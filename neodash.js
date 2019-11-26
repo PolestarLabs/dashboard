@@ -50,8 +50,7 @@ global.DB  = require('./database');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(session);
 
-mongoose.connect('mongodb://pollux:472899@31.220.55.84:27051/polaris', { 
-//mongoose.connect('mongodb://pollux:472899@localhost:27017/polaris', {
+mongoose.connect('mongodb://polaris:geminisbeta@31.220.55.84:27051/polaris', { 
   useNewUrlParser: true,
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 1000,
@@ -89,8 +88,8 @@ passport.use(new CookieStrategy(
 ));
 
 let discordStrategy = new Strategy({
-  clientID: "354285599588483082",
-  clientSecret: "YHOQUdac8RmWplf9jS6jYLYzj73206RH",//config.secret,
+  clientID: config.clientID,
+  clientSecret: config.secret,
   callbackURL: HOST+"/callback",
   scope: scopes,
   passReqToCallback: true

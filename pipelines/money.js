@@ -128,8 +128,8 @@ module.exports={
         method: 'POST',
         headers: headers,
         form: {
-                email: "contato@lucasflicky.com",
-                token: "CAD124277942458EA0FE627961732F2A"
+                email: cfg.pagEmail,
+                token: cfg.pagToken
             }
     }
     
