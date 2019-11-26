@@ -1,0 +1,236 @@
+@import url("https://fonts.googleapis.com/css?family=Nunito:200,200i,400,400i,700,900&subset=latin-ext");
+.expand-dong {
+  flex: 1 0 auto;
+}
+
+.recoil {
+  padding: 0 30px;
+}
+@media screen and (max-width: 720px) {
+  .recoil {
+    padding: 0 8px;
+  }
+}
+
+.square {
+  border: solid 1px #AAA3;
+  border-radius: 2px;
+  flex: 1 1 auto;
+  height: 50%;
+}
+
+
+
+.icon24 {
+  width: 24px;
+  height: 24px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0 6px;
+}
+
+.minibar {
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.1);
+  padding: 5px 10px;
+  margin-bottom: 28px;
+  border-radius: 2px;
+}
+.minibar .avatar {
+  height: 20px;
+  margin: 0 10px;
+}
+.plx-active .minibar {
+  background: rgba(113, 54, 119, 0.92);
+}
+
+.stfront {
+  font-weight: 900 !important;
+  letter-spacing: 2px;
+  font-family: "Nunito";
+}
+
+.glassmenu {
+  width: 100%;
+  height: 70px;
+  align-items: center;
+  transition: all 200ms ease;
+}
+@media screen and (max-width: 999px) {
+  .glassmenu:not(.plx-active) {
+    flex-wrap: wrap;
+    height: auto;
+  }
+  .glassmenu:not(.plx-active) a {
+    width: 70%;
+    border-bottom: solid 1px #fff2 !important;
+  }
+  .plx-active .glassmenu {
+    top: 0 !important;
+    position: fixed;
+    padding-top: 60px;
+    background: #B8BE !important;
+  }
+  .plx-active .glassmenu a {
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+    margin-left: 1px;
+    margin-bottom: 0;
+    border-width: 1px;
+    border-color: #FFF3;
+    flex: 1 1 50px;
+  }
+  .plx-active .glassmenu a i {
+    margin: 0;
+    font-size: 32px;
+  }
+  .plx-active .glassmenu span {
+    font-size: 8px;
+    text-align: center;
+    line-height: 1;
+    margin: 2px 0px;
+  }
+  .plx-active .glassmenu:before {
+    display: none;
+  }
+}
+.glassmenu a {
+  text-decoration: none;
+  color: inherit;
+  font-family: "Nunito";
+  margin: 0 0vw 0 1vw;
+  padding: 0 2vw 0 3vw;
+  box-sizing: border-box;
+  height: 50px;
+  display: flex;
+  align-items: center;
+}
+.glassmenu a:hover {
+  border-bottom: solid 1px #FFF3;
+}
+.glassmenu a i {
+  margin-left: -20px;
+  margin-right: 10px;
+  margin-top: -2px;
+}
+.glassmenu:before {
+  width: 0px;
+  content: "STOREFRONT";
+  opacity: 0;
+  transition: all 400ms ease;
+}
+.plx-active .glassmenu {
+  background: #a561a9E6;
+  border-bottom: solid 1px rgba(0, 0, 20, 0.2);
+  border-top: solid 1px rgba(0, 0, 20, 0.2);
+  box-shadow: inset 0 -1px 2px #FFF3;
+}
+.plx-active .glassmenu:before {
+  content: "STOREFRONT";
+  width: 150px;
+  font-weight: 900;
+  font-size: 19px;
+  letter-spacing: 2px;
+  font-family: "Nunito";
+  margin-left: 14px;
+  opacity: 1;
+}
+
+.to-stores {
+  box-sizing: border-box;
+  margin: 0;
+}
+.to-stores > div {
+  border-radius: 5px;
+  padding: 14px;
+}
+.to-stores > div .glasspane {
+  height: calc(8vw + 120px);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.to-stores > div .glasspane .icon {
+  text-align: center;
+  flex: 1 1 auto;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 8px;
+}
+.to-stores > div .glasspane .title {
+  text-align: center;
+  font-size: 1rem;
+  flex: 0 0 auto;
+  margin: auto;
+  margin-bottom: 20px;
+  width: 100%;
+  line-height: 2;
+}
+@media screen and (max-width: 720px) {
+  .to-stores > div .glasspane .title {
+    text-transform: uppercase;
+    font-size: 0.7rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+  }
+}
+
+.storeside {
+  border-right: solid 2px #FFF3;
+  padding: 0px 20px 8px 4px;
+}
+
+.storeside a.plx-button, .glasspane {
+  border: solid 1px #FFF6;
+  margin-bottom: 6px;
+  border-radius: 2px;
+  font-family: sans-serif;
+  line-height: 2.2;
+  background-image: linear-gradient(45deg, #FFF3 0%, #FFFFFF15 25%, transparent 40%);
+  background-position: -80px;
+  background-size: calc(100% + 80px) 100%;
+  transition: background 300ms ease-out;
+}
+.storeside a.plx-button:hover, .glasspane:hover {
+  border-color: #FFFA;
+  background-position: 0px;
+  color: white;
+}
+.storeside a.plx-button.plx-active, .glasspane.plx-active {
+  border-color: #FFFA;
+  border-bottom: solid 1px #FFF3 !important;
+  background-color: #FFF1;
+  background-position: 0px;
+}
+
+.store-container {
+  color: #fffC;
+  background-color: #7f557d;
+  background: linear-gradient(45deg, rgba(110, 85, 155, 0.8) 0%, #c25ba2 63%, rgba(245, 91, 143, 0.8) 100%);
+  padding: 40px 0;
+}
+.store-container .item {
+  border: none;
+  border-left: solid 3px;
+  border-radius: 1px;
+}
+.store-container .search {
+  display: flex;
+  margin-bottom: 20px;
+  border-bottom: solid 1px white;
+  padding: 6px;
+}
+.store-container .search input {
+  text-transform: uppercase;
+  color: white;
+  margin: 0 10px;
+  width: 100%;
+  background: transparent;
+  border: none;
+}

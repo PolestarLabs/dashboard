@@ -1,0 +1,26 @@
+{
+  "short_name": "Pollux",
+  "name": "Pollux Dashboard",
+  "icons": [
+    {
+      "src": "svicon.png",
+      "type": "image/png",
+      "sizes": "48x48"
+    },
+    {
+      "src": "svicon.png",
+      "type": "image/png",
+      "sizes": "96x96"
+    },
+    {
+      "src": "svicon.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    }
+  ],
+  "start_url": "/?launcher=true",
+  "background_color": "#F5A",
+  "theme_color": "#F5A",
+  "display": "standalone"
+
+}

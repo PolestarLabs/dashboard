@@ -1,0 +1,90 @@
+.commandName {
+    background: red;
+    padding: 4px 8px;
+    margin-bottom: 3px;
+    text-transform: uppercase;
+    min-width: 120px;
+    max-width: 150px;
+    text-align: center;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.envolucro {
+    background: black;
+    padding: 10px;
+}
+
+.c-outline {
+    border-color: #aaC !important;
+    color: #aaC !important;
+}
+
+.c-outline.mod {
+    border-color: #FC2 !important;
+    color: #FC2 !important;
+}
+
+.c-outline.config {
+    border-color: #56F !important;
+    color: #56F !important;
+}
+
+.c-outline.nsfw {
+    border-color: #A32 !important;
+    color: #A32 !important;
+}
+
+.c-outline.custom {
+    border-color: #A5F !important;
+    color: #A5F !important;
+}
+
+.c-outline.economy {
+    border-color: #31e2b4 !important;
+    color: #31e2b4 !important;
+}
+
+.c-outline.anime {
+    border-color: #f79 !important;
+    color: #F79 !important;
+}
+
+.c-outline.roleplay {
+    border-color: #f87 !important;
+    color: #F87 !important;
+}
+
+.c-outline.minigames,
+.c-outline.fun,
+.c-outline.social {
+    border-color: #f6D !important;
+    color: #f6D !important;
+}
+
+.c-outline.cosmetics {
+    border-color: #5FE !important;
+    color: #5FE !important;
+}
+
+.c-outlinex {
+    border-color: #f69 !important;
+    color: #f69 !important;
+}
+
+a.c-outline {
+    opacity: .7;
+    margin-bottom: 10px
+}
+
+a.c-outline:hover {
+    opacity: 1;
+    //color: white !important;
+    background: transparent !important;
+}
+.plx-active a.c-outline {
+    opacity: 1;
+    //color: white !important;
+    background: #1115 !important;
+    box-shadow: 0 0 2px #FFF2
+}

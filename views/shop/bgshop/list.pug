@@ -1,0 +1,11 @@
+.plx-pagination.bgshop
+    include ../../structures/pagination
+#bg-list
+    if pagination.L >0
+        each bg in pagination.res
+            include bg_element
+    else
+        p Nothing here but us chickens
+                    
+.plx-pagination.bgshop
+    include ../../structures/pagination   

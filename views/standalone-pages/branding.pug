@@ -1,0 +1,116 @@
+extends ../layout 
+
+mixin colorfit(NAME,hex,pan,cmyk)
+    -CM=["C","M","Y","K"]
+    
+    .colorfit.plx-box-shadow-small.plx-border-rounded
+        p.name= NAME
+        br
+        .bg(style="background-color:"+hex)
+        .desc
+            if hex
+                p 
+                    if pan
+                        span: b Web: 
+                    else
+                        span: b Hex: 
+                    span= hex                
+            if pan
+                p 
+                    span: b PANTONE: 
+                    span= pan
+            if cmyk
+                -cm=cmyk.split(" ")
+                p 
+                    each c,i in cm
+                        span: b= CM[i]+":"
+                        span= c+" "
+
+block content
+    .wrapper
+        include ../navbar
+
+        style.
+            body{
+                background: #F2F2FF
+            }
+            .colorfit{
+            padding: 20px;
+            width: 150px;
+            }
+            .colorfit .bg{
+            height: 130px;
+            width: 130px;
+            margin: 0 auto 20px;
+            border-radius: 5px
+            }
+            .colorfit p {margin: 0}
+
+
+        .itsa-paper
+
+
+            br
+            br
+            br
+
+            .section#main    
+                h1.title  Design Reference and Branding
+                h3.subtitle  All of our shapes and colors are documented here!                
+                hr
+                br
+                .plx-container
+                    p The consistency of our presentation is taken very seriously. We believe a strong visual presence is key for a more intimate relationship with our users and community members, as well as our own team.
+                    p This branding sheet is designed to both display our commitment with such visual presence and back up the creative minds from our community with official material they can reference to when creating special posts, internal events, fanworks and whatnot, bearing Pollux's theme.
+
+                    hr.plx-divider-icon
+
+                    p  
+                .plx-container
+                    h2#theme Theme
+                    p Pollux's keywords are <b>fancy</b> and <b>modern</b>, we believe it is possible to be both bold and delicate, as well as modern yet not giving up aesthetics to favor sheer praticality.
+                    p These contrasting elements are represented in our colors and iconography by the <b>hexagon</b> and the <b>heart</b> shapes, and with shades of <b>bright reddish pink</b> to a <b>soft lilac-ish black</b>
+                    hr.plx-divider-icon
+                    h2#colors Color Scheme
+
+                    h4: b Core Colors
+                    br
+                    .plx-flex.plx-flex-between.plx-flex-wrap
+                        +colorfit("Bubblegum Pink",'#FF5599','1915 C','0 75 21 0')
+                        +colorfit("Plastic Grape",'#AA66FF','265 C','52 66 0 0')
+                        +colorfit("Stardust Lilac",'#CC55FF','252 C','27 67 0 0')
+                        +colorfit("Candy Yellow",'#F8B95F','121 C','0 8 70 0')
+                        +colorfit("Red Riding Hood",'#FC5065','1785 C','0 76 54 0')
+                    h4: b Auxiliary Shades
+                    br
+                    .plx-flex.plx-flex-between.plx-flex-wrap
+                        //+colorfit("Sour Apple",'#90E050','7487 C','42 0 62 0')
+
+                        +colorfit("Exosphere Blue",'#5A90F5','2718 C','65 45 0 0')
+                        +colorfit("Platinum Cyan",'#50CCFF','2985 C','60 0 5 0')
+                        +colorfit("Lithium White",'#EFEFFE','656 C','10 4 0 0')
+                        +colorfit("Metro Midnight",'#2B2B3B','533 C','95 72 15 67')
+                        +colorfit("Vitorian Black",'#1B1B2B','7547 C','99 74 31 84')
+                   
+                    h4: b Character Colors
+                    br
+
+                    .plx-flex.plx-flex-between.plx-flex-wrap
+                        +colorfit("Dress",'#2A2A3F')
+                        +colorfit("Hair Matte",'#1E2A51')
+                        +colorfit("Hair Tips",'#14ACB7')
+                        +colorfit("Eyes",'#90E050')
+                        +colorfit("Glasses",'#E73A5D')
+                        +colorfit("Crystals",'#FF5599')
+
+                    br    
+                    br    
+                    br    
+                    br    
+                    
+
+
+
+
+block scripts
+        

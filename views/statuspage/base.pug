@@ -1,0 +1,106 @@
+include ../tools/mixins
+html(class="no-js" lang=locale||"en")
+    head
+        meta(charset="utf-8")
+        meta(name="theme-color" content="#f48")
+
+        meta(http-equiv="x-ua-compatible" content="ie=edge")
+        title= (title?title+" - ":"") + "Pollux: A Fancy Maid for Fancy Communities"
+        meta(name='description' content='Pollux is a Virtual Maid designed to be your personal community entertainer as a Discord bot.')
+        meta(name="viewport" content="width=device-width, initial-scale=1")
+        include ../opengraph
+        link(rel="manifest" href="/js/manifest.json")
+
+        style
+            include ../../css/plx.css
+
+        link(rel="preload" href='https://code.jquery.com/jquery-3.2.1.min.js' as="script")
+        link(rel="preload" href="/css/monolith.css" as="style")
+        link(rel="preload" href="/js/uikit.min.js"  as="script")
+        link(rel="preload" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" crossorigin="anonymous" as="style")
+        link(rel="preload" href='/js/pace.js' as="script")
+
+        link(rel="stylesheet" href="/css/plx.css")
+        link(href="/css/monolith.css" rel="stylesheet")
+        link(rel="apple-touch-icon" href="/favicon.png")
+        link(rel="icon" href="/favicon.png")
+        script(src='https://code.jquery.com/jquery-3.2.1.min.js')
+        script(src="/js/plxui.js" async) 
+    body 
+        style
+            include ../late-load.css
+
+        .wrapper
+
+
+            style 
+
+            br
+            br 
+            br
+            br
+
+
+            .plx-container
+                h1.title Pollux Status
+                h3.subtitle Average Latency and Shards outage report
+                hr.plx-divider-small
+                p
+                .section#main    
+                    h2 
+                    h4.subtitle 
+                    p
+                    //hr
+                    style.
+                        .dropp{
+                            display:none
+                        }
+                        .shardSquare{
+                            background: gray;
+                            display: inline-flex;
+                            height: 50px;
+                            width:100px;
+                            justify-content: center;
+                            align-items:center;
+                            margin: 8px;
+                            border-radius: 8px;
+                            color: white;
+                            font-size: 14px;
+                            font-weight: 900;
+                            flex-direction: column;
+                            text-shadow: 1px 1px 3px #2b2b3bAA;
+                            cursor: help;
+                        }
+                        .shardSquare.status-0{
+                            background-color:#2FAF65;
+                        }
+                        .shardSquare.hiping{
+                            background-color: #ffD933;
+                        }
+                        .shardSquare.hipinger{
+                            background-color: #fF9847;
+                        }
+                        .shardSquare.status-5{
+                            background-color: #FD5F00;
+                        }
+                        .shardSquare.status-99{
+                            background-color: #c42035;
+                        }
+                        .shardSquare .help{
+                            opacity: .7
+                        }
+
+
+                    script(src="/js/chart.js")
+                
+                    script(src="/js/moment.js")
+                    #status
+                        include statustick
+                    br
+                    br
+                    br
+                    br
+                    script.
+                        setInterval(()=>{$.get('/status/piece',function (data){ $("#status").html(data) })},60000)
+                    script $('script').remove();
+

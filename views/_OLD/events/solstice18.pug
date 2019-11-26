@@ -1,0 +1,484 @@
+extends ../layout
+block content
+  mixin lightbox(src,w)
+    a(href=src data-lightbox="h") 
+      img(src=src width=w||"auto").level-left
+      
+  .hero.is-pink.is-bold
+    include ../navbas2
+
+ 
+
+  .is-fullwidth.nano: .nano-content
+    br
+    .container.level
+      .level-left
+        div
+          .title.is-1: b Solstice Event: Flowers & Snowflakes
+          .subtitle.is-5 Who's gonna get the best of this contest? The flowery summer faction or the icy winter faction?
+      img(src="/images/event/logo_en.png" width="300px").level-left
+      
+    hr
+    .container
+      .notification.is-purple.is-small
+        p
+          | First, a special shout-out to <a href="/profile/102165107244539904">Xephu#2525</a> for sparkling the idea for this event.    
+      .notification.is-ruby
+        p
+          | Weird stuff showing up in your bonuses? Check the <a href="#logs">Solstice Saga Event Log</a> to catch up! You can always <a href="/support">join Pollux's Server</a> to see things happening yourself.
+          
+      style.
+        .quote{
+        font-style:italic;
+        font-family:serif
+        }     
+      
+      //.section#story.foo2
+        .title.is-4: b Summary
+        
+        .columns: .column.is-3: .box
+          ul
+            li: a(href="#story") • Story
+            hr.is-marginless
+            li: a(href="#cast") • Mascots Cast
+            li: a(href="#niky"): small &#x2003 • Nikoliny - The Ice Queen
+            li: a(href="#cecy"): small &#x2003 • Cecily - The Fey Druidess
+            li: a(href="#australis"): small &#x2003 • Australis - The Elf Trader
+            hr.is-marginless
+            li: a(href="#lineup") • Cosmetics Lineup
+            hr.is-marginless
+            li: a(href="#shop") • Event Shop
+            hr.is-marginless
+            li: a(href="#participating") • Participating
+        
+      .section#story.foo2
+        .title.is-2: b Story
+        .subtitle.is-4 A little flavor to the event
+        hr
+        .columns
+          .column(style="text-align:right !important")
+            img(src="/images/vertical-sfk.png" )
+          .column.is-5
+            br
+            .title Solstice
+            .subtitle Two sides of the same earth
+            .quote
+                p.
+                    As the solstice approaches, 
+                p.
+                    north and south will meet two very distinct pictures-
+                br
+
+                p.
+                    The bright and cheerful afternoons 
+                p.
+                    towards the end of the sunny month of June,
+                p.
+                    when the north wind congregates in crowds
+                p.
+                    the floating mountains of the silver clouds from the horizon,
+                p.
+                    and the stainless sky opens beyond them like eternity. 
+                p.
+                    All things rejoiced beneath the sun;
+                p.
+                    the weeds, the river, and the willow 
+                p.
+                    leaves that glanced in the light breeze.
+                br
+
+                p.
+                    And the never ending nights of a winter 
+                p.
+                    such as when birds die in the deep forests; 
+                p.
+                    and the fishes lie stiffened in the translucent ice, 
+                p.
+                    which makes even the mud and slime of the warm lakes 
+                p.
+                    a wrinkled clod as hard as brick.
+                p.
+                    Among their children, comfortable men 
+                p.
+                    gather about great fires, 
+                p.
+                    and yet feel cold.
+                br
+
+                p.
+                    Praising their own deities 
+                p.
+                    in tribute of these sceneries, 
+                p.
+                    are the Ice Queen and the Fey druidess, 
+                p.
+                    both leading their fellows 
+                p.
+                    to prove themselves the more devoted 
+                p.
+                    in name of the winter and the summer spirits.
+            hr
+            .div
+                p.
+                    In this event you will join in either of these factions, and follow the path of strife to prove yourselves the most devoted. But choose wisely, once you've contracted a bond with one of them, it cannot be undone.
+                br
+                p.
+                    As a member of one of these factions, you will need to collect tributes to your respective priestess.
+                br
+                p
+                    span.
+                        To <b>Nikoliny, the Ice Queen</b>. You should collect <b>Crystalline Snowflakes</b>.
+                    br
+                    span.
+                        And to <b>Cecily, the Fey Druidess</b>. You should collect <b>Blossoming Flowers</b>.
+
+      
+      .section#cast.foo2
+        .title.is-2: b Meet the mascots    
+        .subtitle.is-4 Who's joining us this month for the event
+        hr
+            
+        .columns.is-mobile
+          .column(style="text-align:right !important")
+
+            .foo
+              img(src="/images/nkmug.png" style="max-height:86vh" )
+            .foo
+              hr
+              .title Cecily
+              .subtitle The Fey Druidess
+              p: i Legends tell about this wanderer of the wild. The druidess that can connect with nature itself, and every deity that seeks seclusion within the woods. Cecily inhabits the craddle of Shaedyn civilization, the Liizhaea continent, within the untouched depths of its ever green forest heart. Every year Cecily provides a few treats as a tribute to the deities.
+                br
+                | Your quest as a supporter of the Summer Team is to help the Fey Druidess gather the Blossoming Flowers to be offered as tribute to the gods. Cecy will reward you for your kindness.
+              br
+              p Cosmetics listing
+
+          .column
+            
+            .foo(style="margin-top:100px")
+              hr
+              .title#niky Nikoliny
+              .subtitle The Ice Queen
+              p: i The legendary Queen from the forgotten southen plains of Nanuk, South Amarok. The shining bride of the gods, who reigns over everything the ice touches, as long as she can satisfy the deities with enough tributes.
+                br
+                | Your quest as a supporter of the Winter Team is to help the Ice Queen to gather the Crystaline Snowflakes demanded as tribute for the gods. Niky will reward you for your kindness.
+              br
+              p Cosmetics listing
+            br#cecy
+            br
+            .foo
+              img(src="/images/ccmug.png" style="max-height:86vh" )
+              
+        .title#australis And there's a returning guest this time!      
+        .columns
+          .column(style="text-align:right !important")
+            .foo
+              img(src="/images/austramug.png" style="max-height:86vh" )
+          .column            
+            .foo(style="margin-top:100px")
+              hr
+              .title Australis
+              .subtitle The Elf Trader (From December 2017 PolluXmas Event)
+              p: i Australis is the elf of Midsummer Xmas, at Santa's southern assembly lines. Always greedy and always looking for some way to get as much Rubines as possible on her way.
+              br
+              p Australis trades Flowers and Snowflakes for Rubines, she can tamper with your Server's lootbox drop rate depending on how much you put in her hands.
+            br
+            
+      hr
+      .section#howitworks.foo
+        .title.is-2: b Getting Started
+        .subtitle.is-4 All you need to know to get the most of this event
+        br
+        .columns.is-multiline
+          .column.is-half: +lightbox("/images/event/getting_started.png")
+          .column.is-half: +lightbox("/images/event/pimp.png")
+          .column.is-half: +lightbox("/images/event/progress.png")
+          .column.is-half: +lightbox("/images/event/miles.png")
+          .column.is-12(style="justify-content:space-around;display:flex")#hypekit: +lightbox("/images/event/EVENT_AIDER.png",800)
+          .column.is-12: .box.level
+            div.level-item
+            a(href="/downloads/EVENT_AIDER.psd" style="cursor:pointer").button.is-large.is-pink
+              | ⬇ Download .PSD
+            div.level-item
+            p
+              | Solstice 2018 Event Hypekit for server owners & staff. (Requires Adobe Photoshop)
+            div.level-item
+        
+        
+      hr
+      .section#lineup.foo
+        .title.is-2: b Cosmetics Lineup
+        .subtitle.is-4 Items you can only get at this time of the year    
+ 
+      
+      
+        
+          br
+          br
+          .columns
+            .column
+              .subtitle Winter Team Cosmetics
+                a(href="/images/event/lineupbgstkS.png" data-lightbox="h") 
+                  img(src="/images/event/lineupbgstkS.png" width="640px").level-left
+              .help Backgrounds + Nikoliny Sticker!
+            .column
+              .subtitle Summer Team Cosmetics
+                a(href="/images/event/lineupbgstkF.png" data-lightbox="h2") 
+                  img(src="/images/event/lineupbgstkF.png" width="400px").level-left
+              .help Backgrounds + Cecily Sticker!
+            .column
+              .subtitle Both Teams Cosmetics
+                a(href="/images/event/lineupbgstkN.png" data-lightbox="h2") 
+                  img(src="/images/event/lineupbgstkN.png" width="400px").level-left
+              .help Backgrounds + Australis Sticker!
+          div
+            .title Medals
+            .subtitle Medals will be available to both teams regardless of their theme
+            style.
+              .panoramedal{
+                  height: 100px;
+                  width: 100%;
+                  background-image: url(/images/event/medalpano.png);
+                  /* background-repeat-y: no-repeat; */
+                  /* background-repeat-x: repeat; */
+                  background-size: cover;
+                  /* background-position-x: 50%; */
+                  animation: bgscroll 15s linear both infinite;
+              }
+              @keyframes bgscroll{
+                from {background-position:0% 0%}
+                to {background-position:1708px 0%}
+              }
+              
+              
+            .panoramedal
+
+          
+
+      hr
+      .section#shop.foo2.generallydisabled
+        style .shopItem .desc{display:none} 
+        .title.is-2: b Event Cash Shop
+        .subtitle.is-4 Don't want to wait? Get your items right away and support Pollux <b>and</b> the Artists!               
+        .container  
+          .notification.is-warning
+            p 
+              | All items in this list can be obtained for free if you participate in the event! Consider getting them naturally to not spoil the fun of obtaining it.
+              br
+              | <b>The only exception being the ones from the Team you don't belong to.</b>
+          p If you still want to do it just get them right away, there you go:
+        
+          -var shopstock = buyables.filter(item=>item.filter.split(' ').includes('halloween18'))
+          include ../store/compositestore
+        .help
+          | Purchases made here are processed automatically and aren't reversible.
+          br
+          //| 30% of all money goes to the Artists, 40% to Pollux development, 30% is dedicated to cover processing, bank transfer, and currency conversion fees.
+          
+      
+      
+      hr
+      .section#participating.foo2
+        .columns.is-marginless
+          .column.is-6
+            .section 
+              .title.b500T Participating as a Server
+              br
+              .subtitle: b Joining
+              p Owners of verified/eligible servers can use <code>p!event boxes</code> to get free Event Lootboxes to be distributed amongst your members.
+              p Each one will receive 5 Event Lootboxes, one of every Rarity Tier + 1 Common Event Lootbox for every 100 members in their servers, capping in 15 total.
+              hr
+              .subtitle: b Put your hands in the Hypekit!
+              p Set up a cool event info channel with the hypekit provided 
+                a(href="#hypekit") here
+              hr
+              .subtitle: b Eligibility
+              p Not all Servers will be receive the special event boxes, because there are always those who will not play fairly. So, for your Server be automatically Eligible, you will need to match all these criteria:
+              ul(style="list-style: initial;padding:12px;")
+                li Your Server has a Human : Bot ratio below 10%
+                li Your Server must have been created before August 15th
+                li Pollux must be in your server since August 15th or before
+              br
+              small For the last two items, you can still have your server included by asking for a whitelist, join the Support Server to be verified and whitelisted. 
+      
+          .column.is-6
+            .section
+              .title.b500T Participating as a User
+              br
+              .subtitle: b First things first
+              p To start participating, you need to pick a team. Type <code>p!eventjoin</code> and go through the steps to choose your team, be wary that your decision is not reversible. Opting in for a team's rewards excludes you from the others. CHOOSE WISELY 
+
+              hr
+              .subtitle: b Show your participation
+              p Add an event frame to your profile pic with <code>p!evpropic</code>. You will receive a generous bonus from it!
+              
+              hr
+              .subtitle: b Collect collect collect!
+              p Show your team's might by collecting as much Flowers/Snowflakes as you can, do this with <code>p!collect</code>. The more you dive into the event, the more you will receive. Completing Milestones grant you bonus items, changing your profile picture to your team's motif will boost considerably your income!
+              
+              hr
+              .subtitle: b A little bit of cheating, get your items from second-hand market!
+              p Australis is lurking around, you can get some Snowflakes and Flowers from her, they ain't cheap, but buying from her will boost the Lootbox Drop Rate in your server. Call her <code>p!trader [Amount]</code>, and don't look at her chest for too long, or she will complain and you'll be dragged out of her shop.              
+              
+              hr
+              .subtitle: b Deliver!
+              p Turn in your items to the Priestesses using <code>p!deliver [Amount]</code>
+              p The more you turn in, the faster you team will reach Milestones and receive global Event Goodies, deliver more at once to receive better prizes!
+              
+              hr
+              .subtitle: b Stay tuned in the Leaderboards!
+              p Top deliverers will receive some special treats at the end of the event!
+              p Use <code>p!evboard</code> regularly to check the competition!
+              p Use <code>p!evtop [SFK/FLW]</code> to check user Leaderboards!
+
+    
+      hr
+      .section#logs.foo2
+        .title.is-2: b Solstice Saga Event Logs
+        .subtitle.is-4 There's so much going on among the teams, so check here a resume of everything.
+        br
+
+        //.message.is-info
+          .message-header Thursday September 20th
+          .message-body 
+            p • The third Snowflakes and Flowers ministers were elected by the team members.
+            p: br
+            p • <a href="/p/103727554644418560">Kat#2805</a> keeps in the house but this time sitting in the Minister's throne for Snowflakes (SFK)
+            //p  -  with <a href="/p/  ">   </a> as his secretary.
+            p: br
+            p • <a href="/p/138719997315907584">Krispy Chips#3574</a> joins in for Flowers (FLW)
+            //p  -  with <a href="/p/  ">   </a> as his secretary, refreshing completely the population in the ministry house. 
+            p: br
+            //p • Both were subjected to a challenge where they have to make some tough choices. Ending up in a +10 bonus for FLW, and access to classified information to SFK. Plus a exclusive event BG to everyone;
+            
+        .message.is-purple
+          .message-header Wednesday September 19th
+          .message-body 
+            p • New Ministers elections start!
+            p • <a href="/p/103727554644418560">Kat#2805</a> leads the elections with over 60 votes out of 75 total.
+            p • Flowers have a tight competition for their new leader. <a href="/p/279666399486541824">Gustavo Sith神#6395</a> and <a href="/p/138719997315907584">Krispy Chips#3574</a> head to head.
+            p: br
+            p: b • Flowers elections presumedly rigged for <a href="/p/279666399486541824">Gustavo Sith神#6395</a>, Flowers concerned. Some withdraw their votes. 
+            
+        .message
+          .message-header Sunday September 16th
+          .message-body 
+            p • Flowers opt in for some boosts and adopts Ministry Decree Bonus
+            p • Snowflakes pay 200K of their flakes to reduce the collect cooldown
+
+        .message.is-ruby
+          .message-header Friday September 14th
+          .message-body 
+            p: b • On the verge of being overthrown, Flowers Minister resigns due to pressure of the masses and negative press coverage. electricas#8005 assumes the post of interim Flowers Minister.
+            p
+            p • After some commotion. <a href="/p/320351832268472320">Howerr#0956</a> is promoted to Flowers Minister and <a href="/p/163200584189476865">electricas#8005</a> keeps in the ministry house as his Secretary
+            p
+            p • Previously swapped members are unswapped.
+            p
+            p: b • Beginning of the Solstice mutual-interest treaty:
+            p  -  Flowers and Snowflakes collectively extinguish the burn penalty
+            p  -  Snowflakes income increased by Ministry decree for 50K Snowflakes
+            p  -  Flowers declares sportsmanship status and neither buy more income, nor denies SFK's income.
+
+            
+                
+        .message.is-danger
+          .message-header Thursday September 13th
+          .message-body 
+            p • Ministers challenge was carried and resulted in mutual burn, penalising both teams with -100 at collect.
+            p: br
+            p: b • Tension ensues among Solsticelings, the first solstice crisis begins.
+            p • Flowers Minister begins his autocratic regime.
+            p • Snowflakes Minister tries to handle the situation.
+            
+            
+        .message.is-info
+          .message-header Wednesday September 12th
+          .message-body 
+            p: b • New ministers elected.
+            p • <a href="/p/133004786562760704">key#8305</a> for Snowflakes
+            p  -  with <a href="/p/103727554644418560">Kat#2805</a> as his secretary.
+            p • <code>[REDACTED]</code> for Flowers
+            p  -  with <a href="/p/320351832268472320">Howerr#0956</a> as his secretary.
+            p: br 
+            p • Ministers prompted to swap around 2 of its members.
+            p: br 
+            p: b • Swapped to SFK
+            p  -  <a href="/p/114115657871654920">Meowkey#6849</a>
+            p  -  <a href="/p/266133831671742464">Ehdward#0001</a>
+            p: br 
+            p: b • Swapped to FLW
+            p  -  <a href="/p/423349777011310593">☭ᴠʟᴀᴅɪᴍɪʀ ɪʟʏɪᴄʜ ᴜʟʏᴀɴᴏᴠ☭#4196</a>
+            p  -  <a href="/p/271808225148534784">Mati#1953</a>
+            
+            
+            
+        .message
+          .message-header Tuesday September 11th
+          .message-body 
+            p • The Haze has dissipated, bonus removed.
+        
+        .message
+          .message-header Monday September 10th
+          .message-body 
+            p • Event guides added by flowers on reddit.
+            p • Melting Rate kicked-in. Removing 1% of every delivered flakes/flowers every 5 minutes
+                    
+        .message.is-purple
+          .message-header Saturday September 8th
+          .message-body 
+            p • THE HAZE has been introduced, event status obfuscated by a thick myst. Also +50 Haze bonus to everyone.
+                    
+        .message.is-success
+          .message-header Thursday September 6th
+          .message-body 
+            p • First Milestone Reached!
+            p: br
+            p • Mini event bonus ended, every one got 1 UR Summer/Winter Lootbox +  1 UR Neutral event box.
+           
+            
+        .message.is-info
+          .message-header Tuesday September 4th
+          .message-body 
+            p • The first Snowflakes and Flowers ministers were elected by the team members.
+            p: br
+            p • <a href="/p/423349777011310593">☭ᴠʟᴀᴅɪᴍɪʀ ɪʟʏɪᴄʜ ᴜʟʏᴀɴᴏᴠ☭#4196</a> for Snowflakes (SFK)
+            p  -  with <a href="/p/103727554644418560">Kat#2805</a> as his secretary.
+            p: br
+            p • <a href="/p/114115657871654920">Meowkey#6849</a> for Flowers (FLW)
+            p  -  with <a href="/p/320351832268472320">Howerr#0956</a> as his secretary.
+            p: br
+            p • Both were subjected to a challenge where they have to make some tough choices. Ending up in a +10 bonus for FLW, and access to classified information to SFK. Plus a exclusive event BG to everyone;
+        
+      hr
+      .section#specialthanks.foo2
+        .title.is-2: b Special Thanks
+        .subtitle.is-4 Thanks to these guys who served as the testing squad to make sure everything here looks great! 
+        .columns.is-multiline
+          each usr in thx
+            div.usercard_2.column.is-3(style="display:flex;align-items:center")
+                img(src=usr.meta.avatar height="50px" style="border-radius:8px")
+                a(href="/p/"+usr.id)
+                  span &#x2003
+                  span= usr.meta.tag
+
+
+
+        
+      
+
+            
+              
+
+
+block scripts
+  include ../store/storeintegration
+  script(src='/js/truelite.js')
+  script( src="https://unpkg.com/scrollreveal/dist/scrollreveal.min.js")
+  script.
+    window.sr = ScrollReveal({ reset: true,
+   container:'.nano-content'
+   ,viewFactor: 0.2
+    });
+    sr.reveal('.foo', { duration: 200 });
+    sr.reveal('.foo2', { duration: 500,viewFactor: 0.1 });

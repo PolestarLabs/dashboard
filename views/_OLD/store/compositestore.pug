@@ -1,0 +1,40 @@
+head
+  link(rel="stylesheet" href="/css/buyables.css")
+  link(rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.5.2/animate.min.css")
+body
+  .section
+    .currencychoose
+      span.b500(style="font-size:1.5rem") Select Currency
+      span.b500 &#x2003
+      .select: select#currchose.is-small
+        option#USD USD
+        option#EUR EUR
+        option#GBP GBP
+        option#BRL BRL
+    br
+
+    each item in shopstock
+      .shopItem
+        .imcontainer: img(src="/images/"+item.img+".png")
+        .name=  item.name
+        .desc=  item.description
+        .buy
+          .price
+            span.priceno= item.price_USD
+            span.pricurr= "$"
+          if item.id=="sapphire"
+            span x
+            input(type=number value=1).inputs#saphs
+          if item.id=="jade"
+            span x
+            input(type=number value=100).inputs#jads
+
+          a.button.b500.buybuttonpp(id=item.id data-img=item.img data-item=item.name data-price=item.price_USD data-dsc=item.description).is-info
+            span.icon: i.fab.fa-paypal
+            span GET
+            //.paypalbutton
+    a.tick(style="visibility:hidden")
+      #xisto
+      #paypal-button
+
+//include storeintegration

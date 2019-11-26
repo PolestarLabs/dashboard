@@ -1,0 +1,116 @@
+extends layout
+
+
+
+block head
+  link(rel='stylesheet',type="text/css" href='/css/bakaridash.css')
+block content
+  include templates
+
+  //pre=JSON.stringify(chandata,null,2)
+  .hero.is-primary.is-bold
+      include navbas
+
+      
+  
+  mixin menu
+    .minitag
+      .level.is-marginless.is-mobile
+        .level-left
+          -let avi = server.meta.icon||''
+          .pic: .smolHex(style="transform:scale(.8);background-image:url('"+avi+"');")
+            .shexTop
+            .shexBottom
+        .level-item
+        .level-item
+          .title.is-4= bot.server.name
+        .level-item
+      p.uid= server.id
+      
+  mixin submenu  
+    .menu-label Basic Settings
+    ul.menu-list
+        li#goto_basics.itm2.dswitch.is-active(data-target="basics"): a(href="#/basics") Global Options
+        li#goto_roles.itm2.dswitch(data-target="roles"): a(href="#/roles") Special Roles
+        //li#a3.itm2.dswitch(data-target="cosmetics"): a(href="#/backgrounds") Server Cosmetics
+        //li#a1.itm2.dswitch.is-active(data-target="basics"): a(href="#/logs")  
+    .menu-label Advanced Settings
+    ul.menu-list
+        li#goto_chans.itm2.dswitch(data-target="chans"): a(href="#/chans") Channel Options
+        li#goto_mod.itm2.dswitch(data-target="mod"): a(href="#/mod") Moderation
+        li#goto_logs.itm2.dswitch(data-target="logs"): a(href="#/logs") Advanced Log Setup
+        //li#a4.itm2.dswitch(data-target="ptx").is-hidden-mobile: a(href="#/persotex") Personal Text
+    .menu-label Premium
+    ul.menu-list
+        li#goto_cherry.itm2.dswitch(data-target="cherry"): a(href="#/cherry") Cherry Modules
+        li#goto_partner.itm2.dswitch(data-target="partner"): a(href="#/partner") Partnership Setup
+    .menu-label Misc
+    ul.menu-list
+        li#goto_meta.itm2.dswitch(data-target="meta"): a(href="#/meta") Metadata
+        li#goto_bank.itm2.dswitch(data-target="bank"): a(href="#/bank") Bank
+        li#goto_rank.itm2.dswitch(data-target="rank"): a(href="#/rank") Leaderboards
+        
+        
+  .is-hidden-desktop
+    .sidepanel-bg.hidden
+    .sidepanel
+      +menu
+      .nano: .nano-content
+        +submenu
+      br
+    a.sidemenu.button
+      i.fas.fa-caret-square-down
+      .b500
+        span &#x2003
+        span#loc MENU
+  
+  
+
+  .dashy
+      aside.sidebar.is-hidden-mobile
+        +menu
+        .nano: .nano-content
+          +submenu
+        br
+        
+      .mainview 
+          #basics.switchPanel.hidden
+            include guild/globals
+          #roles.switchPanel.hidden
+            include guild/speciroles
+          #cosmetics.switchPanel.hidden
+            include guild/nope
+            
+          #chans.switchPanel.hidden
+            include guild/perchannel
+          #mod.switchPanel.hidden
+            include guild/moderacci
+          #logs.switchPanel.hidden
+            include guild/logs
+            
+          
+          //---  
+          #cherry.switchPanel.hidden
+            include guild/cherry
+          #partner.switchPanel.hidden
+            include guild/part
+            
+          //---  
+          #meta.switchPanel.hidden
+            include guild/meta
+          #bank.switchPanel.hidden
+            include guild/nope
+
+          #rank.switchPanel.hidden
+            include guild/localleads
+
+block scripts
+  script(src='/js/ddsl.js')
+  script.
+    var SERVER_ID = "#{server.id}"    
+    var slogs;
+        slogs = !{JSON.stringify(server.logs) || false}
+  script(src="/js/neoadmin.js")
+
+      
+    

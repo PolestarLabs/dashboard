@@ -1,0 +1,241 @@
+extends layout
+
+mixin medalsmk
+      -var it = 0;
+      while it < 9
+        if user.modules.medals[it] != undefined
+          -var medal_icon = user.modules.medals[it][0]
+        else
+          -var medal_icon = [0,0]
+
+
+        if medal_icon!=0 && user.modules.medals[it]!=[0,0]
+          img(src="/medals/"+medal_icon+".png")
+        else
+          img(src="/medals/undefined.png")
+          //li.drop.ui-droppable.medalSlot
+        -it++
+
+mixin mockup
+  div.profileMock(style="z-index:999; position:relative; transform:scale(.7) translateX(-25%) translateY(-28%)")
+      img.mainframe(src="http://i.imgur.com/PuDHUx5.png" style="max-width:400px !important")
+      div#bgm
+        img.level-item(src="/backdrops/"+user.modules.bgID+".png")#userbp
+      div#ptxmock
+        p= user.modules.persotext
+      div#medalmocks.level
+        +medalsmk
+      div.hexagon(style="background-image:url('"+userinfo.pix+"')")
+          div.hexTop
+          div.hexBottom
+
+block head
+  style.
+
+      .tabcontainer{
+        position:relative;
+        //bottom:16px;
+        //top:16px;
+      }
+block head
+  link(rel='stylesheet',type="text/css" href='/css/newdash.css')
+block content
+
+
+  -let bgInv = user.modules.bgInventory
+
+  //pre= JSON.stringify(user,null,5)
+  .hero.is-primary.is-bold
+      include navbas
+
+      //.level.topbar.is-hidden-mobile
+            .level-left
+              //img(src=userinfo.pix).image(height="128px")
+              div: .floatnglow: .hexagon(style="transform:scale(1.2) translate(20px,40px);background-image:url('"+userinfo.pix+"');")
+                div.hexTop
+                div.hexBottom
+            div &#x2003
+            div &#x2003
+            div &#x2003
+            div &#x2003
+            .level-left
+                div
+                  p.title: b= userinfo.uname
+                  p.subtitle= userinfo.name
+            .level-item
+                p(class="subtitle")!= "<b>ID </b>"+userinfo.id
+            .level-item
+            .level-item
+      
+  
+  mixin menu
+    .minitag
+      .level.is-marginless.is-mobile
+        .level-left
+          .pic: .smolHex(style="transform:scale(.8);background-image:url('"+userinfo.pix+"');")
+            .shexTop
+            .shexBottom
+        .level-item
+        .level-item
+          .title.is-4= userinfo.name
+        .level-item
+      p.uid= userinfo.id
+      
+    .menu-label Social
+    ul.menu-list
+        li#a1.itm2.dswitch.is-active(data-target="publicProfile"): a(href="#/overview") Public Profile
+        //li#a4.itm2.tab(data-target="soon").is-hidden-mobile: a(href="#/inventory")=translation.website.inventory||  "Inventory"
+    .menu-label Cosmetics
+    ul.menu-list
+        li#a2.itm2.dswitch(data-target="mdl"): a(href="#/medals") Medals
+        li#a3.itm2.dswitch(data-target="bgs"): a(href="#/backgrounds") Backgrounds
+        //li#a4.itm2.dswitch(data-target="ptx").is-hidden-mobile: a(href="#/persotex") Personal Text
+        li#a5.itm2.dswitch(data-target="stk"): a(href="#/stickers") Stickers
+    .menu-label Management
+    ul.menu-list
+        li#a6.itm2.dswitch(data-target="guildsets"): a(href="#/servers") My Servers
+        
+        
+  .is-hidden-desktop
+    .sidepanel-bg.hidden
+    .sidepanel
+      +menu
+    a.sidemenu.button
+      i.fas.fa-caret-square-down
+      .b500
+        span &#x2003
+        span#loc MENU
+  
+  
+
+  .container.preloder
+        style
+          include hearty 
+          div.grid-big 
+            - for (i=0; i<25; i++)
+              div.cell-1
+        br
+        br
+        p.title LOADING
+  .dashy
+      aside.sidebar.is-hidden-mobile
+        +menu
+      .mainview.prelod
+          #publicProfile.switchPanel.fullwidth.fullheight.hidden
+            //embed.profileme(src="http://www.pollux.fun/profile/me")
+            include dash/profile/profile
+          #guildsets.switchPanel.hidden
+            include dash/guilds2
+          #mdl.switchPanel.hidden
+            include dash/profile/medals2
+          #bgs.switchPanel.hidden
+            include dash/profile/backs2 
+          #stk.switchPanel.hidden
+            include dash/profile/stickers 
+
+      
+  //.columns.fullheight.is-gapless 
+    
+      
+        br
+        #overviewSettings.tabcontainer.hidden.fullheight(style="margin-top:-55px;overflow:hidden")
+        #profileSettings.tabcontainer.hidden.is-hidden-mobile
+        #soon.tabcontainer.hidden.is-hidden-mobile
+            include soon
+
+block scripts
+  link(rel='stylesheet',type="text/css" href='/css/pace.css')
+  script(src='/js/pace.js') 
+  script(src="js/countUp.js")
+  script(src="/js/dashboard_operations.js")
+  //include reloader
+  script.
+      
+     $(document).ready(function(){
+     /*
+      //$.ajax({url: "/piece/medals2", success: function(result){
+        //$("#mdl").html(result);
+     // }});   
+      $.ajax({url: "/piece/backs2", success: function(result){
+        $("#bgs").html(result);
+      }});
+      
+      $.ajax({url: "/piece/stickers", success: function(result){
+        //$("#stk").html(result);
+      }});
+      
+      */
+      });
+      
+    $('.sidemenu').click(function() { opensidebar()})
+    $('.sidepanel-bg').click(function() { closeSide()})
+    $('.menu-list a').click(function() { 
+      closeSide()
+        $('#loc').html($(this).html())
+        //$('#publicProfile').html('')
+        setTimeout(function(){
+       // $('#publicProfile').html('<embed class="profileme" src="http://www.pollux.fun/profile/me">')
+        },100)
+    })
+      
+    
+    function opensidebar(){
+        $('.sidepanel-bg').fadeIn()
+        $('.sidepanel').css({
+          "transform": "translateX(0)"
+        });
+    }
+
+        function closeSide(){
+          
+          $('.sidepanel-bg').fadeOut()
+          $('.sidepanel').css({
+            "transform": "translateX(-130%)"
+          });
+
+        }
+        
+        $(document).ready(function () {
+              console.log(location.hash)
+              $('#hideUnowned').click(function(){
+                $('.s_see').css({display:"none"})
+              })
+              $('#showUnowned').click(function(){
+                $('.s_see').css({display:"inline-block"})
+              })
+
+              switch (location.hash) {
+
+                case "#/overview":
+                case "#/general":
+                case "#/profile":
+                  $("#a1").click()
+                  break;
+                case "#/medals":
+                  $("#a2").click()
+                  break;
+                case "#/backgrounds":
+                  $("#a3").click()
+                  break;
+                case "#/persotex":
+                  $("#a4").click()
+                  break;
+                case "#/stickers":
+                  $("#a5").click()
+                  break;
+                case "#/servers":
+                  $("#a6").click()
+                  break;
+                case "#/inventory":
+                  $("#a7").click()
+                  break;
+                default:
+                  $("#a1").click()
+                  break;
+              }
+            })
+            
+            !function(a){function f(a,b){if(!(a.originalEvent.touches.length>1)){a.preventDefault();var c=a.originalEvent.changedTouches[0],d=document.createEvent("MouseEvents");d.initMouseEvent(b,!0,!0,window,1,c.screenX,c.screenY,c.clientX,c.clientY,!1,!1,!1,!1,0,null),a.target.dispatchEvent(d)}}if(a.support.touch="ontouchend"in document,a.support.touch){var e,b=a.ui.mouse.prototype,c=b._mouseInit,d=b._mouseDestroy;b._touchStart=function(a){var b=this;!e&&b._mouseCapture(a.originalEvent.changedTouches[0])&&(e=!0,b._touchMoved=!1,f(a,"mouseover"),f(a,"mousemove"),f(a,"mousedown"))},b._touchMove=function(a){e&&(this._touchMoved=!0,f(a,"mousemove"))},b._touchEnd=function(a){e&&(f(a,"mouseup"),f(a,"mouseout"),this._touchMoved||f(a,"click"),e=!1)},b._mouseInit=function(){var b=this;b.element.bind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),c.call(b)},b._mouseDestroy=function(){var b=this;b.element.unbind({touchstart:a.proxy(b,"_touchStart"),touchmove:a.proxy(b,"_touchMove"),touchend:a.proxy(b,"_touchEnd")}),d.call(b)}}}(jQuery);
+
+
+block footer

@@ -1,0 +1,446 @@
+global.HOST = "https://beta.pollux.gg" 
+global.appRoot = "/home/pollux/polaris"
+global.Promise = require('bluebird')
+
+const config = require('./config.js');
+
+
+
+
+const express = require('express');
+const passport = require("passport");
+const passport_refresh = require('passport-oauth2-refresh');
+const CookieStrategy = require("passport-cookie");
+const {Strategy} = require("passport-discord");
+const session = require("express-session");
+const Eris = require ('eris')
+
+const fs = require("fs");
+const path = require('path');
+const logger = require('morgan');
+
+const favicon = require('serve-favicon');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const xmlparser = require('express-xml-bodyparser');
+const sassMiddleware = require('node-sass-middleware');
+const i18n = require("./locales.js");
+
+const formidable = require('formidable');
+
+
+const app = express();
+app.use(function (req, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', 'https://dev.pagseguro.uol.com.br');
+    res.setHeader('Access-Control-Allow-Origin', 'https://pagseguro.uol.com.br');
+    res.setHeader('Access-Control-Allow-Origin', 'https://api.pollux.fun');
+    res.setHeader('Access-Control-Allow-Origin', 'https://pollux.fun');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader('Access-Control-Allow-Credentials', true);
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+});
+
+global.PLX = new Eris.Client(config.token,{restMode:true})
+Object.assign(PLX,require("../bot/core/utilities/Gearbox").Client)
+global.DB  = require('./database'); 
+
+//-- SESSION STORAGE
+const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo')(session);
+
+mongoose.connect('mongodb://pollux:472899@31.220.55.84:27051/polaris', { 
+//mongoose.connect('mongodb://pollux:472899@localhost:27017/polaris', {
+  useNewUrlParser: true,
+  reconnectTries: Number.MAX_VALUE,
+  reconnectInterval: 1000,
+  keepAlive: 1,
+  connectTimeoutMS: 30000,
+});
+
+
+mongoose.set('useFindAndModify', false);
+mongoose.set('useCreateIndex', true);
+mongoose.Promise = require('bluebird');
+Promise.promisifyAll(require("mongoose"));
+Object.assign(global,require("../bot/core/utilities/Gearbox").Global)
+
+
+//-- PASSPORT  
+const scopes = ['identify', 'guilds','connections'];
+passport.serializeUser((user, done) => {
+  done(null, user);
+}); 
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
+passport.use(new CookieStrategy(
+  function (token, done) {
+    User.findByToken({
+      token: token
+    }, function (err, user) {
+      if (err) return done(err);      
+      if (!user)return done(null, false);      
+      return done(null, user);
+    });
+  }
+));
+
+let discordStrategy = new Strategy({
+  clientID: "354285599588483082",
+  clientSecret: "YHOQUdac8RmWplf9jS6jYLYzj73206RH",//config.secret,
+  callbackURL: HOST+"/callback",
+  scope: scopes,
+  passReqToCallback: true
+}, function (req, accessToken, refreshToken, profile, done) {
+    process.nextTick(function () {
+    return done(null, profile);
+  });
+});
+passport.use(discordStrategy);
+passport_refresh.use(discordStrategy);
+
+
+app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
+app.use(cookieParser());
+app.use(bodyParser.json({limit: '50mb'}));
+app.use(bodyParser.urlencoded({
+  extended: true,
+   parameterLimit:50000,
+  limit: '50mb'
+}));
+app.use(xmlparser());
+/*
+app.use(sassMiddleware({
+  src: path.join(__dirname, 'public/sass'),
+  dest: path.join(__dirname, 'public/css'),
+  indentedSyntax: true
+  //indentedSyntax: false
+  ,sourceMap: true,
+  debug:false,
+  prefix: '/css'
+}));
+*/
+// view engine setup
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../assets/imgres')));
+app.use(express.static(path.join(__dirname, '../assets/cosmetics')));
+app.use("/images", express.static(path.join(__dirname, 'public/images')));
+app.use("/images", express.static(path.join(__dirname, '../assets/website')));
+app.use("/flairs",    express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
+app.use("/medals",    express.static(path.join(__dirname, '../assets/cosmetics/medals')));
+app.use("/stickers",  express.static(path.join(__dirname, '../assets/cosmetics/stickers')));
+app.use("/boosters",  express.static(path.join(__dirname, '../assets/build/boosters')));
+app.use("/backdrops", express.static(path.join(__dirname, '../assets/cosmetics/backdrops')));
+app.use("/build",     express.static(path.join(__dirname, '../assets/build')));
+//backwards compat
+app.use("/build/backdrops", express.static(path.join(__dirname, '../assets/cosmetics/backdrops')));
+app.use("/build/stickers",  express.static(path.join(__dirname, '../assets/cosmetics/stickers')));
+app.use("/build/flairs/top",    express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
+
+
+app.use(session({
+  secret: "giraigumo",
+  maxAge: 13600000,
+  //store: new LevelStore(),
+  store: new MongoStore({ mongooseConnection: mongoose.connection }),
+  cookie: { maxAge: 13600000 },
+  rolling: true,
+  resave: true,
+  saveUninitialized: true
+}));
+
+
+app.use(passport.initialize());
+//app.use(passport_refresh.requestNewAccessToken("discord","a"));
+app.use(passport.session());
+
+//======================================================================
+//              DASHBOARD
+//======================================================================
+
+//passport_refresh.requestNewAccessToken('discord',)
+
+app.get('/auth', passport.authenticate('discord', {scope: scopes}), function (req, res) {
+
+  //console.log(req,res)
+  //passport_refresh.requestNewAccessToken('discord',)
+
+});
+
+app.get('/callback',
+  passport.authenticate('discord', {
+    permissions: 66321471,
+    failureRedirect: '/test'
+  }),
+  (...args) => simplepages().callback(...args));
+
+app.get('/logout', function (req, res) {
+  req.logout();
+  res.redirect('/');
+});  
+
+
+global.simplepages   = function simplepages(location=false){
+  delete require.cache[require.resolve('./routes/'+(location||"simplepages"))];    
+  //delete require.cache[require.resolve('./routes/globalFunctions.js')];    
+  return require(__dirname+'/routes/'+(location||"simplepages"));
+};  
+global.complexpages  = function complexpages(location=false){
+  delete require.cache[require.resolve('./pipelines/'+(location||"/complexpages"))];    
+  //delete require.cache[require.resolve('./routes/globalFunctions.js')];    
+  return require(__dirname+'/pipelines/'+(location||"/complexpages")); 
+};
+
+/* FANCY LOGGING */
+colors = require('colors')
+logger.token('userID', function (req, res) { return req.user? req.user.id.blue : "-ANONYMOUS-".magenta })
+logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator : "" })
+logger.token('date', function(){  return new Date().toUTCString(); });
+app.use(logger(function(tokens,req,res){
+  let status = tokens.status(req,res);
+  let STATUS = status >= 500 ? status.red : status >= 400 ? status.yellow : status >= 300 ? status.cyan : status >= 200 ? status.green : status;
+  let METHOD = (M) => M=='POST'? " POST ".bgYellow : M=='GET' ? " GET  ".bgBlue : M.bgRed;
+  return[
+    //("["+tokens.date(req,res)+"]").grey.bgBlack.dim,"\n",
+    METHOD(tokens.method(req,res)),
+    (tokens.url(req,res)+"").padEnd(40)[tokens.method(req,res)=='POST'?'yellow':'reset'],
+    STATUS+"",
+    ("<< "+tokens.referrer(req,res)+"").replace(HOST,'').padEnd(20).grey.italic, "",
+    ("("+tokens['response-time'](req, res)+ 'ms | '+tokens.res(req, res, 'content-length')+')').padEnd(24),
+    (tokens.userID(req,res)+"").padEnd(20),
+    (" "+tokens.userTag(req,res)+" ").inverse,
+    "\n\n"
+  ].join(' ')
+}));
+/* --------------- */
+
+app.use(i18n({
+  translationsPath: (path.join(__dirname, '../locales')),
+  defaultLang: "en",
+  //  browserEnable :false,
+  siteLangs: ["en", "cz", "es", "fr", "pt-br", "pt", "ru","jp","tr","ko","de","pl"],
+  textsVarName: 'translation',
+  paramLangName: "locale"
+}));
+
+
+app.use(async function(req,res,next){
+
+  
+  if(req.isAuthenticated()){
+    let preUserData = DB.users.findOne({id:req.user.id}).lean().exec();
+    let preDataProcess = result=>{
+      let USR = req.user;
+      res.locals.userdata = result;
+      res.locals.userinfo= {
+        pix: (result.meta||{}).avatar || `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
+        name: `${USR.username}#${USR.discriminator}`,
+        uname: USR.username,
+        id: USR.id,
+        discriminator: USR.discriminator,
+        servers:USR.guilds||USR.servers
+      }
+    }
+
+    preUserData.then(preDataProcess);
+
+    await preUserData;    
+    next();
+  }else{
+    res.locals.userdata=null;
+    res.locals.userinfo=null;
+    next();
+  }  
+})  
+
+//###################################################################################
+const simpleauth = require('basic-auth')
+const admins = { polaris: { password: 'geminis472899' } }
+const auth = function(request, response, next) {
+  if(request.url.includes('botbridge')) return next();
+  if(request.url.includes('webhook'))   return next();
+  if(request.url.includes('.png'))      return next();
+  if(request.url.includes('.jpg'))      return next();
+  if(request.url.includes('piece'))     return next();
+  if(request.url.includes('status'))    return next();
+  if(request.url.includes('gif'))       return next();
+  if(request.url.includes('?json'))     return next();
+  if(request.url.includes('random'))     return next();
+  if(request.url.includes('/admin/'))     return next();
+  if(request.url.includes('/setup/'))     return next();
+  if(request.url.endsWith('/faq'))     return next();
+  if(request.url.endsWith('/terms'))     return next();
+  if(request.url.endsWith('/terms'))     return next();
+  if(request.url.endsWith('/commands'))     return next();
+  if(request.url.endsWith('/bsave'))     return next();
+  if(request.url.endsWith('/invite'))     return next();
+  var user = simpleauth(request)
+
+  if(request.headers['referer']==='http://opengraphcheck.com' || request.headers['user-agent']==='Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)'){
+    console.log(request.headers['referer'])
+    console.log(request.headers['user-agent'])
+  }
+   if( request.headers['user-agent'] === "Polaris "+config.token){
+     return next()
+   }
+
+  if (!user || !admins[user.name] || admins[user.name].password !== user.pass) {
+    response.set('WWW-Authenticate', 'Basic realm="wawa"')
+    //return response.redirect('/auth')
+    return response.status(401).send()
+  }
+  return next()
+}
+global.isAdmin = function isAdmin(req,svID){
+  return new Promise(async resolve=>{
+     
+      try{
+          SVID = req.query.serverID || req.params.serverID || svID
+          let [memberInfo,roleInfo,serverInfo,serverData] = await Promise.all([
+              PLX.getRESTGuildMember(SVID, req.user.id),
+              PLX.getRESTGuildRoles(SVID),
+              PLX.getRESTGuild(SVID),
+              DB.servers.get(svID)
+          ]);
+          console.log({
+            rolehasmod: memberInfo.roles.includes(serverData.modules.MODROLE) ,
+            modrole: serverData.modules.MODROLE
+          })
+          if(memberInfo.roles.includes(serverData.modules.MODROLE)) return resolve(true);
+          resolve(roleInfo.some(role=> req.user.id === serverInfo.ownerID || memberInfo.roles.includes(role.id) && (role.permissions.has('manageGuild')||role.permissions.has('administrator')) ));
+      }catch(err){
+          console.error(err);
+          resolve (false);
+      }
+  })  
+}
+global.hasPolluxRole = function hasPolluxRole(req,roleID){
+  return new Promise(async resolve=>{     
+      try{
+          SVID = "277391723322408960"
+          let [memberInfo,serverData] = await Promise.all([
+              PLX.getRESTGuildMember(SVID, req.user.id),
+              DB.servers.get(SVID)
+          ]);
+          if(memberInfo.roles.includes(serverData.modules.MODROLE)) return resolve(true);
+          resolve( memberInfo.roles.includes(roleID) );
+      }catch(err){
+          console.error(err);
+          resolve (false);
+      }
+  })  
+}
+global.checkAuth = function checkAuth(req, res, next) {
+  if (req.isAuthenticated()) return next();
+  return res.render('needlogin')
+};
+global.compulsoryAuth = async function checkAuth(req, res, next) {
+  if (req.isAuthenticated()){
+    if(await hasPolluxRole(req,"612479032566480926")){
+      return next();
+    }else{
+      return auth(req,res,next);
+    }
+  }else{    
+    return auth(req,res,next);
+   
+  }  
+};
+//###################################################################################
+
+
+
+
+app.use(compulsoryAuth)
+
+app.get('/', (...args)=> simplepages().index(...args));
+
+app.post('/checklogin', checkAuth, function (req, res) {
+    res.sendStatus(200);
+});
+   
+app.post('/sendform', async function (req, res) {
+  let form = new formidable.IncomingForm();
+  delete require.cache[require.resolve('./pipelines/forms.js')];
+  require('./pipelines/forms.js').run(req, res,form).then(status => res.send(status))
+});
+ 
+app.get('/test', (...args)=> simplepages().test(...args));
+ 
+app.get('/callback', 
+          passport.authenticate('discord', {
+            permissions: 66321471,
+            failureRedirect: '/'
+          }),
+          (...args)=> simplepages().callback(...args));
+
+app.use('/', (...args)=>{
+  delete require.cache[require.resolve('./routes/_allroutes')];
+  const router = require('./routes/_allroutes');
+  return router(...args);
+});
+        
+
+//require('./routes/allroutes').run(app);
+
+//-------
+
+//======================================================================
+//              ALL SET
+//======================================================================
+
+app.listen(4728, function (err) {
+  if (err) return console.log(err)
+  console.log('Listening at http://localhost:4728/')
+})
+
+
+
+
+// CATCH 404
+app.use(function (req, res, next) {
+  res.status(404)
+  res.render('404');
+});
+
+
+// ERROR HANDLER
+app.use(async function (err, req, res, next) {
+  console.log("xxx")
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  const md5= require('md5')
+  errdesc= err.message.split(/[\n\r]/g).slice(-1).pop()+""
+  errline= err.message.split(/[\n\r]/g)[0].split('/').slice(5).join(' > ');
+  errorCode = md5(errdesc);
+  console.log(" ERROR ".bgRed, (err.name+"").red, errdesc.yellow, errline,(`[${errorCode}]`.blue))
+  await DB.globals.updateOne({'data.errors.id':{$ne:errorCode}},{$addToSet:{'data.errors': {id:errorCode }    }})
+  let errorData = (await DB.globals.findOneAndUpdate({'data.errors.id':errorCode},
+    {
+      $inc:{'data.errors.$.occurrences':1},
+      $set:{ 'data.errors.$.name': err.name, 'data.errors.$.description': errdesc, 'data.errors.$.file': errline.split(':')[0], 'data.errors.$.stack':err.stack
+      }
+    }
+  )).data.errors.find(er=>er.id==errorCode);
+  console.log({errorData})
+  res.render('error', { errorData }); 
+})
+
+
+
+
+process.on('unhandledRejection', function (reason, p) {
+  console.log("Possibly Unhandled Rejection at: Promise \n".red, p, "\n\n reason: ".red, reason.stack);
+  // sendSlack("Promise Breaker","Promise Rejection: "+reason,reason.stack,"#ffcd25" )
+});
+
+
+module.exports = app

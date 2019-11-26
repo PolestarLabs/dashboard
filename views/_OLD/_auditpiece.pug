@@ -1,0 +1,97 @@
+include templates
+style.
+  .lrg{
+    font-weight: 900;
+    font-size:1.3rem;
+    text-align:right
+  }
+  .tt_plus{
+    color: #58bc4b;
+    text-align:right
+  }
+  .tt_minus{
+    color: #d15d52;
+    text-align:right
+  }
+  .newest{
+    animation: blink 2s both;
+    height:0px;
+  }
+  .center{
+     text-align:center
+  }
+  @keyframes blink {
+    0% { background-color: #e65492;
+      transform: translateX(-100px) scale(1,0);
+    }
+    30%{
+    transform: translateX(0) scale(1,1);
+    }
+    100% { background-color: rgba(230, 84, 146, 0);
+      
+      
+    }
+  }
+table.table.is-mobile.is-narrow
+  thead: tr
+    //th Transaction
+    th.is-hidden-mobile User
+    th Type
+    th Amount
+    th $
+    th Timestamp
+    th Transaction ID
+  tbody  
+    -let auds = audits_mi
+    each item in auds 
+      -var appearcondition = item.to == userdb.id
+      if appearcondition
+        -let transclass = userdb.id == '271394014358405121'? item.transaction!=="+"?"tt_plus":"tt_minus" : item.transaction=="+"?"tt_plus":"tt_minus"      
+        -let now = Date.now()
+        -let newe = now - item.timestamp < 6000 ? 'newest' : ''
+        tr(class=newe)
+          //td= item.transaction
+          td.small.is-hidden-mobile
+
+            -var targ = item.to//(item.type=='give'&&item.from==selfID?item.to:item.from)
+
+            - if(transclass) targ = item.to;
+            -var usr= subaudits.find(x=>x.id==targ)
+            a(target="_blank" href=item.to.includes('DISCOIN')?"http://discoin.sidetrip.xyz":"/audits/"+targ)= ((usr||{meta:false}).meta||{tag:false}).tag||(usr||{name:false}).name||(usr||{id:false}).id || targ
+
+
+
+          td.small= item.type
+          td(class="lrg "+transclass).is-hidden-mobile= item.transaction+miliarize(Math.abs(item.amt),'ultra')
+          td(class=transclass).small.b900.is-hidden-desktop= item.transaction+miliarize(Math.abs(item.amt),'ultra')
+          td.center
+            if item.currency == "RBN"
+              img.curricon(src="/images/rubine.png" width="25px")
+            else if item.currency == "JDE"
+              img.curricon(src="/images/jade.png" width="25px")
+            else if item.currency == "SPH"
+              img.curricon(src="/images/sapphire.png" width="25px")
+            else
+             p OTH
+
+          td.mome.small.center.is-hidden-mobile= item.timestamp
+          td.momemob.small.center.is-hidden-desktop= item.timestamp
+          td.small: code= item.transactionId
+      script.  
+        $('.mome').each(function(){  
+          var x=Number($(this).html())
+          if(isNaN(x))x="Undetermined";
+          else {
+          x = moment(x).format("MMM Do YYYY - hh:mm:ss a")};
+          $(this).html(x)
+        })
+        $('.momemob').each(function(){  
+          var x=Number($(this).html())
+          if(isNaN(x))x="Undetermined";
+          else {
+          x = moment(x).format("MMM Do YYYY \nhh:mm:ss a")};
+          $(this).html(x)
+        })
+
+
+

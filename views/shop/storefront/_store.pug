@@ -1,0 +1,139 @@
+extends ../../layout 
+block content
+    .wrapper
+        -currentPage = 'market'
+        include ../../navbar
+
+        style   
+          include store.css
+
+        
+        -
+          let default_img = "https://via.placeholder.com/120x120";
+          var arrivals = [
+              {type: "md", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "md", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "md", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "tk", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "tk", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "bg", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "bg", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "bg", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "tk", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "tk", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "bg", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "md", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "it", name:"jhfas kj fhasjfh", img:default_img}
+            , {type: "bg", name:"jhfas kj fhasjfh", img:default_img}
+            ]
+
+        nav.plx-navbar.plx-nav-container.topbar(plx-navbar class=index?"home":"" plx-sticky=index?"animation: plx-animation-slide-top-medium;top: 90vh; bottom: true":"")
+          
+        .store-container  
+          .recoil
+            h1.title.stfront STOREFRONT
+            h3.subtitle Your new hub for Pollux Collectibles
+            hr.plx-divider-small
+            brr
+            
+          div(plx-sticky="top:0; offset:50; xmedia: 1000")
+            .plx-flex-start.plx-grid.plx-nav.glassmenu(plx-scrollspy-nav="closest: a; scroll: true")
+              a.item.glasspane(href="#ARRIVALS")
+                i.fas.fa-home
+                span NEW ARRIVALS
+              a.item.glasspane(href="#BUNDLES")
+                i.fas.fa-home
+                span BUNDLES
+              a.item.glasspane(href="#BACKGROUNDS")
+                i.fas.fa-home
+                span BACKGROUNDS
+              a.item.glasspane(href="#MEDALS")
+                i.fas.fa-home
+                span MEDALS
+              a.item.glasspane(href="#BOOSTERS")
+                i.fas.fa-home
+                span BOOSTERS
+
+            //hr.plx-divider-icon
+          
+            .minibar.plx-flex.plx-flex-right
+              .user
+                span User#2000
+                img.avatar(src="https://cdn.discordapp.com/embed/avatars/0.png")
+              span | 
+              .expand-dong
+              
+              .cash.plx-flex
+                .plx-rubine.icon24
+                span 23 785 |
+              .cash.plx-flex 
+                .plx-jade.icon24
+                span 2 472 899 |
+              .cash.plx-flex
+                .plx-sapphire.icon24
+                span 28
+          .recoil
+            .plx-grid.to-stores.plx-flex-around
+              .plx-width-1-2(class='plx-width-1-4@s'): .glasspane
+                .icon: img(src="https://via.placeholder.com/120x120")
+                .title Backgrounds
+              .plx-width-1-2(class='plx-width-1-4@s'): .glasspane
+                .icon: img(src="https://via.placeholder.com/120x120")
+                .title Medals
+              .plx-width-1-1(class='plx-width-1-2@s'): .glasspane
+                .icon: img(src="https://via.placeholder.com/400x120")
+                .title User Marketplace
+
+          hr.plx-divider-icon
+          .recoil#ARRIVALS
+            h1.title New Arrivals
+            h4.subtitle Recently added items
+            .plx-grid(plx-filter="target: #arrivals1")
+              .plx-width-1-1(class='plx-width-1-5@m plx-width-2-5@s')
+
+
+                ul.plx-nav.storeside
+                  form.search
+                    i.fas.fa-search
+                    input(type='search' placeholder="Search store...")
+                  li(plx-filter-control="filter: *"): a.plx-button ALL
+                  li(plx-filter-control="filter: .bg"): a.plx-button BACKGROUNDS
+                  li(plx-filter-control="filter: .md"): a.plx-button MEDALS
+                  li(plx-filter-control="filter: .tk"): a.plx-button STICKERS
+                  li(plx-filter-control="filter: .it"): a.plx-button ITEMS
+              div( plx-slider='xsets: true').plx-position-relative.plx-width-1-1(class='plx-width-4-5@m plx-width-3-5@s').arrivalscar
+                ul.plx-width-auto#arrivals1.plx-slider-items.plx-child-width-1-3.plx-flex-wrap
+                  each item in arrivals
+                    li.square(class=item.type): div 
+                      img(plx-img data-src=item.img)
+                      span= item.name
+                  
+                a.plx-position-center-left.plx-position-small.plx-hidden-hover(plx-slidenav-previous, plx-slider-item="previous")
+                a.plx-position-center-right.plx-position-small.plx-hidden-hover(plx-slidenav-next, plx-slider-item="next")
+            
+
+
+            hr.plx-divider-icon
+          .recoil#BUNDLES
+            h1.title Bundles
+            h4.subtitle Limited-time deals
+            hr.plx-divider-icon
+          .recoil#BACKGROUNDS
+            h1.title Backgrounds
+            h4.subtitle Limited-time deals
+            hr.plx-divider-icon
+          .recoil#MEDALS
+            h1.title Medals
+            h4.subtitle Limited-time deals
+            hr.plx-divider-icon
+          .recoil#BOOSTERS
+            h1.title Boosterpacks
+            h4.subtitle Limited-time deals
+            hr.plx-divider-icon
+            br
+            br
+
+
+
+    style footer svg { margin-top: -60px !important}
+block scripts

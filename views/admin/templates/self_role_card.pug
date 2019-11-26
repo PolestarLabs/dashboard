@@ -1,0 +1,21 @@
+
+
+include ../../tools/mixins
+form.selfrole_item.levelrole_item(id="selfrole-"+i data-index=i)
+ 
+        .level(class=`sfrl-${i}-view`  ).noinput= sfrl[1]
+        input.level(hidden   class=`sfrl-${i}-view` value=sfrl[1] name="short" style="font-size:smaller")
+        span &#x2003
+    
+        .rolename(class=`sfrl-${i}-view`).noinput= thisRole.name || "<DELETED ROLE>"
+        .rolename(hidden class=`sfrl-${i}-view`).withinput
+            +roleSelect("selfrole-select-2",roleInfo,thisRole.id)
+        .plx-flex.plx-flex-around
+            a(hidden data-index=i plx-toggle=`target: .sfrl-${i}-view` class=`sfrl-${i}-view` ).plx-button.selfrole-edit.plx-button-default.plx-button-small
+                i.fas.fa-undo-alt
+            button(type="submit" data-index=i plx-toggle=`target: .sfrl-${i}-view` ).plx-button.selfrole-save.plx-button-secondary.plx-button-small(hidden class=`sfrl-${i}-view`)
+                i.fas.fa-save
+            a(data-index=i plx-toggle=`target: .sfrl-${i}-view` class=`sfrl-${i}-view` ).plx-button.selfrole-edit.plx-button-primary.plx-button-small
+                i.fas.fa-pencil-alt
+            a(data-index=i data-level=sfrl[1] data-role=sfrl[0] class=`sfrl-${i}-view`).plx-button.selfrole-del.plx-button-danger.plx-button-small
+                i.fas.fa-trash

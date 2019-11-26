@@ -1,0 +1,36 @@
+extends layout
+
+block content
+  .level
+    .level-item
+      .level
+        p: b Rarity &#x2003
+        div.control.level-left: .select.is-small: select#filter-rar
+                each i in ["","C","U","R","SR","UR"]
+                  if(i==query.rarity)
+                    option(selected)= i
+                  else
+                    option()= i
+    .level-item
+      .level
+        p: b Tags &#x2003
+        input(type=text placeholder="tags" value=query.tags)#filter-tag
+    .level-item
+      //.level
+        p: b Include Event &#x2003
+        label.switch
+          input(type="checkbox" checked)#filter-event
+          span.slider
+    .level-item
+      .level
+        p: b Results per page &#x2003
+        div.control.level-left: .select.is-small: select#filter-max
+                each i in [60,120,240]
+                  if(i==query.max)
+                    option(selected)= i
+                  else
+                    option()= i
+    a(index=1).button.pgi GO
+  #mdfilt
+    include shop/mds
+block scripts

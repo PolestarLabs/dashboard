@@ -1,0 +1,90 @@
+style footer{font-family:Nunito}
+svg( viewBox="0 -20 700 110" width="100%" height="110" preserveAspectRatio="none" style="height: 100px; margin-top:0vh")
+    path( transform="translate(0, -20)" d="M0,10 c80,-22 240,0 350,18 c90,17 260,7.5 350,-20 v50 h-700" fill="#C7D" )
+    path( d="M0,10 c80,-18 230,-12 350,7 c80,13 260,17 350,-5 v100 h-700z" fill="url(#Bubblegum)" )
+    linearGradient(id="Bubblegum")
+          stop(stop-color="#c51f61" offset="00%")
+          stop(stop-color="#eb2c58 " offset="71%")
+          stop(stop-color="#f23e6a  " offset="100%")
+      
+.plx-background-primary
+    .plx-flex.plx-flex-around
+        a(href="#" plx-scroll)
+            i.fas.fa-arrow-up
+            small &#x2000 Back to top 
+
+    .plx-grid-divider(class="plx-child-width-expand@s" plx-grid style="color:white").plx-padding-small.plx-padding-medium-top.plx-flex-around
+
+        div(class="plx-width-1-2@m") 
+            .plx-text-uppercase.plx-text-muted: b Cool Stuff 
+            //p asdasdsd
+            p.plx-flex.plx-space-between
+                button.plx-button.outline
+                    i.fab.fa-discord(style="font-size:20px; font-weight: initial;")
+                    | &#x2003 Add to Discord
+            a(href="/branding")
+                i.fas.fa-brush
+                | &#x2003;Reference & Branding
+            p: b Support the project !
+            
+            .plx-flex-around.plx-flex(style="text-align: center;font-size:12px; ")
+                a.plx-flex.plx-flex-column(href="/shop/premium")
+                    i.fas.fa-gift(style="font-size:28px")
+                    small.plx-margin-small-top.plx-text-uppercase: b Cash Shop
+
+                a.plx-flex.plx-flex-column(href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8JDLAY5TFU9D6&source=url" target='blank')
+                    i.fab.fa-paypal(style="font-size:28px")
+                    small.plx-margin-small-top.plx-text-uppercase: b PayPal
+
+                a.plx-flex.plx-flex-column(href="https://patreon.com/join/pollux" target='blank')
+                    i.fab.fa-patreon(style="font-size:28px")
+                    small.plx-margin-small-top.plx-text-uppercase: b Patreon
+
+                a.plx-flex.plx-flex-column(href="https://www.blockchain.com/btc/address/1QBobEQnrKgox18R2cL8Tu69Cxw6uqcWmw" target='blank')
+                    i.fab.fa-bitcoin(style="font-size:28px")
+                    small.plx-margin-small-top.plx-text-uppercase: b Crypto
+
+                a.plx-flex.plx-flex-column(href="https://pag.ae/bbwkFvg" target='blank')
+                    div(style="width:28px; height:28px; margin:auto")
+                        svg(aria-hidden="true" focusable="false" data-prefix="fas" data-icon="barcode-alt" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="svg-inline--fa fa-barcode-alt fa-w-20")
+                            path(fill="currentColor" d="M592 0H48C21.5 0 0 21.5 0 48v416c0 26.5 21.5 48 48 48h544c26.5 0 48-21.5 48-48V48c0-26.5-21.5-48-48-48zM160 408c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V104c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v304zm64 0c0 4.4-3.6 8-8 8h-16c-4.4 0-8-3.6-8-8V104c0-4.4 3.6-8 8-8h16c4.4 0 8 3.6 8 8v304zm64 0c0 4.4-3.6 8-8 8h-16c-4.4 0-8-3.6-8-8V104c0-4.4 3.6-8 8-8h16c4.4 0 8 3.6 8 8v304zm128 0c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V104c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v304zm128 0c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V104c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v304z" class="")
+                    small.plx-text-uppercase: b Barcode
+            //p asdasdsd
+
+
+        div(class="plx-width-1-4@m plx-width-1-2@s ") 
+            .plx-text-uppercase.plx-text-muted: b Boring Stuff 
+            ul.plx-list.i-wi-20
+                li: a(href="/faq")
+                    i.fas.fa-question
+                    | FAQ
+                li: a(href="/terms")
+                    i.fas.fa-file-contract
+                    | Terms of Use
+                li: a(href="/privacy")
+                    i.fas.fa-shoe-prints
+                    | Privacy Policy
+                li: a(href="/dmca")
+                    i.fas.fa-gavel
+                    | DMCA Disclaimer
+
+            
+        div(class="plx-width-1-4@m plx-width-1-2@s ") 
+            .plx-text-uppercase.plx-text-muted: b Mailbox 
+            p(style="margin-bottom:0")            
+                b Polestar Interactive
+                //br
+                    small: i Av. Praia de Belas 1181 - 123C
+                br
+                i PO-BOX 4342
+                //br
+                    | Porto Alegre - RS
+                br
+                small: b BRAZIL
+                br
+                small 90110-970
+
+
+
+        div.plx-width-auto.plx-text-muted.plx-margin-medium-top
+            p Copyright © 2017 - 2019  <a style="color:white" href="http://lucasflicky.com" target='blank'>LucasFlicky</a> & <a style="color:white" href="http://qailertang.amarok.kr">Qailertang Dynamics</a>. All rights reserved.

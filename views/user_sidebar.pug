@@ -1,0 +1,135 @@
+.subpom(plx-scrollspy="target: .animate, .plx-nav>li; cls: plx-animation-slide-right-medium; delay: 10").plx-animation-slide-bottom-small
+    if userinfo && userdata
+        img.sidebg(src="/build/backdrops/"+userdata.modules.bgID+".png")
+        img.mugshot(src=userinfo.pix).pinkord-placeholder
+        if userdata.donator
+            .don-icon.icon40(class= userdata.donator )
+        br
+        br
+        div.animate
+            h3.title #{userinfo.uname}
+            h5.subtitle: i #{userdata.modules.tagline}
+        hr
+        .plx-flex-around
+            .plx-button-default.plx-button.plx-button-small.plx-align-center.plx-margin-small.animate
+                span
+                    i.fas.fa-id-card
+                    |&#x2000 Profile
+                
+            .plx-button-default.plx-button.plx-button-small.plx-align-center.plx-margin-small.animate
+                span
+                    i.fas.fa-cogs
+                    |&#x2000 Dashboard
+
+        hr
+
+        a.plx-button-danger.plx-button.plx-width-1-1(href="/logout").animate
+            | LOGOUT
+
+        hr
+        //h4.subtitle #{userinfo.uname}
+        .curcho_dis
+            .currencysho.curr.animate
+                .plx-rubine.icon32.curr_icon_3.level-start
+                span.level-end= "" + miliarize(userdata.modules.rubines,false,' ')
+            .currencysho.curr.animate
+                .plx-jade.icon32.curr_icon_3.level-start
+                span.level-end= "" + miliarize(userdata.modules.jades,false,' ')
+            .currencysho.curr.animate
+                .plx-sapphire.icon32.curr_icon_3.level-start
+                span.level-end= "" + miliarize(userdata.modules.sapphires,false,' ')
+    else
+        a.plx-button.plx-width-1-1( onclick="login()").bg-discord
+            | LOGIN &#x2002 
+            i.fas.fa-sign-in-alt
+    hr
+    ul.plx-nav.plx-nav-parent-icon(plx-nav="multiple: true; animation:plx-animation-slide-left-medium" class="plx-hidden@m")      
+        li: a(href='/commands')
+            span.icon: i.fas.fa-cogs
+            span Commands
+        li.plx-parent
+            a
+                span.icon: i.fa.fa-shopping-basket
+                span Rubine Market
+                span &#x2003
+            //-############################################################
+            ul.plx-nav-sub.plx-nav-default
+                li: a(href='/shop')
+                    span.icon: i.fas.fa-store-alt 
+                    span: b Storefront
+                //-----------------------------------------------
+                li.plx-nav-divider
+                li: a(href='/shop/backgrounds')
+                    span.icon: i.fas.fa-images
+                    span Background Shop
+                li: a(href='/medalshop')
+                    span.icon: i.fab.fa-first-order
+                    span Medal Shop
+                li: a(href='/shop/marketplace')
+                    span.icon: i.fas.fa-store
+                    span User Marketplace
+                li: a(href='/shop/premium')
+                    span.icon: i.fab.fa-cc-paypal 
+                    span Cash Shop
+                //-----------------------------------------------
+                li.plx-nav-divider
+                li: a(href='/crafting')
+                    span.icon: i.fas.fa-flask
+                    span Crafting
+                li: a(href='/stickers')
+                    span.icon: i.fas.fa-splotch
+                    span Profile Stickers
+            //-############################################################
+
+
+        li: a(href='/partners').beta
+            span.icon: i.fa.fa-heart
+            span Partners
+
+        li.plx-parent
+            a
+                span.icon: i.fa.fa-star
+                span Events
+                span &#x2003
+            ul.plx-nav-sub: li        
+                
+                p(style="pointer-events:none") No Ongoing Events
+
+                .plx-nav-divider
+                a(href='/events')
+                    span.icon: i.fa.fa-calendar
+                    span See all events Information
+
+        li: a(href='/donate')
+            span.icon: i.fa.fa-gift
+            span Donate
+        li: a(href='/info')
+            span.icon: i.fa.fa-info-circle
+            span Info
+        li: a(href='/fanart')
+            span.icon: i.fa.fa-paint-brush
+            span Fanart     
+        //li: a(href='/fanart')
+            span.icon: i.fa.fa-paint-brush
+            span Fanart 
+    
+        hr
+        //-############################################################
+        //-############################################################
+        //-############################################################
+        ul
+            li: a(href='/faq')
+                span.icon: i.fa.fa-question
+                span FAQ     
+
+        hr
+    .social-icons.plx-flex.plx-flex-around.animate
+        div.animate
+            a(href="/support" target='blank'): i.fab.fa-discord
+        div.animate
+            a(href="https://steamcommunity.com/groups/PolluxMansion" target='blank'): i.fab.fa-steam
+        div.animate
+            a(href="https://reddit.com/r/pollux" target='blank'): i.fab.fa-reddit
+        div.animate
+            a(href="https://twitter.com/maidpollux" target='blank'): i.fab.fa-twitter
+    

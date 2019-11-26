@@ -1,0 +1,77 @@
+extends layout
+
+block content
+  style.
+    .section,body{
+      background-color:#1C34A9
+    }
+    body{
+      overflow:hidden;
+    }
+    .navbar{
+      box-shadow:none;
+      background:none;
+      color:white !important;
+    }
+  .hero.is-info
+  include navbas
+  .flexboxi.fullheight(style="position:relative;margin:0;padding:0;")
+    .columns(style="width:100%")
+      .column.is-8
+        .section.is-fluid
+          .title: b Technical Information
+          //.subtitle High res versions of most Pollux related original artworks can be found here, as well as sketches and concepts that usually never got to the public
+          .columns
+            .column
+              li vendor_id       : GenuineIntel
+              li cpu family      : 6
+              li model           : 45
+              li model name      : Intel(R) Xeon(R) CPU E5-2609 0 @ 2.40GHz
+              li stepping        : 7
+              li microcode       : 1804
+              li cpu MHz         : 1211.696
+              li cache size      : 10240 KB
+              li physical id     : 0
+              li siblings        : 4
+              li core id         : 0
+              li cpu cores       : 4
+              li apicid          : 0
+              li initial apicid  : 0
+              li fpu             : yes
+              li fpu_exception   : yes
+              li cpuid level     : 13
+              li wp              : yes
+
+              li bogomips        : 4799.91
+              li clflush size    : 64
+              li cache_alignment : 64
+              li address sizes   : 46 bits physical, 48 bits virtual
+            .column
+                
+                li MemTotal:        1048576 kB
+                li MemFree:               0 kB
+                li Cached:             3316 kB
+                li Buffers:               0 kB
+                li Active:           485452 kB
+                li Inactive:         523276 kB
+                li Active(anon):     483728 kB
+                li Inactive(anon):   521684 kB
+                li Active(file):       1724 kB
+                li Inactive(file):     1592 kB
+                li Unevictable:           0 kB
+                li Mlocked:               0 kB
+                li SwapTotal:        262144 kB
+                li SwapFree:           2852 kB
+                li Dirty:              1780 kB
+                li Writeback:             0 kB
+                li AnonPages:       1005412 kB
+                li Shmem:             58712 kB
+                li Slab:              39044 kB
+                li SReclaimable:       9164 kB
+                li SUnreclaim:        29880 kB
+
+
+      .column
+        .div(style="width:100%; flex:0 1 auto;position:absolute;bottom:0").fullheight
+          video(autoplay loop style="height:100%") NO VIDEO SUPPORT
+            source(src="/video/polluxblue.webm" type="video/mp4")

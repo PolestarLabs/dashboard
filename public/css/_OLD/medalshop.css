@@ -1,0 +1,204 @@
+.icon {
+  align-items: initial;
+  display: initial;
+  justify-content: initial;
+  height: initial;
+  width: initial;
+}
+
+.tier {
+  position: absolute;
+  top: -10px;
+  left: -15px;
+  height: 42px;
+  z-index: 100
+}
+
+.box {
+  position: relative;
+}
+
+.b-head {
+  font-size: smaller;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  border-radius: 0 5px 0 0;
+  position: absolute;
+  background: #d94690;
+  color: #ffffff;
+  text-align: right;
+  padding: 4px 8px 4px 16px;
+
+}
+
+
+.b-head p{
+      overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
+height: 20px;
+  text-align: center;
+}
+
+.b-foot {
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  border-radius: 0 0 5px 5px;
+  position: absolute;
+  background: #32323a;
+  text-align: right;
+  z-index: 160;
+  padding: 4px 8px 4px 16px;
+  box-shadow: 0px 3px 5px rgba(50, 50, 58, 0.38)
+}
+
+.i64 {
+  margin: 16px 8px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+}
+
+img.SR,
+img.UR {
+  animation: glow_b 3s both infinite;
+}
+
+
+img.R {
+  animation: glow_b 5s both infinite;
+}
+
+.i64 img {
+  height: 80px;
+  z-index: 12
+}
+
+.b-body {
+  position: relative;
+  z-index: 150
+}
+
+.b-tags {
+  position: absolute;
+  left: 0px;
+  top: 100%;
+  background: whitesmoke;
+  z-index: 160;
+  width: 100%;
+  padding: 8px;
+  display: flex;
+  border-radius: 0 0 5px 5px;
+  align-items: center;
+  text-align: center;
+  box-shadow: 0px 3px 5px rgba(50, 50, 58, 0.38);
+  transition: all 500ms ease;
+  transform: scale(1, 0);
+  transform-origin: top;
+}
+
+.b-tags.open {
+  animation: opn .51s both;
+}
+
+.shine-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  overflow: hidden;
+  left: 0;
+  top: 0
+}
+
+.shine {
+  width: 150px;
+  height: 150px;
+  margin: auto;
+  background-position: cover;
+  z-index: 0;
+}
+
+.spinShine {
+  animation: spin 15s linear infinite;
+}
+
+.shine.UR {
+  background-image: url('/images/shine-ur.png');
+  opacity: .6
+}
+
+.shine.SR {
+  background-image: url('/images/shine-sr.png');
+  opacity: .3
+}
+
+.shine.R {
+  background-image: url('/images/shine-r.png');
+  opacity: .3
+}
+
+//.shine.U{background-image:url('/images/shine.png'); opacity:.01}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg)scale(1.9);
+  }
+  50% {
+    transform: rotate(180deg)scale(1.9);
+    opacity: .1;
+  }
+  100% {
+    transform: rotate(360deg)scale(1.9);
+  }
+}
+
+@keyframes glow_b {
+  50% {
+    filter: drop-shadow(0 0 13px rgba(190, 223, 255, 0.2))
+  }
+}
+
+@keyframes opn {
+  0% {
+    transform: scale(1, 0) translateY(-100%);
+  }
+  100% {
+    transform: scale(1, 1) translateY(00%);
+  }
+}
+
+.tag {
+  position: relative;
+  margin: 2px
+}
+
+.categ {
+  position: relative;
+  bottom: 20px;
+  left: -30px;
+  transform: scale(.6);
+}
+
+.swal2-image {
+  transform: scale(.6)
+}
+
+.openiv {
+  transition: all 200ms linear
+}
+
+.openiv:hover {
+  cursor: pointer;
+  transform: scale(1.2)
+}
+
+@media screen and (max-width:800px) {
+  .spinShine {
+    display: none;
+  }
+}
+
+.swal2-image {
+  transform: scale(.6)
+}

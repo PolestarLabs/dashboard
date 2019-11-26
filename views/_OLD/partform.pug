@@ -1,0 +1,138 @@
+extends layout
+
+block content
+  -let user 
+  if !userinfo
+    -user ={}
+  else
+    -user = userinfo
+
+  .hero.is-primary
+    include navbas
+    
+  .section.is-fluid
+    .title: b Partnership Application Form
+    .subtitle Do you think you're fancy enough? Good! Tell me everything below and I'll see. 
+    .container
+      form(action="/sendform?from=Parnership+Application" enctype="multipart/form-data" method="post")
+        .notification.is-light#jaja(style="overflow:hidden")
+          .columns
+            .column
+              .field
+                .label Your Discord Username
+                .control: input.input(type="text" value=user.name readonly name="username")
+                //p.help Example: User#0101
+              .field
+                .label Your Discord ID
+                .control: input.input(type="text" value=user.id readonly name="userId")
+                //p.help OK
+              #reqList
+                ul.checking-list
+                  li: b Be sure your server meets ALL of these:
+                  li
+                    span.check#memb500
+                      i.fa.fa-check
+                    span &#x2000 500 Members / 100 online
+                  li
+                    span.check#10bots
+                      i.fa.fa-check
+                    span &#x2000 Max 8 bots allowed
+                  li
+                    span.check#100online
+                      i.fa.fa-check
+                    span &#x2000 Pollux is your main bot*
+                  li
+                    span.check#noconflit
+                      i.fa.fa-check
+                    span &#x2000 No-Conflicting Bots
+                  li
+                    span.check#noconflit
+                      i.fa.fa-check
+                    span &#x2000 Community is active and healthy
+                    
+                .help (*) Not enforced for servers with original self-hosted bots and for Bot Servers
+
+            .column.is-9
+            
+              .field
+                .label Partnering Server
+                .control.has-icons-left.has-icons-right
+                  .select: select(name="server")
+                    option(id="INVALID") --Choose a Server--
+                    each sv in user.servers.filter(x=>x.owner)
+                      option(id=sv.id)= sv.name +" | " + sv.id
+                  .span.icon.is-small.is-left: i.fab.fa-discord
+              .field
+                .label Tell me about what you guys do at this server, and why you want to partner this cutesy artificial maid. (In english please, bear in mind we may not speak your language. Only this field needs to be in english, any other language will be simply ignored.)
+                .control: textarea.textarea(type="textarea" rows=10 placeholder="Do tell!" name='about')
+                
+              hr(style="opacity:.21")
+              .field
+                .label Server Description
+                .control: input.input(type="text" placeholder="Ex.: An awesome Server about Slav Planes and Roleplay" name='desc')
+                p.help A one-liner description of your server, keep it brief.        
+                       
+              .columns
+                .column            
+                  .field
+                    .label Website
+                    .control: input.input(type="text" placeholder="Ex.: Twitch Streamer, Roleplay, Skill-Sharing, Anime" name='site')
+                    p.help Facebook Pages / Groups can also be added here. 
+            
+                .column            
+                  .field
+                    .label Server Invite Link
+                    .control: input.input(type="text" placeholder="discord.gg/iNvItEcOdE" name='invite')
+                    p.help A link the never expires, please. 
+
+              .field
+                .label Server Tags
+                .control: input.input(type="text" placeholder="Ex.: Twitch Streamer, Roleplay, Skill-Sharing, Anime" name='tags')
+                p.help Type from 3 to 5 tags that describe your server overall, sepparate with commas (",")
+                        
+              .field
+                .label Server Features
+                .control: input.input(type="text" placeholder="Ex.: Giveaways, Medieval RP, Sci-Fi RP, Themed Chatrooms, MOBA Meta Discussion" name='feats')
+                p.help Be more specific, add up to 10 things that you server provides, sepparate with commas (",")
+                
+              .columns
+                .column
+                  .field
+                    .label Server Location
+                    .control: input.input(type="text" placeholder="Ex.: South Korea" name='location')
+                    p.help If your server is open to worldwide users, use <b>Global</b> as Location
+
+                .column
+                  .field
+                    .label Server Languages
+                    .control: input.input(type="text" placeholder="Ex.: en,pt-br,ko,de,ru" name='langs')
+                    p.help All languages actively spoken in your server, sepparate with commas (",")
+        
+        .butholder(style="position:relative")
+          span.icon.is-pulled-left#aero
+            i.fa.fa-fighter-jet
+          button(type="submit").button.is-large.is-pink.has-addons#submit(style="overflow:hidden")
+            span.divider  &#x2004&#x2004&#x2004
+            div( style="border-left:1px solid #88446b;border-right:1px solid #efc7e6; opacity:.15;height:32px")
+            span.divider  &#x2000
+            span.is-pulled-right.b500#submitTx SUBMIT
+        br
+        br
+        .title#alldone: b.level
+          .level-item
+          .level-right Submission Sent! Now just wait until I check on your application~ 
+          
+  block scripts
+    script.
+      $('#submit').click(()=>{
+        //$("#submit").css("width","10px")
+        $("#aero").addClass("animate")
+        $("#jaja").animate({height: "0px",padding:0,overflow:"hidden"},500)
+        $("#submit").animate({height: "0px",padding:0,opacity:0},500)
+        $("#alldone").addClass("animate")
+        //swal({
+        //title:"Whoa",
+        //text:"my"
+        //})
+      })
+  

@@ -1,0 +1,285 @@
+
+style.
+
+  @media screen and (max-height:750px){
+    .ov{
+     // transform:scale(.9) translateY(-20px);
+      position:relative;
+    }
+  }
+  .ov{
+      width:
+      border: solid 2px #0b0b0b;
+  }
+  .bbgColor{
+
+  height:100%;
+  width:25px;
+  position:absolute;
+    top:0;
+    opacity:.8;
+  left:0;
+  z-index:1
+  }
+  .bbg{
+  background-size:100%;
+  filter:blur(5px);
+  height:100%;
+  width:100%;
+  top:0;
+  left:0;
+  position:absolute;
+  z-index:0;
+
+  }
+  .alignrite{
+  text-align:right;
+  float:right
+  }
+  .ovi{
+ // width:30%
+  }
+  .upfront{
+  z-index:21;
+  position: relative;
+  }
+  .bbgOvlay{
+
+  top:0;
+  left:0;
+  position:absolute;
+  background: linear-gradient(70deg, #111 0%,#1e1e1e 37%,rgba(0, 0, 0, 0) 100%);
+  height:100%;
+  width:100%;
+  z-index:1;
+  }
+  @media screen and (max-width:800px){
+    .medhoist{
+      transform:scale(.7) translate(-84px,-120px)
+    }
+      .bbg {
+        filter:none;
+        position:fixed;
+      } 
+      .bbg img {
+        height:auto !important;
+        width:100% !important;
+      }
+  }
+
+
+-var jade =  "/images/jade.png"
+-var ruby = "/images/rubine.png"
+-var sapphire = "/images/sapphire.png"
+-var emerald = "/images/emerald.png"
+-var amethist = "/images/amethist.png"
+
+
+mixin box1
+  .box.ovi.is-marginless.supershadow
+      .columns
+        .column
+          p
+            b.b500T=translation.website.rubines || "Rubines"
+            span.alignrite: img(src=ruby width="24px").curr_icon
+            span.alignrite.countup(data-count= user.modules.rubines) 0
+          p
+            b.b500=translation.website.jades ||  "Jades"
+            span.alignrite: img(src=jade width="24px").curr_icon
+            span.alignrite.countup(data-count= (user.modules.jades || 0)) 0
+          p
+            b.b500=translation.website.sapphires ||  "Sapphires"
+            span.alignrite: img(src=sapphire width="24px").curr_icon
+            span.alignrite.countup(data-count= (user.modules.sapphires || 0)) 0
+          p
+            b.b500=translation.website.emeralds ||  "Emeralds"
+            span.alignrite: img(src=emerald width="24px").curr_icon
+            span.alignrite.countup(data-count= (user.modules.sapphires || 0)) 0
+          p
+            b.b500=translation.website.amethists ||  "Amethists"
+            span.alignrite: img(src=amethist width="24px").curr_icon
+            span.alignrite.countup(data-count= (user.modules.sapphires || 0)) 0
+          hr.is-marginless
+          p
+            b.b500=translation.website.lastDy || " Last Daily"
+            -let d = new Date(user.modules.daily).getDate()
+            -let m = new Date(user.modules.daily).getMonth()+1
+            -let a = new Date(user.modules.daily).getFullYear()
+            -let data = `${d}/${m}/${a}`
+            small.alignrite= data
+          p
+            b.b500=translation.website.currDySt || "Current Daily Streak"
+            span.alignrite.countup(data-count= user.modules.dyStreak) 0
+        .column.is-1
+
+
+.fadezoom: .box.ov(style="background:rgba(0, 0, 0, 0); overflow:hidden; position:relative; padding-left:50px")
+  .upfront
+    .columns.is-marginless
+      .column.is-3
+        p.title: b!= "&#x2000" + (translation.website.overview  || "Overview")
+        .is-hidden-mobile
+          +box1
+
+
+      .column.is-hidden-mobile
+      //.column.is-hidden-mobile
+        .box(style="visibility:hidden")
+        p: b Rubine Audition
+        .columns(style="margin:12px")
+          if user.modules.audits
+            .columns
+              .column: small
+                b.b500T=translation.$.expenses || "Expenses"
+                p=translation.$.drops || "Drops"
+                  span= " "
+                  span.countup(data-count= user.modules.audits.rubines.expenses.drops) 0
+                p=translation.$.trades || "Trades"
+                  span= " "
+                  span.countup(data-count= user.modules.audits.rubines.expenses.trade) 0
+                p=translation.$.lewdery || "Lewd"
+                  span= " "
+                  span.countup(data-count= user.modules.audits.rubines.expenses.lewd) 0
+                p=translation.$.gambling || "Gambling"
+                  span= " "
+                  span.countup(data-count= user.modules.audits.rubines.expenses.gambling) 0
+
+              .column: small
+
+                b.b500T=translation.$.earnings || "Earnings"
+                p=translation.$.drops || "Drops"
+                  span= " "
+                  span.countup(data-count= user.modules.audits.rubines.earnings.drops) 0
+                p=translation.$.trades || "Trades"
+                  span= " "
+                  span.countup(data-count= user.modules.audits.rubines.earnings.trade) 0
+                p=translation.$.lewdery || "Lewd"
+                  span= " "
+                  span.countup(data-count= user.modules.audits.rubines.earnings.lewd) 0
+                p=translation.$.gambling || "Gambling"
+                  span= " "
+                  span.countup(data-count= user.modules.audits.rubines.earnings.gambling) 0
+          else
+            p Audits Unavailable
+
+
+      .column.is-2.is-hidden-mobile
+      .column.is-4.is-hidden-desktop
+
+        .columns.is-mobile
+          .has-text-centered.column
+            p.is-marginless.title.texshadow.b900.is-microultra.countup.fadein(data-offset=11000 data-time=3 data-start=bot.users.size  data-count=expR+1) &#x2000
+            p.title.texshadow.b500  GLOBAL EXP RANK
+          
+          .has-text-centered.column
+            p.is-marginless.title.texshadow.b900.is-microultra.countup.fadein(data-offset=11000 data-time=3 data-start=bot.users.size  data-count=rubR+1) &#x2000
+            p.title.texshadow.b500  GLOBAL RUBINE RANK
+      
+      
+      .column.is-4.is-hidden-mobile
+
+        .has-text-centered
+            p.is-marginless.title.texshadow.b900.is-miniultra.countup.fadein(data-offset=11000 data-time=3 data-start=bot.users.size  data-count=expR+1) &#x2000
+            p.title.texshadow.b500  GLOBAL EXP RANK
+            p.is-marginless.title.texshadow.b900.is-miniultra.countup.fadein(data-offset=11000 data-time=3 data-start=bot.users.size  data-count=rubR+1) &#x2000
+            p.title.texshadow.b500  GLOBAL RUBINE RANK
+
+
+    .is-hidden-desktop
+      +box1
+    br
+    .columns(style="margin:0px")
+      .column.box.level.is-marginless.columns.is-6.supershadow
+
+        .column: small
+          p
+            .icon.is-small: i.fa.fa-picture-o
+            span &#x2000
+            b= translation.website.backgrounds || "Backgrounds:"
+
+            if user.modules.bgInventory
+              span.alignrite.countup(data-count= user.modules.bgInventory.length) 0
+            else
+              span.alignrite.countup(data-count= 0)
+          p
+            .icon.is-small
+              i.fa.fa-certificate
+            span &#x2000
+            b=translation.website.medals || "Medals"
+
+            if user.modules.medalInventory
+              span.alignrite.countup(data-count= user.modules.medalInventory.length) 0
+            else
+              span.alignrite.countup(data-count= 0)
+          p
+            .icon.is-small: i.fa.fa-flask
+            span &#x2000
+            b=translation.website.inventory || "Inventory"
+            span.alignrite ---
+          p
+            .icon.is-small: i.fa.fa-ticket
+            span &#x2000
+            b=translation.website.stamps || "Stamps"
+            span.alignrite ---
+
+        .column.is-1
+        .column: small
+          p
+            .icon.is-small: i.fa.fa-hand-o-up
+            span &#x2000
+            b=translation.website.reputation || "Reputation"
+            span.alignrite= user.modules.rep
+          p
+            .icon.is-small: i.fa.fa-star
+            span &#x2000
+            b Exp: &#x2003
+            span.alignrite.countup(data-count= user.modules.exp) 0
+          p
+            .icon.is-small: i.fa.fa-eject
+            span &#x2000
+            b=translation.website.level ||"Level"
+            span.alignrite.countup(data-count= user.modules.level) 0
+          p
+            .icon.is-small: i.fa.fa-trophy
+            span &#x2000
+            b=translation.website.globalrank ||" Global Rank:"
+            span.alignrite
+              -let stato = bot.users.size/2
+              span.countup(data-start=stato data-count=expR+1)=stato
+              span /
+             
+              span.countup(data-start=stato data-count=bot.users.size)=stato
+
+
+      .column.is-4(style="transform:translateY(60px)")
+        .tag: small=translation.website.eqMeds || "Equipped Medals"
+
+        .medhoist.level.is-marginless.columns.is-mobile.is-half(style=";filter:drop-shadow(0 0  4px rgba(255, 255, 255, 0.53))")
+              -var it = -1;
+              //while it < 9
+                -it++
+                if user.modules.medals[it] != undefined
+                  -var medal_icon = user.modules.medals[it]
+                else
+                  -var medal_icon = 0
+                if medal_icon!=0 && user.modules.medals[it]!=[0,0]
+                  img(src="/medals/"+medal_icon+".png").medallien_disp
+                else
+                  .medallien_disp
+                  //li.drop.ui-droppable.medalSlot
+                .level-item
+                
+              .level-item
+
+        
+
+  .bbgOvlay
+  .bbgColor(style="background:#"+(user.modules.favcolor||"ccc").replace("#",""))
+  .bbg.supershadow
+    img#bgov(src="backdrops/"+user.modules.bgID+".png" style="height:100%;width:auto;position:absolute;right:3px")
+    //(style="background-image:url('backdrops/"+user.modules.bgID+".png')")
+
+
+
+
+

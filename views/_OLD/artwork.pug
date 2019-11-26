@@ -1,0 +1,77 @@
+extends layout
+
+block content
+
+    
+  link(rel="stylesheet" href="/css/artwork.css")
+  .hero.is-primary
+    include navbas
+  
+  .nano: .nano-content
+    .section.is-fluid
+      .title.is-2: b Fanart Gallery
+      .subtitle 
+        p Artwork made with love by our community members, users, and friends! Send your artworks using either <a href="#sendart">this form</a> or tweeting them to <a target='blank' href="https://twitter.com/maidPollux">@maidPollux</a>!
+        br
+        p This gallery contains artwork not only from Pollux but from her friends. Event mascots that seasonally appear from time to time~
+   
+      
+      hr
+      br
+      .div
+        -
+          function shuffle(array) {
+              var currentIndex = array.length, temporaryValue, randomIndex;
+
+              // While there remain elements to shuffle...
+              while (0 !== currentIndex) {
+
+                // Pick a remaining element...
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                // And swap it with the current element.
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+              }
+
+              return array;
+            }
+            
+        -fanartA = shuffle(fanart.filter(f=>f.author_ID!=='88120564400553984'&&f.publish==true))
+        -
+          fanart2 = fanartA.filter(f=>f.extras.rank===2)
+          fanart3 = fanartA.filter(f=>f.extras.rank===3)
+          fanart4 = fanartA.filter(f=>f.extras.rank===4)
+          fanart5 = fanartA.filter(f=>f.extras.rank===5)
+          fanartO = fanartA.filter(f=>f.extras.rank>5)
+          
+          var fanartSorted = fanartA.filter(f=>f.extras.rank===1).concat(fanart2,fanart3,fanart4,fanart5,fanartO)
+   
+          
+        for img in fanartSorted
+            .art_container
+              a(href=img.src data-lightbox=img.title data-title=img.description || img.title).large_gallery_pic(style="background-image:url('"+img.src.replace("artwork","artwork/thumbs")+"');")
+              p: b=img.title
+              p.truncate(style="height:18px"): i=img.description          
+              p: a(href="/profile/"+img.author_ID, data-user=img.author_ID).userTooltip=img.author          
+
+        hr
+        br
+      //.container
+        .title.is-4 Original Artwork / Concept Art
+        //.subtitle.is-6 All stuff scribbled by the creator themself.
+        for img in fanart.filter(f=>f.author_ID=='88120564400553984'&&f.publish==true)
+
+            a(href=img.src data-lightbox='original' data-title=img.title+" | "+img.description).gallery_pic(alt=img.title title=img.title style="background-image:url('"+img.src.replace("artwork","artwork/thumbs")+"');")
+              //p: b=img.title
+              //p: i=img.description
+              
+        hr
+
+      .section.is-fluid#sendart
+        include set/fanartform
+
+block scripts
+  script(src='/js/truelite.js')

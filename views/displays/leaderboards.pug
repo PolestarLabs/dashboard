@@ -1,0 +1,66 @@
+extends ../layout 
+block content
+    .wrapper
+        include ../navbar
+        style
+            include leaderboards.css
+        style.
+            .user_avatar{
+                height: 80px;
+                width: 80px;
+            }
+            .user_avatar:before {
+                content: ' ';
+                display: block;
+                position: absolute;
+                height: 80px;
+                width: 80px;
+                background-image: url('https://discordapp.com/assets/6debd47ed13483642cf09e832ed0bc1b.png');
+                background-size: cover
+            }
+
+        - let r = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+        .plx-background-cover(plx-parallax="bgy: 100,400" style='background-image: url(/images/heads/office'+r+'.png)').pictoheader.dark
+            .plx-container
+                br
+                h1.title LEADERBOARDS
+                h3.subtitle 
+                hr.plx-divider-small
+                p
+
+        hr.plx-divider-icon-fill
+        .plx-container
+            .section#main    
+                h2 
+                h4.subtitle 
+                p
+                hr
+            
+            .section#board(plx-scrollspy="target: .animate, .rankitem; cls: plx-animation-slide-right-medium; delay: 50")
+                each userRank,i in LEAD
+                    .rankitem(id=`rank${i}` data-id=userRank.id data-pos=i).plx-flex
+                        //div(class=i == 57 ? "gradient-border" : "" )
+                        div(class=userinfo && userRank.id == userinfo.id ? "gradient-border" : "" )
+                        .rank_container
+                            .ranknum=       i+1
+                        img.user_avatar.hexagon(height="80px" width="80px" src=userRank.avatar alt=" ")
+                        .namefield
+                            .user_name=       userRank.name
+                            .user_dsc=    userRank.disc
+                        .levfield
+                            p LEVEL
+                            .lv=    userRank.level
+                        .exfield(class="plx-visible@m")
+                            p EXP
+                            .exp=   userRank.exp
+                        .sub_bg
+                            img(src=  `/backdrops/${userRank.bg}.png`)
+                        
+
+
+
+
+
+block scripts
+    script
+        include leaderboards.js

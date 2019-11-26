@@ -1,0 +1,200 @@
+include templates
+link(rel='stylesheet' type="text/css" href='/css/navbas.css')
+
+if userinfo&& userinfo.id == "88120564400553984"
+  include navbas_next
+  
+
+else
+  nav.navbar   
+    .navbar-brand
+      a.navbar-item(href='/'): div
+        .title: b Pollux
+
+      .navbar-item.topcentershit
+        p.topcentershit.is-hidden-desktop= title || "Dashboard"
+      a.navbar-item.level-right.is-hidden-desktop(href='/support?ref=mobile_minicon', target='_blank').tinypadding
+        span.icon(style='color: #aaa;')
+          i.fab.fa-discord
+      //a.navbar-item.level-right.is-hidden-desktop(href='https://twitter.com/maidPollux', target='_blank').tinypadding
+        span.icon(style='color: #55acee;')
+          i.fa.fa-twitter
+      .navbar-burger.burger(data-target='USERMENUB')
+        span
+        span
+        span  
+
+
+    #USERMENUB.navbar-menu  
+      .navbar-start
+          .navbar-item.navbar-link.has-dropdown.is-hoverable.mininav.is-hidden-desktop
+            span.icon(style='/*color: #222*/;'): i.fa.fa-link
+            span Links
+            .navbar-dropdown.semiblacktex.is-boxed
+              .level.is-mobile
+                a.level-item(href="https://twitter.com/maidPollux") 
+                  span.icon(style='color: #333 !important;'): i.fab.fa-twitter
+                  span Twitter
+                a.level-item(href="https://reddit.com/r/pollux") 
+                  span.icon(style='color: #333 !important;'): i.fab.fa-reddit
+                  span Subreddit
+                a.level-item(href="https://steamcommunity.com/groups/PolluxMansion") 
+                  span.icon(style='color: #333 !important;'): i.fab.fa-steam
+                  span Steam Group
+
+
+          a.navbar-item(href='/commands')
+            span.icon(style='/*color: #222*/;'): i.fas.fa-cogs
+            span= translation.website.commands
+          .navbar-item.navbar-link.has-dropdown.is-hoverable.mininav
+            span.icon(style='/*color: #222*/;'): i.fas.fa-shopping-basket
+            span Rubine Goodies
+            span &#x2003
+            .navbar-dropdown.semiblacktex.is-boxed
+              a.navbar-item(href='/bgshop').lv2
+                span.icon(style='color: #333 !important;'): i.fas.fa-images
+                span Background Shop
+              a.navbar-item(href='/medalshop').lv2
+                span.icon(style='color: #333 !important;'): i.fab.fa-first-order
+                span Medal Shop
+              a.navbar-item(href='/crafting').lv2
+                span.icon(style='color: #333 !important;'): i.fas.fa-flask
+                span Crafting
+              a.navbar-item(href='/stickers').lv2
+                span.icon(style='color: #333 !important;'): i.fas.fa-splotch
+                span Profile Stickers
+          //a.navbar-item(href='http://discord.me/pollux')
+            span.icon(style='/*color: #222*/;'): i.fa.fa-question-circle
+            span= translation.website.support
+          //a.navbar-item(href='/market')
+            span.icon(style='/*color: #222*/;'): i.fa.fa-shopping-basket
+            span Marketplace
+          //a.navbar-item(href='/crafting').is-hidden-desktop
+            span.icon(style='/*color: #222*/;'): i.fa.fa-flask
+            span Crafting
+          a.navbar-item(href='/partners').beta
+            span.icon(style='/*color: #222*/;'): i.fas.fa-heart
+            span Partners
+          a.navbar-item(href='/events').is-hidden-desktop
+            span.icon(style='/*color: #222*/;'): i.fa.fa-star
+            span Events
+
+          .navbar-item.navbar-link.has-dropdown.is-hoverable.mininav.is-hidden-touch
+            span.icon(style='/*color: #222*/;'): i.fa.fa-star
+            span Events
+            span &#x2003
+            .navbar-dropdown.semiblacktex.is-boxed
+              p.navbar-item(style="pointer-events:none") No Ongoing Events
+              //.navbar-item.semiblacktex.nohov.level.is-marginless
+                .level-left
+                  figure.image.is-64x64
+                    img(src="/build/event/halloween18/logo.png" style="max-height:none")
+                .level-item
+                .level-right
+                  span  Halloween Event
+              //.navbar-item.semiblacktex.nohov
+                p#cdw
+              //.navbar-item.semiblacktex.nohov.level
+                a(href="/events/halloween18").button.is-purple.is-small.level-item INFORMATION
+
+              .navbar-divider
+              a.navbar-item(href='/events')
+                span.icon(style='color: #333 !important;'): i.fa.fa-calendar
+                span See all events Information
+
+          a.navbar-item(href='/leaderboards').is-hidden-touch
+            span.icon(style='/*color: #222*/;'): i.fa.fa-trophy
+            span Leaderboards
+          a.navbar-item(href='/donate')
+            span.icon(style='/*color: #222*/;'): i.fa.fa-gift
+            span Donate
+          //a.navbar-item(href='/info')
+            span.icon(style='/*color: #222*/;'): i.fa.fa-info-circle
+            span Info
+          a.navbar-item(href='/artwork')
+            span.icon(style='/*color: #222*/;'): i.fa.fa-paint-brush
+            span Fanart 
+          //a.navbar-item(href='/events')= translation.website.events || "Events"
+          //a.navbar-item(href='/leaderboards')= translation.website.rank
+
+          .navbar-item.is-hidden-touch.ble
+
+      block insert
+      .navbar-end
+        a.navbar-item.is-hidden-touch.minicon(href='/support?ref=mobile_minicon', target='_blank' style="transform:translateX(0px)")
+          .but(style='background:#7289DA;')
+          .buttex(style="padding: 0 0px 0 20px;")
+            span.icon(style='color: #fff;'): i.fab.fa-discord
+        a.navbar-item.is-hidden-touch.minicon(href='https://twitter.com/maidPollux', target='_blank' style="transform:translateX(0px)")
+          .but(style='background:#00aced')
+          .buttex(style="padding: 0 0px 0 20px;")
+            span.icon(style='color: #fff;'): i.fab.fa-twitter
+        a.navbar-item.is-hidden-touch.minicon(href='https://reddit.com/r/pollux', target='_blank')
+          .but(style='background:#ed4900')
+          .buttex(style="padding: 0 5px 0 20px;") 
+            span.icon(style='color: #fff;'): i.fab.fa-reddit
+
+        .navbar-item.has-dropdown.is-hoverable.blackmop
+          if !userinfo
+            div.navbar-item.is-marginless.is-paddingless
+              a.navbas-login(onclick="javascript:login()").navbar-right
+                .but.purpleshit.is-hidden-mobile
+                .buttex
+                  span.is-pulled-right=translation.website.login || "Login"
+                  span.divider  &#x2000
+                  span.icon.is-pulled-left: i.fa.fa-sign-in-alt
+
+          else
+            div.navbar-link.is-unselectable.is-active.rox
+              .but(style='transform:translateX(-15px) skewX(35deg)').purpleshit.is-hidden-mobile
+              .smolHex(style="transform:scale(.7);background-image:url('"+userinfo.pix+"')").is-hidden-touch
+                div.shexTop
+                div.shexBottom
+                //p.is-hidden-touch= userinfo.name
+              .buttex(style="padding: 0 5px 0 0px;").bobile
+                div.x= userinfo.name
+              //| Blog
+
+              #login.navbar-dropdown.is-boxed(data-style='width: 16rem;')
+
+                a(href="/dashboard").navbar-item.lv2
+                  span.is-2.b500= translation.website.dash || "Dashboard"
+                  span.divider  &#x2000
+                  span.icon.is-pulled-left: i.fa.fa-cogs
+
+                a(href="/profile/me").navbar-item.lv2
+                  span Profile
+                  span.divider  &#x2000
+                  span.icon.is-pulled-left: i.fa.fa-id-card
+
+                hr.navbar-divider
+                if userdata
+
+                  .navbar-item.lv2.nopointer.navbasflex.level.is-marginless.curr
+                      img(src="/images/rubine.png").curr_icon_3.level-start
+                      span.level-end= "x " + miliarize(userdata.modules.rubines,true,' ')
+                  .navbar-item.lv2.nopointer.navbasflex.level.is-marginless.curr
+                      img(src="/images/jade.png").curr_icon_3.level-start
+                      span.level-end= "x " + miliarize(userdata.modules.jades,true,' ')
+                  .navbar-item.lv2.nopointer.navbasflex.level.is-marginless.curr
+                      img(src="/images/sapphire.png").curr_icon_3.level-start
+                      span.level-end= "x " + miliarize(userdata.modules.sapphires,true,' ')
+
+                //a(href="/bgshop").navbar-item.lv2=translation.website.bgshop || "Background Shop"
+                //a(href="/medalshop").navbar-item.lv2=translation.website.mdshop || "Medal Shop"
+                //a(href="/leaderboards").navbar-item.lv2=translation.website.rank || "Rankings"
+
+                hr.navbar-divider
+                .navbar-item
+                  .navbar-content
+                    .level.is-mobile
+                      .level-item
+                      a(href="/logout" style="color:white !important").button.is-danger.level-item.is-small=translation.website.logout || "LOGOUT"
+                      .level-item
+
+
+        //.navbar-item.ble
+        script(src='/js/cdwn.js')
+
+
+

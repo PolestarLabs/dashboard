@@ -1,0 +1,211 @@
+extends layout
+
+
+block content
+
+  -
+    function shuffle(array) {
+        var currentIndex = array.length, temporaryValue, randomIndex;
+
+        // While there remain elements to shuffle...
+        while (0 !== currentIndex) {
+
+          // Pick a remaining element...
+          randomIndex = Math.floor(Math.random() * currentIndex);
+          currentIndex -= 1;
+
+          // And swap it with the current element.
+          temporaryValue = array[currentIndex];
+          array[currentIndex] = array[randomIndex];
+          array[randomIndex] = temporaryValue;
+        }
+
+        return array;
+      }
+      
+      
+
+  style.
+    .nsfw:hover{
+      cursor:pointer;
+      box-shadow:inset 0 0 11px #cb2424;
+    }
+    .nsfw:not(.reveal):before{
+          width:140%;
+          height: 140%;
+          background: #EC3532EE;
+          content:"NSFW";
+          color: #fff;
+          padding: 100px;
+          font-size: 40px;
+          font-weight: 900;
+          display: block;
+          position: absolute;
+          margin: -50px;
+          z-index: 1000;
+        }
+
+  .hero.is-pink.is-bold
+    include navbas
+  .is-fullwidth.nano: .nano-content
+    .section.is-fluid
+      .title: b Partners
+      .subtitle The fanciest amongst the fancier communities, Pollux-picked for everyone.
+      .container
+        .columns
+
+
+          .column.is-auto
+            p Communities doesn't grow alone! These are carefully selected communities that actively support and use Pollux.
+            p Feel free to join them and have fun with her in healthy and active communities with well-organised servers.
+
+          .column.is-auto
+            p As a plus, Pollux-Partnered Servers have much more close tech and feat support, the more active and interested the community is, the more attention it receives in the developer-side.
+          .column.is-auto
+            p Partnered communities can be anything, from gaming guilds and Twitch streamers, to RP servers and just general-interest communities.
+            p If you're interested in partnering, check out <a href='partners/apply'>THIS FORM</a>
+            //this info//
+
+        hr
+        -let bigp = partners.filter(sv=>sv.partnerDetails && !sv.partnerDetails.mini && sv.partnerDetails.tags && sv.partnerDetails.langs && sv.partnerDetails.picture )
+        -let smallp = partners.filter(sv=>!sv.partnerDetails || sv.partnerDetails.mini|| sv.partnerDetails&&!(sv.partnerDetails.tags && sv.partnerDetails.langs && sv.partnerDetails.picture) )
+        -shuffle(bigp)
+        -shuffle(smallp)
+        each P in bigp
+          +partner(P.id)
+        .columns.is-multiline
+          each P in smallp
+            .column.is-half
+              +partner(P.id)
+
+
+
+    script.
+      $(document).ready(function(){
+        $('.nsfw').click(function(){
+        console.log('rev')
+          $(this).toggleClass('reveal')
+        })
+      })
+    
+mixin partner(svid,img)
+  -let PTN = (partners.find(x=>x.id===svid)||{}).partnerDetails || {}
+  -let server = (partners.find(x=>x.id===svid)||{}) || {}
+
+  // -let GLD = bot.guilds.get(svid) || {};
+  //-let memsOn    = GLD.members ? GLD.members.filter(x=>x.presence.status!='offline').size :0;
+  //-let memsTot   = GLD.members ? GLD.members.size :0;
+  -let tags      = (PTN.tags || "none").split(',');
+  -let location  =  PTN.region || "global";
+  -let feats     = (PTN.feats || "none").split(',')
+  -let languages = (PTN.langs || "en").toUpperCase().replace(/ +/g,"").split(',').map(l=>{return{F:l,L:l}})
+  -let website   = PTN.website  
+  -let picture   = PTN.picture  
+  -let nsfw   = PTN.nsfw?"nsfw":"safe"  
+  .box.partner-box(class=nsfw)
+    .ptbox-content
+      .columns.gap
+        .column.is-1(style="margin-right:0;width:150px;")
+          .hexagon(style="background-image:url('"+(server.meta||{icon:''}).icon+"'); margin:32px auto")
+            .hexTop
+            .hexBottom
+          .msm(style="text-align:center")
+            if PTN.owner
+              span Owner:&#x2003
+              a(href='/profile/'+PTN.ownerID)
+                span= PTN.owner
+            //p
+              span &#x2004
+              span= memsOn
+              span.tot= "/"+memsTot
+        .column.is-auto
+          .title.is-4: b= PTN.disName || (server.meta||server).name
+          .subtitle.is-6: i= PTN.description ||'A Discord Server'
+
+          style .tag{margin:4px}
+          if tags[0]!="none"
+            .categories
+              .b500 Tags: 
+              each tag in tags
+                
+                if tag.includes("Sponsor")
+                  .tag.is-success= tag
+                else if tag.includes("NSFW")
+                  .tag.is-ruby= tag
+                else
+                  .tag.is-info= tag
+          if feats[0]!="none"
+            .feats
+              .b500 Features: 
+              each feat in feats
+                .tag= feat
+
+
+          .loc.level.is-marginless
+            .b500 Location:
+            .metatag.level-left
+              span &#x2004
+              
+              //img(src="/images/WORLD.png")
+              span &#x2004
+              span= location
+            .level-item
+          .langs
+            .b500 Languages:
+            each lang in languages
+              if lang.L == 'ALL'
+                .tag 
+                  img(src="/images/WORLD.png")
+                  p &#x2004
+                  p= 'Multiple'
+              else
+                .tag 
+                  img(src="/images/flags/"+lang.F+".png")
+                  p &#x2004
+                  p= lang.L
+
+
+        .column.is-1(style="margin-right:0.75rem")
+          if userinfo && userinfo.servers.filter(s=>s.id==svid).length>0
+            a.button.is-success.has-addons(style="pointer-events:none;")
+              span.icon.is-pulled-left
+                i.fa.fa-check
+              //span.divider  &#x2004
+              div( style="border-left:1px solid #4e8844;border-right:1px solid #dcefc7; opacity:.15;height:28px")
+              span.divider  &#x2000
+              span.is-pulled-right.b500 JOINED
+            if userinfo.servers.filter(s=>s.id==svid)[0].owner
+              a.button.is-ruby.has-addons(href='/admin/'+svid+'#/partner')
+                span.icon.is-pulled-left
+                  i.fa.fa-laptop
+                //span.divider  &#x2004
+                div( style="border-left:1px solid #4e8844;border-right:1px solid #dcefc7; opacity:.15;height:28px")
+                span.divider  &#x2000
+                span.is-pulled-right.b500 Manage Settings
+       
+          else
+            if PTN.invite
+              a.button.is-blurple.has-addons(href=PTN.invite)
+                span.icon.is-pulled-left
+                  i.fab.fa-discord
+                //span.divider  &#x2004
+                div( style="border-left:1px solid #4e8844;border-right:1px solid #dcefc7; opacity:.15;height:28px")
+                span.divider  &#x2000
+                span.is-pulled-right.b500 Join
+
+    
+    if website
+      a.button.is-dark.has-addons.is-smasll.webbie(href=website)
+        span.is-pulled-right Website
+        span.divider  &#x2000
+        div( style="border-left:1px solid #4e8844;border-right:1px solid #dcefc7; opacity:.15;height:20px")
+        span.icon.is-pulled-right
+          i.fa.fa-external-link-alt
+        //span.divider  &#x2004
+    .partbg
+
+      if picture == 'default'
+        img.pbgimg(src="http://www.pollux.fun/backdrops/5zhr3HWlQB4OmyCBFyHbFuoIhxrZY6l6.png")
+        //img.pbgimg(src='/backdrops/b08a91c10201d867ca6627cc854705ac.png')
+      else
+        img.pbgimg(src=picture)

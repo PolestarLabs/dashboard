@@ -1,0 +1,84 @@
+mixin list()
+  .nano: .nano-content
+        -let catze = groupBy(svChannels,'cat')
+        each chans,cat in catze
+          small: b= cat.includes('--noindex--')?'':cat
+          each ch in chans
+            p.truncate(style="width:auto"): a(data-target-channel=ch.id).chsel &#x2003;##{ch.name}
+            
+            
+            
+.nano: .nano-content.padded(style="padding-right:5px").flexdown
+  .is-hidden-desktop
+    .columns.is-mobile.is-marginless
+      .column
+        p Channel Options
+      .column
+        a.is-small.button.sidemenu-white Choose Channel
+    .help(style="padding:10px") Server-wide settings, if no Channel-specific settings are present, these ones take place.
+    br
+
+    
+  .is-hidden-mobile
+    .columns
+      .column.is-10
+        .title.is-2: b Per-Channel Options
+        p.subtitle Server-wide settings, if no Channel-specific settings are present, these ones take place.
+      .column.is-2
+
+    hr(style="height:1px;transform:translateY(-10px)")    
+      
+  style.
+    .enterlater{
+      animation: asdgq .6s ease-in-out .6s both
+    }
+    .chanblock{
+      animation: asdgq2 .6s ease-in-out .2s both
+    }
+    .enterevenlater{
+      animation: asdgq2 .6s ease-in-out 1s both
+    }
+  
+  .is-hidden-desktop
+    .sidepanel-white-bg.sidepanel-bg.hidden
+    .sidepanel-white.sidepanel(style='width: 80%;border-radius:4px')
+      +list
+    //whitebox(style="padding-right:0px").enterlater
+  
+  .columns.fullheight
+    .column.is-3.whitebox(style="padding-right:0px").enterlater.is-hidden-mobile
+      +list
+
+    .column.is-auto.fullheight
+      #channelstuff.flexdown.fullheight.enterevenlater
+        include commandchecks
+        
+script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/1.0.5/jquery.mobile-events.js")
+script.
+      $(".chsel").click(function(){
+      $('#channelstuff').html('LOADING')
+      var id = $(this).data('target-channel');
+       $.when($.post("/process/getchannel", {payload:id,sv:SERVER_ID})).then(data => {
+        console.log(data)
+        $('#channelstuff').html(data)
+      }).catch(e=>console.log(e))
+    })
+    $('.sidemenu-white').click(function() { re_opensidebar()})
+    $('.sidepanel-white-bg, .chsel').click(function() { re_closeSide()})
+    
+    function re_opensidebar(){
+        $('.sidepanel-white-bg').fadeIn()
+        $('.sidepanel-white').css({
+          "transform": "translateX(0)"
+        });
+    }
+    $('.sidepanel').swipeleft(function() { closeSide()})
+
+        function re_closeSide(){
+          
+          $('.sidepanel-white-bg').fadeOut()
+          $('.sidepanel-white').css({
+            "transform": "translateX(-130%)"
+          });
+
+        }

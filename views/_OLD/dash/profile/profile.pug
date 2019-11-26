@@ -1,0 +1,356 @@
+//extends ../../layout
+//html: body
+
+
+
+mixin miniuser(usa)
+  -let u = usa.id
+  -let US = user.meta
+  .mcard
+    .mcardpic
+      -let wifeavi = wife_metadata.find(w=>w.id==u).meta.avatar
+      img(src=wifeavi)
+      //img(src=((usa.meta||{avatar:undefined}).avatar||usa.pix))
+    .mcardinfo
+      a(href='/profile/'+usa.id).cardname= usa.tag
+      p
+        span Since:
+        span.mome=usa.since
+    .mcardring
+      img(src="/build/items/"+(user.married?(usa||{ring:""}).ring+".png":"partial.png"))
+
+mixin medalsmk
+      -var it = 0;
+      while it < 9
+        if user.modules.medals[it] != undefined
+          -var medal_icon = user.modules.medals[it]
+        else
+          -var medal_icon = [0]
+
+
+        if medal_icon!=0 && user.modules.medals[it]!=[0,0]
+          img(src="/medals/"+medal_icon+".png" width="64px")
+        else
+          img(src="/medals/undefined.png")
+          //li.drop.ui-droppable.medalSlot
+        -it++
+
+
+//block head
+
+style.
+
+    .tabcontainer{
+      position:relative;
+      //bottom:16px;
+      //top:16px;
+    }
+-let PIC = (user.meta||{avatar:""}).avatar
+//-let bgInv = user.modules.bgInventory
+
+
+
+
+
+-let exptoNex    = Math.trunc(Math.pow((user.modules.level + 1) / 0.0427899, 2));
+-let exptoThis    = Math.trunc(Math.pow((user.modules.level) / 0.0427899, 2));
+-let frameofact  = exptoNex - exptoThis;
+-let levelcoverage = user.modules.exp-exptoThis;
+-let percent     = levelcoverage/frameofact*100;
+-let color = gear.colorname(user.modules.favcolor)[0].title
+-let bgColor = user.modules.favcolor || "#aaaaa"
+
+-let partner = user.partner ||false
+-let mod = user.polluxmod ||false
+-let donator = user.donator||false
+-let tier = user.donator||false
+
+
+-let patron = user.modules.medalInventory.includes('patreon')
+
+-let invertcolor= (parseInt(bgColor.replace('#', ''), 16) > 15458380 ) ? '#000' : '#fff';
+-let cmd= (user.modules.statistics||{}).commandsUsage
+-let comms = cmd? Object.keys(cmd):[]
+-let BGID    = user.modules.bgID
+-let BIO     = user.modules.persotext
+-let TAGLINE = user.modules.tagline
+-
+  function sorting(a,b){
+    return cmd[b]-cmd[a]
+  }
+-comms= comms.sort(sorting)      
+mixin badges
+  if user.id=='88120564400553984'
+    .notification.is-small.is-.level(style="padding:8px")  
+
+      img(src="https://media.freepik.com/accounts/img/badges/favorites_gold.png" width="32px")
+      span  &#x2003 This user is the creator of Pollux! 
+      .level-item
+  else
+
+    if mod
+      .notification.is-small.is-.level(style="padding:8px")
+        img(src="https://vignette.wikia.nocookie.net/scream-queens/images/0/00/Mod-icon.png/revision/latest?cb=20150928063924" width="32px")
+        span  &#x2003 This user is a Moderator at Pollux's official Server!
+        .level-item
+
+    if partner
+      .notification.is-small.is-.level(style="padding:8px")
+        img(src="https://i.pinimg.com/originals/c9/b1/a1/c9b1a1f1c147e98ba84861f0210fa5a2.png" width="32px")
+        span  &#x2003 This user runs a Pollux-partnered server! 
+        .level-item
+
+
+
+    if rubR<6
+      .notification.is-small.is-.level(style="padding:8px")  
+        img(src="https://cdn4.iconfinder.com/data/icons/stash/128/ruby-512.png" width="32px")
+        span  &#x2003 This user is one of the wealthiest in Rubines! 
+        .level-item
+
+    if patron
+      .notification.is-small.is-.level(style="padding:8px")  
+        img(src="https://cdn.worldvectorlogo.com/logos/patreon.svg" width="32px")
+        span  &#x2003 This user supports Pollux on Patreon! 
+        .level-item
+
+    if donator
+      .notification.is-small.is-.level(style="padding:8px")  
+        img(src="/images/zunsyeegacgblhgyqpoo.png" width="32px")
+        span  &#x2003 This user supported Pollux with a donation! 
+        .level-item
+    //if botuser.bot
+      .notification.is-small.is-.level(style="padding:8px")  
+        img(src="https://png.icons8.com/?id=30998&size=280" width="32px")
+        span  &#x2003 This user is a bot. Beep Boop! 
+        .level-item
+
+
+link(rel="stylesheet" href="/css/profile.css")
+
+
+
+
+
+  
+.is-fullwidth.nano: .nano-content(style='background:#2b2b30')
+
+
+
+  .notification.publi.is-info#publicshare
+    button.delete
+    p
+      b Share your public profile: 
+      a(href='http://pollux.fun/profile/'+user.id) http://pollux.fun/profile/#{user.id}
+
+  br
+  .bf: img(src="/backdrops/"+BGID+".png")
+  .container.is-fluid
+    br
+    .level.is-marginless
+      .level-left
+        .hexagon(style="pointer-events:none;margin: 30px auto 10px;transform:scale(1);background-image:url('"+PIC+"')")
+          if tier
+            img(src="/build/profile/donortiers/"+tier+".png").borderDN
+          div.hexTop
+          div.hexBottom    
+      br
+      .level-item
+      .level-left
+        p &#x2003
+      .level-left
+        div(style="text-align:center; text-shadow:0 1px 2px #222")
+          span: b.p-title= user.meta.username
+          span= "#"+user.meta.discriminator
+          p.subtitle.editable#tagline= TAGLINE
+          // || 'A fellow Pollux user'
+      .level-item
+      .level-item
+      .level-item(style="opacity:0")
+        p ------------
+      .level-item(style="flex: 1 1 auto ;margin:20px" ).editable#medals
+        +medalsmk
+    br.is-hidden-mobile
+    br.is-hidden-mobile
+
+    .section.round5
+      .columns
+        .column.is-7
+          .columns
+            .column.is-8 
+              p.is-marginless(style="position:;padding:4px 8px") About
+              p(style="min-height:120px;font-size:16pt;font-family:PT Serif" ).editable#persotex: i= BIO
+            .column.is-auto
+              p.is-marginless(style="position:;padding:4px 8px") Featured Sticker
+              div#sticker.editable: img(src=`/build/stickers/${user.modules.sticker||"undefined"}.png`)
+          hr
+          .is-hidden-desktop
+            +badges
+            hr
+
+          p.title: b Completionist Status
+          .box
+            //progress.progress(value= max=JSON.parse(BGBASE).length)
+            h1.title Cosmetics
+            h3.subtitle Items attachable to your Profilecard
+            p Backgrounds
+            -posess = BGBASE.filter(x=>!x.event&&user.modules.bgInventory.includes(x.code)).length
+            -max =BGBASE.filter(x=>!x.event).length
+            //progress.is-marginless.progress.is-small.is-primary(value=posess max=max)
+            -percentage = ((posess/max*100)||0)
+            -completion = percentage>=100?"maxed":percentage>=75? "quartered":percentage>=50?"halved":""
+            .p-progress.whitebg: .progbar(style="width:"+percentage+"%;" class=completion)
+            p.level-right.flotRite= posess+" of "+ max
+            br
+
+            -posess = MEDALBASE.filter(x=>!x.event&&user.modules.medalInventory.includes(x.icon)).length
+            -max = MEDALBASE.filter(x=>!x.event).length
+            p Medals
+            //progress.is-marginless.progress.is-small.is-primary(value=posess max=max)
+            -percentage = ((posess/max*100)||0)
+            -completion = percentage>=100?"maxed":percentage>=75? "quartered":percentage>=50?"halved":""
+            .p-progress.whitebg: .progbar(style="width:"+percentage+"%;" class=completion)
+            p.level-right.flotRite= posess+" of "+ max
+            br
+
+            -posess = STICKERBASE.filter(x=>!x.event&&user.modules.stickerInventory.includes(x.id)).length
+            -max = STICKERBASE.filter(x=>!x.event).length
+            p Stickers
+            //progress.is-marginless.progress.is-small.is-primary(value=posess max=max)
+            -percentage = ((posess/max*100)||0)
+            -completion = percentage>=100?"maxed":percentage>=75? "quartered":percentage>=50?"halved":""
+            .p-progress.whitebg: .progbar(style="width:"+percentage+"%;" class=completion)
+            p.level-right.flotRite= posess+" of "+ max
+            br
+
+
+            h2.title Collectibles
+            h3.subtitle Items displayed on specific Collector's Card 
+
+            p Fishes
+            -posess = user.modules.fishCollection.length
+            //progress.is-marginless.progress.is-small.is-primary(value=posess max=max)
+            -percentage = ((posess/max*100)||0)
+            -completion = percentage>=100?"maxed":percentage>=75? "quartered":percentage>=50?"halved":""
+            .p-progress.whitebg: .progbar(style="width:"+percentage+"%;" class=completion)
+            p.level-right.flotRite= posess+" of "+ max
+            br
+
+            p Flowers
+            -posess = user.modules.flowerCollection.length
+            //progress.is-marginless.progress.is-small.is-primary(value=posess max=max)
+            -percentage = ((posess/max*100)||0)
+            -completion = percentage>=100?"maxed":percentage>=75? "quartered":percentage>=50?"halved":""
+            .p-progress.whitebg: .progbar(style="width:"+percentage+"%;" class=completion)
+            p.level-right.flotRite= posess+" of "+ max
+            br
+
+            p Elements
+            -posess = user.modules.elementCollection.length
+            -percentage = ((posess/max*100)||0)
+            -completion = percentage>=100?"maxed":percentage>=75? "quartered":percentage>=50?"halved":""
+            .p-progress.whitebg: .progbar(style="width:"+percentage+"%;" class=completion)
+            //progress.is-marginless.progress.is-small.is-primary(value=posess max=max)
+            p.level-right.flotRite= posess+" of "+ max
+            br
+
+          script( async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js")
+          ins( class="adsbygoogle" style="display:block" data-ad-client="ca-pub-6458250766331979" data-ad-slot="1158646928" data-ad-format="auto" data-full-width-responsive="true")
+          script (adsbygoogle = window.adsbygoogle || []).push({});
+
+        .column(style="text-align:center")
+          .is-hidden-mobile
+            +badges
+            br
+          div( ).editable#background
+            img.bgprofile(src="/backdrops/"+BGID+".png")
+          .level(style="flex:0 0 auto").is-marginless
+            .level-item
+              .p-title
+                b= user.modules.level
+                .b500.small(style="transform:translateY(-12px)") LEVEL
+            .level-item
+              .title=gear.miliarize(user.modules.rep||0)
+                .b500.small REP 
+            .level-item
+            br
+
+          .p-progress
+            .progbar(style="width:"+percent+"%")
+
+          span.mono.alignrite=levelcoverage+"/"+frameofact
+          span.b500.alignrite EXP to NEXT: &#x2003
+          br
+          br
+          .columns
+            .column
+              .level.is-marginless
+                span: img(src="/images/rubine.png").currency_icon
+                span.b500 &#x2003Rubines:&#x2003
+                span= gear.miliarize(user.modules.rubines||0)
+                .level-item
+              .level.is-marginless
+                span: img(src="/images/jade.png").currency_icon
+                span.b500 &#x2003Jades:&#x2003
+                span= gear.miliarize(user.modules.jades||0)
+                .level-item
+              .level.is-marginless
+                span: img(src="/images/sapphire.png").currency_icon
+                span.b500 &#x2003Sapphires:&#x2003
+                span= gear.miliarize(user.modules.sapphires||0)
+                .level-item
+              br
+
+            .column
+              span.b500 Favcolor:&#x2003
+              span= (color||"Default")
+              .colorcont.editable(style="background:"+user.modules.favcolor)#favcol
+
+          .message.is-small.is-primary
+           .message-header Marriage Status
+           .message-body.box
+            if user.married && user.married.length>0
+              //if true
+              //-let WIFE = user.married.find(x=>x.featured==true)||user.married[0];
+              .momeb500 Married to:
+              each WIFE in user.married
+                +miniuser(WIFE)
+              br
+            else
+              p= user.meta.tag + " IS SINGLE"
+
+          .message.is-small
+           .message-header Achievements
+           .message-body
+              if user.modules.achievements
+                each ach in user.modules.achievements
+                  img(src="/medals/"+ach+".png").achievement
+              else
+                p.b500 --No Achievements--
+
+          .message.is-small
+             .message-header Flairs
+             .message-body(style="display: flex;flex: 0 0 auto;justify-content: space-evenly;align-items: center;" class=me?"editable":"")#flair
+                each flair in user.modules.flairsInventory
+                  .div(class=user.modules.flairTop==flair?'equipped':'' id=flair)
+                    img(src="/build/flairs/top/"+flair+".png" )
+
+
+
+
+  //block scripts
+  script.
+    var currbg= "#{user.modules.bgID}"
+    var bginv= "#{user.modules.bgInventory}"
+    var mdinv= "#{user.modules.medalInventory}"
+    var stickers= "#{user.modules.stickerInventory}"
+    var cstick= "#{user.modules.sticker}"
+  script(src="/js/profile_edit.js")
+  script(src="/js/moment.js")
+  script.
+    $('.mome').each(function(){  
+      var x=Number($(this).html())
+      if(isNaN(x))x="Undetermined";
+      else x = moment(x).format("MMM Do hh:mm a");
+      $(this).html(x)
+    })

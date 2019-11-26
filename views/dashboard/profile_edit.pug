@@ -1,0 +1,42 @@
+extends ../layout
+block content
+    br
+    br
+    br
+    br
+    br
+    h1 The worst profile edit in history of contemporary modern profile edits 
+
+    if userdata
+        h2= userdata.id
+        div
+            input#bg(type="text" name=payload value=userdata.modules.bgID)
+            button#savebg send
+
+
+        div        
+            input(type=text name=medals value=userdata.modules.medals)
+            input(type=text name=sticker value=userdata.modules.sticker)
+            input(type=text name=flair value=userdata.modules.flairTop)
+            input(type=text name=frame, value= (userdata.switches||{}).profileFrame ?1:0)
+
+    script.
+        $("#savebg").click(()=>{
+
+            fetch("/dash/profile/background",{
+                method:"PATCH",
+                 headers: { "Content-Type": "application/json; charset=utf-8" },
+                body:  JSON.stringify({data:$("#bg").val()})
+            }).then(res=>{
+                (res.ok)                
+            })
+        
+        })
+
+
+    br
+    br
+    br
+    br
+    br
+    br

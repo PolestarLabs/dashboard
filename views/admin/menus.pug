@@ -1,0 +1,425 @@
+script(src="https://twemoji.maxcdn.com/2/twemoji.min.js?12.0.4")
+br
+.plx-grid.plx-width-5-6.plx-position-fixed.underbar
+    .plx-width-1-2
+        button#save-all.plx-button.plx-button-primary( xplx-sticky="cls-active:glued-totop ;offset:10; animation:true"  )
+            i.fas.fa-save
+            span &#x2003  
+            span SAVE
+    .plx-width-1-2
+        button.plx-button.plx-button-secondary( plx-toggle="target: #options" class="plx-hidden@m" xplx-sticky="cls-active:glued-totop ;offset:10; animation:true;")
+            | MENU   
+
+br
+br
+style hr:not(.plx-divider-small):not(.plx-divider-icon){opacity:.1}
+-incremental = 100
+mixin section(title,sub,id,icon,helper,noside)
+    section.plx-flex.plx-flex-wrap.plx-card.plx-card-default.plx-card-body(id=id style=`margin-bottom:45px; z-index:${incremental--}` plx-scrollspy="cls: plx-animation-slide-left-small; repeat: true;delay:200" )
+        .plx-width-expand
+            h3.title
+                i.icon: div(style="opacity:.8" class=icon.split('.').join(' '))
+                span &#x2004 #{title}
+            h5.subtitle!= sub
+            //br
+            block             
+            br
+        if(!noside)
+            .plx-width-1-1(class="plx-width-1-5@l plx-width-2-5@xl")
+                p.helpe!= helper.replace('\n','<br>')
+br(class="plx-hidden@m")
+
+
+
+
+
+
+
+
+
+
+
+h1#general.title General Options
+h3.subtitle Server-wide settings, if no Channel-specific settings are present, these ones take place.
+hr.plx-divider-small 
+
+
+
+
+
+
+
+-
+    helper=
+        `I use 3 main prefixes: Local (+), Global (p!), and Universal (plx!)
+        Local can be changed to anything you want, Global can only be turned on or off, and Universal cannot be touched as it is used as absolute fallback in case someone familiar with the me but unbeknownst your server setup can use my commands.   
+        `
++section("Prefix","How to trigger my commands","prefix",".fas.fa-terminal",helper)
+    .plx-flex(style="align-items:center").plx-grid
+        .plx-flex-start.plx-width-1-1(class="plx-width-1-2@m")
+            .short-input
+                +pinkInput("server-prefix","Local Prefix for this Server","text",serverData.modules.PREFIX || "+","PREFIX") 
+        .plx-flex-end.plx-width-1-1(class="plx-width-1-2@m")
+            +pinkSwitch("global-prefix-toggle","Enable Global Prefix",serverData.globalPrefix||true)
+            
+
+
+
+
+
+-
+    helper=
+        `Global Language affects every channel that doesn't have a defined language, by default every channel will use the Global Language
+        If you believe the translations are not quite right, or if there's a missing language you'd like to see, please <a href="https://translation.pollux.fun" target="blank">request access to translations</a> then join my Server and ask to become a translator.
+        `
++section("Language","The language I'll speak on this server","language",".fas.fa-language",helper)
+    div(style="transform:translateX(1px)")
+        .control.level-left(style="margin-bottom: 80px;"): .select(style="width: 320px !important"): select#lang
+            each L,i in langs
+                if L.iso == serverData.modules.LANGUAGE
+                    option(id=L.iso data-description=L.english value = L.iso data-imagesrc="/build/guessing/guessflags/"+L.flag2+".png" selected)= L.name
+                else
+                    option(id=L.iso data-description=L.english value = L.iso data-imagesrc="/build/guessing/guessflags/"+L.flag2+".png" )= L.name
+
+        style: include  ddsl.css
+
+
+
+
+
+-
+    helper=
+        `
+        You can enable and disable Local and Global Levelups independently.
+        By enabling <b>Global</b> LevelUps you are also enabling DM Notifications to tell users when they receive Level prizes (Lootboxes), this action can be customized per-channel. If the user levels up where they can see the leveling message, they'll receive a DM, otherwise they won't.
+        <b>Local LevelUps</b> in the other hand are more discrete, they only tell the new level and any roles they might've unlocked. You can <a href="#customlocallv">customize Local LevelUp messages here</a>.
+        Local LevelUps <b>does not award Lootboxes</b>.
+        `
++section("Level Ups","Notify people about their Level going up","levelupmsgs",".far.fa-arrow-alt-circle-up",helper)
+    .plx-flex(style="align-items:center").plx-grid
+        .plx-flex-start.plx-width-1-1(class="plx-width-1-2@m")
+            +pinkSwitch("levelup-local","Enable <b>Local</b> LevelUps",serverData.modules.LVUP_local)
+        .plx-flex-end.plx-width-1-1(class="plx-width-1-2@m")
+            +pinkSwitch("levelup-global","Enable <b>Global</b> LevelUps",serverData.modules.LVUP )
+        p.plx-margin-remove-bottom Custom Local Level Up message
+        .plx-pink-input
+            textarea#level-message(name="level-message", cols="25", rows="4")= serverData.modules.LVUP_text ||""
+
+
+
+
+
+
+-
+    helper=
+        `
+       Lootboxes are my most precious gifts to award server activity. They contain lots of items to boost your profile and unlock more items for you to play with.
+       Each message from a conversation including a set amount of members has a 0.025% chance of spawning a box.
+
+       Be wary that <b>forcing drops or farming boxes is not allowed and it is bannable</b>. You're risking to lose all your progress and items regardless of they being acquired legitimately before you were caught. 
+        `
++section("Lootbox Drops","Allow lootboxes to spawn from time to time","drops",".fa.fa-cube",helper)
+     +pinkSwitch("loot-drops","Enable Lootbox Drops in all channels of this server",serverData.modules.DROPS )
+
+
+
+
+
+
+-
+    helper=
+        `
+       I am constantly being updated.
+       Receive update notices right away by enabling this option.
+       Servers with Beta Access will receive Beta notices via this feed.
+        `
++section("Update Notices","Opt-in or out of Update Notifications.","notices",".fa.fa-exclamation-circle",helper)
+     +pinkSwitch("update-alerts","Opt-in for Update Notices",serverData.modules.UPDATES || true)
+
+
+
+
+
+
+
+
+
+
+
+
+br
+hr.plx-divider-icon 
+br
+h1#housekeeping.title Housekeeping
+h3.subtitle Essential settings to make sure everything works good in your server~  
+hr.plx-divider-small 
+br
+
+
+
+
+-
+    helper=
+        `
+       Discord already introduces new members, but you can always make it better!
+       Add a custom message to your new members, and optionally let me send a special image to introduce them~       
+
+        `
++section("Administrative Roles","Roles used to define moderation functionalities in the server.","modroles",".fas.fa-shield",helper)
+    h4.title 
+        i: .fas.fa-unlock-alt
+        | &#x2001 Moderation Role
+    +roleSelect("modrole-select",roleInfo,serverData.modules.MODROLE)
+    .help Users with this role can access this dashboard, as well as mute, ban, and kick members.
+    h4.title
+        i: .fas.fa-ban
+        | &#x2001 Mute Role
+    +roleSelect("muterole-select",roleInfo,serverData.modules.MUTEROLE)
+    .help This role will be assigned to users targeted by the mute command
+
+
+
+
+
+
+-
+    helper=
+        `
+       Discord already introduces new members, but you can always make it better!
+       Add a custom message to your new members, and optionally let me send a special image to introduce them~       
+
+        `
++section("Welcome & Farewell Messages","Greet new members as they join your server, or say goodbye to those leaving.","welcome",".fas.fa-comments",helper)
+    .plx-grid
+        .plx-width-1-1(class="plx-width-1-2@m")
+            h4.title Welcome Message
+            p.plx-margin-remove-bottom Channel
+            +channelSelect("welcome-channel",channelInfo.filter(c=>c.type==0),serverData.modules.GREET.channel)
+            p.plx-margin-remove-bottom Message
+            .plx-pink-input
+                textarea#welcome-message(name="welcome-message", cols="25", rows="4")= serverData.modules.GREET.text ||""
+            +pinkSwitch("welcome-toggle","Enable welcome messages",serverData.modules.GREET.enabled || true)
+            hr
+            br
+
+        .plx-width-1-1(class="plx-width-1-2@m")
+            h4.title Farewell Message
+            p.plx-margin-remove-bottom Channel
+            +channelSelect("bye-channel",channelInfo.filter(c=>c.type==0),serverData.modules.FWELL.channel)
+            p.plx-margin-remove-bottom Message
+            .plx-pink-input
+                textarea#bye-message(name="bye-message", cols="25", rows="4")= serverData.modules.FWELL.text ||""
+            +pinkSwitch("bye-toggle","Enable goodbye messages",serverData.modules.FWELL.enabled || true)
+            hr
+            br
+
+        .plx-width-1-1 
+            +pinkSwitch("welcome-img","Use Welcome Image",serverData.imgwelcome || false)
+
+
+
++section("Global Command Switch ","   ","switches",".fas.fa-tasks",null,true)
+    +pinkSwitch("respond-disabled","Respond to Disabled commands with a message",serverData.modules.respondDisabled || true)
+    .help Otherwise, disabled commands will be ticked with a "X" reaction. <b>There's no "NO FEEDBACK" option.</b>
+    ul(plx-accordion="multiple: true").categs-container
+        each cat in commands.CATS
+             li.categ(id=cat.consolidated)
+                - let commandsFromThisCat= commands.CMS.collection.filter(c=>!c.hidden&&c.cat===cat.consolidated)
+                - let code= !serverData.modules.DISABLED.includes(cat.consolidated) && !serverData.modules.DISABLED.every(disa=> commandsFromThisCat.some(cmd=> cmd.name === disa) )
+                .plx-magic-input
+                    .plx-pink-check
+                        -let id= "global-cmd-cat-"+cat.consolidated
+                        input.markall(data-cat=cat.consolidated type="checkbox" id=id name=id checked= code )
+                        label(for=id)
+                
+                a.plx-accordion-title
+                        h5.title= cat.name
+                        .help= cat.description
+                .plx-accordion-content
+                    .container
+                        each cmd in commandsFromThisCat
+                            label.a-comand(class="cat_"+cat.consolidated)
+                                input.command-toggle(type="checkbox" name=cmd.name checked=!serverData.modules.DISABLED.includes(cmd.name)&&!serverData.modules.DISABLED.includes(cmd.cat) )
+                                span(plx-tooltip=cmd.desc)= cmd.name
+                            
+    button.plx-button.plx-button-primary#save-command-switch
+            i.fas.fa-save
+            span &#x2003  
+            span SAVE
+
+
+
+
+
+
+
+
+
+
+br
+hr.plx-divider-icon 
+br
+h1#smartroles.title Smart Roles
+h3.subtitle Let your Roles work for themselves, configure once and forget.
+hr.plx-divider-small 
+br
+-
+    helper=
+        `
+       Discord already introduces new members, but you can always make it better!
+       Add a custom message to your new members, and optionally let me send a special image to introduce them~       
+
+        `
+
+
+
++section("Reaction Roles","Let users pick a role by clicking a reaction","reactionroles",".far.fa-hand-point-up",helper,true)
+    .plx-grid
+        .plx-width-expand
+            h4 This feature should be set up in Discord with the <code class="mistyblue">#{serverData.modules.PREFIX}reactionroles</code> command.
+            h5 Check below the active Reaction Roles for this server
+        .plx-width-1-1(class="plx-width-2-5@m")
+            //p.helpe!= helper.replace('\n','<br>')
+    include ../tools/twemoji
+    include ../tools/invertcolor
+    style .emoji{width:24px}
+    style .emojirole{padding:.08rem .8rem; border-radius: 24px; margin:1rem}
+    style .rearolecontainer{padding:1.5rem; border-radius: 8px; margin:1rem; border: solid 2px #f695; position:relative}
+    .rearoles.plx-flex.plx-flex-wrap
+        each rea in reactRoles
+            - let channel = channelInfo.find(ch=>ch.id==rea.channel)
+            .rearolecontainer.plx-flex-none(id=rea.message)
+                button.del-rea-rol(plx-close data-channel=channel.id data-message=rea.message ).plx-close-large.plx-modal-close-default
+                p
+
+                    span.title= "#"+ channel.name
+                    br
+                    b Message 
+                    span.chanlink: a(href=`https://discordapp.com/channels/${serverInfo.id}/${channel.id}/${rea.message}` target='blank')= rea.message 
+                p
+                    b Reactions
+
+                p
+                    each r in rea.rolemoji
+                        span 
+                            if r.emoji.length > 5
+                                img(width="24px" src=`https://cdn.discordapp.com/emojis/${r.emoji.split(":").pop()}.${r.emoji.startsWith('a:')?"gif":"png"}`)
+                            else
+                                -x= twemoji.parse(r.emoji)
+                                span!= x
+   
+                        -let role = roleInfo.find(ro=>r.role===ro.id)||{}
+                        -let roleHexColor = "#"+(role.color||0xcccccc).toString(16);
+
+                        span.emojirole(style=`color: ${invertcolor(roleHexColor,true)}AA; background-color: ${roleHexColor};`)= role.name
+                        br
+
+
+
+
+
+
+
+-
+    helper=
+        `
+       Reward user activity with special roles each level! These are awarded automatically once the user arrives a certain level.
+       To configure how fast your members will Level Up, check the UPFACTOR option~       
+
+        `
+style .levelrole_item{border-radius:8px;border:solid 1px #f58;padding:5px;display:flex;margin-bottom:1rem;max-width:500px;height:38px}.levelrole_item .rolename{margin-right:1em;flex:1 1 auto;font-family:Quicksand;min-height:35px;font-family:Quicksand;font-size:20px;line-height:20px;margin:10px}.levelrole_item .level{font-size:18pt;opacity:.7;font-family:'Panton Black';font-style:italic;text-align:right;width:3.5rem;flex:0 0 auto}.levelrole_item .plx-flex-around{justify-content:flex-end;flex:0 1 auto}.levelrole_item .plx-flex-around>*{margin-left:5px}.levelrole_item .plx-pink-input select{margin-bottom:0!important;margin:-10px;max-width:300px}input.level{background:0 0;border:none;border-bottom:solid 2px #aac}input[type=number].level{-moz-appearance:textfield}input[type=number].level::-webkit-inner-spin-button,input[type=number].level::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}.selfrole_item .rolename{margin-right:1em;flex:1 1 auto;font-family:Quicksand;min-height:35px;font-family:Quicksand;font-size:20px;line-height:20px;margin:10px 0}.selfrole_item .level{font-size:12pt;opacity:.7;font-family:'Panton Light';font-style:italic;text-align:left!important;width:5rem;flex:0 0 auto}.selfrole_item .plx-flex-around{justify-content:flex-end;flex:0 1 auto}.selfrole_item .plx-flex-around>*{margin-left:5px}.selfrole_item .plx-pink-input select{margin-bottom:0!important;/*! max-width: 200px; */font-size:12pt}@media screen and (max-width:600px){.levelrole_item .rolename{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px}.selfrole_item .rolename{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;margin-left:-8px}}.row-1,.row-2{width:100%}
++section("Level Roles","Give members a special role when they reach a level","levelroles",".fas.fa-arrow-circle-up",helper,true)
+    .plx-grid
+        //.plx-width-expand
+            //h4 This feature should be set up in Discord with the <code class="mistyblue">reactionroles</code> command.
+            //h5 Check below the active Reaction Roles for this server
+
+
+        .levroles.plx-width-1-1(class="plx-width-1-2@m")
+
+            div
+                form#new-lev-role.levelrole_item
+                    input(name="level" type="number" placeholder="00").level
+                    span &#x2003
+                    .rolename
+                        +roleSelect("levrole-select",roleInfo,null)
+                    button(type="submit" formmethod="post" value="ADD").plx-button-secondary.plx-button
+                        i.fas.fa-plus-square
+                        span &#x2000
+                        span NEW
+
+            br
+            br
+            #levelroleslist
+                each lvrl,i in serverData.modules.AUTOROLES.filter(x=>x)
+                    -let thisRole = roleInfo.find(rl=> rl.id == lvrl[0])||{}
+                    include templates/level_role_card
+
+        .levroles_settings.plx-width-1-1(class="plx-width-1-2@m")
+            p.helpe!= helper.replace('\n','<br>')
+            br
+            hr
+            br
+
+            +pinkSwitch("local-lvup-toggle","Enable Local Level Up Messages",serverData.modules.LVUP_local || true)
+            br
+            +pinkSwitch("rolestack-toggle","Keep All Roles",serverData.modules.autoRoleStack )
+                span Keep All Roles
+                .help Level Roles will stack as they're obtained, uncheck to keep only the newest.
+
+
+-
+    helper=
+        `
+       Let your users pick roles with a command. This one is faster and easier to setup than Reaction Roles, but might need some cooperation from your users to get them right.
+
+        `
+
++section("Command Roles","Give members a special role when they type <code class='mistyblue'>"+serverData.modules.PREFIX+"roleme [SHORTCUT]</code>","selfroles",".fas.fa-angle-double-up",helper,true)
+    .plx-grid
+        //.plx-width-expand
+            //h4 This feature should be set up in Discord with the <code class="mistyblue">reactionroles</code> command.
+            //h5 Check below the active Reaction Roles for this server
+
+
+        .selfrole.plx-width-1-1(class="plx-width-1-2@m")
+           
+            div 
+                form#new-self-role.selfrole_item 
+                    span #{serverData.modules.PREFIX}roleme 
+                    input(name="short" type="text" placeholder="SHORTCUT"  ).level
+                    span &#x2003
+                    .rolename
+                        +roleSelect("selfrole-select",roleInfo,null)
+                    button(type="submit" formmethod="post" value="ADD").plx-button-secondary.plx-button
+                        i.fas.fa-plus-square
+                        span &#x2000
+                        span NEW
+
+            br
+            br
+            #selfroleslist
+                each sfrl,i in serverData.modules.SELFROLES.filter(x=>x)
+                    -let thisRole = roleInfo.find(rl=> rl.id == sfrl[0])||{}
+                    
+                    include templates/self_role_card
+
+        .selfrole_settings.plx-width-1-1(class="plx-width-1-2@m")
+            p.helpe!= helper.replace('\n','<br>')
+            br
+            hr
+            br
+ 
+
+br
+hr.plx-divider-icon 
+br
+
+pre= JSON.stringify(serverData,null,1)
+
+
+script  var validator = '#{validator}'
+script  var serverid = '#{serverInfo.id}'
+script(src="/js/sweetalert.js")
+script
+    include adm_menus.js

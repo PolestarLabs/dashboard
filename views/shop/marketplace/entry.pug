@@ -1,0 +1,99 @@
+extends ../../layout 
+block content
+    .wrapper
+        include ../../navbar
+
+        style 
+            include market.css
+ 
+        
+        div(plx-grid)
+            div(class="plx-width-3-5@l")
+
+              .plx-container.plx-container-expand
+                br
+                br
+                br
+                .section#main    
+                    .plx-grid
+                        .plx-width-1-1(class="plx-width-1-2@s")
+                            .itempic(class=entry.item_type)
+                                img(src=entry.itemdata.img)
+
+                            .iteminfo
+                                img(src=`https://beta.pollux.gg/images/tiers/new/${entry.itemdata.rarity}.png`).rar
+                                div
+                                    h2= item.name 
+                                    h4.subtitle
+                                        img(src=entry.userdata.meta.avatar alt="Avatar" style="border-radius:5px;margin:0 16px 0 -10px;").pinkord.icon32
+                                        span= entry.userdata.meta.tag  
+                        .plx-width-1-1.prices(class="plx-width-1-2@s")
+                            p
+                                if(entry.currency=="SPH")
+                                    .plx-sapphire.icon64
+                                if(entry.currency=="RBN")
+                                    .plx-rubine.icon64
+                                span &#x2003
+                                span.price= entry.price 
+                                span.curr= entry.currency
+
+                    hr.plx-divider-icon
+                .section#listings    
+                    h2 Other listings
+                    h4.subtitle Sale and purchase orders for this item
+                    -pricesS = listings.concat(entry).map(itm=>{return{price:itm.price,currency:itm.currency,type:itm.type}}).filter(x=>x.currency==="RBN"&&x.type==="sell")
+                    -pricesB = listings.concat(entry).map(itm=>{return{price:itm.price,currency:itm.currency,type:itm.type}}).filter(x=>x.currency==="RBN"&&x.type==="buy")
+                    -totalS  = pricesS.length>0? pricesS.map(x=>x.price).reduce((a,b)=> a + b) : 0
+                    -totalB  = pricesB.length>0? pricesB.map(x=>x.price).reduce((a,b)=> a + b) : 0
+                    p                   
+                        b Market average: 
+                        span Selling: #{Math.ceil(totalS/pricesS.length) || "---"} | 
+                        span Buying: #{Math.ceil(totalB/pricesB.length) || "---"}
+                    -if (!fullbase ) fullbase= [item]
+                    -listings=listings.filter(itm=>itm.id!==entry.id)
+                    -listings.sort((a,b)=>a.price-b.price)
+                    .plx-grid
+                        .plx-width-1-2
+                            p More people <b>selling</b> this item.
+                                    
+                            each entry,i in listings.filter(lis=>lis.type==='sell')
+                                    if i <10
+                                        include market_entry_sell
+                                        
+                        .plx-width-1-2
+                            p More people <b>buying</b> this item.
+                                    
+                            each entry,i in listings.filter(lis=>lis.type==='buy')
+                                    if i <10
+                                        include market_entry_sell
+                                        
+                    hr.plx-divider-icon
+            .plx-background-secondary.plx-padding-remove-left(class="plx-width-2-5@l" style="margin-bottom: -80px; direction: rtl;")
+                br
+                br
+                .plx-container.plx-sticky.plx-active.plx-sticky-fixed.plx-sticky-below(style="height: 100vh;overflow-y: scroll;")
+                    br
+                    .section#more(style="direction:ltr;padding-bottom: 100px;")    
+                        h2 More from #{entry.userdata.meta.username}
+                        h4.subtitle 
+                        
+                        each entry,i in morefrom
+                                if i <10
+                                    include market_entry_sell
+                                        
+
+        //
+            pre= JSON.stringify(listings,null,2)
+            pre= JSON.stringify(entry,null,2)
+            pre= JSON.stringify(item,null,2)
+
+    block scripts
+        script(src="/js/moment.js")
+        script.
+            $('.date').each(function () {
+                var ts = $(this).data('ts')
+                x = moment(ts).format('MMM D YYYY')
+                y = moment(ts).format('h:mm A')
+                $(this.children[0]).html(x);
+                $(this.children[1]).html(y);
+            })

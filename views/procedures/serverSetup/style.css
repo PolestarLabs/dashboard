@@ -1,0 +1,392 @@
+   
+@font-face {
+    font-family: "Whitney";
+    src: url("/css/fonts/WhitneyHTF-Light.otf");
+    font-weight: 300
+  }
+  
+  @font-face {
+    font-family: "Whitney";
+    src: url("/css/fonts/WhitneyHTF-Medium.otf");
+  }
+  
+  @font-face {
+    font-family: "Whitney";
+    src: url("/css/fonts/WhitneyHTF-Bold.otf");
+    font-weight: 700
+  }
+  
+  @font-face {
+    font-family: "Whitney";
+    src: url("/css/fonts/WhitneyHTF-Black.otf");
+    font-weight: 900
+  }
+  
+  @font-face {
+    font-family: "Whitney";
+    src: url("/css/fonts/WhitneyHTF-BoldSC.otf");
+    font-weight: 500
+  }
+  
+  body{
+    font-family: Whitney;
+      width:100%;
+     height:100%;
+      margin:0;
+     background:#282b30;
+    color:white;
+    display: flex;
+    }
+  wrapper{
+      width: 400px;
+      height:680px;
+    background:#35383c;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+       text-align: center;
+    box-shadow: 0 1px 30px 5px rgba(0,0,0,.2);
+      position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+    #top{
+     background:#7289da;
+     flex: 0 0 auto;
+     
+    }
+  #fill{
+    flex: 1 0 auto;
+     background: #494b4f;
+    padding: 16px
+  }
+#fill p{
+  text-align: left;
+  padding: 0 16px
+}
+    
+    #bottom{
+      display: flex;
+      flex-direction: column;
+      height:100px;
+      align-items: center;
+      flex: 0 0 auto;   
+      position: absolute;
+      bottom:0;
+      width: 100%;
+      background:#35383c;
+     
+    }
+#next:hover{
+  background: #4e5d94
+}
+    #next {
+    margin: auto;
+      cursor: pointer;
+      background: #7289da;
+      border: none;
+      padding:10px 25px;
+      font-size:large;
+      border-radius: 4px;
+        color:white;
+    }
+
+.serverIcon img{
+  background: #8ea1e1;
+  border: solid 8px #8ea1e1;
+  border-radius: 100%;
+}
+
+h3.title{
+  opacity: .4;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: .85rem;
+  margin:20px
+}
+
+p{
+  font-weight: 300;
+  opacity: 0.8
+}
+
+  #selektor{
+
+
+position: relative;
+
+
+}
+select{
+  -moz-appearance: none;
+  -webkit-appearance: none;
+-webkit-box-sizing: border-box;
+appearance: none;
+  background: #35383c;
+border: 2px solid hsla(0,0%,100%,.2);
+border-radius: 3px;
+box-sizing: border-box;
+  color: hsla(0,0%,100%,.2);
+font-size: 16px;
+line-height: 19px;
+margin-top: 12px;
+padding: 12px;
+  color: white;
+  font-family: Whitney;
+  font-weight: 100;
+}
+
+#selektor:after{
+
+    border: 6px solid transparent;
+        border-top-color: transparent;
+    border-top-color: hsla(0,0%,100%,.2);
+    content: " ";
+    height: 0;
+    margin-top: 3px;
+    pointer-events: none;
+    position: absolute;
+    right: 48px;
+    top: 50%;
+    width: 0;
+
+}
+#selektor:focus:after, select:focus {
+    border-color: #7289da;
+}
+
+.check  
+@font-face {
+    font-family: "Whitney";
+    src: url("/css/fonts/WhitneyHTF-Light.otf");
+    font-weight: 300
+  }
+  
+  @font-face {
+    font-family: "Whitney";
+    src: url("/css/fonts/WhitneyHTF-Medium.otf");
+  }
+  
+  @font-face {
+    font-family: "Whitney";
+    src: url("/css/fonts/WhitneyHTF-Bold.otf");
+    font-weight: 700
+  }
+  
+  @font-face {
+    font-family: "Whitney";
+    src: url("/css/fonts/WhitneyHTF-Black.otf");
+    font-weight: 900
+  }
+  
+  @font-face {
+    font-family: "Whitney";
+    src: url("/css/fonts/WhitneyHTF-BoldSC.otf");
+    font-weight: 500
+  }
+  
+  body{
+    font-family: Whitney;
+      width:100%;
+     height:100%;
+      margin:0;
+     background:#282b30;
+    color:white;
+    display: flex;
+    }
+  wrapper{
+      width: 400px;
+      height:680px;
+    background:#35383c;
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+       text-align: center;
+    box-shadow: 0 1px 30px 5px rgba(0,0,0,.2);
+      position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+    #top{
+     background:#7289da;
+     flex: 0 0 auto;
+     
+    }
+  #fill{
+
+    flex: 0 0 265px;
+     background: #494b4f;
+    padding: 0px 16px;    
+    overflow-y: scroll;
+
+  }
+#fill p{
+  text-align: left;
+  padding: 0 16px;
+  font-size: 14
+}
+    
+    #bottom{
+      display: flex;
+      flex-direction: column;
+      height:100px;
+      align-items: center;
+      flex: 0 0 auto;         
+      //bottom:0;
+      width: 100%;
+      background:#35383c;
+     
+    }
+#next:hover{
+  background: #4e5d94
+}
+    #next {
+    margin: auto;
+      cursor: pointer;
+      background: #7289da;
+      border: none;
+      padding:10px 25px;
+      font-size:large;
+      border-radius: 4px;
+        color:white;
+    }
+
+.serverIcon img{
+  background: #8ea1e1;
+  border: solid 8px #8ea1e1;
+  border-radius: 100%;
+}
+
+h3.title{
+  opacity: .4;
+  font-weight: 400;
+  text-transform: uppercase;
+  font-size: .85rem;
+  margin:20px
+}
+
+p{
+  font-weight: 300;
+  opacity: 0.8
+}
+
+  #selektor{
+position: relative;
+}
+
+select,input,textarea{
+appearance: none;
+  background: #35383c;
+border: 2px solid hsla(0,0%,100%,.2);
+border-radius: 3px;
+box-sizing: border-box;
+  color: hsla(0,0%,100%,.2);
+font-size: 16px;
+line-height: 19px;
+margin-top: 12px;
+padding: 12px;
+  color: white;
+  font-family: Whitney;
+  font-weight: 100;
+}
+
+#selektor:after{
+
+    border: 6px solid transparent;
+        border-top-color: transparent;
+    border-top-color: hsla(0,0%,100%,.2);
+    content: " ";
+    height: 0;
+    margin-top: 3px;
+    pointer-events: none;
+    position: absolute;
+    right: 15%;
+    top: 50%;
+    width: 0;
+
+}
+#selektor:focus:after, select:focus {
+    border-color: #7289da;
+}
+
+
+.switch {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+  font-size: 16px;
+text-align: left;
+  -webkit-user-select: none;
+ -moz-user-select: none;
+}
+
+
+
+.switch input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+  
+}
+
+.slider {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 18px;
+  width: 18px;
+  border:solid 2px;
+  border-radius: 3px;
+  transition: all 150ms ease
+  
+}
+
+.switch:hover input ~ .slider {
+ // background-color: #ccc;
+}
+
+.switch input:checked ~ .slider {
+  background-color: #7289da;
+   color:white;
+  border-color: #7289da;
+
+}
+
+.slider:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.switch input:checked ~ .slider:after {
+  display: block;
+  color:white;
+}
+
+.switch .slider:after {
+  left: 6px;
+  top: 2px;
+  width: 4px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+} 
+
+.gotoDash{
+  display: inline-flex;
+justify-content:space-evenly;
+align-items:center;
+  width: 200px;
+  height: 60px;
+  background: #2b2b2F;
+margin:26px 0 -10px;
+color:white;
+border-radius:5px;
+text-decoration:none;
+
+}

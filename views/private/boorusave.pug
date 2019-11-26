@@ -1,0 +1,111 @@
+extends ../layout 
+block content
+    .wrapper
+        include ../navbar
+
+        style
+            include imgallery.css
+     
+
+        br
+        br
+        br
+        .plx-container
+            .section#main    
+                h2 
+                h4.subtitle 
+                p
+           
+                .plx-flex(style="align-items:center")
+                    span Your Collection: (#{boorucollection.length}/25)
+                    span &#x2003
+                    span  
+                        style .bluebgclick{border: solid 2px #59F; color:white} .bluebgclick:hover{background:#59F2} .bluebgclick:active{background:#59F5;border-color:white}
+                        a.bluebgclick.plx-button(type='button')
+                            .plx-sapphire.icon32(style="transform:scale(.7)")
+                            span &#x2003
+                            span Expand
+ 
+            hr.plx-divider-icon
+            br
+
+        .plx-container.plx-container-large
+                if boorucollection.length === 0
+                    p You don't have any Imageboard searches saved.
+                .plx-grid-small(plx-grid="masonry: true; parallax: 50" )   
+                    each itm,i in boorucollection.reverse().slice(0,25)
+
+                        div(id=itm.saved): .plx-itmcard(plx-scrollspy="cls:plx-animation-slide-top-small; delay: "+(i*300+2000))
+                            .plx-inline
+                                img(plx-img data-src=itm.url class=(itm.nsfw?'img-nsfw':'') )
+                                if(itm.nsfw)
+                                    .plx-overlay.plx-position-center
+                                        .nsfw-label
+                                            i.fas.fa-heartbeat
+                                            span &#x2001 NSFW
+                            .plx-flex.plx-flex-around(plx-lightbox)
+                                a.plx-button.plx-button-primary(type='button' href=itm.url ) 
+                                    i.fas.fa-search                            
+                                .plx-button.plx-button-secondary(type='button') 
+                                    i.fas.fa-tags
+                                .supertag(plx-dropdown='mode:click; boundary: .plx-itemcard; boundary-align: true; pos: top-center; offset: 80')
+                                        .plx-flex.plx-flex-wrap.plx-flex-center.tags
+
+                                            each tag in itm.tags.slice(1).split(/ +/)
+                                                .plx-label(style="margin:2px")
+                                                    small= tag
+
+
+                                .delete.plx-button.plx-button-danger(type='button' data-saved=itm.saved) 
+                                    i.fas.fa-trash
+                                    
+        hr
+
+block scripts
+    script(src='/js/sweetalert.js')
+    script.
+        $(".delete").click(function(){
+            Swal.fire({
+                title: 'Hey, are you sure?',
+                text: "All those deleted bookmarks will be lost in time like tears in rain!\n\n\u200b",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#AA66FF',
+                cancelButtonColor: '#FC5065',
+                confirmButtonText: 'Yes, time to die!',
+                showLoaderOnConfirm: true,
+                preConfirm: (login) => {
+                    return fetch(`/dash/imgbookmarks/${$(this).data('saved')}`,{method:"DELETE"})
+                    .then(response => {
+                        console.log(response)
+                        if (!response.ok) {
+                            console.log(response)
+                        throw new Error(response.status)
+                        }
+                        return response
+                    })
+                    .catch(error => {
+                        console.log(error)
+                        Swal.showValidationMessage(
+                        `Oopsie Woopsie: ${error}`
+                        )
+                    })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+                }).then((result) => {
+                if (result.value) {
+
+                        Swal.fire({
+                            title:'Deleted!',
+                            text:'This bookmark is no more!',
+                            type:'success',
+                            confirmButtonText:'Poof!'
+                        })
+                        $(`#${$(this).data('saved')}`).remove()
+
+                }
+            })
+           
+
+        })
+

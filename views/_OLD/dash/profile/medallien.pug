@@ -1,0 +1,178 @@
+include ../../templates
+
+.tile.is-ancestor.fullheight
+  .tile.is-parent.is-vertical.is-4.is-marginless
+    .tile.is-child.mobiShrink
+      .title.is-5: b Equipped
+      -
+        var ii = {
+                theme:'is-ruby',
+                classes:'fas fa-save',
+                colA: '#ccc',
+                colB: '#aaa',
+                caption: 'SAVE',
+                id: 'scnd2',
+                }
+        var ii2next = {
+                theme:'is-gray is-small',
+                classes:'fas fa-undo medalreset',
+                colA: '#ccc',
+                colB: '#aaa',
+                caption: 'RESET',
+                id: 'medalreset',
+                }
+
+      .bginv.is-hidden-mobile.level
+        +iconButton(ii)      
+        //+iconButton(ii2next)
+      ul.level.equipped
+          - var it = 0;
+          - if(user.modules.medals.length < 9)user.modules.medals.push(0);
+          .columns.is-multiline.is-mobile#equipped
+              while it < 9
+                if user.modules.medals[it] !== undefined
+                  -var medal_icon = user.modules.medals[it]
+                  -var findMedal  = MEDALBASE.find(m=> m.icon == user.modules.medals[it])
+                  -var medal_name = findMedal ?findMedal.name : user.modules.medals[it]
+                else
+                  -var medal_icon = 0
+                  -var medal_name = 0
+
+                .column.is-4
+                    if medal_icon!=0 && user.modules.medals[it]!=[0,0] && user.modules.medals[it]!=0
+                      li.drop.ui-droppable.medalSlot(data-pos = it)
+                        .medallien(data-medal=medal_icon data-medname=medal_name).ui-draggable.drag.ui-sortable-handle.ui-draggable-handle
+                              .med-rare
+                                -let filter = MEDALBASE.filter(med=>med.icon==medal_icon)
+                                if filter[0] != undefined
+                                  img.this_rare_med(src="/images/tiers/"+filter[0].rarity+".png")
+                              .med-pic
+                                img(src="/medals/"+medal_icon+".png")
+                              .med-name
+                                p.tinyFonto= medal_name
+                    else
+                      li.drop.ui-droppable.medalSlot
+                -it++
+
+  .tile.is-parent.is-8
+    //.tile.is-8.is-child.whitebox
+
+   
+ 
+
+    //.tile.is-1.is-child
+    -let inventory = user.modules.medalInventory.concat(user.modules.achievements).reverse()
+    .nanox.medinv.tile.is-8.is-child
+           ul.cardPile.sortable.dropB.ui-sortable.ui-droppable.flexboxi.contox.inv_box
+            for i in inventory
+               -if (i==null) continue;
+               -if (user.modules.medals.includes(i)) continue;
+
+               -var findMedal = MEDALBASE.find(m=> m.icon == i)
+               -var ina = findMedal ?findMedal.name :i
+               -let filter = MEDALBASE.find(med=>med.icon==i)||{rarity:'XR'}
+               -var classSet = `${filter.rarity} ${filter.event?"event":""} ${filter.category=="Achievements"?"achiev":"medal"} ${filter.exclusive?"serverx":""}` 
+
+               li.medallien(data-medal=i data-medname=ina class=classSet).super-filter.ui-draggable.drag
+                  .med-rare
+                      if filter
+                        img.this_rare_med(src=i==0?"":"/images/tiers/"+filter.rarity+".png")
+                  .med-pic
+                      img(src="/medals/"+i+".png")
+                  //.med-name
+                      p.tinyFonto= ina
+    .tile.is-1.is-child.is-marginless.is-paddingless
+      .is-hidden-desktop.topButs
+        .inline
+          +iconButton(ii2next)
+        .inline
+          +iconButton(ii)
+    -
+      var filterCount = {
+        C: MEDALBASE.filter(x=> inventory.includes(x.icon) && x.rarity=="C").length
+        ,U: MEDALBASE.filter(x=> inventory.includes(x.icon) && x.rarity=="U").length
+        ,R: MEDALBASE.filter(x=> inventory.includes(x.icon) && x.rarity=="R").length
+        ,SR: MEDALBASE.filter(x=> inventory.includes(x.icon) && x.rarity=="SR").length
+        ,UR: MEDALBASE.filter(x=> inventory.includes(x.icon) && x.rarity=="UR").length
+        ,XR: MEDALBASE.filter(x=> inventory.includes(x.icon) && x.rarity=="XR").length
+        ,event: MEDALBASE.filter(x=> inventory.includes(x.icon) && x.event).length
+        ,achiev: MEDALBASE.filter(x=> inventory.includes(x.icon) && x.category=="Achievements").length
+        ,server: MEDALBASE.filter(x=> inventory.includes(x.icon) && x.exclusive).length
+        ,medal: MEDALBASE.filter(x=> inventory.includes(x.icon) && x.category!="Achievements").length
+        ,all: MEDALBASE.filter(x=> inventory.includes(x.icon)).length
+      }
+        filterCount.XR= filterCount.all - filterCount.medal - filterCount.achiev
+      
+    .tile.is-3.is-vertical.is-child.is-hidden-mobile.menu: ul.menu-list
+      li: a.title.is-5.super-filter-button(data-filter="all").is-active All
+      li: a.title.is-5.super-filter-button(data-filter="medal") Medals
+      li: a.title.is-5.super-filter-button(data-filter="achiev") Achievements
+      li: a.title.is-5.super-filter-button(data-filter="event") Event
+      li: a.title.is-5.super-filter-button(data-filter="UR") Ultra Rare
+      li: a.title.is-5.super-filter-button(data-filter="SR") Super Rare
+      li: a.title.is-5.super-filter-button(data-filter="R") Rare
+      li: a.title.is-5.super-filter-button(data-filter="U") Uncommon
+      li: a.title.is-5.super-filter-button(data-filter="C") Common
+      li: a.title.is-5.super-filter-button(data-filter="XR") Exclusive Rare
+
+//.columns.fullheight.is-mobile
+    .column.is-4.eqq
+
+    .column.dispos
+        .title.is-5: b Achievement
+          .nano-content.inv_box.achinv
+             ul.cardPile.sortable.dropB.ui-sortable.ui-droppable.flexboxi
+              for i in user.modules.achievements
+                 -var findMedal = MEDALBASE.find(m=> m.icon == i)
+                 -var ina = findMedal ?findMedal.name :i
+                 li.medallien(data-medal=i data-medname=ina).ui-draggable.drag
+                    .med-rare
+                        -let filter = MEDALBASE.find(med=>med.icon==i)||{rarity:'XR'}
+                        if filter
+                          img.this_rare_med(src=i==0?"":"/images/tiers/"+filter.rarity+".png")
+                    .med-pic
+                        img(src="/medals/"+i+".png")
+                    .med-name
+                        p.tinyFonto= ina
+
+        .title.is-5: b Inventory
+          .nano-content.inv_box.medinv
+             ul.cardPile.sortable.dropB.ui-sortable.ui-droppable.flexboxi
+              for i in user.modules.medalInventory
+                 -var findMedal = MEDALBASE.find(m=> m.icon == i)
+                 -var ina = findMedal ?findMedal.name :i
+                 li.medallien(data-medal=i data-medname=ina).ui-draggable.drag
+                    .med-rare
+                        -let filter = MEDALBASE.find(med=>med.icon==i)||{rarity:'XR'}
+                        if filter
+                          img.this_rare_med(src=i==0?"":"/images/tiers/"+filter.rarity+".png")
+                    .med-pic
+                        img(src="/medals/"+i+".png")
+                    .med-name
+                        p.tinyFonto= ina
+
+
+        //.nano(style="height:100%"): .nano-content.inv_box
+              ul.cardPile.sortable.dropB.ui-sortable.ui-droppable.flexboxi
+
+                if  user.modules.medalInventory
+                  for i in user.modules.medalInventory
+                    if i
+                      -var findMedal = MEDALBASE.find(m=> m.icon == i)
+                      //p = xxx
+                      //pre=findMedal 
+                      -var ina = findMedal ?findMedal.name :i
+                      //if user.modules.medals.includes(i)||user.modules.achievements.includes(i)
+
+                      //else
+
+                      li.medallien(data-medal=i data-medname=ina).ui-draggable.drag
+                            .med-rare
+                                -let filter = MEDALBASE.find(med=>med.icon==i)||{rarity:'XR'}
+                                if filter
+                                  img.this_rare_med(src=i==0?"":"/images/tiers/"+filter.rarity+".png")
+                            .med-pic
+                                img(src="/medals/"+i+".png")
+                            .med-name
+                                p.tinyFonto= ina
+    
