@@ -21,6 +21,8 @@ function gatherData(){
     ,updates: $('#update-alerts').prop('checked')
     ,drops: $('#loot-drops').prop('checked')
 
+    ,language: $('.dd-selected-value').val()
+
     ,modrole: $('#modrole-select').val()
     ,muterole: $('#muterole-select').val()
 

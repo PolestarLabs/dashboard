@@ -90,7 +90,7 @@ Changes:
 \`\`\`
 Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
 `}
-        }) )
+        }).catch(e=>null) )
 }
 
     const setPayload = {
@@ -113,10 +113,8 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
        
     } 
     if(payload.language){
-        setPayload['modules.LANGUAGE']= payload.language
-    }
-    
-    console.log({SVID, setPayload}) 
+        setPayload['modules.LANGUAGE']= payload.language || 'en'
+    }    
 
     DB.servers.set(SVID,{
         $set:  setPayload  
@@ -150,7 +148,7 @@ router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
 
         Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
         `}
-    }) )}
+    }).catch(e=>null) )}
 
     payload.server=SVID;
     delete payload.validator;
@@ -182,7 +180,7 @@ router.delete("/levelrole",ADMCHECKS,async (req,res)=>{
     
             Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
             `}
-        }) )}
+        }).catch(e=>null) )}
 
         await DB.servers.set(SVID,{$pull:{'modules.AUTOROLES':null}});
         return res.status(200).json("Level Role Created!");
@@ -206,7 +204,7 @@ router.delete("/selfrole",ADMCHECKS,async (req,res)=>{
 
         Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
         `}
-    }) )}
+    }).catch(e=>null) )}
 
 
     DB.servers.updateOne({id:SVID},{
@@ -235,7 +233,7 @@ router.patch("/levelrole",ADMCHECKS,async (req,res)=>{
 
         Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
         `}
-    }) )}
+    }).catch(e=>null) )}
     
     DB.servers.updateOne({id:SVID},{
         $set: {
@@ -261,7 +259,7 @@ router.patch("/selfrole",ADMCHECKS,async (req,res)=>{
 
         Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
         `}
-    }) )}
+    }).catch(e=>null) )}
     
     DB.servers.updateOne({id:SVID},{
         $set: {
@@ -295,7 +293,7 @@ router.put("/language",ADMCHECKS,async (req,res)=>{
         
                 Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
                 `}
-            }) )}
+            }).catch(e=>null) )}
 
             if(response && response.ok) return res.status(200).json("Language OK");
             else if (response) return  res.status(response.status).json(response.message);
@@ -340,7 +338,7 @@ router.put("/selfrole",ADMCHECKS,async (req,res)=>{
 
         Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
         `}
-    }) )}
+    }).catch(e=>null) )}
     
     DB.servers.findOneAndUpdate({id:SVID},{
         $push: {
@@ -374,7 +372,7 @@ router.put("/levelrole",ADMCHECKS,async (req,res)=>{
 
         Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
         `}
-    }) )}
+    }).catch(e=>null) )}
 
     DB.servers.findOneAndUpdate({id:SVID},{
         $push: {
