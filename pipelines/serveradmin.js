@@ -84,4 +84,3 @@ if(!req.user.guilds.find(g=>g.id==theG.id&&g.owner==true)&&!['88120564400553984'
   }
   })
 }
-

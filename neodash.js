@@ -233,7 +233,7 @@ app.use(async function(req,res,next){
 
   
   if(req.isAuthenticated()){
-    let preUserData = DB.users.findOne({id:req.user.id}).lean().exec();
+    let preUserData = DB.users.getFull({id:req.user.id}).lean().exec();
     let preDataProcess = result=>{
       let USR = req.user;
       res.locals.userdata = result;
@@ -262,6 +262,7 @@ app.use(async function(req,res,next){
 const simpleauth = require('basic-auth')
 const admins = { polaris: { password: 'geminis472899' } }
 const auth = function(request, response, next) {
+  if(request.url.includes('branding')) return next();
   if(request.url.includes('botbridge')) return next();
   if(request.url.includes('webhook'))   return next();
   if(request.url.includes('.png'))      return next();
@@ -276,7 +277,8 @@ const auth = function(request, response, next) {
   if(request.url.endsWith('/faq'))     return next();
   if(request.url.endsWith('/terms'))     return next();
   if(request.url.endsWith('/terms'))     return next();
-  if(request.url.endsWith('/commands'))     return next();
+  if(request.url.includes('commands'))     return next();
+  if(request.url.includes('cmlist'))     return next();
   if(request.url.endsWith('/bsave'))     return next();
   if(request.url.endsWith('/invite'))     return next();
   var user = simpleauth(request)
@@ -285,7 +287,7 @@ const auth = function(request, response, next) {
     console.log(request.headers['referer'])
     console.log(request.headers['user-agent'])
   }
-   if( request.headers['user-agent'] === "Polaris "+config.token){
+   if( request.headers['user-agent'] === "Polaris Bot"){
      return next()
    }
 
@@ -307,10 +309,7 @@ global.isAdmin = function isAdmin(req,svID){
               PLX.getRESTGuild(SVID),
               DB.servers.get(svID)
           ]);
-          console.log({
-            rolehasmod: memberInfo.roles.includes(serverData.modules.MODROLE) ,
-            modrole: serverData.modules.MODROLE
-          })
+           
           if(memberInfo.roles.includes(serverData.modules.MODROLE)) return resolve(true);
           resolve(roleInfo.some(role=> req.user.id === serverInfo.ownerID || memberInfo.roles.includes(role.id) && (role.permissions.has('manageGuild')||role.permissions.has('administrator')) ));
       }catch(err){
@@ -404,14 +403,13 @@ app.listen(4728, function (err) {
 
 // CATCH 404
 app.use(function (req, res, next) {
-  res.status(404)
-  res.render('404');
+  res.status(404).render('404');
 });
 
 
 // ERROR HANDLER
 app.use(async function (err, req, res, next) {
-  console.log("xxx")
+  console.log("xxx",err)
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};

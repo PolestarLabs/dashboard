@@ -22,12 +22,17 @@ router.get('/:serverID', async function (req,res) {
     req.user.validator = md5(Date.now());
 
     
-    let [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles] = await Promise.all([
+    let [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
         PLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
         PLX.getRESTGuildRoles(SVID),
         PLX.getRESTGuild(SVID),
         PLX.getRESTGuildChannels(SVID),
-        DB.reactRoles.find({server:SVID}).lean().exec()
+        DB.reactRoles.find({server:SVID}).lean().exec(),
+        DB.feed.find({server:SVID}).lean().exec(),
+        DB.localranks.find({server:SVID}).lean().exec(),
+        DB.temproles.find({server:SVID}).lean().exec(),
+        DB.paidroles.find({server:SVID}).lean().exec(),
+
     ]);
 
     //fx.
@@ -44,11 +49,14 @@ router.get('/:serverID', async function (req,res) {
         roleInfo,
         serverInfo,
         channelInfo,
+        feeds,
+        localranks,
+        temproles,
+        paidroles,
         validator:req.user.validator
     };
     
-    
-    console.log({serverInfo,SVID,serverID,serverInfo})
+   
     
    return res.render('admin/base', payload);
 
@@ -131,7 +139,7 @@ router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
 
     let payload = req.body;
 
-    if(req.user.validator != payload.validator) res.status(401).json("Validator Mismatch "+`${payload.validator} / ${req.user.validator}`);
+    if(req.user.validator != payload.validator) return res.status(401).json("Validator Mismatch "+`${payload.validator} / ${req.user.validator}`);
 
     let SVID = payload.serverid.toString();    
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
@@ -392,13 +400,50 @@ router.put("/levelrole",ADMCHECKS,async (req,res)=>{
     })
 })
 
+router.put("/savechannelist",ADMCHECKS,async (req,res)=>{
+ 
+    let payload = req.body.data;
+
+    let serverInfo= (await PLX.getRESTGuild(SVID));
+    let userData = (await DB.users.get(serverInfo.ownerID));
+
+    if(!req.body.noDM || userData.DMnotifs !== false){
+    PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
+        embed: {color:0xff6699,description: `<@${req.user.id}> changed channel overrides for **${serverInfo.name}**'s
+        Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
+        `}
+    }).catch(e=>null) )}
+
+    let PAR;
+    switch(payload.param){
+        case "lootboxDrops":
+            PAR = 'chLootboxOff'
+            break;
+        case "levelUps":
+            PAR = 'chLvlUpOff'
+            break;
+        case "expBypass":
+            PAR = 'chExpOff'
+            break;
+    }
+     
+ 
+    if(!PAR) return res.status(500).json("no PAR");
+
+    await DB.servers.findOneAndUpdate({id:SVID},{
+        $set: {
+            [`switches.${PAR}`] :  payload.channels
+        }         
+    });  
+})
+
 async function ADMCHECKS(req,res,nex){
     if(req.user.id ==='88120564400553984')  nex(); 
     let payload = req.body;
-    if(req.user.validator != payload.validator) res.send({status:401,data:"Validator Mismatch "+`${payload.validator} / ${req.user.validator}`});
+    if(req.user.validator != payload.validator) return res.send({status:401,data:"Validator Mismatch "+`${payload.validator} / ${req.user.validator}`});
     let SVID = payload.serverid.toString();    
     if(!(await isAdmin(req,SVID))) return res.send({status:401,data:"User is not Admin"});
-    nex();
+    else nex();
 }
 
 

@@ -10,7 +10,7 @@ const Strategy = require('passport-http-bearer').Strategy
 
 passport.use(new Strategy(
         (token,cb) =>{
-            DB.users.findOne({apiKey:token}).then(user=>{
+            DB.users.getFull({apiKey:token}).then(user=>{
                 if(!user) return cb(null,false,{message: "API Token Needed"});
                 let resUser={
                     id: user.id,

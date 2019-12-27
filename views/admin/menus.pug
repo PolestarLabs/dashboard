@@ -1,4 +1,9 @@
+script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.min.js')
 script(src="https://twemoji.maxcdn.com/2/twemoji.min.js?12.0.4")
+script(src='https://unpkg.com/@johmun/vue-tags-input/dist/vue-tags-input.js')
+
+include templates/tags-input
+
 br
 .plx-grid.plx-width-5-6.plx-position-fixed.underbar
     .plx-width-1-2
@@ -414,6 +419,101 @@ style .levelrole_item{border-radius:8px;border:solid 1px #f58;padding:5px;displa
 br
 hr.plx-divider-icon 
 br
+
+h1#channel-opts.title Channel Options
+h3.subtitle Define precise settings for specific channels
+hr.plx-divider-small 
+
+
+
+
+ 
++section( "Feature Debuffs",'Disable features in certain channels, this overrides Global settings', "channel-toggles",".fas.fa-toggle-off",null,true)
+    .plx-width-expand
+        .plx-grid.plx-flex.plx-flex-wrap
+            .plx-width-1-1(class="plx-width-1-3@m")
+                +channelInput("Applied Lootbox Repellent",'lootboxDrops',"fa fa-cube", (serverData.switches||{}).chLootboxOff )
+                    p Do <b>not</b> drop Lootboxes at:
+            .plx-width-1-1(class="plx-width-1-3@m")
+                +channelInput("In space no one can hear you cheer",'levelUps'," far fa-arrow-alt-circle-up", (serverData.switches||{}).chLvlUpOff )
+                    p Do <b>not</b> post Level Up messages at:
+            .plx-width-1-1(class="plx-width-1-3@m")
+                +channelInput("Law of Inherent EXP Bypass",'expBypass', "fas fa-medal", (serverData.switches||{}).chExpOff )
+                    p  Do <b>not</b> award Local EXP at:
+           
+
+ 
+br
+hr.plx-divider-icon 
+br
+
+h1#server-logs.title Server Logs
+h3.subtitle Register all activity in your server
+hr.plx-divider-small 
+
++section('','','','','','')
+    p SERVER LOGS FEATURE IS TEMPORARILY UNAVAILABLE
+
+ 
+br
+hr.plx-divider-icon 
+br
+
+h1#local-economy.title Local Economy
+h3.subtitle Unleash the trader within your members 
+hr.plx-divider-small 
+
++section('','','','','','')
+    p LOCAL ECONOMY IS NOT YET AVAILABLE
+
+
+br
+hr.plx-divider-icon 
+br
+
+h1#content-creators.title Content Creators
+h3.subtitle Useful tools for Streamers, Tubers, Bloggers, and whatnot.
+hr.plx-divider-small 
+
+mixin feedItem(item)
+    .plx-flex.feed-item
+        div.img-container
+            img(src=item.thumb || "https://s3.us-east-2.amazonaws.com/upload-icon/uploads/icons/png/5461146321553771552-512.png" ).feed-icon
+        .plx-flex.plx-flex-column
+            h4.title= item.name || "Unknown Feed" 
+            .plx-flex.plx-flex-column
+                
+                code.mistyblue(style='background-color:white; border: none;')= "#"+channelInfo.find(c=>c.id == item.channel).name
+                p
+                    b Last: 
+                    if item.last.link
+                        a(href=item.last.link): i= item.last.title
+                    else
+                        i= item.last.title
+                
+
+
++section( "Twitch Alerts",' ', "twitch",".fab.fa-twitch",null,true)
+    each item in feeds.filter(feed=> feed.type == 'twitch')
+        +feedItem(item)
+                    
+                 
+        
+
++section( "YouTube Alerts",' ', "youtube",".fab.fa-youtube",null,true)
+    each item in feeds.filter(feed=> feed.type == 'youtube')
+        +feedItem(item)
++section( "RSS Feeds",' ', "rss",".fas.fa-rss-square",null,true)
+    each item in feeds.filter(feed=> feed.type == 'rss')
+        +feedItem(item)
+ 
+
+br
+hr.plx-divider-icon 
+br
+
+style
+    include admin.css
 
 pre= JSON.stringify(serverData,null,1)
 
