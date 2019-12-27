@@ -202,19 +202,21 @@ MODEL.updateMeta = U => {
           staticAvatar: (U.displayAvatarURL||"").replace('gif','png')
         }
       }
-    })
+    },{upsert:false})
   );
 };
 
 
 MODEL.new = userDATA => {
-  MODEL.findOne({id: userDATA.id}, (err, newUser) => {
-    if (err) {
+
+    MODEL.findOne({id: userDATA.id}, (err, newUser) => {
+      if (err) {
         console.error(err)
-    }
-    if (newUser) {
-      // Nothing
-    } else {
+      }
+      if (newUser) {
+        return newUser;
+
+      } else {
         let user = new MODEL({
           id: userDATA.id,
           name:userDATA.username,
@@ -224,16 +226,16 @@ MODEL.new = userDATA => {
           if (err) return console.error(err);
           //console.log("[NEW USER]".blue,userDATA.tag.yellow,`(ID:${userDATA.id})`);
           MODEL.updateMeta(userDATA);
+          return user;
         });
-    }
-  });
+      }
+    });   
 
-  return MODEL.findOne({id:userDATA.id})
 }
 
 
 
-
+MODEL.cat = 'users'
 MODEL.set = utils.dbSetter;
 MODEL.get = utils.dbGetter;
 module.exports = MODEL;

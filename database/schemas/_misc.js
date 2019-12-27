@@ -77,6 +77,15 @@ const ReactionRoles = new Schema({
   rolemoji:Array,  
 },{ strict: false });
 
+const PaidRoles = new Schema({
+  server:String,
+  role:String,
+  price:String,
+  temp:Number,
+  unique: Mixed
+
+},{ strict: false });
+
 const FanartModel = new Schema({
         id:String,
         src:String,
@@ -113,6 +122,23 @@ const RelationShipModel = new Schema({
 },{ strict: false });
 
 
+
+const GiftItem = new Schema({
+  id:String,
+  creator: String,
+  holder: String,
+  type: String, // Cosmetic | Item
+  querystring: Mixed,
+  icon: {type: String, default: 'wrap'},
+  message: String,
+  
+},{ strict: false });
+
+const gift    = mongoose.model('Gift', GiftItem, 'GIFTS');
+gift.set    =  utils.dbSetter;
+gift.get    =  utils.dbGetter; 
+
+
   const audit     = mongoose.model('Audit', Audit, 'transactions');
       audit.set     =  utils.dbSetter;
       audit.get     =  utils.dbGetter; 
@@ -124,16 +150,16 @@ const RelationShipModel = new Schema({
           });
        }    
 
-  const FeedModel = new Schema({
-    server:{type:String,unique:true},
-    defaultChannel: String,
-    feeds: [{
-      type: {type: String}, // RSS, TWITCH, YouTube
-      url: String,
-      last: Mixed,
-      channel: String,
-    }]
-  })     
+    const FeedModel = new Schema({
+        server:String,
+          type: String, // RSS, TWITCH, YouTube
+          url: String,
+          last: Mixed,
+          channel: String,
+          thumb: String,
+          name: String
+    })  
+
   const feed    = mongoose.model('Fees', FeedModel, 'Feeds');
        feed.set    =  utils.dbSetter;
        feed.get    =  utils.dbGetter; 
@@ -160,6 +186,18 @@ const RelationShipModel = new Schema({
   const reactRoles    = mongoose.model('ReactionRoles', ReactionRoles, 'ReactionRoles');
         reactRoles.set    =  utils.dbSetter;
         reactRoles.get    =  utils.dbGetter; 
+
+        
+  const paidroles    = mongoose.model('PaidRoles', PaidRoles, 'PaidRoles');
+        paidroles.set    =  utils.dbSetter;
+        paidroles.get    =  utils.dbGetter; 
+        paidroles.new = payload => {
+          let aud = new paidroles(payload);
+          aud.save((err) => {
+            if (err) return console.error(err);
+            console.log("[NEW PAID ROLE]".blue,payload);
+          });
+      }    
         
   const global    = mongoose.model('Global', Globals, 'globals');
       global.set  = function(alter){
@@ -235,4 +273,4 @@ const RelationShipModel = new Schema({
         })
       }
 
-module.exports={ usercols,audit,global,fanart,buyables,commends, control,reactRoles,marketplace,relationships,alert, feed,control }; 
+module.exports={ gift,paidroles, usercols,audit,global,fanart,buyables,commends, control,reactRoles,marketplace,relationships,alert, feed,control }; 

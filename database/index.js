@@ -23,16 +23,19 @@ const
        ,control        : miscDB.control
        ,marketplace    : miscDB.marketplace
        ,reactRoles     : miscDB.reactRoles
+       ,paidroles      : miscDB.paidroles
        ,relationships  : miscDB.relationships
        ,alerts         : miscDB.alert
        ,feed           : miscDB.feed
-       ,usercols           : miscDB.usercols
+       ,usercols       : miscDB.usercols
+       ,gifts          : miscDB.gift
    /////////////////////////////////////////////////////
    ,cosmetics     : require('./schemas/cosmetics.js')
    ,collectibles  : require('./schemas/collectibles.js')
    ,items         : require('./schemas/items.js')
    ,achievements  : require('./schemas/achievements.js')
    ,mutes         : require('./schemas/mutes.js')
+   ,temproles     : require('./schemas/temproles.js')
    
    
    ,users:    userDB
@@ -43,10 +46,10 @@ const
    ,marketbase: async function refreshBases(projection){
    
      let [bgBase,mdBase,stBase,itBase] = await Promise.all([
-       this.cosmetics.find({type:"background", /*tradeable:true*/}, {type:1, rarity:1, _id:0, id:1, name:1, price:1, code:1,})
-       ,this.cosmetics.find({type:"medal",      /*tradeable:true*/}, {type:1, rarity:1, _id:0, id:1, name:1, price:1, icon:1,})
-       ,this.cosmetics.find({type:"sticker",    /*tradeable:true*/}, {type:1, rarity:1, _id:0, id:1, name:1, price:1})
-     ,this.items.find(    {                   /*tradeable:true*/}, {type:1, rarity:1, _id:0, id:1, name:1, price:1, icon:1})
+        this.cosmetics.find({type:"background", /*tradeable:true*/}, {type:1, rarity:1, _id:0, id:1, name:1, price:1, code:1,}).lean().exec()
+        ,this.cosmetics.find({type:"medal",      /*tradeable:true*/}, {type:1, rarity:1, _id:0, id:1, name:1, price:1, icon:1,}).lean().exec()
+        ,this.cosmetics.find({type:"sticker",    /*tradeable:true*/}, {type:1, rarity:1, _id:0, id:1, name:1, price:1}).lean().exec()
+        ,this.items.find(    {                   /*tradeable:true*/}, {type:1, rarity:1, _id:0, id:1, name:1, price:1, icon:1}).lean().exec()
     ]);
     bgBase=bgBase.map(itm=> { return {
          name:itm.name,
