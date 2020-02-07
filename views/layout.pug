@@ -17,7 +17,7 @@ html(class="no-js" lang=locale||"en")
         link(rel="preload" href='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js' as="script")
         link(rel="preload" href="/css/monolith.css" as="style")
         link(rel="preload" href="/js/plxui.js"  as="script")
-        link(rel="preload" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" crossorigin="anonymous" as="style")
+        link(rel="preload" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" crossorigin="anonymous" as="style")
         link(rel="preload" href='/js/pace.js' as="script")
 
 
@@ -27,7 +27,7 @@ html(class="no-js" lang=locale||"en")
         // Everybody is a book of blood; wherever we're opened, we're red.
 
 
-        link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" crossorigin="anonymous")
+        link(rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.0/css/all.css" crossorigin="anonymous")
         link(rel="stylesheet" href="/css/plx.css")
         link(href="/css/monolith.css" rel="stylesheet")
 
@@ -39,7 +39,9 @@ html(class="no-js" lang=locale||"en")
         style
             include late-load.css
         
-    
+        script window.userinfo = (!{ JSON.stringify(userinfo != null ? userinfo : false) })
+        script window.userdata = (!{ JSON.stringify(userdata != null ? userdata : false) }) //".replace(/&quot;/g,'"'))
+  
 
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
         script(src="/js/pace.js")
@@ -52,17 +54,18 @@ html(class="no-js" lang=locale||"en")
         if opengraph&&opengraph.sitename === "POLLUX MARKETPLACE"
             include structures/pace
 
-        else if true || index
+        else if index
             include structures/pace_home
             script(defer src="/js/preload.js")
         else
-            include structures/pace
+            include structures/pace_home
+            script(src="/js/preload.js")
 
             
         block head
     body
         if (true &&opengraph&& opengraph.sitename  !== "POLLUX MARKETPLACE") || index
-            #preloader(style="  position: fixed;  top: 0;  left: 0;  right: 0;  bottom: 0;  background: #05050F;  z-index: 2800;  height: 100%;  width: 100%;")
+        #preloader(style="  position: fixed;  top: 0;  left: 0;  right: 0;  bottom: 0;  background: #05050F;  z-index: 2800;  height: 100%;  width: 100%;")
                 #loader 
 
         block content
@@ -77,9 +80,7 @@ html(class="no-js" lang=locale||"en")
 
     
  
-    script(async defer) window.userinfo = (!{ JSON.stringify(userinfo != null ? userinfo : false) })
-    script(async defer) window.userdata = JSON.parse("#{ JSON.stringify(userdata != null ? userdata : false) }".replace(/&quot;/g,'"'))
-    
+  
     script(async defer).
 
             "use strict";

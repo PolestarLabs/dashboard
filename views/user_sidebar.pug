@@ -1,6 +1,6 @@
 .subpom(plx-scrollspy="target: .animate, .plx-nav>li; cls: plx-animation-slide-right-medium; delay: 10").plx-animation-slide-bottom-small
     if userinfo && userdata
-        img.sidebg(src="/build/backdrops/"+userdata.modules.bgID+".png")
+        img.sidebg(src="/backdrops/"+userdata.modules.bgID+".png")
         img.mugshot(src=userinfo.pix).pinkord-placeholder
         if userdata.donator
             .don-icon.icon40(class= userdata.donator )
@@ -11,12 +11,12 @@
             h5.subtitle: i #{userdata.modules.tagline}
         hr
         .plx-flex-around
-            .plx-button-default.plx-button.plx-button-small.plx-align-center.plx-margin-small.animate
+            a(href="/profile/"+userinfo.id).plx-button-default.plx-button.plx-button-small.plx-align-center.plx-margin-small.animate
                 span
                     i.fas.fa-id-card
                     |&#x2000 Profile
                 
-            .plx-button-default.plx-button.plx-button-small.plx-align-center.plx-margin-small.animate
+            a(href="/dash").plx-button-default.plx-button.plx-button-small.plx-align-center.plx-margin-small.animate
                 span
                     i.fas.fa-cogs
                     |&#x2000 Dashboard

@@ -3,7 +3,7 @@
     padding: 10px;
     border-radius: 5px;
     flex-wrap: wrap;
-    width: 280px;
+    //width: 280px;
     display: inline-grid;
     position: relative;
     z-index: 1;

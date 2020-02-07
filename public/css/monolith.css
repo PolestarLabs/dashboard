@@ -14,7 +14,9 @@
 body,html {
     overflow-x: hidden
 }
-
+b{
+    color: rgb(233, 233, 255);
+}
 .lh-1 {
     line-height: 1.1
 }
@@ -499,6 +501,7 @@ nav:not(.home) .plx-logo:hover {
     z-index: 2000;
     position: relative;
 }
+
 nav:not(.home) .login, .plx-active .login{
     background: #A6F;
 }
@@ -536,6 +539,19 @@ nav:not(.home) .login:before, .plx-active .login:before{
     text-indent: 500px;
     height: 60px;
 }
+.login:hover{
+    filter: hue-rotate(265deg) brightness(1.25);
+}
+.login:focus{
+    filter: hue-rotate(265deg) brightness(.75);
+}  
+.login:hover img{
+    filter: hue-rotate(-265deg) brightness(.75);
+}
+.login:focus img{
+    filter: hue-rotate(-265deg) brightness(1.25);
+}  
+
 
 .social-icons a {
     font-size: 25px;
@@ -643,7 +659,10 @@ span.icon>i {
 }
 
 .hexagon {
-    clip-path: polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%)
+    filter: none;
+    clip-path: polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);
+    -moz-clip-path: polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);
+    -webkit-clip-path: polygon(50% 0%,95% 25%,95% 75%,50% 100%,5% 75%,5% 25%);
 }
 
 .truncate {
@@ -938,8 +957,8 @@ div:not(.plx-open) .faders {
       }
     
     .login {
-        margin-top: 8px;
-        margin-right: 8px;
+       // margin-top: 8px;
+       // margin-right: 8px;
     }
     
     .weirdSidebar {
@@ -1246,3 +1265,88 @@ overflow: hidden;
     border-radius: 8px;
     display: block;
   }
+
+  .bluebgclick {
+    display: inline-flex;
+    border: solid 2px #59F;
+    color:white
+   }
+   .bluebgclick:hover {
+    background:#59F2
+   }
+   .bluebgclick:active {
+    background:#59F5;
+    border-color:white
+   }
+   .redbgclick {
+    display: inline-flex;
+    border: solid 2px #F35;
+    color:white
+   }
+   .redbgclick:hover {
+    background:#F352;
+    color:#F35;
+     
+   }
+   .redbgclick:active {
+    background:#F355;
+    border-color:white
+   }
+   
+.sidewinder{
+    position: fixed;
+    z-index: 990;
+    top: 4px;
+    height: 46px;
+    padding: 0 10px;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    background-color:#F35;
+    color: white;
+    border-radius: 0 !important;
+    text-decoration: none;    
+}
+.sidewinder:hover{
+    filter: brightness(1.3)
+}
+.sidewinder:focus{
+    filter: brightness(.7)
+}  
+
+.sidewinder.left:after{
+
+    content: "";  
+    width: 20px;
+    position: absolute;
+    right: -20px;
+    top: 0;
+    display: block !important;
+    border-right: solid 10px transparent !important;
+    border-bottom: solid 23px transparent !important;
+    border-left: solid 10px;
+    border-top: solid 23px;
+    box-sizing: border-box;
+    border-color: #F35;
+}
+.svg-inline--fa {
+    display: inline-block;
+    font-size: inherit;
+    height: 1em;
+    overflow: visible;
+    vertical-align: -0.125em;
+  }
+
+  .plx-active .plx-color-pink{
+    color: white;
+}
+.plx-color-pink{
+    color: #F59;
+}
+
+.nullify{
+    position: inherit;
+    padding: inherit;
+    margin: inherit;
+    z-index: inherit;
+}

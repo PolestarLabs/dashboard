@@ -11,22 +11,40 @@ router.get('/', function (req, res) {
 
 router.post('/patreon', function (req, res) {
   let payload = req.body;
-  let type = req.query.T
+  let type = req.query.t
 
   console.log(require('util').inspect(payload, {
-    depth: 4,
+    depth: 6,
     colors: true
   }))
   embed = {}
   embed.fields = []
   if (type == "new") {
     embed.title = "New Patron"
-    embed.color = 16345172;
+    embed.color = 0x22ff33;
   }
 
   if (type == "delete") {
     embed.title = "Pledge Cancelled"
-    embed.color = 339273;
+    embed.color = 0xff0000;
+  }
+
+
+  const TIERS = {
+
+zircon: "<:zircon:673593105525637140>"
+,uranium: "<:uranium:673593105454465035>"
+,plastic: "<:plastic:673593105458528266>"
+,palladium: "<:palladium:673593105055875073>"
+,neutrino: "<:neutrino:673593105102143495>"
+,lithium: "<:lithium:673593105391288357>"
+,iron: "<:iron:673593105253007381>"
+,iridium: "<:iridium:673593105546477568>"
+,carbon: "<:carbon:673593105458659356>"
+,astatine: "<:astatine:673593105479499817>"
+,antimatter: "<:antimatter:673593105429299211>"
+,aluminium: "<:aluminium:673593146025967617>"
+
   }
 
   let user = payload.included[0].attributes
@@ -34,17 +52,16 @@ router.post('/patreon', function (req, res) {
   let rel = payload.data.relationships
   embed.description = `
     **${user.full_name}**
-    \`${user.discord_id}\`
-    ${payload.data.attributes.amount_cents}
-    ${tier.title}
-    ${JSON.stringify(tier.discord_role_ids)}
+    ${ user.discodiscord_id ? `<@${user.discodiscord_id}> \`${user.discodiscord_id}\`` : "`NO DISCORD ID`" } 
+    ${TIERS[tier.title.toLowerCase()]} [${tier.title}]  $${(Number(payload.data.attributes.amount_cents)/100).toFixed(2)}
+    ${tier.discord_role_ids.map(x=>`<@&${x}>`).join(' ')}
     `
   embed.thumbnail = {
     url: user.image_url
   }
   // embed.footer = {}
   embed.timestamp = payload.data.attributes.created_at.split('+')[0]
-
+console.log(embed)
   sendWebhook({embeds: [embed]})
   res.sendStatus(200);
 })
@@ -182,3 +199,6 @@ function sendWebhook(data,url) {
 }
 
 module.exports = router
+
+
+

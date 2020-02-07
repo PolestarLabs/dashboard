@@ -10,7 +10,7 @@ const Strategy = require('passport-http-bearer').Strategy
 
 passport.use(new Strategy(
         (token,cb) =>{
-            DB.users.getFull({apiKey:token}).then(user=>{
+            DB.users.get({apiKey:token}).then(user=>{
                 if(!user) return cb(null,false,{message: "API Token Needed"});
                 let resUser={
                     id: user.id,
@@ -107,6 +107,7 @@ router.get('/items/:endpoint', async (req,res) => {
     }
 
 })
+
 //router.get('/cosmetics')
 //router.get('/collectibles')
 //router.get('/localranks')

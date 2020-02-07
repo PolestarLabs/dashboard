@@ -29,7 +29,7 @@ $(".bg-clickable").on("click", ".plx-bg-card", function () {
         $("#artistPic").attr("src", "")
     }
 
-    $("#bg-image").attr("src", "/build/backdrops/" + $(this).data('code') + ".png")
+    $("#bg-image").attr("src", "/backdrops/" + $(this).data('code') + ".png")
     $("#bg-rarity").attr("src", "/images/tiers/new/" + $(this).data('rarity') + ".png")
 })
 

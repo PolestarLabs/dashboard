@@ -1,0 +1,83 @@
+extends ../layout
+block head
+    script window.paceOptions = {document:false,ghostTime: 800, restartOnRequestAfter: 300, }
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js')
+
+        
+block content
+  
+    .wrapper#wrapper
+        include ../navbar
+    br(style="line-height: 50px;")
+        
+    -
+        let PG = 
+                endpoint == 'profile'   ? 0 :
+                endpoint == 'servers' ? 1 :
+                endpoint == 'inventory' ? 2 :
+                endpoint == 'boorusave' ? 3 :
+                endpoint == 'settings'  ? 4 : 0
+    style.
+        .plx-dash-cover{
+            width: 100%;
+            height: 200px;
+            position: absolute;
+            padding-bottom: 30px;
+            background-size: cover;
+            background-position: top;
+            filter: blur(3px);
+            overflow: hidden;
+            clip-path: inset(0);
+            opacity: .1;
+            z-index: -1;}
+        }
+
+    .plx-relative.plx-flex.plx-flex-column.plx-flex-between(style="height:200px;overflow: hidden;")
+        .plx-dash-cover(plx-parallax="bgy: 100,400" style='filter: blur(8px) ;background-image: url(/backdrops/'+userdata.modules.bgID+'.png)').user-bg
+        include topbar
+        .plx-flex-center(class="plx-visible@s")
+            include topmenu
+        
+        
+        a(href="#dashmenu" plx-toggle class="plx-hidden@s" style=" color: white;").sidewinder.left.plx-button
+            i.far.fa-compass
+            div &#x2000
+            span Menu
+
+
+    hr.plx-divider-icon-fill
+    #dashmenu(plx-offcanvas)
+        .plx-offcanvas-bar
+            button.plx-offcanvas-close(plx-close)
+            br
+            .plx-flex-left(class="plx-hidden@s")
+                include topmenu
+    div
+        ul.plx-switcher.plx-margin#pages
+            li   
+                include profile_edit
+            li
+                include servers
+            li
+                include inventory                
+            li
+                include ../private/boorusave  
+            li
+                p nobody here but us chickens
+
+block scripts
+    script var endpoint = #{PG}
+    script.
+        //$('.plx-tab-dash'), options)
+        const TOPBAR = new Vue({
+            el: '#topbar',
+            components:{
+                "animated-number": window.AnimatedNumber,
+            },
+            data: {
+                rubines: userdata.modules.rubines,
+                sapphires: userdata.modules.sapphires,
+                jades: userdata.modules.jades,
+            }
+        })
+ 

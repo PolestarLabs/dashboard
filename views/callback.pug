@@ -1,18 +1,18 @@
 html
     head
     title Redir...
-    body
-    link(rel='stylesheet', href='/css/heart.css')
+    body(style="background-image:url('/images/heartloader.gif');background-size:cover;background-position:center;height: 100%;overflow: hidden;")
+    //link(rel='stylesheet', href='/css/heart.css')
 
 
-    span.title.level-item#redir REDIRECTING...
-    span#redire(style="visibility:hidden")= redire
-    div.container
+    //span.title.level-item#redir REDIRECTING...
+    //span#redire(style="visibility:hidden")= redire
+    //div.container
 
         div.grid-big
         - for (i=0; i<25; i++)
             div.cell-1
-    div.loadere
+    //div.loadere
         div.bare
         div.bareb
 
@@ -22,7 +22,7 @@ html
         }catch(e){ }
 
             setTimeout(function(){
-            document.getElementById("redir").innerHTML = "Poi!"
+            //document.getElementById("redir").innerHTML = "Poi!"
                 setTimeout(function(){
                 window.close()
         window.location.replace("/");

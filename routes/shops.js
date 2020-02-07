@@ -38,7 +38,7 @@ async function refreshBases(){
  ]);
  bgBase=bgBase.map(itm=> { return {
       name:itm.name,
-      img:"/build/backdrops/"+itm.code+".png",
+      img:"/backdrops/"+itm.code+".png",
       id:itm.code,
       type:itm.type,
       rarity:itm.rarity,

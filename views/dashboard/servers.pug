@@ -1,0 +1,248 @@
+-
+    let  SVS = userinfo.servers.sort((a,b)=>a.rankSort - b.rankSort)
+
+style.
+    .star{
+    position: absolute;
+    bottom: 10px;
+    right: 15px;
+    z-index: 2;
+    cursor:pointer;
+    }
+    .star.faved{
+    color: #F95;
+    }
+
+    .server-card{
+    padding: 0;
+    margin: auto;
+    position: relative;
+    height: 290px;
+    width: 240px;
+    overflow: hidden;
+    border-radius: 8px;
+    background: #0b0b1BAA;
+    margin: 16px;
+
+    }
+    .server-card > .display{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    margin: 0;
+    position: absolute;
+    z-index: 1;
+    opacity: 1;
+    transition: all .5s ease-in;
+    color: white;
+
+    }
+    .server-card > .display .flags{  position: absolute;  bottom: 14px}
+    .flags >div{
+    flex-grow: 0;
+    margin: 4px 20px
+    }
+    .server-card .display h3{
+    position: absolute;
+    top: 20px;
+    width: 100%;
+    text-align: center;
+    font-weight: 600;
+    font-size: 14pt;
+
+    }
+    .display.Owner.has-pollux{
+    background: #F355
+    }
+    .display.Owner{
+    background: #53F0
+    }
+    .display.Admin{
+    background: #5533FF00
+    }
+    .display.Admin.has-pollux{
+    background: #53F5
+    }
+
+
+    .server-card .display h5{
+    position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    font-weight: 300;
+    font-size: 10pt
+    }
+    .server-card .display img{
+    transition: all .3s ease-out;
+    margin: auto;
+    }
+    .server-card:hover > .display{
+    opacity: 0;
+    pointer-events: none;
+    }
+    .server-card:hover > .display *{
+    transition: all .3s ease-out;
+    opacity: 0;
+    }
+    .server-card:hover > .display img{
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(2) 
+    }
+    .server-card .info{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    }
+    .server-card .info > *:not(.background){
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all .5s ease;
+    }
+    .server-card:hover .info > *:not(.background){
+    opacity: 1 ;
+    transform: translateY(0px);
+    }
+    .server-card .background{
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    filter: blur(15px);
+    opacity: .2;
+    transition: filter .5s linear;
+    }
+    .server-card:hover .info > .background {
+    filter: blur(4px);
+    }
+    .server-card > .info .plx-button{ 
+    margin-bottom: 10px;
+    color: white
+    }
+    .server-card > .info .plx-button:hover{ 
+    background: #f35
+    }
+    .info > h3{  font-size:14pt;  padding:0 4px; user-select: none;}
+    .plx-accordion-title{color:#aaa}
+    .plx-accordion-title h2{color:#f69}
+
+
+
+
+
+-SVS= SVS.map(s=> {s.faved = ((userdata.switches||{ }).favServers||[]).includes(s.id); return s} );
+
+
+mixin ServerCard(Server,favs)
+    -Server.ava = Server.icon ? `https://cdn.discordapp.com/icons/${Server.id}/${Server.icon}${Server.features.includes('ANIMATED_ICON')&&Server.icon.startsWith('a_')?'.gif':'.png'}` : "https://cdn.discordapp.com/embed/avatars/0.png" 
+    .server-card(class=`s-card-${Server.id} ${favs?'fv':''}`)
+        .star(data-svid=Server.id class=Server.faved?'faved':'', data-fave=(Server.faved?'faved':'') )
+            i.fas.fa-star
+        .display.plx-flex.plx-flex-center.plx-flex-column(class=Server.rank+(Server.hasPollux?' has-pollux':''))
+            h3= Server.name
+            h5= Server.id
+            img.plx-border-circle(src= Server.ava , width='100', height='100',alt=" ")
+            if Server.rank != 'Commoner'
+                .flags.plx-flex.plx-flex-between.plx-flex-center.plx-flex-wrap
+                    .plx-label(class=(Server.rank == "Owner") ? "plx-label-purple" : "plx-label-warning" )= Server.rank
+                    if Server.hasPollux
+                        .plx-label.plx-label-success POLLUX IS HERE!
+                    else
+                        .plx-label.plx-label-danger POLLUX IS NOT HERE!
+        .info
+            .background(style="background:url('"+Server.ava+"') center / cover;")
+            h3= Server.name           
+            h5= Server.id           
+            .plx-flex.plx-flex-around.plx-flex-column
+                if Server.hasPollux
+                    if Server.rank != 'Commoner'
+                        a.plx-button.plx-button-default(href='/admin/'+Server.id target='blank') MANAGE
+                    a.plx-button.plx-button-default(href='/top/'+Server.id target='blank') SEE RANKS
+                else
+                    if Server.rank != 'Commoner' && Server.rank != 'Moderator'
+                        a.plx-button.plx-button-default(href='/invite' target='blank') ADD POLLUX
+
+                
+    //div( class='plx-width-1-3@l plx-width-1-2@m plx-width-1-1 '): .plx-card.plx-card-default(style="border-radius:8px")
+        .plx-card-header
+            .plx-card-badge.plx-label= Server.rank
+            .plx-grid-small.plx-flex-middle(plx-grid='')
+                .plx-width-auto
+                    img.plx-border-circle(src= Server.ava , width='80', height='80',alt=" ")
+                .plx-width-expand
+                    h3.plx-card-title.plx-margin-remove-bottom= Server.name
+                    p.plx-text-meta.plx-margin-remove-top= Server.id
+        
+        .plx-card-footer           
+            .plx-flex.plx-flex-between
+                if Server.hasPollux
+                    if Server.rank != 'Commoner'
+                        a.plx-button.plx-button-text(href='/admin/'+Server.id target='blank') MANAGE
+                    a.plx-button.plx-button-text(href='/top/'+Server.id target='blank') SEE RANKS
+                else
+                    a.plx-button.plx-button-text(href='/invite' target='blank') ADD POLLUX
+
+ul(plx-accordion='collapsible: false')
+    li
+        a.plx-container(href="#").plx-accordion-title
+            h2.plx-title Favorite Servers
+            hr
+        .plx-uncontainer.plx-accordion-content
+            .plx-flex.plx-flex-center.plx-flex-wrap#faves
+                if SVS.filter(s=> s.faved ).length == 0
+                    p.nofavs There are no favorited servers! 
+                each Server in SVS.filter(s=> s.faved )
+                    +ServerCard(Server,true)
+        hr
+    li
+        a.plx-container(href="#").plx-accordion-title
+            h2.plx-title Servers I manage
+            h4.subtitle Servers you either own or has either "Administrator" or "Manage Server" permissions
+            hr
+        .plx-uncontainer.plx-accordion-content
+            .plx-flex.plx-flex-center.plx-flex-wrap
+            
+                each Server in SVS 
+                    if Server.rank != 'Commoner'
+                            +ServerCard(Server)
+                        
+    li
+        a.plx-container(href="#").plx-accordion-title
+            h2.plx-title Servers with Pollux
+            hr
+        .plx-uncontainer.plx-accordion-content
+            .plx-flex.plx-flex-center.plx-flex-wrap
+                each Server in SVS 
+                    if Server.rank == 'Commoner' && Server.hasPollux
+                            +ServerCard(Server)
+                 
+br
+hr.plx-divider-icon
+br
+
+script.
+    $('body').on('click','.star',function(){
+        let svid = $(this).data('svid');
+        let fave =  $(this).attr('data-fave');
+        if(fave){
+            $(`.s-card-${svid} .star`).removeClass('faved');
+            $(`.s-card-${svid} .star`).attr('data-fave', '' );
+            $(`.s-card-${svid}.fv`).remove();
+            
+        }else{
+            $(`.nofavs`).hide();
+            $(`.s-card-${svid} .star`).addClass('faved');
+            $(`.s-card-${svid} .star`).attr('data-fave', 'faved' );
+            $(`.s-card-${svid}`).clone().addClass('fv').prependTo( $('#faves')  );
+        }
+
+        fetch(`/dash/servers/faves?sv=${svid}&switch=${fave?0:1}`,{method: 'PUT'}).then(res=>{
+           
+        })
+        
+    })

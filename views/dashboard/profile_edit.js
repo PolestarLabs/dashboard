@@ -1,0 +1,435 @@
+var TIMER = null;
+
+VueSelect.VueSelect.methods.maybeAdjustScroll = () => false;
+//Vue.component('v-select', VueSelect.VueSelect)
+
+//bgSelectItems = BGINFO.map(thisBgData=>{
+const bgSelectItems = userdata.modules.bgInventory.map(bg => {
+  let thisBgData = BGINFO.find(x => x.code == bg) || {
+    name: "Unknown",
+    rarity: "C",
+    tags: "unknown test"
+  };
+  return {
+    name: thisBgData.name,
+    rarity: thisBgData.rarity,
+    tags: thisBgData.tags,
+    //code: bg,
+    code: thisBgData.code,
+    img: "/backdrops/" + thisBgData.code + ".png"
+  };
+});
+
+var Chrome = window.VueColor.Chrome;
+
+if (!userdata.modules.flairsInventory.includes("default"))
+  userdata.modules.flairsInventory.push("default");
+const flairsAvailable = userdata.modules.flairsInventory;
+/* ["aluminium",
+"aluminium-l",
+"antimatter",
+"astatine",
+"carbon",
+"default",
+"digdeeper",
+"easter19",
+"easter2019",
+"easterflair",
+"easterflairplus",
+"flower18",
+"flw",
+"golden",
+"goose",
+"halloween18_part",
+"halloween18_ward",
+"iridium",
+"iridium-l",
+"iron",
+"lithium",
+"neutrino",
+"noctix_honeymoon",
+"palladium",
+"palladium-l",
+"pixel",
+"plastic",
+"princessconquest_f",
+"pusheendonut",
+"sfk",
+"snow18",
+"spoopi",
+"spoopi1",
+"spoopi2",
+"spoopi3",
+"thewae",
+"uranium",
+"uranium-l",
+"winsum18bronze",
+"winsum18gold",
+"winsum18silver",
+"zircon",
+] */
+
+STKPAK = STKPAK.map(pack => {
+  pack.size = STKINFO.filter(s => s.series_id == pack.icon).length;
+  return pack;
+});
+
+const DASH = new Vue({
+  el: "#dash",
+  data: () => {
+    return {
+      message: "hello",
+      favcolor: {
+        hex: userdata.modules.favcolor,
+        source: "hex"
+      },
+      isColorpickerOpen: false,
+      isFlairOpen: false,
+      rars: ["C", "U", "R", "SR", "UR"],
+
+      selectBackground: BGINFO.find(bg => bg.code == userdata.modules.bgID)||'none',
+      selectSticker:
+        STKINFO.find(x => x.id == userdata.modules.sticker) || "none",
+      selectBooster:
+        STKPAK.find(
+          x =>
+            x.icon ==
+            (STKINFO.find(y => y.id == userdata.modules.sticker) || {})
+              .series_id
+        ) || "none",
+      selectFlair: userdata.modules.flairTop,
+      flairsAvailable,
+
+      backgroundsAvailable: bgSelectItems,
+      stickerAvailable: STKINFO.filter(x =>
+        userdata.modules.stickerInventory.includes(x.id)
+      ),
+      boostersAvailable: STKPAK,
+
+      search: "",
+      select:"",
+      tagline: userdata.modules.tagline,
+      persotext: userdata.modules.persotext,
+      frame: (userdata.switches || {}).profileFrame,
+      medals: MDINFO,
+      medalsEquipped: [],
+      hooperSettings: {
+        itemsToShow: 5,
+        centerMode: true,
+        infiniteScroll: true,
+        vertical: true,
+        transition: 100,
+        initialSlide: flairsAvailable.indexOf(userdata.modules.flairTop)
+      }
+    };
+  },
+  components: {
+    "chrome-picker": Chrome,
+    "v-select": VueSelect.VueSelect,
+    
+    Hooper: window.Hooper.Hooper,
+    Slide: window.Hooper.Slide,
+    HooperPagination: window.Hooper.Pagination,
+    HooperNavigation: window.Hooper.Navigation
+  },
+
+  methods: {
+    updateRubines(x) {
+      this.rubines = x || userdata.modules.rubines;
+    },
+    filterMeds() {
+      if (this.timer) {
+        clearTimeout(this.timer);
+        this.timer = null;
+      }
+      this.timer = setTimeout(() => {
+        var input = this.search;
+        var filter = document.getElementById("filter");
+        if (input == "") filter.setAttribute("plx-filter-control", "");
+        else
+          filter.setAttribute(
+            "plx-filter-control",
+            "filter:[data-search*='" + input + "'i] ; group:search"
+          );
+
+        filter.click();
+      }, 800);
+    },
+    filterMedals() {
+      let filtered = this.medals;
+      if (this.search) {
+        filtered = this.medals.filter(
+          m => m.name.toLowerCase().indexOf(this.search) > -1
+        );
+      }
+      if (this.select) {
+        filtered = filtered.filter(
+          m => m.rarity.toLowerCase() === this.select.toLowerCase()
+        );
+      }
+      console.log(filtered);
+      return filtered;
+    },
+    fuckThis() {
+      $("nav.topbar ").css({ background: this.favcolor.hex });
+      updateColorName(this.favcolor.hex);
+    },
+    saveFlair(payload) {
+      setTimeout(() => {
+        this.selectFlair = flairsAvailable[this.$refs.flairs.currentSlide];
+        AUTOSAVE("FLAIR");
+      }, 800);
+    },
+    gotoFlair: function(f) {
+      this.$refs.flairs.slideTo(f);
+      //if (!this.isFlairOpen) setTimeout(()=>this.$refs.flairs.update(),50);
+    },
+    toggleColorpick: function() {
+      updateColorName(this.favcolor.hex);
+      this.isColorpickerOpen = !this.isColorpickerOpen;
+      this.favcolor.source = "hex";
+      AUTOSAVE("COLOR");
+    },
+    setSelected: val => {
+      console.log(val);
+    },
+    onChangeStickerPack(item) {
+      this.selectSticker = "none";
+      AUTOSAVE("STICKER-PACK");
+    },
+    onChangeSticker(item) {
+      AUTOSAVE("STICKER");
+    },
+    onChange(item) {
+      $("#background-bar .name.sel").html(item.name);
+      $("#background-bar .bgcode code").html(item.code);
+      $(".sidebg").attr('src','/backdrops/' + item.code + '.png');
+      $("#background-bar .background-slot, .user-bg").css({
+        "background-image": "url('/backdrops/" + item.code + ".png')"
+      });
+      $("#background-bar .background-thumb").css({
+        "background-image": "url('/backdrops/" + item.code + ".png')"
+      });
+      AUTOSAVE("BACKGROUND");
+    },
+    bgFiltering: (opts, srch) =>
+      opts.filter(o => {
+        return [o.rarity, o.name, o.tags, o.code]
+          .join(" ")
+          .toLowerCase()
+          .includes(srch.toLowerCase());
+      }),
+    stkFiltering: (opts, srch) =>
+      opts.filter(o => {
+        return [o.rarity, o.name, o.code]
+          .join(" ")
+          .toLowerCase()
+          .includes(srch.toLowerCase());
+      }),
+    maybeAdjustScroll: () => false,
+    medalreset:  function medalreset() {
+      const allMedals = $(".medal-chip:visible");
+      allMedals.prependTo("#inventory");
+      seeEquips();
+    },
+    medalrandom:  function medalrandom() {
+      const allMedals = $(".medal-chip:visible");
+      this.medalreset();
+      let slots = $("#equipped .eq-container").children();
+      let rand = res => res.eq(Math.floor(Math.random() * res.length));
+      setTimeout(() => {
+        slots.each(function() {
+          rand(allMedals).prependTo($(this));
+        });
+        seeEquips();
+      }, 1);
+    }
+  }
+});
+
+function updateColorName(hex) {
+  fetch("https://www.thecolorapi.com/id?hex=" + hex.replace("#", "")).then(r =>
+    r.json().then(res => $("#colorname").html(res.name.value))
+  );
+}
+
+var correctCards = 0;
+$(function() {
+  var lastPlace;
+  $("#inventory").sortable({
+    connectWith: ".sortable"
+  });
+  $("#inventory > *").disableSelection();
+  $(".drag").draggable({
+    connectWith: ".sortable",
+    revert: "invalid",
+    helper: "clone",
+    cursorAt: {
+      top: 50,
+      left: 50
+    },
+    appendTo: "body",
+    zIndex: 9,
+    start: function(event, ui) {
+      $(this).hide();
+      lastPlace = $(this).parent();
+    },
+    stop: function(event, ui) {
+      seeEquips();
+      $(this).show();
+      lastPlace = $(this).parent();
+    }
+  });
+  $("#inventory").droppable({
+    connectWith: ".sortable",
+    drop: function(event, ui) {
+      $(this).removeClass("over");
+      $(this).removeClass("dropa");
+
+      $(lastPlace).removeClass("dropt");
+      var dropped = ui.draggable;
+      var droppedOn = this;
+      $(dropped)
+        .detach()
+        .prependTo($(droppedOn));
+      //$(dropped).detach().css({top: 0,left: 0}).prependTo($(droppedOn));
+    }
+  });
+
+  $(".drop").droppable({
+    hoverClass: "slot-hover",
+    drop: function(event, ui) {
+      let dropped = ui.draggable;
+      let droppedOn = this;
+      if ($(droppedOn).children().length > 0)
+        $(droppedOn)
+          .children()
+          .detach()
+          .prependTo($(lastPlace));
+      $(dropped)
+        .detach()
+        .prependTo($(droppedOn));
+    }
+  });
+});
+
+
+function seeEquips() {
+  var medals = [];
+  var slots = $("#equipped .eq-container").children();
+
+  for (i = 0; i < slots.length; i++) {
+    try {
+      medals.push(slots[i].children[0].dataset.medal);
+    } catch (e) {
+      medals.push(0);
+    }
+  }
+  unsaved = true;
+  DASH.medalsEquipped = medals;
+  localStorage.setItem("medals", JSON.stringify(medals));
+  AUTOSAVE("MEDALS");
+}
+
+$("document").ready(() => setTimeout(() => DASH.$refs.flairs.update(), 1000));
+async function AUTOSAVE(what) {
+  if (!TIMER && what == "FLAIR") return (TIMER = setTimeout(() => {}, 0));
+  if (TIMER) {
+    clearTimeout(TIMER);
+    TIMER = null;
+  }
+  $("#postloader").fadeIn("slow");
+
+  TIMER = setTimeout(() => {
+    let relevantData = {
+      flair: DASH.selectFlair,
+      ptxt: DASH.persotext,
+      tgln: DASH.tagline,
+      color: DASH.favcolor.hex,
+      bkg: DASH.selectBackground.code,
+      medals: DASH.medalsEquipped,
+      sticker: DASH.selectSticker.id,
+      frame: DASH.frame
+    };
+
+    Promise.all([
+      (async () => {
+        if (relevantData.medals !== []) {
+          return fetch("/dashboard/profile/medals", {
+            method: "PUT",
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+            body: JSON.stringify(relevantData.medals)
+          });
+        }
+      })(),
+
+      fetch("/dashboard/profile/tagline", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ data: relevantData.tgln })
+      }),
+
+      fetch("/dashboard/profile/personaltxt", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ data: relevantData.ptxt })
+      }),
+
+      fetch("/dashboard/profile/frame", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ data: relevantData.frame })
+      }),
+
+      fetch("/dashboard/profile/background", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({
+          data: userdata.modules.bgInventory.indexOf(relevantData.bkg)
+        })
+      }),
+
+      fetch("/dashboard/profile/color", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ data: relevantData.color })
+      }),
+
+      fetch("/dashboard/profile/flair", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ data: relevantData.flair })
+      }),
+
+      fetch("/dashboard/profile/sticker", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ data: relevantData.sticker })
+      })
+    ]).then(processRes);
+
+    async function processRes(res) {
+      $("#postloader").fadeOut("slow");
+      if (res[0].ok)
+        PLX.notification(
+          '<div  class="plx-flex plx-flex-between"> <span style="align-text:left; flex-shrink: 0"> Profile Updated! ✔ </span>',
+          { pos: "bottom-left" }
+        );
+      else
+        PLX.notification(
+          '<div   class="plx-flex plx-flex-between"> <span style="align-text:left; flex-shrink: 0"> Error! [' +
+            what +
+            "] ❌ </span>",
+          { pos: "bottom-left" }
+        );
+    }
+    DASH.$refs.flairs.update();
+    console.log(
+      `%c[${what}]` + " %cSAVED!",
+      "background: #222; color: #bada55",
+      "background: none; color: unset"
+    );
+    console.log(relevantData);
+  }, 1500);
+}
+

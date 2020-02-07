@@ -4,6 +4,7 @@ const router = express.Router()
 
 
 router.post('/', async (req,res,nex)=> {
+    return  res.sendStatus(200);
 
     await DB.globalDB.set({
         $push:{
@@ -22,6 +23,7 @@ router.post('/', async (req,res,nex)=> {
 
 
 router.get('/' ,async (req,res,nex)=>{ 
+    return  res.sendStatus(200);
 
     const globalDB = await DB.globals.get();
     let statusDatabase = globalDB.statusTrack
@@ -31,6 +33,8 @@ router.get('/' ,async (req,res,nex)=>{
 })
 
 router.get('/piece' ,async (req,res,nex)=>{ 
+    return  res.sendStatus(200);
+    return;
     const globalDB = await DB.globals.get();
     let statusDatabase = globalDB.statusTrack
     statusDatabase = statusDatabase.sort((a,b)=> a.timestamp-b.timestamp).slice(-3000)

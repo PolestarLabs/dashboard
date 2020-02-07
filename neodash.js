@@ -4,6 +4,41 @@ global.Promise = require('bluebird')
 
 const config = require('./config.js');
 
+global.hasPolluxRole = function hasPolluxRole(req,roleID){
+  return new Promise(async resolve=>{     
+      try{
+          SVID = "277391723322408960"
+          let [memberInfo,serverData] = await Promise.all([
+              PLX.getRESTGuildMember(SVID, req.user.id),
+              DB.servers.get(SVID)
+          ]);
+          if(memberInfo.roles.includes(serverData.modules.MODROLE)) return resolve(true);
+          resolve( memberInfo.roles.includes(roleID) );
+      }catch(err){
+          console.error(err);
+          resolve (false);
+      }
+  })  
+}
+global.compulsoryAuth = async function checkAuthTwo(req, res, next) {
+  try{
+
+    if (req.isAuthenticated()){
+      if((await hasPolluxRole(req,"278985430844833792"))&& req.url.includes('/dashboard/')  ){
+        return next();
+      }else if(await hasPolluxRole(req,"612479032566480926")){
+        return next();
+      }else{
+        return auth(req,res,next);
+      }
+    }else{    
+      return auth(req,res,next);   
+    }  
+  }catch(err){
+    console.error(err);
+    return false;
+  }
+};
 
 
 
@@ -31,16 +66,20 @@ const formidable = require('formidable');
 
 const app = express();
 app.use(function (req, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', 'https://dev.pagseguro.uol.com.br');
-    res.setHeader('Access-Control-Allow-Origin', 'https://pagseguro.uol.com.br');
-    res.setHeader('Access-Control-Allow-Origin', 'https://api.pollux.fun');
-    res.setHeader('Access-Control-Allow-Origin', 'https://pollux.fun');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.header('Access-Control-Allow-Origin', 'https://dev.pagseguro.uol.com.br');
+    res.header('Access-Control-Allow-Origin', 'https://pagseguro.uol.com.br');
+    res.header('Access-Control-Allow-Origin', 'https://api.pollux.fun');
+    res.header('Access-Control-Allow-Origin', 'https://pollux.fun');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+    res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.header('Access-Control-Allow-Credentials', true);
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    
     next();
 });
+
 
 global.PLX = new Eris.Client(config.token,{restMode:true})
 Object.assign(PLX,require("../bot/core/utilities/Gearbox").Client)
@@ -220,7 +259,7 @@ app.use(logger(function(tokens,req,res){
 /* --------------- */
 
 app.use(i18n({
-  translationsPath: (path.join(__dirname, '../locales')),
+  translationsPath: (path.join(__dirname, '../bot/locales')),
   defaultLang: "en",
   //  browserEnable :false,
   siteLangs: ["en", "cz", "es", "fr", "pt-br", "pt", "ru","jp","tr","ko","de","pl"],
@@ -233,7 +272,7 @@ app.use(async function(req,res,next){
 
   
   if(req.isAuthenticated()){
-    let preUserData = DB.users.getFull({id:req.user.id}).lean().exec();
+    let preUserData = DB.users.get({id:req.user.id});
     let preDataProcess = result=>{
       let USR = req.user;
       res.locals.userdata = result;
@@ -261,53 +300,65 @@ app.use(async function(req,res,next){
 //###################################################################################
 const simpleauth = require('basic-auth')
 const admins = { polaris: { password: 'geminis472899' } }
-const auth = function(request, response, next) {
-  if(request.url.includes('branding')) return next();
-  if(request.url.includes('botbridge')) return next();
-  if(request.url.includes('webhook'))   return next();
-  if(request.url.includes('.png'))      return next();
-  if(request.url.includes('.jpg'))      return next();
-  if(request.url.includes('piece'))     return next();
-  if(request.url.includes('status'))    return next();
-  if(request.url.includes('gif'))       return next();
-  if(request.url.includes('?json'))     return next();
-  if(request.url.includes('random'))     return next();
-  if(request.url.includes('/admin/'))     return next();
-  if(request.url.includes('/setup/'))     return next();
-  if(request.url.endsWith('/faq'))     return next();
-  if(request.url.endsWith('/terms'))     return next();
-  if(request.url.endsWith('/terms'))     return next();
-  if(request.url.includes('commands'))     return next();
-  if(request.url.includes('cmlist'))     return next();
-  if(request.url.endsWith('/bsave'))     return next();
-  if(request.url.endsWith('/invite'))     return next();
-  var user = simpleauth(request)
+ 
+const auth = async function(req, res, next) {
+  if(req.url.includes('branding')) return next();
+  if(req.url.includes('botbridge')) return next();
+  if(req.url.includes('webhook'))   return next();
+  if(req.url.includes('.png'))      return next();
+  if(req.url.includes('.jpg'))      return next();
+  if(req.url.includes('piece'))     return next();
+  if(req.url.includes('status'))    return next();
+  if(req.url.includes('gif'))       return next();
+  if(req.url.includes('?json'))     return next();
+  if(req.url.includes('random'))     return next();
+  if(req.url.includes('/admin/'))     return next();
+  if(req.url.includes('/setup/'))     return next();
+  if(req.url.endsWith('/faq'))     return next();
+  if(req.url.endsWith('/terms'))     return next();
+  if(req.url.endsWith('/terms'))     return next();
+  if(req.url.includes('commands'))     return next();
+  if(req.url.includes('cmlist'))     return next();
+  if(req.url.endsWith('/bsave'))     return next();
+  if(req.url.endsWith('/invite'))     return next();
+  if(req.url.includes('/auth'))     return next();
 
-  if(request.headers['referer']==='http://opengraphcheck.com' || request.headers['user-agent']==='Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)'){
-    console.log(request.headers['referer'])
-    console.log(request.headers['user-agent'])
+  
+  var user = simpleauth(req)
+
+console.log('test')
+  if(!req.isAuthenticated() && !req.url.includes('/auth')) return res.redirect('/auth');
+  if(req.isAuthenticated()){
+    if(await hasPolluxRole(req,"278985430844833792") && req.url.includes('/dash') ) return next();
+    if(await hasPolluxRole(req,"612479032566480926")) return next();
   }
-   if( request.headers['user-agent'] === "Polaris Bot"){
+  
+  if(req.headers['referer']==='http://opengraphcheck.com' || req.headers['user-agent']==='Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)'){
+    console.log(req.headers['referer'])
+    console.log(req.headers['user-agent'])
+  }
+   if( req.headers['user-agent'] === "Polaris Bot"){
      return next()
    }
 
   if (!user || !admins[user.name] || admins[user.name].password !== user.pass) {
-    response.set('WWW-Authenticate', 'Basic realm="wawa"')
+    res.set('WWW-Authenticate', 'Basic realm="wawa"')
     //return response.redirect('/auth')
-    return response.status(401).send()
+    return res.status(401).send()
   }
   return next()
 }
+
 global.isAdmin = function isAdmin(req,svID){
   return new Promise(async resolve=>{
      
       try{
           SVID = req.query.serverID || req.params.serverID || svID
           let [memberInfo,roleInfo,serverInfo,serverData] = await Promise.all([
-              PLX.getRESTGuildMember(SVID, req.user.id),
-              PLX.getRESTGuildRoles(SVID),
-              PLX.getRESTGuild(SVID),
-              DB.servers.get(svID)
+              PLX.getRESTGuildMember(SVID, req.user.id).catch(()=>null),
+              PLX.getRESTGuildRoles(SVID).catch(()=>null),
+              PLX.getRESTGuild(SVID).catch(()=>null),
+              DB.servers.get(svID).catch(()=>null)
           ]);
            
           if(memberInfo.roles.includes(serverData.modules.MODROLE)) return resolve(true);
@@ -318,37 +369,10 @@ global.isAdmin = function isAdmin(req,svID){
       }
   })  
 }
-global.hasPolluxRole = function hasPolluxRole(req,roleID){
-  return new Promise(async resolve=>{     
-      try{
-          SVID = "277391723322408960"
-          let [memberInfo,serverData] = await Promise.all([
-              PLX.getRESTGuildMember(SVID, req.user.id),
-              DB.servers.get(SVID)
-          ]);
-          if(memberInfo.roles.includes(serverData.modules.MODROLE)) return resolve(true);
-          resolve( memberInfo.roles.includes(roleID) );
-      }catch(err){
-          console.error(err);
-          resolve (false);
-      }
-  })  
-}
+
 global.checkAuth = function checkAuth(req, res, next) {
   if (req.isAuthenticated()) return next();
   return res.render('needlogin')
-};
-global.compulsoryAuth = async function checkAuth(req, res, next) {
-  if (req.isAuthenticated()){
-    if(await hasPolluxRole(req,"612479032566480926")){
-      return next();
-    }else{
-      return auth(req,res,next);
-    }
-  }else{    
-    return auth(req,res,next);
-   
-  }  
 };
 //###################################################################################
 
@@ -403,7 +427,10 @@ app.listen(4728, function (err) {
 
 // CATCH 404
 app.use(function (req, res, next) {
-  res.status(404).render('404');
+  if(req.handled) return;
+  setTimeout(()=>{
+    res.status(404).render('404');
+  },2500)
 });
 
 

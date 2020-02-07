@@ -435,9 +435,11 @@ router.put("/savechannelist",ADMCHECKS,async (req,res)=>{
             [`switches.${PAR}`] :  payload.channels
         }         
     });  
+    res.send('OK')
 })
 
 async function ADMCHECKS(req,res,nex){
+    req.handled = true;
     if(req.user.id ==='88120564400553984')  nex(); 
     let payload = req.body;
     if(req.user.validator != payload.validator) return res.send({status:401,data:"Validator Mismatch "+`${payload.validator} / ${req.user.validator}`});

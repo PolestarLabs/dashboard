@@ -38,7 +38,7 @@ function loadLangJSONFiles (langPath, defaultLang,siteLangs) {
           delete require.cache[require.resolve(langPath + '/' + files[i]+"/website.json")];
         } catch (e) {}
 
-        i18n[files[i].split('.').shift().toLowerCase()] = require(langPath + '/' + files[i]+"/website.json");
+        i18n[files[i].split('.').shift().toLowerCase()] = Object.assign(require(langPath + '/' + files[i]+"/website.json"),require(langPath + '/' + files[i]+"/bot_strings.json"));
       } 
     }
   } else {

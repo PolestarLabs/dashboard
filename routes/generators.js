@@ -45,8 +45,7 @@ router.get("/boosterpack/:series/:A/:B/booster.png", async (req,res)=>{
     series  = req.params.series
     aNew    = req.query.anew=="true"
     bNew    = req.query.bnew=="true"
-    console.log({rarA,rarB,aNew,bNew,stkA})
-    console.log('sdfsds')
+
     const [ stickerA,stickerB,nametagA,nametagB,rarityA,rarityB,boosterPack,rbnShadow,isNew] = await Promise.all([
        
         Canvas.loadImage(HOST+`/stickers/${stkA}.png`),
@@ -59,7 +58,6 @@ router.get("/boosterpack/:series/:A/:B/booster.png", async (req,res)=>{
         Canvas.loadImage(HOST+`/build/boosters/rubineshadow.png`),
         Canvas.loadImage(HOST+`/build/new.png`),
     ]);
-    console.log('sdfsds2')
   
     
     ctx.translate(-30,115)
@@ -414,7 +412,7 @@ router.get("/cooking-minigame/selenedi.png", async (req,res) => {
     let cooktop  = "main_off"
     let cauldron = false
     let smoke    = false
-console.log(req.query)
+
     switch (Number(req.query.ct)) {
         case 1:
             cooktop = "main_lo";
@@ -464,7 +462,7 @@ console.log(req.query)
    while(i--){
        if(req.query.ut){
             let utensils = req.query.ut.split(',').slice(0,3)
-            console.log(utensils)
+            
             const [u1,u2,u3] = await Promise.all([
                 Canvas.loadImage(HOST+"/build/events/hallowinter19/cooking/cauldron_0"+(utensils[0]||4)+".png"),
                 Canvas.loadImage(HOST+"/build/events/hallowinter19/cooking/cauldron_0"+(utensils[1]||4)+".png"),

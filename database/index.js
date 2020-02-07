@@ -53,7 +53,7 @@ const
     ]);
     bgBase=bgBase.map(itm=> { return {
          name:itm.name,
-         img:"/build/backdrops/"+itm.code+".png",
+         img:"/backdrops/"+itm.code+".png",
          id:itm.code,
          type:itm.type,
          rarity:itm.rarity,
@@ -72,7 +72,7 @@ const
    stBase=stBase.map(itm=> { return {
    
        name:itm.name,
-       img:"/build/stickers/"+itm.id+".png",
+       img:"/stickers/"+itm.id+".png",
        id:itm.id,
        type:itm.type,
          rarity:itm.rarity,

@@ -40,7 +40,7 @@ const fx = require('../pipelines/globalFunctions.js');
     return achievements(...args);
   });
 // ACHIEVEMENTS  
-  router.use(['/leaderboards','/ranks/global','ranks'], (...args)=>{
+  router.use(['/leaderboards','/ranks/global','/ranks','/top'], (...args)=>{
     delete require.cache[require.resolve('./leaderboards')];
     const leads = require('./leaderboards');
     return leads(...args);
@@ -113,7 +113,7 @@ router.use('/admin',checkAuth, (...args)=>{
   } );
 
   // STATUSPAGE  
-  router.use('/status', (...args)=>{
+  router.use('/status', (...args)=>{    
     delete require.cache[require.resolve('./status')];
     const status = require('./status');
     return status(...args);
