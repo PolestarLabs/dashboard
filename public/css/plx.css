@@ -5,15 +5,17 @@ html {
     font-weight: 400; 
     line-height: 1.5;
     -webkit-text-size-adjust: 100%;
-    background: #334;
-    color: #ACACCA;
+    background: var(--bg-main);
+    color: var(--text-main);
 } 
   
 body {    
     margin: 0  
 }
  .plx-sticky-placeholder{
-     height:0 !important;
+     //height:0 !important;
+     /* ^ -- REMOVED: BREAKS STICKY DEFAULT BEHAVIOUR IN STICKERS PAGE */ 
+     
      margin-bottom:25px
  }
   
@@ -58,13 +60,13 @@ a:hover {
 
 a,
 .plx-link {
-  color: #87f;
+  color: var(--links,#87f);
   text-decoration: none;
   cursor: pointer;
 }
 a:hover,
 .plx-link:hover {
-  color: #8af;
+  color: var(--links-hover, #8af);
   text-decoration: underline;
 }
 
@@ -81,14 +83,14 @@ strong {
 :not(pre)>code,
 :not(pre)>kbd,
 :not(pre)>samp {
-    font-family: Share Tech Mono, monaco, monospace;
+    font-family: var(--mono-font, monospace);
     font-size: .875rem;
-    color: #D27;
+    color: var(--code-main-color);
     /*! white-space: nowrap; */
     border-radius: 3px;
     padding: 1px 3px;
-    border: 1px solid #472541F1;
-    background: #2c1d2f;
+    border: var(--code-main-border);
+    background: var(--code-main-bg);
     margin-right: 2px;
 }
 code.mistyblue {
@@ -96,26 +98,26 @@ code.mistyblue {
     margin-right: 0.2rem;
     //padding: 0.3rem 0.6rem; 
     white-space: nowrap;
-    background: #1d1721;
-    border: 1px solid #39354a;
+    background: var(--code-misty-bg);
+    border: var(--code-misty-border);
     border-radius: 3px;
-    color: cadetblue;
+    color: var(--code-misty-color);
 }
 
 
 em {
-    color: #dd0055;
+    color: var(--darkest-pink,#dd0055);
 }
 
 ins {
-    background: #EED;
-    color: #8080A0;
+    background: var(--bg-inverse);
+    color: var(--mid-main);
     text-decoration: none
 }
 
 mark {
-    background: #EED;
-    color: #8080A0
+    background: var(--bg-inverse);
+    color: var(--mid-main);
 }
 
 q {
@@ -216,7 +218,7 @@ h6 {
     margin: 0 0 20px 0;
     font-family: "Nunito",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-weight: 400;
-    color: #8F999AB;
+    color: var( --text-bold);
     text-transform: none
 }
 
@@ -238,13 +240,13 @@ h6 {
 .plx-h1,
 h1 {
     font-size: 2.23125rem;
-    line-height: 1.2
+    line-height: 1.5
 }
 
 .plx-h2,
 h2 {
     font-size: 1.7rem;
-    line-height: 1.3
+    line-height: 1.4
 }
 
 .plx-h3,
@@ -312,7 +314,7 @@ hr {
     text-align: inherit;
     margin: 0 0 20px 0;
     border: 0;
-    border-top: 1px solid #3b3b42
+    border-top: 1px solid var(--divider-color)
 }
 
 *+.plx-hr,
@@ -344,7 +346,7 @@ blockquote footer {
     margin-top: 10px;
     font-size: .875rem;
     line-height: 1.5;
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 blockquote footer::before {
@@ -368,14 +370,14 @@ pre code {
 }
 
 ::selection {
-    background: #85F;
-    color: #fff;
+    background: var(--select);
+    color: var(--select-bg);
     text-shadow: 0 0 2px #FFFD;    
 
 }
 
 .rainbow { 
-background: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+background: var(--rainbow)
 background-size: 1800% 1800%;
 animation: rainbow 18s ease infinite;
 }
@@ -424,12 +426,12 @@ template {
 
 .plx-link-muted a,
 a.plx-link-muted {
-    color: #99AA
+    color: var(--muted)
 }
 
 .plx-link-muted a:hover,
 a.plx-link-muted:hover {
-    color: #8080A0A
+    color: var(--text-dim-mid)A
 }
 
 .plx-link-text a:not(:hover),
@@ -439,7 +441,7 @@ a.plx-link-text:not(:hover) {
 
 .plx-link-text a:hover,
 a.plx-link-text:hover {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-link-heading a:not(:hover),
@@ -449,7 +451,7 @@ a.plx-link-heading:not(:hover) {
 
 .plx-link-heading a:hover,
 a.plx-link-heading:hover {
-    color: #F56595;
+    color: var(--link-head-hover);
     text-decoration: none
 }
 
@@ -500,7 +502,7 @@ a.plx-link-reset:hover {
 
 .plx-heading-divider {
     padding-bottom: 10px;
-    border-bottom: 1px solid #e5e5e5
+    border-bottom: 1px solid var(--heading-divider-color)
 }
 
 .plx-heading-bullet {
@@ -515,7 +517,7 @@ a.plx-link-reset:hover {
     vertical-align: middle;
     height: .9em;
     margin-right: 10px;
-    border-left: 5px solid #e5e5e5
+    border-left: 5px solid var(--heading-divider-color)
 }
  
 .plx-heading-line {
@@ -533,7 +535,7 @@ a.plx-link-reset:hover {
     position: absolute;
     top: calc(50% - (1px / 2));
     width: 2000px;
-    border-bottom: 1px solid #e5e5e5
+    border-bottom: 1px solid var(--heading-divider-color)
 }
 
 .plx-heading-line>::before {
@@ -573,11 +575,11 @@ a.plx-link-reset:hover {
 
 .plx-divider-icon-fill::after,
 .plx-divider-icon-fill::before {
-    border-bottom: 1px solid #8b8b9F
+    border-bottom: 1px solid var(--divider-color)
 }
 .plx-divider-icon::after,
 .plx-divider-icon::before {
-    border-bottom: 1px solid #8b8b9FAA
+    border-bottom: 1px solid var(--divider-color)
 }
 .plx-divider-icon-fill::after, 
 .plx-divider-icon-fill::before,
@@ -615,7 +617,7 @@ a.plx-link-reset:hover {
     display: inline-block;
     width: 100px;
     max-width: 100%;
-    border-top: 1px solid #e5e5e5;
+    border-top: 1px solid var(--heading-divider-color);
     vertical-align: top
 }
 
@@ -624,7 +626,7 @@ a.plx-link-reset:hover {
     height: 100px;
     margin-left: auto;
     margin-right: auto;
-    border-left: 1px solid #e5e5e5
+    border-left: 1px solid var(--heading-divider-color)
 }
 
 .plx-list {
@@ -660,7 +662,7 @@ a.plx-link-reset:hover {
 .plx-list-divider>li:nth-child(n+2) {
     margin-top: 10px;
     padding-top: 10px;
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid var(--text-lighter)
 }
 
 .plx-list-striped>li {
@@ -668,8 +670,8 @@ a.plx-link-reset:hover {
 }
 
 .plx-list-striped>li:nth-of-type(odd) {
-    border-top: 1px solid #e5e5e5;
-    border-bottom: 1px solid #e5e5e5
+    border-top: 1px solid var(--heading-divider-color);
+    border-bottom: 1px solid var(--heading-divider-color);
 }
 
 .plx-list-striped>li:nth-of-type(odd) {
@@ -713,8 +715,8 @@ a.plx-link-reset:hover {
 }
 
 .plx-list-large.plx-list-striped>li:nth-of-type(odd) {
-    border-top: 1px solid #e5e5e5;
-    border-bottom: 1px solid #e5e5e5
+    border-top: 1px solid var(--heading-divider-color);
+    border-bottom: 1px solid var(--heading-divider-color);
 }
 
 .plx-list-large.plx-list-striped>li:nth-child(n+2) {
@@ -722,7 +724,7 @@ a.plx-link-reset:hover {
 }
 
 .plx-description-list>dt {
-    color: #888;
+    color: var(--text-faint);
     font-size: .875rem;
     font-weight: 400;
     text-transform: uppercase
@@ -735,7 +737,7 @@ a.plx-link-reset:hover {
 .plx-description-list-divider>dt:nth-child(n+2) {
     margin-top: 20px;
     padding-top: 20px;
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid var(--heading-divider-color);
 }
 
 .plx-table {
@@ -755,7 +757,7 @@ a.plx-link-reset:hover {
     vertical-align: bottom;
     font-size: .875rem;
     font-weight: 400;
-    color: #9999AA;
+    color: var(--text-main);
     text-transform: uppercase
 }
 
@@ -775,7 +777,7 @@ a.plx-link-reset:hover {
 .plx-table caption {
     font-size: .875rem;
     text-align: left;
-    color: #9999AA
+    color: var(--text-faint);
 }
 
 .plx-table-middle,
@@ -786,14 +788,14 @@ a.plx-link-reset:hover {
 .plx-table-divider>:first-child>tr:not(:first-child),
 .plx-table-divider>:not(:first-child)>tr,
 .plx-table-divider>tr:not(:first-child) {
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid var(--heading-divider-color);
 }
 
 .plx-table-striped tbody tr:nth-of-type(odd),
 .plx-table-striped>tr:nth-of-type(odd) {
     background: #112;
-    border-top: 1px solid #e5e5e5;
-    border-bottom: 1px solid #e5e5e5
+    border-top: 1px solid var(--heading-divider-color);
+    border-bottom: 1px solid var(--text-lighter)
 }
 
 .plx-table-hover tbody tr:hover,
@@ -922,7 +924,7 @@ button.plx-icon:not(:disabled) {
 }
 
 .plx-icon:not(.plx-preserve) [stroke*='#']:not(.plx-preserve) {
-    stroke: #F58
+    stroke: var(--accent-color,#F58)
 }
 
 .plx-icon>* {
@@ -939,12 +941,12 @@ button.plx-icon:not(:disabled) {
 }
 
 .plx-icon-link {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-icon-link:focus,
 .plx-icon-link:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     outline: 0
 }
 
@@ -959,7 +961,7 @@ button.plx-icon:not(:disabled) {
     height: 36px;
     border-radius: 500px;
     background: #112;
-    color: #9999AA;
+    color: var(--text-dim);
     vertical-align: middle;
     display: inline-flex;
     justify-content: center;
@@ -970,15 +972,15 @@ button.plx-icon:not(:disabled) {
 
 .plx-icon-button:focus,
 .plx-icon-button:hover {
-    background-color: #334;
-    color: #8080A0;
+    background-color: var(--mid-dark);
+    color: var(--text-dim-mid);
     outline: 0
 }
 
 .plx-active>.plx-icon-button,
 .plx-icon-button:active {
     background-color: #dfdfdf;
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-range {
@@ -1025,7 +1027,7 @@ button.plx-icon:not(:disabled) {
     height: 15px;
     width: 15px;
     border-radius: 500px;
-    background: #fff;
+    background:  var(--bg-lightest);
     border: 1px solid #ccc
 }
 
@@ -1034,7 +1036,7 @@ button.plx-icon:not(:disabled) {
     height: 15px;
     width: 15px;
     border-radius: 500px;
-    background: #fff;
+    background:  var(--bg-lightest);
     border: 1px solid #ccc
 }
 
@@ -1047,7 +1049,7 @@ button.plx-icon:not(:disabled) {
     height: 15px;
     width: 15px;
     border-radius: 500px;
-    background: #fff;
+    background:  var(--bg-lightest);
     border: 1px solid #ccc
 }
 
@@ -1057,35 +1059,35 @@ button.plx-icon:not(:disabled) {
 
 .plx-range::-webkit-slider-runnable-track {
     height: 3px;
-    background: #334;
+    background: var(--mid-dark);
     border-radius: 500px
 }
 
 .plx-range:active::-webkit-slider-runnable-track,
 .plx-range:focus::-webkit-slider-runnable-track {
-    background: #090911
+    background: var(--darkest)
 }
 
 .plx-range::-moz-range-track {
     height: 3px;
-    background: #334;
+    background: var(--mid-dark);
     border-radius: 500px
 }
 
 .plx-range:focus::-moz-range-track {
-    background: #090911
+    background: var(--darkest)
 }
 
 .plx-range::-ms-fill-lower,
 .plx-range::-ms-fill-upper {
     height: 3px;
-    background: #334;
+    background: var(--mid-dark);
     border-radius: 500px
 }
 
 .plx-range:focus::-ms-fill-lower,
 .plx-range:focus::-ms-fill-upper {
-    background: #090911
+    background: var(--darkest)
 }
 
 .plx-checkbox,
@@ -1154,9 +1156,9 @@ button.plx-icon:not(:disabled) {
     width: 100%;
     border: 0 none;
     padding: 0 10px;
-    background: #fff;
-    color: #8080A0;
-    border: 1px solid #e5e5e5;
+    background:  var(--bg-lightest);
+    color: var(--text-dim-mid);
+    border: 1px solid var(--heading-divider-color);
     transition: .2s ease-in-out;
     transition-property: color, background-color, border
 }
@@ -1185,33 +1187,33 @@ button.plx-icon:not(:disabled) {
 .plx-select:focus,
 .plx-textarea:focus {
     outline: 0;
-    background-color: #fff;
-    color: #8080A0;
-    border-color: #F56595
+    background-color:  var(--text-lightest);
+    color: var(--text-dim-mid);
+    border-color: var(--accent-color)
 }
 
 .plx-input:disabled,
 .plx-select:disabled,
 .plx-textarea:disabled {
     background-color: #112;
-    color: #9999AA;
-    border-color: #e5e5e5
+    color: var(--text-dim);
+    border-color: var(--text-lighter)
 }
 
 .plx-input::-ms-input-placeholder {
-    color: #9999AA !important
+    color: var(--text-dim) !important
 }
 
 .plx-input::placeholder {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-textarea::-ms-input-placeholder {
-    color: #9999AA !important
+    color: var(--text-dim) !important
 }
 
 .plx-textarea::placeholder {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-form-small {
@@ -1260,7 +1262,7 @@ button.plx-icon:not(:disabled) {
 }
 
 .plx-form-blank:focus {
-    border-color: #e5e5e5;
+    border-color: var(--heading-divider-color);
     border-style: dashed
 }
 
@@ -1322,7 +1324,7 @@ select.plx-form-width-xsmall {
     transition: .2s ease-in-out;
     transition-property: background-color, border;
     border-radius: 3px;
-    background-color: #fff;
+    background-color:  var(--text-lightest);
 }
 
 .plx-radio {
@@ -1332,13 +1334,13 @@ select.plx-form-width-xsmall {
 .plx-checkbox:focus,
 .plx-radio:focus {
     outline: 0;
-    border-color: #F56595
+    border-color: var(--accent-color)
 }
 
 .plx-checkbox:checked,
 .plx-checkbox:indeterminate,
 .plx-radio:checked {
-    background-color: #F56595;
+    background-color: var(--accent-color);
     border-color: transparent;
     border-radius: 3px;
 }
@@ -1365,7 +1367,7 @@ select.plx-form-width-xsmall {
 .plx-checkbox:disabled,
 .plx-radio:disabled {
     background-color: #112;
-    border-color: #e5e5e5
+    border-color: var(--text-lighter)
 }
 
 .plx-radio:disabled:checked {
@@ -1455,11 +1457,11 @@ select.plx-form-width-xsmall {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-form-icon:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-form-icon:not(a):not(button):not(input) {
@@ -1520,7 +1522,7 @@ select.plx-form-width-xsmall {
 .plx-button-default {
     background-color: transparent;
     color: #333;
-    border: 1px solid #e5e5e5
+    border: 1px solid var(--text-lighter)
 }
 
 .plx-button-default:focus,
@@ -1534,70 +1536,102 @@ select.plx-form-width-xsmall {
 .plx-button-default:active {
     background-color: transparent;
     color: #333;
-    border-color: #9999AA
+    border-color: var(--text-dim)
 }
 
 .plx-button-primary {
-    background-color: #F56595;
-    color: #fff;
+    background-color: var(--accent-color);
+    color:  var(--text-lightest);
     border: 1px solid transparent
 }
 
 .plx-button-primary:focus,
 .plx-button-primary:hover {
     background-color: #0DC;
-    color: #fff
+    color:  var(--text-lightest);
+    box-shadow: 0 5px 10px #0DC5;
 }
 
 .plx-button-primary.plx-active,
 .plx-button-primary:active {
     background-color: #d47;
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-button-secondary {
-    background-color: #B6D;
-    color: #fff;
+    background-color: var(--secondary-color);
+    color:  var(--text-lightest);
     border: 1px solid transparent
 }
 
 .plx-button-secondary:focus,
 .plx-button-secondary:hover {
     background-color: #0DC;
-    color: #fff
+    color:  var(--text-lightest);
+    box-shadow: 0 5px 10px #0DC5;
 }
 
 .plx-button-secondary.plx-active,
 .plx-button-secondary:active {
     background-color: #536;
-    color: #fff
+    color:  var(--text-lightest);
+   
+    
 }
 
 .plx-button-danger {
-    background-color: #F03050;
-    color: #fff;
+    background-color: #FF3050;
+    color:  var(--text-lightest);
     border: 1px solid transparent
 }
 
 .plx-button-danger:focus,
 .plx-button-danger:hover {
-    background-color: #ee395b;
-    color: #fff
+    background-color:
+#df3962;
+color: var(--text-lightest);
+box-shadow: 0 5px 10px
+#F355;
 }
 
 .plx-button-danger.plx-active,
 .plx-button-danger:active {
     background-color: #ec2147; 
-    color: #fff
+    color:  var(--text-lightest)
 }
 
+
+
+.plx-button-warn {
+    background-color: #ffb52c;
+    color:  var(--text-lightest);
+    border: 1px solid transparent
+    ;
+}
+
+.plx-button-warn:focus,
+.plx-button-warn:hover {
+    background-color: #fad46c;
+    box-shadow: 0 5px 10px
+#ffb52c55;
+    color:  var(--text-lightest)
+}
+
+.plx-button-warn.plx-active,
+.plx-button-warn:active {
+    background-color: #ff922c; 
+    color:  var(--text-lightest)
+}
+
+
+.plx-button-warn:disabled,
 .plx-button-danger:disabled,
 .plx-button-default:disabled,
 .plx-button-primary:disabled,
 .plx-button-secondary:disabled {
     background-color: transparent;
-    color: #9999AA;
-    border-color: #e5e5e5
+    color: var(--text-dim);
+    border-color: var(--text-lighter)
 }
 
 .plx-button-small {
@@ -1641,7 +1675,7 @@ select.plx-form-width-xsmall {
 }
 
 .plx-button-text:disabled {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-button-text:disabled::before {
@@ -1652,7 +1686,7 @@ select.plx-form-width-xsmall {
     padding: 0;
     line-height: 1.5;
     background: 0 0;
-    color: #F56595
+    color: var(--accent-color)
 }
 
 .plx-button-link:focus,
@@ -1676,13 +1710,16 @@ select.plx-form-width-xsmall {
 .plx-button-group>div:nth-child(n+2) .plx-button {
     margin-left: -1px
 }
-
+.plx-button:active{
+    box-shadow: none;
+}
 .plx-button-group .plx-button.plx-active,
 .plx-button-group .plx-button:active,
 .plx-button-group .plx-button:focus,
 .plx-button-group .plx-button:hover {
     position: relative;
-    z-index: 1
+    z-index: 1;
+   
 }
 
 .plx-section {
@@ -1755,11 +1792,11 @@ select.plx-form-width-xsmall {
 }
 
 .plx-section-primary {
-    background: #F56595
+    background: var(--accent-color)
 }
 
 .plx-section-secondary {
-    background: #B6D
+    background: var(--secondary-color)
 }
 
 .plx-container {
@@ -2014,7 +2051,7 @@ select.plx-form-width-xsmall {
     position: absolute;
     left: 0;
     right: 0;
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid var(--text-lighter)
 }
 
 .plx-grid-divider {
@@ -2242,7 +2279,7 @@ select.plx-form-width-xsmall {
 }
 
 .plx-tile-primary {
-    background: #F56595
+    background: var(--accent-color)
 }
 
 .plx-tile-secondary {
@@ -2320,13 +2357,13 @@ select.plx-form-width-xsmall {
 }
 
 .plx-card-hover:not(.plx-card-default):not(.plx-card-primary):not(.plx-card-secondary):hover {
-    background: #fff;
+    background:   var(--bg-card,#FFF);
     box-shadow: 0 14px 25px rgba(0, 0, 0, .16)
 }
 
 .plx-card-default {
-    background: #fff;
-    color: #8080A0;
+    background:  var(--bg-card);
+    color: var(--text-dim-mid);
     box-shadow: 0 5px 15px rgba(0, 0, 0, .08)
 }
 
@@ -2335,41 +2372,41 @@ select.plx-form-width-xsmall {
 }
 
 .plx-card-default.plx-card-hover:hover {
-    background-color: #fff;
+    background-color:  var(--bg-card);
     box-shadow: 0 14px 25px rgba(0, 0, 0, .16)
 }
 
 .plx-card-default .plx-card-header {
-    border-bottom: 1px solid #e5e5e5
+    border-bottom: 1px solid var(--text-lighter)
 }
 
 .plx-card-default .plx-card-footer {
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid var(--text-lighter)
 }
 
 .plx-card-primary {
-    background: #F56595;
-    color: #fff;
+    background: var(--accent-color);
+    color:  var(--text-contrast);
     box-shadow: 0 5px 15px rgba(0, 0, 0, .08)
 }
 
 .plx-card-primary .plx-card-title {
-    color: #fff
+    color:  var(--text-contrast)
 }
 
 .plx-card-primary.plx-card-hover:hover {
-    background-color: #F56595;
+    background-color: var(--accent-color);
     box-shadow: 0 14px 25px rgba(0, 0, 0, .16)
 }
 
 .plx-card-secondary {
     background: #222;
-    color: #fff;
+    color:  var(--text-lightest);
     box-shadow: 0 5px 15px rgba(0, 0, 0, .08)
 }
 
 .plx-card-secondary .plx-card-title {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-secondary.plx-card-hover:hover {
@@ -2493,14 +2530,14 @@ select.plx-form-width-xsmall {
 }
 
 .plx-close {
-    color: #9999AA;
+    color: var(--text-dim);
     transition: .1s ease-in-out;
     transition-property: color, opacity
 }
 
 .plx-close:focus,
 .plx-close:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     outline: 0
 }
 
@@ -2545,13 +2582,13 @@ select.plx-form-width-xsmall {
 
 .plx-totop {
     padding: 5px;
-    color: #9999AA;
+    color: var(--text-dim);
     transition: color .1s ease-in-out
 }
 
 .plx-totop:focus,
 .plx-totop:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     outline: 0
 }
 
@@ -2562,13 +2599,13 @@ select.plx-form-width-xsmall {
 .plx-marker {
     padding: 5px;
     background: #222;
-    color: #fff;
+    color:  var(--text-lightest);
     border-radius: 500px
 }
 
 .plx-marker:focus,
 .plx-marker:hover {
-    color: #fff;
+    color:  var(--text-lightest);
     outline: 0
 }
 
@@ -2577,7 +2614,7 @@ select.plx-form-width-xsmall {
     margin-bottom: 20px;
     padding: 15px 29px 15px 15px;
     background: #112;
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 *+.plx-alert {
@@ -2608,7 +2645,7 @@ select.plx-form-width-xsmall {
 
 .plx-alert-primary {
     background: #d8eafc;
-    color: #F56595
+    color: var(--accent-color)
 }
 
 .plx-alert-success {
@@ -2652,8 +2689,8 @@ select.plx-form-width-xsmall {
     padding: 0 5px;
     border-radius: 500px;
     vertical-align: middle;
-    background: #F56595;
-    color: #fff;
+    background: var(--accent-color);
+    color:  var(--text-lightest);
     font-size: .875rem;
     display: inline-flex;
     justify-content: center;
@@ -2662,7 +2699,7 @@ select.plx-form-width-xsmall {
 
 .plx-badge:focus,
 .plx-badge:hover {
-    color: #fff;
+    color:  var(--text-lightest);
     text-decoration: none;
     outline: 0
 }
@@ -2670,10 +2707,10 @@ select.plx-form-width-xsmall {
 .plx-label {
     display: inline-block;
     padding: 0 10px;
-    background: #F56595;
+    background: var(--accent-color);
     line-height: 1.5;
     font-size: .875rem;
-    color: #fff;
+    color:  var(--text-lightest);
     vertical-align: middle;
     white-space: nowrap;
     border-radius: 2px;
@@ -2682,17 +2719,17 @@ select.plx-form-width-xsmall {
 
 .plx-label-success {
     background-color: #15E070;
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-label-warning {
     background-color: #faa05a;
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-label-danger {
     background-color: #F03050;
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-overlay {
@@ -2743,15 +2780,15 @@ select.plx-form-width-xsmall {
 .plx-article-meta {
     font-size: .875rem;
     line-height: 1.4;
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-article-meta a {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-article-meta a:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     text-decoration: none
 }
 
@@ -2790,7 +2827,7 @@ select.plx-form-width-xsmall {
 .plx-comment-meta {
     font-size: .875rem;
     line-height: 1.4;
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-comment-list {
@@ -2849,7 +2886,7 @@ select.plx-form-width-xsmall {
     vertical-align: middle;
     width: 100%;
     border: none;
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-search-input:focus {
@@ -2857,11 +2894,11 @@ select.plx-form-width-xsmall {
 }
 
 .plx-search-input:-ms-input-placeholder {
-    color: #9999AA !important
+    color: var(--text-dim) !important
 }
 
 .plx-search-input::placeholder {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-search-icon:focus {
@@ -2876,11 +2913,11 @@ select.plx-form-width-xsmall {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-search .plx-search-icon:hover {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-search .plx-search-icon:not(a):not(button):not(input) {
@@ -2901,7 +2938,7 @@ select.plx-form-width-xsmall {
     padding-left: 6px;
     padding-right: 6px;
     background: 0 0;
-    border: 1px solid #e5e5e5
+    border: 1px solid var(--text-lighter)
 }
 
 .plx-search-default .plx-search-input:focus {
@@ -2965,12 +3002,12 @@ select.plx-form-width-xsmall {
 }
 
 .plx-search-toggle {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-search-toggle:focus,
 .plx-search-toggle:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-nav,
@@ -3038,12 +3075,12 @@ ul.plx-nav-sub {
 }
 
 .plx-nav-default>li>a {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-nav-default>li>a:focus,
 .plx-nav-default>li>a:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-nav-default>li.plx-active>a {
@@ -3055,7 +3092,7 @@ ul.plx-nav-sub {
 }
 
 .plx-nav-default .plx-nav-divider {
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid var(--text-lighter)
 }
 
 .plx-nav-default .plx-nav-sub a {
@@ -3064,22 +3101,22 @@ ul.plx-nav-sub {
 
 .plx-nav-default .plx-nav-sub a:focus,
 .plx-nav-default .plx-nav-sub a:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-nav-default .plx-nav-sub li.plx-active>a {
-    color: #f69
+    color: var(--accent-color)
 }
 
 .plx-nav-primary>li>a {
     font-size: 1.5rem;
     line-height: 1.5;
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-nav-primary>li>a:focus,
 .plx-nav-primary>li>a:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-nav-primary>li.plx-active>a {
@@ -3091,16 +3128,16 @@ ul.plx-nav-sub {
 }
 
 .plx-nav-primary .plx-nav-divider {
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid var(--text-lighter)
 }
 
 .plx-nav-primary .plx-nav-sub a {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-nav-primary .plx-nav-sub a:focus,
 .plx-nav-primary .plx-nav-sub a:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-nav-primary .plx-nav-sub li.plx-active>a {
@@ -3215,7 +3252,7 @@ ul.plx-nav-sub {
 }
 
 .plx-navbar-nav>li>a {
-    color: #9999AA;
+    color: var(--text-dim);
     text-transform: uppercase;
     transition: .1s ease-in-out;
     transition-property: color, background-color
@@ -3224,12 +3261,12 @@ ul.plx-nav-sub {
 .plx-navbar-nav>li:hover>a,
 .plx-navbar-nav>li>a.plx-open,
 .plx-navbar-nav>li>a:focus {
-    color: #FFF;
+    color:  var(--text-lightest);
     outline: 0
 }
 
 .plx-navbar-nav>li>a:active {
-    color: #FFFA
+    color:  var(--text-lightest)A
 }
 
 .plx-navbar-nav>li.plx-active>a {
@@ -3237,17 +3274,17 @@ ul.plx-nav-sub {
 }
 
 .plx-navbar-item {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-navbar-toggle {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-navbar-toggle.plx-open,
 .plx-navbar-toggle:focus,
 .plx-navbar-toggle:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     outline: 0;
     text-decoration: none
 }
@@ -3263,8 +3300,8 @@ ul.plx-nav-sub {
     box-sizing: border-box;
     width: 200px;
     padding: 20px 15px 25px 15px; 
-    background: #fff;
-    color: #8080A0;
+    background:  #FFF;
+    color: var(--text-dim-mid);
     box-shadow: 0 5px 12px rgba(0, 0, 0, .15)
 }
 
@@ -3331,12 +3368,12 @@ ul.plx-nav-sub {
 }
 
 .plx-navbar-dropdown-nav>li>a {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-navbar-dropdown-nav>li>a:focus,
 .plx-navbar-dropdown-nav>li>a:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-navbar-dropdown-nav>li.plx-active>a {
@@ -3348,16 +3385,16 @@ ul.plx-nav-sub {
 }
 
 .plx-navbar-dropdown-nav .plx-nav-divider {
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid var(--text-lighter)
 }
 
 .plx-navbar-dropdown-nav .plx-nav-sub a {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-navbar-dropdown-nav .plx-nav-sub a:focus,
 .plx-navbar-dropdown-nav .plx-nav-sub a:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-navbar-dropdown-nav .plx-nav-sub li.plx-active>a {
@@ -3395,7 +3432,7 @@ ul.plx-nav-sub {
     top: 0;
     bottom: 0;
     left: 25px;
-    border-left: 1px solid #e5e5e5
+    border-left: 1px solid var(--text-lighter)
 }
 
 .plx-navbar-dropdown-grid.plx-grid-stack>.plx-grid-margin::before {
@@ -3404,7 +3441,7 @@ ul.plx-nav-sub {
     top: -25px;
     left: 50px;
     right: 0;
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid var(--text-lighter)
 }
 
 .plx-subnav {
@@ -3424,7 +3461,7 @@ ul.plx-nav-sub {
 
 .plx-subnav>*>:first-child {
     display: block;
-    color: #9999AA;
+    color: var(--text-dim);
     font-size: .875rem;
     text-transform: uppercase;
     transition: .1s ease-in-out;
@@ -3433,7 +3470,7 @@ ul.plx-nav-sub {
 
 .plx-subnav>*>a:focus,
 .plx-subnav>*>a:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     text-decoration: none;
     outline: 0
 }
@@ -3452,37 +3489,37 @@ ul.plx-nav-sub {
     height: 1.5em;
     margin-left: 0;
     margin-right: 20px;
-    border-left: 1px solid #e5e5e5
+    border-left: 1px solid var(--text-lighter)
 }
 
 .plx-subnav-pill>*>:first-child {
     padding: 1px 8px;
     background: 0 0;
-    color: #9999AF;
+    color:var(--text-dim);
     border-radius: 2px;
     border: solid 1px transparent;
 }
 
 .plx-subnav-pill>*>a:focus,
 .plx-subnav-pill>*>a:hover {
-    background-color: #FF4462;
+    background-color: var(--accent-color);
     color: #DDF;
-    background: #85F;
+    background: var(--secondary-color);
 }
 
 .plx-subnav-pill>*>a:active {
-    background-color: #B5A;
+    background-color:var(--secondary-color-dark);
     color: #FFCFE3;
-    border: solid 1px #85F;
+    border: solid 1px var(--secondary-color);
 }
 
 .plx-subnav-pill>.plx-active>a {
-    background-color: #F56595;
-    color: #fff
+    background-color: var(--accent-color);
+    color:  var(--color-contrast);
 }
 
 .plx-subnav>.plx-disabled>a {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-breadcrumb {
@@ -3499,24 +3536,24 @@ ul.plx-nav-sub {
 .plx-breadcrumb>*>* {
     display: inline-block;
     font-size: .875rem;
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-breadcrumb>*>:focus,
 .plx-breadcrumb>*>:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     text-decoration: none
 }
 
 .plx-breadcrumb>:last-child>* {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-breadcrumb>:nth-child(n+2):not(.plx-first-column)::before {
     content: "/";
     display: inline-block;
     margin: 0 20px;
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-pagination {
@@ -3535,22 +3572,22 @@ ul.plx-nav-sub {
 
 .plx-pagination>*>* {
     display: block;
-    color: #9999AA;
+    color: var(--text-dim);
     transition: color .1s ease-in-out
 }
 
 .plx-pagination>*>:focus,
 .plx-pagination>*>:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     text-decoration: none
 }
 
 .plx-pagination>.plx-active>* {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-pagination>.plx-disabled>* {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-tab {
@@ -3568,7 +3605,7 @@ ul.plx-nav-sub {
     bottom: 0;
     left: 20px;
     right: 0;
-    border-bottom: 1px solid #e5e5e5
+    border-bottom: 1px solid var(--text-lighter)
 }
 
 .plx-tab>* {
@@ -3581,7 +3618,7 @@ ul.plx-nav-sub {
     display: block;
     text-align: center;
     padding: 5px 10px;
-    color: #9999AA;
+    color: var(--text-dim);
     border-bottom: 1px solid transparent;
     font-size: .875rem;
     text-transform: uppercase;
@@ -3590,17 +3627,17 @@ ul.plx-nav-sub {
 
 .plx-tab>*>a:focus,
 .plx-tab>*>a:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     text-decoration: none
 }
 
 .plx-tab>.plx-active>a {
-    color: #333;
-    border-color: #F56595
+    color: var(--text-inverse);
+    border-color: var(--accent-color)
 }
 
 .plx-tab>.plx-disabled>a {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-tab-bottom::before {
@@ -3629,7 +3666,7 @@ ul.plx-nav-sub {
     bottom: 0;
     left: auto;
     right: 0;
-    border-left: 1px solid #e5e5e5;
+    border-left: 1px solid var(--heading-divider-color);
     border-bottom: none
 }
 
@@ -3638,7 +3675,7 @@ ul.plx-nav-sub {
     bottom: 0;
     left: 0;
     right: auto;
-    border-left: 1px solid #e5e5e5;
+    border-left: 1px solid var(--heading-divider-color);
     border-bottom: none
 }
 
@@ -3827,7 +3864,7 @@ ul.plx-nav-sub {
 
 .plx-accordion-title:focus,
 .plx-accordion-title:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     text-decoration: none;
     outline: 0
 }
@@ -3889,8 +3926,8 @@ ul.plx-nav-sub {
     box-sizing: border-box;
     min-width: 200px;
     padding: 25px;
-    background: #fff;
-    color: #8080A0;
+    background:  var(--bg-lightest);
+    color: var(--text-dim-mid);
     box-shadow: 0 5px 12px rgba(0, 0, 0, .15)
 }
 
@@ -3904,13 +3941,13 @@ ul.plx-nav-sub {
 }
 
 .plx-dropdown-nav>li>a {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-dropdown-nav>li.plx-active>a,
 .plx-dropdown-nav>li>a:focus,
 .plx-dropdown-nav>li>a:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-dropdown-nav .plx-nav-header {
@@ -3918,17 +3955,17 @@ ul.plx-nav-sub {
 }
 
 .plx-dropdown-nav .plx-nav-divider {
-    border-top: 1px solid #e5e5e5
+    border-top: 1px solid var(--text-lighter)
 }
 
 .plx-dropdown-nav .plx-nav-sub a {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-dropdown-nav .plx-nav-sub a:focus,
 .plx-dropdown-nav .plx-nav-sub a:hover,
 .plx-dropdown-nav .plx-nav-sub li.plx-active>a {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 [class*=plx-dropdown-top] {
@@ -3994,7 +4031,7 @@ ul.plx-nav-sub {
     margin: 0 auto;
     width: 600px;
     max-width: calc(100% - .01px) !important;
-    background: #fff;
+    background:  var(--bg-lightest);
     opacity: 0;
     transform: translateY(-100px);
     transition: .3s linear;
@@ -4028,14 +4065,14 @@ ul.plx-nav-sub {
 
 .plx-modal-header {
     padding: 15px 30px;
-    background: #fff;
-    border-bottom: 1px solid #e5e5e5
+    background:  var(--bg-lightest);
+    border-bottom: 1px solid var(--text-lighter)
 }
 
 .plx-modal-footer {
     padding: 15px 30px;
-    background: #fff;
-    border-top: 1px solid #e5e5e5
+    background:  var(--bg-lightest);
+    border-top: 1px solid var(--text-lighter)
 }
 
 .plx-modal-body::after,
@@ -4081,11 +4118,11 @@ ul.plx-nav-sub {
     top: 0;
     right: -5px;
     transform: translate(0, -100%);
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-modal-close-outside:hover {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 @media (min-width:960px) {
@@ -4167,7 +4204,7 @@ ul.plx-nav-sub {
 }
 
 .plx-lightbox-toolbar-icon:hover {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-lightbox-button {
@@ -4182,7 +4219,7 @@ ul.plx-nav-sub {
 }
 
 .plx-lightbox-button:hover {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-lightbox-iframe {
@@ -4478,17 +4515,17 @@ ul.plx-nav-sub {
 
 .plx-iconnav>*>a {
     display: block;
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-iconnav>*>a:focus,
 .plx-iconnav>*>a:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     outline: 0
 }
 
 .plx-iconnav>.plx-active>a {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-iconnav-vertical {
@@ -4542,8 +4579,8 @@ ul.plx-nav-sub {
 .plx-notification-message {
     position: relative;
     padding: 15px;
-    background: #334;
-    color: #8080A0;
+    background: var(--mid-dark);
+    color: var(--text-dim-mid);
     font-size: 1.25rem;
     line-height: 1.4;
     cursor: pointer;
@@ -4567,7 +4604,7 @@ ul.plx-nav-sub {
 }
 
 .plx-notification-message-primary {
-    border-left: solid 5px #F56595;
+    border-left: solid 5px var(--accent-color);
    
 
 }
@@ -4581,7 +4618,7 @@ ul.plx-nav-sub {
 }
 
 .plx-notification-message-danger {
-    color: #F03050
+    color: var(--plx-danger)
 }
 
 .plx-tooltip {
@@ -4595,7 +4632,7 @@ ul.plx-nav-sub {
     padding: 3px 6px;
     background: #111;
     border-radius: 2px;
-    color: #fff;
+    color:  var(--text-lightest);
     font-size: 11px
 }
 
@@ -4623,7 +4660,7 @@ ul.plx-nav-sub {
     margin-bottom: 20px;
     padding: 30px 30px;
     background: 0 0;
-    border: 1px dashed #e5e5e5
+    border: 1px dashed var(--text-lighter)
 }
 
 *+.plx-placeholder {
@@ -4667,16 +4704,16 @@ ul.plx-nav-sub {
 }
 
 .plx-progress::-webkit-progress-value {
-    background-color: #F56595;
+    background-color: var(--accent-color);
     transition: width .6s ease
 }
 
 .plx-progress::-moz-progress-bar {
-    background-color: #F56595
+    background-color: var(--accent-color)
 }
 
 .plx-progress::-ms-fill {
-    background-color: #F56595;
+    background-color: var(--accent-color);
     transition: width .6s ease;
     border: 0
 }
@@ -5703,15 +5740,15 @@ ul.plx-nav-sub {
 .plx-text-meta {
     font-size: .875rem;
     line-height: 1.4;
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-text-meta a {
-    color: #9999AA
+    color: var(--text-dim)
 }
 
 .plx-text-meta a:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     text-decoration: none
 }
 
@@ -5742,7 +5779,7 @@ ul.plx-nav-sub {
 }
 
 .plx-text-muted {
-    color: #FFF5 !important
+    color:  var(--text-lightest)5 !important
 }
 
 .plx-text-emphasis {
@@ -5750,7 +5787,7 @@ ul.plx-nav-sub {
 }
 
 .plx-text-primary {
-    color: #F56595 !important
+    color: var(--accent-color) !important
 }
 
 .plx-text-success {
@@ -5769,12 +5806,12 @@ ul.plx-nav-sub {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     display: inline-block;
-    color: #F56595 !important
+    color: var(--accent-color) !important
 }
 
 @supports (-webkit-background-clip:text) {
     .plx-text-background {
-        background-color: #F56595
+        background-color: var(--accent-color)
     }
 }
 
@@ -5907,7 +5944,7 @@ th.plx-text-break {
 }
 
 .plx-column-divider {
-    column-rule: 1px solid #e5e5e5;
+    column-rule: 1px solid var(--heading-divider-color);
     column-gap: 60px
 }
 
@@ -6047,7 +6084,7 @@ iframe.plx-cover {
 }
 
 .plx-background-default {
-    background-color: #fff
+    background-color:  var(--text-lightest)
 }
 
 .plx-background-muted {
@@ -6055,12 +6092,12 @@ iframe.plx-cover {
 }
 
 .plx-background-primary {
-    background-color: #F56595;
-    background-image: linear-gradient( 90deg, #c51f61 0%, #eb2c58 71%, #f23e6a 100%);
+    background-color: var(--accent-color);
+    background-image: linear-gradient( 90deg, var(--accent-color-dark) 0%, var(--accent-color-mid) 71%, var(--accent-color-dark)100%);
 }
 
 .plx-background-secondary {
-    background-color: #202031;
+    background-color:var(--bg-opaque);
 }
 
 .plx-background-contain,
@@ -6341,7 +6378,7 @@ iframe.plx-cover {
 .plx-panel-scrollable {
     height: 170px;
     padding: 10px;
-    border: 1px solid #e5e5e5;
+    border: 1px solid var(--heading-divider-color);
     overflow: auto;
     -webkit-overflow-scrolling: touch;
     resize: both
@@ -6543,13 +6580,13 @@ iframe.plx-cover {
 .plx-logo {
     font-size: 1.5rem;
     font-family: "Nunito",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-    color: #8080A0;
+    color: var(--text-dim-mid);
     text-decoration: none
 }
 
 .plx-logo:focus,
 .plx-logo:hover {
-    color: #8080A0;
+    color: var(--text-dim-mid);
     outline: 0;
     text-decoration: none
 }
@@ -7660,7 +7697,7 @@ iframe.plx-cover {
 .plx-tile-primary:not(.plx-preserve-color) a,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-link,
 .plx-tile-secondary:not(.plx-preserve-color) a {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-link:hover,
@@ -7685,7 +7722,7 @@ iframe.plx-cover {
 .plx-tile-primary:not(.plx-preserve-color) a:hover,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-link:hover,
 .plx-tile-secondary:not(.plx-preserve-color) a:hover {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body :not(pre)>code,
@@ -7736,7 +7773,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) em,
 .plx-tile-primary:not(.plx-preserve-color) em,
 .plx-tile-secondary:not(.plx-preserve-color) em {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-h1,
@@ -7871,7 +7908,7 @@ iframe.plx-cover {
 .plx-tile-secondary:not(.plx-preserve-color) h4,
 .plx-tile-secondary:not(.plx-preserve-color) h5,
 .plx-tile-secondary:not(.plx-preserve-color) h6 {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body blockquote,
@@ -7885,7 +7922,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) blockquote,
 .plx-tile-primary:not(.plx-preserve-color) blockquote,
 .plx-tile-secondary:not(.plx-preserve-color) blockquote {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body blockquote footer,
@@ -8024,7 +8061,7 @@ iframe.plx-cover {
 .plx-tile-primary:not(.plx-preserve-color) a.plx-link-heading:hover,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-link-heading a:hover,
 .plx-tile-secondary:not(.plx-preserve-color) a.plx-link-heading:hover {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-heading-divider,
@@ -8696,7 +8733,7 @@ iframe.plx-cover {
 .plx-tile-secondary:not(.plx-preserve-color) .plx-checkbox:checked,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-checkbox:indeterminate,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-radio:checked {
-    background-color: #fff;
+    background-color:  var(--text-lightest);
     border-color: rgba(255, 255, 255, .7)
 }
 
@@ -8789,7 +8826,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-form-label,
 .plx-tile-primary:not(.plx-preserve-color) .plx-form-label,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-form-label {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-form-icon,
@@ -8832,7 +8869,7 @@ iframe.plx-cover {
 .plx-tile-primary:not(.plx-preserve-color) .plx-button-default,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-default {
     background-color: transparent;
-    color: #fff;
+    color:  var(--text-lightest);
     border-color: rgba(255, 255, 255, .7)
 }
 
@@ -8859,8 +8896,8 @@ iframe.plx-cover {
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-default:focus,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-default:hover {
     background-color: transparent;
-    color: #fff;
-    border-color: #fff
+    color:  var(--text-lightest);
+    border-color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-button-default.plx-active,
@@ -8886,8 +8923,8 @@ iframe.plx-cover {
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-default.plx-active,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-default:active {
     background-color: transparent;
-    color: #fff;
-    border-color: #fff
+    color:  var(--text-lightest);
+    border-color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-button-primary,
@@ -8901,8 +8938,8 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-button-primary,
 .plx-tile-primary:not(.plx-preserve-color) .plx-button-primary,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-primary {
-    background-color: #fff;
-    color: #8080A0
+    background-color:  var(--text-lightest);
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-button-primary:focus,
@@ -8928,7 +8965,7 @@ iframe.plx-cover {
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-primary:focus,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-primary:hover {
     background-color: #f2f2f2;
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-button-primary.plx-active,
@@ -8954,7 +8991,7 @@ iframe.plx-cover {
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-primary.plx-active,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-primary:active {
     background-color: #e6e6e6;
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-button-secondary,
@@ -8968,8 +9005,8 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-button-secondary,
 .plx-tile-primary:not(.plx-preserve-color) .plx-button-secondary,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-secondary {
-    background-color: #fff;
-    color: #8080A0
+    background-color:  var(--text-lightest);
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-button-secondary:focus,
@@ -8995,7 +9032,7 @@ iframe.plx-cover {
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-secondary:focus,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-secondary:hover {
     background-color: #f2f2f2;
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-button-secondary.plx-active,
@@ -9021,7 +9058,7 @@ iframe.plx-cover {
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-secondary.plx-active,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-secondary:active {
     background-color: #e6e6e6;
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-button-text,
@@ -9035,7 +9072,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-button-text,
 .plx-tile-primary:not(.plx-preserve-color) .plx-button-text,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-text {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-button-text::before,
@@ -9049,7 +9086,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-button-text::before,
 .plx-tile-primary:not(.plx-preserve-color) .plx-button-text::before,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-text::before {
-    border-bottom-color: #fff
+    border-bottom-color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-button-text:focus,
@@ -9074,7 +9111,7 @@ iframe.plx-cover {
 .plx-tile-primary:not(.plx-preserve-color) .plx-button-text:hover,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-text:focus,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-button-text:hover {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-button-text:disabled,
@@ -9247,7 +9284,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-totop:active,
 .plx-tile-primary:not(.plx-preserve-color) .plx-totop:active,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-totop:active {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-marker,
@@ -9262,7 +9299,7 @@ iframe.plx-cover {
 .plx-tile-primary:not(.plx-preserve-color) .plx-marker,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-marker {
     background: #112;
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-marker:focus,
@@ -9287,7 +9324,7 @@ iframe.plx-cover {
 .plx-tile-primary:not(.plx-preserve-color) .plx-marker:hover,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-marker:focus,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-marker:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-badge,
@@ -9301,8 +9338,8 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-badge,
 .plx-tile-primary:not(.plx-preserve-color) .plx-badge,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-badge {
-    background-color: #fff;
-    color: #8080A0
+    background-color:  var(--text-lightest);
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-badge:focus,
@@ -9327,7 +9364,7 @@ iframe.plx-cover {
 .plx-tile-primary:not(.plx-preserve-color) .plx-badge:hover,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-badge:focus,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-badge:hover {
-    color: #8080A0
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-label,
@@ -9341,8 +9378,8 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-label,
 .plx-tile-primary:not(.plx-preserve-color) .plx-label,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-label {
-    background-color: #fff;
-    color: #8080A0
+    background-color:  var(--text-lightest);
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-article-meta,
@@ -9603,7 +9640,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-nav-default>li.plx-active>a,
 .plx-tile-primary:not(.plx-preserve-color) .plx-nav-default>li.plx-active>a,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-nav-default>li.plx-active>a {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-nav-default .plx-nav-header,
@@ -9617,7 +9654,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-nav-default .plx-nav-header,
 .plx-tile-primary:not(.plx-preserve-color) .plx-nav-default .plx-nav-header,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-nav-default .plx-nav-header {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-nav-default .plx-nav-divider,
@@ -9684,7 +9721,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-nav-default .plx-nav-sub li.plx-active>a,
 .plx-tile-primary:not(.plx-preserve-color) .plx-nav-default .plx-nav-sub li.plx-active>a,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-nav-default .plx-nav-sub li.plx-active>a {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-nav-primary>li>a,
@@ -9737,7 +9774,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-nav-primary>li.plx-active>a,
 .plx-tile-primary:not(.plx-preserve-color) .plx-nav-primary>li.plx-active>a,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-nav-primary>li.plx-active>a {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-nav-primary .plx-nav-header,
@@ -9751,7 +9788,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-nav-primary .plx-nav-header,
 .plx-tile-primary:not(.plx-preserve-color) .plx-nav-primary .plx-nav-header,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-nav-primary .plx-nav-header {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-nav-primary .plx-nav-divider,
@@ -9818,7 +9855,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-nav-primary .plx-nav-sub li.plx-active>a,
 .plx-tile-primary:not(.plx-preserve-color) .plx-nav-primary .plx-nav-sub li.plx-active>a,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-nav-primary .plx-nav-sub li.plx-active>a {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-navbar-nav>li>a,
@@ -9882,7 +9919,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-navbar-nav>li>a:active,
 .plx-tile-primary:not(.plx-preserve-color) .plx-navbar-nav>li>a:active,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-navbar-nav>li>a:active {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-navbar-nav>li.plx-active>a,
@@ -9896,7 +9933,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-navbar-nav>li.plx-active>a,
 .plx-tile-primary:not(.plx-preserve-color) .plx-navbar-nav>li.plx-active>a,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-navbar-nav>li.plx-active>a {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-navbar-item,
@@ -10013,7 +10050,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-subnav>.plx-active>a,
 .plx-tile-primary:not(.plx-preserve-color) .plx-subnav>.plx-active>a,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-subnav>.plx-active>a {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-subnav-divider>:nth-child(n+2):not(.plx-first-column)::before,
@@ -10097,8 +10134,8 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-subnav-pill>.plx-active>a,
 .plx-tile-primary:not(.plx-preserve-color) .plx-subnav-pill>.plx-active>a,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-subnav-pill>.plx-active>a {
-    background-color: #fff;
-    color: #8080A0
+    background-color:  var(--text-lightest);
+    color: var(--text-dim-mid)
 }
 
 .plx-card-primary.plx-card-body .plx-subnav>.plx-disabled>a,
@@ -10313,8 +10350,8 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-tab>.plx-active>a,
 .plx-tile-primary:not(.plx-preserve-color) .plx-tab>.plx-active>a,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-tab>.plx-active>a {
-    color: #fff;
-    border-color: #fff
+    color:  var(--text-lightest);
+    border-color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-tab>.plx-disabled>a,
@@ -10466,7 +10503,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-accordion-title,
 .plx-tile-primary:not(.plx-preserve-color) .plx-accordion-title,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-accordion-title {
-    color: #fff
+    color:  var(--text-lightest)
 }
 
 .plx-card-primary.plx-card-body .plx-accordion-title:focus,
@@ -10600,7 +10637,7 @@ iframe.plx-cover {
 .plx-section-secondary:not(.plx-preserve-color) .plx-text-emphasis,
 .plx-tile-primary:not(.plx-preserve-color) .plx-text-emphasis,
 .plx-tile-secondary:not(.plx-preserve-color) .plx-text-emphasis {
-    color: #fff !important
+    color:  var(--text-lightest) !important
 }
  
 .plx-card-primary.plx-card-body .plx-text-primary,
@@ -10744,7 +10781,7 @@ iframe.plx-cover {
 
     blockquote, 
     pre {
-        border: 1px solid #9999AA;
+        border: 1px solid var(--text-dim);
         page-break-inside: avoid
     }
 
@@ -10861,7 +10898,7 @@ iframe.plx-cover {
     border-color: #ffcb10; }
   .input.is-ruby,
   .textarea.is-ruby {
-    border-color: #eb2c58; }
+    border-color: var(--accent-color-mid); }
   .input.is-pink,
   .textarea.is-pink {
     border-color: #e87aa9; }
@@ -11026,7 +11063,7 @@ iframe.plx-cover {
   .select.is-warning select {
     border-color: #ffcb10; }
   .select.is-ruby select {
-    border-color: #eb2c58; }
+    border-color: var(--accent-color-mid); }
   .select.is-pink select {
     border-color: #e87aa9; }
   .select.is-blurple select {
@@ -11109,7 +11146,7 @@ iframe.plx-cover {
   .help.is-warning {
     color: #ffcb10; }
   .help.is-ruby {
-    color: #eb2c58; }
+    color: var(--accent-color-mid); }
   .help.is-pink {
     color: #e87aa9; }
   .help.is-blurple {
@@ -11371,7 +11408,7 @@ iframe.plx-cover {
         width: 24px;
         height: 24px;
         //border: 3px solid red;
-       background-color: #f69;
+       background-color: var(--accent-color);
        transition: all 500ms ease;
         opacity: .5;
     }
@@ -11382,7 +11419,7 @@ iframe.plx-cover {
         right: 0;
         width: 70px;
         height: 30px;
-        border: 4px solid #f69;
+        border: 4px solid var(--accent-color);
        transition: all 500ms ease;
     }
     
@@ -11402,7 +11439,7 @@ iframe.plx-cover {
         width: 70px;
         height: 30px;
         border-color: #143240;
-      background-color: #f69;
+      background-color: var(--accent-color);
         opacity: 1;
     }
     
@@ -11412,7 +11449,7 @@ iframe.plx-cover {
         right: 3px;
         width: 24px;
         height: 24px;
-        border-color: #fff;
+        border-color:  var(--text-lightest);
       background-color:#fff5;
     
     
@@ -11441,7 +11478,7 @@ iframe.plx-cover {
     font-size: 20px;
     line-height: 20px;
     color: #4b4b5F;
-    border: solid 3px #f69;
+    border: solid 3px var(--accent-color);
     border-radius: 4px;
     margin-bottom: 20px;    
      min-width: 280px; 
@@ -11469,7 +11506,7 @@ iframe.plx-cover {
     font-weight: 900;
 }
 .plx-pink-input>*:first-child:focus{
-    border: solid 3px #96F;
+    border: solid 3px var(--secondary-color);
 }
 
 .plx-pink-input input{height: 35px}
@@ -11490,9 +11527,9 @@ iframe.plx-cover {
 
 .plx-pink-input select {
   background-image:
-    linear-gradient(45deg, transparent 50%, #f69 50%),
-    linear-gradient(135deg, #f69 50%, transparent 50%),
-    linear-gradient(to right, #f69A, #f69A);
+    linear-gradient(45deg, transparent 50%, var(--accent-color) 50%),
+    linear-gradient(135deg, var(--accent-color) 50%, transparent 50%),
+    linear-gradient(to right, var(--accent-color)A, var(--accent-color)A);
   background-position:
     calc(100% - 20px) calc(.6em + 2px),
     calc(100% - 15px) calc(.6em + 2px),
@@ -11506,9 +11543,9 @@ iframe.plx-cover {
 
 .plx-pink-input select:focus {
   background-image:
-    linear-gradient(45deg, #96f 50%, transparent 50%),
-    linear-gradient(135deg, transparent 50%, #96f 50%),
-    linear-gradient(to right, #96fA, #96fA);
+    linear-gradient(45deg,  var(--secondary-color) 50%, transparent 50%),
+    linear-gradient(135deg, transparent 50%,  var(--secondary-color) 50%),
+    linear-gradient(to right, var(--secondary-color-dark), var(--secondary-color));
   background-position:
     calc(100% - 15px) calc(.6em + 2px),
     calc(100% - 20px) calc(.6em + 2px),
@@ -11534,7 +11571,7 @@ iframe.plx-cover {
 }
 
 .categ{
-    border: solid 2px #f69;
+    border: solid 2px var(--accent-color);
     margin: 6px;
     margin-top:6px !important;
     padding: 15px 5px; 
@@ -11577,8 +11614,8 @@ iframe.plx-cover {
     display: none;
 }
 .a-comand input + span{
-    border: solid 2px #96F;
-     color: #96FA;
+    border: solid 2px var(--secondary-color);
+     color: var(--secondary-color);
        border-radius: 4px;    
     padding: .2em 1em;
     margin: .2em;
@@ -11587,7 +11624,7 @@ iframe.plx-cover {
     cursor: pointer;
 }
 .a-comand input:checked + span {
-      background: #96F;
+      background: var(--secondary-color);
     color: white;
 }
 .a-comand input:not(:checked) + span {

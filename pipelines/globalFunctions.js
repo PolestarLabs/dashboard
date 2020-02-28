@@ -133,6 +133,7 @@ module.exports = {
         json = JSON.parse(fs.readFileSync(__dirname + "/../../../bot/locales/" + (lang||"dev") + "/commands.json"))
     }
     let aliases = require( "../../bot/utils/aliases_legacy.json");
+    json.lang = lang;
     let CMS = this.getComms(json,aliases);
 
     return {
@@ -195,8 +196,8 @@ module.exports = {
             ,aliases:(c.aliases||[])
             //,aliases_ext:(c.aliases||[]).concat(smolAlias.filter(a=>a.comm==c.cmd).map(a=>a.alias) )
             ,perms:c.botPerms
-            ,desc:json.help[c.cmd]
-            ,use:json.usage[c.cmd]
+            ,desc: $t(['commands:help.'+c.cmd,''], {lngs: [json.lang,'en','dev']} )
+            ,use: $t(['commands:usage.'+c.cmd,''], {lngs: [json.lang,'en','dev']} )
             ,filename: morefiles[y]
             ,hidden
           })
@@ -224,8 +225,8 @@ module.exports = {
                 ,aliases: []
                 ,aliases_ext: (smolAlias.filter(a=>a.comm==ccmd).map(a=>a.alias) )
                 ,perms: []
-                ,desc:json.help[ccmd]
-                ,use:json.usage[ccmd]
+                ,desc: $t(['commands:help.'+ccmd,''], {lngs: [json.lang,'en','dev']} )
+                ,use: $t(['commands:usage.'+ccmd,''], {lngs: [json.lang,'en','dev']} )
                 ,filename: morefiles[y]
                 ,hidden
               })
@@ -233,7 +234,6 @@ module.exports = {
         }
 
       }
-    
 
   }
 

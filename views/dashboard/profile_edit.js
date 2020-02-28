@@ -1,5 +1,6 @@
 var TIMER = null;
 
+
 VueSelect.VueSelect.methods.maybeAdjustScroll = () => false;
 //Vue.component('v-select', VueSelect.VueSelect)
 
@@ -78,6 +79,8 @@ const DASH = new Vue({
   el: "#dash",
   data: () => {
     return {
+      RSHP,
+      featuredMarriage: userdata.featuredMarriage ,
       message: "hello",
       favcolor: {
         hex: userdata.modules.favcolor,
@@ -105,7 +108,7 @@ const DASH = new Vue({
         userdata.modules.stickerInventory.includes(x.id)
       ),
       boostersAvailable: STKPAK,
-
+      Swal,
       search: "",
       select:"",
       tagline: userdata.modules.tagline,
@@ -120,7 +123,8 @@ const DASH = new Vue({
         vertical: true,
         transition: 100,
         initialSlide: flairsAvailable.indexOf(userdata.modules.flairTop)
-      }
+      },
+      sortWife: 'ring'
     };
   },
   components: {
@@ -133,7 +137,30 @@ const DASH = new Vue({
     HooperNavigation: window.Hooper.Navigation
   },
 
-  methods: {
+  methods: {    
+    changeFeatMarriage(id){
+      this.featuredMarriage = id;
+      AUTOSAVE("Featured Marriage") 
+    },
+    toggleWifeOrder(by){
+      
+      if(this.sortWife==by) return DASH.RSHP.reverse();
+
+      this.sortWife = by;
+
+      if(by == 'ring'){
+        DASH.RSHP.sort((x,y)=>x.ring<y.ring?1:-1)
+      }
+      if(by == 'date'){        
+          DASH.RSHP.sort((x,y)=>x.since-y.since);
+      }
+      if(by == 'lovp'){
+        DASH.RSHP.sort((x,y)=> (x.lovepoints||0) - (y.lovepoints|| 0))
+      }
+    },
+    since(x){
+      return moment(x).fromNow(true);
+    },
     updateRubines(x) {
       this.rubines = x || userdata.modules.rubines;
     },
@@ -332,6 +359,7 @@ function seeEquips() {
 }
 
 $("document").ready(() => setTimeout(() => DASH.$refs.flairs.update(), 1000));
+
 async function AUTOSAVE(what) {
   if (!TIMER && what == "FLAIR") return (TIMER = setTimeout(() => {}, 0));
   if (TIMER) {
@@ -349,7 +377,8 @@ async function AUTOSAVE(what) {
       bkg: DASH.selectBackground.code,
       medals: DASH.medalsEquipped,
       sticker: DASH.selectSticker.id,
-      frame: DASH.frame
+      frame: DASH.frame,
+      wife: DASH.featuredMarriage || ''
     };
 
     Promise.all([
@@ -405,24 +434,15 @@ async function AUTOSAVE(what) {
         method: "PATCH",
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify({ data: relevantData.sticker })
-      })
-    ]).then(processRes);
+      }),
 
-    async function processRes(res) {
-      $("#postloader").fadeOut("slow");
-      if (res[0].ok)
-        PLX.notification(
-          '<div  class="plx-flex plx-flex-between"> <span style="align-text:left; flex-shrink: 0"> Profile Updated! ✔ </span>',
-          { pos: "bottom-left" }
-        );
-      else
-        PLX.notification(
-          '<div   class="plx-flex plx-flex-between"> <span style="align-text:left; flex-shrink: 0"> Error! [' +
-            what +
-            "] ❌ </span>",
-          { pos: "bottom-left" }
-        );
-    }
+      fetch("/dashboard/profile/wife", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json; charset=utf-8" },
+        body: JSON.stringify({ data: relevantData.wife })
+      })
+    ]).then(res=>processRes(res,what,"Profile Updated!"));
+
     DASH.$refs.flairs.update();
     console.log(
       `%c[${what}]` + " %cSAVED!",
@@ -430,6 +450,6 @@ async function AUTOSAVE(what) {
       "background: none; color: unset"
     );
     console.log(relevantData);
-  }, 1500);
+  }, 1200);
 }
 

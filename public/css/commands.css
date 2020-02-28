@@ -1,7 +1,7 @@
 
 .commandCard{  
-    background:#2A2A3B55;
-    border-bottom:solid 2px #334;
+    background:var(--bg-opaque);
+    border-bottom:solid 2px var(--dark-border);
     margin-bottom:16px;
     padding: 8px 15px 8px 15px;
     border-radius: 4px 4px 0 0; 
@@ -32,8 +32,8 @@
     margin-bottom: 8px;
     border-radius:3px;
     line-height: 1.4;
-    border: solid 1px #85F;
-    color: #85F;
+    border: solid 1px var(--secondary-color);
+    color:  var(--secondary-color);
     font-weight: 500;
     font-family: 'varela round';
     letter-spacing: 2px;
@@ -96,7 +96,7 @@ code code code{
  
 
     height:20px; 
-    border:dashed 1px #FFF3; 
+    border:dashed 1px  var(--text-dim);
     text-align: center;
     margin:3px;
     padding:0 5px;
@@ -107,18 +107,18 @@ code code code{
 .cmCard-foot{
     align-items: baseline;
     margin-left:8px;
-    border-top: solid 1px #5574;
+    border-top: solid 1px var(--dark-border);
 }
 .cmCard-foot span:first-child{
     font-size:12px;        
 }
 
 .plx-button.compactable{
-    border: solid 1px #bf77ff;
+    border: solid 1px var(--secondary-color-light,#bf77ff);
     border-radius: 4px;
     background: transparent;
     padding: 4px 12px;
-    color: #bf77ff;
+    color:  var(--secondary-color-light,#bf77ff);
     font-size: 12px;
     line-height: 1.4;
     font-weight: 800;
@@ -126,8 +126,8 @@ code code code{
 }
 
 .plx-button.compactable.compact{
-    border: solid 1px #bf77ff;
-    background: #bf77ff;
+    border: solid 1px var(--secondary-color-light,#bf77ff);
+    background: var(--secondary-color-light,#bf77ff);
     color: white;
     opacity:1
 }
@@ -148,8 +148,8 @@ code code code{
     text-align:center;
 }
 .compact .commandCard{
-    border:solid 1px #3345;
-    border-left: solid 3px #334A;
+    border:solid 1px var(--dark-border)5;
+    border-left: solid 3px var(--dark-border);
     margin-bottom:8px;
     padding: 10px 15px 8px 13px;
     border-radius: 3px;
@@ -171,7 +171,7 @@ code code code{
 .compact .cmCard-foot{border: none;}
 .compact .cmCard-foot span:first-child{font-size:10px; margin-left:125px}
 .compact .aliases{display:none !important}
-.compact .description{color:#DDFA}
+.compact .description{color:var(--text-main)}
 .compact code{font-size: 11px; padding: 1px 3px; line-height: 1.5; border: none}
 .compact .cmCard-body{
     position: relative;

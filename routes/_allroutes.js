@@ -83,6 +83,11 @@ router.use(['/dashboard','/dash'], (...args)=>{
   return dash(...args);
 });
 
+// DASHBOARD  
+router.use(['/embeds','/embedvisualizer','/embedarchitect','/embed-architect'], (req,res)=>{
+  res.render('tools/embedvis')
+});
+
   
 
 // COMMANDS
@@ -98,6 +103,13 @@ router.use('/webhook', (...args)=>{
   delete require.cache[require.resolve('./webhooks')];
   const whs = require('./webhooks');
   return whs(...args);
+});
+
+// oembed  
+router.use('/oembed', (...args)=>{
+  delete require.cache[require.resolve('./oembed')];
+  const oembed = require('./oembed');
+  return oembed(...args);
 });
 
 // ADMIN INTERFACE  

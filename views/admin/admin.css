@@ -24,11 +24,11 @@
   .vue-tags-input {
       border-radius:  10px;
     letter-spacing: 1px;
-    border: solid 3px #F69; 
+    border: solid 3px var(--accent-color); 
     }
     .vue-tags-input.ti-focus  {
      
-      border: solid 3px #96F;
+      border: solid 3px var(--secondary-color);
     }
     
     .vue-tags-input .ti-autocomplete {
@@ -50,7 +50,7 @@
   }
     .vue-tags-input .ti-tag {
       position: relative;
-      background: #F69;
+      background: var(--accent-color);
       color: #fff;
       padding: 5px 5px 5px 10px;
       border-radius:  100px;

@@ -20,7 +20,7 @@ router.get('/:id', async function (req, res) {
   ] 
   if(legacy.includes(event)){
     var path = require('path');
-   return res.sendFile(path.resolve('legacy/'+event+'.html'))
+   return res.sendFile(path.resolve('dashboard/legacy/'+event+'.html'))
   }
 
   res.render('events/' + req.params.id )

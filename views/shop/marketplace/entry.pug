@@ -1,8 +1,9 @@
 extends ../../layout 
+block head          
+    script window.paceOptions = {document:false,ghostTime: 800, restartOnRequestAfter: 300, }
 block content
     .wrapper
         include ../../navbar
-
         style 
             include market.css
  
@@ -71,7 +72,7 @@ block content
             .plx-background-secondary.plx-padding-remove-left(class="plx-width-2-5@l" style="margin-bottom: -80px; direction: rtl;")
                 br
                 br
-                .plx-container.plx-sticky.plx-active.plx-sticky-fixed.plx-sticky-below(style="height: 100vh;overflow-y: scroll;")
+                .plx-container.plx-sticky.plx-active.plx-sticky-fixed.plx-sticky-below.market-sidebar
                     br
                     .section#more(style="direction:ltr;padding-bottom: 100px;")    
                         h2 More from #{entry.userdata.meta.username}

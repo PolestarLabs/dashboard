@@ -1,0 +1,75 @@
+extends ../layout 
+block prehead
+  -title= "Pollux Embed Architect v1.3"
+  -
+    opengraph = {
+      description: 'Embeds are an advanced configuration for those who want to be extra-fancy with their welcome messages, custom responses, or any other kind of stuff that might benefit from them! They can look a bit scary so we provide some buttons for quick setup.',
+      title: 'Pollux Embed Architect',
+      image: '/build/stickers/rocketlux.png'
+    } 
+block head
+  style
+    include embedvis.css
+ 
+block content
+    .wrapper(style='font-family: Nunito; line-height: 1.4;')
+        include ../navbar
+
+        style 
+
+        - let r = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+        .plx-background-cover(plx-parallax="bgy: 100,400" style='background-image: url(/images/heads/office'+r+'.png)').pictoheader.dark
+            .plx-container
+                br
+                h1.title Pollux Embed Architect
+                h3.subtitle Build Embeds for commands that support them
+                hr.plx-divider-small
+                p(style='font-family: Nunito; line-height: 1.4;')
+                  span  Embeds are an advanced configuration for those who want to be extra-fancy with their welcome messages, custom responses, or any other kind of stuff that might benefit from them! They can look a bit scary so we provide some buttons for quick setup.
+                  br
+                  br
+            
+
+        hr.plx-divider-icon-fill
+        br
+        .plx-container
+          .plx-grid-small.plx-grid-match.plx-flex(plx-grid class="plx-child-width-1-4@m").plx-flex-top
+            div
+              h5.subhead SAY:  
+              p To be used in plain messages, copypaste the result in the channel you want to post them, or just adapt it to fit the "saytochannel" command.
+              
+            div(style='font-family: Nunito; line-height: 1.4;')
+              h5.subhead RESPONSES: 
+              p Use this for custom responses, think of them like "custom commands" but way more simple, they don't require a prefix to trigger. 
+              
+            div(style='font-family: Nunito; line-height: 1.4;')
+              h5.subhead Welcome/Bye Text:  
+              p Will be posted whenever you set this as a welcome/bye text. Paste the output on the appropriate fields at your server's Admin Dashboard. Notice that if you have the Welcome Image enabled, it will override any images you put here.
+            div(style='font-family: Nunito; line-height: 1.4;')
+          
+              h5.subhead Welcome/Bye messages cheatsheet:
+              p
+                code.mistyblue %user%
+                span This will be replaced with a mention to the user 
+                br
+                code.mistyblue %username%
+                span This will be replaced with a the user's display name 
+                br
+                code.mistyblue %server%
+                span This will be replaced with the server name 
+
+          hr(style="opacity:.3")
+        
+
+
+        #root
+        .plx-container
+          hr.plx-divider-icon
+        br
+        br
+          
+
+block scripts
+    script(type='text/javascript', src='/js/embvis.js')
+
+

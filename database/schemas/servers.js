@@ -39,7 +39,7 @@ const ServerSchema = new mongoose.Schema({
             autoRoleStack:  {type:Boolean, default:false},
             DROPS:      {type:Boolean, default:true},
             ANNOUNCE:   {type:Boolean, default:true},
-            PREFIX:     {type:String,  default:"+"},
+            PREFIX:     {type:String,  default:"==="},
             LANGUAGE:   {type:String, default:"en"},
             MODROLE:    String,
             DISABLED:   Array,
@@ -157,7 +157,7 @@ MODEL.findOne({id: svDATA.id}, (err, guild) => {
       let guild = new MODEL({
          id: svDATA.id,
          meta: svDATA,
-         prefix: '+',
+         prefix: '===',
          modules:{LANGUAGE: 'en'},
          meta:null
       });

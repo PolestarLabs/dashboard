@@ -14,7 +14,7 @@
         .numeric-divider
         .plx-dash-numeric
             .item
-                .num= (userdata.counters||{daily:{}}).daily.streak || 0
+                .num= ((userdata.counters||{}).daily||{}).streak || 0
                 .name Streak
 
     .plx-flex.plx-flex-around.plx-width-1-1(class="plx-width-auto@m")

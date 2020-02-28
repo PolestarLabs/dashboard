@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const fx = require('../pipelines/globalFunctions.js');
 
+global.userCache = new Map();
 
 
 
@@ -95,18 +96,30 @@ router.use("/profile",(req,res,nex)=> {
 
 router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
  
-    const [ALLCOSM,ALLITEMS,BCOL] = await Promise.all([
+    const [ALLCOSM,ALLITEMS,BCOL,RSHP] = await Promise.all([
          DB.cosmetics.find({}).lean().exec(),
          DB.items.find({}).lean().exec(),
-         DB.usercols.get(req.user.id)
+         DB.usercols.get(req.user.id),
+         DB.relationships.aggregate([
+            {$match:{users:req.user.id}},
+            {$lookup:{from:"userdb",localField:"users",foreignField:"id",as:"usersData"}},
+            {$project:{"usersData.id":1,initiative:1,ring:1,since:1,type:1,lovepoints:1,"usersData.meta":1,"usersData.featuredMarriage":1,"usersData.modules.tagline":1}}
+        ]).allowDiskUse(!0).exec()
     ]);
+    let discordUserData = await Promise.all(
+        RSHP.map(usrData=>  usrData.usersData.map(usr=> userCache.get(usr.id) || PLX.getRESTUser(usr.id))  ).flat()
+    );
+    discordUserData.forEach(u=> userCache.set(u.id,u) )
 
+    
+    RSHP.forEach(rel=> rel.usersData = rel.usersData.map(usr=> (usr.meta = userCache.get(usr.id)) && usr ) )
 
 
     const STKPAK = ALLITEMS.filter(x=>x.type== "boosterpack")
     const MDINFO = ALLCOSM.filter(x=>x.type== "medal"      )
     const BGINFO = ALLCOSM.filter(x=>x.type== "background" )
     const STKINFO= ALLCOSM.filter(x=>x.type== "sticker"    )
+    const DCKINFO= ALLCOSM.filter(x=>x.type== "skin")
 
     
     res.locals.userinfo.servers = await Promise.all(req.user.guilds.map(async g=>{
@@ -116,7 +129,7 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
         return g;
     })); 
 
-    res.render('dashboard/main',{ALLITEMS,MDINFO,BGINFO,STKINFO,STKPAK,
+    res.render('dashboard/main',{ALLITEMS,MDINFO,BGINFO,STKINFO,STKPAK,DCKINFO,RSHP,
         boorucollection: BCOL?BCOL.collections.boorusave:[],
         endpoint: req.params.endpoint 
     })
@@ -124,6 +137,33 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
 })
  
 //PROFILE
+
+router.patch("/misc/:endpoint", async (req,res)=>{
+    
+    const UID = req.user.id;
+    const _endpt = req.params.endpoint;
+    const payload = req.body
+    const USERDATA = await DB.users.get(UID);
+
+
+    
+    if (_endpt == "skin"){
+        if (payload.skinId!='default' && !USERDATA.modules.skinInventory.includes(payload.skinFor+"_"+payload.skinId)) return res.status(403).json("INVALID SKIN");
+        return DB.users.set(UID, {$set: {["modules.skins."+payload.skinFor] : payload.skinId } } ).then(()=> res.sendStatus(200) ).catch(e=> res.status(500).send(e) );
+    }
+    
+    if (_endpt == "attr"){
+        return DB.users.set(UID, {$set: {"switches.variables" : payload.attrSet } } ).then(()=> res.sendStatus(200) ).catch(e=> res.status(500).send(e) );
+    }
+
+    if (_endpt == "notifs"){
+        console.log({payload},typeof payload)
+        return DB.users.set(UID, {$set: {"switches.notifications" : payload } } ).then((x)=>  res.sendStatus(200)  ).catch(e=> res.status(500).send(e) );
+    }
+   
+
+})
+
 
 router.patch("/profile/:endpoint", async (req,res)=>{
     
@@ -175,7 +215,14 @@ router.patch("/profile/:endpoint", async (req,res)=>{
         return DB.users.set(UID, {$set: {"modules.favcolor" : payload} } ).then(()=> res.sendStatus(200) );
     }
 
+    if (_endpt == "wife"){
+        return DB.users.set(UID, {$set: {"featuredMarriage" : payload} } ).then(()=> res.sendStatus(200) );
+    }
+
 })
+
+
+
 router.put('/profile/medals', async (req,res)=>{
     console.log(req.body,typeof req.body);
     try{

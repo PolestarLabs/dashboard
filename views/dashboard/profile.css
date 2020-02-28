@@ -2,7 +2,7 @@ section:focus{
   border: none
 }
 .sticker-sel-span{
-  color: aliceblue;
+  color: var(--text-bold);
   opacity: .6;
 }
 .colorpicker {
@@ -14,7 +14,8 @@ section:focus{
   }
   
   .backblur {
-    background-color: rgba(0, 0, 20, 0.8);
+    background-color: var(--bg-darkest);
+    opacity: .9;
     backdrop-filter: blur(6px);
     width: 100%;
     height: 100%;
@@ -92,9 +93,9 @@ background-repeat: no-repeat;
     padding: 0 18px 4px 18px;
   }
   .plx-tab-dash .plx-active a {
-    color: #F59;
+    color: var(--accent-color);
     font-weight: 600;
-    border-bottom: solid 2px #F59;
+    border-bottom: solid 2px var(--accent-color);
   }
   
   .numeric-divider {
@@ -133,7 +134,8 @@ background-repeat: no-repeat;
   .numeric-large .num {
     line-height: 6.5rem;
     font-size: 8rem;
-    font-family: "Panton Black";
+    font-family: "Panton Black","Panton";
+    font-weight:900;
   }
   .numeric-large .name {
     letter-spacing: 5px;
@@ -190,7 +192,7 @@ background-repeat: no-repeat;
   .main-profile .info .tagline {
     font-size: 16pt;
     color: #88A;
-    background: #121223;
+    background: var(--bg-darkest);
     border-radius: 10px;
     padding: 10px;
     width: 100%;
@@ -202,7 +204,7 @@ background-repeat: no-repeat;
     font-family: inherit;
     color: #AAD;
     margin-top: 8px;
-    background: #121223;
+    background: var(--bg-darkest);
     border-radius: 10px;
     padding: 10px;
     height: 4.5rem;
@@ -290,6 +292,8 @@ background-repeat: no-repeat;
     filter: brightness(.6);
     transition: filter 400ms ease
   }
+  
+
 .dash-pill .sticker-pack:hover { filter: brightness(1);}
 .stick-sel-opt{align-items: center; display: flex;
 
@@ -361,38 +365,7 @@ background-repeat: no-repeat;
       padding: 6px 10px 8px;
     }
   }
-  .plx-rarity-icon {
-    z-index: 2;
-    width: 24px;
-    height: 24px;
-    display: inline-block;
-    transform: translateY(8px);
-  }
-  .plx-rarity-icon.UR {
-    background-image: url("https://beta.pollux.gg/images/tiers/UR.png");
-    background-size: contain;
-  }
-  .plx-rarity-icon.SR {
-    background-image: url("https://beta.pollux.gg/images/tiers/SR.png");
-    background-size: contain;
-  }
-  .plx-rarity-icon.R {
-    background-image: url("https://beta.pollux.gg/images/tiers/R.png");
-    background-size: contain;
-  }
-  .plx-rarity-icon.U {
-    background-image: url("https://beta.pollux.gg/images/tiers/U.png");
-    background-size: contain;
-  }
-  .plx-rarity-icon.C {
-    background-image: url("https://beta.pollux.gg/images/tiers/C.png");
-    background-size: contain;
-  }
-  .plx-rarity-icon.XR {
-    background-image: url("https://beta.pollux.gg/images/tiers/XR.png");
-    background-size: contain;
-  }
-  
+ 
   .v-select {
     position: relative;
     font-family: inherit;
@@ -520,8 +493,8 @@ background-repeat: no-repeat;
   }
   
   .vs__dropdown-option--highlight {
-    background: #f58;
-    color: #fff;
+    background: var(--accent-color);
+    color: var(--color-contrast);
   }
   
   .vs__dropdown-option--disabled {
@@ -646,7 +619,7 @@ pointer-events: none;
     position: relative;
     display: flex;
     align-items: center;
-    background: #3b3b4b;
+    background: var(--bg-dark,#3b3b4b);
     border-radius: 100px;
   }
   
@@ -682,7 +655,7 @@ pointer-events: none;
     flex: 0 0 auto;
     width: 80px;
     height: 80px;
-    border: 4px solid #3b3b4b;
+    border: 4px solid var(--bg-dark,#3b3b4b);
     border-radius: 100px;
     cursor: pointer;
   }
@@ -843,7 +816,7 @@ pointer-events: none;
     display: flex;
     flex-wrap: wrap;
     overflow-y: scroll;
-    background: #2b2b3BAA;
+    background: var(--bg-darker);
     border-radius: 8px; 
     margin: 0px 20px;
     padding: 10px;
@@ -881,7 +854,7 @@ pointer-events: none;
   }
   
   .slot-hover {
-    background:#f695;
+    background:var(--accent-color);
   }
   
   .drag {
@@ -974,3 +947,154 @@ pointer-events: none;
 .flair-container :focus{
     outline: 0 !important;
   }
+
+  .wife-block .avatar{
+    -webkit-mask: url(data:image/svg+xml;base64,CjxzdmcgdmVyc2lvbj0nMS4xJyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMjkgMTI5JyB4bWxuczp4bGluaz0naHR0cDovL3d3dy53My5vcmcvMTk5OTlBQS94bGluaycgZW5hYmxlLWJhY2tncm91bmQ9J25ldyAwIDAgMTI5IDEyOSc+PGc+PHBhdGggZmlsbD0nIzhiOGI5RicgZD0nbTEyMS42LDQwLjFjLTMuMy0xNi42LTE1LjEtMjcuMy0zMC4zLTI3LjMtOC41LDAtMTcuNywzLjUtMjYuNywxMC4xLTkuMS02LjgtMTguMy0xMC4zLTI2LjktMTAuMy0xNS4yLDAtMjcuMSwxMC44LTMwLjMsMjcuNi00LjgsMjQuOSAxMC42LDU4IDU1LjcsNzYgMC41LDAuMiAxLDAuMyAxLjUsMC4zIDAuNSwwIDEtMC4xIDEuNS0wLjMgNDUtMTguNCA2MC4zLTUxLjQgNTUuNS03Ni4xem0tNTcsJy8+PC9nPjwvc3ZnPgo=);
+  }
+.wife-block .name{
+   font-size: 14pt;
+  font-family: Proxima Soft ;
+  font-weight: 600;
+  margin: 0 10px;
+
+  
+}
+
+
+.wife-block .username{
+  margin-right:  50px;
+  display:inline;
+   color: var(--text-extra-bold);
+}
+.wife-block .discrimin{
+  font-size: 8pt;
+  opacity: .5
+}
+    
+
+.wife-block{
+  justify-content: space-between;
+  display: flex;
+  align-items: center;
+  padding: 2px 14px;
+  border-radius: 8px;
+  margin: 4px 0;
+  transition: background 1s, transform .5s cubic-bezier(.68,-0.55,.27,1.55);
+
+
+}
+
+.wife-block .ring{
+  transform: scale(.8);
+      height: 64px;
+  width: 64px;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  border-radius: 100%;
+  margin-left: 10px;
+}
+
+
+.is-featured .ring{
+  background: white;
+}
+
+.wife-block .ring img{
+  height: 80%;
+}
+
+
+
+
+.wife-block div{
+  flex-basis: auto;
+   flex-grow: 0;
+   flex-shrink: 0;
+}
+
+
+.wife-block .since{
+  margin-left: auto;
+    font-size: 10pt;
+    color: var(--text-extra-bold);
+  opacity: .6;
+  }
+  
+
+
+
+.feats{
+  margin: 0 10px;
+  color: var(--plx-yellow)
+}
+.init{
+    color: var(--plx-danger)
+}
+.feats,.init{
+  font-size: small;
+}
+.is-featured .init *{
+  color: white;
+  opacity: .8 !important;;
+}
+.is-featured{transform: scale(1.2)}
+.is-featured{
+  background: var(--plx-danger);
+   border-radius: 8px 4px 4px 8px;
+
+}
+
+
+.wife-block:hover{
+  background: var(--bg-opaque);
+ cursor: pointer;
+ 
+}
+.wife-actions{
+  display: flex;
+  justify-content: space-between;
+  background: var(--bg-main);
+  padding: 12px;
+  border-radius: 4px;
+  box-shadow: 0 0 15px #0015;
+  margin-top: -25px; margin-left:10px;
+ 
+}
+.wife-actions .plx-button{
+  padding: 2px 24px;
+  margin: 0 5px;
+  line-height: 1.5;
+}
+
+.wife-block.empty{
+  border: dashed  2px var(--text-faint);
+  opacity: .2;
+  color: var(--text-extra-bold);
+  height: 50px;
+  justify-content: center;
+  margin: 24px;
+}
+.wife-block.empty span{
+  opacity: 0;
+  width: 0;  
+  white-space: nowrap;
+  overflow: hidden;
+  transition: width .3s ease-out, opacity .3s ease;
+  transition-delay: .1s, .0s;
+}
+.wife-block.empty:hover{
+  opacity: .5;
+}
+.wife-block.empty:hover span{
+width: 160px;
+  opacity: 1;
+     transition-delay: 0s, .3s;  
+}
+.stick-sel-opt .author{
+  opacity: .75;
+  font-size: small;
+  font-style: italic;
+  display: block;
+  margin: 0px 10px 10px 50px   
+}

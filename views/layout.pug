@@ -6,10 +6,13 @@ html(class="no-js" lang=locale||"en")
         meta(name="theme-color" content="#f48")
         
         meta(http-equiv="x-ua-compatible" content="ie=edge")
-        title= (title?title+" - ":"") + "Pollux: A Fancy Maid for Fancy Communities"
         meta(name='description' content='Pollux is a Virtual Maid designed to be your personal community entertainer as a Discord bot.')
         meta(name="viewport" content="width=device-width, initial-scale=1")
+
+        block prehead
+        title= (title?title+" - ":"") + "Pollux: A Fancy Maid for Fancy Communities"
         include opengraph
+
         link(rel="manifest" href="/js/manifest.json")
 
         
@@ -61,9 +64,11 @@ html(class="no-js" lang=locale||"en")
             include structures/pace_home
             script(src="/js/preload.js")
 
-            
+
         block head
     body
+        style#
+        
         if (true &&opengraph&& opengraph.sitename  !== "POLLUX MARKETPLACE") || index
         #preloader(style="  position: fixed;  top: 0;  left: 0;  right: 0;  bottom: 0;  background: #05050F;  z-index: 2800;  height: 100%;  width: 100%;")
                 #loader 

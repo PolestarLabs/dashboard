@@ -1,8 +1,7 @@
 
 //script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js')
 
-script(  src="https://unpkg.com/animated-number-vue@1.0.0/dist/AnimatedNumber.umd.min.js")
-script(  src='https://unpkg.com/vue-select@3.0.2')
+
 script(  src='https://cdnjs.cloudflare.com/ajax/libs/vue-color/2.2.3/vue-color.js')
 script(  src="https://unpkg.com/hooper@0.3.4/dist/hooper.min.js")
 script(  src='https://unpkg.com/vue-select@3.0.2')
@@ -22,7 +21,7 @@ div#dash(plx-scrollspy="cls:plx-animation-slide-top-small; delay: 100 ")
     .main-profile.plx-flex(style="align-items: center; max-width:1250px; margin:auto " plx-scrollspy="cls:plx-animation-slide-top-small; delay: 600 ").plx-margin
       .avicontainer     
         .avatar
-          img(src=userdata.meta.avatar width='512px' ).hexagon
+          img(src=userdata.meta.avatar||userinfo.pic width='512px' ).hexagon
         #frame( plx-toggle="target: #frame img; cls: disengaged" )
           if(userdata.switches && userdata.donator)
             img(src=`/build/profile/frames/${userdata.donator}.png` class=userdata.switches.profileFrame?'':'disengaged' @click="frame=!frame; AUTOSAVE('FRAME')")
@@ -222,12 +221,70 @@ div#dash(plx-scrollspy="cls:plx-animation-slide-top-small; delay: 100 ")
                   each rar in ['C','U','R','SR','UR','XR']
                     a(plx-filter-control="filter:[data-rarity='"+rar+"']; group:rarity" class=rar style="height: 32px; width: 32px").plx-rarity-icon.plx-hover-glow
                 br
+        br
+        .plx-container.plx-flex.plx-flex-wrap
+          .plx-width-1-1
+            .dash-pill#wife-bar(v-bind:style="{'border-color':favcolor.hex}" style="height:auto")
+              //.background-slot(style="background-image:url('/backdrops/"+userdata.modules.bgID+".png');"   )
+              .backblur 
+              .plx-flex
+                .wifevatar
+                .wifename
+                .wifesince
+              .plx-flex-column     
+                ul.menuzinho.plx-subnav.plx-subnav-pill
+                  span SORT
+                  .li(v-bind:class="{'plx-active': sortWife=='date'}"): a(@click="toggleWifeOrder('date')") DATE
+                  .li(v-bind:class="{'plx-active': sortWife=='ring'}"): a(@click="toggleWifeOrder('ring')") RING
+                  .li(v-bind:class="{'plx-active': sortWife=='lovp'}"): a(@click="toggleWifeOrder('lovp')") LOVEPOINTS
+
+
+                div(v-for="rel in RSHP")
+                  .wife-block.plx-flex( v-bind:class="rel._id == featuredMarriage?'is-featured':''" v-if='rel.wife')
+                      
+                    .avatar: img(:src="`https://cdn.discordapp.com/avatars/${rel.wife.id}/${rel.wife.meta.avatar}.${rel.wife.meta.avatar.startsWith('a_')?'gif':'png'}?size=64`")
+                    .detail
+                      .feats
+                        div(v-if="rel._id == rel.wife.featuredMarriage" plx-tooltip="This person features you in their profile! <3")  
+                          i.fas.fa-star 
+                        div(v-else  plx-tooltip="This person does not display you in their profile. &lt;/3")  
+                          i.far.fa-star(style="opacity:.6")
+                      .init
+                        div(v-if=`'${userdata.id}' == rel.initiative` plx-tooltip="You proposed to this person!") 
+                          i.far.fa-heart(style="opacity:.6")
+                        div(v-else   plx-tooltip="This person proposed to you!")
+                          i.fas.fa-heart
+                    .username
+                      span.name {{rel.wife.meta.username}}
+                      span.discrimin # {{rel.wife.meta.discriminator}} 
+                    .since.mome {{since(rel.since)}}
+                    .ring: img(:src="`/build/items/ring_${rel.ring}.png`")
+                
+                  div(plx-drop='mode:click; animation:plx-animation-slide-top-small' style="width:auto"): .wife-actions(:id="rel._id")
+                    .plx-button.plx-button-secondary(@click="changeFeatMarriage(rel._id)", :data-for="rel._id") 
+                        i.fas.fa-star
+                        | FEATURE
+                    .plx-button.plx-button-warn(:data-for="rel._id" @click="Swal.fire('','To upgrade your ring, craft a higher-quality ring and re-propose to your current spouse.','info' )") 
+                        i.fas.fa-ring
+                        | UPGRADE
+                    .plx-button.plx-button-danger(:data-for="rel._id" @click="Swal.fire('','To divorce someone, use <code>p!divorce [USER ID]</code>.','info' )") 
+                        i.fas.fa-heart-broken
+                        | DIVORCE
+
+                .wife-block.empty
+                    i.fas.fa-unlock
+                    span &#x2000 UNLOCK SLOTS
+                
+        
 
 hr.plx-divider-icon
-
-script var STKPAK  = !{JSON.stringify(STKPAK || STKPAK )}
-script var STKINFO = !{JSON.stringify(STKINFO || STKINFO.filter(x=> userdata.modules.bgInventory.includes(x.code)))}
+               
+script var RSHP = !{JSON.stringify(RSHP.map(rel=> {rel.wife = rel.usersData.find(w=>w.id!=userdata.id); delete rel.usersData; return rel} )||[])}
+script var STKPAK  = !{JSON.stringify(STKPAK)}
+script var STKINFO = !{JSON.stringify(STKINFO.filter(x=> userdata.modules.stickerInventory.includes(x.id)))}
+script var STKINFO3 = !{JSON.stringify(STKINFO)}
 script var BGINFO  = !{JSON.stringify(BGINFO.filter(x=> userdata.modules.bgInventory.includes(x.code)))}
 script var MDINFO  = !{JSON.stringify(MDINFO.filter(x=> userdata.modules.medalInventory.includes(x.icon)))}
+
 script(defer)
     include profile_edit.js

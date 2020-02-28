@@ -50,11 +50,17 @@ zircon: "<:zircon:673593105525637140>"
   let user = payload.included[0].attributes
   let tier = payload.included[1].attributes
   let rel = payload.data.relationships
+  let disRoles;
+  try {
+    disRoles = tier.discord_role_ids.map(x=>`<@&${x}>`).join(' ')
+  } catch (err) {
+    disRoles = " "
+  }
   embed.description = `
     **${user.full_name}**
     ${ user.discodiscord_id ? `<@${user.discodiscord_id}> \`${user.discodiscord_id}\`` : "`NO DISCORD ID`" } 
     ${TIERS[tier.title.toLowerCase()]} [${tier.title}]  $${(Number(payload.data.attributes.amount_cents)/100).toFixed(2)}
-    ${tier.discord_role_ids.map(x=>`<@&${x}>`).join(' ')}
+    ${disRoles}
     `
   embed.thumbnail = {
     url: user.image_url

@@ -42,12 +42,12 @@ global.compulsoryAuth = async function checkAuthTwo(req, res, next) {
 
 
 
-const express = require('express');
-const passport = require("passport");
-const passport_refresh = require('passport-oauth2-refresh');
+const Express = require('express');
+const Passport = require("passport");
+const PassportRefresh = require('passport-oauth2-refresh');
 const CookieStrategy = require("passport-cookie");
 const {Strategy} = require("passport-discord");
-const session = require("express-session");
+const exSession = require("express-session");
 const Eris = require ('eris')
 
 const fs = require("fs");
@@ -59,12 +59,12 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const xmlparser = require('express-xml-bodyparser');
 const sassMiddleware = require('node-sass-middleware');
-const i18n = require("./locales.js");
+
 
 const formidable = require('formidable');
 
 
-const app = express();
+const app = Express();
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -87,7 +87,7 @@ global.DB  = require('./database');
 
 //-- SESSION STORAGE
 const mongoose = require('mongoose');
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo')(exSession);
 
 mongoose.connect('mongodb://polaris:geminisbeta@31.220.55.84:27051/polaris', { 
   useNewUrlParser: true,
@@ -107,14 +107,14 @@ Object.assign(global,require("../bot/core/utilities/Gearbox").Global)
 
 //-- PASSPORT  
 const scopes = ['identify', 'guilds','connections'];
-passport.serializeUser((user, done) => {
+Passport.serializeUser((user, done) => {
   done(null, user);
 }); 
-passport.deserializeUser((obj, done) => {
+Passport.deserializeUser((obj, done) => {
   done(null, obj);
 });
 
-passport.use(new CookieStrategy(
+Passport.use(new CookieStrategy(
   function (token, done) {
     User.findByToken({
       token: token
@@ -133,13 +133,13 @@ let discordStrategy = new Strategy({
   scope: scopes,
   passReqToCallback: true
 }, function (req, accessToken, refreshToken, profile, done) {
+    profile.refreshToken = refreshToken;
     process.nextTick(function () {
     return done(null, profile);
   });
 });
-passport.use(discordStrategy);
-passport_refresh.use(discordStrategy);
-
+Passport.use(discordStrategy);
+PassportRefresh.use(discordStrategy);
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 app.use(cookieParser());
@@ -165,58 +165,55 @@ app.use(sassMiddleware({
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(express.static(path.join(__dirname, 'public')));
-app.use(express.static(path.join(__dirname, '../assets/imgres')));
-app.use(express.static(path.join(__dirname, '../assets/cosmetics')));
-app.use("/images", express.static(path.join(__dirname, 'public/images')));
-app.use("/images", express.static(path.join(__dirname, '../assets/website')));
-app.use("/flairs",    express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
-app.use("/medals",    express.static(path.join(__dirname, '../assets/cosmetics/medals')));
-app.use("/stickers",  express.static(path.join(__dirname, '../assets/cosmetics/stickers')));
-app.use("/boosters",  express.static(path.join(__dirname, '../assets/build/boosters')));
-app.use("/backdrops", express.static(path.join(__dirname, '../assets/cosmetics/backdrops')));
-app.use("/build",     express.static(path.join(__dirname, '../assets/build')));
+app.use(Express.static(path.join(__dirname, 'public')));
+app.use(Express.static(path.join(__dirname, '../assets/imgres')));
+app.use(Express.static(path.join(__dirname, '../assets/cosmetics')));
+app.use("/images", Express.static(path.join(__dirname, 'public/images')));
+app.use("/images", Express.static(path.join(__dirname, '../assets/website')));
+app.use("/flairs",    Express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
+app.use("/medals",    Express.static(path.join(__dirname, '../assets/cosmetics/medals')));
+app.use("/stickers",  Express.static(path.join(__dirname, '../assets/cosmetics/stickers')));
+app.use("/boosters",  Express.static(path.join(__dirname, '../assets/build/boosters')));
+app.use("/backdrops", Express.static(path.join(__dirname, '../assets/cosmetics/backdrops')));
+app.use("/build",     Express.static(path.join(__dirname, '../assets/build')));
 //backwards compat
-app.use("/build/backdrops", express.static(path.join(__dirname, '../assets/cosmetics/backdrops')));
-app.use("/build/stickers",  express.static(path.join(__dirname, '../assets/cosmetics/stickers')));
-app.use("/build/flairs/top",    express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
+app.use("/build/backdrops", Express.static(path.join(__dirname, '../assets/cosmetics/backdrops')));
+app.use("/build/stickers",  Express.static(path.join(__dirname, '../assets/cosmetics/stickers')));
+app.use("/build/flairs/top",    Express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
 
 
-app.use(session({
+app.use(exSession({
   secret: "giraigumo",
   maxAge: 13600000,
-  //store: new LevelStore(),
   store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  cookie: { maxAge: 13600000 },
+  cookie: { maxAge: 3600000 /*hour*/ * 48 },
   rolling: true,
   resave: true,
   saveUninitialized: true
 }));
 
-
-app.use(passport.initialize());
-//app.use(passport_refresh.requestNewAccessToken("discord","a"));
-app.use(passport.session());
+app.use(Passport.initialize());
+app.use(Passport.session());
 
 //======================================================================
 //              DASHBOARD
 //======================================================================
 
-//passport_refresh.requestNewAccessToken('discord',)
 
-app.get('/auth', passport.authenticate('discord', {scope: scopes}), function (req, res) {
-
+app.get('/auth', Passport.authenticate('discord', {scope: scopes}), function (req, res) {
   //console.log(req,res)
-  //passport_refresh.requestNewAccessToken('discord',)
-
+  
 });
 
+
+
 app.get('/callback',
-  passport.authenticate('discord', {
+  Passport.authenticate('discord', {
     permissions: 66321471,
     failureRedirect: '/test'
   }),
   (...args) => simplepages().callback(...args));
+
 
 app.get('/logout', function (req, res) {
   req.logout();
@@ -256,8 +253,11 @@ app.use(logger(function(tokens,req,res){
     "\n\n"
   ].join(' ')
 }));
-/* --------------- */
 
+
+
+/* --------------- */
+const i18n = require("./locales.js");
 app.use(i18n({
   translationsPath: (path.join(__dirname, '../bot/locales')),
   defaultLang: "en",
@@ -268,10 +268,58 @@ app.use(i18n({
 }));
 
 
+const i18next = require('i18next');
+const i18n_backend = require('i18next-node-fs-backend');
+const backendOptions = {
+    loadPath: '/home/pollux/polaris/bot/locales/{{lng}}/{{ns}}.json',
+    jsonIndent: 2
+};
+ 
+fs.readdir('/home/pollux/polaris/bot/locales/' , (err,list) => {
+  //console.log(list)
+    i18next.use(i18n_backend).init({
+        backend: backendOptions,
+        lng: 'dev',
+        fallbackLng: ["en", "dev"],
+        fallbackToDefaultNS: true,
+        fallbackOnNull: true,
+        returnEmptyString: false,
+        preload: list,
+        load: 'currentOnly',
+        ns: ['bot_strings', 'events', 'commands', 'website', 'items', 'translation'],
+        defaultNS: 'bot_strings',
+        fallbackNS: 'translation',
+        interpolation: {
+            escapeValue: false
+        }
+    }, (err, t) => {
+        if (err) {
+            //console.warn("• ".yellow, "Failed to Load Some Translations".yellow, "\n"+err.map(e=>e.path.gray).join('\n'))
+        }
+        //console.log("• ".green, "Translation Engine Loaded")
+
+        global.i18nx = i18next;
+        global.$t = t     
+    });
+});
+
+
+
+const AcquireDiscordPayload = (TOKEN,req) => {
+  TOKEN = (TOKEN||{}).access_token||TOKEN
+  if(!TOKEN) return;
+  discordStrategy.userProfile(TOKEN, FUD => ( (FUD||{}).id && FUD.provider == 'discord') ? req.user = freshUserData : null )
+}
+
 app.use(async function(req,res,next){
 
-  
   if(req.isAuthenticated()){
+ 
+    console.log(req.session)
+
+    AcquireDiscordPayload(req.user.accessToken,req)
+    PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
+
     let preUserData = DB.users.get({id:req.user.id});
     let preDataProcess = result=>{
       let USR = req.user;
@@ -286,7 +334,12 @@ app.use(async function(req,res,next){
       }
     }
 
-    preUserData.then(preDataProcess);
+    preUserData.then(async data=>{
+ 
+      let dscUser = await PLX.getRESTUser(req.user.id);
+      if(!data) data = await DB.users.new(dscUser); 
+      preDataProcess(data)
+    });
 
     await preUserData;    
     next();
@@ -303,6 +356,7 @@ const admins = { polaris: { password: 'geminis472899' } }
  
 const auth = async function(req, res, next) {
   if(req.url.includes('branding')) return next();
+  if(req.url.includes('embedarchitect')) return next();
   if(req.url.includes('botbridge')) return next();
   if(req.url.includes('webhook'))   return next();
   if(req.url.includes('.png'))      return next();
@@ -364,7 +418,7 @@ global.isAdmin = function isAdmin(req,svID){
           if(memberInfo.roles.includes(serverData.modules.MODROLE)) return resolve(true);
           resolve(roleInfo.some(role=> req.user.id === serverInfo.ownerID || memberInfo.roles.includes(role.id) && (role.permissions.has('manageGuild')||role.permissions.has('administrator')) ));
       }catch(err){
-          console.error(err);
+          
           resolve (false);
       }
   })  
@@ -396,7 +450,7 @@ app.post('/sendform', async function (req, res) {
 app.get('/test', (...args)=> simplepages().test(...args));
  
 app.get('/callback', 
-          passport.authenticate('discord', {
+          Passport.authenticate('discord', {
             permissions: 66321471,
             failureRedirect: '/'
           }),

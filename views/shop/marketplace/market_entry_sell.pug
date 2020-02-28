@@ -19,7 +19,7 @@ if entry.userdata.meta
         a.piece-one(href=`http://beta.pollux.gg/shop/marketplace/entry/${entry.id}`) 
             .picture: div(plx-img style="background-image:url("+item_pic+")" )
             .name
-                .feat-text= item.name
+                .feat-text: span= item.name
                 .type= item.type
         .piece-two
             .price(plx-tooltip=entry.price)

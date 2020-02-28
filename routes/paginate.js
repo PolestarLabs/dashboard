@@ -237,5 +237,3 @@ if(C>L)C=L;
 
     res.render('structures/pagination',{pagination:payload})
 }
-
-
