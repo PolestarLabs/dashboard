@@ -65,7 +65,7 @@ router.get("/discoin/exchange.png", async (req,res)=>{
         ctx.drawImage(tag(ctx,Transaction.to.name,' 600 14pt "Merchant Copy Doublesize"','#2b2b3b'),22+38,198)
         ctx.drawImage(tag(ctx,Transaction.to.id,' 600 14pt "Merchant Copy Doublesize"','#2b2b3b'),427,193)
         
-        ctx.drawImage(tag(ctx,true_amount+" "+Transaction.from.id,' 600 14pt "Merchant Copy Doublesize"','#2b2b3b'),22,246)
+        ctx.drawImage(tag(ctx,(true_amount.toFixed(3))+" "+Transaction.from.id,' 600 14pt "Merchant Copy Doublesize"','#2b2b3b'),22,246)
         
         if(isRBN){
             ctx.drawImage(tag(ctx,Math.floor(Number(Transaction.payout))+" "+Transaction.to.id,' 600 14pt "Merchant Copy Doublesize"','#2b2b3b'),22,296)
@@ -109,6 +109,10 @@ router.get("/discoin/exchange.png", async (req,res)=>{
     
     
     router.get("/boosterpack/:series/:A/:B/booster.png", async (req,res)=>{
+        res.writeHead(200, {
+            'Content-Type': 'image/png',
+           // 'Content-Length': result.length
+        });
         
     const canvas = Canvas.createCanvas(400,250);
     const ctx = canvas.getContext('2d')
@@ -192,13 +196,10 @@ router.get("/discoin/exchange.png", async (req,res)=>{
     aNew ? ctx.drawImage(isNew,400-60,0,60,60) : null;
     bNew ? ctx.drawImage(isNew,0,250-60,60,60) : null;
 
-    let result = await canvas.toBuffer();
-    res.writeHead(200, {
-        'Content-Type': 'image/png',
-        'Content-Length': result.length
-    });
-    res.end(result);
-
+    //let result = await canvas.toBuffer();
+   
+    //res.end(result);
+    canvas.pngStream().pipe(res);
 });
 
 
@@ -234,15 +235,46 @@ let lnOptions = {
     ctx.drawImage(tag2.item ,254+tag.width+5,55+8);
     ctx.drawImage(tag3.item ,280 ,100);
 
-    let result = await canvas.toBuffer();
+    let result = canvas.toBuffer();
+
     res.writeHead(200, {
         'Content-Type': 'image/png',
         'Content-Length': result.length
     });
-    res.end(result);
+    canvas.pngStream().pipe(res);
+
 
 
 })
+
+
+
+router.get("/repipe/:url" , async (req,res) => {
+
+  
+    let Picto = require('../../bot/core/utilities/Picto')
+ 
+    let base = await Picto.getCanvas( decodeURI(req.params.url) );
+
+    let newWidth = 300
+    let newHeight = newWidth / base.width * base.height;
+    
+    const canvas = Picto.new(newWidth,newHeight);
+    const ctx = canvas.getContext('2d')
+ 
+    ctx.drawImage(base,0,0,newWidth,newHeight);    
+ 
+    res.writeHead(200, {
+        'Content-Type': 'image/jpg',
+        'Cache-Control': 'public, max-age=31557600'
+    });
+    canvas.createJPEGStream().pipe(res);
+
+
+
+})
+
+
 
 
 router.get(["/booster/:pack/:B/:A/:Anew/:Bnew/output.gif", ], async (req, res) => {

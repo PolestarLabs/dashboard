@@ -4,16 +4,25 @@ const express = require('express');
 const router = express.Router();
 const fx = require('../pipelines/globalFunctions.js');
 
-global.userCache = new Map();
-
-
-
 
 router.get('/bsave', checkAuth, async (req,res)=>{
-    console.log('test')
+
     const bcol = await DB.usercols.get(req.user.id);
     
     res.render('private/boorusave',{boorucollection: bcol?bcol.collections.boorusave:[]})
+})
+
+router.get('/imgbookmarks/:id', async (req,res)=>{
+ 
+    const [gallery,user] = await Promise.all([
+        DB.usercols.get(req.params.id),
+        DB.users.get(req.params.id,{switches:1})
+    ]);
+    if (user.switches?.booruPublic === false){
+        res.json( {loading: true, status: "PRIVATE"} );
+    }else{
+        res.json( gallery?.collections.boorusave||[])
+    }
 })
 
 router.post('/imgbookmarks/expand', async (req,res)=>{
@@ -32,8 +41,6 @@ router.post('/imgbookmarks/expand', async (req,res)=>{
         res.sendStatus(503)
     }
 })
-
- 
 
 router.post('/imgbookmarks/shrink', async (req,res)=>{
     try{
@@ -84,15 +91,6 @@ router.delete('/imgbookmarks/:id', async (req,res)=>{
   
 
 })
-
-/*
-router.use("/profile",(req,res,nex)=> { 
-    if( !req.user ) return res.status(401).send("User not Authenticated");
-    else nex()
-});
-*/
-
- 
 
 router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
  
@@ -220,7 +218,6 @@ router.patch("/profile/:endpoint", async (req,res)=>{
     }
 
 })
-
 
 
 router.put('/profile/medals', async (req,res)=>{

@@ -1890,6 +1890,11 @@ input::-moz-focus-inner {
  * ------------------------------------------------------------------- */
 html.cl-preload .home-content__main {
   opacity: 0;
+
+}
+html.cl-preload   {
+ 
+  overflow: hidden !important;
 }
 
 html.cl-loaded .home-content__main {

@@ -5,7 +5,9 @@ html {
     font-weight: 400; 
     line-height: 1.5;
     -webkit-text-size-adjust: 100%;
-    background: var(--bg-main);
+    background-color: var(--bg-main);
+    background-image: var(--bg-main);
+    background-attachment: fixed;
     color: var(--text-main);
 } 
   
@@ -110,8 +112,8 @@ em {
 }
 
 ins {
-    background: var(--bg-inverse);
-    color: var(--mid-main);
+    //background: var(--bg-inverse);
+    //color: var(--mid-main);
     text-decoration: none
 }
 
@@ -11630,3 +11632,10 @@ iframe.plx-cover {
 .a-comand input:not(:checked) + span {
    text-decoration: line-through;
 }
+
+.plx-accordion-title i{color: #f58} .plx-accordion-title{color: var(--text-extra-bold)}
+                .plx-accordion>li{
+                        border: solid 1px #AAA3;
+                        border-radius: 3px;
+                        padding: 12px 24px;
+                    }

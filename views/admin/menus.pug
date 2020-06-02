@@ -293,31 +293,37 @@ br
     .rearoles.plx-flex.plx-flex-wrap
         each rea in reactRoles
             - let channel = channelInfo.find(ch=>ch.id==rea.channel)
-            .rearolecontainer.plx-flex-none(id=rea.message)
-                button.del-rea-rol(plx-close data-channel=channel.id data-message=rea.message ).plx-close-large.plx-modal-close-default
-                p
-
-                    span.title= "#"+ channel.name
-                    br
-                    b Message 
-                    span.chanlink: a(href=`https://discordapp.com/channels/${serverInfo.id}/${channel.id}/${rea.message}` target='blank')= rea.message 
-                p
-                    b Reactions
-
-                p
-                    each r in rea.rolemoji
-                        span 
-                            if r.emoji.length > 5
-                                img(width="24px" src=`https://cdn.discordapp.com/emojis/${r.emoji.split(":").pop()}.${r.emoji.startsWith('a:')?"gif":"png"}`)
-                            else
-                                -x= twemoji.parse(r.emoji)
-                                span!= x
-   
-                        -let role = roleInfo.find(ro=>r.role===ro.id)||{}
-                        -let roleHexColor = "#"+(role.color||0xcccccc).toString(16);
-
-                        span.emojirole(style=`color: ${invertcolor(roleHexColor,true)}AA; background-color: ${roleHexColor};`)= role.name
+            if(channel)
+                .rearolecontainer.plx-flex-none(id=rea.message)
+                    button.del-rea-rol(plx-close data-channel=channel.id data-message=rea.message ).plx-close-large.plx-modal-close-default
+                    p
+ 
+                        span.title= "#"+ channel.name
                         br
+                        b Message 
+                        span.chanlink: a(href=`https://discordapp.com/channels/${serverInfo.id}/${channel.id}/${rea.message}` target='blank')= rea.message 
+                    p
+                        b Reactions
+                    p
+                        each r in rea.rolemoji
+                            span 
+                                if r.emoji.length > 5
+                                    img(width="24px" src=`https://cdn.discordapp.com/emojis/${r.emoji.split(":").pop()}.${r.emoji.startsWith('a:')?"gif":"png"}`)
+                                else
+                                    -x= twemoji.parse(r.emoji)
+                                    span!= x
+    
+                            -let role = roleInfo.find(ro=>r.role===ro.id)||{}
+                            -let roleHexColor = "#"+(role.color||0xcccccc).toString(16);
+
+                            span.emojirole(style=`color: ${invertcolor(roleHexColor,true)}AA; background-color: ${roleHexColor};`)= role.name
+                            br
+            else
+                .rearolecontainer.plx-flex-none(id=rea.message)
+                    button.del-rea-rol(plx-close data-channel=rea.channel data-message=rea.message ).plx-close-large.plx-modal-close-default
+                    p Broken Entry 
+                    p= rea.message
+                    p= rea.channel
 
 
 

@@ -36,15 +36,15 @@ const Audit = new Schema({
   transaction: String,
   amt: Number,
   timestamp: Number,
-  transactionId: String 
+  transactionId: String ,
+  details: Mixed
 });
 
 
 
 const Buyable = new Schema({
   id:String,
-  price_USD:Number,
-  price_BRL:Number,
+  price:Number,
   sendTo:String,
   name:String,
   description:String  ,

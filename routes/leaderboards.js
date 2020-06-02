@@ -32,7 +32,7 @@ async function compileLeaderboard(TYPE){
 
     if (!TYPE ||TYPE === "global") {
       LEAD = await DB.users
-        .find({})
+        .find({blacklisted:{$ne:"BOT ACCOUNT"}},{meta:1,id:1,'modules.exp':1,'modules.level':1,'modules.bgID':1})
         .limit(100)
         .sort({ "modules.exp": -1 });
     } else {
@@ -58,6 +58,11 @@ async function compileLeaderboard(TYPE){
 }
 function userRankify(plxUser = {}, discordUser, member) {
   let userRank = {};
+
+  
+  discordUser= discordUser || userCache?.get(plxUser.id) 
+  PLX.getRESTUser(plxUser.id ).then(u=> userCache.set(u.id,u));
+ 
 
   if (discordUser) {
     userRank.name = member

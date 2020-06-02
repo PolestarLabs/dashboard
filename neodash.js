@@ -1,6 +1,11 @@
 global.HOST = "https://beta.pollux.gg" 
 global.appRoot = "/home/pollux/polaris"
 global.Promise = require('bluebird')
+Promise.config({
+  longStackTraces: true
+})
+
+global.userCache = new Map();
 
 const config = require('./config.js');
 
@@ -89,7 +94,7 @@ global.DB  = require('./database');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo')(exSession);
 
-mongoose.connect('mongodb://polaris:geminisbeta@31.220.55.84:27051/polaris', { 
+mongoose.connect('mongodb://polaris:geminisbeta@138.201.158.163:27472/polaris', { 
   useNewUrlParser: true,
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 1000,
@@ -129,6 +134,7 @@ Passport.use(new CookieStrategy(
 let discordStrategy = new Strategy({
   clientID: config.clientID,
   clientSecret: config.secret,
+  authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
   callbackURL: HOST+"/callback",
   scope: scopes,
   passReqToCallback: true
@@ -314,8 +320,6 @@ const AcquireDiscordPayload = (TOKEN,req) => {
 app.use(async function(req,res,next){
 
   if(req.isAuthenticated()){
- 
-    console.log(req.session)
 
     AcquireDiscordPayload(req.user.accessToken,req)
     PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
@@ -355,11 +359,13 @@ const simpleauth = require('basic-auth')
 const admins = { polaris: { password: 'geminis472899' } }
  
 const auth = async function(req, res, next) {
+  //return next();
+  if(req.url.includes('.png'))      return next();
+  if(req.url.includes('discoin'))      return next();
   if(req.url.includes('branding')) return next();
   if(req.url.includes('embedarchitect')) return next();
   if(req.url.includes('botbridge')) return next();
   if(req.url.includes('webhook'))   return next();
-  if(req.url.includes('.png'))      return next();
   if(req.url.includes('.jpg'))      return next();
   if(req.url.includes('piece'))     return next();
   if(req.url.includes('status'))    return next();
@@ -379,8 +385,7 @@ const auth = async function(req, res, next) {
 
   
   var user = simpleauth(req)
-
-console.log('test')
+ 
   if(!req.isAuthenticated() && !req.url.includes('/auth')) return res.redirect('/auth');
   if(req.isAuthenticated()){
     if(await hasPolluxRole(req,"278985430844833792") && req.url.includes('/dash') ) return next();
@@ -456,13 +461,16 @@ app.get('/callback',
           }),
           (...args)=> simplepages().callback(...args));
 
+  
 app.use('/', (...args)=>{
   delete require.cache[require.resolve('./routes/_allroutes')];
   const router = require('./routes/_allroutes');
-  return router(...args);
+  return router(...args);    
 });
         
-
+app.use('/die', (...args)=>{
+  process.exit()
+});
 //require('./routes/allroutes').run(app);
 
 //-------
@@ -478,13 +486,16 @@ app.listen(4728, function (err) {
 
 
 
-
+return;
 // CATCH 404
 app.use(function (req, res, next) {
   if(req.handled) return;
   setTimeout(()=>{
+    if (res.headersSent) {
+      return next(err);
+    }
     res.status(404).render('404');
-  },2500)
+  },23500)
 });
 
 
@@ -516,8 +527,11 @@ app.use(async function (err, req, res, next) {
 
 
 process.on('unhandledRejection', function (reason, p) {
-  console.log("Possibly Unhandled Rejection at: Promise \n".red, p, "\n\n reason: ".red, reason.stack);
-  // sendSlack("Promise Breaker","Promise Rejection: "+reason,reason.stack,"#ffcd25" )
+
+  console.log("Possibly Unhandled Rejection at: Promise \n".red, p, "\n\n reason: ".red, reason);
+  process.exit(1)
+
+
 });
 
 

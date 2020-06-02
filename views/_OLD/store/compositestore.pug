@@ -6,7 +6,7 @@ body
     .currencychoose
       span.b500(style="font-size:1.5rem") Select Currency
       span.b500 &#x2003
-      .select: select#currchose.is-small
+      .select: select#currency-select.is-small
         option#USD USD
         option#EUR EUR
         option#GBP GBP
@@ -29,7 +29,7 @@ body
             span x
             input(type=number value=100).inputs#jads
 
-          a.button.b500.buybuttonpp(id=item.id data-img=item.img data-item=item.name data-price=item.price_USD data-dsc=item.description).is-info
+          a.button.b500.plx-buy-button(id=item.id data-img=item.img data-item=item.name data-price=item.price_USD data-dsc=item.description).is-info
             span.icon: i.fab.fa-paypal
             span GET
             //.paypalbutton

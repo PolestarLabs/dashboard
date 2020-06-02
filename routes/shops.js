@@ -28,6 +28,21 @@ router.get(["/backgrounds","/bgs","bgshop"], async function (req, res) {
   })
 })
 
+router.get(["/premium","/cash","prime"], async function (req, res) {
+  delete require.cache[require.resolve('./paginate')];
+  
+  const base =  await DB.buyables.find({available:true}).limit(50).lean().exec();
+ 
+  res.render('shop/premium/main',{
+    base,
+      pagination: await require('./paginate').run(req,res,null,{
+      page:0,
+      endpoint:'buyables',
+      rpp: 50      
+    }) 
+  }) 
+})
+
 async function refreshBases(){
 
   let [bgBase,mdBase,stBase,itBase] = await Promise.all([

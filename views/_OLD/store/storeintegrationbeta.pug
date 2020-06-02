@@ -40,7 +40,7 @@ script.
     $(".handlechangepp").click(function() {
         let cart = {
           item:this.id,
-          currency:$('#currchose').find(':selected')[0].id,
+          currency:$('#currency-select').find(':selected')[0].id,
           name: $(this).data('item'),
           description: $(this).data('dsc'),
           img: $(this).data('img'),
@@ -49,10 +49,10 @@ script.
     })
 
 
-    $(".buybuttonpp").click(function() {
+    $(".plx-buy-button").click(function() {
       let cart = {
           item:this.id,
-          currency:$('#currchose').find(':selected')[0].id,
+          currency:$('#currency-select').find(':selected')[0].id,
           amt: (this.id == "sapphire"? $("#saphs").val():this.id == "jade"? $("#jads").val(): 1),
           name: $(this).data('item'),
           description: $(this).data('dsc'),

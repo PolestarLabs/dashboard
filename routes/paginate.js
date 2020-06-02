@@ -58,6 +58,10 @@ exports.run = async function (req, res, next, options={}) {
             endpointBase = options.base || null
             queryString  =  {}
             break;
+        default:
+            endpointBase = _endpoint || null
+            queryString  =  {public:true}
+            break;
     }
 
     let payload = {};
@@ -223,8 +227,7 @@ if(C>L)C=L;
     payload.N = C+1
     payload.url = req.originalUrl
     if(!req.query.rpp) payload.url += '?rpp='+_rpp;
-    console.log(options)
-    if ( payload.res.length == 0 && !options.filter ) return res.sendStatus(404);
+   // if ( payload.res.length == 0 && !options.filter ) return res.sendStatus(404);
 
     if(req.body.piece) res.render(req.body.piece,{pagination:payload})
 
