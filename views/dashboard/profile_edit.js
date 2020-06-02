@@ -1,23 +1,19 @@
 var TIMER = null;
 
-
 VueSelect.VueSelect.methods.maybeAdjustScroll = () => false;
-//Vue.component('v-select', VueSelect.VueSelect)
 
-//bgSelectItems = BGINFO.map(thisBgData=>{
-const bgSelectItems = userdata.modules.bgInventory.map(bg => {
-  let thisBgData = BGINFO.find(x => x.code == bg) || {
+const bgSelectItems = userdata.modules.bgInventory.map((bg) => {
+  let thisBgData = BGINFO.find((x) => x.code == bg) || {
     name: "Unknown",
     rarity: "C",
-    tags: "unknown test"
+    tags: "unknown test",
   };
   return {
     name: thisBgData.name,
     rarity: thisBgData.rarity,
     tags: thisBgData.tags,
-    //code: bg,
     code: thisBgData.code,
-    img: "/backdrops/" + thisBgData.code + ".png"
+    img: "/backdrops/" + thisBgData.code + ".png",
   };
 });
 
@@ -26,52 +22,9 @@ var Chrome = window.VueColor.Chrome;
 if (!userdata.modules.flairsInventory.includes("default"))
   userdata.modules.flairsInventory.push("default");
 const flairsAvailable = userdata.modules.flairsInventory;
-/* ["aluminium",
-"aluminium-l",
-"antimatter",
-"astatine",
-"carbon",
-"default",
-"digdeeper",
-"easter19",
-"easter2019",
-"easterflair",
-"easterflairplus",
-"flower18",
-"flw",
-"golden",
-"goose",
-"halloween18_part",
-"halloween18_ward",
-"iridium",
-"iridium-l",
-"iron",
-"lithium",
-"neutrino",
-"noctix_honeymoon",
-"palladium",
-"palladium-l",
-"pixel",
-"plastic",
-"princessconquest_f",
-"pusheendonut",
-"sfk",
-"snow18",
-"spoopi",
-"spoopi1",
-"spoopi2",
-"spoopi3",
-"thewae",
-"uranium",
-"uranium-l",
-"winsum18bronze",
-"winsum18gold",
-"winsum18silver",
-"zircon",
-] */
 
-STKPAK = STKPAK.map(pack => {
-  pack.size = STKINFO.filter(s => s.series_id == pack.icon).length;
+STKPAK = STKPAK.map((pack) => {
+  pack.size = STKINFO.filter((s) => s.series_id == pack.icon).length;
   return pack;
 });
 
@@ -80,37 +33,38 @@ const DASH = new Vue({
   data: () => {
     return {
       RSHP,
-      featuredMarriage: userdata.featuredMarriage ,
+      featuredMarriage: userdata.featuredMarriage,
       message: "hello",
       favcolor: {
         hex: userdata.modules.favcolor,
-        source: "hex"
+        source: "hex",
       },
       isColorpickerOpen: false,
       isFlairOpen: false,
       rars: ["C", "U", "R", "SR", "UR"],
 
-      selectBackground: BGINFO.find(bg => bg.code == userdata.modules.bgID)||'none',
+      selectBackground:
+        BGINFO.find((bg) => bg.code == userdata.modules.bgID) || "none",
       selectSticker:
-        STKINFO.find(x => x.id == userdata.modules.sticker) || "none",
+        STKINFO.find((x) => x.id == userdata.modules.sticker) || "none",
       selectBooster:
         STKPAK.find(
-          x =>
+          (x) =>
             x.icon ==
-            (STKINFO.find(y => y.id == userdata.modules.sticker) || {})
+            (STKINFO.find((y) => y.id == userdata.modules.sticker) || {})
               .series_id
         ) || "none",
       selectFlair: userdata.modules.flairTop,
       flairsAvailable,
 
       backgroundsAvailable: bgSelectItems,
-      stickerAvailable: STKINFO.filter(x =>
+      stickerAvailable: STKINFO.filter((x) =>
         userdata.modules.stickerInventory.includes(x.id)
       ),
       boostersAvailable: STKPAK,
       Swal,
       search: "",
-      select:"",
+      select: "",
       tagline: userdata.modules.tagline,
       persotext: userdata.modules.persotext,
       frame: (userdata.switches || {}).profileFrame,
@@ -122,43 +76,42 @@ const DASH = new Vue({
         infiniteScroll: true,
         vertical: true,
         transition: 100,
-        initialSlide: flairsAvailable.indexOf(userdata.modules.flairTop)
+        initialSlide: flairsAvailable.indexOf(userdata.modules.flairTop),
       },
-      sortWife: 'ring'
+      sortWife: "ring",
     };
   },
   components: {
     "chrome-picker": Chrome,
     "v-select": VueSelect.VueSelect,
-    
+
     Hooper: window.Hooper.Hooper,
     Slide: window.Hooper.Slide,
     HooperPagination: window.Hooper.Pagination,
-    HooperNavigation: window.Hooper.Navigation
+    HooperNavigation: window.Hooper.Navigation,
   },
 
-  methods: {    
-    changeFeatMarriage(id){
+  methods: {
+    changeFeatMarriage(id) {
       this.featuredMarriage = id;
-      AUTOSAVE("Featured Marriage") 
+      AUTOSAVE("Featured Marriage");
     },
-    toggleWifeOrder(by){
-      
-      if(this.sortWife==by) return DASH.RSHP.reverse();
+    toggleWifeOrder(by) {
+      if (this.sortWife == by) return DASH.RSHP.reverse();
 
       this.sortWife = by;
 
-      if(by == 'ring'){
-        DASH.RSHP.sort((x,y)=>x.ring<y.ring?1:-1)
+      if (by == "ring") {
+        DASH.RSHP.sort((x, y) => (x.ring < y.ring ? 1 : -1));
       }
-      if(by == 'date'){        
-          DASH.RSHP.sort((x,y)=>x.since-y.since);
+      if (by == "date") {
+        DASH.RSHP.sort((x, y) => x.since - y.since);
       }
-      if(by == 'lovp'){
-        DASH.RSHP.sort((x,y)=> (x.lovepoints||0) - (y.lovepoints|| 0))
+      if (by == "lovp") {
+        DASH.RSHP.sort((x, y) => (x.lovepoints || 0) - (y.lovepoints || 0));
       }
     },
-    since(x){
+    since(x) {
       return moment(x).fromNow(true);
     },
     updateRubines(x) {
@@ -186,12 +139,12 @@ const DASH = new Vue({
       let filtered = this.medals;
       if (this.search) {
         filtered = this.medals.filter(
-          m => m.name.toLowerCase().indexOf(this.search) > -1
+          (m) => m.name.toLowerCase().indexOf(this.search) > -1
         );
       }
       if (this.select) {
         filtered = filtered.filter(
-          m => m.rarity.toLowerCase() === this.select.toLowerCase()
+          (m) => m.rarity.toLowerCase() === this.select.toLowerCase()
         );
       }
       console.log(filtered);
@@ -200,6 +153,9 @@ const DASH = new Vue({
     fuckThis() {
       $("nav.topbar ").css({ background: this.favcolor.hex });
       updateColorName(this.favcolor.hex);
+      AUTOSAVE("COLOR")
+      AUTOSAVE("TAGLINE",true)
+      AUTOSAVE("PTXT",true)
     },
     saveFlair(payload) {
       setTimeout(() => {
@@ -207,17 +163,17 @@ const DASH = new Vue({
         AUTOSAVE("FLAIR");
       }, 800);
     },
-    gotoFlair: function(f) {
+    gotoFlair: function (f) {
       this.$refs.flairs.slideTo(f);
       //if (!this.isFlairOpen) setTimeout(()=>this.$refs.flairs.update(),50);
     },
-    toggleColorpick: function() {
+    toggleColorpick: function () {
       updateColorName(this.favcolor.hex);
       this.isColorpickerOpen = !this.isColorpickerOpen;
       this.favcolor.source = "hex";
       AUTOSAVE("COLOR");
     },
-    setSelected: val => {
+    setSelected: (val) => {
       console.log(val);
     },
     onChangeStickerPack(item) {
@@ -230,61 +186,61 @@ const DASH = new Vue({
     onChange(item) {
       $("#background-bar .name.sel").html(item.name);
       $("#background-bar .bgcode code").html(item.code);
-      $(".sidebg").attr('src','/backdrops/' + item.code + '.png');
+      $(".sidebg").attr("src", "/backdrops/" + item.code + ".png");
       $("#background-bar .background-slot, .user-bg").css({
-        "background-image": "url('/backdrops/" + item.code + ".png')"
+        "background-image": "url('/backdrops/" + item.code + ".png')",
       });
       $("#background-bar .background-thumb").css({
-        "background-image": "url('/backdrops/" + item.code + ".png')"
+        "background-image": "url('/backdrops/" + item.code + ".png')",
       });
       AUTOSAVE("BACKGROUND");
     },
     bgFiltering: (opts, srch) =>
-      opts.filter(o => {
+      opts.filter((o) => {
         return [o.rarity, o.name, o.tags, o.code]
           .join(" ")
           .toLowerCase()
           .includes(srch.toLowerCase());
       }),
     stkFiltering: (opts, srch) =>
-      opts.filter(o => {
+      opts.filter((o) => {
         return [o.rarity, o.name, o.code]
           .join(" ")
           .toLowerCase()
           .includes(srch.toLowerCase());
       }),
     maybeAdjustScroll: () => false,
-    medalreset:  function medalreset() {
+    medalreset: function medalreset() {
       const allMedals = $(".medal-chip:visible");
       allMedals.prependTo("#inventory");
       seeEquips();
     },
-    medalrandom:  function medalrandom() {
+    medalrandom: function medalrandom() {
       const allMedals = $(".medal-chip:visible");
       this.medalreset();
       let slots = $("#equipped .eq-container").children();
-      let rand = res => res.eq(Math.floor(Math.random() * res.length));
+      let rand = (res) => res.eq(Math.floor(Math.random() * res.length));
       setTimeout(() => {
-        slots.each(function() {
+        slots.each(function () {
           rand(allMedals).prependTo($(this));
         });
         seeEquips();
       }, 1);
-    }
-  }
+    },
+  },
 });
 
 function updateColorName(hex) {
-  fetch("https://www.thecolorapi.com/id?hex=" + hex.replace("#", "")).then(r =>
-    r.json().then(res => $("#colorname").html(res.name.value))
-  );
+  fetch(
+    "https://www.thecolorapi.com/id?hex=" + hex.replace("#", "")
+  ).then((r) => r.json().then((res) => $("#colorname").html(res.name.value)));
 }
 
 var correctCards = 0;
-$(function() {
+$(function () {
   var lastPlace;
   $("#inventory").sortable({
-    connectWith: ".sortable"
+    connectWith: ".sortable",
   });
   $("#inventory > *").disableSelection();
   $(".drag").draggable({
@@ -293,53 +249,45 @@ $(function() {
     helper: "clone",
     cursorAt: {
       top: 50,
-      left: 50
+      left: 50,
     },
     appendTo: "body",
     zIndex: 9,
-    start: function(event, ui) {
+    start: function (event, ui) {
       $(this).hide();
       lastPlace = $(this).parent();
     },
-    stop: function(event, ui) {
+    stop: function (event, ui) {
       seeEquips();
       $(this).show();
       lastPlace = $(this).parent();
-    }
+    },
   });
   $("#inventory").droppable({
     connectWith: ".sortable",
-    drop: function(event, ui) {
+    drop: function (event, ui) {
       $(this).removeClass("over");
       $(this).removeClass("dropa");
 
       $(lastPlace).removeClass("dropt");
       var dropped = ui.draggable;
       var droppedOn = this;
-      $(dropped)
-        .detach()
-        .prependTo($(droppedOn));
+      $(dropped).detach().prependTo($(droppedOn));
       //$(dropped).detach().css({top: 0,left: 0}).prependTo($(droppedOn));
-    }
+    },
   });
 
   $(".drop").droppable({
     hoverClass: "slot-hover",
-    drop: function(event, ui) {
+    drop: function (event, ui) {
       let dropped = ui.draggable;
       let droppedOn = this;
       if ($(droppedOn).children().length > 0)
-        $(droppedOn)
-          .children()
-          .detach()
-          .prependTo($(lastPlace));
-      $(dropped)
-        .detach()
-        .prependTo($(droppedOn));
-    }
+        $(droppedOn).children().detach().prependTo($(lastPlace));
+      $(dropped).detach().prependTo($(droppedOn));
+    },
   });
 });
-
 
 function seeEquips() {
   var medals = [];
@@ -360,13 +308,13 @@ function seeEquips() {
 
 $("document").ready(() => setTimeout(() => DASH.$refs.flairs.update(), 1000));
 
-async function AUTOSAVE(what) {
-  if (!TIMER && what == "FLAIR") return (TIMER = setTimeout(() => {}, 0));
+async function AUTOSAVE(what,silent) {
+  if (!TIMER && what == "FLAIR") return (TIMER = setTimeout(() => {}, 500));
   if (TIMER) {
     clearTimeout(TIMER);
     TIMER = null;
   }
-  $("#postloader").fadeIn("slow");
+  if(!silent) $("#postloader").fadeIn("slow");
 
   TIMER = setTimeout(() => {
     let relevantData = {
@@ -378,70 +326,105 @@ async function AUTOSAVE(what) {
       medals: DASH.medalsEquipped,
       sticker: DASH.selectSticker.id,
       frame: DASH.frame,
-      wife: DASH.featuredMarriage || ''
+      wife: DASH.featuredMarriage || "",
     };
 
-    Promise.all([
-      (async () => {
-        if (relevantData.medals !== []) {
-          return fetch("/dashboard/profile/medals", {
-            method: "PUT",
-            headers: { "Content-Type": "application/json; charset=utf-8" },
-            body: JSON.stringify(relevantData.medals)
-          });
-        }
-      })(),
-
-      fetch("/dashboard/profile/tagline", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({ data: relevantData.tgln })
-      }),
-
-      fetch("/dashboard/profile/personaltxt", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({ data: relevantData.ptxt })
-      }),
-
-      fetch("/dashboard/profile/frame", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({ data: relevantData.frame })
-      }),
-
-      fetch("/dashboard/profile/background", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({
-          data: userdata.modules.bgInventory.indexOf(relevantData.bkg)
+    let queue = [];
+    let ALL = what === "all";
+    if (ALL || what === "MEDALS") {
+      queue.push(
+        (async () => {
+          if (relevantData.medals !== []) {
+            return fetch("/dashboard/profile/medals", {
+              method: "PUT",
+              headers: { "Content-Type": "application/json; charset=utf-8" },
+              body: JSON.stringify(relevantData.medals),
+            });
+          }
+        })()
+      );
+    }
+    if (ALL || what === "TAGLINE") {
+      queue.push(
+        fetch("/dashboard/profile/tagline", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          body: JSON.stringify({ data: relevantData.tgln }),
         })
-      }),
+      );
+    }
+    if (ALL || what === "PTXT") {
+      queue.push(
+        fetch("/dashboard/profile/personaltxt", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          body: JSON.stringify({ data: relevantData.ptxt }),
+        })
+      );
+    }
 
-      fetch("/dashboard/profile/color", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({ data: relevantData.color })
-      }),
+    if (ALL || what === "COLOR") {
+      queue.push(
+        fetch("/dashboard/profile/color", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          body: JSON.stringify({ data: relevantData.color }),
+        })
+      );
+    }
 
-      fetch("/dashboard/profile/flair", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({ data: relevantData.flair })
-      }),
+    if (ALL || what === "STICKER" || what === "STICKER-PACK") {
+      queue.push(
+        fetch("/dashboard/profile/sticker", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          body: JSON.stringify({ data: relevantData.sticker }),
+        })
+      );
+    }
+    if (ALL || what === "BACKGROUND") {
+      queue.push(
+        fetch("/dashboard/profile/background", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          body: JSON.stringify({
+            data: userdata.modules.bgInventory.indexOf(relevantData.bkg),
+          }),
+        })
+      );
+    }
 
-      fetch("/dashboard/profile/sticker", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({ data: relevantData.sticker })
-      }),
+    if (ALL || what === "Featured Marriage") {
+      queue.push(
+        fetch("/dashboard/profile/wife", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          body: JSON.stringify({ data: relevantData.wife }),
+        })
+      );
+    }
+    if (ALL || what === "FLAIR") {
+      queue.push(
+        fetch("/dashboard/profile/flair", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          body: JSON.stringify({ data: relevantData.flair }),
+        })
+      );
+    }
+    if (ALL || what === "FRAME") {
+      queue.push(
+        fetch("/dashboard/profile/frame", {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json; charset=utf-8" },
+          body: JSON.stringify({ data: relevantData.frame }),
+        })
+      );
+    }
 
-      fetch("/dashboard/profile/wife", {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json; charset=utf-8" },
-        body: JSON.stringify({ data: relevantData.wife })
-      })
-    ]).then(res=>processRes(res,what,"Profile Updated!"));
+    if (!queue.length) return;
+    Promise.all(queue).then((res) => silent?null:processRes(res, what, "Profile Updated!"));
+
 
     DASH.$refs.flairs.update();
     console.log(
@@ -452,4 +435,3 @@ async function AUTOSAVE(what) {
     console.log(relevantData);
   }, 1200);
 }
-

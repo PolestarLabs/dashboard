@@ -45,7 +45,7 @@ block content
                             .ranknum=       i+1
                         img.user_avatar.hexagon(height="80px" width="80px" src=userRank.avatar alt=" ")
                         .namefield
-                            .user_name=       userRank.name
+                            a(href="/profile/"+userRank.id).user_name=       userRank.name
                             .user_dsc=    userRank.disc
                         .levfield
                             p LEVEL

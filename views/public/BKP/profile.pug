@@ -1,0 +1,100 @@
+extends ../layout 
+block content
+  .wrapper
+    -index=true
+    include ../navbar
+    style 
+      include ../home.css
+
+
+  -var rel =RSHP
+
+
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
+  script(  src="https://unpkg.com/animated-number-vue@1.0.0/dist/AnimatedNumber.umd.min.js")  
+  
+ 
+  .plx-animation-kenburns.background-container(style=`background-image:url('https://beta.pollux.gg/backdrops/${userprofile.modules.bgID}.png')`)
+
+  style :root{--favcolor-not-so-dim: #{userprofile.modules.favcolor}AA; --favcolor-dim: #{userprofile.modules.favcolor}15; --favcolor: #{userprofile.modules.favcolor}} .favc-color{color: #{userprofile.modules.favcolor}}
+  style
+    include profile.css
+
+  .profile-container(
+        data-tilt,
+        data-tilt-mouse-event-element="body",
+        data-tilt-glare='true',
+        data-tilt-max-glare="0.1",
+        data-tilt-speed="1000",
+        data-tilt-max="3",
+        data-tilt-perspective=1500,
+        data-tilt-startX=0
+  )
+    .bgblur
+    .col.left: .plx-animation-slide-right-medium#left
+      .wife(:href="`/profile/${wifeData.id}`",  v-if="relationships.loading")
+        
+        p
+          i.fas.fa-cog.fa-spin.favc-color
+          | &#x2003 LOADING
+      .wife(:href="`/profile/${wifeData.id}`",  v-if="!relationships.loading && !wifeData.id")
+        p 
+          i.fas.fa-heart-broken.favc-color
+          | &#x2003 #{userprofile.meta.username} is Single
+          
+      a.de-link.wife(:href="`/profile/${wifeData.id}`",  v-if="!relationships.loading && wifeData.id")
+        .avatar
+           img( :src="`https://cdn.discordapp.com/avatars/${wifeData.id}/${wifeData.avatar}.${wifeData.avatar.startsWith('a_')?'gif':'png'}?size=64`")
+        .textdata( )
+          .username
+            span.name {{wifeData.username}}
+            span.discrim # {{wifeData.discriminator}}
+          .since.moment {{ wifeData.since[0] }} ({{ wifeData.since[1] }})
+        .ring
+          img(  :src="`https://beta.pollux.gg/build/items/ring_${wifeData.ring}.png`" width=48 )
+           
+    
+ 
+      br
+      .progress
+        .level-container
+          .level.number= userprofile.modules.level
+          .label Level
+        .exp-container
+          .exp.number= userprofile.modules.exp
+          .label EXP
+   
+
+    .avicontainer: .plx-animation-slide-bottom-medium
+      .avatar.hexagon
+          img(src=userprofile.meta.avatar width='512px' )
+      #frame 
+        if(userprofile.switches && userprofile.donator)
+          img(src=`https://beta.pollux.gg/build/profile/frames/${userprofile.donator}.png` class=userprofile.switches.profileFrame?'':'disengaged' alt="FRAME")
+
+    .col.center(data-tilt data-tilt-reverse="true"): .plx-animation-slide-bottom-medium
+      .userinfo
+        .username
+          span.name= userprofile.meta.username
+          span.discrim= "#" + userprofile.meta.discriminator
+        .tagline= userprofile.modules.tagline
+        p.persotex!= userprofile.modules.persotext.replace(/\n/g,'<br>') 
+
+    .col.right: .plx-animation-slide-left-medium#right
+      
+      include profile_sidemenu
+      ul.plx-switcher#right-pages 
+        li.cosm-li
+          include profile_pieces/cosmetics
+        li
+          include profile_pieces/commend
+      
+            
+
+block scripts
+    script const userprofile = !{JSON.stringify( userprofile )}
+    script const {stickersSize, backgroundsSize, medalsSize,} = !{JSON.stringify({stickersSize, backgroundsSize, medalsSize,})}
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js")
+    script
+        include profile.js
