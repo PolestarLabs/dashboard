@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/', async (cache,req,res)=>{
+router.get('/', async (req,res)=>{
     
     let Picto = require('../../../bot/core/utilities/Picto')
     const canvas = Picto.new(600,600);

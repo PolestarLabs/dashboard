@@ -1,18 +1,28 @@
 const express = require('express');
 const router = express.Router();
+const Picto = require('../../../bot/core/utilities/Picto');
 
+const staticAssets = {}
+staticAssets.load = Promise.all([
+    Picto.getCanvas('https://cdn.discordapp.com/attachments/488142183216709653/719962883525574706/unknown.png'),
+    Picto.getCanvas('https://cdn.discordapp.com/attachments/488142183216709653/719963379099369512/rubineCHIP.png'),
+    Picto.getCanvas(HOST + '/build/games/roulette/pin.png'),
+]).then(res=>{
+    let [table,chip,pin] = res;
+    Object.assign(staticAssets, {table, chip, pin, loaded:true});
+    delete staticAssets.load
+})
  
-const Picto = require('../../../bot/core/utilities/Picto')
-router.get('/', async (cache,req,res)=>{
-
+router.get('/', async (req,res)=>{
+    console.log('234')
     const canvas = Picto.new(800, 600);
     const ctx = canvas.getContext('2d');
 
     const payload = req.query.data
 
-    const table = await Picto.getCanvas('https://cdn.discordapp.com/attachments/488142183216709653/719962883525574706/unknown.png');
-    const chip = await Picto.getCanvas('https://cdn.discordapp.com/attachments/488142183216709653/719963379099369512/rubineCHIP.png');
-    const pin = await Picto.getCanvas(HOST + '/build/games/roulette/pin.png');
+    if(!staticAssets.loaded) await staticAssets.load;
+
+    const {table, chip, pin } = staticAssets;
 
     const betTypes = ["straight", "split", "street", "square", "basket", "dstreet", "dozen", "column", "snake", "manque", "passe", "colour", "parity"];
 
@@ -92,9 +102,11 @@ router.get('/', async (cache,req,res)=>{
 
     ctx.drawImage(table, 0, 0);
     ctx.shadowColor = "#112"
-    USERS.forEach(player => {
+    USERS.forEach((player,i) => {
 
-        player.bets.forEach((bet, i) => {
+        let totalBet = 0;
+
+        player.bets.forEach((bet) => {
 
             let { x, y } = typeCoords[bet.type];
 
@@ -103,20 +115,19 @@ router.get('/', async (cache,req,res)=>{
 
             ctx.shadowBlur = 5
             ctx.drawImage(chip, dx - 20, dy - 20, 40, 40);
+            totalBet+= bet.amt
 
         })
-        player.bets.forEach(async (bet, i) => {
+        let xpos = 300+ i % 3 * (225  + 8);
+        let ypos = 300+ ~~(i/3) * (100 + 8);
 
-            let avi = player.avatar;
-            ctx.shadowBlur = 10
-            let { x, y } = typeCoords[bet.type];
 
-            let dx = x(bet)
-            let dy = y(bet)
-            ctx.drawImage(avi, dx - 32, dy - 137, 62, 62);
-            ctx.drawImage(pin, dx - 64, dy - 150, 128, 128);
-            Picto.setAndDraw(ctx, Picto.tag(ctx, miliarize(bet.amt, 0), '600 20px "AvenirNextRoundedW01-Bold" ', '#FFF'), dx, dy - 72, 128, 'center')
-        })
+         
+            Picto.setAndDraw(ctx,
+                Picto.tag(ctx, miliarize(totalBet, 0), '600 20px "AvenirNextRoundedW01-Bold" ', '#FFF'),
+                xpos, ypos  , 128, 'center'
+            )
+         
 
     })
     

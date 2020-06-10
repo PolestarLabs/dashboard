@@ -2,7 +2,7 @@
 const express = require('express');
 const router = express.Router();
 
-router.get('/:inout/:userID/minimal.png', async (cache,req,res)=>{
+router.get('/:inout/:userID/minimal.png', async (req,res)=>{
     
     let Picto = require('../../../bot/core/utilities/Picto')
 

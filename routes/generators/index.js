@@ -4,52 +4,62 @@ const express = require('express')
 const router = express.Router()
 const ImageCache = new Map()
  
-router.get("/reload", (req, res) => {
-    res.send('unavailable')
+router.use("/reload", async (req, res) => {
+    console.log('reload')
+    let removed = []
+   Object.keys( require.cache).forEach(rq=>{
+        if (rq.includes('generators/')) {
+            delete require.cache[rq];
+            removed.push(rq)
+        }
+
+    })
+    return res.json(removed)
 })
 
 
-router.get("/roulette.png", async (req, res) => {
-    return (require('./roulette.js'))(ImageCache, ...args);
+router.use("/roulette.png", async (...args) => {
+   return (require('./roulette.js'))( ...args,ImageCache);
+   
 });
 
-router.get("/discoin", async (req, res) => {
-    return (require('./discoin.js'))(ImageCache, ...args);
+router.use("/discoin", async (...args) => {
+    return (require('./discoin.js'))( ...args);
 });
 
-router.get("/boosterpack/", async (req, res) => {
-    return (require('./boosterpack.js'))(ImageCache, ...args);
+router.use("/boosterpack/", async (...args) => {
+    return (require('./boosterpack.js'))( ...args);
 });
 
-router.get("/userio", async (req, res) => {
-    return (require('./user-io.js'))(ImageCache, ...args);
+router.use("/userio", async (...args) => {
+    return (require('./user-io.js'))( ...args);
 });
 
 
-router.get(["/booster/:pack/:B/:A/:Anew/:Bnew/output.gif",], async (...args) => {
-    return (require('./event/booster.js'))(ImageCache, ...args);
+router.use(["/booster/:pack/:B/:A/:Anew/:Bnew/output.gif",], async (...args) => {
+    return (require('./event/booster.js'))( ...args);
 })
 
-router.get("/event/furnace.png", async (...args) => {
-    return (require('./event/furnace.js'))(ImageCache, ...args);
+router.use("/event/furnace.png", async (...args) => {
+    return (require('./event/furnace.js'))( ...args);
 })
 
-router.get("/cooking-minigame", async (req, res) => {
-    return (require('./event/cooking-minigame.js'))(ImageCache, ...args);
+router.use("/cooking-minigame", async (...args) => {
+    return (require('./event/cooking-minigame.js'))( ...args);
 })
 
-router.get("/repipe/:url", async (req, res) => {
+router.use("/repipe/:url", async (...args) => {
 
 
     let Picto = require('../../../bot/core/utilities/Picto')
 
-    let base = await Picto.getCanvas(decodeURI(req.params.url));
+    let base = await Picto.useCanvas(decodeURI(req.params.url));
 
     let newWidth = 300
     let newHeight = newWidth / base.width * base.height;
 
     const canvas = Picto.new(newWidth, newHeight);
-    const ctx = canvas.getContext('2d')
+    const ctx = canvas.useContext('2d')
 
     ctx.drawImage(base, 0, 0, newWidth, newHeight);
 

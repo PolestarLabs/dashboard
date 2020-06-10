@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Canvas = require('canvas')
 
-router.get('/lunanuli.png', async (cache,req,res)=>{
+router.get('/lunanuli.png', async (req,res)=>{
     
     let Picto = require('../../../../bot/core/utilities/Picto')
     const canvas = Picto.new(800,600);
@@ -15,7 +15,7 @@ router.get('/lunanuli.png', async (cache,req,res)=>{
 
     canvas.pngStream().pipe(res);;
 })
-router.get('/selenedi.png', async (cache,req,res)=>{
+router.get('/selenedi.png', async (req,res)=>{
 
     const canvas = Canvas.createCanvas(825,600);
     const ctx = canvas.getContext('2d')

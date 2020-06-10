@@ -3,7 +3,25 @@ const express = require('express');
 const router = express.Router();
 const Canvas = require('canvas') 
 
-router.get('/:series/:A/:B/booster.png', async (cache,req,res)=>{
+function tag(base, text,font,color) {
+
+    font =  font || '600 18px "Corporate Logo Rounded"'
+    color = color || '#fff'
+    base.font = font;
+
+    let H = base.measureText(text).emHeightAscent
+    let h = base.measureText(text).emHeightDescent;
+    let w = base.measureText(text).width+20;
+    const item = new Canvas.createCanvas(w, h + H);
+        let c = item.getContext("2d")
+        c.antialias = 'subpixel';
+        c.filter = 'best';
+        c.font = font;
+        c.fillStyle = color;
+        c.fillText(text, 0, H);
+    return item;
+}
+router.get('/:series/:A/:B/booster.png', async (req,res)=>{
 
         
     const canvas = Canvas.createCanvas(400,250);

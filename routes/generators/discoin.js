@@ -29,7 +29,7 @@ function tag(base, text,font,color) {
 }
 
 
-router.get('/exchange.png', async (cache,req,res)=>{
+router.get('/exchange.png', async (req,res)=>{
     
     
     const canvas = Canvas.createCanvas(500,500);
