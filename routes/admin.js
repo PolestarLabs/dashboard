@@ -138,25 +138,26 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
 router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
 
     let payload = req.body;
-
+ 
     if(req.user.validator != payload.validator) return res.status(401).json("Validator Mismatch "+`${payload.validator} / ${req.user.validator}`);
 
     let SVID = payload.serverid.toString();    
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
 
-    let userData = (await DB.users.get(serverInfo.ownerID));
-
+    
     if(!req.body.noDM || userData.DMnotifs !== false){
-    let serverInfo= (await PLX.getRESTGuild(SVID));
-    PLX.deleteMessage(payload.channel,payload.message)
-    PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
-        embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
+        let serverInfo= (await PLX.getRESTGuild(SVID));
+        let userData = (await DB.users.get(serverInfo.ownerID));
+        PLX.deleteMessage(payload.channel,payload.message)
+        PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
+          embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 
         **Deleted Reaction Role Message at <#${payload.channel}>**
 
         Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
         `}
-    }).catch(e=>null) )}
+        }).catch(e=>null) )
+    }
 
     payload.server=SVID;
     delete payload.validator;
@@ -453,7 +454,7 @@ module.exports = router
 
 global.GLOBALINSTANCES = [
     {
-        ip:"108.174.198.174",
+        ip:"78.47.50.59",
         prefix:90,
         clusters: 5,
         get ports(){

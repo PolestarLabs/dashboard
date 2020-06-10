@@ -485,17 +485,12 @@ app.listen(4728, function (err) {
 })
 
 
-
-return;
+ 
 // CATCH 404
 app.use(function (req, res, next) {
-  if(req.handled) return;
-  setTimeout(()=>{
-    if (res.headersSent) {
-      return next(err);
-    }
-    res.status(404).render('404');
-  },23500)
+  if(req.handled) return; 
+  if (res.headersSent) return next(err);
+  res.status(404).render('404'); 
 });
 
 
