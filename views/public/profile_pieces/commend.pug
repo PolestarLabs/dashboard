@@ -3,14 +3,36 @@
     div(v-if='commendInfo.loading') 
         i.fas.fa-cog.fa-spin
     div(v-else ).commends-list
-        a.de-link.commend.plx-animation-slide-top-small(:href='"/profile/"+cmd.id' v-for="(cmd,ind) in commendInfo.whoIn.slice(0,10)" :style="{'animation-delay': `${ind*.11}s` }")
-            div
-                span.pos(style="font-family: 'Panton Black' ") # {{ind+1}} &#x2003
-                span.avatar
+        .commens-in
+            a.de-link.commend.plx-animation-slide-top-small(
+                :href='"/profile/"+cmd.id'
+                v-for="(cmd,ind) in commendInfo.whoIn.slice(0,10)"
+                :style="{'animation-delay': `${ind*.11}s` }"
+            )
+                
+                div.avatar
                     img(:src="udata(cmd).avatar ? udata(cmd).avatar.startsWith('https')?udata(cmd).avatar:`https://cdn.discordapp.com/avatars/${cmd.id}/${udata(cmd).avatar}.png` : 'https://cdn.discordapp.com/embed/avatars/0.png' " width='24px')
-            .username
-                span.name {{udata(cmd).username}}
-                span.discrimin
-                    | #
-                    span {{udata(cmd).discriminator}}
-            .commends {{cmd.count}}
+                    .commends {{cmd.count}}
+                .username
+                    span.name {{udata(cmd).username}}
+                    span.discrimin
+                        span {{udata(cmd).discriminator}}
+                span.pos(style="font-family: 'Panton Black' ")
+                    span.hashtag # 
+                    span.postext {{ind+1}}
+        .commens-out
+            a.de-link.commend.plx-animation-slide-top-small(
+                :href='"/profile/"+cmd.id'
+                v-for="(cmd,ind) in commendInfo.whoOut.slice(0,10)"
+                :style="{'animation-delay': `${ind*.11}s` }"
+            )
+                span.pos(style="font-family: 'Panton Black' ")
+                    span.hashtag # 
+                    span.postext {{ind+1}}
+                .username
+                    span.name {{udata(cmd).username}}
+                    span.discrimin
+                        span {{udata(cmd).discriminator}}
+                div.avatar
+                    .commends {{cmd.count}}
+                    img(:src="udata(cmd).avatar ? udata(cmd).avatar.startsWith('https')?udata(cmd).avatar:`https://cdn.discordapp.com/avatars/${cmd.id}/${udata(cmd).avatar}.png` : 'https://cdn.discordapp.com/embed/avatars/0.png' " width='24px')

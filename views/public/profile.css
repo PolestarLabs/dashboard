@@ -222,7 +222,7 @@ svg.svg-shine {
   background-size: contain;
   padding: 0;
 }
-.userblock .username {
+.userblock .username, .commend .username {
   font-family: Panton;
   font-weight: 600;
   font-size: 32px;
@@ -232,7 +232,7 @@ svg.svg-shine {
   content: "#";
   font-size: smaller;
 }
-.userblock .discrimin {
+.userblock .discrimin, .commend, .discrimin {
   font-family: Panton;
   font-weight: 300;
   font-size: 24px;
@@ -248,6 +248,71 @@ svg.svg-shine {
   margin-top: 0.2em;
   margin-bottom: -0.5em;
 }
+
+.commends-list{
+  display: flex;
+}
+.commends-list > div{ display: flex; flex-direction: column;
+flex: 1 0 auto
+}
+.commend{ 
+  display: flex;
+  border: solid 1px  var(--favcolor-not-so-dim); 
+  align-items: center;
+  justify-content: space-between;  
+  margin: 8px 20px; 
+  box-sizing: border-box;
+  color: #EEFB;
+}
+ 
+.commens-in .commend{
+  background:  var(--favcolor-dim); 
+  border-color: var(--favcolor-not-so-dim); 
+   padding: 0 24px 0 0;
+    border-radius: 40px 15px 15px 40px;
+}
+
+.commens-out .commend{
+  padding: 0 0 0 24px; 
+  border-radius: 15px 40px 40px 15px;  
+}
+
+
+.commend .pos{
+  font-size: 36px;
+  vertical-align: middle;
+  font-style: italic;
+}
+.commend .hashtag{
+  font-family: Panton;
+  font-weight: 100;
+  font-size: 20px;  
+  vertical-align: super
+}    
+
+.commend .avatar img{
+  width: 80px;
+  border-radius: 100%;
+  
+}
+.commend .avatar{
+  display: flex;
+  align-items: center;
+}
+
+
+.commend .username .name{
+  font-size: 24px
+}
+.commend .discrimin{
+  font-size:  14px
+}
+.commend .commends{
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 10px;
+}
+
 .small {
   line-height: 1.4;
 }
