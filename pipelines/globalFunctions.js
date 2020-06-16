@@ -132,7 +132,7 @@ module.exports = {
       
         json = JSON.parse(fs.readFileSync(__dirname + "/../../../bot/locales/" + (lang||"dev") + "/commands.json"))
     }
-    let aliases = require( "../../bot/utils/aliases_legacy.json");
+    let aliases = {} // just in case so it doesnt break
     json.lang = lang;
     let CMS = this.getComms(json,aliases);
 
