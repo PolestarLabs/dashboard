@@ -4,7 +4,7 @@ const express = require('express')
 const router = express.Router()
 const ImageCache = new Map()
  
-router.use( async (req, res,next) => {
+router.use( '/reload', async (req, res,next) => {
     console.log('reload')
     let removed = []
    Object.keys( require.cache).forEach(rq=>{
