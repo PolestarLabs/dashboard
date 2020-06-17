@@ -241,6 +241,8 @@ router.get('/commendrank/:id/:endpoint', async (req,res)=>{
 
 router.get('/relationships', async (req, res)=> {
 
+    let {page: skip} = req.query;
+
     let Relationship, Relationships;
     if (req.query.id){
         Relationship = await DB.relationships.findOne({_id: req.query.id }).lean().exec();
@@ -248,7 +250,7 @@ router.get('/relationships', async (req, res)=> {
         return res.json( await relationshipParse(Relationship,req.query.plxdata) );
     }
     if (req.query.uid){
-        Relationships = await DB.relationships.find({users: req.query.uid }).lean().exec();
+        Relationships = await DB.relationships.find({users: req.query.uid }).limit(10).skip(10*(skip||0)).lean().exec();
         if(!Relationships) return res.status(404).json("USER NOT FOUND");
         return res.json( await Promise.all(Relationships.map(REL => relationshipParse(REL,req.query.plxdata))) );
     }
@@ -256,26 +258,27 @@ router.get('/relationships', async (req, res)=> {
  
 });
 
-async function relationshipParse(REL,dbData){    
+async function relationshipParse(REL,dbData){
+
     let usersData = await Promise.all( REL.users.map(async U=>userCache.get( U ) || (await PLX.getRESTUser( U ))) );
     usersData.forEach(U=> userCache.set(U.id,U));
-    if(dbData){      
-        usersData = await Promise.all(
-            usersData.map(async uDx =>{
-                let uD = {}
-                uD.id = uDx.id;
-                uD.avatar = uDx.avatar;
-                uD.bot = uDx.bot;
-                uD.discriminator = uDx.discriminator;
-                uD.username = uDx.username;
-                const plxUserData = ((await DB.users.get( uD.id,  {_id:0, "featuredMarriage":1,"modules.tagline":1} ))||{})._doc;
-                if(!plxUserData) return uD;
-                
-                uD.tagline   = plxUserData.modules.tagline;               
-                uD.featuredMarriage = plxUserData.featuredMarriage;
-                return uD;                
-            }) 
-        );
+    if(dbData){
+        let usersDBData = await DB.users.find( {id: {$in: usersData.map(u=>u.id)}},  {_id:0, "featuredMarriage":1,"modules.tagline":1} );
+        usersData = usersData.map(discordUser =>{
+            let userPayload = {
+                id : discordUser.id,
+                avatar : discordUser.avatar,
+                bot : discordUser.bot,
+                discriminator : discordUser.discriminator,
+                username : discordUser.username,
+            }
+            const plxUserData =  usersDBData.find(u=>u.id === ud.id);
+            if(!plxUserData) return userPayload;
+
+            userPayload.tagline   = plxUserData.modules.tagline;               
+            userPayload.featuredMarriage = plxUserData.featuredMarriage;
+            return userPayload;                
+        })
     };
    
    
