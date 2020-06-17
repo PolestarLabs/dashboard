@@ -1,4 +1,4 @@
-if userprofile.switches.booruPublic
+if userprofile.switches && userprofile.switches.booruPublic
     div( v-if="!boorucollection.loading")
 
         .plx-grid.plx-flex-top.plx-flex-wrap-top(class="plx-child-width-1-2@s plx-child-width-1-3@m plx-child-width-1-4@l" plx-grid="masonry: true; parallax: 200; ")
