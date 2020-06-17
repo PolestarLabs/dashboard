@@ -170,18 +170,19 @@ router.get('/commends', async (req,res)=>{
         const userCommends = (await DB.commends.get(req.query.uid || req.user.id , {_id: 0, __v:0}));
         if(!userCommends)  return res.status(404).json(null);
         let users =  [...new Set(
-                userCommends.whoIn.map(u=>u.id).concat(userCommends.whoOut.map(u=>u.id))
+                userCommends.whoIn.map(u=>u.id).slice(0,10).concat(userCommends.whoOut.map(u=>u.id).slice(0,10))
             )]
 
             const payload = {};
             payload.whoOut = userCommends.whoOut;
-            payload.userdata = await Promise.all(users.map(usr=> (userCache&&userCache.get(usr)) || PLX.getRESTUser(usr)));
+            payload.userdata = await Promise.all(users.map(usr=> (userCache?.get(usr)) || PLX.getRESTUser(usr)));
             payload.whoIn = userCommends.whoIn.sort((a,b)=> b.count - a.count )
         return res.json(payload);
     }
     const commendDataIn = DB.commends.aggregate(
         [
             { $match: { id: req.query.uid || req.user.id  } }, 
+            { $limit: 10},
             {
                 $lookup: {
                     from: "userdb",
@@ -207,7 +208,36 @@ router.get('/commends', async (req,res)=>{
 })
 
 
-
+router.get('/commendrank/:id/:endpoint', async (req,res)=>{
+ 
+    const ID = req.params.id
+    const count = (await DB.commends.get(ID))?.whoIn?.reduce((a,b)=> ({count: a.count + b.count}))?.count;
+    const rank = (await DB.commends.aggregate(
+        [            
+            {
+                $addFields: {
+                
+                "countIn":{$sum:"$whoIn.count"},
+                "countOut":{$sum:"$whoOut.count"},
+                }
+            },
+            {$match:{ [req.params.endpoint === 'in' ? 'countIn' : 'countOut']: {$gt: count} }},
+            {
+                $project: {
+                
+                    "id": 1,
+                    "whoOut": 1,
+                    "whoIn": 1,
+                    "pplIn": { "$size": "$whoIn" },
+                    "pplOut": { "$size": "$whoOut" }
+                
+                }
+            },
+            {$count:'count'}
+        ]
+    ))[0]?.count;     
+        return res.json({rank,count});
+})
 
 router.get('/relationships', async (req, res)=> {
 
