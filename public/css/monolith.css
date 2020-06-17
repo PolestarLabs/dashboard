@@ -32,7 +32,7 @@ body{
   overflow:hidden;
 }
 b {
- //color:var(--text-bold)
+/*color:var(--text-bold)*/
 }
 .lh-1 {
  line-height:1.1
@@ -195,7 +195,7 @@ div {
  content:"/ "
 }
 .lv1-nav>i {
- //opacity:.8;
+/*opacity:.8;*/
  transition:all 200ms ease;
  margin-bottom:2px
 }
@@ -442,12 +442,12 @@ nav:not(.home) .plx-logo:hover {
 }
 nav:not(.home) .login,
 .plx-active .login {
- background:var(--secondary-color)
+ background:var(--secondary-color);
 }
 nav:not(.home) .login:before,
 .plx-active .login:before {
  content:"";
- //background:inherit;
+/*background:inherit;*/
  width:20px;
  position:absolute;
  left:-20px;
@@ -467,7 +467,7 @@ nav:not(.home) .login:before,
  text-transform:none;
  z-index:0
 }
-.login img {
+.login img, .login .user-avatar {
  width:60px;
  display:inline;
  margin:-2px -29px 0 10px;
@@ -475,13 +475,13 @@ nav:not(.home) .login:before,
  text-indent:500px;
  height:60px
 }
-.login:hover {
- filter:hue-rotate(265deg) brightness(1.25)
+.login:hover  {
+ filter:hue-rotate(265deg) brightness(1.25); 
 }
 .login:focus {
  filter:hue-rotate(265deg) brightness(.75)
 }
-.login:hover img {
+.login:hover .user-avatar {
  filter:hue-rotate(-265deg) brightness(.75)
 }
 .login:focus img {
@@ -602,7 +602,7 @@ span.icon>i {
 }
 .title {
  color:var(--text-bold);
- //#cDcDE5
+/*#cDcDE5*/
 }
 h1,
 h2,
@@ -616,8 +616,9 @@ h5 {
 }
 h1.title {
  font-weight:700;
- color:var(--text-extra-bold) margin-bottom:2.5rem;
- margin-top:0
+ color:var(--text-extra-bold);
+/* margin-bottom:2.5rem;*/
+ margin-top:0;
 }
 h2.title {
  font-weight:500;
@@ -769,9 +770,9 @@ div:not(.plx-open) .faders {
   padding-left:0
  }
  .login img {
-  //width:25px;
-  //margin:AUTO-30pxAUTO8PXpx;
-  //border-radius:3px;
+/*width:25px;*/
+/*margin:AUTO-30pxAUTO8PXpx;*/
+/*border-radius:3px;*/
   display:none!important
  }
  .login span:not(.logon) {
@@ -826,8 +827,8 @@ div:not(.plx-open) .faders {
   width:320px
  }
  .login {
-  //margin-top:8px;
-  //margin-right:8px
+/*margin-top:8px;*/
+/*margin-right:8px*/
  }
  .weirdSidebar {
   display:none
@@ -968,33 +969,33 @@ div:not(.plx-open) .faders {
 .plx-rarity.C:after {
  background:gray;
  content:"C";
- //background-image:url('/images/tiers/C.png')
+/*background-image:url('/images/tiers/C.png')*/
 }
 .plx-rarity.R:after {
  background:#4e6dff;
  content:"R";
- //background-image:url('/images/tiers//R.png')
+/*background-image:url('/images/tiers//R.png')*/
 }
 .plx-rarity.SR:after {
  background:linear-gradient(-175deg,#Fb60b3 0%,#F146a1 50%,#F84077 51%,#Fb66D4 100%);
- //background:#ff4e6d;
+/*background:#ff4e6d;*/
  content:"SR";
- //background-image:url('/images/tiers//SR.png')
+/*background-image:url('/images/tiers//SR.png')*/
 }
 .plx-rarity.U:after {
  background:#ffbe4d;
  content:"U";
- //background-image:url('/images/tiers//U.png')
+/*background-image:url('/images/tiers//U.png')*/
 }
 .plx-rarity.UR:after {
  background:linear-gradient(-45deg,#ff4466,#fada66,#adfa55,#45d5fa,#6544fa,#da66fa);
  content:"UR";
- //background-image:url('/images/tiers//UR.png')
+/*background-image:url('/images/tiers//UR.png')*/
 }
 .plx-rarity.XR:after {
  background:var(--plx-color-xr);
  content:"XR";
- //background-image:url('/images/tiers//XR.png')
+/*background-image:url('/images/tiers//XR.png')*/
 }
 .plx-rubine {
  background-image:url(/images/gems/rubine_full.png);
@@ -1100,9 +1101,9 @@ h5 {
  visibility:hidden!important
 }
 .pinkord-placeholder {
- background-image:url(https://cdn.discordapp.com/embed/avatars/0.png);
- background-color:#f58;
- background-blend-mode:screen;
+ background-image:url(https://cdn.discordapp.com/embed/avatars/4.png);
+ background-color:#523297;
+ /*! background-blend-mode:screen; */
  background-size:contain;
  text-indent:500px;
  overflow:hidden
