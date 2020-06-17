@@ -28,7 +28,7 @@ router.get('/:endpoint', async (req, res)=> {
          DB.cosmetics.find({type:'sticker',  event: {$exists: false}}).countDocuments()
         , DB.cosmetics.find({type:'background', public: true, event: {$exists: false}, rarity: {$ne:'XR'} }).countDocuments()
         , DB.cosmetics.find({type:'medal', public: true, event: {$exists: false}, rarity: {$ne:'XR'} }).countDocuments()
-        ,(userCache&&userCache.get( userprofile.id ) || (await PLX.getRESTUser( userprofile.id )))
+        ,(userCache.get( userprofile.id ) || (await PLX.getRESTUser( userprofile.id )))
     ])
 
     let donoranks;

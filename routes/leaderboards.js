@@ -60,7 +60,7 @@ function userRankify(plxUser = {}, discordUser, member) {
   let userRank = {};
 
   
-  discordUser= discordUser || userCache?.get(plxUser.id) 
+  discordUser= discordUser || userCache.get(plxUser.id) 
   PLX.getRESTUser(plxUser.id ).then(u=> userCache.set(u.id,u));
  
 

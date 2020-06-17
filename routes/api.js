@@ -16,8 +16,8 @@ passport.use(new Strategy(
                     id: user.id,
                     apiKey: user._doc.apiKey,
                     apiPermission: user._doc.apiPerms || 'basic',
-                    ip: user.personal.ip,
-                    location: `${user.personal.city}, ${user.personal.country}`,
+                    ip: user.personal?.ip,
+                    location: user.personal?`${user.personal?.city}, ${user.personal?.country}`:undefined,
                 };
 
                 return cb(null,resUser)
@@ -175,7 +175,7 @@ router.get('/commends', async (req,res)=>{
 
             const payload = {};
             payload.whoOut = userCommends.whoOut;
-            payload.userdata = await Promise.all(users.map(usr=> (userCache?.get(usr)) || PLX.getRESTUser(usr)));
+            payload.userdata = await Promise.all(users.map(usr=> (userCache.get(usr)) || PLX.getRESTUser(usr)));
             payload.whoIn = userCommends.whoIn.sort((a,b)=> b.count - a.count )
         return res.json(payload);
     }
@@ -194,7 +194,7 @@ router.get('/commends', async (req,res)=>{
                     ],
                     as: "userdata"
                 }
-            }            
+            }
         ]
     ).allowDiskUse(!0).exec().then(result=>{
         result[0].userdata = result[0].userdata.map(udata=> {let udt = udata.meta; udt.id = udata.id; return udt} )
