@@ -138,6 +138,10 @@ function since(x){
   })
  
   
+fetch("/api/relationships?uid="+userprofile.id+"&plxdata=1").then(r =>
+    r.json().then(res =>  PROFILE.relationships = res  )
+);
+
 fetch("/api/commends?uid="+userprofile.id+"&.png&full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );
@@ -147,11 +151,7 @@ fetch("/api/commendrank/"+userprofile.id+"/in?.png&full=1").then(r =>
   
 fetch("/api/commends?uid="+userprofile.id+"&.png&full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
-);
-  
-fetch("/api/relationships?uid="+userprofile.id+"&plxdata=1").then(r =>
-    r.json().then(res =>  PROFILE.relationships = res  )
-);
+);  
 
 fetch("/api/cosmetics/search?type=sticker&id="+userprofile.modules.sticker+"&.png").then(r =>
     r.json().then(res =>  PROFILE.sticker = res[0]  )
@@ -162,7 +162,7 @@ fetch("/api/cosmetics/search?type=background&code="+userprofile.modules.bgID+"&.
 );
 
 
-userprofile.modules.medals.forEach((medal,i)=>{
+userprofile.modules.medals.forEach(async (medal,i)=>{
   
   fetch("/api/cosmetics/search?type=medal&icon="+userprofile.modules.medals[i]+"&.png").then(r =>{
   

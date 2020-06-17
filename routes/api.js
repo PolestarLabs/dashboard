@@ -241,6 +241,8 @@ router.get('/commendrank/:id/:endpoint', async (req,res)=>{
 
 router.get('/relationships', async (req, res)=> {
 
+    console.log('start')
+
     let {page: skip} = req.query;
 
     let Relationships;
@@ -253,15 +255,21 @@ router.get('/relationships', async (req, res)=> {
         if(!Relationships) return res.status(404).json("USER NOT FOUND");
     }
 
+    console.log('p1')
+
     let usersInvolved = Relationships.map(R=> R.users.find(u=> u!=req.query.uid) ).concat(req.query.uid);
     
     let [usersData,usersDBdata] = await Promise.all([
         Promise.all( usersInvolved.map(async U => userCache.get( U ) || PLX.getRESTUser( U )) ),
         (req.query.plxdata ? DB.users.find( {id: {$in: usersInvolved}},  {_id:0, id:1,"featuredMarriage":1,"modules.tagline":1} ) : null)
-    ]);  
+    ]);
+    usersData.forEach(USR=> userCache.set(USR.id,USR) );
+
+    console.log('p2')
 
     let parsedRelationships = []
     Relationships.forEach(rel=>{
+        console.log(0)
         let item = {
             type: rel.type,
             initiative: rel.initiative, 
@@ -280,6 +288,7 @@ router.get('/relationships', async (req, res)=> {
         parsedRelationships.push(item)
     });
     
+    console.log('end')
     return res.json( parsedRelationships);
  
 });
