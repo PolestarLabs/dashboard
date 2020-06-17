@@ -13,6 +13,10 @@ function since(x){
         AS3:'',
         boorucollection: {loading:true},
         commendInfo: {loading:true},
+        commendRank:{
+          in: {loading:true},
+          out:  {loading:true}
+        },
         bgData: {loading:true},
         relationships: {loading:true},
         bgDataMarket: {loading:true},
@@ -133,6 +137,13 @@ function since(x){
   }
   })
  
+  
+fetch("/api/commends?uid="+userprofile.id+"&.png&full=1").then(r =>
+    r.json().then(res =>  PROFILE.commendInfo = res  )
+);
+fetch("/api/commendrank/"+userprofile.id+"/in?.png&full=1").then(r =>
+    r.json().then(res =>  PROFILE.commendRank.in = res  )
+);
   
 fetch("/api/commends?uid="+userprofile.id+"&.png&full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
