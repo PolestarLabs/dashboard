@@ -41,7 +41,7 @@ router.get('/',AUTHED, (req, res)=> {
 router.use( '/users/:id', async (req,res,next) => {
     
     const { id } = req.params;
-    const res.locals.userdata = await DB.users.get(id);
+    res.locals.userdata = await DB.users.get(id);
 
     next();
     
@@ -50,7 +50,7 @@ router.use( '/users/:id', async (req,res,next) => {
 router.use( '/admin/:id', async (req,res,next) => {
     
     const { id } = req.params;
-    const res.locals.serverdata = await DB.servers.get(id);
+    res.locals.serverdata = await DB.servers.get(id);
 
     next();
     
@@ -59,7 +59,7 @@ router.use( '/admin/:id', async (req,res,next) => {
 router.use( '/items/:id', async (req,res,next) => {
     
     const { id } = req.params;
-    const res.locals.itemdata = await DB.items.get(id);
+    res.locals.itemdata = await DB.items.get(id);
 
     next();
     
@@ -70,4 +70,3 @@ router.use( '/cosmetics', async (req,res,next) => {
     
  });
 
- 
