@@ -95,6 +95,7 @@ const DASH = new Vue({
     changeFeatMarriage(id) {
       this.featuredMarriage = id;
       AUTOSAVE("Featured Marriage");
+      AUTOSAVE("COLOR")
     },
     toggleWifeOrder(by) {
       if (this.sortWife == by) return DASH.RSHP.reverse();
@@ -153,7 +154,7 @@ const DASH = new Vue({
     fuckThis() {
       $("nav.topbar ").css({ background: this.favcolor.hex });
       updateColorName(this.favcolor.hex);
-      AUTOSAVE("COLOR")
+      AUTOSAVE("COLOR",true)
       AUTOSAVE("TAGLINE",true)
       AUTOSAVE("PTXT",true)
     },
@@ -231,9 +232,13 @@ const DASH = new Vue({
 });
 
 function updateColorName(hex) {
+  AUTOSAVE("COLOR")
   fetch(
     "https://www.thecolorapi.com/id?hex=" + hex.replace("#", "")
-  ).then((r) => r.json().then((res) => $("#colorname").html(res.name.value)));
+  ).then((r) => r.json().then(async (res) => {
+    $("#colorname").html(res.name.value)
+    await   AUTOSAVE("COLOR");
+  }));
 }
 
 var correctCards = 0;
