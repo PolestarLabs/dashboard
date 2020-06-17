@@ -48,18 +48,18 @@ router.use("/cooking-minigame", async (...args) => {
     return (require('./event/cooking-minigame.js'))( ...args);
 })
 
-router.use("/repipe/:url", async (...args) => {
+router.use("/repipe/:url", async (req,res) => {
 
 
     let Picto = require('../../../bot/core/utilities/Picto')
 
-    let base = await Picto.useCanvas(decodeURI(req.params.url));
+    let base = await Picto.getCanvas(decodeURI(req.params.url));
 
     let newWidth = 300
     let newHeight = newWidth / base.width * base.height;
 
     const canvas = Picto.new(newWidth, newHeight);
-    const ctx = canvas.useContext('2d')
+    const ctx = canvas.getContext('2d')
 
     ctx.drawImage(base, 0, 0, newWidth, newHeight);
 
