@@ -243,53 +243,47 @@ router.get('/relationships', async (req, res)=> {
 
     let {page: skip} = req.query;
 
-    let Relationship, Relationships;
+    let Relationships;
     if (req.query.id){
-        Relationship = await DB.relationships.findOne({_id: req.query.id }).lean().exec();
-        if(!Relationship) return res.status(404).json("RELATIONSHIP ID NOT FOUND");
-        return res.json( await relationshipParse(Relationship,req.query.plxdata) );
+        Relationships = await DB.relationships.find({_id: req.query.id }).lean().exec();
+        if(!Relationships) return res.status(404).json("RELATIONSHIP ID NOT FOUND");
     }
     if (req.query.uid){
         Relationships = await DB.relationships.find({users: req.query.uid }).limit(10).skip(10*(skip||0)).lean().exec();
         if(!Relationships) return res.status(404).json("USER NOT FOUND");
-        return res.json( await Promise.all(Relationships.map(REL => relationshipParse(REL,req.query.plxdata))) );
     }
-    return res.status(400).json("BAD REQUEST");
+
+    let usersInvolved = Relationships.map(R=> R.users.find(u=> u!=req.query.uid) ).concat(req.query.uid);
+    
+    let [usersData,usersDBdata] = await Promise.all([
+        Promise.all( usersInvolved.map(async U => userCache.get( U ) || PLX.getRESTUser( U )) ),
+        (req.query.plxdata ? DB.users.find( {id: {$in: usersInvolved}},  {_id:0, id:1,"featuredMarriage":1,"modules.tagline":1} ) : null)
+    ]);  
+
+    let parsedRelationships = []
+    Relationships.forEach(rel=>{
+        let item = {
+            type: rel.type,
+            initiative: rel.initiative, 
+            ring: rel.ring,
+            since: rel.since,
+            id: rel._id,
+            users: rel.users,
+            usersData: rel.users.map(u=> {
+                let udbData = {};
+                let {avatar,bot,discriminator,username} = usersData.find(usr=> usr.id === u);
+                if(usersDBdata) udbData = usersDBdata.find(usr=> usr.id === u);           
+                
+                return  Object.assign( {id:u, avatar, bot, discriminator, username} , {tagline:udbData?.modules?.tagline,featuredMarriage:udbData?.featuredMarriage} )
+            })
+        };
+        parsedRelationships.push(item)
+    });
+    
+    return res.json( parsedRelationships);
  
 });
-
-async function relationshipParse(REL,dbData){
-
-    let usersData = await Promise.all( REL.users.map(async U=>userCache.get( U ) || (await PLX.getRESTUser( U ))) );
-    usersData.forEach(U=> userCache.set(U.id,U));
-    if(dbData){
-        let usersDBData = await DB.users.find( {id: {$in: usersData.map(u=>u.id)}},  {_id:0, "featuredMarriage":1,"modules.tagline":1} );
-        usersData = usersData.map(discordUser =>{
-            let userPayload = {
-                id : discordUser.id,
-                avatar : discordUser.avatar,
-                bot : discordUser.bot,
-                discriminator : discordUser.discriminator,
-                username : discordUser.username,
-            }
-            const plxUserData =  usersDBData.find(u=>u.id === ud.id);
-            if(!plxUserData) return userPayload;
-
-            userPayload.tagline   = plxUserData.modules.tagline;               
-            userPayload.featuredMarriage = plxUserData.featuredMarriage;
-            return userPayload;                
-        })
-    };
-   
-   
-    delete REL.__v
-    REL.usersData = usersData;
-    REL.id = REL._id
-    delete REL._id
-    return REL;
-};
-
-
+ 
 
 //router.get('/cosmetics')
 //router.get('/collectibles')
