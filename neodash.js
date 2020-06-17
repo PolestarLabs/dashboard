@@ -358,8 +358,10 @@ app.use(async function(req,res,next){
 const simpleauth = require('basic-auth')
 const admins = { polaris: { password: 'geminis472899' } }
  
+// remove all this shit later
 const auth = async function(req, res, next) {
   //return next();
+  if(req.url.includes('api'))      return next();
   if(req.url.includes('.png'))      return next();
   if(req.url.includes('discoin'))      return next();
   if(req.url.includes('branding')) return next();
