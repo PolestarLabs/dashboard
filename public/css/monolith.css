@@ -1240,3 +1240,14 @@ h5 {
  margin:inherit;
  z-index:inherit
 }
+
+svg.commend-token{
+  background: #3366FF;
+  padding: 4px;
+  margin: 8px;
+  width: 32px;
+  border-radius: 100px;
+  vertical-align: bottom;
+  border: solid 2px;
+}
+ 
