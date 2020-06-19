@@ -27,9 +27,15 @@ router.get('/', async (req,res)=>{
     const betTypes = ["straight", "split", "street", "square", "basket", "dstreet", "dozen", "column", "snake", "manque", "passe", "colour", "parity"];
 
     let USERS = await Promise.all(payload.split(',').map(async U => {
+        let avatar
+        try {
+            avatar = await Picto.getCanvas(`https://cdn.discordapp.com/avatars/${U.split('_')[0]}/${U.split('_')[1]}.png?size=64`);
+        } catch (err) {
+            avatar = await Picto.getCanvas(`https://cdn.discordapp.com/embed/avatars/4.png`);
+        }
         return {
             id: U.split('_')[0]
-            , avatar: await Picto.getCanvas(`https://cdn.discordapp.com/avatars/${U.split('_')[0]}/${U.split('_')[1]}.png?size=64`)
+            , avatar
             , bets: U.slice(U.indexOf(' ') + 1).split(' ').map(b => {
                 let meta = b.split('-')[0];
                 console.log({ b })
@@ -83,8 +89,8 @@ router.get('/', async (req,res)=>{
             y: i => baselineGridY(i) - 31
         },
         split: {
-            x: i => baselineGridX(i) + (i.offset == 2 ? 23 : 0),
-            y: i => baselineGridY(i) - (i.offset == 1 ? 31 : 0),
+            x: i => baselineGridX(i) + (i.offset == 1 ? 23 : 0),
+            y: i => baselineGridY(i) - (i.offset == 2 ? 31 : 0),
         },
         street: {
             x: i => baselineGridX(i),
