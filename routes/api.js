@@ -11,11 +11,12 @@ const Strategy = require('passport-http-bearer').Strategy
 passport.use(new Strategy(
         (token,cb) =>{
             DB.users.get({apiKey:token}).then(user=>{
+                console.log({user})
                 if(!user) return cb(null,false,{message: "API Token Needed"});
                 let resUser={
                     id: user.id,
-                    apiKey: user._doc.apiKey,
-                    apiPermission: user._doc.apiPerms || 'basic',
+                    apiKey: user.apiKey,
+                    apiPermission: user.apiPerms || 'basic',
                     ip: user.personal?.ip,
                     location: user.personal?`${user.personal?.city}, ${user.personal?.country}`:undefined,
                 };
@@ -39,6 +40,12 @@ const DONOR  = (rq,rs,nx) => ['master','admin','sponsor','donor'].includes(rq.us
 router.get('/',AUTHED, (req, res)=> {
         res.json(req.user)
 })
+
+
+router.use( (req,res,nex)=>{
+    if (req.headers.authorization) return AUTHED(req,res,nex);
+    nex();
+});
 
 router.get('/discoin/currencies', async (req,res)=>{
     let units = await DB.globals.find({'type':'discoin'},{type:0,_id:0}).lean().exec();
@@ -93,7 +100,7 @@ router.get('/user/:id',  async (req,res) => {
 })
 
 
-router.get('/items/:endpoint', async (req,res) => {
+router.get('/items/:endpoint',   (req,res) => {
 
     if(req.params.endpoint == 'search'){
         let queries = {}
@@ -103,12 +110,154 @@ router.get('/items/:endpoint', async (req,res) => {
                     queries[ky] = req.query[ky]
                 })
         console.log({queries})
-        queries.public = true;
+        
         DB.items.find(queries,{name:1, rarity:1, event:1, icon:1, id:1, type:1}).then(result=>{
+            console.log(result)
             res.json(result)
         })
     }
 
+})
+
+
+router.post('/crafting/mix',  async (req,res) => {
+
+    const {pot} = req.body;
+    
+    let inventory, craftingHistory;
+    if(req.user?.id){
+        let [userData,userStats] = await Promise.all([
+            DB.users.get(req.user.id, {'modules.inventory':1,'counters.crafted':1}),
+            (await DB.users.get(req.user.id, {'modules.inventory':1,'counters.crafted':1}))?.data
+        ]);
+        inventory = (userData?.modules?.inventory || []).filter(x=>x.count > 0);
+        craftingHistory = (userStats?.data?.crafted || []).map(x=>x.id);
+        
+    } 
+
+    console.log(req.user)
+
+    if (!pot) return res.status(400).json({error: "No Pot"});
+    
+    const query = {
+        $or: [
+            {materials: {$all:pot.map(i=>i.id)}},
+            {'materials.id': {$all:pot.map(i=>i.id)}}
+        ],
+        //crafted: !0, display: !0
+    };
+    const queryExact = {
+        $or: [
+            {materials: {$size: pot.length, $all: pot.map(i=>i.id)}},
+            {
+                $and:pot.map(itm=>{
+                    return {'materials.id': itm.id , 'materials.count': {$lte: itm.count} }
+                }).concat({ materials: {$size: pot.length} })
+            },
+        ],    
+        //crafted: !0, display: !0
+    };
+
+    
+    let possible =  await DB.items.find(queryExact).lean().exec();
+    if (!possible.length) possible = await DB.items.find(query).lean().exec();
+
+    else possible.exact = true;
+    
+    if (possible.exact && possible.length > 1){
+        let rars = ["C","U","R","SR","UR","XR"] 
+        let possiblest = possible.sort((a,b)=>{
+            //if (craftingHistory.includes(a.id)) return -1;
+            //if (inventory.map(x=>x.id).includes(a.id)) return -1;
+            if ( rars.indexOf(a.rarity) < rars.indexOf(b.rarity) ) return -1;
+            if ( rars.indexOf(a.rarity) > rars.indexOf(b.rarity) ) return  1;
+            if ( a.level < b.level  ) return  -1;
+            if ( a.level > b.level  ) return   1;
+        })
+        possible = [possiblest[0]]
+    }
+     
+
+    if (possible.length === 1){
+
+        let discovery = possible[0];
+        let canCraftNow = isExact(pot,discovery.materials);
+        let isDiscovery = itemsMatch(pot, discovery.materials);
+
+        return res.json({discovery, isDiscovery, canCraftNow,inventory});
+        
+    }else{
+        return res.json({
+            possible: possible.length ||0, 
+            inventory
+            
+        })
+    };
+
+
+
+
+
+   
+
+
+    
+    
+    DB.items.find({$or: [{materials: {$all:items}}, {'materials.id': {$all:items}}], crafted: !0, display: !0},
+        {name:1, rarity:1, event:1, icon:1, id:1, type:1, gemcraft: 1, materials: 1, code: 1}).then(result=>{
+        
+            result.map(itm=> {
+                itm.materials.every(t=>items.includes(t))
+            })
+        res.json(result)
+    })
+     
+})
+
+function isExact(pot,recipe){
+    return itemsMatch(pot,recipe) &&
+    recipe.every(item=>{
+        let material = pot.find(m=> m.id === (item.id||item) );
+        if (!material) return false;
+        let needs = item.count || 1;
+        let has = material.count;
+        return has >= needs
+    });
+}
+
+function itemsMatch(pot,recipe){
+    return pot.length === recipe.length &&
+    recipe.every(item=> 
+        !!pot.find(m=> 
+            m.id === (item.id || item)
+        )
+    );     
+}
+
+router.get('/crafting/:endpoint',   (req,res) => {
+
+    if(req.params.endpoint == 'search'){
+        let queries = {}
+        Object.keys(req.query)
+            .filter(qry => ['id','rarity','code','type'].includes(qry) )
+            .forEach(ky=> {
+                    queries[ky] = req.query[ky]
+                })
+ 
+        queries.crafted = true
+        queries.display = true
+
+        DB.items.find(queries, {name:1, rarity:1, event:1, icon:1, id:1, type:1, gemcraft: 1, materials: 1, code: 1}).then(result=>{
+            console.log(result)
+            res.json(result)
+        })
+    }else{
+        DB.items.find({id:req.params.endpoint, crafted: !0, display: !0},
+            {name:1, rarity:1, event:1, icon:1, id:1, type:1, gemcraft: 1, materials: 1, code: 1}).then(result=>{
+            console.log(result)
+            res.json(result)
+        })
+    }
 })
 
 
