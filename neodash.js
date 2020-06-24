@@ -85,22 +85,30 @@ app.use(function (req, res, next) {
     next();
 });
 
-
-global.PLX = new Eris.Client(config.token,{restMode:true})
-Object.assign(PLX,require("../bot/core/utilities/Gearbox").Client)
-global.DB  = require('./database'); 
-
-//-- SESSION STORAGE
-const mongoose = require('mongoose');
-const MongoStore = require('connect-mongo')(exSession);
-
-mongoose.connect('mongodb://polaris:geminisbeta@138.201.158.163:27472/polaris', { 
+const dbURL = 'mongodb://polaris:geminisbeta@138.201.158.163:27472/polaris';
+const dbOptions = { 
   useNewUrlParser: true,
   reconnectTries: Number.MAX_VALUE,
   reconnectInterval: 1000,
   keepAlive: 1,
   connectTimeoutMS: 30000,
-});
+}
+
+global.PLX = new Eris.Client(config.token,{restMode:true})
+Object.assign(PLX,require("../bot/core/utilities/Gearbox").Client);
+
+(require('@polestar/database_schema'))({
+  url: dbURL,
+  options: dbOptions,
+}).then(Connection => {
+  global.DB  = Connection;
+})
+
+//-- SESSION STORAGE
+const mongoose = require('mongoose');
+const MongoStore = require('connect-mongo')(exSession);
+
+mongoose.connect( dbURL, dbOptions);
 
 
 mongoose.set('useFindAndModify', false);

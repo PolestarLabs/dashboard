@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@polestar/database_schema": "gitlab:PolestarLabs/database_schema",
     "assert": "^1.4.1",
     "axios": "^0.19.0",
     "bluebird": "^3.5.5",
@@ -23,7 +24,7 @@
     "formidable": "^1.2.1",
     "gif-encoder": "^0.7.2",
     "gifencoder": "^2.0.1",
-    "helmet": "^3.19.0",
+    "helmet": "^3.23.2",
     "i18n-express": "^1.1.3",
     "i18next": "^19.3.1",
     "i18next-node-fs-backend": "^2.1.3",
@@ -32,7 +33,7 @@
     "mongoose": "^5.6.0",
     "morgan": "^1.9.1",
     "node-fetch": "^2.6.0",
-    "node-sass": "^4.13.1",
+    "node-sass": "^4.14.1",
     "node-sass-middleware": "^0.11.0",
     "passport": "^0.4.0",
     "passport-cookie": "^1.0.4",
