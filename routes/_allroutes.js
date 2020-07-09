@@ -53,6 +53,7 @@ const fx = require('../pipelines/globalFunctions.js');
     return bridge(...args);
   });
 
+  router.get('/discord', async  (r,res)=>  res.redirect('http://discord.gg/rEBCccS'));
 
 // SEARCH & PAGINATE  
   router.get('/search/:endpoint/:page', async  (...args)=> simplepages('paginate').run(...args));
