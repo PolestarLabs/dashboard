@@ -43,7 +43,7 @@ router.get('/',AUTHED, (req, res)=> {
 
 
 router.use( (req,res,nex)=>{
-    if (req.headers.authorization) return AUTHED(req,res,nex);
+    if (req.headers.authorization && !req.user) return AUTHED(req,res,nex);
     nex();
 });
 
@@ -98,7 +98,19 @@ router.get('/user/:id',  async (req,res) => {
             
     })
 })
+router.get('/user/:id/inventory', async (req,res)=>{
+    const uID = req.params.id;
+        
+        let USR = await DB.users.get(uID);
+        let userInventory = USR.modules.inventory.filter(itm=> itm.count > 0 && typeof itm.id === 'string');
+        let userMetaInventory = await DB.items.find({id: {$in: userInventory.map(i=>i.id) } });
+        userInventory.forEach(item=>{
+            item.meta = userMetaInventory.find(itm=>itm.id === item.id);
+        })
+        
+        res.json(userInventory)
 
+})
 
 router.get('/items/:endpoint',   (req,res) => {
 
@@ -123,6 +135,8 @@ router.get('/items/:endpoint',   (req,res) => {
 router.post('/crafting/mix',  async (req,res) => {
 
     const {pot} = req.body;
+    const rars = ["C","U","R","SR","UR","XR"];
+    const potTypeMap = pot.map(i=>i.type);
     
     let inventory, craftingHistory;
     if(req.user?.id){
@@ -135,8 +149,6 @@ router.post('/crafting/mix',  async (req,res) => {
         
     } 
 
-    console.log(req.user)
-
     if (!pot) return res.status(400).json({error: "No Pot"});
     
     const query = {
@@ -146,9 +158,11 @@ router.post('/crafting/mix',  async (req,res) => {
         ],
         //crafted: !0, display: !0
     };
+    
+
     const queryExact = {
         $or: [
-            {materials: {$size: pot.length, $all: pot.map(i=>i.id)}},
+            {materials: {$size: pot.length, $all: pot.map(i=>i.id) }},
             {
                 $and:pot.map(itm=>{
                     return {'materials.id': itm.id , 'materials.count': {$lte: itm.count} }
@@ -157,34 +171,109 @@ router.post('/crafting/mix',  async (req,res) => {
         ],    
         //crafted: !0, display: !0
     };
+    let tCraftSize = ([...new Set( potTypeMap )]).length
+    console.log({tCraftSize})
+
 
     
     let possible =  await DB.items.find(queryExact).lean().exec();
+    console.log(possible,pot)
     if (!possible.length) possible = await DB.items.find(query).lean().exec();
-
     else possible.exact = true;
     
+    if (!possible.length){
+        
+        const refinedPot = pot.map(item=> { item.count *= ((rars.indexOf(item.rarity)+1)/2); return item})
+        let querySameType = {
+            $and: pot.map(itm=>{
+                let craftType = itm.type;
+                let threshold = refinedPot.filter(i=>i.type === craftType ).reduce((a,b)=> ({count: a.count + b.count}))?.count || 0;
+
+                return {
+                    
+                    'typeCraft.count': { $lte: threshold },
+                    'typeCraft.type': craftType,
+    
+                }
+            })
+            .concat({'typeCraft.type': {$all: potTypeMap ,}}),
+            //crafted: !0, display: !0
+        };
+        console.log({refinedPot})
+        possible = await DB.items.find(querySameType).lean().exec();
+        const potSorted = pot.sort((a,b) => rars.indexOf(b.rarity) - rars.indexOf(a.rarity) );
+        const highestRar = potSorted[0].rarity;
+        const lowestRar = potSorted[pot.length -1].rarity;
+
+
+
+        console.table( {'length':possible.length,lowestRar,highestRar })  
+        possible = possible.filter(x=> {  
+            let isBetterThanLowest =  (rars.indexOf(x.rarity) >= (rars.indexOf(lowestRar) || 1))
+            let isSameOrInferiorThanBest = rars.indexOf(x.rarity) <= rars.indexOf(highestRar);
+            console.table({
+                thisRAR: x.rarity,lowestRar, highestRar,isBetterThanLowest,
+                isSameOrInferiorThanBest
+
+            })        
+            return isBetterThanLowest && isSameOrInferiorThanBest
+        });
+        console.log('length',possible.length)  
+        
+        
+        if (possible.length){            
+            possible = [shuffle(possible)[0]]
+            possible.typeCraft = true
+        }else{
+            querySameType = {'typeCraft.type' : {$all: potTypeMap } }
+            if (pot.length === 3) querySameType.rarity = {$in: pot.map(i=>i.rarity)};
+            console.log(querySameType)        
+            possible = await DB.items.find(querySameType).lean().exec();
+            possible.typeCraft = true
+            possible.notQuite = true
+        }
+  
+    } 
+        
+
+
+    
     if (possible.exact && possible.length > 1){
-        let rars = ["C","U","R","SR","UR","XR"] 
+        
         let possiblest = possible.sort((a,b)=>{
             //if (craftingHistory.includes(a.id)) return -1;
             //if (inventory.map(x=>x.id).includes(a.id)) return -1;
+            if ( a.materials.every(x=> x.count <= pot.find(y=> y.id == x.id)?.count ) ) return -1;
             if ( rars.indexOf(a.rarity) < rars.indexOf(b.rarity) ) return -1;
             if ( rars.indexOf(a.rarity) > rars.indexOf(b.rarity) ) return  1;
             if ( a.level < b.level  ) return  -1;
             if ( a.level > b.level  ) return   1;
         })
         possible = [possiblest[0]]
+        possible.exact = true;
     }
-     
 
-    if (possible.length === 1){
+    
+
+    if (possible.typeCraft && !possible.notQuite){
+
+        let discovery   = possible[0];
+        
+        let canCraftNow = !possible.notQuite;
+        let isDiscovery = true;
+
+        return res.json({discovery, isDiscovery, canCraftNow, typeCraft: true});
+        
+    }
+    
+
+    if (possible.exact){
 
         let discovery = possible[0];
         let canCraftNow = isExact(pot,discovery.materials);
         let isDiscovery = itemsMatch(pot, discovery.materials);
 
-        return res.json({discovery, isDiscovery, canCraftNow,inventory});
+        return res.json({discovery, isDiscovery, canCraftNow});
         
     }else{
         return res.json({
@@ -247,7 +336,7 @@ router.get('/crafting/:endpoint',   (req,res) => {
         queries.crafted = true
         queries.display = true
 
-        DB.items.find(queries, {name:1, rarity:1, event:1, icon:1, id:1, type:1, gemcraft: 1, materials: 1, code: 1}).then(result=>{
+        DB.items.find(queries, {name:1, rarity:1, event:1, icon:1, id:1, subtype:1, type:1, gemcraft: 1, materials: 1, code: 1}).then(result=>{
             console.log(result)
             res.json(result)
         })
@@ -271,8 +360,13 @@ router.get('/cosmetics/:endpoint', async (req,res) => {
                     queries[ky] = req.query[ky]
                 })
         console.log({queries})
+        let sort = {_id:-1}
         //queries.public = true;
-        DB.cosmetics.find(queries,{_id:0,series:1,series_id:1,code:1, name:1,category:1, rarity:1, event:1, icon:1, id:1, type:1,BUNDLE:1,legacy:1,exclusive:1}).lean().exec().then(result=>{
+        DB.cosmetics.find(queries,{_id:0,series:1,series_id:1,code:1, name:1,category:1, rarity:1, event:1, icon:1, id:1, type:1,BUNDLE:1,legacy:1,exclusive:1,artistName:1,artistLink:1,artistImg:1})
+        .skip(parseInt(req.query.skip)||0)
+        .limit( parseInt(req.query.lim)||50)
+        .sort(sort)
+        .lean().exec().then(result=>{
             res.json(result)
         })
     }
