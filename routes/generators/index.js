@@ -48,6 +48,10 @@ router.use("/cooking-minigame", async (...args) => {
     return (require('./event/cooking-minigame.js'))( ...args);
 })
 
+router.use("/flag", async (...args) => {
+    return (require('./flag.js'))( ...args);
+})
+
 router.use("/repipe/:url", async (req,res) => {
 
 
