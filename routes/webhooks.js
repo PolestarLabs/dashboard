@@ -274,6 +274,17 @@ router.post('/minecraft', async function (req, res) {
 
 
 
+router.post('/:any', function (req, res) {
+  let payload = req.body;
+
+  console.log(payload);
+ 
+
+  res.send(200)
+  
+})
+
+
 
 
 
