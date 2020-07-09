@@ -102,6 +102,11 @@ Object.assign(PLX,require("../bot/core/utilities/Gearbox").Client);
   options: dbOptions,
 }).then(Connection => {
   global.DB  = Connection;
+  app.listen(4728, function (err) {
+    if (err) return console.log(err)
+    console.log('Listening at http://localhost:4728/')
+  })
+  
 })
 
 //-- SESSION STORAGE
@@ -488,12 +493,6 @@ app.use('/die', (...args)=>{
 //======================================================================
 //              ALL SET
 //======================================================================
-
-app.listen(4728, function (err) {
-  if (err) return console.log(err)
-  console.log('Listening at http://localhost:4728/')
-})
-
 
  
 // CATCH 404
