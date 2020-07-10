@@ -1,4 +1,4 @@
-                                           
+      
 .expand-dong {
   flex: 1 0 auto;
 }
@@ -7,9 +7,7 @@ img{
   //pointer-events: none;
 }
 
-.recoil {
-  //padding-left: 30px;
-}
+ 
 @media screen and (max-width: 720px) {
   .recoil {
     padding: 0 8px;
@@ -191,17 +189,19 @@ img{
 .arrivalscar{
   background: #0015;
   padding: 20px 5px; 
+  width: 100%;
   
+  /*! flex: 1 0 auto; */
 }
 
 .storeside {
 
-  background: var(--light);
+  background: var(--mid);
   background-image: linear-gradient(45deg ,var(--accent-color-dark),var(--accent-color-dark));
   background-blend-mode: multiply;
   color: var(--lightest);
   background-image: linear-gradient(141deg,var(--accent-color-dark) 0%,var(--accent-color-mid) 71%,var(--accent-color) 100%);
-  min-width: 260px;
+  min-width: 300px;
 }
 
 .storeside li{
@@ -220,9 +220,19 @@ img{
   border-radius: 0;
 }
 
+ 
 .megastroke a{
-    paint-order: stroke fill;
-  -webkit-text-stroke: 5px var(--text-shadow);
+    --megastroke: -2px 1px 0 var(--text-shadow),
+       1px 1px 0 var(--text-shadow),
+     -1px -1px 0 var(--text-shadow),  
+      1px -1px 0 var(--text-shadow),
+      -1px 1px 0 var(--text-shadow),
+       1px 1px 0 var(--text-shadow);
+  //paint-order: stroke fill;
+  //-webkit-text-stroke: 5px var(--text-shadow);
+  text-shadow:  var(--megastroke);
+    
+ 
   filter: drop-shadow(-2px 2px 0px var(--text-shadow)) 
 }
 
@@ -232,8 +242,9 @@ img{
 }
 
 .megastroke.plx-active{
-    paint-order: stroke fill;
-  -webkit-text-stroke: 5px var(--text-shadow);
+  //  paint-order: stroke fill;
+  //-webkit-text-stroke: 5px var(--text-shadow);
+     text-shadow:  var(--megastroke);
 }
 
 .megastroke.plx-active a{
@@ -253,13 +264,25 @@ img{
 
 .storeside .plx-active a{
   font-weight: 900 ;
+  white-space:  nowrap      
+}
+.storeside a i {
+   padding-right:15px;
+  color: var(--secondary-color-alt);
   
 }
+.storeside .plx-active a i{
  
+  margin-right: 15px;
+  
+  
+}
 
 @keyframes menufill {
   0% {width: 0}
-  100% {width: 100%;  padding-left:30px;}
+  100% {
+    width: 100%;
+  }
 }
 
 .storeside li.plx-active:after {
@@ -388,13 +411,18 @@ font-size: 22px;
   align-self: start;
 }
 .img.background .bg-image{
-  animation: bg-anim 50s  infinite;
+
   width: 100%;
   height: 100%;
   background-size: cover;
   background-position-x: 70%;
   box-shadow: inset 0 3px 20px #1133;
 
+}
+@-moz-document url-prefix() {
+  .img.background .bg-image{
+    animation: bg-anim 50s  infinite;
+  }
 }
 @keyframes bg-anim{
   50%{      transform: rotate(5deg) scale(1.2); }
@@ -482,10 +510,16 @@ font-size: 22px;
 
 .img.sticker img{
   height: 150px;
-  transform: rotate(-5deg) scale(1.2);
-  animation: stickerRotate 12s ease-in-out alternate infinite;
+  
   filter: drop-shadow(1px 3px 8px #3258)
 }
+@-moz-document url-prefix() {
+  .img.sticker img{
+    transform: rotate(-5deg) scale(1.2);
+    animation: stickerRotate 12s ease-in-out alternate infinite;
+  }
+}
+
 @keyframes stickerRotate {
   to {
     transform: rotate(10deg) scale(1.275);;
@@ -598,5 +632,27 @@ pointer-events: none;
   border-radius: 10px;
  
 }
+
+
+
+
+.store-sidebar{
+  
+background: black;
+  display: flex;
+  flex-direction: column;
+}
+@media screen and (max-width: 900px ){
+.store-sidebar label{
+  display: none;
+}
+  .store-sidebar{
+    min-width: 100px;
+  }
+}
+
+
+
+
 
 
