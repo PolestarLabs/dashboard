@@ -1,0 +1,49 @@
+mixin arrivalsMenu()
+    ul#filter-arrivals.plx-nav(plx-filter-control="group:type")
+        form.search
+            i.fas.fa-search
+                input(type='search' v-model='search' placeholder="Search arrivals..." @keyup="filterMeds()")
+        li.megastroke.menuitem(plx-filter-control="filter: *").plx-active
+            a.plx-button 
+                i: .fas.fa-star
+                | All
+        li.megastroke.menuitem(plx-filter-control="filter: .background ; group: type")
+            a.plx-button 
+                i: .fas.fa-image
+                | Backgrounds
+        li.megastroke.menuitem(plx-filter-control="filter: .medal ; group: type")
+            a.plx-button 
+                i: .fas.fa-map-marker
+                | Medals
+        li.megastroke.menuitem(plx-filter-control="filter: .sticker ; group: type")
+            a.plx-button 
+                i: .fas.fa-clone
+                | Stickers
+        li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type")
+            a.plx-button 
+                i: .fas.fa-vial
+                | Items
+
+section#ARRIVALS
+    //h1.title New Arrivals
+    //h4.subtitle Recently added items
+
+
+    
+    //
+        
+        
+    .plx-button.plx-button-default(plx-toggle="target: #offcanvas-arrivals" class="plx-hidden@m") Filter 
+    .plx-flex(plx-filter="target: #arrivals1")
+        #offcanvas-arrivals(plx-offcanvas  class="plx-hidden@m")
+            .storeside 
+                .plx-offcanvas-close(plx-close)
+                +arrivalsMenu()
+        .storeside(class='plx-visible@m')
+            +arrivalsMenu()
+
+
+        .plx-position-relative.plx-width-1-1.arrivalscar
+            ul.plx-width-auto#arrivals1.plx-slider-items.plx-child-width-1-4.plx-flex-wrap.plx-flex-center 
+                li.shopbox(v-for="item in arrivals", :data-search="item.name", :class="[item.type,'raritybox',item.rarity].join(' ')")
+                    +shopcard()

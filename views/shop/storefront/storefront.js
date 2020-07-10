@@ -5,10 +5,7 @@ let default_img = "https://via.placeholder.com/120x120";
 STORE = new Vue({
     el:'#storefront',
     components:{
-        Hooper: window.Hooper.Hooper,
-        Slide: window.Hooper.Slide,
-       HooperPagination: window.Hooper.Pagination,
-       HooperNavigation: window.Hooper.Navigation
+         
     },
     data:{
         backgrounds: {loading:true},
@@ -36,8 +33,10 @@ STORE = new Vue({
             infiniteScroll: true,
             centerMode: true,
             breakpoints:{                
-                1000: {itemsToShow: 5},
-                 720: {itemsToShow: 5},
+                1660: {itemsToShow: 7},
+                1200: {itemsToShow: 5},
+                1000: {itemsToShow: 4},
+ 
                  500: {itemsToShow: 3},
                  460: {itemsToShow: 2},
                  0: {
@@ -94,7 +93,7 @@ fetch("/api/cosmetics/search?type=medal").then(r =>
 
 
 fetch("/api/items/search?type=boosterpack").then(r =>
-    r.json().then(async res =>  STORE.stickers = shuffle(res).slice(0,24)  )
+    r.json().then(async res =>  STORE.boosters = shuffle(res).slice(0,24)  )
 );
 
 

@@ -1,6 +1,6 @@
-extends ../../layout 
+extends ../../layout
 
-mixin shopcard()  
+mixin shopcard() 
     .header
       .s-title.truncate(:plx-tooltip="item.name") {{item.name}}
       .icon
@@ -18,6 +18,8 @@ mixin shopcard()
         img(plx-img :src="`/medals/${item.icon}.png`")
       .img(v-if='item.type == "sticker"').sticker
         img(plx-img :src="`/stickers/${item.id}.png`")
+      .img(v-if='item.type == "boosterpack"').sticker
+        img(plx-img :src="`/build/boosters/showcase/${item.icon}.png`")
       .img(v-if='item.type == "item"').item
         img(plx-img :src="`/build/items/${item.id}.png`")
       .img(v-if='item.type == "skin"').skin
@@ -42,191 +44,82 @@ mixin shopcard()
 
 block head
   script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
-  script(src='https://unpkg.com/hooper@0.3.4/dist/hooper.js')
+
   
 block content
-    .wrapper
-        -currentPage = 'market'
-        include ../../navbar
 
-        style   
-          include store.css
-        style   
-          include hooper.css
-        style   
-          include ../rarityboxes.css
-        style.
-          img{
-            user-select: none
-          }
- 
+    -currentPage = 'market'
+    include ../../navbar
 
-          
+    style   
+        include store.css
+    style   
+        include hooper.css
+    style   
+        include ../rarityboxes.css
 
-        .store-container#storefront
-          div
-          h1.title.stfront STOREFRONT
-          h3.subtitle Your new hub for Pollux Collectibles
-          hr.plx-divider-small
-          br
-            
-          div(plx-sticky="top:0; offset:50; xmedia: 1000" class="plx-visible@m")
-            .plx-flex-start.plx-grid.plx-nav.glassmenu(plx-scrollspy-nav="closest: a; scroll: true; offset: 60")
-              a.item.glasspane(href="#ARRIVALS")
-                i.fas.fa-home
-                span New Arrivals
-              a.item.glasspane(href="#BUNDLES")
-                i.fas.fa-home
-                span Bundles
-              a.item.glasspane(href="#BACKGROUNDS")
-                i.fas.fa-home
-                span Backdrops
-              a.item.glasspane(href="#MEDALS")
-                i.fas.fa-home
-                span Medals
-              a.item.glasspane(href="#BOOSTERS")
-                i.fas.fa-home
-                span Boosterpacks
-          
-          
 
-          .plx-bottom-menu( class="plx-hidden@m")
-            .plx-flex(plx-scrollspy-nav="closest: a; scroll: true; offset: 180")
-              a(href="#ARRIVALS")
-                i.fas.fa-home
-                span NEW
-              a(href="#BUNDLES")
-                i.fas.fa-home
-                span BUNDLES
-              a(href="#BACKGROUNDS")
-                i.fas.fa-home
-                span BGs
-              a(href="#MEDALS")
-                i.fas.fa-home
-                span MEDALS
-              a(href="#BOOSTERS")
-                i.fas.fa-home
-                span BOOSTERS
-          
-            .minibar.plx-flex.plx-flex-right
-              .user
-              span
-              .expand-dong              
-              .cash.plx-flex
-                .plx-rubine.icon24
-                span 23 785 |
-              .cash.plx-flex 
-                .plx-jade.icon24
-                span 2 472 899 |
-              .cash.plx-flex
-                .plx-sapphire.icon24
-                span 28
-          
-          .plx-grid.to-stores.plx-flex-around
-              .plx-width-1-2(class='plx-width-1-4@s'): .glasspane
-                .icon: img(src="https://via.placeholder.com/120x120")
-                .title Backgrounds
-              .plx-width-1-2(class='plx-width-1-4@s'): .glasspane
-                .icon: img(src="https://via.placeholder.com/120x120")
-                .title Medals
-              .plx-width-1-1(class='plx-width-1-2@s'): .glasspane
-                .icon: img(src="https://via.placeholder.com/400x120")
-                .title User Marketplace
 
-          hr.plx-divider-icon
-          section#ARRIVALS
-            h1.title New Arrivals
-            h4.subtitle Recently added items
-
-            mixin arrivalsMenu()
+    h1.title.stfront STOREFRONT
+    h3.subtitle Your new hub for Pollux Collectibles
+    hr.plx-divider-small
+    br
+    #storefront
+        if userdata
+            .wealth.plx-flex.plx-flex-around
+                .rubines
+                    span.plx-rubine.icon64.curr_icon_3
+                    span= miliarize(userdata.modules.rubines) || 0
+                .sapphires
+                    span.plx-sapphire.icon64.curr_icon_3
+                    span= miliarize(userdata.modules.rubines) || 0
+                .jades
+                    span.plx-jade.icon64.curr_icon_3
+                    span= miliarize(userdata.modules.rubines) || 0
+                .tokens
+                    span.plx-token.icon64.curr_icon_3
+                    span= miliarize(userdata.eventGoodie) || 0
+    
+    
+       
+        .plx-flex.plx-width-1-1
+            ul.storeside.store-sidebar.store-nav.plx-subnav(plx-switcher="connect:.store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small; active: 0")
+                li.megastroke.menuitem(plx-filter-control="filter: *").plx-active
+                    a.plx-button 
+                        i: .fas.fa-star
+                        label  Arrivals
+                li.megastroke.menuitem(plx-filter-control="filter: .background ; group: type")
+                    a.plx-button 
+                        i: .fas.fa-image
+                        label  Bundles
+                li.megastroke.menuitem(plx-filter-control="filter: .medal ; group: type")
+                    a.plx-button 
+                        i: .fas.fa-map-marker
+                        label  Backgrounds
+                li.megastroke.menuitem(plx-filter-control="filter: .sticker ; group: type")
+                    a.plx-button 
+                        i: .fas.fa-clone
+                        label  Medals
+                li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type")
+                    a.plx-button 
+                        i: .fas.fa-vial
+                        label  Marketplace
               
-
-                ul#filter-arrivals.plx-nav(plx-filter-control="group:type")
-                  form.search
-                    i.fas.fa-search
-                    input(type='search' v-model='search' placeholder="Search arrivals..." @keyup="filterMeds()")
-                  li.megastroke.menuitem(plx-filter-control="filter: *").plx-active: a.plx-button All
-                  li.megastroke.menuitem(plx-filter-control="filter: .background ; group: type"): a.plx-button Backgrounds
-                  li.megastroke.menuitem(plx-filter-control="filter: .medal ; group: type"): a.plx-button Medals
-                  li.megastroke.menuitem(plx-filter-control="filter: .sticker ; group: type"): a.plx-button Stickers
-                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type"): a.plx-button Items
-
-            
-            //
-              
-              
-            .plx-button.plx-button-default(plx-toggle="target: #offcanvas-arrivals" class="plx-hidden@m") Filter 
-            .plx-flex(plx-filter="target: #arrivals1")
-              #offcanvas-arrivals(plx-offcanvas  class="plx-hidden@m")
-                .storeside 
-                  .plx-offcanvas-close(plx-close)
-                  +arrivalsMenu()
-              .storeside(class='plx-visible@m')
-                +arrivalsMenu()
-        
-
-              .plx-position-relative.plx-width-1-1.arrivalscar
-                ul.plx-width-auto#arrivals1.plx-slider-items.plx-child-width-1-4.plx-flex-wrap.plx-flex-center 
-                  li.shopbox(v-for="item in arrivals", :data-search="item.name", :class="[item.type,'raritybox',item.rarity].join(' ')")
-                    +shopcard()
-
-
-
-
-
-          #BUNDLES
-            h1.title Bundles
-            h4.subtitle Limited-time deals
-            hr.plx-divider-icon
-
-          #BACKGROUNDS
-            h1.title Backgrounds
-            h4.subtitle Limited-time deals
-
-            .background-menu(v-if="!backgrounds.loading" style="").fade-sides: .plx-position-relative
-              hooper( style="height: 380px; max-height:50vh ; padding: 050px 0"  :settings="hooperSettings", ref="bg_paks"  )
-                hooper-pagination( slot="hooper-addons")
-                slide(v-for="(item,idx) in backgrounds", :key="idx", :index="idx" )
-                  .shopbox.shopbox-wide(:class="[item.type,'raritybox',item.rarity].join(' ')",  @click="selectPack(idx,'bg_paks')")
-                    +shopcard()
+            ul.store-main.plx-width-1-1.store-tab-content.plx-switcher
                 
-
-            br
-            hr.plx-divider-icon
-
-          #MEDALS
-            h1.title Medals
-            h4.subtitle Limited-time deals
-            .medals-menu(v-if="!medals.loading" style="").fade-sides: .plx-position-relative
-              hooper( style="height: 380px; max-height:50vh ; padding: 050px 0"  :settings="hooperSettingsNarrow", ref="md_paks"  )
-                hooper-pagination( slot="hooper-addons")
-                slide(v-for="(item,idx) in medals", :key="idx", :index="idx"  )
-                  .shopbox.shopbox-mdl(:class="[item.type,'raritybox',item.rarity].join(' ')"  ,@click="selectPack(idx,'md_paks')")
-                    +shopcard()
+                    li#arrivals
+                        
+                        include pages/arrivals
+                    li#bundles
+                        p mega wiwi
+                        //include pages/bundles
+                    li#backgrounds
+                        //include pages/backgrounds
+                    li#medals
+                        //include pages/medals        
+                    li#marketplace
+                        //include pages/marketplace
                 
-
-            br
-            hr.plx-divider-icon
-
-          #BOOSTERS
-            h1.title Boosterpacks
-            h4.subtitle Limited-time deals
-            .boosters-menu(v-if="!boosters.loading" style="").fade-sides: .plx-position-relative
-              hooper( style="height: 380px; max-height:50vh ; padding: 050px 0"  :settings="hooperSettingsNarrow", ref="st_paks"  )
-                  hooper-pagination( slot="hooper-addons")
-                  slide(v-for="(item,idx) in boosters", :key="idx", :index="idx"  )
-                    .shopbox.shopbox-bii(:class="[item.type,'raritybox',item.rarity].join(' ')",@click="selectPack(idx,'st_paks')")
-                      +shopcard()
-                  //hooper-navigation( slot="hooper-addons" style="margin-top:80px")
-
-
-            br
-            hr.plx-divider-icon
-
-            br
-            br
-
-    style footer svg { margin-top: -60px !important}
 block scripts
 
   script
