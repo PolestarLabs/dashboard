@@ -997,19 +997,19 @@ div:not(.plx-open) .faders {
  content:"XR";
 /*background-image:url('/images/tiers//XR.png')*/
 }
-.plx-rubine {
+.plx-rubine, .plx-RBN {
  background-image:url(/images/gems/rubine_full.png);
  background-size:contain
 }
-.plx-jade {
+.plx-jade, .plx-JDE {
  background-image:url(/images/gems/jade_full.png);
  background-size:contain
 }
-.plx-sapphire {
+.plx-sapphire, .plx-SPH {
  background-image:url(/images/gems/sapphire_full.png);
  background-size:contain
 }
-.plx-event,.plx-token {
+.plx-event,.plx-token, .plx-EVT {
  background-image:url(/images/gems/token_full.png);
  background-size:contain
 }
