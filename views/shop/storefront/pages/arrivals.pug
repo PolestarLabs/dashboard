@@ -1,27 +1,30 @@
 mixin arrivalsMenu()
-    ul#filter-arrivals.plx-nav(plx-filter-control="group:type")
-        form.search
+    ul#filter-arrivals.plx-nav(plx-filter-control="group:type" ,plx-sticky="offset:50; bottom: true")
+        //form.search
             i.fas.fa-search
                 input(type='search' v-model='search' placeholder="Search arrivals..." @keyup="filterMeds()")
-        li.megastroke.menuitem(plx-filter-control="filter: *").plx-active
-            a.plx-button 
-                i: .fas.fa-star
+        li.menuitem(plx-filter-control="filter: *").plx-active
+            a.plx-button(href="#storetop" plx-scroll="offset:30")
+                i: .fas.fa-asterisk
                 | All
-        li.megastroke.menuitem(plx-filter-control="filter: .background ; group: type")
-            a.plx-button 
-                i: .fas.fa-image
+        li.menuitem(plx-filter-control="filter: .background ; group: type")
+            a.plx-button(href="#storetop" plx-scroll="offset:30")
+                i: .far.fa-images
                 | Backgrounds
-        li.megastroke.menuitem(plx-filter-control="filter: .medal ; group: type")
-            a.plx-button 
-                i: .fas.fa-map-marker
+        li.menuitem(plx-filter-control="filter: .medal ; group: type")
+            a.plx-button(href="#storetop" plx-scroll="offset:30")
+                i: svg.svg-inline--fa.fa-bullseye.fa-w-16(aria-hidden='true', focusable='false', data-prefix='fal', data-icon='bullseye', role='img', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 496 512')
+                    path(fill='currentColor', d='M248 92c-90.65 0-164 73.36-164 164 0 90.65 73.36 164 164 164 90.65 0 164-73.36 164-164 0-90.65-73.36-164-164-164zm0 296c-72.79 0-132-59.21-132-132s59.21-132 132-132 132 59.21 132 132-59.21 132-132 132zm0-212c-44.11 0-80 35.89-80 80s35.89 80 80 80 80-35.89 80-80-35.89-80-80-80zm0 128c-26.47 0-48-21.53-48-48s21.53-48 48-48 48 21.53 48 48-21.53 48-48 48zm0-296C111.03 8 0 119.03 0 256s111.03 248 248 248 248-111.03 248-248S384.97 8 248 8zm0 464c-119.1 0-216-96.9-216-216S128.9 40 248 40s216 96.9 216 216-96.9 216-216 216z')
                 | Medals
-        li.megastroke.menuitem(plx-filter-control="filter: .sticker ; group: type")
-            a.plx-button 
-                i: .fas.fa-clone
+        li.menuitem(plx-filter-control="filter: .sticker ; group: type")
+            a.plx-button(href="#storetop" plx-scroll="offset:30")
+                i: .far.fa-clone
                 | Stickers
-        li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type")
-            a.plx-button 
-                i: .fas.fa-vial
+        li.menuitem(plx-filter-control="filter: .item ; group: type")
+            a.plx-button(href="#storetop" plx-scroll="offset:30")
+                i: svg.svg-inline--fa.fa-vial.fa-w-15(aria-hidden='true', focusable='false', data-prefix='fal', data-icon='vial', role='img', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 480 512')
+                    path(fill='currentColor', d='M477.7 188L308 18.3c-3.1-3.1-8.2-3.1-11.3 0l-11.3 11.3c-3.1 3.1-3.1 8.2 0 11.3l17 17L28.1 332.1c-37.5 37.5-37.6 98.2 0 135.7 37.5 37.5 98.2 37.6 135.7 0L438 193.6l17 17c3.1 3.1 8.2 3.1 11.3 0l11.3-11.3c3.2-3.1 3.2-8.1.1-11.3zM141.3 445.2c-24.2 24.2-66.3 24.2-90.5 0-25-25-25-65.5 0-90.5l66.7-66.7h181L141.3 445.2zM330.5 256h-181L324.9 80.6l90.5 90.5-84.9 84.9z')
+
                 | Items
 
 section#ARRIVALS
@@ -33,17 +36,14 @@ section#ARRIVALS
     //
         
         
-    .plx-button.plx-button-default(plx-toggle="target: #offcanvas-arrivals" class="plx-hidden@m") Filter 
+ 
     .plx-flex(plx-filter="target: #arrivals1")
-        #offcanvas-arrivals(plx-offcanvas  class="plx-hidden@m")
-            .storeside 
-                .plx-offcanvas-close(plx-close)
-                +arrivalsMenu()
-        .storeside(class='plx-visible@m')
+ 
+        .storeside 
             +arrivalsMenu()
 
 
-        .plx-position-relative.plx-width-1-1.arrivalscar
-            ul.plx-width-auto#arrivals1.plx-slider-items.plx-child-width-1-4.plx-flex-wrap.plx-flex-center 
-                li.shopbox(v-for="item in arrivals", :data-search="item.name", :class="[item.type,'raritybox',item.rarity].join(' ')")
+        .plx-position-relative.plx-width-1-1.arrivalscar(style="padding-bottom: 5rem")
+            ul.plx-width-auto#arrivals1.plx-slider-items.plx-child-width-1-4.plx-flex-wrap.plx-flex-center
+                li.shopbox(v-for="(item) in arrivals", :data-search="item.name", :class="[hasItem(item)?'obtained':'',item.type,'raritybox',item.rarity].join(' ') " )
                     +shopcard()
