@@ -1,0 +1,3 @@
+ul.plx-flex.plx-flex-wrap.plx-flex-center 
+    li.shopbox(v-for="(item,i) in medals", :class="[hasItem(item)?'obtained':'',item.type,'raritybox',item.rarity].join(' ')"  v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small
+        +shopcard()

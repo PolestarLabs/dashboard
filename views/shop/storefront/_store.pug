@@ -1,6 +1,7 @@
 extends ../../layout
 
-mixin shopcard() 
+mixin shopcard()
+  div(v-if="item")
     .header
       .s-title.truncate(:plx-tooltip="item.name") {{item.name}}
       .icon
@@ -15,7 +16,7 @@ mixin shopcard()
           i.fas.fa-paint-brush
           a(:href="item.artistLink" target="blank") {{item.artistName}}
       .img(v-if='item.type == "medal"').medal
-        img(plx-img :src="`/medals/${item.icon}.png`")
+        img(plx-img :src="`/medals/${item.icon||item.id}.png`")
       .img(v-if='item.type == "sticker"').sticker
         img(plx-img :src="`/stickers/${item.id}.png`")
       .img(v-if='item.type == "boosterpack"').sticker
@@ -33,7 +34,10 @@ mixin shopcard()
           i: .fas.fa-info-circle
           .price PACK INFO
             
-        .button(v-else style="padding:0 5px")
+        .button(v-else-if="hasItem(item)" style="padding:0 5px", :class="hasItem(item)?'disabled':''")
+            i: .fas.fa-check.icon24
+            .price Obtained
+        .button(v-else-if="item.type" style="padding:0 5px", :class="hasItem(item)?'disabled':''")
           i: .plx-rubine.icon24.curr_icon_3
           .price
             span.face() 35.250
@@ -41,6 +45,13 @@ mixin shopcard()
           i: .plx-sapphire.icon24.curr_icon_3
           .price
             span.face() 18
+        .button(v-else style="padding:0 5px").dead
+          .price: span.face LOADING...
+ 
+        a(:href="`/marketplace/sell?type=${item.type}&finder=${item.code||item.id||item.icon}`" plx-tooltip="Sell in Marketplace").button(v-if="hasItem(item)" style="padding:0 5px").sellbut
+          i: .fas.fa-shopping-cart.icon24
+        
+
 
 block head
   script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
@@ -57,69 +68,97 @@ block content
         include hooper.css
     style   
         include ../rarityboxes.css
-
+    style
+      include ./pages/bundles.css
+    style   
+        include sfront_marketplace.css
 
 
     h1.title.stfront STOREFRONT
     h3.subtitle Your new hub for Pollux Collectibles
     hr.plx-divider-small
     br
+    .plx-grid.to-stores.plx-flex-around
+        .plx-width-1-2(class='plx-width-1-4@s'): .glasspane
+          .icon: img(src="https://via.placeholder.com/120x120")
+          .title Backgrounds
+        .plx-width-1-2(class='plx-width-1-4@s'): .glasspane
+          .icon: img(src="https://via.placeholder.com/120x120")
+          .title Medals
+        .plx-width-1-1(class='plx-width-1-2@s'): .glasspane
+          .icon: img(src="https://via.placeholder.com/400x120")
+          .title User Marketplace
+
+    a#storetop
+    //(style="min-height:120vh; overflow: hidden")
     #storefront
-        if userdata
-            .wealth.plx-flex.plx-flex-around
+        p test
+        .wealth.plx-flex.plx-flex-around(plx-sticky)
+            if userdata
                 .rubines
-                    span.plx-rubine.icon64.curr_icon_3
+                    span.plx-rubine.icon32.curr_icon_3
                     span= miliarize(userdata.modules.rubines) || 0
                 .sapphires
-                    span.plx-sapphire.icon64.curr_icon_3
-                    span= miliarize(userdata.modules.rubines) || 0
+                    span.plx-sapphire.icon32.curr_icon_3
+                    span= miliarize(userdata.modules.sapphires) || 0
                 .jades
-                    span.plx-jade.icon64.curr_icon_3
-                    span= miliarize(userdata.modules.rubines) || 0
+                    span.plx-jade.icon32.curr_icon_3
+                    span= miliarize(userdata.modules.jades) || 0
                 .tokens
-                    span.plx-token.icon64.curr_icon_3
+                    span.plx-token.icon32.curr_icon_3
                     span= miliarize(userdata.eventGoodie) || 0
+            else
+              p
+                a(onclick="login()")
+                  i: .fas.fa-sign-in-alt
+                  | Login  &#x2000
+                | to see your balance
+
     
     
        
         .plx-flex.plx-width-1-1
-            ul.storeside.store-sidebar.store-nav.plx-subnav(plx-switcher="connect:.store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small; active: 0")
-                li.megastroke.menuitem(plx-filter-control="filter: *").plx-active
-                    a.plx-button 
-                        i: .fas.fa-star
-                        label  Arrivals
-                li.megastroke.menuitem(plx-filter-control="filter: .background ; group: type")
-                    a.plx-button 
-                        i: .fas.fa-image
-                        label  Bundles
-                li.megastroke.menuitem(plx-filter-control="filter: .medal ; group: type")
-                    a.plx-button 
-                        i: .fas.fa-map-marker
-                        label  Backgrounds
-                li.megastroke.menuitem(plx-filter-control="filter: .sticker ; group: type")
-                    a.plx-button 
-                        i: .fas.fa-clone
-                        label  Medals
-                li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type")
-                    a.plx-button 
-                        i: .fas.fa-vial
-                        label  Marketplace
+            //
+            .store-sidebar
+              ul.store-nav.plx-subnav(plx-sticky="offset:50; bottom: true",  plx-switcher="connect:.store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small; active: 0")
+                  li.megastroke.menuitem(plx-filter-control="filter: *" ).plx-active
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-star
+                          label  Arrivals
+                  li.megastroke.menuitem(plx-filter-control="filter: .background ; group: type" )
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-cubes
+                          label  Bundles
+                  li.megastroke.menuitem(plx-filter-control="filter: .medal ; group: type" )
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-images
+                          label  Backgrounds
+                  li.megastroke.menuitem(plx-filter-control="filter: .sticker ; group: type" )
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-bullseye
+                          label  Medals
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" )
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-store
+                          label  Marketplace
               
             ul.store-main.plx-width-1-1.store-tab-content.plx-switcher
                 
                     li#arrivals
-                        
                         include pages/arrivals
                     li#bundles
-                        p mega wiwi
-                        //include pages/bundles
+                        include pages/bundles
                     li#backgrounds
-                        //include pages/backgrounds
+                        include pages/backgrounds
                     li#medals
-                        //include pages/medals        
+                        include pages/medals        
                     li#marketplace
-                        //include pages/marketplace
-                
+                        include pages/marketplace
+    
+    br
+    hr
+    P 4545645646456
+    //style #footer{margin-top: -5rem}                
 block scripts
 
   script
