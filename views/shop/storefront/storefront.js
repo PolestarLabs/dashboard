@@ -1,118 +1,165 @@
-let default_img = "https://via.placeholder.com/120x120";
- 
- 
-
-STORE = new Vue({
-    el:'#storefront',
-    components:{
-         
-    },
-    data:{
-        backgrounds: {loading:true},
-        medals: {loading:true},
-        boosters: {loading:true},
-        stickers: {loading:true},
-        hooperSettings:{
-            infiniteScroll: true,
-            centerMode: true,
-            itemsToSlide: 3,
-            transition: 800,
-            breakpoints:{
-                
-                1000: {itemsToShow: 3},
-                 720: {itemsToShow: 3},
-                 500: {itemsToShow: 3},
-                 460: {itemsToShow: 1.5,itemsToSlide:1},
-                 0: {
-                   itemsToShow: 1.2,
-                   pagination: 'fraction',
-                   itemsToSlide:1
-                }}
-        },
-        hooperSettingsNarrow:{
-            infiniteScroll: true,
-            centerMode: true,
-            breakpoints:{                
-                1660: {itemsToShow: 7},
-                1200: {itemsToShow: 5},
-                1000: {itemsToShow: 4},
- 
-                 500: {itemsToShow: 3},
-                 460: {itemsToShow: 2},
-                 0: {
-                   itemsToShow: 1.5,
-                   pagination: 'fraction',
-                   itemsToSlide:1
-                }}
-        },
-        search: "",
-        arrivals : [
-          
-          ]
-    },
-    methods:{
-        selectPack(i,ref,noscroll){
-            console.log('aaa')
-            if(!noscroll)
-              this.$refs[ref].slideTo(i),
-              this.currentIndex = this.$refs[ref].currentSlide;
-          },
-        filterMeds() {
-            if (this.timer) {
-              clearTimeout(this.timer);
-              this.timer = null;
-            }
-            this.timer = setTimeout(() => {
-              var input = this.search;
-              var filter = document.getElementById("filter-arrivals");
-              if (input == "") filter.setAttribute("plx-filter-control", "");
-              else
-                filter.setAttribute(
-                  "plx-filter-control",
-                  "filter:[data-search*='" + input + "'i] ; group:search"
-                );
-      
-              filter.click();
-            }, 800);
-          },
+  let default_img = "https://via.placeholder.com/120x120";
+  
+function miliarize(numstring,strict,symbol){
+  let sym = symbol||"." 
+  if (!numstring)return 0 ;
+    if (typeof numstring == "number"){
+        numstring = numstring.toString()
     }
-})
+    if(numstring.length < 4) return numstring;
 
-fetch("/api/cosmetics/search?skip=710&lim=100").then(r =>
-    r.json().then(async res =>  STORE.arrivals = shuffle(res).slice(0,10)  )
-);
+    var stashe = numstring.replace(/\B(?=(\d{3})+(?!\d))/g, sym).toString();
 
-fetch("/api/cosmetics/search?type=background").then(r =>
-    r.json().then(async res =>  STORE.backgrounds = shuffle(res).slice(0,24)  )
-);
-
-
-fetch("/api/cosmetics/search?type=medal").then(r =>
-    r.json().then(async res =>  STORE.medals = shuffle(res).slice(0,24)  )
-);
-
-
-fetch("/api/items/search?type=boosterpack").then(r =>
-    r.json().then(async res =>  STORE.boosters = shuffle(res).slice(0,24)  )
-);
-
-
- function shuffle(array) {
-
-
-        let currentIndex = array.length, temporaryValue, randomIndex;
-        
-        while (0 !== currentIndex) {
-            
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-      
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
+    if(strict==="ultra"){
+        return stashe;
     }
     
-    return (array);
+    if(strict){
+        var stash = stashe.split(sym)
+    switch(stash.length){
+        case 1:
+            return stash;
+        case 2:
+            if(stash[1]!="000") break;
+            return stash[0]+"K";
+        case 3:
+            if(stash[2]!="000") break;
+            return stash[0]+sym+stash[1][0]+stash[1][1]+"Mi";
+        case 4:
+            if(stash[3]!="000") break;
+            return stash[0]+sym+stash[1][0]+stash[1][1]+"Bi";
+         }
 
+        return stashe;
+    }        
+
+    stash = stashe.split(sym)
+    switch(stash.length){
+        case 1:
+            return stash.join(" ");
+        case 2:
+            if(stash[0].length<=1) break;
+            return stash[0]+"K";
+        case 3:
+            return stash[0]+"Mi";
+        case 4:
+            return stash[0]+"Bi";
+         }
+     return stashe;
   }
-  
+  console.log(miliarize)
+  console.log(Vue)
+  const STORE = new Vue({
+      el:'#storefront',
+      components:{
+          
+      },
+      data:{
+          userdata,
+          backgrounds: {loading:true},
+          medals: {loading:true},
+          boosters: {loading:true},
+          stickers: {loading:true},
+          market: {loading:true},
+          
+          search: "",
+          arrivals : [
+            
+            ]
+      },
+      computed: {
+        marketItems(){
+          if(this.market.map){
+            return this.market.map(x=>x.metadata).filter(x=>!!x)
+          }else{
+            return []
+          }
+        },
+      },
+      methods:{
+        hasItem(i){
+          if (!this.userdata) return false;
+          if (i.type == 'background')
+            return this.userdata.modules.bgInventory.includes(i.code);
+          if (i.type == 'medal')
+            return this.userdata.modules.medalInventory.includes(i.icon);
+          if (i.type == 'sticker')
+            return this.userdata.modules.stickerInventory.includes(i.id);
+          if (i.type == 'skin')
+            return this.userdata.modules.skinInventory.includes(i.id);
+          return false;  
+          
+        },
+        timeFun(i){
+          return i*20+i*80
+        },
+          miliarize,
+          selectPack(i,ref,noscroll){
+              console.log('aaa')
+              if(!noscroll)
+                this.$refs[ref].slideTo(i),
+                this.currentIndex = this.$refs[ref].currentSlide;
+            },
+          filterMeds() {
+              if (this.timer) {
+                clearTimeout(this.timer);
+                this.timer = null;
+              }
+              this.timer = setTimeout(() => {
+                var input = this.search;
+                var filter = document.getElementById("filter-arrivals");
+                if (input == "") filter.setAttribute("plx-filter-control", "");
+                else
+                  filter.setAttribute(
+                    "plx-filter-control",
+                    "filter:[data-search*='" + input + "'i] ; group:search"
+                  );
+        
+                filter.click();
+              }, 800);
+            },
+      }
+  })
+  console.log(STORE)
+  fetch("/api/cosmetics/search?skip=710&lim=100").then(r =>
+      r.json().then(async res =>  STORE.arrivals = shuffle(res).slice(0,24)  )
+  );
+
+  fetch("/api/cosmetics/search?type=background").then(r =>
+      r.json().then(async res =>  STORE.backgrounds = shuffle(res).slice(0,24)  )
+  );
+
+
+  fetch("/api/cosmetics/search?type=medal").then(r =>
+      r.json().then(async res =>  STORE.medals = shuffle(res).slice(0,24)  )
+  );
+
+
+  fetch("/api/items/search?type=boosterpack").then(r =>
+      r.json().then(async res =>  STORE.boosters = shuffle(res).slice(0,24)  )
+  );
+
+  fetch("/api/marketplace").then(r =>
+      r.json().then(async res =>  STORE.market = res)
+  );
+ 
+
+  function shuffle(array) {
+
+
+          let currentIndex = array.length, temporaryValue, randomIndex;
+          
+          while (0 !== currentIndex) {
+              
+        randomIndex = Math.floor(Math.random() * currentIndex);
+        currentIndex -= 1;
+        
+        temporaryValue = array[currentIndex];
+        array[currentIndex] = array[randomIndex];
+        array[randomIndex] = temporaryValue;
+      }
+      
+      return (array);
+
+    }
+    
