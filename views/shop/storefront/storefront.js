@@ -61,7 +61,7 @@ function miliarize(numstring,strict,symbol){
           boosters: {loading:true},
           stickers: {loading:true},
           market: {loading:true},
-          
+          defaultPrices:  {loading:true},
           search: "",
           arrivals : [
             
@@ -139,8 +139,12 @@ function miliarize(numstring,strict,symbol){
       r.json().then(async res =>  STORE.boosters = shuffle(res).slice(0,24)  )
   );
 
-  fetch("/api/marketplace").then(r =>
+  fetch("/api/marketplace?limit=10").then(r =>
       r.json().then(async res =>  STORE.market = res)
+  );
+ 
+  fetch("/api/meta/rates").then(r =>
+      r.json().then(async res =>  STORE.defaultPrices = res)
   );
  
 
