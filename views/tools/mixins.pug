@@ -11,6 +11,16 @@ mixin iconButton(i)
 
 
 
+mixin svgBadge(c)
+  .badge(class=c)
+    svg.svg-inline--fa.fa-badge.fa-w-16(aria-hidden='true', focusable='false', data-prefix='fas', data-icon='badge', role='img', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 512 512')
+      path(fill='currentColor', d='M512,256c0-37.7-23.7-69.9-57.1-82.4c14.7-32.4,8.8-71.9-17.9-98.6c-26.7-26.7-66.2-32.6-98.6-17.9\
+      C325.9,23.7,293.7,0,256,0s-69.9,23.7-82.4,57.1c-32.4-14.7-72-8.8-98.6,17.9c-26.7,26.7-32.6,66.2-17.9,98.6\
+      C23.7,186.1,0,218.3,0,256s23.7,69.9,57.1,82.4c-14.7,32.4-8.8,72,17.9,98.6c26.6,26.6,66.1,32.7,98.6,17.9\
+      c12.5,33.3,44.7,57.1,82.4,57.1s69.9-23.7,82.4-57.1c32.6,14.8,72,8.7,98.6-17.9c26.7-26.7,32.6-66.2,17.9-98.6\
+      C488.3,325.9,512,293.7,512,256z')
+    .label
+      block
 
 
 mixin checkLine1(condition,onoffid,helptex,hlclass,inverse)

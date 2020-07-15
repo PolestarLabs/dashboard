@@ -3,6 +3,7 @@ extends ../../layout
 mixin shopcard()
   div(v-if="item")
     .header
+      
       .s-title.truncate(:plx-tooltip="item.name") {{item.name}}
       .icon
         i.far.fas(:class="`fa-star`")
@@ -38,6 +39,11 @@ mixin shopcard()
             i: .fas.fa-check.icon24
             .price Obtained
         .button(v-else-if="item.type" style="padding:0 5px", :class="hasItem(item)?'disabled':''")
+          .isnew 
+            +svgBadge('discount')               
+                .txt-num 75
+                  span.txt-percent % 
+                  .txt-off OFF 
           i: .plx-rubine.icon24.curr_icon_3
           .price
             span.face() 35.250

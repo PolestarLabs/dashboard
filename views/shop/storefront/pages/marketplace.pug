@@ -2,6 +2,8 @@ ul.plx-flex.plx-flex-center
     li( v-for="(entry,i) in market" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small
         .market-entry.raritybox( v-for="item in [entry.itemdata]",  v-if="!!item", :class="[item.type,'raritybox',item.rarity].join(' ')")
            div(v-if='item && entry') 
+            
+
             .body
                     .img(v-if='item.type == "background"').background
                         .bg-image( v-bind:style="{backgroundImage: `url('/backdrops/${item.code}.png')`}")
@@ -39,3 +41,6 @@ ul.plx-flex.plx-flex-center
                     i: div(:class="`plx-${entry.currency}`").icon24
                     .price  {{ miliarize(entry.price||"UNK",0,' ') }} 
                 .title.truncate {{item.name}}
+                .isnew(v-if="entry.timestamp > Date.now() - 7 * 24 * 1000 * 60 * 60")
+                    +svgBadge("new")
+                        | NEW
