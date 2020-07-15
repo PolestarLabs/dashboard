@@ -5,7 +5,27 @@ Promise.config({
   longStackTraces: true
 })
 
+const memCache = require('memory-cache');
+global.cacheFunction = (duration) => {
+  return (req, res, next) => {
+    res.set('Cache-control', 'public, max-age='+duration);
+    let key = '__express__' + req.originalUrl || req.url
+    let cachedBody = memCache.get(key)
+    if (cachedBody) {
+      res.json(typeof cachedBody == 'string' ? JSON.parse(cachedBody) : cachedBody)
+      return
+    } else {
+      res.sendResponse = res.send
+      res.send = (body) => {
+        memCache.put(key, body, duration * 1000);
+        res.sendResponse(body)
+      }
+      next()
+    }
+  }
+}
 global.userCache = new Map();
+
 
 const config = require('./config.js');
 
@@ -184,6 +204,7 @@ app.use(sassMiddleware({
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+
 app.use(Express.static(path.join(__dirname, 'public')));
 app.use(Express.static(path.join(__dirname, '../assets/imgres')));
 app.use(Express.static(path.join(__dirname, '../assets/cosmetics')));
@@ -332,7 +353,7 @@ const AcquireDiscordPayload = (TOKEN,req) => {
 
 app.use(async function(req,res,next){
 
-  if(req.isAuthenticated()){
+  if(req.isAuthenticated() && req.method == 'GET' && !req.url.includes('/api/') && !req.url.includes('/generators/')){
 
     AcquireDiscordPayload(req.user.accessToken,req)
     PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
@@ -353,7 +374,7 @@ app.use(async function(req,res,next){
 
     preUserData.then(async data=>{
  
-      let dscUser = await PLX.getRESTUser(req.user.id);
+      let dscUser = userCache.get(req.user.id) || await PLX.getRESTUser(req.user.id);
       if(!data) data = await DB.users.new(dscUser); 
       preDataProcess(data)
     });

@@ -47,12 +47,17 @@ router.use( (req,res,nex)=>{
     nex();
 });
 
+ 
+ const cache= cacheFunction
+router.get(cache(60));
+
+
 router.get('/discoin/currencies', async (req,res)=>{
     let units = await DB.globals.find({'type':'discoin'},{type:0,_id:0}).lean().exec();
     res.json(units)
 })
 
-router.get('/user/:id',  async (req,res) => {
+router.get('/user/:id', cache(30), async (req,res) => {
     let STATUS = 200
     const uID = req.params.id;
     let discordUser = await PLX.getRESTUser(uID).timeout(500).catch(e=>{ return {error:e.message} });
@@ -112,7 +117,7 @@ router.get('/user/:id/inventory', async (req,res)=>{
 
 })
 
-router.get('/items/:endpoint',   (req,res) => {
+router.get('/items/:endpoint', cache(360),  (req,res) => {
 
     if(req.params.endpoint == 'search'){
         let queries = {}
@@ -132,7 +137,7 @@ router.get('/items/:endpoint',   (req,res) => {
 })
 
 
-router.post('/crafting/mix',  async (req,res) => {
+router.post('/crafting/mix',cache(120),  async (req,res) => {
 
     const {pot} = req.body;
     const rars = ["C","U","R","SR","UR","XR"];
@@ -350,7 +355,7 @@ router.get('/crafting/:endpoint',   (req,res) => {
 })
 
 
-router.get('/cosmetics/:endpoint', async (req,res) => {
+router.get('/cosmetics/:endpoint', cache(2660), async (req,res) => {
 
     if(req.params.endpoint == 'search'){
         let queries = {}
@@ -373,7 +378,7 @@ router.get('/cosmetics/:endpoint', async (req,res) => {
 
 })
 
-router.get('/achievements/:id', async (req,res) => {
+router.get('/achievements/:id',cache(2360), async (req,res) => {
 
     if(req.params.id == 'user'){
        
@@ -424,7 +429,7 @@ router.get('/marketplace/:item', async (req,res) => {
     });
 })
 
-router.get('/marketplace', async (req,res) => {
+router.get('/marketplace', cache(60), async (req,res) => {
  
         let queries = {}
         Object.keys(req.query)
@@ -475,12 +480,12 @@ router.get('/marketplace', async (req,res) => {
         })
 
 })
-router.get('/meta/rates', async (req,res) => {
+router.get('/meta/rates', cache(24*60*60),async (req,res) => {
     const {bgPrices, medalPrices} = require('../../bot/GlobalNumbers.js');
     return res.json({bgPrices, medalPrices});
 });
 
-router.get('/commends', async (req,res)=>{
+router.get('/commends', cache(360), async (req,res)=>{
      
     if(!req.query.full)  return res.json( await DB.commends.get(req.query.uid || req.user.id , {_id: 0, __v:0}) );
     if(req.query.full==1){
@@ -525,7 +530,7 @@ router.get('/commends', async (req,res)=>{
 })
 
 
-router.get('/commendrank/:id/:endpoint', async (req,res)=>{
+router.get('/commendrank/:id/:endpoint',cache(360), async (req,res)=>{
  
     const ID = req.params.id
     const count = (await DB.commends.get(ID))?.whoIn?.reduce((a,b)=> ({count: a.count + b.count}))?.count;
@@ -556,7 +561,7 @@ router.get('/commendrank/:id/:endpoint', async (req,res)=>{
         return res.json({rank,count});
 })
 
-router.get('/relationships', async (req, res)=> {
+router.get('/relationships', cache(1260), async (req, res)=> {
 
     console.log('start')
 

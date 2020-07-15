@@ -17,6 +17,7 @@ router.use( '/reload', async (req, res,next) => {
     next()
 })
 
+router.use(cacheFunction(10000))
 
 router.use("/roulette.png", async (...args) => {
    return (require('./roulette.js'))( ...args,ImageCache);
