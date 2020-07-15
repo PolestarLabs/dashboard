@@ -1,4 +1,4 @@
-            
+                    
 
 .shopbox-wide{
   min-width: 80px;
@@ -57,7 +57,7 @@ text-align: center;
       margin-bottom: 10px;height: 80px;
   }
   .shopbox .body {
-   // margin-top:10px;
+
   flex-grow: 1;}
   .shopbox .body, .shopbox .footer {
     display: flex;
@@ -71,6 +71,7 @@ text-align: center;
     --fadecolor: rgba(72, 35, 58, 0.82);
     user-select: none;
     cursor: pointer;
+    position: relative;
     margin: 4px;
     display: flex;
     align-items: center;
@@ -93,11 +94,6 @@ text-align: center;
     --fadecolor: #0b103b;
     border: solid 4px #0B7B4B;
     box-shadow: 0 0 0px 3px #2245;
-
-  
-   
-  
-   
         background-blend-mode: multiply;
     background-size: 250px 250px;
     background-position: center 0px;
@@ -325,7 +321,67 @@ filter:  drop-shadow(0 0 10px #0EFA)  drop-shadow(0 0 20px #05F8)
       background-position: 0% 50%;      
     }
   }
-  
- 
 
+  .badge{
+    position: absolute;
+    transform: scale(2.5);
+    left: 0;
+    top: 0;
+    filter: drop-shadow(0 0px 1px #112a) drop-shadow(0 0px 1px #112A);
+    transition: transform 200ms;
+    z-index: 5;
+  }
+.raritybox:hover .badge svg{
+  animation: plx-spinner-rotate 2s infinite; 
+ 
+      animation-timing-function: linear;
+ 
+}
+.raritybox:hover .badge {
+  transform: scale(2.8) rotate(-20deg)
+}
+    .badge path{
+      fill:var(--secondary-color);      
+      transform-origin: center;
+    }
+.badge.new .label{
+  transform: rotate(-20deg)
+}
+.badge.discount path{
+  fill: #f33;
+} 
+.badge.discount{
+  right: 0;
+  top:-12px;
+  left: unset;
+  text-shadow: 0 0 0px #112, 0 0 0px #112,0 0 0px #112,0 1px 0px #112A,1px 0 0px #112A;
+  transform: scale(2.5) rotate(-20deg)
   
+}
+
+    .badge .label{
+      
+      color: white;
+      font-size: 5px;
+      font-weight: 600;
+      font-family: Panton;
+      position: absolute;
+      top: 0;
+      line-height: 1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;      
+      justify-content: center;
+      text-align: center;     
+      
+    }
+.label .txt-num{
+  font-size: 6px;
+  margin: 1px -2px 0 0;
+}
+
+.label .txt-off, .label .txt-percent{
+  font-size: 4px;
+}
