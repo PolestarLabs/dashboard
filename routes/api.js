@@ -423,6 +423,7 @@ router.get('/marketplace/:item', async (req,res) => {
         res.json(response)
     });
 })
+
 router.get('/marketplace', async (req,res) => {
  
         let queries = {}
@@ -449,10 +450,14 @@ router.get('/marketplace', async (req,res) => {
         DB.marketplace.find(queries, {__v:0}).sort({timestamp: sort}).limit(lim).skip(skip).then(async result=>{
      
             let [marketeers,cosmetics,goods]  = await Promise.all([
-                DB.users.find({id:{$in:result.map(i=>i.author)}},{meta:1,id:1}).lean().exec(),
-                DB.cosmetics.find({_id:{$in:result.map(i=>i.item_id)}}).lean().exec(),
-                DB.items.find({_id:{$in:result.map(i=>i.item_id)}}).lean().exec()
-            ]);
+                DB.users.find({id:{$in:result.map(i=>i.author)}},{meta:1,id:1}).lean().exec().catch(e=>[]),
+                DB.cosmetics.find({_id:{$in:result.map(i=>i.item_id)}}).lean().exec().catch(e=>[]),
+                DB.items.find({_id:{$in:result.map(i=>i.item_id)}}).lean().exec().catch(e=>[])
+            ]).catch(err=>{
+                console.error(result.map(i=>i.item_id))
+                
+                res.status(500).send('ERROR')
+            });
  console.log(result)
             let newThing=
                 result.map(entry=>{
@@ -466,11 +471,14 @@ router.get('/marketplace', async (req,res) => {
             res.json(newThing)
         }).catch(e=>{
             console.error(e)
-            res.send("What the fuck are you trying?")
+            res.status(500).send("What the fuck are you trying?")
         })
 
 })
-
+router.get('/meta/rates', async (req,res) => {
+    const {bgPrices, medalPrices} = require('../../bot/GlobalNumbers.js');
+    return res.json({bgPrices, medalPrices});
+});
 
 router.get('/commends', async (req,res)=>{
      
