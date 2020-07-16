@@ -19,11 +19,11 @@ br
 br
 style hr:not(.plx-divider-small):not(.plx-divider-icon){opacity:.1}
 -incremental = 100
-mixin section(title,sub,id,icon,helper,noside)
+mixin section(title,sub,id,icon,helper,noside,color)
     section.plx-flex.plx-flex-wrap.plx-card.plx-card-default.plx-card-body(id=id style=`margin-bottom:45px; z-index:${incremental--}` plx-scrollspy="cls: plx-animation-slide-left-small; repeat: true;delay:200" )
         .plx-width-expand
             h3.title
-                i.icon: div(style="opacity:.8" class=icon.split('.').join(' '))
+                i.icon: div(style="opacity:.8; color: "+color class=icon.split('.').join(' '))
                 span &#x2004 #{title}
             h5.subtitle!= sub
             //br
@@ -338,7 +338,8 @@ br
        To configure how fast your members will Level Up, check the UPFACTOR option~       
 
         `
-style .levelrole_item{border-radius:8px;border:solid 1px #f58;padding:5px;display:flex;margin-bottom:1rem;max-width:500px;height:38px}.levelrole_item .rolename{margin-right:1em;flex:1 1 auto;font-family:Quicksand;min-height:35px;font-family:Quicksand;font-size:20px;line-height:20px;margin:10px}.levelrole_item .level{font-size:18pt;opacity:.7;font-family:'Panton';font-weight:900;font-style:italic;text-align:right;width:3.5rem;flex:0 0 auto}.levelrole_item .plx-flex-around{justify-content:flex-end;flex:0 1 auto}.levelrole_item .plx-flex-around>*{margin-left:5px}.levelrole_item .plx-pink-input select{margin-bottom:0!important;margin:-10px;max-width:300px}input.level{background:0 0;border:none;border-bottom:solid 2px #aac}input[type=number].level{-moz-appearance:textfield}input[type=number].level::-webkit-inner-spin-button,input[type=number].level::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}.selfrole_item .rolename{margin-right:1em;flex:1 1 auto;font-family:Quicksand;min-height:35px;font-family:Quicksand;font-size:20px;line-height:20px;margin:10px 0}.selfrole_item .level{font-size:12pt;opacity:.7;font-family:'Panton Light';font-style:italic;text-align:left!important;width:5rem;flex:0 0 auto}.selfrole_item .plx-flex-around{justify-content:flex-end;flex:0 1 auto}.selfrole_item .plx-flex-around>*{margin-left:5px}.selfrole_item .plx-pink-input select{margin-bottom:0!important;/*! max-width: 200px; */font-size:12pt}@media screen and (max-width:600px){.levelrole_item .rolename{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:15px}.selfrole_item .rolename{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:12px;margin-left:-8px}}.row-1,.row-2{width:100%}
+style
+    include admindashbulmaport.css
 +section("Level Roles","Give members a special role when they reach a level","levelroles",".fas.fa-arrow-circle-up",helper,true)
     .plx-grid
         //.plx-width-expand
@@ -431,20 +432,20 @@ h3.subtitle Define precise settings for specific channels
 hr.plx-divider-small 
 
 
-
-
+ 
+    
  
 +section( "Feature Debuffs",'Disable features in certain channels, this overrides Global settings', "channel-toggles",".fas.fa-toggle-off",null,true)
     .plx-width-expand
         .plx-grid.plx-flex.plx-flex-wrap
             .plx-width-1-1(class="plx-width-1-3@m")
-                +channelInput("Applied Lootbox Repellent",'lootboxDrops',"fa fa-cube", (serverData.switches||{}).chLootboxOff )
+                +channelInput("Applied Lootbox Repellent",'lootboxDrops'," fa fa-cube", (serverData.switches||{}).chLootboxOff )
                     p Do <b>not</b> drop Lootboxes at:
             .plx-width-1-1(class="plx-width-1-3@m")
                 +channelInput("In space no one can hear you cheer",'levelUps'," far fa-arrow-alt-circle-up", (serverData.switches||{}).chLvlUpOff )
                     p Do <b>not</b> post Level Up messages at:
             .plx-width-1-1(class="plx-width-1-3@m")
-                +channelInput("Law of Inherent EXP Bypass",'expBypass', "fas fa-medal", (serverData.switches||{}).chExpOff )
+                +channelInput("Law of Inherent EXP Bypass",'expBypass', " fas fa-medal", (serverData.switches||{}).chExpOff )
                     p  Do <b>not</b> award Local EXP at:
            
 
@@ -499,17 +500,17 @@ mixin feedItem(item)
                 
 
 
-+section( "Twitch Alerts",' ', "twitch",".fab.fa-twitch",null,true)
++section( "Twitch Alerts",' ', "twitch",".fab.fa-twitch",null,true,"#3C26A6")
     each item in feeds.filter(feed=> feed.type == 'twitch')
         +feedItem(item)
                     
                  
         
 
-+section( "YouTube Alerts",' ', "youtube",".fab.fa-youtube",null,true)
++section( "YouTube Alerts",' ', "youtube",".fab.fa-youtube",null,true,"#F00")
     each item in feeds.filter(feed=> feed.type == 'youtube')
         +feedItem(item)
-+section( "RSS Feeds",' ', "rss",".fas.fa-rss-square",null,true)
++section( "RSS Feeds",' ', "rss",".fas.fa-rss-square",null,true,"FF3C00")
     each item in feeds.filter(feed=> feed.type == 'rss')
         +feedItem(item)
  
