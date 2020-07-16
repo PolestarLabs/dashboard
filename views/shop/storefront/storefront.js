@@ -144,7 +144,7 @@ function miliarize(numstring,strict,symbol){
   );
  
   fetch("/api/meta/rates").then(r =>
-      r.json().then(async res =>  STORE.defaultPrices = res)
+      r.json().then(async res =>  STORE.defaultPrices = {medal: res.medalPrices, background: res.bgPrices})
   );
  
 
