@@ -39,18 +39,18 @@ mixin shopcard()
             i: .fas.fa-check.icon24
             .price Obtained
         .button(v-else-if="item.type" style="padding:0 5px", :class="hasItem(item)?'disabled':''")
-          .isnew 
+          //.isnew 
             +svgBadge('discount')               
                 .txt-num 75
                   span.txt-percent % 
                   .txt-off OFF 
           i: .plx-rubine.icon24.curr_icon_3
           .price
-            span.face() 35.250
+            span.face() {{ miliarize(item.price || (defaultPrices[item.type]||{})[item.rarity] || "N/A" ,0,' ')}}
           //.button(style="padding:0 5px")
           i: .plx-sapphire.icon24.curr_icon_3
           .price
-            span.face() 18
+            span.face() {{ miliarize( Math.ceil((item.price || (defaultPrices[item.type]||{})[item.rarity]||0) / 1250) || "N/A" ,0,' ') }}
         .button(v-else style="padding:0 5px").dead
           .price: span.face LOADING...
  
@@ -62,22 +62,17 @@ mixin shopcard()
 block head
   script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
 
+  link(rel='stylesheet' href="/css/store.css")
+  link(rel='stylesheet' href="/css/rarityboxes.css")
+  link(rel='stylesheet' href="/css/bundles.css")
+  link(rel='stylesheet' href="/css/sfront_marketplace.css") 
+
   
 block content
 
     -currentPage = 'market'
     include ../../navbar
 
-    style   
-        include store.css
-    style   
-        include hooper.css
-    style   
-        include ../rarityboxes.css
-    style
-      include ./pages/bundles.css
-    style   
-        include sfront_marketplace.css
 
 
     h1.title.stfront STOREFRONT
@@ -126,7 +121,7 @@ block content
         .plx-flex.plx-width-1-1
             //
             .store-sidebar
-              ul.store-nav.plx-subnav(plx-sticky="offset:50; bottom: true",  plx-switcher="connect:.store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small; active: 0")
+              ul.store-nav.plx-subnav(plx-sticky="offset:50; bottom: #endof",  plx-switcher="connect:.store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small; active: 0")
                   li.megastroke.menuitem(plx-filter-control="filter: *" ).plx-active
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-star
@@ -161,6 +156,7 @@ block content
                     li#marketplace
                         include pages/marketplace
     
+    #endof
     br
     hr
     P 4545645646456
