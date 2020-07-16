@@ -123,11 +123,24 @@
                 span FAQ     
 
         hr
-    .social-icons.plx-flex.plx-flex-around.animate
-        a.animate.icon64: img(src="/images/plx.png" onclick="enableTheme('default')")
-        a.animate.icon64: img(src="/images/ntx.png" onclick="enableTheme('noctix')")
-        a.animate.icon64: img(src="/images/nkn.png" onclick="enableTheme('nikoliny')")
-        a.animate.icon64: img(src="https://cdn.discordapp.com/emojis/594743909159010324.png?v=1g" onclick="enableTheme('australis')")
+    ul(plx-accordion)
+        li
+            a.plx-accordion-title: small Site Theme:
+            .plx-accordion-content.social-icons.plx-flex.plx-flex-wrap.plx-flex-center.animate
+                p Choose a flavor for the website based in one of our event mascots:
+                small: b Dark themes
+                br
+                a.animate: img(src="/images/themeicons/plx.png" onclick="enableTheme('default')")
+                a.animate: img(src="/images/themeicons/nox.png" onclick="enableTheme('noctix')")
+                a.animate: img(src="/images/themeicons/ccy.png" onclick="enableTheme('cecily')")
+                a.animate: img(src="/images/themeicons/aus.png" onclick="enableTheme('australis')")
+                a.animate: img(src="/images/themeicons/lun.png" onclick="enableTheme('lunanuli')")
+                small: b Light themes
+                br
+                a.animate: img(src="/images/themeicons/nik.png" onclick="enableTheme('nikoliny')")
+                a.animate: img(src="/images/themeicons/bor.png" onclick="enableTheme('borealis')")
+                a.animate: img(src="/images/themeicons/sel.png" onclick="enableTheme('selenedi')")
+    br    
     .social-icons.plx-flex.plx-flex-around.animate
         div.animate
             a(href="/support" target='blank'): i.fab.fa-discord
