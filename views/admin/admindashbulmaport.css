@@ -1,0 +1,98 @@
+.levelrole_item {
+    border-radius:8px;
+    border:solid 1px #f58;
+    padding:5px;
+    display:flex;
+    margin-bottom:1rem;
+    max-width:500px;
+    height:38px;
+    /*! align-items: center; */
+   }
+   .levelrole_item .rolename {
+    margin-right:1em;
+    flex:1 1 auto;
+    font-family:Quicksand;
+    min-height:35px;
+    font-family:Quicksand;
+    font-size:20px;
+    line-height:20px;
+    margin:10px
+   }
+   
+   .levelrole_item .plx-flex-around {
+    justify-content:flex-end;
+    flex:0 1 auto
+   }
+   .levelrole_item .plx-flex-around>* {
+    margin-left:5px
+   }
+   .levelrole_item .plx-pink-input select {
+    margin-bottom:0!important;
+    margin:-10px;
+    max-width:300px
+   }
+   input.level {
+    background:0 0;
+    border:none;
+    border-bottom:solid 2px #aac
+   }
+   input[type=number].level {
+    -moz-appearance:textfield
+   }
+   input[type=number].level::-webkit-inner-spin-button,
+   input[type=number].level::-webkit-outer-spin-button {
+    -webkit-appearance:none;
+    margin:0
+   }
+   .selfrole_item .rolename {
+    margin-right:1em;
+    flex:1 1 auto;
+    font-family:Quicksand;
+    min-height:35px;
+    font-family:Quicksand;
+    font-size:20px;
+    line-height:20px;
+    margin:10px 0
+   }
+   .selfrole_item .level {
+    font-size:12pt;
+    /*! opacity:.7; */
+    font-family:'Panton Light';
+    font-style:italic;
+    /*! text-align:left!important; */
+    width:5rem;
+    flex:0 0 auto;
+    text-align: center;
+    margin: auto;
+   }
+   .selfrole_item .plx-flex-around {
+    justify-content:flex-end;
+    flex:0 1 auto
+   }
+   .selfrole_item .plx-flex-around>* {
+    margin-left:5px
+   }
+   .selfrole_item .plx-pink-input select {
+    margin-bottom:0!important;
+    /*! max-width: 200px; */font-size:12pt
+   }
+   @media screen and (max-width:600px) {
+    .levelrole_item .rolename {
+     white-space:nowrap;
+     overflow:hidden;
+     text-overflow:ellipsis;
+     font-size:15px
+    }
+    .selfrole_item .rolename {
+     white-space:nowrap;
+     overflow:hidden;
+     text-overflow:ellipsis;
+     font-size:12px;
+     margin-left:-8px
+    }
+   }
+   .row-1,
+   .row-2 {
+    width:100%
+   }
+   
