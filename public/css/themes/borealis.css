@@ -1,4 +1,4 @@
-html{
+html,:root{
   
   
     --color-contrast: var(--lightest);
@@ -7,20 +7,20 @@ html{
   --text-accent: var(--mid);
   --text-accent-dim:   #2235;
   
-  --text-extra-bold: var(--pre-light,#AAC);
-  --text-bold: var(--mid-light,#AAC);
-  --text-main: var(--light,#AAC);
-  --text-faint: var(--light,#668);
-  --text-dim: var(--mid-light,#99A);
-  --text-dim-mid: var(--light,#88a);
-  --text-inverse: var(--light,#2b2b3b);
+  --text-extra-bold:  rgb(63, 63, 82);
+  --text-bold:  rgb(93, 93, 126);
+  --text-main:  rgb(123, 123, 150);
+  --text-faint:  #668;
+  --text-dim:  #99A;
+  --text-dim-mid:  #88a;
+  --text-inverse:  #2b2b3b;
   
   --mid-main: var(--light);
   --bg-main: var(--lightest);
   --bg-darker: var(--lighter);
   --bg-darkest: #E5E5F8;
   
-  --bg-opaque: #AAC2;
+  --bg-opaque: #AAC1;
   --bg-inverse: var(--dark);
   
   

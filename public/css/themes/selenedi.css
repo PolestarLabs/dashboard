@@ -7,13 +7,13 @@ html{
   --text-accent: var(--mid);
   --text-accent-dim:   #2235;
   
-  --text-extra-bold: var(--pre-light,#AAC);
-  --text-bold: var(--mid-light,#AAC);
-  --text-main: var(--light,#AAC);
-  --text-faint: var(--light,#668);
-  --text-dim: var(--mid-light,#99A);
-  --text-dim-mid: var(--light,#88a);
-  --text-inverse: var(--light,#2b2b3b);
+  --text-extra-bold: #302433;
+  --text-bold: #413448;
+  --text-main: #6c5186;
+  --text-faint: #81409fd4;
+  --text-dim: #81409f;
+  --text-dim-mid: #8c409fe0;
+  --text-inverse: #9AAFFF;
   
   --mid-main: var(--light);
   --bg-main: var(--lightest);
