@@ -78,7 +78,7 @@ function since(x){
     }
   })
   
-fetch("https://beta.pollux.gg/api/commends?uid="+userprofile.id+"&.png&full=1").then(r =>
+fetch("https://beta.pollux.gg/api/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  RIGHT_COLUMN.commendInfo = res  )
 );
   

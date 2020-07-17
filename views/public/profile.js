@@ -142,14 +142,14 @@ fetch("/api/relationships?uid="+userprofile.id+"&plxdata=1").then(r =>
     r.json().then(res =>  PROFILE.relationships = res  )
 );
 
-fetch("/api/commends?uid="+userprofile.id+"&.png&full=1").then(r =>
+fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );
-fetch("/api/commendrank/"+userprofile.id+"/in?.png&full=1").then(r =>
+fetch("/api/user/"+userprofile.id+"/commends/in?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendRank.in = res  )
 );
   
-fetch("/api/commends?uid="+userprofile.id+"&.png&full=1").then(r =>
+fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );  
 
