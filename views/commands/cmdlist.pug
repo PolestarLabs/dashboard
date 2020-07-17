@@ -53,13 +53,13 @@ block content
                     
                     div(plx-filter="target: .commandFilter")
                         small.help Category Filter
+                        
                         ul.plx-subnav.plx-subnav-pill.subnavite
                             li(plx-filter-control="")#allFIlter: a All
                             each cat in cm.CATS
                                 li(plx-filter-control=".filter-"+cat.consolidated).genericFilter: a(class="c-outline "+cat.consolidated)=  cat.name
-                        .plx-button(type='button' plx-toggle="target: .compactable; cls: compact" ).compactable COMPACT MODE
                         
-                        hr
+                        
                         .plx-grid.commandStream
                             .plx-width-1-1(class="plx-width-3-4@s")
                                 .commandFilter#commands-dock.compactable
@@ -68,8 +68,11 @@ block content
                                     
             
                             .plx-width-1-4.weirdSidebar
-                                ul#weirdNav.plx-subnav.plx-subnav-pill( style="z-index: 1; margin-left:0" plx-sticky="bottom: true; offset: 80" plx-scrollspy-nav=" closest: li; scroll: true; offset: 180;" )
-                                    li: a(href="#top") TOP
+                                ul#weirdNav.plx-flex-column.plx-subnav.plx-subnav-pill( style="z-index: 1; margin-left:0" plx-sticky="bottom: true; offset: 80" plx-scrollspy-nav=" closest: li; scroll: true; offset: 100;" )
+                                    .plx-button(type='button' plx-toggle="target: .compactable; cls: compact" ).compactable COMPACT MODE
+                                    a(href="#top").plx-button
+                                        i: .fas.fa-arrow-up
+                                        | TOP
                                     each cat in cm.CATS                      
                                         li(): a(href="#"+cat.consolidated)=  cat.name                                                 
 
