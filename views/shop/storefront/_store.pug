@@ -8,7 +8,7 @@ mixin shopcard()
       .icon
         i.far.fas(:class="`fa-star`")
       .subheader
-        .text.truncate {{ (item.category||item.series||item.BUNDLE||"").toUpperCase() }}
+        .text.truncate {{ ((item.event?item.event+" event":'')||item.category||item.series||item.BUNDLE||(item.for?item.for+" deck":'')||"").toUpperCase() }}
     .rartag
     .body
       .img(v-if='item.type == "background"').background
@@ -16,28 +16,53 @@ mixin shopcard()
         .artist-tag(v-if="item.artistName")
           i.fas.fa-paint-brush
           a(:href="item.artistLink" target="blank") {{item.artistName}}
-      .img(v-if='item.type == "medal"').medal
+      .img(v-else-if='item.type == "medal"').medal
         img(plx-img :src="`/medals/${item.icon||item.id}.png`")
-      .img(v-if='item.type == "sticker"').sticker
+      .img(v-else-if='item.type == "sticker"').sticker
         img(plx-img :src="`/stickers/${item.id}.png`")
-      .img(v-if='item.type == "boosterpack"').sticker
+      .img(v-else-if='item.type == "boosterpack"').sticker
         img(plx-img :src="`/build/boosters/showcase/${item.icon}.png`")
-      .img(v-if='item.type == "item"').item
-        img(plx-img :src="`/build/items/${item.id}.png`")
-      .img(v-if='item.type == "skin"').skin
+      //.img(v-if='item.type == "item"').item
+      .img(v-else-if='item.type == "skin"').skin
         //assuming it is always DECK for now
         // PLEASE CHANGE THIS
         .container
           img(plx-img :src="`/build/cards/${item.id.split('_').join('/')}/${item.id.startsWith('tarot')? 'star':'HQ'}.png`")
           img(plx-img :src="`/build/cards/${item.id.split('_').join('/')}/backface.png`")
+      .img(v-else).item
+        img(plx-img :src="`/build/items/${item.id}.png`")
+
+
     .footer.plx-flex.plx-flex-wrap
-        .button(v-if='item.type == "sticker"').sticker
+
+        .button(v-if="item.rarity == 'XR' && !item.crafted"  ).special.alt
+            i: .fas.fa-star
+            .price Special
+
+        .button(v-else-if='item.event', :class="hasItem(item)?'disabled':''").event.alt
+          i: .plx-token.icon24.curr_icon_3
+          .price
+            span.face() {{ miliarize(item.price || (defaultPrices[item.type]||{})[item.rarity] / 2 || "N/A" ,0,' ')}}
+
+
+        .button(v-else-if='item.type == "sticker"').sticker.alt
           i: .fas.fa-info-circle
           .price PACK INFO
+
             
         .button(v-else-if="hasItem(item)" style="padding:0 5px", :class="hasItem(item)?'disabled':''")
             i: .fas.fa-check.icon24
             .price Obtained
+
+
+        .button(v-else-if="item.type == 'skin'"  ).advcraft.alt
+          i: .fas.fa-vial
+          .price ADV. CRAFT
+
+        .button(v-else-if="item.crafted"  ).craft.alt
+          i: .fas.fa-flask
+          .price CRAFT INFO
+        
         .button(v-else-if="item.type" style="padding:0 5px", :class="hasItem(item)?'disabled':''")
           //.isnew 
             +svgBadge('discount')               
@@ -51,6 +76,8 @@ mixin shopcard()
           i: .plx-sapphire.icon24.curr_icon_3
           .price
             span.face() {{ miliarize( Math.ceil((item.price || (defaultPrices[item.type]||{})[item.rarity]||0) / 1250) || "N/A" ,0,' ') }}
+        
+        
         .button(v-else style="padding:0 5px").dead
           .price: span.face LOADING...
  
