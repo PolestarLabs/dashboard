@@ -361,7 +361,7 @@ a > label{
   transform: rotate(15deg) translate(30px, -25px) scale(1);
   justify-content: center;
   display: flex;
-  margin-top: 10px;
+  margin-top: 55px;
 }
 .img.skin .container img{
   position: absolute;
