@@ -37,36 +37,107 @@ router.get('/',AUTHED, (req, res)=> {
 });
 
 
+router.use( (req,res,nex)=>{
+    if (req.headers.authorization && !req.user) return AUTHED(req,res,nex);
+    nex();
+});
+global.cache= cacheFunction
+router.get(cache(60));
 
-router.use( '/users/:id', async (req,res,next) => {
+
+
+router.use("/user/", async (...args) => {
+    return (require('./users.js'))( ...args);
+});
+
+router.use(["/market/","/marketplace/"], async (...args) => {
+    return (require('./marketplace.js'))( ...args);
+});
+
+router.use(["/crafting/","/items/"], async (...args) => {
+    return (require('./collections.js'))( ...args);
+});
+
+router.use(["/cosmetics/"], async (...args) => {
+    return (require('./cosmetics.js'))( ...args);
+});
+
+
+
+//############################################
+
+router.get('/discoin/currencies', async (req,res)=>{
+    let units = await DB.globals.find({'type':'discoin'},{type:0,_id:0}).lean();
+    res.json(units)
+})
+
+
+router.get('/achievements/:id',cache(2360), async (req,res) => {
+
+    if(req.params.id == 'user'){
+       
+    }else{
+        let achi = req.params.id
+        DB.achievements.get({id:achi}).then(result=>{
+            res.json(result)
+        })
+    }
+
+})
+
+router.get('/relationships', cache(1260), async (req, res)=> {
+
+    console.log('start')
+
+    let {page: skip} = req.query;
+
+    let Relationships;
+    if (req.query.id){
+        Relationships = await DB.relationships.find({_id: req.query.id }).lean().exec();
+        if(!Relationships) return res.status(404).json("RELATIONSHIP ID NOT FOUND");
+    }
+    if (req.query.uid){
+        Relationships = await DB.relationships.find({users: req.query.uid }).limit(10).skip(10*(skip||0)).lean().exec();
+        if(!Relationships) return res.status(404).json("USER NOT FOUND");
+    }
+
+    console.log('p1')
+
+    let usersInvolved = Relationships.map(R=> R.users.find(u=> u!=req.query.uid) ).concat(req.query.uid);
     
-    const { id } = req.params;
-    res.locals.userdata = await DB.users.get(id);
+    let [usersData,usersDBdata] = await Promise.all([
+        Promise.all( usersInvolved.map(async U => userCache.get( U ) || PLX.getRESTUser( U )) ),
+        (req.query.plxdata ? DB.users.find( {id: {$in: usersInvolved}},  {_id:0, id:1,"featuredMarriage":1,"modules.tagline":1} ) : null)
+    ]);
+    usersData.forEach(USR=> userCache.set(USR.id,USR) );
 
-    next();
+    console.log('p2')
+
+    let parsedRelationships = []
+    Relationships.forEach(rel=>{
+        console.log(0)
+        let item = {
+            type: rel.type,
+            initiative: rel.initiative, 
+            ring: rel.ring,
+            since: rel.since,
+            id: rel._id,
+            users: rel.users,
+            usersData: rel.users.map(u=> {
+                let udbData = {};
+                let {avatar,bot,discriminator,username} = usersData.find(usr=> usr.id === u);
+                if(usersDBdata) udbData = usersDBdata.find(usr=> usr.id === u);           
+                
+                return  Object.assign( {id:u, avatar, bot, discriminator, username} , {tagline:udbData?.modules?.tagline,featuredMarriage:udbData?.featuredMarriage} )
+            })
+        };
+        parsedRelationships.push(item)
+    });
     
- });
-
-router.use( '/admin/:id', async (req,res,next) => {
-    
-    const { id } = req.params;
-    res.locals.serverdata = await DB.servers.get(id);
-
-    next();
-    
- });
-
-router.use( '/items/:id', async (req,res,next) => {
-    
-    const { id } = req.params;
-    res.locals.itemdata = await DB.items.get(id);
-
-    next();
-    
- });
-
-router.use( '/cosmetics', async (req,res,next) => {
-     
-    
- });
-
+    console.log('end')
+    return res.json( parsedRelationships);
+ 
+});
+ 
+ 
+module.exports = router  

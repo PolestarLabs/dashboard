@@ -71,8 +71,8 @@ const fx = require('../pipelines/globalFunctions.js');
 
 // API
 router.use('/api', (...args)=>{
-  delete require.cache[require.resolve('./api')];
-  const api = require('./api');
+  delete require.cache[require.resolve('./api/_main.js')];
+  const api = require('./api/_main.js');
   return api(...args);
 });
 
