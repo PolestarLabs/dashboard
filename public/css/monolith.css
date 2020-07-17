@@ -725,7 +725,7 @@ div:not(.plx-open) .faders {
 }
 .weirdSidebar {
  flex-direction:column;
- width:130px
+ /*! width:130px; */
 }
 @media screen and (min-width:1400px) {
  #side-rotation-nav {
