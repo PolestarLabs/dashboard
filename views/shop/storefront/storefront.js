@@ -155,7 +155,7 @@ fetch("/api/marketplace?limit=10").then((r) =>
   r.json().then(async (res) => (STORE.market = res))
 );
 
-fetch("/api/meta/rates").then((r) =>
+fetch("/api/marketplace/rates").then((r) =>
   r
     .json()
     .then(

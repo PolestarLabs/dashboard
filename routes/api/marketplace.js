@@ -33,6 +33,12 @@ function getItemMarketDetails(item){
 }
 
 
+router.get('/rates', async (req,res) => {
+    const {bgPrices, medalPrices} = require('../../../bot/GlobalNumbers.js');
+    return res.json({bgPrices, medalPrices});
+});
+
+
 router.get('/:item', async (req,res) => {
     const {item} = req.params;
        
@@ -94,10 +100,6 @@ router.get('/', cache(60), async (req,res) => {
         })
 
 })
-router.get('/rates', cache(24*60*60),async (req,res) => {
-    const {bgPrices, medalPrices} = require('../../bot/GlobalNumbers.js');
-    return res.json({bgPrices, medalPrices});
-});
 
 
 module.exports = router
