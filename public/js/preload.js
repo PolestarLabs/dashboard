@@ -1,8 +1,8 @@
 $("html").addClass("cl-preload");
 $(window).on("load", function () {
-  //$("#loader").fadeOut("slow", function() {
-  // $("#preloader").delay(300).fadeOut("slow");
-  //});
+  $("#loader").fadeOut("slow", function() {
+   $("#preloader").delay(100).fadeOut("slow");
+  });
   $("html").removeClass("cl-preload");
   $("html").addClass("cl-loaded");
 });
@@ -13,4 +13,4 @@ window.onbeforeunload = function (e) {
     $("#preloader").animate({ opacity: 1 });
   });
 };
-window.paceOptions = {restartOnRequestAfter: 300 ,ghostTime: 100,restartOnPushState: false}; Pace.options.restartOnPushState = false; console.log(Pace.options)
+window.paceOptions = {ajax:false, restartOnRequestAfter: 300 ,ghostTime: 100,restartOnPushState: false}; Pace.options.restartOnPushState = false; console.log(Pace.options)
