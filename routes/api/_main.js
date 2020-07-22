@@ -57,6 +57,7 @@ router.use("/user/", async (...args) => {
 });
 
 router.use(["/market/","/marketplace/"], async (...args) => {
+    delete require.cache[(require.resolve('./shops/marketplace.js'))];
     return (require('./shops/marketplace.js'))( ...args);
 });
 
