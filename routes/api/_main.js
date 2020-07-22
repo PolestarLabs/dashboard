@@ -12,8 +12,8 @@ passport.use(new Strategy(
             if(!user) return cb(null,false,{message: "API Token Needed"});
             let resUser={
                 id: user.id,
-                apiKey: user._doc.apiKey,
-                apiPermission: user._doc.apiPerms || 'basic',
+                apiKey: user.apiKey,
+                apiPermission: user.apiPerms || 'basic',
                 ip: user.personal.ip,
                 location: `${user.personal.city}, ${user.personal.country}`,
             };
@@ -42,8 +42,14 @@ router.use( (req,res,nex)=>{
     nex();
 });
 global.cache= cacheFunction
-router.get(cache(60));
 
+router.get(cache(60));
+router.use( (req,res,nex)=>{
+    console.log(req.body)
+    console.log( MARKET_TOKEN )
+    if(req.method !== 'GET' && (!req.user && req.body.pollux != MARKET_TOKEN) ) return res.status(401).send("Nope");
+    else nex();
+});
 
 
 router.use("/user/", async (...args) => {
@@ -51,7 +57,7 @@ router.use("/user/", async (...args) => {
 });
 
 router.use(["/market/","/marketplace/"], async (...args) => {
-    return (require('./marketplace.js'))( ...args);
+    return (require('./shops/marketplace.js'))( ...args);
 });
 
 router.use(["/crafting/","/items/"], async (...args) => {
