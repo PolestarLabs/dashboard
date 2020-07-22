@@ -16,6 +16,16 @@ $(window).on("load", function () {
     $("#" + flashy).addClass('ding')
 })
 $(document).ready(function () {
+    let search = getUrlVars()['search'];
+    if (search){
+        let payload = {
+            filter: search,
+        }
+        $("#search input").val(search)
+        if(window.xhrUpdate) xhrUpdate.abort();
+        window.marketfilter = payload.filter
+        updateMarketCanvas(0, payload) 
+    }
 
     $('#trade-dock').infiniteScroll({
         // options
@@ -103,3 +113,15 @@ $(document).ready(function () {
 });
 reloadDates() 
 
+function getUrlVars()
+{
+    var vars = [], hash;
+    var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+    for(var i = 0; i < hashes.length; i++)
+    {
+        hash = hashes[i].split('=');
+        vars.push(hash[0]);
+        vars[hash[0]] = hash[1];
+    }
+    return vars;
+}
