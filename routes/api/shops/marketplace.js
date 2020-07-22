@@ -94,8 +94,8 @@ router.get("/", cache(60), async (req, res) => {
 });
 
 router.get("/rates", async (req, res) => {
-  const { bgPrices, medalPrices } = require("../../../../bot/GlobalNumbers.js");
-  return res.json({ bgPrices, medalPrices });
+  const { bgPrices, medalPrices,sapphireModifier, jadeModifier } = require("../../../../bot/GlobalNumbers.js");
+  return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier });
 });
 
 router.get("/:item", async (req, res) => {
@@ -169,10 +169,38 @@ router.post("/", async (req, res) => {
 });
 
 
-router.get("/buy/:entry", async (req,res)=>{
-  
-  
-  destroyEntry()
+router.post("/buy/:entry", async (req,res)=>{
+  const {entry} = req.params;
+
+  let entry = await DB.marketplace.findOne({ id: entry }).lean();
+  if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
+  if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+
+  let item = await getItemMarketDetails(entry.item_id);
+
+  /*
+
+  TO-DO:  test item against type then fork?
+
+  */
+})
+
+router.post("/sell/:entry", async (req,res)=>{
+  const {entry} = req.params;
+
+  let entry = await DB.marketplace.findOne({ id: entry }).lean();
+  if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
+  if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+
+  let item = await getItemMarketDetails(entry.item_id);
+
+  /*
+
+  TO-DO:  test item against type then fork?
+
+  */
+
+
 })
 
 
@@ -196,6 +224,23 @@ router.delete("/:entry", async (req,res)=>{
     res.status(result.status).json(result.json)
   });
 })
+
+
+  /*
+
+  TO-DO:  catch-all procedure for buy/sell/delete
+
+  types: background, skin, flair, medal => respective collection ($addToSet)
+  anything else: goest to user > inventory ($inc by item ID )
+
+  */
+
+
+
+
+
+
+
 
 router.patch("/:entry", async (req,res)=>{
   const {entry} = req.params;

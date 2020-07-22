@@ -42,7 +42,7 @@ mixin shopcard()
         .button(v-else-if='item.event', :class="hasItem(item)?'disabled':''").event.alt
           i: .plx-token.icon24.curr_icon_3
           .price
-            span.face() {{ miliarize(item.price || (defaultPrices[item.type]||{})[item.rarity] / 2 || "N/A" ,0,' ')}}
+            span.face() {{ miliarize(item.price || (defaultPrices[item.type]||{})[item.rarity] * defaultPrices.tokenModifier || "N/A" ,0,' ')}}
 
 
         .button(v-else-if='item.type == "sticker"').sticker.alt
@@ -75,7 +75,7 @@ mixin shopcard()
           //.button(style="padding:0 5px")
           i: .plx-sapphire.icon24.curr_icon_3
           .price
-            span.face() {{ miliarize( Math.ceil((item.price || (defaultPrices[item.type]||{})[item.rarity]||0) / 1250) || "N/A" ,0,' ') }}
+            span.face() {{ miliarize( Math.ceil((item.price || (defaultPrices[item.type]||{})[item.rarity]||0) * sapphireModifier) || "N/A" ,0,' ') }}
         
         
         .button(v-else style="padding:0 5px").dead
