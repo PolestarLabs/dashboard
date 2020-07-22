@@ -160,10 +160,10 @@ fetch("/api/marketplace/rates").then((r) =>
     .json()
     .then(
       async (res) =>
-        (STORE.defaultPrices = {
+        (STORE.defaultPrices = Object.assign(res,{
           medal: res.medalPrices,
           background: res.bgPrices,
-        })
+        }))
     )
 );
 
