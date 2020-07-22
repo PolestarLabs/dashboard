@@ -60,6 +60,11 @@ router.use(["/market/","/marketplace/"], async (...args) => {
     return (require('./shops/marketplace.js'))( ...args);
 });
 
+router.use(["/shop/","/store/"], async (...args) => {
+    delete require.cache[(require.resolve('./shops/main.js'))];
+    return (require('./shops/main.js'))( ...args);
+});
+
 router.use(["/crafting/","/items/"], async (...args) => {
     return (require('./collections.js'))( ...args);
 });
