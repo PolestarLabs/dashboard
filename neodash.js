@@ -26,8 +26,8 @@ global.cacheFunction = (duration) => {
 }
 global.userCache = new Map();
 
-
 const config = require('./config.js');
+
 
 global.hasPolluxRole = function hasPolluxRole(req,roleID){
   return new Promise(async resolve=>{     
@@ -64,7 +64,7 @@ global.compulsoryAuth = async function checkAuthTwo(req, res, next) {
     return false;
   }
 };
-
+global.MARKET_TOKEN = config["pollux-api-token"]
 
 
 const Express = require('express');
@@ -467,7 +467,8 @@ global.isAdmin = function isAdmin(req,svID){
 
 global.checkAuth = function checkAuth(req, res, next) {
   if (req.isAuthenticated()) return next();
-  return res.render('needlogin')
+  if(req.method === 'GET') return res.render('needlogin');
+  else res.status(401).send("Nope")
 };
 //###################################################################################
 
