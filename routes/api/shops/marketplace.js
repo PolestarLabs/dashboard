@@ -169,10 +169,10 @@ router.post("/", async (req, res) => {
 });
 
 
-router.post("/buy/:entry", async (req,res)=>{
-  const {entry} = req.params;
+router.post("/buy/:entry_id", async (req,res)=>{
+  const {entry_id} = req.params;
 
-  let entry = await DB.marketplace.findOne({ id: entry }).lean();
+  let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
   if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
@@ -185,10 +185,10 @@ router.post("/buy/:entry", async (req,res)=>{
   */
 })
 
-router.post("/sell/:entry", async (req,res)=>{
-  const {entry} = req.params;
+router.post("/sell/:entry_id", async (req,res)=>{
+  const {entry_id} = req.params;
 
-  let entry = await DB.marketplace.findOne({ id: entry }).lean();
+  let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
   if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
@@ -204,10 +204,10 @@ router.post("/sell/:entry", async (req,res)=>{
 })
 
 
-router.delete("/:entry", async (req,res)=>{
-  const {entry} = req.params;
+router.delete("/:entry_id", async (req,res)=>{
+  const {entry_id} = req.params;
 
-  let entry = await DB.marketplace.findOne({ id: entry }).lean();
+  let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
   if(entry.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
@@ -219,7 +219,7 @@ router.delete("/:entry", async (req,res)=>{
   */
 
   
-  destroyEntry(entry).then(result=>{
+  destroyEntry(entry_id).then(result=>{
     
     res.status(result.status).json(result.json)
   });
