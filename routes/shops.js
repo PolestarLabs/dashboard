@@ -137,7 +137,7 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
   let ff = req.params.id  
   let entry = await DB.marketplace.findOne({id:ff}); 
   if(!entry) return _404();
-  
+
   let [marketplace,prefbase] = await Promise.all([
      DB.marketplace.aggregate([
        {$match: {$or: [{author: entry.author}, {item_id: entry.item_id }] } },
@@ -205,11 +205,13 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
       let fullbase = prefbase.fullbase;
 
       let opengraph={}
-      let defrarity = { C: "⭐",
-       U: "⭐⭐", 
-       R: "⭐⭐⭐", 
-       SR: "⭐⭐⭐⭐",
-        UR : "⭐⭐⭐⭐⭐"
+      let defrarity = {
+        C:   "⭐",
+        U:   "⭐⭐", 
+        R:   "⭐⭐⭐", 
+        SR:  "⭐⭐⭐⭐",
+        UR : "⭐⭐⭐⭐⭐",
+        XR : "⭐⭐⭐⭐⭐⭐⭐"
       }[item.rarity];
       opengraph.title = `[${entry.item_type.toUpperCase()}] ${item.name} ${defrarity}`
       //opengraph.sitename = ((entry.userdata||{}).meta||{}).tag||"-no author-"
