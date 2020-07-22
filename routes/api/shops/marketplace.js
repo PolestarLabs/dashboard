@@ -120,15 +120,16 @@ router.post("/", async (req, res) => {
     return res.status(401).json("No Author Supplied");
   if (req.user) PAYLOAD.author = req.user.id;
 
-  PAYLOAD.id = require("md5")(Date.now());
+  PAYLOAD.id = (Date.now()).toString(16).toUpperCase()+process.pid;
   PAYLOAD.timestamp = Date.now();
+
+  let {item} = (await getItemMarketDetails(PAYLOAD.item_id)); 
 
   if (PAYLOAD.type == "sell") {
     let result = await userCanSell(
       PAYLOAD.author,
-      PAYLOAD.currency,
-      PAYLOAD.item_type,
-      PAYLOAD.item_id
+      PAYLOAD.currency,    
+      item
     );
     if (result.res === true) {
       await DB.users.updateOne(
@@ -143,9 +144,8 @@ router.post("/", async (req, res) => {
     let result = await userCanBuy(
       PAYLOAD.author,
       PAYLOAD.currency,
-      PAYLOAD.item_type,
-      PAYLOAD.item_id,
-      PAYLOAD.price
+      PAYLOAD.price,
+      item,
     );
     if (result.res === true) {
       await ECO.pay(
@@ -172,11 +172,21 @@ router.post("/", async (req, res) => {
 router.post("/buy/:entry_id", async (req,res)=>{
   const {entry_id} = req.params;
 
+  if(!req.user) return res.send(403);
+
   let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
-  if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  //if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
-  let item = await getItemMarketDetails(entry.item_id);
+  let {item} = (await getItemMarketDetails(entry.item_id)); 
+  let canBuy = await userCanBuy(req.user.id,entry.currency,entry.price,item);
+  
+  if(!canBuy.res) return res.status(canBuy.status).json({canBuy,item});
+
+
+
+
+  res.json({item,canBuy})
 
   /*
 
@@ -184,6 +194,10 @@ router.post("/buy/:entry_id", async (req,res)=>{
 
   */
 })
+
+
+async function awardMarketplaceItem(item,user){}
+
 
 router.post("/sell/:entry_id", async (req,res)=>{
   const {entry_id} = req.params;
@@ -320,90 +334,120 @@ function getItemMarketDetails(item) {
   });
 }
 
-async function userCanSell(id, currency, item_type, item_id) {
+function itemInInventory(item, userData) {
+  let res = false;
+  let reason = "UNKNOWN";
+  let status = 400;
+  let query = {};
+  let prequery = {};
+
+  if (item.type === "boosterpack")
+    item_shallow_id = item_shallow_id + "_booster";
+
+
+  if (userData.amtItem(item.id) == 0 &&
+    ["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)) {
+    res = false;
+    reason = "ITEM NOT IN INVENTORY";
+    status = 404;
+    prequery = { id: userData.id, "modules.inventory.id": item.id };
+    query = { $inc: { "modules.inventory.$.count": -1 } };
+  }
+  if (item.type === "background") {
+    if (!userData.modules.bgInventory.includes(item.code)) {
+      res = false;
+      reason = "BACKGROUND NOT IN INVENTORY";
+      status = 404;
+    }
+    else {
+      query = { $pull: { "modules.bgInventory": item.code } };
+      res = true;
+    }
+  }
+  if (item.type === "medal") {
+    if (!userData.modules.medalInventory.includes(item.icon)) {
+      res = false;
+      reason = "MEDAL NOT IN INVENTORY";
+      status = 404;
+    }
+    else {
+      query = { $pull: { "modules.medalInventory": item.icon } };
+      res = true;
+    }
+  }
+  if (item.type === "skin") {
+    if (!userData.modules.skinInventory.includes(item.id)) {
+      res = false;
+      reason = "SKIN NOT IN INVENTORY";
+      status = 404;
+    }
+    else {
+      query = { $pull: { "modules.skinInventory": item.id } };
+      res = true;
+    }
+  }
+  if (item.type === "sticker") {
+    if (!userData.modules.stickerInventory.includes(item.id)) {
+      res = false;
+      reason = "STICKER NOT IN INVENTORY";
+      status = 404;
+    }
+    else {
+      query = { $pull: { "modules.stickerInventory": item.id } };
+      res = true;
+    }
+  }
+  return { res, reason, status, query , prequery};
+}
+
+async function userCanSell(id, currency, item) {
   if (!(await DB.users.get(id)))
     return { res: false, reason: "USER NOT FOUND", status: 401 };
   if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 300, currency)))
     return { res: false, reason: "NO FUNDS", status: 422 };
 
-  let res = false,
-    reason = "UNKNOWN";
-  let status = 400;
-  let query = {};
-
   const userData = await DB.users.get(id);
 
+  let { res, reason, status, prequery, query } = itemInInventory(item, userData);
+ 
   if (userData.amtItem("sph-license") < 1 && currency === "SPH") {
     res = false;
     reason = "NO SAPPHIRE LICENSE";
     status = 401;
   }
-  if (item_type === "boosterpack") item_id = item_id + "_booster";
-  if (
-    userData.amtItem(item_id) == 0 &&
-    ["junk", "boosterpack", "key", "material", "consumable"].includes(item_type)
-  ) {
-    res = false;
-    reason = "ITEM NOT IN INVENTORY";
-    status = 404;
-    prequery = { id: userData.id, "modules.inventory.id": item_id };
-    query = { $inc: { "modules.inventory.$.count": -1 } };
-  }
-  if (item_type === "background") {
-    if (!userData.modules.bgInventory.includes(item_id)) {
-      res = false;
-      reason = "BACKGROUND NOT IN INVENTORY";
-      status = 404;
-    } else {
-      query = { $pull: { "modules.bgInventory": item_id } };
-      res = true;
-    }
-  }
-  if (item_type === "medal") {
-    if (!userData.modules.medalInventory.includes(item_id)) {
-      res = false;
-      reason = "MEDAL NOT IN INVENTORY";
-      status = 404;
-    } else {
-      query = { $pull: { "modules.medalInventory": item_id } };
-      res = true;
-    }
-  }
-  if (item_type === "skin") {
-    if (!userData.modules.skinInventory.includes(item_id)) {
-      res = false;
-      reason = "SKIN NOT IN INVENTORY";
-      status = 404;
-    } else {
-      query = { $pull: { "modules.skinInventory": item_id } };
-      res = true;
-    }
-  }
 
-  ({ res, reason, status } = await isTradeable(
-    item_type,
-    item_id,
-    res,
-    reason,
-    status
+  ({ res, reason, status,  } = await isTradeable(
+    item.type, item._id,
+    res,    reason,    status
   ));
 
-  return { res, reason, status, query };
+  return { res, reason, status, query, prequery };
 }
 
-async function userCanBuy(id, currency, item_type, item_id, price) {
+// might need refactor
+async function userCanBuy(userId, currency, price, item) {
   let res = true,
     reason = "UNKNOWN",
-    status = 400;
+    status = 200;
 
-  if (!(await ECO.checkFunds(id, price, currency))) {
+  const userData = await DB.users.findOne({id:userId});
+  let itemInInv = itemInInventory(item, userData);
+  console.log(itemInInv)
+  if( itemInInv.res ){
+    if(['background','medal','sticker','flair','skin'].includes(item.type)){     
+      res = false;
+      reason = "ITEM ALREADY OWNED";
+      status = 403;
+    }
+  }
+  else if (!(await ECO.checkFunds(userId, price, currency))) {
     res = false;
     reason = "NO FUNDS";
     status = 422;
   } else {
     ({ res, reason, status } = await isTradeable(
-      item_type,
-      item_id,
+      item.type,
+      item._id,
       res,
       reason,
       status
@@ -413,20 +457,22 @@ async function userCanBuy(id, currency, item_type, item_id, price) {
   return { res, reason, status };
 }
 
-async function isTradeable(item_type, item_id, res, reason, status) {
-  let target_db = ["background", "medal", "sticker", "flair", "skin"].includes(
-    item_type
-  )
+async function isTradeable(item) {
+  let res = true, reason="NONE", status=200;
+  let target_db = ["background", "medal", "sticker", "flair", "skin"].includes(item.type)
     ? "cosmetics"
     : "items";
   let item = await DB[target_db]
-    .find({ _id: item_id })
+    .find({ _id: item._id })
     .lean()
     .catch((e) => null);
-  if (!item?.tradeable) {
+  console.log(item)
+  if (false && !item?.tradeable) { // TEMP SWITCH OFF
     res = false;
     reason = "ITEM IS NOT TRADEABLE";
     status = 403;
+  }else{
+    reason= "OK"
   }
   return { res, reason, status };
 }
