@@ -179,11 +179,20 @@ router.get("/buy/:entry", async (req,res)=>{
 router.delete("/:entry", async (req,res)=>{
   const {entry} = req.params;
 
-  let item = await DB.marketplace.findOne({ id: entry }).lean();
-  if(!item) return res.status(404).json({status: "ENTRY NOT FOUND"});
-  if(item.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  let entry = await DB.marketplace.findOne({ id: entry }).lean();
+  if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
+  if(entry.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+
+  let item = await getItemMarketDetails(entry.item_id);
+  /*
+
+  TO-DO:  test item against type then fork?
+
+  */
+
   
   destroyEntry(entry).then(result=>{
+    
     res.status(result.status).json(result.json)
   });
 })
