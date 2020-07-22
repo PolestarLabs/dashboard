@@ -2,7 +2,6 @@ const ECO = require("../../../pipelines/economy.js");
 const express = require("express");
 const router = express.Router();
 const { bgPrices, medalPrices,sapphireModifier, jadeModifier, tokenModifier } = require("../../../../bot/GlobalNumbers.js");
-const { query } = require("express");
 const defaultPrices = {
     background: bgPrices,
     bundle: bgPrices * 10,
@@ -51,29 +50,39 @@ router.post("/:type/buy/:finder", async (req,res)=>{
 
     switch(type){
         case "background":
-            userData.update({$addToSet: {'modules.bgInventory': item.code} });
-            res.status(200).json({status:"OK", cost: price, trans});
+            await userData.update({},{$addToSet: {'modules.bgInventory': item.code} });            
             break;
 
         case "medal":
-            userData.update({$addToSet: {'modules.medalInventory': item.icon} });
-            res.status(200).json({status:"OK", cost: price, trans});
+            await userData.update({},{$addToSet: {'modules.medalInventory': item.icon} });       
             break;
 
         default:
-            res.status(500).json({status: "ERROR:NOTYPE"});
+            return res.status(500).json({status: "ERROR:NOTYPE"});
     }
+    res.status(200).json({status:"OK", cost: price, trans});
 
 })
 
 async function buyBundle({req,res,userData,bundle,price,currency}){
 
-    let parseBundle = calculateBundlePrice({userData,bundle,price});
+    let bundleStats = calculateBundlePrice({userData,bundle,price});
 
-    return res.json({payload})
+    if(bundleStats.complete) return res.status(403).json({status:"User already owns all bundle items"});
+ 
+    if ( !(await ECO.checkFunds(userData.id,bundleStats.finalPrice,currency)) )  return res.status(403).json({status:"Insufficient Funds"});
+    let trans = await ECO.pay(userData.id,bundleStats.finalPrice,`Webshop - bundle`,currency).catch(err=>{
+        res.status(500).json({status: "ERROR:ECOFAIL"});
+    });
+    return DB.users.updateOne({id:userData.id}, bundleStats.query ).exec().then(ok=>{
+        res.status(200).json({status:"OK", cost: bundleStats.finalPrice, trans, ok,x:bundleStats.query});   
+    }).catch(err=>{
+        res.status(500).json({status:"ERR", err});   
+    });  
+
 };
 
-async function calculateBundlePrice({userData,bundle,price}){
+ function calculateBundlePrice({userData,bundle,price}){
 
     let tally = 0;
     let owned = []
