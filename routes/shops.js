@@ -1,47 +1,8 @@
-// const DB = require('../database')
-const ECO = require('../pipelines/economy.js')
+
 const express = require('express')
 const router = express.Router()
-let bgBase,mdBase,stBase,itBase,fullbase;
+let fullbase;
 
-refreshBases();
-
-router.get('/', function (req, res) {
-  res.render('shop/storefront/_store')
-})
-
-
-
-router.get(["/backgrounds","/bgs","bgshop"], async function (req, res) {
-  delete require.cache[require.resolve('./paginate')];
-  
-  const bgBase =  await DB.cosmetics.find({type:"background",public:true,exclusive:{$exists:false}}).limit(50);
-  console.log(bgBase.length)
-  
-  res.render('shop/bgshop/bgshop',{
-    bgBase,
-    pagination: await require('./paginate').run(req,res,null,{
-      page:0,
-      endpoint:'backgrounds',
-      rpp: 70      
-    }) 
-  })
-})
-
-router.get(["/premium","/cash","prime"], async function (req, res) {
-  delete require.cache[require.resolve('./paginate')];
-  
-  const base =  await DB.buyables.find({available:true}).limit(50).lean().exec();
- 
-  res.render('shop/premium/main',{
-    base,
-      pagination: await require('./paginate').run(req,res,null,{
-      page:0,
-      endpoint:'buyables',
-      rpp: 50      
-    }) 
-  }) 
-})
 
 async function refreshBases(){
 
@@ -90,12 +51,50 @@ stBase=stBase.map(itm=> { return {
    })
    
   
-  fullbase = [].concat.apply([],[bgBase,mdBase,stBase,itBase])
+  fullbase = [].concat(bgBase,mdBase,stBase,itBase);
 
     return {bgBase,mdBase,stBase,itBase,fullbase};
-  }
+}
 
-  router.get("/marketplace", async function (req, res) {
+refreshBases();
+
+
+router.get('/', function (req, res) {
+  res.render('shop/storefront/_store')
+})
+
+router.get(["/backgrounds","/bgs","bgshop"], async function (req, res) {
+  delete require.cache[require.resolve('./paginate')];
+  
+  const bgBase =  await DB.cosmetics.find({type:"background",public:true,exclusive:{$exists:false}}).limit(50);
+  console.log(bgBase.length)
+  
+  res.render('shop/bgshop/bgshop',{
+    bgBase,
+    pagination: await require('./paginate').run(req,res,null,{
+      page:0,
+      endpoint:'backgrounds',
+      rpp: 70      
+    }) 
+  })
+})
+
+router.get(["/premium","/cash","prime"], async function (req, res) {
+  delete require.cache[require.resolve('./paginate')];
+  
+  const base =  await DB.buyables.find({available:true}).limit(50).lean().exec();
+ 
+  res.render('shop/premium/main',{
+    base,
+      pagination: await require('./paginate').run(req,res,null,{
+      page:0,
+      endpoint:'buyables',
+      rpp: 50      
+    }) 
+  }) 
+})
+
+router.get("/marketplace", async function (req, res) {
     delete require.cache[require.resolve('./paginate')];      
     await refreshBases();
     req.app.locals.fullbase = fullbase
@@ -103,6 +102,7 @@ stBase=stBase.map(itm=> { return {
     let marketeers = await DB.users.find({id:{$in:marketplace.map(i=>i.author)}},{meta:1,id:1}).lean().exec()
     let item, opengraph={};    
 
+    // THIS PIECE IS PROBS DEPRECATED
     if(req.query.ff){
       let ff = req.query.ff
         entry = marketplace.find(x=>x.id==ff)
@@ -115,11 +115,11 @@ stBase=stBase.map(itm=> { return {
             opengraph.title = `[${item.rarity}] ${item.name} (${item.type}) `
             opengraph.sitename = ((authordata||{}).meta||{}).tag||"-no author-"
             opengraph.description = `Posted by ${authordata.meta.tag} | <b>Price: ${entry.price} ${entry.currency}</b>`
-            opengraph.image = "https://pollux.fun"+item.img
+            opengraph.image = ROOT+item.img
             opengraph.type = "arcticle"
             opengraph.ts = new Date(entry.timestamp).toISOString()
           }
-        }      
+        }
       }
       // await refreshBases();
    
@@ -133,10 +133,11 @@ stBase=stBase.map(itm=> { return {
   })
 })
 
-
-router.get("/marketplace/entry/:id", async function (req, res) {
+router.get("/marketplace/entry/:id", async function (req, res, _404) {
   let ff = req.params.id  
   let entry = await DB.marketplace.findOne({id:ff}); 
+  if(!entry) return _404();
+  
   let [marketplace,prefbase] = await Promise.all([
      DB.marketplace.aggregate([
        {$match: {$or: [{author: entry.author}, {item_id: entry.item_id }] } },
@@ -228,138 +229,7 @@ router.get("/marketplace/entry/:id", async function (req, res) {
   }
 })
 
-router.post("/marketplace", async function (req, res) {
-  const DATA = req.body
-  const PAYLOAD = req.body.pollux ? req.body.LISTING : req.body;
-
-  // VALIDATION
-  if(!PAYLOAD) return res.status(400).json("No Listing Supplied");
-  if( (PAYLOAD.pollux && !PAYLOAD.author) && !req.user )  return res.status(401).json("No Author Supplied");
-  if(req.user) PAYLOAD.author = req.user.id;
-
-  
-  PAYLOAD.id = require('md5')(Date.now())
-  PAYLOAD.timestamp = Date.now()
-
-
-  if(PAYLOAD.type == 'sell'){   
-      let result = await userCanSell(PAYLOAD.author,PAYLOAD.currency,PAYLOAD.item_type,PAYLOAD.item_id);
-      if(result.res === true){         
-        await DB.users.updateOne( ( (DATA.itemStatus||{}).prequery ||result.prequery || {id:PAYLOAD.author}) , (DATA.itemStatus||{}).query || result.query );
-      }else{
-        return res.status(result.status).json(result.reason);
-      }
-  }
-  else if(PAYLOAD.type == 'buy'){
-    let result = await userCanBuy(PAYLOAD.author,PAYLOAD.currency,PAYLOAD.item_type,PAYLOAD.item_id,PAYLOAD.price);
-    if(result.res === true){
-      await ECO.pay(PAYLOAD.author,Math.abs(PAYLOAD.price),"Marketplace Buy Listing", PAYLOAD.currency);
-    }else{
-      return res.status(result.status).json(result.reason);
-    }
-
-  } else {
-    return res.status(400).json("Listing Type Not Set");
-  }
-
-  await DB.marketplace.new(PAYLOAD);
-
-  return res.status(200).json({status:"OK",payload: PAYLOAD});
-
-
-
-  //res.redirect('/shop/marketplace')
-})
-
-// FUNCTIONS 
-
-async function userCanSell(id,currency,item_type,item_id){
-
-  if( !(await DB.users.get(id)) ) return {res:false,reason:"USER NOT FOUND", status: 401};
-  if ( !(await ECO.checkFunds(id,(currency==="SPH"?2:300),currency)) ) return {res:false,reason:"NO FUNDS",status:422};
-
-  let res = false, reason = "UNKNOWN";
-  let status = 400
-  let query = {}
-
-  const userData = await DB.users.get(id);
-
-
-  if((userData.amtItem('sph-license'))<1 && currency==="SPH"){
-    res = false;
-    reason = "NO SAPPHIRE LICENSE"    
-    status = 401
-  }
-  if(item_type === 'boosterpack') item_id = item_id + "_booster";
-  if (userData.amtItem(item_id) == 0 && ['junk','boosterpack','key','material','consumable'].includes(item_type)){
-    res = false;
-    reason = "ITEM NOT IN INVENTORY"
-    status = 404
-    prequery = {id:userData.id, 'modules.inventory.id':item_id}
-    query = {$inc:{'modules.inventory.$.count':-1}}
-  } 
-  if(item_type === "background"){
-    if(!userData.modules.bgInventory.includes(item_id)){
-        res = false
-        reason = "BACKGROUND NOT IN INVENTORY"
-        status = 404
-    }else{
-      query = {$pull:{'modules.bgInventory':item_id}}
-      res=true; 
-    }
-  }
-  if(item_type === "medal"){
-    if(!userData.modules.medalInventory.includes(item_id)){     
-      res = false
-      reason = "MEDAL NOT IN INVENTORY"
-      status = 404
-    }else{
-      query = {$pull:{'modules.medalInventory':item_id}}
-      res=true; 
-    }
-  }
-  if(item_type === "skin"){
-      if(!userData.modules.skinInventory.includes(item_id)){
-      res = false
-      reason = "SKIN NOT IN INVENTORY"
-      status = 404
-    }else{
-      query = {$pull:{'modules.skinInventory':item_id}}
-      res=true; 
-    }
-  }
-
-  await refreshBases();
-
-  if(!fullbase.find(itm=>itm.type === item_type && itm.id === item_id)) {
-    res = false
-    reason = "ITEM IS NOT TRADEABLE OR DOES NOT EXIST"
-    status = 404  
-  }
-
-
-  return {res,reason,status,query};
-}
-async function userCanBuy(id,currency,item_type,item_id,price){
-  let res = true, reason = "UNKNOWN";
-  let status = 400
-
-  if ( !(await ECO.checkFunds(id,price,currency)) ) {
-    res = false
-    reason = "NO FUNDS"
-    status = 422
-  }
-
-  if(!fullbase.find(itm=>itm.type === item_type && itm.id === item_id)) {
-    res = false
-    reason = "ITEM IS NOT TRADEABLE"
-    status = 403
-  }
-
-  return {res,reason,status};
-}
-
-
+// POST
 
 module.exports = router
 
