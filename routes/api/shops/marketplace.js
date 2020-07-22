@@ -19,6 +19,7 @@ const router = express.Router();
 
 */
 
+// ROOT
 router.get("/", cache(60), async (req, res) => {
   let queries = {};
   Object.keys(req.query)
@@ -72,7 +73,7 @@ router.get("/", cache(60), async (req, res) => {
 
         res.status(500).send("ERROR");
       });
-      console.log(result);
+
       let newThing = result.map((entry) => {
         return Object.assign(
           {
@@ -93,11 +94,14 @@ router.get("/", cache(60), async (req, res) => {
     });
 });
 
+// RATES
 router.get("/rates", async (req, res) => {
   const { bgPrices, medalPrices,sapphireModifier, jadeModifier } = require("../../../../bot/GlobalNumbers.js");
   return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier });
 });
 
+// ITEM INFO
+// - takes an ObjectID
 router.get("/:item", async (req, res) => {
   const { item } = req.params;
 
@@ -110,6 +114,16 @@ router.get("/:item", async (req, res) => {
     });
 });
 
+// POST NEW ENTRY
+/*
+  Payload:
+    type = [sell | buy]
+    author = userID
+    currency = [RBN | SPH]
+    price = INTEGER > 0
+      --> TO-DO: >> must check for rotation and retail prices in the future
+    pollux = Bot Request Validator 
+*/
 router.post("/", async (req, res) => {
   const DATA = req.body;
   const PAYLOAD = req.body.pollux ? req.body.LISTING : req.body;
@@ -169,6 +183,9 @@ router.post("/", async (req, res) => {
 });
 
 
+async function awardMarketplaceItem(item,user){}
+
+// BUY FROM ENTRY
 router.post("/buy/:entry_id", async (req,res)=>{
   const {entry_id} = req.params;
 
@@ -195,18 +212,19 @@ router.post("/buy/:entry_id", async (req,res)=>{
   */
 })
 
-
-async function awardMarketplaceItem(item,user){}
-
-
+// SELL FROM ENTRY
 router.post("/sell/:entry_id", async (req,res)=>{
   const {entry_id} = req.params;
 
   let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
-  if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  //if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
-  let item = await getItemMarketDetails(entry.item_id);
+  let {item} = (await getItemMarketDetails(entry.item_id)); 
+  let canSell = await userCanSell(req.user.id,entry.currency,item,true);
+  
+  if(!canSell.res) return res.status(canSell.status).json({canSell,item});
+  res.json({item,canSell})
 
   /*
 
@@ -217,7 +235,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
 
 })
 
-
+// DELETE ENTRY (Restores Item)
 router.delete("/:entry_id", async (req,res)=>{
   const {entry_id} = req.params;
 
@@ -242,7 +260,7 @@ router.delete("/:entry_id", async (req,res)=>{
 
   /*
 
-  TO-DO:  catch-all procedure for buy/sell/delete
+  ~~TO-DO:  catch-all procedure for buy/sell/delete~~
 
   types: background, skin, flair, medal => respective collection ($addToSet)
   anything else: goest to user > inventory ($inc by item ID )
@@ -255,7 +273,7 @@ router.delete("/:entry_id", async (req,res)=>{
 
 
 
-
+// EDIT ENTRY (Price-Only)
 router.patch("/:entry", async (req,res)=>{
   const {entry} = req.params;
   const {price} = req.body;
@@ -266,7 +284,6 @@ router.patch("/:entry", async (req,res)=>{
   if(item.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
   DB.marketplace.updateOne({ id: entry } , {$set: {price} }).lean().then((r) => {
-    console.log(r)
     if(r.nModified) res.status(200).json({updated: r.nModified, status: "OK"});
     else res.status(410).json({status: "Nothing to update"});
   }).catch(err=>{
@@ -334,6 +351,7 @@ function getItemMarketDetails(item) {
   });
 }
 
+// might need refactor
 function itemInInventory(item, userData) {
   let res = false;
   let reason = "UNKNOWN";
@@ -343,7 +361,6 @@ function itemInInventory(item, userData) {
 
   if (item.type === "boosterpack")
     item_shallow_id = item_shallow_id + "_booster";
-
 
   if (userData.amtItem(item.id) == 0 &&
     ["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)) {
@@ -399,31 +416,31 @@ function itemInInventory(item, userData) {
   }
   return { res, reason, status, query , prequery};
 }
-
-async function userCanSell(id, currency, item) {
+// might need refactor
+async function userCanSell(id, currency, item, softCheck=false) {
   if (!(await DB.users.get(id)))
     return { res: false, reason: "USER NOT FOUND", status: 401 };
   if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 300, currency)))
     return { res: false, reason: "NO FUNDS", status: 422 };
 
-  const userData = await DB.users.get(id);
+  const userData = await DB.users.findOne({id});
 
   let { res, reason, status, prequery, query } = itemInInventory(item, userData);
  
-  if (userData.amtItem("sph-license") < 1 && currency === "SPH") {
+  if (!softCheck && userData.amtItem("sph-license") < 1 && currency === "SPH") {
     res = false;
     reason = "NO SAPPHIRE LICENSE";
     status = 401;
   }
 
-  ({ res, reason, status,  } = await isTradeable(
-    item.type, item._id,
-    res,    reason,    status
-  ));
+  if( !isTradeable(item) ){
+    res = false;
+    reason = "ITEM IS NOT TRADEABLE";
+    status = 403;
+  };
 
   return { res, reason, status, query, prequery };
 }
-
 // might need refactor
 async function userCanBuy(userId, currency, price, item) {
   let res = true,
@@ -432,49 +449,31 @@ async function userCanBuy(userId, currency, price, item) {
 
   const userData = await DB.users.findOne({id:userId});
   let itemInInv = itemInInventory(item, userData);
-  console.log(itemInInv)
+
   if( itemInInv.res ){
     if(['background','medal','sticker','flair','skin'].includes(item.type)){     
       res = false;
       reason = "ITEM ALREADY OWNED";
       status = 403;
     }
-  }
-  else if (!(await ECO.checkFunds(userId, price, currency))) {
+  }  else if (!(await ECO.checkFunds(userId, price, currency))) {
     res = false;
     reason = "NO FUNDS";
     status = 422;
-  } else {
-    ({ res, reason, status } = await isTradeable(
-      item.type,
-      item._id,
-      res,
-      reason,
-      status
-    ));
+  } else {   
+    if( !isTradeable(item) ){
+      res = false;
+      reason = "ITEM IS NOT TRADEABLE";
+      status = 403;
+    };
   }
 
   return { res, reason, status };
 }
-
-async function isTradeable(item) {
-  let res = true, reason="NONE", status=200;
-  let target_db = ["background", "medal", "sticker", "flair", "skin"].includes(item.type)
-    ? "cosmetics"
-    : "items";
-  let item = await DB[target_db]
-    .find({ _id: item._id })
-    .lean()
-    .catch((e) => null);
-  console.log(item)
-  if (false && !item?.tradeable) { // TEMP SWITCH OFF
-    res = false;
-    reason = "ITEM IS NOT TRADEABLE";
-    status = 403;
-  }else{
-    reason= "OK"
-  }
-  return { res, reason, status };
+// might need refactor
+function isTradeable(item){
+  return  ( true || item?.tradeable )  // TEMP SWITCH OFF
 }
+
 
 module.exports = router;
