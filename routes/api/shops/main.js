@@ -82,7 +82,28 @@ async function buyBundle({req,res,userData,bundle,price,currency}){
 
 };
 
- function calculateBundlePrice({userData,bundle,price}){
+router.get("/bundle/price/:finder", async (req,res)=>{
+
+    let bundle =  await DB.cosmetics.findOne({type:'bundle', id: req.params.finder}).lean();
+    if(!req.user) return res.status(206).json({price: bundle.price, owned: [], info:"User not authenticated. This data is not complete."});
+    const userData = await DB.users.get(req.user.id);
+
+    let bundleStatsRBN = calculateBundlePrice({userData,bundle,price: ~~(itemPrice(bundle,"RBN")) });
+    let bundleStatsSPH = calculateBundlePrice({userData,bundle,price: ~~(itemPrice(bundle,"SPH")) });
+    
+    const payload = {}
+    payload.SPH = {price: bundleStatsSPH.finalPrice, original: bundleStatsSPH.originalPrice}
+    payload.RBN = {price: bundleStatsRBN.finalPrice, original: bundleStatsRBN.originalPrice}
+    delete bundleStatsRBN.query
+    delete bundleStatsRBN.originalPrice
+    delete bundleStatsRBN.finalPrice
+    Object.assign(payload,bundleStatsRBN)
+ 
+    
+    return res.status(200).json(payload)
+})
+
+function calculateBundlePrice({userData,bundle,price}){
 
     let tally = 0;
     let owned = []
@@ -133,7 +154,7 @@ async function buyBundle({req,res,userData,bundle,price,currency}){
     const payload = {
         finalPrice,
         originalPrice: price,
-        discount: Math.min(~~(adjustment*100),100)+"%",
+        discount: Math.min(~~(adjustment*100),100),
         complete: !toBeAdded.length,
         owned,toBeAdded,query
         
@@ -141,7 +162,6 @@ async function buyBundle({req,res,userData,bundle,price,currency}){
 
     return  payload 
 };
-
 
 function itemPrice (item,currency="RBN"){
     let basePrice = item.price || defaultPrices[item.type]?.[item.rarity]
