@@ -219,7 +219,7 @@ router.post("/buy/:entry_id", async (req,res)=>{
 
   let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
-  //if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
   if(entry.type !== 'sell') return res.status(403).json({status: "ITEM FOR SALE-ONLY"});
 
   let {item} = (await getItemMarketDetails(entry.item_id)); 
@@ -249,7 +249,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
   let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
   if(entry.type )
-  //if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
   if(entry.type !== 'buy') return res.status(403).json({status: "ITEM FOR PURCHASE-ONLY"});
 
   let {item} = (await getItemMarketDetails(entry.item_id)); 
