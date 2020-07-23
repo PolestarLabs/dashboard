@@ -183,7 +183,33 @@ router.post("/", async (req, res) => {
 });
 
 
-async function awardMarketplaceItem(item,user){}
+async function awardMarketplaceItem(item,userID,remove){
+  const query = {};
+  let finder = {id: userID}
+  let operation = remove ? "$pull" : "$addToSet";
+
+  switch(item.type){
+    case "background":
+      query[operation]= {'modules.bgInventory': item.code};
+      break;
+    case "medal":
+      query[operation]= {'modules.medalInventory': item.icon};
+      break;
+    case "sticker":
+      query[operation]= {'modules.stickerInventory': item.id};
+      break;
+    case "flair":
+      query[operation]= {'modules.stickerInventory': item.id};
+      break;
+    default:       
+      finder['modules.inventory.id'] = item.id;
+      query = {$inc: {'modules.items.count': (remove ? -1 : 1) } };
+  }
+
+  let res = await DB.users.set( finder, query ).catch(err=>null);
+  if (res) return true;
+  else return false;
+}
 
 // BUY FROM ENTRY
 router.post("/buy/:entry_id", async (req,res)=>{
@@ -200,16 +226,10 @@ router.post("/buy/:entry_id", async (req,res)=>{
   
   if(!canBuy.res) return res.status(canBuy.status).json({canBuy,item});
 
+  let sale = await awardMarketplaceItem(item,req.user.id,false);
 
+  return res.status(sale?200:500).json(sale?{item,canSell,status:"OK"}:{status:"ERROR"});
 
-
-  res.json({item,canBuy})
-
-  /*
-
-  TO-DO:  test item against type then fork?
-
-  */
 })
 
 // SELL FROM ENTRY
@@ -224,14 +244,10 @@ router.post("/sell/:entry_id", async (req,res)=>{
   let canSell = await userCanSell(req.user.id,entry.currency,item,true);
   
   if(!canSell.res) return res.status(canSell.status).json({canSell,item});
-  res.json({item,canSell})
 
-  /*
+  let sale = await awardMarketplaceItem(item,req.user.id,true);
 
-  TO-DO:  test item against type then fork?
-
-  */
-
+  return res.status(sale?200:500).json(sale?{item,canSell,status:"OK"}:{status:"ERROR"});
 
 })
 
@@ -244,15 +260,9 @@ router.delete("/:entry_id", async (req,res)=>{
   if(entry.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
   let item = await getItemMarketDetails(entry.item_id);
-  /*
-
-  TO-DO:  test item against type then fork?
-
-  */
-
   
-  destroyEntry(entry_id).then(result=>{
-    
+  destroyEntry(entry_id).then(async result=>{
+    await awardMarketplaceItem(item,req.user.id,false);
     res.status(result.status).json(result.json)
   });
 })
