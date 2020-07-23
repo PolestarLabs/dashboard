@@ -220,6 +220,7 @@ router.post("/buy/:entry_id", async (req,res)=>{
   let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
   //if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  if(entry.type !== 'sell') return res.status(403).json({status: "ITEM FOR SALE-ONLY"});
 
   let {item} = (await getItemMarketDetails(entry.item_id)); 
   let canBuy = await userCanBuy(req.user.id,entry.currency,entry.price,item);
@@ -227,8 +228,17 @@ router.post("/buy/:entry_id", async (req,res)=>{
   if(!canBuy.res) return res.status(canBuy.status).json({canBuy,item});
 
   let sale = await awardMarketplaceItem(item,req.user.id,false);
-
-  return res.status(sale?200:500).json(sale?{item,canSell,status:"OK"}:{status:"ERROR"});
+  
+  if(sale) {
+    ECO.transfer(req.user.id,entry.author,entry.price,'MARKETPLACE [BUY/SOLD]',entry.currency)
+    .then(receipt=>{
+     return res.status(200).json({status:'OK',receipt})
+    }).catch(err=>{
+     return res.status(500).json({status:'ERROR DURING PAYMENT PHASE'})
+    });
+  }else{
+   return res.status(500).json({status:'ERROR:SALE_INVALID'})
+  }
 
 })
 
@@ -238,7 +248,9 @@ router.post("/sell/:entry_id", async (req,res)=>{
 
   let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
+  if(entry.type )
   //if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  if(entry.type !== 'buy') return res.status(403).json({status: "ITEM FOR PURCHASE-ONLY"});
 
   let {item} = (await getItemMarketDetails(entry.item_id)); 
   let canSell = await userCanSell(req.user.id,entry.currency,item,true);
@@ -247,7 +259,16 @@ router.post("/sell/:entry_id", async (req,res)=>{
 
   let sale = await awardMarketplaceItem(item,req.user.id,true);
 
-  return res.status(sale?200:500).json(sale?{item,canSell,status:"OK"}:{status:"ERROR"});
+  if(sale) {
+    ECO.transfer(entry.author, req.user.id, entry.price, 'MARKETPLACE [SELL/BOUGHT]', entry.currency)
+    .then(receipt=>{
+     return res.status(200).json({status:'OK',receipt})
+    }).catch(err=>{
+     return res.status(500).json({status:'ERROR DURING PAYMENT PHASE'})
+    });
+  }else{
+   return res.status(500).json({status:'ERROR:SALE_INVALID'})
+  }
 
 })
 
@@ -266,21 +287,6 @@ router.delete("/:entry_id", async (req,res)=>{
     res.status(result.status).json(result.json)
   });
 })
-
-
-  /*
-
-  ~~TO-DO:  catch-all procedure for buy/sell/delete~~
-
-  types: background, skin, flair, medal => respective collection ($addToSet)
-  anything else: goest to user > inventory ($inc by item ID )
-
-  */
-
-
-
-
-
 
 
 // EDIT ENTRY (Price-Only)
