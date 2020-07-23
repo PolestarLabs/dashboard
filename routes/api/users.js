@@ -2,11 +2,15 @@
 const express = require('express');
 const router = express.Router();
 
-
+router.use('/:id/', (req,res,nex)=>{
+    res.locals.userID = req.params.id
+    if (req.params.id === '@me') res.locals.userID = req.user.id;
+    nex();
+})
 
 router.get('/:id', cache(30), async (req,res) => {
     let STATUS = 200
-    const uID = req.params.id;
+    const uID = res.locals.userID
     let discordUser = await PLX.getRESTUser(uID).timeout(500).catch(e=>{ return {error:e.message} });
     DB.users.get(uID).then(USR=>{
         let response = {
@@ -50,8 +54,9 @@ router.get('/:id', cache(30), async (req,res) => {
             
     })
 })
+ 
 router.get('/:id/inventory', async (req,res)=>{
-    const uID = req.params.id;
+    const uID = res.locals.userID;
         
         let USR = await DB.users.get(uID);
         let userInventory = USR.modules.inventory.filter(itm=> itm.count > 0 && typeof itm.id === 'string');
@@ -66,10 +71,10 @@ router.get('/:id/inventory', async (req,res)=>{
 
 
 router.get('/:id/commends', cache(360), async (req,res)=>{
-     
-    if(!req.query.full)  return res.json( await DB.commends.get(req.params.id || req.user.id , {_id: 0, __v:0}) );
+    const uID = res.locals.userID;
+    if(!req.query.full)  return res.json( await DB.commends.get(uID || req.user.id , {_id: 0, __v:0}) );
     if(req.query.full==1){
-        const userCommends = (await DB.commends.get(req.params.id || req.user.id , {_id: 0, __v:0}));
+        const userCommends = (await DB.commends.get(uID || req.user.id , {_id: 0, __v:0}));
         if(!userCommends)  return res.status(404).json(null);
         let users =  [...new Set(
                 userCommends.whoIn.map(u=>u.id).slice(0,10).concat(userCommends.whoOut.map(u=>u.id).slice(0,10))
@@ -83,7 +88,7 @@ router.get('/:id/commends', cache(360), async (req,res)=>{
     }
     const commendDataIn = DB.commends.aggregate(
         [
-            { $match: { id: req.params.id || req.user.id  } }, 
+            { $match: { id: uID || req.user.id  } }, 
             { $limit: 10},
             {
                 $lookup: {
@@ -111,7 +116,7 @@ router.get('/:id/commends', cache(360), async (req,res)=>{
 
 router.get('/:id/commends/:endpoint',cache(360), async (req,res)=>{
  
-    const ID = req.params.id
+    const ID = res.locals.id
     const count = (await DB.commends.get(ID))?.whoIn?.reduce((a,b)=> ({count: a.count + b.count}))?.count;
     const rank = (await DB.commends.aggregate(
         [            
