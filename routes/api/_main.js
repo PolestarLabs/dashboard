@@ -53,6 +53,7 @@ router.use( (req,res,nex)=>{
 
 
 router.use("/user/", async (...args) => {
+    delete require.cache[(require.resolve('./users.js'))];
     return (require('./users.js'))( ...args);
 });
 
@@ -74,7 +75,10 @@ router.use(["/cosmetics/"], async (...args) => {
     return (require('./cosmetics.js'))( ...args);
 });
 
-
+router.use(["/utils/"], async (...args) => {
+    delete require.cache[(require.resolve('./utils.js'))];
+    return (require('./utils.js'))( ...args);
+});
 
 //############################################
 
