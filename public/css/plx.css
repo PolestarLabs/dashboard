@@ -1029,7 +1029,7 @@ button.plx-icon:not(:disabled) {
     height: 15px;
     width: 15px;
     border-radius: 500px;
-    background:  var(--bg-lightest);
+    background:  var(--bg-main);
     border: 1px solid #ccc
 }
 
@@ -1038,7 +1038,7 @@ button.plx-icon:not(:disabled) {
     height: 15px;
     width: 15px;
     border-radius: 500px;
-    background:  var(--bg-lightest);
+    background:  var(--bg-main);
     border: 1px solid #ccc
 }
 
@@ -1051,7 +1051,7 @@ button.plx-icon:not(:disabled) {
     height: 15px;
     width: 15px;
     border-radius: 500px;
-    background:  var(--bg-lightest);
+    background:  var(--bg-main);
     border: 1px solid #ccc
 }
 
@@ -1158,7 +1158,7 @@ button.plx-icon:not(:disabled) {
     width: 100%;
     border: 0 none;
     padding: 0 10px;
-    background:  var(--bg-lightest);
+    background:  var(--bg-main);
     color: var(--text-dim-mid);
     border: 1px solid var(--heading-divider-color);
     transition: .2s ease-in-out;
@@ -3928,7 +3928,7 @@ ul.plx-nav-sub {
     box-sizing: border-box;
     min-width: 200px;
     padding: 25px;
-    background:  var(--bg-lightest);
+    background:  var(--bg-main);
     color: var(--text-dim-mid);
     box-shadow: 0 5px 12px rgba(0, 0, 0, .15)
 }
@@ -4003,7 +4003,10 @@ ul.plx-nav-sub {
     padding: 15px 15px;
     background: rgba(0, 0, 0, .6);
     opacity: 0;
-    transition: opacity .15s linear
+    transition: opacity .1s ease;
+    border-radius: 10px;
+    backdrop-filter: grayscale(.1) blur(5px);
+    
 }
 
 @media (min-width:640px) {
@@ -4033,11 +4036,12 @@ ul.plx-nav-sub {
     margin: 0 auto;
     width: 600px;
     max-width: calc(100% - .01px) !important;
-    background:  var(--bg-lightest);
+    background:  var(--bg-main);
     opacity: 0;
     transform: translateY(-100px);
     transition: .3s linear;
-    transition-property: opacity, transform
+    transition-property: opacity, transform;
+    animation: plx-fade-scale-02 .3s forwards
 }
 
 .plx-open>.plx-modal-dialog {
@@ -4067,13 +4071,13 @@ ul.plx-nav-sub {
 
 .plx-modal-header {
     padding: 15px 30px;
-    background:  var(--bg-lightest);
+    background:  var(--bg-main);
     border-bottom: 1px solid var(--text-lighter)
 }
 
 .plx-modal-footer {
     padding: 15px 30px;
-    background:  var(--bg-lightest);
+    background:  var(--bg-main);
     border-top: 1px solid var(--text-lighter)
 }
 
