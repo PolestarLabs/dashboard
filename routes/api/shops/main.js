@@ -8,6 +8,22 @@ const defaultPrices = {
     medal: medalPrices
 }
 
+
+const ERRORS = {
+    item404:      { code: 0xA1, status: "ITEM NOT FOUND" },
+    user404:      { code: 0xA2, status: "USER NOT FOUND" },
+
+    itemOwned:    { code: 0xB1, status: "ITEM ALREADY IN INVENTORY" },
+    bundleOwned:  { code: 0xB2, status: "User already owns all bundle items" },
+
+    noFunds:      { code: 0xC1, status: "Insufficient Funds" },
+    
+    ecoFail:      { code: 0xF1, status: "ERROR:ECOFAIL" },
+    noType:       { code: 0xF2, status: "ERROR:NOTYPE" },
+    noJades:      { code: 0xFF, status: "Jades are no longer supported as currency" },
+};
+
+
 router.get("/", cache(60), async (req,res)=>{
 
 })
@@ -19,7 +35,7 @@ router.post("/:type/buy/:finder", async (req,res)=>{
     const {type,finder} = req.params;
     const {currency} = req.body;
 
-    if (currency === 'JDE') return res.status(401).json({status:"Jades are no longer supported as currency"});
+    if (currency === 'JDE') return res.status(401).json(ERRORS.noJades);
 
     const userData = await DB.users.findOne({id: req.user.id});
 
@@ -30,8 +46,8 @@ router.post("/:type/buy/:finder", async (req,res)=>{
 
     const price = ~~(itemPrice(item,currency));
     
-    if(!item) return res.status(404).json({status: "ITEM NOT FOUND"});
-    if(!userData) return res.status(404).json({status: "USER NOT FOUND"});
+    if(!item) return res.status(404).json(ERRORS.item404);
+    if(!userData) return res.status(404).json(ERRORS.user404);
     
     if (type === 'bundle'){
         return buyBundle({req,res,userData,bundle:item,price,currency});
@@ -40,27 +56,29 @@ router.post("/:type/buy/:finder", async (req,res)=>{
     if(
         (type == 'medal' && userData.modules.medalInventory.includes(item.icon)) ||
         (type == 'background' && userData.modules.bgInventory.includes(item.code))
-    )  return res.status(403).json({status: "ITEM ALREADY IN INVENTORY"});
+    )  return res.status(403).json(ERRORS.itemOwned);
      
 
-    if ( !(await ECO.checkFunds(userData.id,price,currency)) )  return res.status(403).json({status:"Insufficient Funds"});
-    let trans = await ECO.pay(userData.id,price,`Webshop - ${type}`,currency).catch(err=>{
-        res.status(500).json({status: "ERROR:ECOFAIL"});
-    });
+    if ( !(await ECO.checkFunds(userData.id,price,currency)) )  
+        return res.status(403).json(ERRORS.noFunds);
 
+    let trans = await ECO.pay(userData.id,price,`Webshop - ${type}`,currency).catch(err=>{
+        res.status(500).json(ERRORS.ecoFail);
+    });
+    let respons;
     switch(type){
         case "background":
-            await userData.update({},{$addToSet: {'modules.bgInventory': item.code} });            
+            respons = await DB.users.set(userData.id,{$addToSet: {'modules.bgInventory': item.code} });            
             break;
 
         case "medal":
-            await userData.update({},{$addToSet: {'modules.medalInventory': item.icon} });       
+            respons = await DB.users.set(userData.id,{$addToSet: {'modules.medalInventory': item.icon} });       
             break;
 
         default:
-            return res.status(500).json({status: "ERROR:NOTYPE"});
+            return res.status(500).json(ERRORS.noType);
     }
-    res.status(200).json({status:"OK", cost: price, trans});
+    res.status(200).json({status:"OK", cost: price, trans,respons});
 
 })
 
@@ -68,16 +86,17 @@ async function buyBundle({req,res,userData,bundle,price,currency}){
 
     let bundleStats = calculateBundlePrice({userData,bundle,price});
 
-    if(bundleStats.complete) return res.status(403).json({status:"User already owns all bundle items"});
+    if(bundleStats.complete) return res.status(403).json(ERRORS.bundleOwned);
  
-    if ( !(await ECO.checkFunds(userData.id,bundleStats.finalPrice,currency)) )  return res.status(403).json({status:"Insufficient Funds"});
+    if ( !(await ECO.checkFunds(userData.id,bundleStats.finalPrice,currency)) )
+      return res.status(403).json(ERRORS.noFunds);
     let trans = await ECO.pay(userData.id,bundleStats.finalPrice,`Webshop - bundle`,currency).catch(err=>{
-        res.status(500).json({status: "ERROR:ECOFAIL"});
+        res.status(500).json(ERRORS.ecoFail);
     });
     return DB.users.updateOne({id:userData.id}, bundleStats.query ).exec().then(ok=>{
         res.status(200).json({status:"OK", cost: bundleStats.finalPrice, trans, ok,x:bundleStats.query});   
     }).catch(err=>{
-        res.status(500).json({status:"ERR", err});   
+        res.status(500).json({code: -1, status:"ERR", err});   
     });  
 
 };
