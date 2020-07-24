@@ -62,6 +62,7 @@ const STORE = new Vue({
     defaultPrices: { loading: true },
     search: "",
     arrivals: [],
+    currentModalItem: null
   },
   computed: {
     marketItems() {
@@ -73,6 +74,9 @@ const STORE = new Vue({
     },
   },
   methods: {
+    setCurrentItem(item){
+      this.currentModalItem = item
+    },
     hasItem(i) {
       if (!this.userdata) return false;
       if (i.type == "background")
@@ -184,3 +188,57 @@ function shuffle(array) {
   return array;
 }
 
+
+
+// MODALS
+ 
+  function buyStoreItem(type,item,currency="RBN"){
+    Swal.fire({
+      title: 'Select color',
+      allowEscapeKey: () => !Swal.isLoading(),
+      allowOutsideClick: () => !Swal.isLoading(),
+      showConfirmButton: false,
+      showLoaderOnConfirm: true,
+      onOpen: Swal.clickConfirm,    
+      preConfirm: () =>
+        fetch(
+          `/api/shop/${type}/buy/${item}`,
+          {
+            method:"POST",
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ currency })
+          }
+        ).then((r) =>
+          r.json().then( val=> {
+            if(!r.ok){
+              const newSwalOptions = {
+                showCancelButton : true,
+                showCloseButton : true,
+              }
+              if(val.code == 0xC1){
+                currency = currency == 'RBN' ? 'SPH' : 'RBN';
+                newSwalOptions.confirmButtonText = `Try with ${currency}`
+                newSwalOptions.confirmButtonColor = currency == 'SPH' ? '#5599F0' : '#F03355';                    
+              }
+              if([0xB1,0xB2].includes(val.code)){
+                newSwalOptions.showConfirmButton = false;
+                if(val.code == 0xB1)
+                  newSwalOptions.cancelButtonText = "Ah I can't have two?";
+                if(val.code == 0xB2)
+                  newSwalOptions.cancelButtonText = "Wow ok.";
+              }
+              if((val.code||00).toString(16).startsWith("f")){
+                newSwalOptions.showConfirmButton = false;
+                newSwalOptions.cancelButtonText = "😬"
+              }
+              
+              Swal.update( newSwalOptions );
+              return Swal.showValidationMessage(val.status);
+            }
+            return Swal.fire("wew")
+            
+
+          })
+        )
+    });
+}
