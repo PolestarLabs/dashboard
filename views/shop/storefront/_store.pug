@@ -63,7 +63,16 @@ mixin shopcard()
           i: .fas.fa-flask
           .price CRAFT INFO
         
-        .button(v-else-if="item.type" style="padding:0 5px", :class="hasItem(item)?'disabled':''")
+        .button(
+          v-else-if="item.type",
+          style="padding:0 5px",
+          :class="hasItem(item)?'disabled':''",
+          plx-toggle="#modal-buy",
+
+
+          @click="setCurrentItem(item)"
+
+        )
           //.isnew 
             +svgBadge('discount')               
                 .txt-num 75
@@ -182,13 +191,26 @@ block content
                         include pages/medals        
                     li#marketplace
                         include pages/marketplace
-    
+
+
+        #modals-galore
+          #modal-buy(plx-modal plx-flex-top)
+            include modals/buy_item
+
+          #modal-craft(plx-modal plx-flex-top)
+            include modals/craft_item
+
+          #modal-pack(plx-modal plx-flex-top)
+            include modals/pack_info
     #endof
     br
     hr
-    P 4545645646456
+    
+
+
+
     //style #footer{margin-top: -5rem}                
 block scripts
-
+  script(src='js/sweetalert.js')
   script
     include storefront.js
