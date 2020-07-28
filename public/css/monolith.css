@@ -607,8 +607,11 @@ span.icon>i {
 h1,
 h2,
 h3.title {
+  font-weight: 600;
+font-family: panton;
+/* old
  font-family:proxima soft;
- font-weight:900
+ font-weight:900 */
 }
 h4,
 h5 {
