@@ -308,8 +308,6 @@ router.patch("/:entry", async (req,res)=>{
   })
 })
 
-
-
 function destroyEntry(entry) {
   let status, json;
   return DB.marketplace.remove({ id: entry }).lean().then((r) => {
