@@ -1523,7 +1523,7 @@ select.plx-form-width-xsmall {
 
 .plx-button-default {
     background-color: transparent;
-    color: #333;
+    /*color: #333;*/
     border: 1px solid var(--text-lighter)
 }
 
