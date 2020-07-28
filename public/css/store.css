@@ -738,3 +738,12 @@ li#arrivals  {
 .raritybox.UR > div{
   background-image: radial-gradient(#ffc85c, #ff8251, #66133a);
 }
+
+.bg-on-ppc{
+
+  display: flex;
+  margin: 20px;
+  transform: perspective(1500px) rotateY(-20deg) rotateX(2deg) rotateZ(1deg);
+}
+  
+  
