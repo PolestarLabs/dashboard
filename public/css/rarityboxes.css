@@ -122,6 +122,22 @@ text-align: center;
    font-size: 26pt; 
 }
 
+.raritybox .button.sapphires {
+  --maincolor: #3BD7FB;
+  --maincolor-dim: #3134e3;
+  --fadecolor: #122b77;
+  width: 8rem;
+  font-size: 26pt; 
+}
+.raritybox .button.rubines {
+  --maincolor: #FB3B3B;
+  --maincolor-dim: #e33134;
+  --fadecolor: #77122b;
+  width: 11rem;
+  font-size: 26pt; 
+}
+
+
 .shopbox .button.alt i {
 color: inherit
 }
