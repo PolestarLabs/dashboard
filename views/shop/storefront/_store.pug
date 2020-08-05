@@ -11,6 +11,21 @@ mixin shopcard()
         .text.truncate {{ ((item.event?item.event+" event":'')||item.category||item.series||item.BUNDLE||(item.for?item.for+" deck":'')||"").toUpperCase() }}
     .rartag
     .body
+      .timer(v-if="item.expires && item.expires > Date.now()")
+        div(:plx-countdown='`date: ${new Date(item.expires).toISOString()} `')
+          div
+            span.plx-countdown-days
+            span.sep DAYS
+          div
+            span.plx-countdown-hours
+            span.sep HR
+          div
+            span.plx-countdown-minutes
+            span.sep MIN
+          div
+            span.plx-countdown-seconds
+            span.sep SEC
+
       .img(v-if='item.type == "background"').background
         .bg-image( v-bind:style="{backgroundImage: `url('/backdrops/${item.code}.png')`}")
         .artist-tag(v-if="item.artistName")
@@ -36,7 +51,7 @@ mixin shopcard()
 
     .footer.plx-flex.plx-flex-wrap
 
-        .button(v-if="item.rarity == 'XR' && !item.crafted"  ).special.alt
+        .button(v-if="item.buyable === false && !item.crafted || item.rarity == 'XR' && !item.crafted" @click="setCurrentItem(item)" plx-toggle="#modal-special"  ).special.alt
             i: .fas.fa-star
             .price Special
 
@@ -166,6 +181,11 @@ block content
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-star
                           label  Arrivals
+                  li.megastroke.menuitem(plx-filter-control="filter: .limited" ).plx-active
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-hourglass-half
+                          label  Limited Time
+
                   li.megastroke.menuitem(plx-filter-control="filter: .background ; group: type" )
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-cubes
@@ -187,6 +207,8 @@ block content
                 
                     li#arrivals
                         include pages/arrivals
+                    li#timed
+                        include pages/timed
                     li#bundles
                         include pages/bundles
                     li#backgrounds
@@ -206,6 +228,9 @@ block content
 
           #modal-pack(plx-modal plx-flex-top)
             include modals/pack_info
+
+          #modal-special(plx-modal plx-flex-top)
+            include modals/special
     #endof
     br
     hr

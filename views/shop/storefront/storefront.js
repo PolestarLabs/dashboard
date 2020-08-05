@@ -63,16 +63,23 @@ const STORE = new Vue({
     search: "",
     arrivals: [],
     currentModalItem: 0,
+    hideOwnedArrivals: false,
+    displayPackinfo:false,
+    displayStickerinfo: false,
  
   },
   computed: {
   },
   methods: {
+    firstOfWeek(d) {
+      d = new Date(d); 
+      let diff = d.getDate() - d.getDay() + (d.getDay() == 0 ? -6:1);
+      return new Date(d.setDate(diff));
+    },
     buyStoreItem,
-        bs(item){
-          return bullshitGenerator(item.type)
-         },
-
+    bs(item){
+      return bullshitGenerator(item.type)
+      },
     marketItems() {
       if (this.market.map) {
         return this.market.map((x) => x.metadata).filter((x) => !!x);
@@ -285,7 +292,12 @@ function shuffle(array) {
               Swal.update( newSwalOptions );
               return Swal.showValidationMessage(val.status);
             }else{
-
+              STORE.userdata.modules[
+                (type=="background"?"bg"
+                :type=="flair"?"flairs"
+                :type)
+                + "Inventory"
+              ].push(item)
               return Swal.fire({
                 title: "Yay!",
                 text: `Your ${type} is in your inventory. What's next?`,
@@ -294,7 +306,8 @@ function shuffle(array) {
                 cancelButtonText: 'Continue browsing',               
                 showCancelButton : true,
                 showCloseButton : true,
-                //confirmButtonColor: ,
+                preConfirm: () => location.assign("/profile/me"),
+                onClose: ()=> $('.modal-close').click()
                 //cancelButtonColor: ,
 
               });
