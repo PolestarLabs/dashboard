@@ -22,6 +22,7 @@ slowmodeTimer:Number,
             DROPS:   {type:Boolean,default:true},
             BYPASS:   {type:Boolean,default:false},
             DISABLED: Array,
+            ENABLED: Array,
           statistics: Mixed
         }
     },{ strict: false });
