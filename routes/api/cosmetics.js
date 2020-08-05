@@ -9,7 +9,7 @@ router.get('/:endpoint', cache(2660), async (req,res) => {
     if(req.params.endpoint == 'search'){
         let queries = {}
         Object.keys(req.query)
-            .filter(qry => ['_id','id','rarity','code','event','icon','type'].includes(qry) )
+            .filter(qry => ['_id','id','rarity','code','event','icon','type','expires'].includes(qry) )
             .forEach(ky=> {
                     queries[ky] = req.query[ky]
                 })
