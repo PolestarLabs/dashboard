@@ -1,7 +1,7 @@
 extends ../../layout
 
 mixin shopcard()
-  div(v-if="item")
+  div(v-if="item" )
     .header
       
       .s-title.truncate(:plx-tooltip="item.name") {{item.name}}
@@ -17,20 +17,21 @@ mixin shopcard()
           i.fas.fa-paint-brush
           a(:href="item.artistLink" target="blank") {{item.artistName}}
       .img(v-else-if='item.type == "medal"').medal
-        img(plx-img :src="`/medals/${item.icon||item.id}.png`")
+        img(:src="`/medals/${item.icon||item.id}.png`")
       .img(v-else-if='item.type == "sticker"').sticker
-        img(plx-img :src="`/stickers/${item.id}.png`")
+        img(:src="`/stickers/${item.id}.png`")
+        .sticker-bpack(v-bind:style="{'background-image': `url(/build/boosters/showcase/${item.series_id}.png)`}")
       .img(v-else-if='item.type == "boosterpack"').sticker
-        img(plx-img :src="`/build/boosters/showcase/${item.icon}.png`")
+        img(:src="`/build/boosters/showcase/${item.icon}.png`")
       //.img(v-if='item.type == "item"').item
       .img(v-else-if='item.type == "skin"').skin
         //assuming it is always DECK for now
         // PLEASE CHANGE THIS
         .container
-          img(plx-img :src="`/build/cards/${item.id.split('_').join('/')}/${item.id.startsWith('tarot')? 'star':'HQ'}.png`")
-          img(plx-img :src="`/build/cards/${item.id.split('_').join('/')}/backface.png`")
+          img(:src="`/build/cards/${item.id.split('_').join('/')}/${item.id.startsWith('tarot')? 'star':'HQ'}.png`")
+          img(:src="`/build/cards/${item.id.split('_').join('/')}/backface.png`")
       .img(v-else).item
-        img(plx-img :src="`/build/items/${item.id}.png`")
+        img(:src="`/build/items/${item.id}.png`")
 
 
     .footer.plx-flex.plx-flex-wrap
@@ -45,7 +46,11 @@ mixin shopcard()
             span.face() {{ miliarize(item.price || (defaultPrices[item.type]||{})[item.rarity] * defaultPrices.tokenModifier || "N/A" ,0,' ')}}
 
 
-        .button(v-else-if='item.type == "sticker"').sticker.alt
+        .button(
+          v-else-if='item.type == "sticker" || item.type == "boosterpack"',
+          plx-toggle="#modal-pack",
+          @click="setCurrentItem(item)"
+        ).sticker.alt
           i: .fas.fa-info-circle
           .price PACK INFO
 
@@ -68,7 +73,6 @@ mixin shopcard()
           style="padding:0 5px",
           :class="hasItem(item)?'disabled':''",
           plx-toggle="#modal-buy",
-
 
           @click="setCurrentItem(item)"
 
