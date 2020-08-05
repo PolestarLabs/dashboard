@@ -49,6 +49,19 @@ section#ARRIVALS
 
 
         .plx-position-relative.plx-width-1-1.arrivalscar(style="padding-bottom: 5rem")
+            section#arrivals-intro.plx-container.margin-top-mobo
+                h1.title Arrivals
+                h3.subtitle What's new in the shop
+                p Here are the latest items added to our decor roster. They're hottest stuff out there and as new items arrive they start going out of stock, you'll only be able to get them again once they appear in the weekly store rotation!
+                 -let item= "hide-obt" 
+                .plx-flex.plx-flex-right
+                    .plx-flex
+                        .plx-magic-input(style="transform: scale(.8); transform-origin: top right")
+                            .plx-pink-check
+                                input.markall(type="checkbox" id=item checked= false v-model="hideOwnedArrivals")
+                                label(for=item) 
+                        | Hide items you already own
+                hr.plx-divider-icon
             ul.plx-width-auto#arrivals1.plx-slider-items.plx-child-width-1-4.plx-flex-wrap.plx-flex-center
-                li.shopbox(v-for="(item) in arrivals", :data-search="item.name", :class="[hasItem(item)?'obtained':'',(item.display||item.type=='skin')?'item':'',item.type,'raritybox',item.rarity].join(' ') " )
+                li.shopbox( v-if="!hideOwnedArrivals || !hasItem(item)", v-for="(item) in arrivals", :data-search="item.name", :class="[hasItem(item)?'obtained':'',(item.display||item.type=='skin')?'item':'',item.type,'raritybox',item.rarity].join(' ') " )
                     +shopcard()
