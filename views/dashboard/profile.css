@@ -483,7 +483,7 @@ background-repeat: no-repeat;
     line-height: 1.42857143;
     display: block;
     padding: 5px;
-    margin: 3px 8px;
+    //margin: 3px 8px;
     clear: both;
     color: #333;
     white-space: nowrap;
