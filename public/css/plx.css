@@ -1530,14 +1530,14 @@ select.plx-form-width-xsmall {
 .plx-button-default:focus,
 .plx-button-default:hover {
     background-color: transparent;
-    color: #333;
+    color:  var(--secondary-color);
     border-color: #b2b2b2
 }
 
 .plx-button-default.plx-active,
 .plx-button-default:active {
     background-color: transparent;
-    color: #333;
+    color: var(--accent-color);
     border-color: var(--text-dim)
 }
 
@@ -4041,7 +4041,8 @@ ul.plx-nav-sub {
     transform: translateY(-100px);
     transition: .3s linear;
     transition-property: opacity, transform;
-    animation: plx-fade-scale-02 .3s forwards
+    animation: plx-fade-scale-02 .3s forwards;
+    box-shadow: 0 10px 50px -10px #25F8;
 }
 
 .plx-open>.plx-modal-dialog {
