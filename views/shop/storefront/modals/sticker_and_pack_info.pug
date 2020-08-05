@@ -1,0 +1,89 @@
+
+.plx-modal-dialog(:class="currentModalItem.rarity + ' ' + (currentModalItem.type === 'background'?'plx-width-2-3@m '+currentModalItem.type:'') ").plx-margin-auto-vertical.raritybox 
+    div
+        button.plx-modal-close-default(type='button', plx-close).modal-close
+        .plx-modal-header
+            h2.plx-modal-title {{currentModalItem.series}}
+            h5.small.subtitle
+                | "{{currentModalItem.name}}" belongs to this Pack.
+
+        .plx-modal-body(style="background:var(--bg-darker)")
+            
+ 
+
+                .body-dual.plx-flex.plx-flex-wrap 
+                    .plx-width-1-1(class="plx-width-1-2@m").plx-flex.plx-flex-column
+                        transition(name="fade" mode="out-in" )
+                            .pack-sticker-display(v-if="displayPackinfo" key=1)
+                                //a(@click="displayPackinfo= false") wuwu
+                                h3.title Pack Information
+                                h5.subtitle {{rarity(currentModalItem.packData.rarity)}} Boosterpack
+                                p
+                                    b Size: 
+                                    span {{currentModalItem.packData.size}}
+                                    br 
+                                    b Materials:
+                                    ul
+                                        li(v-for="m in currentModalItem.packData.materials")
+                                           | {{m.id}} x {{m.count}} 
+                                        li Jades x {{currentModalItem.packData.gemcraft.jades}}
+                  
+                                    b Crafting Cost:
+                                    ul
+                                        li Rubines x {{currentModalItem.packData.gemcraft.rubines}}
+                                        li Sapphires x {{currentModalItem.packData.gemcraft.sapphires}}
+                                
+                        
+           
+                            .pack-sticker-display(v-if="!displayPackinfo" key=2)
+                                a.the-sticker(v-bind:style="{backgroundImage:`url(/stickers/${currentModalItem.id}.png)`}", @click="displayStickerinfo= !displayStickerinfo")
+                            
+                    .plx-width-1-1(class="plx-width-1-2@m")
+                        transition(name="fade" mode="out-in" )
+                            .pack-sticker-display(v-if="displayStickerinfo" key=1)
+                                //a(@click="displayPackinfo= false") wuwu
+                                h3.title Sticker Information
+                                h5.subtitle {{rarity(currentModalItem.rarity)}} Sticker
+                                p
+                                    b Size: 
+                                    span {{currentModalItem.packData.size}}
+                                    br 
+                                    b Drop Odds: 
+                                    span {{~~(currentModalItem.packData.content.filter(x=>x.rarity === currentModalItem.rarity ).length / currentModalItem.packData.size * 100 / ['z','C','U','R','SR','UR'].indexOf(currentModalItem.rarity) )}}%
+                                    br 
+                                    b Pack Contents: 
+                                    ul(style="overflow-y:scroll; height: 200px")
+                                        li(v-for="m in currentModalItem.packData.content") {{m.name}}
+                                        
+                                        
+                  
+                                  
+                            .booster-pack-display(v-if="!displayStickerinfo" key=2)
+                                a.the-booster(v-bind:style="{backgroundImage:`url(/build/boosters/showcase/${currentModalItem.series_id}.png)`}", @click="displayPackinfo= !displayPackinfo")
+                        
+            
+        .plx-modal-footer.plx-text-right.plx-flex.plx-flex-right
+            button.plx-button.plx-button-default.plx-modal-close(type='button') Cancel
+            a.button.limitless.search( :href="`/shop/marketplace?search=${currentModalItem.id}`"  )
+                .plx-margin-auto
+                i: .fas.fa-search 
+                .plx-margin-auto
+                .price
+                    span.face() 
+                        .mainface SEARCH
+                        .subface Sticker in marketplace
+                .plx-margin-auto
+ 
+
+            a.button.limitless.craft(  :href="`/crafting?search=${currentModalItem.series_id}`"  )
+                .plx-margin-auto
+                i: .fas.fa-flask 
+                .plx-margin-auto
+                .price
+                    span.face() 
+                        .mainface CRAFT
+                        .subface Boosterpack
+                .plx-margin-auto
+ 
+                    
+            //button.plx-button.plx-button-primary(type='button') Save
