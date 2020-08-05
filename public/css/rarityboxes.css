@@ -89,6 +89,7 @@ text-align: center;
     height: 40px;
     
   }
+
       .shopbox .button.sticker {
         --maincolor: #0BAB4B;
         --maincolor-dim: #0BFB4B88;
@@ -100,22 +101,22 @@ text-align: center;
         background-position: center 0px;
 
   }
-.shopbox .button.special {
+.raritybox .button.special {
   --maincolor: #FB8B3B;
   --maincolor-dim: #f11;
   --fadecolor: #Ab152b;
 }
-.shopbox .button.craft {
+.raritybox .button.craft {
   --maincolor: #3BD7FB;
   --maincolor-dim: #3134e3;
   --fadecolor: #122b77;
 }
-.shopbox .button.advcraft {
+.raritybox .button.advcraft {
   --maincolor: #2B74FF;
   --maincolor-dim: #e33131;
   --fadecolor: #1f1871;
 }
-.shopbox .button.event {
+.raritybox .button.event {
   --maincolor: #FF2B98;
   --maincolor-dim: #e33163;
   --fadecolor: #201231;
@@ -136,17 +137,23 @@ text-align: center;
   width: 11rem;
   font-size: 26pt; 
 }
+.raritybox .button.search {
+  --maincolor: var(--accent-color);
+  --maincolor-dim: var(--accent-color);
+  --fadecolor: var(--accent-color-dark);
+  
+  font-size: 26pt; 
+}
 
-
-.shopbox .button.alt i {
+.raritybox .button.alt i {
 color: inherit
 }
-.shopbox .button.alt .price{
+.raritybox .button.alt .price{
  font-size: 16pt; 
 margin-left: 10px;
 
 }
-.shopbox .button.event .price{
+.raritybox .button.event .price{
    font-size: 20pt; 
 }
     
@@ -196,7 +203,11 @@ margin-left: 10px;
 transform: scale(.8)
 }
   
-  
+  .raritybox .button.limitless{
+ width: auto !important;
+
+  padding-left: 20px
+}
   
   .raritybox {
 
@@ -324,6 +335,9 @@ height: 100%;
   opacity: .5;
 }
 
+.raritybox .button{
+  text-decoration: none;
+}
 /*
 .raritybox.SR,.raritybox.R{
 overflow: hidden;
@@ -426,4 +440,20 @@ filter:  drop-shadow(0 0 10px #0EFA)  drop-shadow(0 0 20px #05F8)
 
 .label .txt-off, .label .txt-percent{
   font-size: 4px;
+}
+
+
+.face{
+display: flex;
+  flex-flow: row wrap;
+  line-height: .9;
+  justify-content: center;
+}
+.face .mainface{
+  margin-top: -2px;
+  font-size: 1.5rem;
+}
+.face .subface{
+  font-size: 10pt;
+  font-weight: 600
 }
