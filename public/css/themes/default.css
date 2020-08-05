@@ -81,5 +81,8 @@
     --heading-divider-color: var(--lighter);
     --muted: #99AA;
     --light-border: var(--light);
-    --dark-border: var(--dark)
+    --dark-border: var(--dark);
+    --dark-dim: #27233775;
+--dark-dimmer: #0d0d1796;
+--dark-dimmest: #100c2b59;
    }

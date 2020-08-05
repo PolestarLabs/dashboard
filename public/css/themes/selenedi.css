@@ -17,9 +17,15 @@ html{
   
   --mid-main: var(--light);
   --bg-main: var(--lightest);
+  --bg-dark: var(--light);
   --bg-darker: var(--lighter);
   --bg-darkest: #E5E5F8;
   
+  --dark-dim: #BEA3D0E0;
+  --dark-dimmer: #ffffffbf;
+  --dark-dimmest: #ffffff59;
+
+
   --bg-opaque: #AAC2;
   --bg-inverse: var(--dark);
   
