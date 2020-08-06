@@ -3,20 +3,21 @@
         h1.title Backgrounds Rotation
         h3.subtitle Weekly roundup of buyable backdrops to decorate your profile
         p Every week we have a selection of {{backgrounds.length}} backgrounds that can be obtained at your choice from our BGShop.
-
-        div(:plx-countdown='`date: ${ firstOfWeek(Date.now()).toISOString() } `').plx-rotation-counter
+        
+        h5 Next Rotation
+        div(:plx-countdown='`date: ${ firstOfWeek(Date.now()+7*24*60*60e3).toISOString() } `').plx-rotation-counter
             div
                 span.plx-countdown-days
                 span.sep DAYS
-            div
+            div.flex-row
                 span.plx-countdown-hours
-                span.sep HR
-            div
+                span.colon :
+            div.flex-row
                 span.plx-countdown-minutes
-                span.sep MIN
-            div
+                span.colon :
+            div.flex-row
                 span.plx-countdown-seconds
-                span.sep SEC
+         
 
 
     ul.plx-flex.plx-flex-wrap.plx-flex-center 
