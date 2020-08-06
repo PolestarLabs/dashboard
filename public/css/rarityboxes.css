@@ -67,13 +67,14 @@ text-align: center;
   
   }
   .shopbox .button, .raritybox .button,.shopbox-button {
+    
     --maincolor: #ffba3b;
     --fadecolor: rgba(72, 35, 58, 0.82);
     --glowcolor:  #2245;
     user-select: none;
     cursor: pointer;
     position: relative;
-    margin: 4px;
+    margin: 4px ;
     display: flex;
     align-items: center;
     border: solid 4px var(--maincolor);
@@ -231,18 +232,7 @@ height: 100%;
     border-color: #cf268a;
   }
   
-  .raritybox.XR:not(.unavailable):not(.obtained) {
-    --borderWidth: 2px;
-    background-image: radial-gradient(#f2be52 , #a52a43 , #3b2b5b 50%, #0b0b1b );
-    //border-color: #ff223c;
-    border-width: var( --borderWidth);
-    background-position: 22% 70%;
-    background-size: 300% 300%;
-    background-repeat: no-repeat;
-    border-color: transparent;
-    background-clip: content-box;
-    position: relative;
-  }
+
   
   .raritybox.R {
     background-image: radial-gradient(#5cd9e6, #0b1b3b);
@@ -307,12 +297,28 @@ height: 100%;
    animation: animatedgradient 2s linear infinite;
    /*! background-blend-mode: hard-light; */
 }
+
+  .raritybox.XR:not(.unavailable):not(.obtained) {
+    --borderWidth: 2px;
+    background-image: radial-gradient(#f2be52 , #a52a43 , #3b2b5b 50%, #0b0b1b );
+    //border-color: #ff223c;
+    border-width: var( --borderWidth);
+    background-position: 22% 70%;
+    background-size: 300% 300%;
+    background-repeat: no-repeat;
+    border-color: transparent;
+    background-clip: content-box;
+    position: relative;
+    /*! z-index: 1; */
+  }
+
   .raritybox.XR:after {
    background-color: #F00;
    background-image: linear-gradient( 60deg, #FA3,#ff343d,#ff34Ad, #ff343d, #FA3);
    background-size: 300% 300%;
    animation: pingponggrad 3s linear infinite;
  
+   /*! z-index: -1; */
   }
 
 
@@ -338,6 +344,15 @@ height: 100%;
 .raritybox .button{
   text-decoration: none;
 }
+
+ .raritybox.UR>div {
+  background-image:radial-gradient(#ffc85c,#ff8251,#66133a);
+ }
+ .raritybox.XR>div {
+  background-image: radial-gradient(#f2be52 , #a52a43 , #3b2b5b 50%, #0b0b1b );
+   background-size:300% 300%;
+   background-position: center -100px;
+ }
 /*
 .raritybox.SR,.raritybox.R{
 overflow: hidden;
