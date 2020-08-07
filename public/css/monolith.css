@@ -23,7 +23,9 @@ body,
 html {
  overflow-x:hidden;
 
-
+ display: flex;
+ flex-direction: column;
+ 
 }
 html{
 }
