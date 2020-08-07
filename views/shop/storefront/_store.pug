@@ -128,27 +128,12 @@ block content
     -currentPage = 'market'
     include ../../navbar
 
+    section#title
+      include section_top
 
-
-    h1.title.stfront STOREFRONT
-    h3.subtitle Your new hub for Pollux Collectibles
-    hr.plx-divider-small
-    br
-    .plx-grid.to-stores.plx-flex-around
-        .plx-width-1-2(class='plx-width-1-4@s'): .glasspane
-          .icon: img(src="https://via.placeholder.com/120x120")
-          .title Backgrounds
-        .plx-width-1-2(class='plx-width-1-4@s'): .glasspane
-          .icon: img(src="https://via.placeholder.com/120x120")
-          .title Medals
-        .plx-width-1-1(class='plx-width-1-2@s'): .glasspane
-          .icon: img(src="https://via.placeholder.com/400x120")
-          .title User Marketplace
-
-    a#storetop
-    //(style="min-height:120vh; overflow: hidden")
+ 
+      a#storetop
     #storefront
-        p test
         .wealth.plx-flex.plx-flex-around(plx-sticky)
             if userdata
                 .rubines
