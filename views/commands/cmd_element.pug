@@ -19,7 +19,7 @@
         .replace("http://pollux.gg/bgshop" , "<a href='http://pollux.gg/bgshop'><b>THIS LINK</b></a>")
     }
 each cat in cm.CATS
-    .section(id=cat.consolidated class="filter-"+cat.consolidated)
+    .section(id=cat.consolidated class="filter-"+cat.consolidated dir=cm.lang=='ar'?'rtl':'')
         h2.title= cat.name
         h4.subtitle= cat.description
         style .hidden{background:#C005}
