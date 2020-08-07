@@ -28,25 +28,45 @@ block content
 
             .section                
                 small.help Commands Description Language
+                mixin langButton(code,flag,badge)
+                    a.button.is-small.active(id=code)
+                        img(src="/build/guessing/guessflags/"+flag+".png")
+                        if badge=="HQ"
+                            .badge(plx-tooltip="High Quality Translation")
+                                i: .fas.fa-star
+                        if badge=="SRC"
+                            .badge(plx-tooltip="Source Language")
+                                i: .fas.fa-code
+                        if badge=="SOON"
+                            .badge(plx-tooltip="Coming Soon")
+                                i: .fas.fa-clock
+                        if badge=="NEW"
+                            .badge(plx-tooltip="Newly Added")
+                                i: .fas.fa-meteor
+                        if badge=="HLP"
+                            a.badge(href="https://crowdin.com/project/pollux" plx-tooltip="Translators Needed!")
+                                i: .fas.fa-life-ring
+
                 .plx-flex.plx-flex-around.flag-icons
-                    a.button.is-small#dev.active:       img(src="/build/guessing/guessflags/united-states.png")
-                    a.button.is-small#de:       img(src="/build/guessing/guessflags/germany.png")
-                    a.button.is-small#cs:       img(src="/build/guessing/guessflags/czech-republic.png")
-                    a.button.is-small#pt-BR:       img(src="/build/guessing/guessflags/brazil.png")
-                    //a.button.is-small#nl:     img(src="/build/guessing/guessflags/nederlands.png")
-                    a.button.is-small#es-ES:       img(src="/build/guessing/guessflags/spain.png")
-                    a.button.is-small#fr:       img(src="/build/guessing/guessflags/france.png")
-                    a.button.is-small#ro:       img(src="/build/guessing/guessflags/romania.png")
-                    a.button.is-small#hu:       img(src="/build/guessing/guessflags/hungary.png")
-                    a.button.is-small#pl:       img(src="/build/guessing/guessflags/poland.png")
-                    a.button.is-small#bg:       img(src="/build/guessing/guessflags/bulgaria.png")
-                    a.button.is-small#by:       img(src="/build/guessing/guessflags/belarus.png")
-                    a.button.is-small#ru:       img(src="/build/guessing/guessflags/russia.png")
-                    a.button.is-small#ua:       img(src="/build/guessing/guessflags/ukraine.png")
-                    a.button.is-small#tr:       img(src="/build/guessing/guessflags/turkey.png")
-                    a.button.is-small#zh-TW:    img(src="/build/guessing/guessflags/taiwan.png")
-                    a.button.is-small#ko:       img(src="/build/guessing/guessflags/south-korea.png")
-                    a.button.is-small#ja:       img(src="/build/guessing/guessflags/japan.png")
+                    +langButton('dev','united-states','SRC')                        
+                    +langButton("de","germany")
+                    +langButton("cs","czech-republic")
+                    +langButton("pt-BR","brazil", "HQ")
+                    +langButton("es-ES","spain", "HQ")
+                    +langButton("fr","france")
+                    +langButton("ro","romania")
+                    +langButton("hu","hungary")
+                    +langButton("pl","poland", "HQ")
+                    +langButton("bg","bulgaria")
+                    +langButton("by","belarus")
+                    +langButton("ru","russia","HLP")
+                    +langButton("ua","ukraine")
+                    +langButton("tr","turkey", "HQ")
+                    +langButton("zh-TW","taiwan")
+                    +langButton("ko","south-korea")
+                    +langButton("ja","japan")
+                    +langButton("vi","vietnam","SOON")
+                    +langButton("ar","saudi-arabia","SOON")
 
                 .commandTable                                   
                     

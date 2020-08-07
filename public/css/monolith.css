@@ -1282,3 +1282,22 @@ svg.commend-token{
 button span,.ti-tag span{
   color: white !important;
 }
+.button{
+  position: relative;
+}
+.badge{
+  position: absolute;
+  top: -2px;
+  right: -3px;
+  background: var(--secondary-color);
+  color: white;
+  line-height: 1;
+  width: 16px;
+  height: 16px;  
+  box-sizing: border-box;
+  font-size: 9px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 100%;
+}
