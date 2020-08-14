@@ -24,7 +24,7 @@
   border: none;
   padding: 0;
   background-color: #fff;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .hooper-pagination.is-vertical {
   bottom: auto;

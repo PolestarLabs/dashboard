@@ -871,7 +871,7 @@ div:not(.plx-open) .faders {
 .menu-button-mob {
  -webkit-transform:scale(.3);
  background:0 0;
- cursor:pointer;
+ cursor: url(/cur/pointer.png), pointer;
  display:block;
  height:45px;
  margin-left:-20px;

@@ -171,7 +171,7 @@ background-repeat: no-repeat;
     opacity: 0.1;
   }
   .main-profile #frame:hover {
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
   }
   .main-profile .info {
     padding: 0 40px 0 20px;
@@ -409,7 +409,7 @@ background-repeat: no-repeat;
   .vs__actions {
     display: flex;
     align-items: center;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
     pointer-events: none;
     width: 30px;
     margin-right: 5px;
@@ -421,7 +421,7 @@ background-repeat: no-repeat;
   }
   
   .vs--unsearchable .vs__dropdown-toggle {
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
   }
   
   .vs--open .vs__dropdown-toggle {
@@ -450,7 +450,7 @@ background-repeat: no-repeat;
     padding: 0;
     border: 0;
     background-color: transparent;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
     margin-right: 8px;
   }
   
@@ -489,7 +489,7 @@ background-repeat: no-repeat;
     white-space: nowrap;
   }
   .vs__dropdown-option:hover {
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
   }
   
   .vs__dropdown-option--highlight {
@@ -526,7 +526,7 @@ background-repeat: no-repeat;
     margin-left: 4px;
     padding: 0;
     border: 0;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
     background: none;
     fill: rgba(60, 60, 60, 0.5);
     text-shadow: 0 1px 0 #fff;
@@ -594,7 +594,7 @@ pointer-events: none;
     opacity: 1;
   }
   .vs--unsearchable .vs__search:hover {
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
   }
   
   .vs--single.vs--searching:not(.vs--open):not(.vs--loading) .vs__search {
@@ -657,7 +657,7 @@ pointer-events: none;
     height: 80px;
     border: 4px solid var(--bg-dark,#3b3b4b);
     border-radius: 100px;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
   }
   .swatch:hover {
     border: 4px solid white;
@@ -1051,7 +1051,7 @@ color: white ;
 
 .wife-block:hover{
   background: var(--bg-opaque);
- cursor: pointer;
+ cursor: url(/cur/pointer.png), pointer;
  
 }
 .wife-actions{

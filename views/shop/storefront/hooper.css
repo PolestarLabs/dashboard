@@ -52,7 +52,7 @@
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
     fill:white
   }
   .hooper-next.is-disabled,
@@ -108,7 +108,7 @@
     border: none;
     padding: 0;
     background-color: #fff;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
   }
   .hooper-indicator:hover,
   .hooper-indicator.is-active {

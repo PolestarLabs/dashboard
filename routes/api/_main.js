@@ -68,6 +68,7 @@ router.use(["/shop/","/store/"], async (...args) => {
 });
 
 router.use(["/crafting/","/items/"], async (...args) => {
+    delete require.cache[(require.resolve('./collections.js'))];
     return (require('./collections.js'))( ...args);
 });
 
@@ -83,7 +84,7 @@ router.use(["/utils/"], async (...args) => {
 //############################################
 
 router.get('/discoin/currencies', async (req,res)=>{
-    let units = await DB.globals.find({'type':'discoin'},{type:0,_id:0}).lean();
+    let units = await DB.globals.find({'type':'discoin'},{type:0,_id:0,data:0}).lean();
     res.json(units)
 })
 

@@ -6,7 +6,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .hooper-next.is-disabled,
 .hooper-prev.is-disabled {

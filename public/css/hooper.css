@@ -45,7 +45,7 @@
   border: none;
   padding: 0;
   background-color: #fff;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .hooper-pagination.is-vertical {
   bottom: auto;
@@ -67,7 +67,7 @@
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .hooper-next.is-disabled,
 .hooper-prev.is-disabled {
@@ -163,7 +163,7 @@
 
 .flair{
    transform: translateY(-10px);
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .hooper-slide {
   transform: scale(.3) translateY(-10px);

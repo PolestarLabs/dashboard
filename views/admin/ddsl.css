@@ -28,7 +28,7 @@ color: white;
 border-radius:2px;
 border:solid 2px rgba(255,255,255,.2) !important;
 position:relative;
-cursor:pointer;
+cursor: url(/cur/pointer.png), pointer;
 }
 .dd-desc {
 color:#aaa;
@@ -93,7 +93,7 @@ border-bottom:solid 1px #2225;
 overflow:hidden;
 text-decoration:none;
 color:#5b5b6b ;
-cursor:pointer;
+cursor: url(/cur/pointer.png), pointer;
 -webkit-transition: all 0.25s ease-in-out;
 -moz-transition: all 0.25s ease-in-out;
 -o-transition: all 0.25s ease-in-out;

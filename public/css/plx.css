@@ -9,6 +9,7 @@ html {
     background-image: var(--bg-main);
     background-attachment: fixed;
     color: var(--text-main);
+    cursor: url(/cur/cur.png), default;
 } 
   
 body {    
@@ -64,7 +65,7 @@ a,
 .plx-link {
   color: var(--links,#87f);
   text-decoration: none;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 a:hover,
 .plx-link:hover {
@@ -913,7 +914,7 @@ a.plx-link-reset:hover {
 }
 
 button.plx-icon:not(:disabled) {
-    cursor: pointer
+    cursor: url(/cur/pointer.png), pointer
 }
 
 .plx-icon::-moz-focus-inner {
@@ -1012,15 +1013,15 @@ button.plx-icon:not(:disabled) {
 }
 
 .plx-range:not(:disabled)::-webkit-slider-thumb {
-    cursor: pointer
+    cursor: url(/cur/pointer.png), pointer
 }
 
 .plx-range:not(:disabled)::-moz-range-thumb {
-    cursor: pointer
+    cursor: url(/cur/pointer.png), pointer
 }
 
 .plx-range:not(:disabled)::-ms-thumb {
-    cursor: pointer
+    cursor: url(/cur/pointer.png), pointer
 }
 
 .plx-range::-webkit-slider-thumb {
@@ -1137,7 +1138,7 @@ button.plx-icon:not(:disabled) {
 
 .plx-checkbox:not(:disabled),
 .plx-radio:not(:disabled) {
-    cursor: pointer
+    cursor: url(/cur/pointer.png), pointer
 }
 
 .plx-fieldset {
@@ -1409,7 +1410,7 @@ select.plx-form-width-xsmall {
     left: 0;
     -webkit-appearance: none;
     opacity: 0;
-    cursor: pointer
+    cursor: url(/cur/pointer.png), pointer
 }
 
 .plx-form-custom input[type=file] {
@@ -1505,7 +1506,7 @@ select.plx-form-width-xsmall {
 }
 
 .plx-button:not(:disabled) {
-    cursor: pointer
+    cursor: url(/cur/pointer.png), pointer
 }
 
 .plx-button::-moz-focus-inner {
@@ -4590,7 +4591,7 @@ ul.plx-nav-sub {
     color: var(--text-dim-mid);
     font-size: 1.25rem;
     line-height: 1.4;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
     border-radius: 5px;
     border-left: solid 5px #ACACCA;
 }
@@ -10966,13 +10967,13 @@ iframe.plx-cover {
 
 .checkbox,
 .radio {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: inline-block;
   line-height: 1.25;
   position: relative; }
   .checkbox input,
   .radio input {
-    cursor: pointer; }
+    cursor: url(/cur/pointer.png), pointer; }
   .checkbox:hover,
   .radio:hover {
     color: #363636; }
@@ -11026,7 +11027,7 @@ iframe.plx-cover {
     background-color: white;
     border-color: #dbdbdb;
     color: #363636;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
     display: block;
     font-size: 1em;
     max-width: 100%;
@@ -11402,7 +11403,7 @@ iframe.plx-cover {
         height: 30px;
     position:relative;
     
-        cursor: pointer;
+        cursor: url(/cur/pointer.png), pointer;
       transition: all 500ms ease;
       border-radius: 20px;
 
@@ -11628,7 +11629,7 @@ iframe.plx-cover {
     margin: .2em;
     line-height: 2.2em;
     height: 2em;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
 }
 .a-comand input:checked + span {
       background: var(--secondary-color);

@@ -106,7 +106,7 @@ flex-grow: 1;}
 }
 .shopbox .body .button, .shopbox .footer .button {
   user-select: none;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   margin: 8px;
   display: flex;
   align-items: center;
@@ -130,7 +130,7 @@ flex-grow: 1;}
   background-image: radial-gradient(#ffba3b, rgba(36, 36, 83, 0.7) 70%);
   background-position: center 10px;
   transition: all 10ms ease;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .shopbox .body .button .price, .shopbox .footer .button .price {
   color: white;

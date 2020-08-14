@@ -488,7 +488,7 @@
   height: 48px;
   display: inline-block;
   margin: 0 10px;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .bronze .bottom-row .links a {
   display: none;

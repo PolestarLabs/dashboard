@@ -82,7 +82,7 @@
 }
     #next {
     margin: auto;
-      cursor: pointer;
+      cursor: url(/cur/pointer.png), pointer;
       background: #7289da;
       border: none;
       padding:10px 25px;
@@ -242,7 +242,7 @@ padding: 12px;
 }
     #next {
     margin: auto;
-      cursor: pointer;
+      cursor: url(/cur/pointer.png), pointer;
       background: #7289da;
       border: none;
       padding:10px 25px;
@@ -315,7 +315,7 @@ padding: 12px;
   position: relative;
   padding-left: 35px;
   margin-bottom: 12px;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   font-size: 16px;
 text-align: left;
   -webkit-user-select: none;
@@ -327,7 +327,7 @@ text-align: left;
 .switch input {
   position: absolute;
   opacity: 0;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   height: 0;
   width: 0;
   

@@ -72,7 +72,7 @@ border-bottom: solid 1px #FFFA;
 }
 .profilenav > li {
 height: 50px;
-cursor: pointer;
+cursor: url(/cur/pointer.png), pointer;
 }
 
 .profile-container {
@@ -299,7 +299,7 @@ margin:auto;
   opacity: 0;
 }
 .avicontainer #frame:hover {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 
 .medals {

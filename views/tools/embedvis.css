@@ -3264,7 +3264,7 @@
   }
   .pointer:hover,
   .shadow-hover {
-   cursor:pointer
+   cursor: url(/cur/pointer.png), pointer
   }
   .shadow-hover {
    position:relative;
@@ -7590,7 +7590,7 @@
   .cm-s-one-dark .CodeMirror-foldmarker {
    font-family:Consolas,Monaco,monospace;
    line-height:.3;
-   cursor:pointer;
+   cursor: url(/cur/pointer.png), pointer;
    color:#abb2bf;
    background:rgba(204,217,255,.05)
   }
@@ -7600,7 +7600,7 @@
   }
   .cm-s-one-dark .CodeMirror-foldgutter-folded,
   .cm-s-one-dark .CodeMirror-foldgutter-open {
-   cursor:pointer
+   cursor: url(/cur/pointer.png), pointer
   }
   .cm-s-one-dark .CodeMirror-foldgutter-open:after {
    content:"\25BE";
@@ -7780,7 +7780,7 @@
    display:inline-block;
    text-align:center; 
    color:#fff;
-   cursor:pointer;
+   cursor: url(/cur/pointer.png), pointer;
    width:33.33%;
    padding:20px 0;
    font-size:.875rem;
@@ -7833,7 +7833,7 @@
    font-size:13px;
    padding:5px 12px;
    margin-left:10px;
-   cursor:pointer;
+   cursor: url(/cur/pointer.png), pointer;
    text-transform:uppercase
   }
   .cmd-btn:active {
@@ -8168,13 +8168,13 @@
    background:#fff
   }
   .chat .user-name {
-   cursor:pointer
+   cursor: url(/cur/pointer.png), pointer
   }
   .chat .user-name:hover {
    text-decoration:underline
   }
   .chat .avatar-large {
-   cursor:pointer;
+   cursor: url(/cur/pointer.png), pointer;
    opacity:1;
    transition:opacity .2s ease
   }
@@ -8224,7 +8224,7 @@
   .message-group a {
    color:#00b0f4;
    transition:.05s;
-   cursor:pointer
+   cursor: url(/cur/pointer.png), pointer
   }
   .message-group a:hover {
    text-decoration:underline
@@ -8482,7 +8482,7 @@
    -webkit-box-flex:0;
    -ms-flex:0 1 5px;
    flex:0 1 8px;
-    cursor: pointer
+    cursor: url(/cur/pointer.png), pointer
    
   }
   
@@ -8798,7 +8798,7 @@
   }
   .discord-view button {
    border:0;
-   cursor:pointer;
+   cursor: url(/cur/pointer.png), pointer;
    margin-bottom:10px;
    background-color:#282b30;
    border:1px solid #282b30;

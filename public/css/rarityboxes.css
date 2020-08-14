@@ -72,7 +72,7 @@ text-align: center;
     --fadecolor: rgba(72, 35, 58, 0.82);
     --glowcolor:  #2245;
     user-select: none;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
     position: relative;
     margin: 4px ;
     display: flex;
@@ -169,7 +169,7 @@ margin-left: 10px;
     background-image: radial-gradient(#ffba3b, rgba(36, 36, 83, 0.7) 70%);
     background-position: center 10px;
     transition: all 10ms ease;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
   }
   .shopbox .button .price ,
   .raritybox .button .price {

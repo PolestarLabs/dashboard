@@ -141,7 +141,7 @@
  .store-sidebar li {
   position:relative;
   --text-shadow: #0b0b1b;
-  cursor:pointer;
+  cursor: url(/cur/pointer.png), pointer;
   user-select:none
  }
  .store-sidebar li .plx-button {
@@ -185,7 +185,7 @@
   color:#fff
  }
  a>label {
-  cursor:pointer
+  cursor: url(/cur/pointer.png), pointer
  }
  .store-sidebar a i {
   padding-right:15px;
@@ -1006,4 +1006,7 @@
        box-shadow: 0 2px 10px #1125;
    }
  }
- 
+ .plx-disabled{
+   opacity: .5;
+   filter: saturate(0)
+ }
