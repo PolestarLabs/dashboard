@@ -187,6 +187,27 @@ block content
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-store
                           label  Marketplace
+                  //hr
+                  br
+                  li.menulabel.plx-disabled
+                      a Coming Soon:
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" ).plx-disabled
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-calendar
+                          label  Event Shop
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" ).plx-disabled
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-sync-alt
+                          label  Daily Shop
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" ).plx-disabled
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-ankh
+                          label  Pawn Shop
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" ).plx-disabled
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-parachute-box
+                          label  Supplier
+                  div(style="margin-bottom:10rem")
               
             ul.store-main.plx-width-1-1.store-tab-content.plx-switcher
                 
@@ -217,13 +238,12 @@ block content
           #modal-special(plx-modal plx-flex-top)
             include modals/special
     #endof
-    br
-    hr
+
     
 
 
 
-    //style #footer{margin-top: -5rem}                
+    style #footer{margin-top: -5rem}                
 block scripts
   script(src='js/sweetalert.js')
   script
