@@ -66,6 +66,7 @@ const fx = require('../pipelines/globalFunctions.js');
   router.get('/terms', (q,r)=>r.render("standalone-pages/terms"));
   router.get('/dmca', (q,r)=>r.render("standalone-pages/dmca"));
   router.get('/branding', (q,r)=>r.render("standalone-pages/branding"));
+  router.get('/info', (q,r)=>r.render("standalone-pages/info"));
   router.get('/stickers', async  (...args)=> simplepages('stickers').run(...args));
 
 

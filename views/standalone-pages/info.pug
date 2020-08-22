@@ -1,0 +1,512 @@
+extends ../layout 
+ 
+mixin staffcard()
+        div(v-if="usr && usr.meta && usr.meta.loading")
+            p LOADING
+        div(v-else)            
+            .bg(v-bind:style="{backgroundImage:`url(/backdrops/${usr.meta.profile.background}.png)`}")
+            .avatar(v-bind:style="{background:  'url(https://cdn.discordapp.com/embed/avatars/4.png)', 'background-image': `url(${usr.meta.avatar.replace('.jpg','.png').replace('=128','=512')})` }")
+            .name
+                .uname {{usr.meta.tag.split('#')[0]}}
+                .discrimin 
+                    |\#{{usr.meta.tag.split('#')[1]}}
+            .tagline {{usr.meta.profile.tagline}}
+            .title {{usr.title}}
+            .subtitle {{usr.dsc}}
+
+block head
+    script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
+block content
+    style
+        include staff.css
+    br
+    include ../navbar
+    div
+        .plx-container
+            section
+                br
+                br
+                h1.title About & Info
+                h3.subtitle Everything you may or may not want to know about Pollux and our Team
+
+    hr.plx-divider-icon
+    br
+    #crew
+        .plx-container.plx-flex.plx-flex-wrap
+            .plx-width-1-2.plx-flex.plx-flex-wrap
+                .plx-width-auto
+                    h3: b Created and Designed by 
+                    br
+                    .staffcard(v-for="usr in staffMembers.filter(c=>c.cls=='lead')" v-if='!usr.meta.loading')
+                        +staffcard
+                .plx-width-1-2
+                    .small.help(style="margin-top:100%; font-family: quicksand") A Visual/UX Designer and Broadcasting Systems Analyst spending some spare time experimenting new stuff and creating cool things. Pollux was a single-person pet-project from mid 2016 until late 2018.
+            .plx-width-1-2.plx-flex.plx-flex-wrap
+                .plx-width-1-2
+                    br
+                    br
+                    br
+                    br
+                    .small.help(style="margin-top:0%; font-family: quicksand") Polly is a state-of-art gynomorphic synthoid developed and assembled by Amarok Federation's R&D Bureau Qailertand Dynamics. A repurposed model from the Geminis Series to be employed in public entertainment by private contractors.
+                .plx-width-auto
+                    h3: b About Pollux
+                    br
+                    .staffcard(v-for="usr in staffMembers.filter(c=>c.cls=='plx')" v-if='!usr.meta.loading')
+                        +staffcard
+                
+                
+                
+        .plx-container
+            br
+            hr.plx-divider-icon
+            section
+                h2.title: b TEAM
+                h4.subtitle Who, what and how.
+                p From November 2018 until late 2020, Pollux was rewritten from scratch to fix a myriad of technical issues and to better reflect the technical knowledge acquired with the years. During this new phase, a lot of new people joined in to help out with this endeavour. Some veterans from the pre-rewrite era, some coming from other bots, and some extremelly helpful people that are around to support the project the way they can.
+
+        .plx-container
+                br
+                br
+                h3: b Collaborators 
+                br
+        .plx-uncontainer
+                .stafroll
+                    .staffcard(v-for="usr in staffMembers.filter(c=>c.cls=='dev' || c.cls=='art')")
+                        +staffcard
+
+        .plx-container
+                br
+                hr.plx-divider-icon
+                br
+                h3: b Community
+                br
+        .plx-uncontainer
+                .stafroll
+                    .staffcard(v-for="usr in staffMembers.filter(c=>c.cls=='mod')")
+                        +staffcard
+                
+        .plx-container
+                br
+                hr.plx-divider-icon
+                br
+                h3: b Support Team
+                br
+        .plx-uncontainer
+                .stafroll.support
+                    .staffcard(v-for="usr in staffMembers.filter(c=>c.cls=='sup')")
+                        +staffcard
+
+        .plx-container
+                br
+                hr.plx-divider-icon
+                br
+                h3: b Special Thanks 
+                br
+        .plx-uncontainer
+                .stafroll.special
+                    .staffcard(v-for="usr in staffMembers.filter(c=>c.cls=='thx')")
+                        +staffcard
+                    
+
+        br
+        hr.plx-divider-icon
+        br
+        br
+
+    div: .plx-container
+        section
+            h2.title: b TECHNICAL SHEET
+            h4.subtitle For those wondering what's under the carpet
+
+            p Pollux is one piece of a series of other projects that share the same infra. These units host the bot, dashboard, assets, database, and some other internal services/tools or act as backup/failover.
+            p The information here is for reference purposes and may not be up to date.
+            br 
+            .plx-flex.plx-flex-wrap(style="opacity:.60")
+                .plx-width-1-1(class="plx-width-1-3@s")
+                    h3 Infrastructure
+                    
+                    h5 Processing Unit ALDEBARAN
+                    ul.specs.plx-flex
+                        li 
+                            i: .fas.fa-microchip
+                            span 12x Xeon E5
+                        li 
+                            i: .fas.fa-memory
+                            span 128GB
+                        li 
+                            i: .fas.fa-globe-europe
+                            span Germany
+                    
+                    h5 Storage Unit BETELGEUSE
+                    ul.specs.plx-flex
+                        li 
+                            i: .fas.fa-microchip
+                            span 3x Ryzen EPYC
+                        li 
+                            i: .fas.fa-memory
+                            span 4GB
+                        li 
+                            i: .fas.fa-globe-europe
+                            span Finland
+                    
+                    h5 Auxiliary Unit CASSIOPEA
+                    ul.specs.plx-flex
+                        li 
+                            i: .fas.fa-microchip
+                            span 2x Ivy Bridge
+                        li 
+                            i: .fas.fa-memory
+                            span 2GB
+                        li 
+                            i: .fas.fa-globe-europe
+                            span Germany
+                    h5 Relay Unit XENONIA
+                    ul.specs.plx-flex
+                        li 
+                            i: .fas.fa-microchip
+                            span 2x Xeon E3
+                        li 
+                            i: .fas.fa-memory
+                            span 2GB
+                        li 
+                            i: .fas.fa-globe-europe
+                            span Japan
+                    br
+                    div(style="opacity: .5")
+                        h5 Processing Unit SUPERNOVA [Decommissioned]
+                        ul.specs.plx-flex
+                            li 
+                                i: .fas.fa-microchip
+                                span 9x Xeon E3
+                            li 
+                                i: .fas.fa-memory
+                                span 16GB
+                            li 
+                                i: .fas.fa-globe-europe
+                                span United States 
+
+                        h5 Processing Unit POLARIS-I [Decommissioned]
+                        ul.specs.plx-flex
+                            li 
+                                i: .fas.fa-microchip
+                                span 8x Intel i5 gen6
+                            li 
+                                i: .fas.fa-memory
+                                span 8GB
+                            li 
+                                i: .fas.fa-globe-europe
+                                span Canada 
+                        h5 Processing Unit POLARIS-II [Decommissioned]
+                        ul.specs.plx-flex
+                            li 
+                                i: .fas.fa-microchip
+                                span 8x Ivy Bridge
+                            li 
+                                i: .fas.fa-memory
+                                span 32GB
+                            li 
+                                i: .fas.fa-globe-europe
+                                span Germany
+
+          
+
+                .plx-width-1-1(class="plx-width-1-3@s")
+                    h3 Userbase
+                    
+
+                    h5: b Total Users Registered
+                    p 6 million, ~8K active at any given time globally.
+
+                    h5: b Top Regions (Dashboard)
+                    ul
+                        li European Union (440K users)
+                            ul: li.small Top: Poland
+                        li North America (300K users)
+                            ul: li.small Top: United States
+                        li South America (280K users)
+                            ul: li.small Top: Brazil
+                        li Southeast Asia (122K users)
+                            ul: li.small Top: Vietnam
+                        li Western Asia (80K users)
+                            ul: li.small Top: South Korea
+                    br
+                .plx-width-1-1(class="plx-width-1-3@s")
+                    h3 Statistics
+                    
+                    h5: b Top Commands
+                    ul
+                        li Profile
+                        li Blackjack
+                        li Guess the Flag
+                        li Daily
+                        li Venture
+                    h3 Software
+                    h5: b Discord Library
+                    ul: li.small  Custom Eris
+                    h5: b Dashboard
+                    ul: li.small  Express & Vue
+                    h5: b Database
+                    ul: li.small  MongoDB
+                    
+
+
+
+        br
+        hr.plx-divider-icon
+        br
+    br
+    br
+    br
+    br
+    br
+    p
+
+block scripts
+    script.
+          
+        const STAFF = new Vue({
+            el: "#crew",
+            data: {
+                staffMembers : [
+                    {
+                        id: "88120564400553984",
+                        title: "Creator, BDFL",
+                        dsc: "Designer, Developer, Illustrator and some more",
+                        cls: "lead",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "271394014358405121",
+                        title: "MODEL GEMINIS-B",
+                        dsc: "Luxury-class Synthoid Warranty void if opened",
+                        cls: "plx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "124989722668957700",//mitch
+                        title: "Developer",
+                        dsc: "Code Contributor",
+                        cls:"dev",
+                        meta : {loading:true}
+                    },
+                    {
+                        id: "253600545972027394",//bsian
+                        title: "Developer",
+                        dsc: "Code Review",
+                        cls:"dev",
+                        meta : {loading:true}
+                    },
+                    {
+                        id: "176257147015790592",//gallu
+                        title: "Artist",
+                        dsc: "Sticker & Website Illustrations",
+                        cls:"art",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "554608299669192725",//bannieh
+                        title: "Artist",
+                        dsc: "Sticker Illustrations",
+                        cls:"art",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "540940594164400169",//vio
+                        title: "Artist",
+                        dsc: "Background Artist, Concept Artist",
+                        cls:"art",
+                        meta : {loading:true}
+
+                    },
+                     {
+                        id: "301178935004233729",//42ne
+                        title: "Project Manager",
+                        dsc: "Community and Staff Management",
+                        cls:"dev",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "103727554644418560",//kat
+                        title: "Support",
+                        dsc: "Support Supervisor",
+                        cls:"mod",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "315541510315573259",//yan
+                        title: "Support / Moderation",
+                        dsc: "English / French",
+                        cls:"mod",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "288737270402383872",//acuario
+                        title: "Support",
+                        dsc: "Spanish",
+                        cls:"sup",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "428113995115921409",//rei
+                        title: "Support",
+                        dsc: "English",
+                        cls:"sup",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "266326050466824192",//yat
+                        title: "Support",
+                        dsc: "Portuguese",
+                        cls:"sup",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "482564751944318977",//diz
+                        title: "Support",
+                        dsc: "Russian",
+                        cls:"sup",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "235917117575266304",//mayu
+                        title: "Support",
+                         dsc: "Portuguese",
+                        cls:"sup",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "114115657871654920",//meow
+                        title: "MVP",
+                        dsc: "Member of the year of all years",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "179908288337412096",//khaz
+                        title: "MVP",
+                        dsc: "AxonCore Dev",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "227115752396685313",//gin
+                        title: "MVP",
+                        dsc: "Dyno Dev, Technical Advisor",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "565287683023437865",//mavu
+                        title: "MVP",
+                        dsc: "Wiki Maintainer",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "246653151417991168",//isht
+                        title: "MVP",
+                        dsc: "Content Contributor",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "203139018760781824",//akira
+                        title: "Community Moderator",
+                        dsc: "Veteran Member",
+                        cls:"mod",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "163200584189476865",//elec
+                        title: "Community Moderator",
+                        dsc: "Veteran Member",
+                        cls:"mod",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "200044537270370313",//saito
+                        title: "MVP",
+                        dsc: "Former Manager / Mod - Veteran Member",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "174622753666629632",//nyk
+                        title: "Translator",
+                        dsc: "ex-Riot Games Translator. Contributed as Translation Coordinator in 2018",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "246726269088169984",//myth
+                        title: "Consultant",
+                        dsc: "Gacha and Economy Affairs",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "359925352061075468",//katlay
+                        title: "Consultant",
+                        dsc: "Early tester and bug-reporter",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "207484517898780672",//bus
+                        title: "MVP",
+                        dsc: "DTel Dev, Discoin Creator",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "155323155735511041",//bus
+                        title: "MVP",
+                        dsc: "First Major Partner - Sponsored the Custom Shops System",
+                        cls:"thx",
+                        meta : {loading:true}
+
+                    },
+                   
+
+                ] 
+            },
+            methods:{
+                updateStaff(uid,res){
+                    this.staffMembers.find(x=>x.id===uid).meta = res
+                }
+         
+            }
+        })
+
+        STAFF.staffMembers.forEach(async (user)=>{
+            
+            fetch("/api/user/"+user.id).then((r) =>
+                r.json().then(async (res) => (STAFF.updateStaff(user.id,res) ))
+            );
+        })
+        
+
