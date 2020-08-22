@@ -125,10 +125,10 @@ module.exports = {
       
     }
     
-      if (VARS.EVENT) {
-        imgbox.EV = bgbas.filter(bg => bg.event == VARS.EVENT)
+      if (VARS.EVENT.id) {
+        imgbox.EV = bgbas.filter(bg => bg.event == VARS.EVENT.id)
       }
-      imgbox.PEV = bgbas.filter(bg => bg.event && bg.event != VARS.EVENT)
+      imgbox.PEV = bgbas.filter(bg => bg.event && bg.event != VARS.EVENT.id)
       let USR = req.user
 
 

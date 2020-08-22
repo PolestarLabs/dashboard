@@ -93,7 +93,27 @@
                 span &#x2003
             ul.plx-nav-sub: li        
                 
-                p(style="pointer-events:none") No Ongoing Events
+                div
+                    .mkmenu_title Ongoing
+                    if EVENT.end 
+                        div(plx-countdown="date: "+(new Date(EVENT.end)) ).smallcounter
+                            div
+                                .plx-countdown-number.plx-countdown-days
+                                .plx-countdown-label.plx-text-center.plx-margin-small D
+                            .plx-countdown-separator :
+                            div
+                                .plx-countdown-number.plx-countdown-hours
+                                .plx-countdown-label.plx-text-center.plx-margin-small H
+                            .plx-countdown-separator :
+                            div
+                                .plx-countdown-number.plx-countdown-minutes
+                                .plx-countdown-label.plx-text-center.plx-margin-small M
+                            .plx-countdown-separator :
+                            div
+                                .plx-countdown-number.plx-countdown-seconds
+                                .plx-countdown-label.plx-text-center.plx-margin-small S
+                    else
+                        p No events ongoing
 
                 .plx-nav-divider
                 a(href='/events')

@@ -76,27 +76,30 @@ nav.plx-navbar.plx-nav-container.topbar(plx-navbar class=index?"home":"" plx-sti
                     .plx-navbar-dropdown.ballooned.event_menu
                         div
                             .mkmenu_title Ongoing
-                            div(plx-countdown="date: 2019-03-03T19:58:54+00:00").smallcounter
-                                div
-                                    .plx-countdown-number.plx-countdown-days
-                                    .plx-countdown-label.plx-text-center.plx-margin-small D
-                                .plx-countdown-separator :
-                                div
-                                    .plx-countdown-number.plx-countdown-hours
-                                    .plx-countdown-label.plx-text-center.plx-margin-small H
-                                .plx-countdown-separator :
-                                div
-                                    .plx-countdown-number.plx-countdown-minutes
-                                    .plx-countdown-label.plx-text-center.plx-margin-small M
-                                .plx-countdown-separator :
-                                div
-                                    .plx-countdown-number.plx-countdown-seconds
-                                    .plx-countdown-label.plx-text-center.plx-margin-small S
-                            .events_bottom.fancylist
-                                .mkmenu_title Info
-                                a(href="/events"): span
-                                    i.far.fa-calendar
-                                    |&#x2000  See all events information
+                            if EVENT.end 
+                                div(plx-countdown="date: "+(new Date(EVENT.end)) ).smallcounter
+                                    div
+                                        .plx-countdown-number.plx-countdown-days
+                                        .plx-countdown-label.plx-text-center.plx-margin-small D
+                                    .plx-countdown-separator :
+                                    div
+                                        .plx-countdown-number.plx-countdown-hours
+                                        .plx-countdown-label.plx-text-center.plx-margin-small H
+                                    .plx-countdown-separator :
+                                    div
+                                        .plx-countdown-number.plx-countdown-minutes
+                                        .plx-countdown-label.plx-text-center.plx-margin-small M
+                                    .plx-countdown-separator :
+                                    div
+                                        .plx-countdown-number.plx-countdown-seconds
+                                        .plx-countdown-label.plx-text-center.plx-margin-small S
+                            else
+                                p No events ongoing
+                        .events_bottom.fancylist
+                            .mkmenu_title Info
+                            a(href="/events"): span
+                                i.far.fa-calendar
+                                |&#x2000  See all events information
         .plx-navbar-item( style="width: 0px;margin: 0;padding: 0;" class="plx-hidden@m")
         a.plx-navbar-item.plx-logo(class="plx-visible@m" href="/")
             div
