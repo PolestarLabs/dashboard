@@ -202,7 +202,7 @@ app.use(sassMiddleware({
 */
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'pug');
+app.set('view engine', 'pug'); 
 
 
 app.use(Express.static(path.join(__dirname, 'public')));
@@ -351,31 +351,44 @@ const AcquireDiscordPayload = (TOKEN,req) => {
   discordStrategy.userProfile(TOKEN, FUD => ( (FUD||{}).id && FUD.provider == 'discord') ? req.user = freshUserData : null )
 }
 
+const VARS = require("./pipelines/vars.js");
+const authCacheExpiration = new Map();
+
 app.use(async function(req,res,next){
+  res.locals.EVENT=VARS.EVENT
+  let preDataProcess = result=>{
+    let USR = req.user;
+    res.locals.userdata = result;
+    res.locals.userinfo= {
+      pix: (result.meta||{}).avatar || `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
+      name: `${USR.username}#${USR.discriminator}`,
+      uname: USR.username,
+      id: USR.id,
+      discriminator: USR.discriminator,
+      servers:USR.guilds||USR.servers
+    }
+  }
 
   if(req.isAuthenticated() && req.method == 'GET' && !req.url.includes('/api/') && !req.url.includes('/generators/')){
+    
+    let userCacheReload = authCacheExpiration.get(req.user.id);
+    if( userCacheReload && userCacheReload.exp < Date.now() ) {
+      preDataProcess(userCacheReload.data)
+      return next();
+    }
+
 
     AcquireDiscordPayload(req.user.accessToken,req)
     PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
 
     let preUserData = DB.users.get({id:req.user.id});
-    let preDataProcess = result=>{
-      let USR = req.user;
-      res.locals.userdata = result;
-      res.locals.userinfo= {
-        pix: (result.meta||{}).avatar || `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
-        name: `${USR.username}#${USR.discriminator}`,
-        uname: USR.username,
-        id: USR.id,
-        discriminator: USR.discriminator,
-        servers:USR.guilds||USR.servers
-      }
-    }
 
     preUserData.then(async data=>{
- 
-      let dscUser = userCache.get(req.user.id) || await PLX.getRESTUser(req.user.id);
-      if(!data) data = await DB.users.new(dscUser); 
+      if(!data) {
+        let dscUser = userCache.get(req.user.id) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
+        data = await DB.users.new(dscUser); 
+      }
+      authCacheExpiration.set(req.user.id,{data,exp: Date.now() + 120e3  })
       preDataProcess(data)
     });
 
@@ -398,6 +411,7 @@ const auth = async function(req, res, next) {
   if(req.url.includes('api'))      return next();
   if(req.url.includes('.png'))      return next();
   if(req.url.includes('discoin'))      return next();
+  if(req.url.includes('/discord'))      return next();
   if(req.url.includes('branding')) return next();
   if(req.url.includes('embedarchitect')) return next();
   if(req.url.includes('botbridge')) return next();
@@ -421,7 +435,9 @@ const auth = async function(req, res, next) {
 
   
   var user = simpleauth(req)
- 
+
+  compulsoryAuth(req,res,next);
+  
   if(!req.isAuthenticated() && !req.url.includes('/auth')) return res.redirect('/auth');
   if(req.isAuthenticated()){
     if(await hasPolluxRole(req,"278985430844833792") && req.url.includes('/dash') ) return next();
@@ -475,7 +491,7 @@ global.checkAuth = function checkAuth(req, res, next) {
 
 
 
-app.use(compulsoryAuth)
+//app.use(compulsoryAuth)
 
 app.get('/', (...args)=> simplepages().index(...args));
 
