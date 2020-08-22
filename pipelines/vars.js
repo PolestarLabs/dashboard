@@ -12,7 +12,14 @@ let respack = {
   b: "Geez"
 }
 
-let EVENT = null
+let EVENT = {
+  name: null,
+  id: null,
+  filter: null,
+  start: null,
+  end: null
+}
+
 
 const interj = {
   success: [
