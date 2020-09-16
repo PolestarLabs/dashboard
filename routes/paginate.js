@@ -3,10 +3,11 @@
 exports.run = async function (req, res, next, options={}) {
 
     //search/:endpoint/:page
+    console.log("//search/:endpoint/:page")
 
    if (req.body.options) options = req.body.options;
    if (req.query.piece) req.body.piece = req.query.piece;
-
+  console.log(req.query,options,"ok")
 
     let _endpoint = (options||{}).endpoint || req.params.endpoint;
     const _page = parseInt(req.params.page) || options.page ||req.query.page|| 0;
@@ -97,6 +98,9 @@ exports.run = async function (req, res, next, options={}) {
 
     }else if(_endpoint =="marketplace"){
         let _searchtype = options.fstype
+        
+        console.log(req.query,options)
+        
         _sorting = {timestamp:-1}
         results = await DB.marketplace.aggregate(
             [
@@ -167,11 +171,11 @@ exports.run = async function (req, res, next, options={}) {
                 },
                 { $project: {_id:0,junkdata:0,cosdata:0,} },
                 
-            ]           
+            ]
         );
         itemCount   =    await DB.marketplace.countDocuments({});        
         if(options.filter ){
-            console.log(_filter)
+            console.log({_filter})
             //console.log(results)
             /*
             results=results.filter(r=>{
