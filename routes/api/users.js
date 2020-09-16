@@ -1,6 +1,36 @@
 
 const express = require('express');
+const { response } = require('express');
 const router = express.Router();
+
+
+
+router.get('/search',  cache(600), async(req,res)=>{
+    let queries = {}
+    Object.keys(req.query)
+        .filter(qry => ['_id','id','donator','name','meta.tag','personalhandle'].includes(qry) )
+        .forEach(ky=> queries[ky] = req.query[ky])
+
+    if(queries.donator == 'exists') queries.donator = {$exists:true};
+    let sort = {_id:-1}
+
+    DB.users.find(queries)
+        .skip(parseInt(req.query.skip)||0)
+        .limit( parseInt(req.query.lim)||50)
+        .sort(sort).lean()
+        .then(async result=>{
+            let result_2 = await Promise.all(result.map(async USR=>{
+                let discordUser =   userCache.get( USR.id ) || (await PLX.getRESTUser( USR.id ).catch(e=>{ id: "error" }));
+                if (!discordUser) return null;
+                userCache.set(discordUser.id,discordUser);
+                let { response } = parse_userdata(discordUser, USR, 0);
+                return response;
+            }));
+            
+            return res.json(result_2)
+        })
+})
+
 
 router.use('/:id/', (req,res,nex)=>{
     res.locals.userID = req.params.id
@@ -11,48 +41,8 @@ router.use('/:id/', (req,res,nex)=>{
 router.get('/:id', cache(30), async (req,res) => {
     let STATUS = 200
     const uID = res.locals.userID
-    let discordUser = await PLX.getRESTUser(uID).timeout(500).catch(e=>{ return {error:e.message} });
-    DB.users.get(uID).then(USR=>{
-        let response = {
-            id: discordUser.id
-            ,tag: discordUser.id ? (discordUser.username +"#"+ discordUser.discriminator) : ((USR||{}).meta||{}).tag
-            ,avatar: discordUser.avatarURL
-        }
-        //if(discordUser.bot) return res.json(response);        
-        if(!USR){
-            STATUS = 404
-            response.isPolluxUser = false;
-            response.isBot = discordUser.bot;
-        }else{            
-            response.level=  USR.modules.level
-            response.exp=  USR.modules.exp
-            response.commends=  USR.modules.commend
-            response.rubines=  USR.modules.rubines
-            response.jades=  USR.modules.jades
-            response.sapphires=  USR.modules.sapphires
-            response.isDonator=  USR.donator && USR.donator != ""
-            response.donatorTier=  USR.donator
-            response.isBlacklisted=  USR.blacklisted && USR.blacklisted != ""?true:false
-            response.profile= {
-                background: USR.modules.bgID
-                ,sticker: USR.modules.sticker
-                ,color: USR.modules.favcolor
-                ,flair: USR.modules.flairTop
-                ,about: USR.modules.persotext
-                ,tagline: USR.modules.tagline
-                ,medals: USR.modules.medals
-            } 
-            response.inventorySize= USR.modules.inventory.reduce((a,b)=>a+b.count,0 )||0
-        }
-        if(discordUser.error) {
-            STATUS = response.isPolluxUser?206:400
-            response.discordDataUnavailable= discordUser.error
-        };
-        
-        res.status(STATUS).jsonp(response)
-       // res.json(USR._doc)
-            
-    })
+    
+    return parseUserAndReturn( uID, res);
 })
  
 router.get('/:id/inventory', async (req,res)=>{
@@ -145,4 +135,63 @@ router.get('/:id/commends/:endpoint',cache(360), async (req,res)=>{
         return res.json({rank,count});
 })
 
+
 module.exports = router
+
+async function parseUserAndReturn(uID, res) {
+    let STATUS = 200
+    let discordUser =   userCache.get( uID ) || (await PLX.getRESTUser( uID ).catch(e=>{ error: "error" }));
+    userCache.set(discordUser.id,discordUser);
+
+    return DB.users.get(uID).then(USR => {
+        let response;
+        ({ response, STATUS } = parse_userdata(discordUser, USR, STATUS));
+
+        return res.status(STATUS).json(response);
+        // res.json(USR._doc)
+    }); 
+}
+function parse_userdata(discordUser, USR, STATUS) {
+    let response = {
+        id: discordUser.id,
+        tag: discordUser.id ? (discordUser.username + "#" + discordUser.discriminator) : ((USR || {}).meta || {}).tag,
+        avatar: discordUser.avatarURL
+    };
+    //if(discordUser.bot) return res.json(response);        
+    if (!USR) {
+        STATUS = !discordUser ? 404 : 206;
+        response.isPolluxUser = false;
+        response.isBot = discordUser.bot;
+    }
+    else {
+        response.level = USR.modules.level;
+        response.exp = USR.modules.exp;
+        response.commends = USR.modules.commend;
+        response.rubines = USR.modules.rubines;
+        response.jades = USR.modules.jades;
+        response.sapphires = USR.modules.sapphires;
+        response.isDonator = USR.donator && USR.donator != "";
+        response.donatorTier = USR.donator;
+        response.isBlacklisted = USR.blacklisted && USR.blacklisted != "" ? true : false;
+        response.profile = {
+            background: USR.modules.bgID,
+            sticker: USR.modules.sticker,
+            color: USR.modules.favcolor,
+            flair: USR.modules.flairTop,
+            about: USR.modules.persotext,
+            tagline: USR.modules.tagline,
+            medals: USR.modules.medals
+        };
+        response.inventorySize = USR.modules.inventory.reduce((a, b) => a + b.count, 0) || 0;
+    }
+    if (discordUser.error) {
+        console.log("AAAAAAAAAAAAAAAAA".red)
+        console.log("AAAAAAAAAAAAAAAAA".red)
+        console.log("AAAAAAAAAAAAAAAAA".red)
+        console.log({discordUser})
+        STATUS =   response.isPolluxUser ? 206 : 400;
+        response.discordDataUnavailable = discordUser.error;
+    };
+    return { response, STATUS };
+}
+
