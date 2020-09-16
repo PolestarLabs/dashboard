@@ -38,12 +38,16 @@ router.get('/',AUTHED, (req, res)=> {
 
 
 router.use( (req,res,nex)=>{
-    if (req.headers.authorization && !req.user) return AUTHED(req,res,nex);
+    //if (req.headers.authorization && !req.user) return AUTHED(req,res,nex);
     nex();
 });
 global.cache= cacheFunction
 
-router.get(cache(60));
+router.get((rq,rs,nx)=> {
+    if(rq.query.nocache) nx();
+    else (cache(60))(rq,rs,nx);
+});
+
 router.use( (req,res,nex)=>{
     console.log(req.body)
     console.log( MARKET_TOKEN )
