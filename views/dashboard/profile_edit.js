@@ -92,10 +92,13 @@ const DASH = new Vue({
   },
 
   methods: {
+    saveAll(){
+      AUTOSAVE("all");
+    },
     changeFeatMarriage(id) {
       this.featuredMarriage = id;
       AUTOSAVE("Featured Marriage");
-      AUTOSAVE("COLOR")
+      
     },
     toggleWifeOrder(by) {
       if (this.sortWife == by) return DASH.RSHP.reverse();
