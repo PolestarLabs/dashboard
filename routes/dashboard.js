@@ -151,7 +151,7 @@ router.patch("/misc/:endpoint", async (req,res)=>{
     }
     
     if (_endpt == "attr"){
-        return DB.users.set(UID, {$set: {"switches.variables" : payload.attrSet } } ).then(()=> res.sendStatus(200) ).catch(e=> res.status(500).send(e) );
+        return DB.users.set(UID, {$set: {"switches.variables" : payload.attrSet } } ).then((re)=> res.status(200).send( Object.assign({UID},re)) ).catch(e=> res.status(500).send(e) );
     }
 
     if (_endpt == "notifs"){
