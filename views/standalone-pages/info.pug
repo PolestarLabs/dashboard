@@ -4,15 +4,32 @@ mixin staffcard()
         div(v-if="usr && usr.meta && usr.meta.loading")
             p LOADING
         div(v-else)            
-            .bg(v-bind:style="{backgroundImage:`url(/backdrops/${usr.meta.profile.background}.png)`}")
+            .bg(v-bind:style="{backgroundImage:`url(/backdrops/${usr.meta.profile.background}.png)`}" v-if="usr.meta.profile")
             .avatar(v-bind:style="{background:  'url(https://cdn.discordapp.com/embed/avatars/4.png)', 'background-image': `url(${usr.meta.avatar.replace('.jpg','.png').replace('=128','=512')})` }")
             .name
                 .uname {{usr.meta.tag.split('#')[0]}}
                 .discrimin 
                     |\#{{usr.meta.tag.split('#')[1]}}
-            .tagline {{usr.meta.profile.tagline}}
+            .tagline(v-if="usr.meta.profile") {{usr.meta.profile.tagline}}
+            .tagline(v-else) -
+            
             .title {{usr.title}}
             .subtitle {{usr.dsc}}
+        //div(v-else)
+            p ERROR
+mixin suppcard()
+        div(v-if="!usr")
+            p LOADING
+        div(v-else)            
+            .bg(v-bind:style="{backgroundImage:`url(/backdrops/${usr.profile.background}.png)`}")
+            .avatar(v-bind:style="{background:  'url(https://cdn.discordapp.com/embed/avatars/4.png)', 'background-image': `url(${usr.avatar.replace('.jpg','.png').replace('=128','=512')})` }")
+            .name
+                .uname {{usr.tag.split('#')[0]}}
+                .discrimin 
+                    |\#{{usr.tag.split('#')[1]}}
+            .tagline 
+            .title {{usr.donatorTier}}
+            .subtitle {{usr.profile.tagline}}
 
 block head
     script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
@@ -106,7 +123,27 @@ block content
                 .stafroll.special
                     .staffcard(v-for="usr in staffMembers.filter(c=>c.cls=='thx')")
                         +staffcard
-                    
+
+        .plx-container
+                br
+                hr.plx-divider-icon
+                br
+                h2: b Donators
+                p Some of the people that financially supports us~
+                br
+        .plx-uncontainer(style="transform:scale(.8)")
+                .stafroll.special(v-if="donos.loading !== true")
+                    .staffcard(v-for="(usr,i) in donos.filter(x=> !staffMembers.find(y=>y.id===x.id) )" v-if="donos.filter && i < 18") 
+                        +suppcard
+                
+        .plx-container
+                br
+                h3 
+                    | ...and some more! You can 
+                    a(href="https://patreon.com/join/pollux") join them 
+                    | and appear here as well as receive super cool perks!
+                br
+                br
 
         br
         hr.plx-divider-icon
@@ -246,7 +283,9 @@ block content
                     h5: b Dashboard
                     ul: li.small  Express & Vue
                     h5: b Database
-                    ul: li.small  MongoDB
+                    ul
+                        li.small  MongoDB
+                        li.small  PostgreSQL
                     
 
 
@@ -267,7 +306,9 @@ block scripts
         const STAFF = new Vue({
             el: "#crew",
             data: {
-                staffMembers : [
+                donos: {loading:true},
+                staffMembers :
+                 [
                     {
                         id: "88120564400553984",
                         title: "Creator, BDFL",
@@ -501,7 +542,9 @@ block scripts
          
             }
         })
-
+        fetch("/api/user/search?donator=exists").then((r) =>
+            r.json().then(async (res) => (STAFF.donos= shuffle(res) ))
+        );
         STAFF.staffMembers.forEach(async (user)=>{
             
             fetch("/api/user/"+user.id).then((r) =>
@@ -509,4 +552,20 @@ block scripts
             );
         })
         
+            function shuffle(array) {
+            let currentIndex = array.length,
+                temporaryValue,
+                randomIndex;
+
+            while (0 !== currentIndex) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex -= 1;
+
+                temporaryValue = array[currentIndex];
+                array[currentIndex] = array[randomIndex];
+                array[randomIndex] = temporaryValue;
+            }
+
+            return array;
+            }
 
