@@ -18,7 +18,7 @@ router.get('/', async (req,res)=>{
     const canvas = Picto.new(800, 600);
     const ctx = canvas.getContext('2d');
 
-    const payload = req.query.data
+    const payload = req.query.data 
 
     if(!staticAssets.loaded) await staticAssets.load;
 
@@ -26,7 +26,7 @@ router.get('/', async (req,res)=>{
 
     const betTypes = ["straight", "split", "street", "square", "basket", "dstreet", "dozen", "column", "snake", "manque", "passe", "colour", "parity"];
 
-    let USERS = await Promise.all(payload.split(',').map(async U => {
+    let USERS = payload ? await Promise.all(payload.split(',').map(async U => {
         let avatar
         try {
             avatar = await Picto.getCanvas(`https://cdn.discordapp.com/avatars/${U.split('_')[0]}/${U.split('_')[1]}.png?size=64`);
@@ -47,7 +47,7 @@ router.get('/', async (req,res)=>{
                 }
             })
         }
-    }));
+    })) : [];
 
 
  
