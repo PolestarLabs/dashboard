@@ -42,7 +42,11 @@ app.use(async function (err, req, res, next) {
 })
 
 process.on('unhandledRejection', function (reason, p) {
-  console.log("Possibly Unhandled Rejection at: Promise \n".red, p, "\n\n reason: ".red, reason);
+  console.error("Possibly Unhandled Rejection at: Promise \n".red, p, "\n\n reason: ".red, reason);
+  process.exit(1)
+});
+process.on('uncaughtException', function (err) {
+  console.error(err)
   process.exit(1)
 });
 
