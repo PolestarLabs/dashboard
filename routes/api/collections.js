@@ -25,7 +25,8 @@ function itemsMatch(pot,recipe){
 }
 
 
-router.get('/:endpoint', cache(360),  (req,res) => {
+
+router.get('/:endpoint', cache(0.1),  (req,res) => {
 
     let queries = {}
     queries.crafted = true;
@@ -44,7 +45,10 @@ router.get('/:endpoint', cache(360),  (req,res) => {
         .skip(parseInt(req.query.skip)||0)
         .limit( parseInt(req.query.lim)||50)
         .sort(sort).lean()
-        .then(result=>{
+        .then(async result=>{
+            if(result){
+                let x = await Promise.all(result.map(res=> res.type == 'boosterpack' ? stickerCount(res) : null ));
+            }
             result.forEach(x=>{               
                 let timestamp = x._id.toString().substring(0,8)
                 x.release = parseInt( timestamp, 16 ) * 1000 
@@ -55,12 +59,25 @@ router.get('/:endpoint', cache(360),  (req,res) => {
     }else{
         DB.items.find({id:req.params.endpoint, crafted: !0, display: !0},
             {name:1, rarity:1, event:1, icon:1, id:1, type:1, gemcraft: 1, materials: 1, code: 1}).then(result=>{
-            console.log(result)
             res.json(result)
         })
     }
 
 })
+ 
+
+async function stickerCount(pack){
+    packdatafind = pack.materials.map(x=>x.id||x);
+    console.log(packdatafind)
+    let [pdata,mdata] = await Promise.all([
+        DB.cosmetics.find({series_id:pack.icon},{name:1,id:1,rarity:1}).lean(),
+        DB.items.find({id: {$in:pack.materials.map(x=>x.id||x) } },{name:1,id:1,rarity:1}).lean()
+    ]);
+    pack.size = pdata.length;
+    pack.materialsData = mdata;
+    pack.content = pdata;
+    return pack;
+}
 
 
 router.post('/mix',cache(120),  async (req,res) => {
