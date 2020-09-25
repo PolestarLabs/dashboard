@@ -165,8 +165,8 @@ let fields = []
   
  
   descrip =( p.commits.map(c=>
-    `**\`${c.id.slice(0,8)}\`** [${c.title}](${c.url} "${c.id}")`
-  ).join('\n')).slice(0,1500)
+    `**\`${c.id.slice(0,8)}\`** [${c.title}](${c.url})`
+  ).join('\n')).slice(0,1700)
  
  
   
