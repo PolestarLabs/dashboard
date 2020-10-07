@@ -14,7 +14,7 @@ staticAssets.load = Promise.all([
 })
  
 router.get('/', async (req,res)=>{
-    console.log('234')
+    console.log('2343')
     const canvas = Picto.new(800, 600);
     const ctx = canvas.getContext('2d');
 
@@ -50,18 +50,17 @@ router.get('/', async (req,res)=>{
     })) : [];
 
 
- 
- 
+
 
     const baselineGridX = i => 192 + (46 * ~~(i.number / 3.1));
     const baselineGridY = i => 405 - (62 * (((i.number) % 3 || 3) - 1));
     const typeCoords = {
         column: {
             x: _ => 750,
-            y: i => 280 + i.offset * 62
+            y: i => 280 + (i.offset-1) * 62
         },
         dozen: {
-            x: i => 250 + i.offset * 100,
+            x: i => 050 + i.offset * 200,
             y: _ => 464
         },
         manque: {
@@ -73,7 +72,7 @@ router.get('/', async (req,res)=>{
             y: _ => 229
         },
         colour: {
-            x: i =>  (i.offset == 1 ? 189 : i.offset == 2 ? 389 : 589),
+            x: i => i.offset == 1 ? 389 : i.offset == 2 ? 539 : 539,
             y: _ => 509
         },
         parity: {
