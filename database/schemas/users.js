@@ -29,7 +29,7 @@ const UserSchema = new mongoose.Schema({
   //OLD BL
   blacklisted:String,
   married:Array,
-  eventThing:Mixed,
+  eventData:Mixed,
 
   //MODULES
   featuredMarriage: String,

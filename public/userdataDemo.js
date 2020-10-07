@@ -1435,7 +1435,7 @@ var userdata =
       "timezone": "America/Sao_Paulo",
       "readme": "https://ipinfo.io/missingauth"
     },
-    "eventThing": {
+    "eventData": {
       "wintersummer": {
         "faction": "FLW",
         "collectibles": 621.5353599999999,
