@@ -136,9 +136,7 @@ router.get('/', async (req,res)=>{
             
             let od = -400+dx
             let ddx = (rpt*(od/100))
-            let ddy =  -rpt*5
-
-
+            let ddy =  -rpt*5          
 
             ctx.shadowBlur = -ddx
             ctx.drawImage(chip, dx - 20+ddx, dy - 20+ddy, 40, 40);
@@ -193,6 +191,37 @@ router.get('/', async (req,res)=>{
 
     })
     
+
+
+    if(req.query.h){
+        const {h} = req.query
+        let { x, y } = typeCoords.straight;
+        let posX = x({number:h,offset: h == "0" ? 1 : h == "00" ? 2 : 0})
+        let posY = y({number:h,offset: h == "0" ? 1 : h == "00" ? 2 : 0})
+
+        let overlay = Picto.new(800,600);
+        let c = overlay.getContext('2d');
+        
+        let grad = c.createLinearGradient(0,0,0,600)
+        grad.addColorStop(0,"#0005")
+        grad.addColorStop(1,"#000A")
+
+        c.fillStyle = grad;
+
+
+        c.fillRect(0,0,800,600);
+        c.fillStyle = "#FFF";
+        c.arc(posX,posY+5, 50, 0, 2 * Math.PI);
+
+        c.fill()
+
+        ctx.globalCompositeOperation  = "multiply"
+        ctx.drawImage(overlay,0,0)
+
+       
+        
+    }        
+
     canvas.pngStream().pipe(res);
 })
 
