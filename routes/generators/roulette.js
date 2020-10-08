@@ -76,7 +76,7 @@ router.get('/', async (req,res)=>{
             y: _ => 509
         },
         parity: {
-            x: i => i.offset == 1 ? 281 : 700,
+            x: i => i.offset == 0 ? 281 : 700,
             y: _ => 509
         },
         straight: {
@@ -203,8 +203,8 @@ router.get('/', async (req,res)=>{
         let c = overlay.getContext('2d');
         
         let grad = c.createLinearGradient(0,0,0,600)
-        grad.addColorStop(0,"#0005")
-        grad.addColorStop(1,"#000A")
+        grad.addColorStop(.3,"#0002")
+        grad.addColorStop(1,"#2b2b3BAA")
 
         c.fillStyle = grad;
 
