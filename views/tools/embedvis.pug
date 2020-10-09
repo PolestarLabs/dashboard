@@ -57,6 +57,8 @@ block content
                 br
                 code.mistyblue %server%
                 span This will be replaced with the server name 
+                br
+                a(href="#csheet") See more at the bottom of this page
 
           hr(style="opacity:.3")
         
@@ -64,7 +66,52 @@ block content
 
         #root
         .plx-container
+
+          table.csheet#csheet
+            tbody
+              tr
+                th Alias
+                th Item
+              tr
+                td.cheatsheet_comm  %username%
+                td   Username  
+              tr
+                td.cheatsheet_comm  %tag%
+                td   Username#0000  
+              tr
+                td.cheatsheet_comm  %userid%
+                td   User ID  
+              tr
+                td.cheatsheet_comm  %user% / %mention%
+                td  @User  
+              tr
+                td.cheatsheet_comm  %userBackground%
+                td   Equipped Pollux Background  
+              tr
+                td.cheatsheet_comm  %reputation%
+                td   Public Reputation (Commend)  
+              tr
+                td.cheatsheet_comm  %lvGlobal%
+                td   User Global Level  
+              tr
+                td.cheatsheet_comm  %pfLink%
+                td   User Profile Link  
+              tr
+                td.cheatsheet_comm  %server%
+                td  Server Name  
+              tr
+                td.cheatsheet_comm  %membernumber%
+                td   Server Member Count  
+              tr
+                td.cheatsheet_comm  %serverIcon%
+                td   Server Icon URL  
+              tr
+                td.cheatsheet_comm  %userAvatar%
+                td   User Avatar URL  
+
           hr.plx-divider-icon
+        br
+        br
         br
         br
           

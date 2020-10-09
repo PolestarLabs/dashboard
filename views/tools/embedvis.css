@@ -1418,7 +1418,7 @@
   }
   .code,
   code {
-   font-family:Consolas,monaco,monospace
+   font-family:Share Tech Mono, Consolas,monaco,monospace
   }
   .courier {
    font-family:Courier Next,courier,monospace
@@ -7556,7 +7556,7 @@
   }
   .cm-s-one-dark .CodeMirror,
   .cm-s-one-dark .CodeMirror-scroll {
-   font-family:Consolas,Monaco,monospace;
+   font-family:Share Tech Mono, Consolas,Monaco,monospace;
    font-weight:300;
    font-size:14px;
    background: var(--bg-dark);
@@ -7588,7 +7588,7 @@
    color:#393e46
   }
   .cm-s-one-dark .CodeMirror-foldmarker {
-   font-family:Consolas,Monaco,monospace;
+   font-family:Share Tech Mono, Consolas,Monaco,monospace;
    line-height:.3;
    cursor: url(/cur/pointer.png), pointer;
    color:#abb2bf;
@@ -7759,7 +7759,7 @@
    height:100%;
    border-radius:0;
    z-index:0;
-   font-family:Consolas,Monaco,monospace;
+   font-family:Share Tech Mono, Consolas,Monaco,monospace;
    font-weight:300;
    font-size:14px;
    border-radius:5px
@@ -8235,7 +8235,7 @@
   }
   .message-group .comment .markup code.inline,
   .message-group .comment .markup pre {
-   font-family:Consolas,Liberation Mono,Menlo,Courier,monospace;
+   font-family:Share Tech Mono, Consolas,Liberation Mono,Menlo,Courier,monospace;
    background:#f9f9f9
   }
   .message-group .accessory {
@@ -8812,7 +8812,7 @@
    outline:0
   }
   .discord-view code {
-   font-family:Menlo,Consolas,Monaco,monospace;
+   font-family:Menlo,Share Tech Mono, Consolas,Monaco,monospace;
    font-size:14px;
    line-height:16px
   }
@@ -8980,3 +8980,30 @@
       content:'\f0d0\2003';
       font-family: 'Font Awesome 5 Free'
   }
+
+
+  .csheet{
+    border: solid 1px;
+    padding: 15px;
+    border-radius: 10px;
+  }
+  .csheet th{
+    padding-bottom: 10px;
+    text-align: left;
+    font-family: panton;
+    font-size: 14pt;
+  }
+  .csheet tr td:first-child{
+    font-family: Share Tech Mono;
+    color: #Fb4b6b
+  }
+  .csheet td{
+    padding: 2px 40px 2px 10px;
+    
+  }
+  .csheet tbody tr:nth-child(2n+3){
+    background: #2b2b3b22
+  } 
+  .csheet tbody tr:nth-child(2n){
+    background: #2b2b3b55
+  } 
