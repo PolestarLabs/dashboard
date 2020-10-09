@@ -52,7 +52,7 @@ router.get('/', async (req,res)=>{
 
 
 
-    const baselineGridX = i => 192 + (46 * ~~(i.number / 3.1));
+    const baselineGridX = i => 192 + (46 * ~~(i.number / 3));
     const baselineGridY = i => 405 - (62 * (((i.number) % 3 || 3) - 1));
     const typeCoords = {
         column: {
@@ -116,8 +116,6 @@ router.get('/', async (req,res)=>{
 
 
     USERS.forEach((player,i) => {
-
-        console.log(player.bets)
 
         let totalBet = 0;
         player.color = "#"+userColors[i]
@@ -207,7 +205,6 @@ router.get('/', async (req,res)=>{
         grad.addColorStop(1,"#2b2b3BAA")
 
         c.fillStyle = grad;
-
 
         c.fillRect(0,0,800,600);
         c.fillStyle = "#FFF";
