@@ -68,6 +68,8 @@ router.get('/:serverID', async function (req,res) {
 router.post('/save',ADMCHECKS, async function(req,res){
     let payload = req.body.data || req.body;
     
+    const SVID = req.query.serverID;
+
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let svData= (await  DB.servers.get(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
