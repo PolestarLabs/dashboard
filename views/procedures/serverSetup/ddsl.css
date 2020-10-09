@@ -10,7 +10,7 @@ font-family:Whitney,Raleway,Sans-serif;
 
     appearance: none;
 
-background: #35383c !important;
+background: #3b3b4c !important;
 
 
 
@@ -23,7 +23,7 @@ line-height: 19px;
 margin-top: 12px;
 color: white;
 border-radius:2px;
-border:solid 2px rgba(255,255,255,.2) !important;
+border:solid 2px #CCCCff33 !important;
 position:relative;
 cursor: url(/cur/pointer.png), pointer;
 }
@@ -50,31 +50,32 @@ margin-top:-3px;
 }
 .dd-pointer-down {
 border:solid 5px transparent;
-border-top:solid 5px #FFF5;
+border-top:solid 5px #CCF5;
 }
 .dd-pointer-up {
 border:solid 5px transparent !important;
-border-bottom:solid 5px #FFF5 !important;
+border-bottom:solid 5px #CCF5 !important;
 margin-top:-8px;
 }
 .dd-options {
-border:solid 1px #2224;
+width: 100% !important;
+    border:solid 1px #2b2b3b44;
 border-top:none;
 list-style:none;
-box-shadow:0px 1px 5px #2b2b2b;
+box-shadow:0px 1px 5px #2b2b3b;
 display:none;
 position:absolute;
 z-index:2000;
 margin:0;
 padding:0;
-background:#35383c;
+background:#3b3b4c;
 overflow:auto;
 }
 .dd-option {
 
 padding:10px;
 display:block;
-border-bottom:solid 1px #2225;
+border-bottom:solid 1px #2235;
 overflow:hidden;
 text-decoration:none;
 color:white !important;
@@ -88,7 +89,7 @@ cursor: url(/cur/pointer.png), pointer;
 border-bottom:none;
 }
 .dd-option:hover {
-background:#7289da;
+background:#ca4b7c;
 color:#white;
 }
 .dd-option:hover .dd-desc{
@@ -120,3 +121,5 @@ position:relative;
 .dd-selected-text {
 font-weight:bold
 }
+
+
