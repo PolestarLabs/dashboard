@@ -1,13 +1,19 @@
 head
+    link(rel='stylesheet' href='/css/late-load.css')
     title Setting Up: #{serverInfo.name}
     script(src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js")
     
 style 
     include style.css 
-body 
+style 
+script SVINFO = !{JSON.stringify(serverInfo)}
+body
+    .subg(style= serverInfo.splash? `background-image: url('https://cdn.discordapp.com/splashes/${serverInfo.id}/${serverInfo.splash}.png?size=2048');`:"") 
+    .bg
     wrapper
         #top
-            h3.title New Server Setup
+            .bgserv(style= serverInfo.banner? `background-image: url('https://cdn.discordapp.com/banners/${serverInfo.id}/${serverInfo.banner}.png?size=512');`:"background-image: url(/backdrops/5zhr3HWlQB4OmyCBFyHbFuoIhxrZY6l6.png)")
+            h3.title Server Setup
             .serverIcon
                 img(src= `https://cdn.discordapp.com/icons/${serverInfo.id}/${serverInfo.icon}`, width=128, height=128)
             h1.title #{serverInfo.name}
@@ -16,10 +22,21 @@ body
 
         #fill
             #informationFill
-                h3 Click "START" to begin.
+                h3 Click <b>START</b> to begin or <b>SKIP SETUP</b> to skip the setup process entirely
+                p
+                    | This quick setup will configure:
+                    ul(style="text-align:left")
+                        li Pollux Moderation Role
+                        li Welcome Message (optional)
+                        li Level Up / Lootbox Drop messages
+                        li Prefix
+                        li Language
 
         #bottom
-            button(id="next") START
+            .buttons(style="display: flex; margin-top: 0px")
+                button.plx-button.pink-button.plx-button-primary(id="next") START
+                p &#x2003;
+                button.plx-button.pink-button.purple-button(id="skip") SKIP SETUP
 
 
 script  var serverID = '#{serverInfo.id}'
@@ -42,7 +59,7 @@ script.
 
 
     $("#next").click( async function(){
-        $(this).html("NEXT")
+         $("#skip").remove()
         informationFill[("compute"+informationFill.page)]()
         informationFill.page++
         if(informationFill.page === 5){
@@ -59,8 +76,18 @@ script.
                 })
 
         }else{
-
+            $(this).html("NEXT")
             informationFill.update()
         }
     })
 
+    $("#skip").click( async function(){        
+        
+        informationFill.page = 5
+         window.STATUS = "OK"
+        informationFill.update()
+        
+ 
+    })
+
+ 
