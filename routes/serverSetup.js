@@ -12,7 +12,11 @@ exports.run = async (req,res)=>{
             PLX.getRESTGuildRoles(SVID),
             PLX.getRESTGuild(SVID),
             PLX.getRESTGuildChannels(SVID)
-        ]);
+        ]).catch(err=>{
+            res.render('404');
+            return [0]
+        });
+        if(!memberInfo) return;
     let modpass = roleInfo.some(role=> req.user.id === serverInfo.ownerID|| memberInfo.roles.includes(role.id) && (role.permissions.has('manageGuild')||role.permissions.has('administrator')) )
 
 
