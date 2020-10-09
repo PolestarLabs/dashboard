@@ -166,8 +166,7 @@ br
 -
     helper=
         `
-       Discord already introduces new members, but you can always make it better!
-       Add a custom message to your new members, and optionally let me send a special image to introduce them~       
+       < NO DOCS >       
 
         `
 +section("Administrative Roles","Roles used to define moderation functionalities in the server.","modroles",".fas.fa-shield",helper)
@@ -191,9 +190,29 @@ br
     helper=
         `
        Discord already introduces new members, but you can always make it better!
-       Add a custom message to your new members, and optionally let me send a special image to introduce them~       
+       Add a custom message to your new members, and optionally let me send a special image to introduce them~ 
 
+       You can make even prettier welcome messages using my <a target="blank" href="/embedarchitect">Embed Architect Tool</a>, so you can incorporate embeds, images, user level, and much more!
+        <b>Here's a cheatsheet of dynamic values you can add:</b>
+        <table>
+        <tr><th>Alias</th><th>Item</th></tr>
+        <tr><td class="cheatsheet_comm"> %username% </td>  <td>  Username  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %tag% </td>  <td>  Username#0000  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %userid% </td>  <td>  User ID  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %user% / %mention% </td>  <td> @User  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %userBackground% </td>  <td>  Equipped Pollux Background  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %reputation% </td>  <td>  Public Reputation (Commend)  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %lvGlobal% </td>  <td>  User Global Level  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %pfLink% </td>  <td>  User Profile Link  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %server% </td>  <td> Server Name  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %membernumber% </td>  <td>  Server Member Count  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %serverIcon% </td>  <td>  Server Icon URL  </td> </tr>
+        <tr><td class="cheatsheet_comm"> %userAvatar% </td>  <td>  User Avatar URL  </td> </tr>
+        </table>
+        <br>
+        *If embed color is left blank, the Member's favcolor will be used
         `
+style .cheatsheet_comm{font-family:Share Tech Mono, Consolas, monaco, monospace !important}
 +section("Welcome & Farewell Messages","Greet new members as they join your server, or say goodbye to those leaving.","welcome",".fas.fa-comments",helper)
     .plx-grid
         .plx-width-1-1(class="plx-width-1-2@m")
