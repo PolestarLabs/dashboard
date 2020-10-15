@@ -125,7 +125,7 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
     if(payload.language){
         setPayload['modules.LANGUAGE']= payload.language || 'en'
     }    
-
+    updateGlobalInstances({id:SVID})
     DB.servers.set(SVID,{
         $set:  setPayload  
     }).then(done=>{
@@ -456,7 +456,7 @@ module.exports = router
 
 global.GLOBALINSTANCES = [
     {
-        ip:"78.47.50.59",
+        ip:"136.243.78.7",
         prefix:90,
         clusters: 5,
         get ports(){
