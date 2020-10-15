@@ -1,5 +1,7 @@
 const request = require("request");
 const cfg = require('../config')
+const Path = require('path')
+
 // const DB = require('../database') 
 const VARS = require('./vars.js');
 // const gear = {}// require('../../core/gearbox.js');
@@ -147,8 +149,8 @@ module.exports = {
   }
 
 ,getComms: function getComms(json,aliases) {
-  let path =  __dirname+"/../../bot/core"  
-  let path_polaris = __dirname + "/../../../bot/core"
+  let path =  Path.resolve(__dirname,"../../bot/core" )
+  let path_polaris = Path.resolve(__dirname + "../../../bot/core")
   let files = fs.readdirSync(path + "/commands")
   let COMMANDS = {}
   let hidden = false;
@@ -158,7 +160,7 @@ module.exports = {
    // console.log(files)
 
   for (i = 0; i < files.length; i++) {
-    let filedir = path + "/commands/" + files[i]
+    let filedir = Path.resolve(path, "commands/" , files[i]);
 
     if (files[i] != "dev" &&
       files[i] != "experimental" &&
@@ -171,7 +173,10 @@ module.exports = {
     else hidden = false;
 
     let morefiles = fs.readdirSync(filedir)    
-   global.appRoot=path+"/.."
+   global.appRoot = Path.resolve(path,"..")
+   global.paths =  require(Path.resolve(__dirname,'../../bot/utils/paths'));
+   global._emoji = ()=>({});
+
       for (y = 0; y < morefiles.length; y++) {
 
         if (!["imgreactor.js","unstructured"].includes(morefiles[y])) {
@@ -204,15 +209,17 @@ module.exports = {
 
           
         }catch(e){
-          console.log((morefiles[y]+"").magenta)
+          //console.log((morefiles[y]+"").magenta)
           let hidden;
           try{
-            let {pub} = require(`${path}/modules/${files[i]}/${morefiles[y]}`);  
+            let {pub} = require(`${path}/commands/${files[i]}/${morefiles[y]}`);  
             
             hidden = pub || true;
             console.log((morefiles[y]+"").yellow, pub)
           }catch(e){
-            console.log((morefiles[y]+"").bgBlue) 
+            console.log((" "+morefiles[y]+" ").bgRed + " Error parsing command!".red) 
+            console.log(e.message.yellow)
+            console.log("-------------------".gray)
             hidden = true;
           }
           let ccmd = morefiles[y].replace(".js", "");
