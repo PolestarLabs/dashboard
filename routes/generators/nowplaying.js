@@ -57,20 +57,20 @@ let lnOptions = {
     Picto.roundRect(ctx,2,2,196,196,{ tl: 10, tr: 0, br: 0, bl: 10},AlbumArt)
     
     ctx.fillStyle = "#5555"
-    ctx.fillRect(199,188,600,10)
+    ctx.fillRect(205,188,585,6)
     let grd = ctx.createLinearGradient(199, 0, 600, 0);
-    grd.addColorStop(0, "#"+color || "#e23");
-    grd.addColorStop(1, "#"+color || "#f35");
+    grd.addColorStop(0, "#"+ (color || "e23"));
+    grd.addColorStop(1, "#"+ (color || "f35"));
     ctx.fillStyle = grd
     ctx.save()
     ctx.globalCompositeOperation = 'multiply'
     Picto.roundRect(ctx,2,2,196,196,{ tl: 10, tr: 0, br: 0, bl: 10},Overlay)
     ctx.restore()
     console.log({totalTime,elapsedTime})
-    ctx.fillRect(199,188,(550 * (elapsedTime/totalTime)),10)
+    ctx.fillRect(205,188,(585 * (elapsedTime/totalTime)),6)
    
     lnOptions.lineHeight= 1.2
-    let titleGfx = Picto.block(ctx,name,"italic 900 30px  'Panton Black'","#CCD",550,80,lnOptions).item;
+    let titleGfx = Picto.block(ctx,name,"italic 900 30px  'Panton Black'","#CCD",550,75,lnOptions).item;
     ctx.drawImage(
         titleGfx,
         210,        
@@ -91,7 +91,7 @@ let lnOptions = {
     lnOptions.textAlign = 'right'
     lnOptions.sizeToFill= false
     ctx.drawImage(
-        Picto.block(ctx, user.username + "#"+ user.discriminator ,"500 24px 'Panton'","#AAA",200,20,lnOptions).item,
+        Picto.block(ctx, user.username + "#"+ user.discriminator ,"500 24px 'Panton'","#AAA",200,30,lnOptions).item,
         530,        
         200 - 10 - 35,
     );
