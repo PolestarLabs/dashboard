@@ -52,7 +52,7 @@ router.get('/', async (req,res)=>{
 
 
 
-    const baselineGridX = i => 192 + (46 * ~~(i.number / 3));
+    const baselineGridX = i => 192 + (46 * ~~((i.number -.5) / 3) );
     const baselineGridY = i => 405 - (62 * (((i.number) % 3 || 3) - 1));
     const typeCoords = {
         column: {
