@@ -34,7 +34,7 @@ exports.run = async (req,res)=>{
         if(req.query.pg){
             return res.render('procedures/serverSetup/page'+req.query.pg, {serverData,serverInfo,channelInfo,langs: operations.getLangs(),validator:req.user.validator} )
         }
-        res.render('procedures/serverSetup/main', {serverData,serverInfo} );
+        res.render('procedures/serverSetup/main', {serverData: toBase64(serverData),serverInfo: toBase64(serverInfo)} );
        
     }) 
  

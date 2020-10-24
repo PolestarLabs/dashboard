@@ -461,7 +461,7 @@ res.render('stata3')
               wife_metadata,
               title: UDB.name+"'s Profile",
               user: UDB,
-              userinfo: USR,
+              userinfo: toBase64(USR),
               gear: gear,
               STICKERBASE: (await DB.cosmetics.find({type:'sticker'})),
               MEDALBASE: (await DB.cosmetics.medals()),

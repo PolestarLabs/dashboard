@@ -119,13 +119,14 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
     const STKINFO= ALLCOSM.filter(x=>x.type== "sticker"    )
     const DCKINFO= ALLCOSM.filter(x=>x.type== "skin")
 
-    
-    res.locals.userinfo.servers = await Promise.all(req.user.guilds.map(async g=>{
+    const userInfoModify = JSON.parse(Buffer.from(res.locals.userinfo, 'base64').toString());
+    userInfoModify.servers = await Promise.all(req.user.guilds.map(async g=>{
         g.rank= g.owner ? "Owner" : (g.permissions & 0x8) > 0 ? "Admin" : (g.permissions & 0x20) > 0 ? "Manager" : (await isAdmin(req,g.id)) ? "Moderator" : 'Commoner';
         g.hasPollux = !!(await PLX.getRESTGuild(g.id).catch(()=>false));
         g.rankSort = g.rank == "Owner" ? 0 : g.rank == "Admin" ? 1 : g.rank == "Manager" ? 2 : "Moderator" ? 3 : 4;
         return g;
     })); 
+    res.locals.userinfo = toBase64(userInfoModify);
 
     res.render('dashboard/main',{ALLITEMS,MDINFO,BGINFO,STKINFO,STKPAK,DCKINFO,RSHP,
         boorucollection: BCOL?BCOL.collections.boorusave:[],
