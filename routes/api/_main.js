@@ -51,6 +51,7 @@ router.get((rq,rs,nx)=> {
 router.use( (req,res,nex)=>{
     console.log(req.body)
     console.log( MARKET_TOKEN )
+    return nex();
     if(req.method !== 'GET' && (!req.user && req.body.pollux != MARKET_TOKEN) ) return res.status(401).send("Nope");
     else nex();
 });
@@ -78,6 +79,10 @@ router.use(["/crafting/","/items/"], async (...args) => {
 
 router.use(["/cosmetics/"], async (...args) => {
     return (require('./cosmetics.js'))( ...args);
+});
+
+router.use(["/interactions/"], async (...args) => {
+    return (require('./interactions.js'))( ...args);
 });
 
 router.use(["/utils/"], async (...args) => {
