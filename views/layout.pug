@@ -43,11 +43,10 @@ html(class="no-js" lang=locale||"en")
         style
             include late-load.css
         
-        script window.userinfo = Base64.decode('!{userinfo != null ? userinfo : "ZmFsc2U="}')
-        script window.userdata = Base64.decode('!{userdata != null ? userdata : "ZmFsc2U="}') //".replace(/&quot;/g,'"'))
+        script window.userinfo = atob('!{userinfo != null ? userinfo : "ZmFsc2U="}')
+        script window.userdata = atob('!{userdata != null ? userdata : "ZmFsc2U="}') //".replace(/&quot;/g,'"'))
   
 
-        script(src="https://cdn.jsdelivr.net/npm/js-base64@3.5.2/base64.min.js")
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
         script(src="/js/pace.js")
         script(src="/js/plxui.js" async defer) 
