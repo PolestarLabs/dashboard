@@ -43,8 +43,8 @@ html(class="no-js" lang=locale||"en")
         style
             include late-load.css
         
-        script window.userinfo = (!{ JSON.stringify(userinfo != null ? userinfo : false) })
-        script window.userdata = (!{ JSON.stringify(userdata != null ? userdata : false) }) //".replace(/&quot;/g,'"'))
+        script window.userinfo = Base64.decode('!{userinfo != null ? userinfo : "ZmFsc2U="}')
+        script window.userdata = Base64.decode('!{userdata != null ? userdata : "ZmFsc2U="}') //".replace(/&quot;/g,'"'))
   
 
         script(src='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js')
