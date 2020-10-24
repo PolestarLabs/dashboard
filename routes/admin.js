@@ -42,13 +42,13 @@ router.get('/:serverID', async function (req,res) {
     const serverData = await DB.servers.get(serverID);
     let payload = {
         reactRoles,
-        serverData: toBase64(serverData),
+        serverData,
         commands: fx.cmsSetup(req),
         langs: operations.getLangs(),
-        memberInfo: toBase64(memberInfo),
-        roleInfo: toBase64(roleInfo),
-        serverInfo: toBase64(serverInfo),
-        channelInfo: toBase64(channelInfo),
+        memberInfo,
+        roleInfo,
+        serverInfo,
+        channelInfo,
         feeds,
         localranks,
         temproles,

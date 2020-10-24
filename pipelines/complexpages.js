@@ -84,8 +84,8 @@ module.exports={
     let payload = {
       title: "Dashboard",
       user: dbpars,
-      userinfo: toBase64(USR),
-      usershit: toBase64(req.user),
+      userinfo: USR,
+      usershit:req.user,
       wife_metadata,
       gear:gear,
       guilds: ginfo,

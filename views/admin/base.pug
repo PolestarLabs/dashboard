@@ -1,6 +1,6 @@
 extends ../layout 
 block content
-    script var channelInfo = Base64.decode(!{channelInfo})
+    script var channelInfo = !{JSON.stringify(channelInfo)}
     .wrapper
         include ../navbar
 

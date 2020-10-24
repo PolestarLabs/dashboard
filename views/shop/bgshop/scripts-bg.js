@@ -68,7 +68,7 @@ function updateBgCanvas(query, options) {
 
 function checkUpdates() {
     var xhr = new XMLHttpRequest();
-    var user = JSON.parse(Buffer.from(userinfo, 'base64').toString()).id
+    var user = userinfo.id
     if (!user) return;
 
     xhr.open('GET', "https://pollux.fun/api/user/" + user);
