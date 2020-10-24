@@ -114,7 +114,7 @@ const dbOptions = {
   connectTimeoutMS: 30000,
 }
 
-global.PLX = new Eris.Client(config.token,{restMode:true})
+global.PLX = new Eris.Client(config.token_laris,{restMode:true})
 Object.assign(PLX,require("../bot/core/utilities/Gearbox").Client);
 
 (require('@polestar/database_schema'))({
@@ -142,7 +142,6 @@ mongoose.Promise = require('bluebird');
 Promise.promisifyAll(require("mongoose"));
 Object.assign(global,require("../bot/core/utilities/Gearbox").Global)
 
-
 //-- PASSPORT  
 const scopes = ['identify', 'guilds','connections'];
 Passport.serializeUser((user, done) => {
@@ -165,8 +164,8 @@ Passport.use(new CookieStrategy(
 ));
 
 let discordStrategy = new Strategy({
-  clientID: config.clientID,
-  clientSecret: config.secret,
+  clientID: config.clientID_laris,
+  clientSecret: config.secret_laris,
   authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
   callbackURL: HOST+"/callback",
   scope: scopes,
@@ -253,6 +252,8 @@ app.get('/callback',
     failureRedirect: '/test'
   }),
   (...args) => simplepages().callback(...args));
+
+app.get('/newserver', (...args) => simplepages().callback(...args));
 
 
 app.get('/logout', function (req, res) {
@@ -509,7 +510,7 @@ app.get('/test', (...args)=> simplepages().test(...args));
  
 app.get('/callback', 
           Passport.authenticate('discord', {
-            permissions: 66321471,
+            permissions: 268492822,
             failureRedirect: '/'
           }),
           (...args)=> simplepages().callback(...args));
