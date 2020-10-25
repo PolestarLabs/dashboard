@@ -10,13 +10,13 @@ script SVINFO = JSON.parse(atob('!{serverInfoB64}'))
 body
     .subg(style= serverInfo.splash? `background-image: url('https://cdn.discordapp.com/splashes/${serverInfo.id}/${serverInfo.splash}.png?size=2048');`:"") 
     .bg
-    wrapper
+    wrapper(style="height:auto;max-height:90%")
         #top
             .bgserv(style= serverInfo.banner? `background-image: url('https://cdn.discordapp.com/banners/${serverInfo.id}/${serverInfo.banner}.png?size=512');`:"background-image: url(/backdrops/5zhr3HWlQB4OmyCBFyHbFuoIhxrZY6l6.png)")
             h3.title Server Setup
             .serverIcon
                 img(src= `https://cdn.discordapp.com/icons/${serverInfo.id}/${serverInfo.icon}`, width=128, height=128)
-            h1.title.truncate #{serverInfo.name}
+            h1.title #{serverInfo.name}
 
             p#configging Looks like you're setting up this place for the first time.
 
