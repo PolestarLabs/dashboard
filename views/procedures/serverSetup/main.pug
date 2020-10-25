@@ -16,7 +16,7 @@ body
             h3.title Server Setup
             .serverIcon
                 img(src= `https://cdn.discordapp.com/icons/${serverInfo.id}/${serverInfo.icon}`, width=128, height=128)
-            h1.title #{serverInfo.name}
+            h1.title.truncate #{serverInfo.name}
 
             p#configging Looks like you're setting up this place for the first time.
 
