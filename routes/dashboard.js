@@ -126,7 +126,8 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
         g.rankSort = g.rank == "Owner" ? 0 : g.rank == "Admin" ? 1 : g.rank == "Manager" ? 2 : "Moderator" ? 3 : 4;
         return g;
     })); 
-    res.locals.userinfo = toBase64(userInfoModify);
+    res.locals.userinfoB64 = toBase64(userInfoModify);
+    res.locals.userinfo = userInfoModify;
 
     res.render('dashboard/main',{ALLITEMS,MDINFO,BGINFO,STKINFO,STKPAK,DCKINFO,RSHP,
         boorucollection: BCOL?BCOL.collections.boorusave:[],

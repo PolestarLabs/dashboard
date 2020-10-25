@@ -360,8 +360,8 @@ app.use(async function(req,res,next){
   res.locals.EVENT=VARS.EVENT
   let preDataProcess = result=>{
     let USR = req.user;
-    res.locals.userdata = toBase64(result);
-    res.locals.userinfo= toBase64({
+    res.locals.userdataB64 = toBase64(result);
+    res.locals.userinfoB64= toBase64({
       pix: (result.meta||{}).avatar || `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
       name: `${USR.username}#${USR.discriminator}`,
       uname: USR.username,
@@ -369,6 +369,15 @@ app.use(async function(req,res,next){
       discriminator: USR.discriminator,
       servers:USR.guilds||USR.servers
     })
+    res.locals.userdata = result;
+    res.locals.userinfo= {
+      pix: (result.meta||{}).avatar || `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
+      name: `${USR.username}#${USR.discriminator}`,
+      uname: USR.username,
+      id: USR.id,
+      discriminator: USR.discriminator,
+      servers:USR.guilds||USR.servers
+    }
   }
 
   if(req.isAuthenticated() && req.method == 'GET' && !req.url.includes('/api/') && !req.url.includes('/generators/')){
@@ -397,8 +406,10 @@ app.use(async function(req,res,next){
     await preUserData;    
     next();
   }else{
-    res.locals.userdata=toBase64(null);
-    res.locals.userinfo=toBase64(null);
+    res.locals.userdataB64=toBase64(null);
+    res.locals.userinfoB64=toBase64(null);
+    res.locals.userdata=null;
+    res.locals.userinfo=null;
     next();
   }  
 })  

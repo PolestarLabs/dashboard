@@ -70,7 +70,8 @@ if(!req.user.guilds.find(g=>g.id==theG.id&&g.owner==true)&&!['88120564400553984'
     res.render('adminpanel', {
       title: dbpars.meta.name+" | Admin Panel",
       server: dbpars,
-      userinfo: toBase64(USR),
+      userinfoB64: toBase64(USR),
+      userinfo: USR,
       langs: operations.getLangs(),
       sv: dbpars.meta,
       muteds,

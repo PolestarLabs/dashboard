@@ -43,7 +43,7 @@ exports.run = function(req,res,auth){
     let BOOSTERS = await DB.items.find({type:"boosterpack"});
     
     //let userdata = USR? await DB.userDB.findOne({id:(USR.id||'none')}) : {}
-    res.render(req.params.page,{userinfo: toBase64(userinfo),partners,fanart,fanart_DB,items,shopstock,STICKERBASE
+    res.render(req.params.page,{userinfoB64: toBase64(userinfo),userinfo: userinfo,partners,fanart,fanart_DB,items,shopstock,STICKERBASE
 ,BOOSTERS})
   })
   

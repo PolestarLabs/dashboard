@@ -1,6 +1,6 @@
 extends ../layout 
 block content
-    script var channelInfo = JSON.parse(atob('!{channelInfo}'))
+    script var channelInfo = JSON.parse(atob('!{channelInfoB64}'))
     .wrapper
         include ../navbar
 
