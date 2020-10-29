@@ -373,7 +373,7 @@ app.use(async function(req,res,next){
   if(req.isAuthenticated() && req.method == 'GET' && !req.url.includes('/api/') && !req.url.includes('/generators/')){
     
     let userCacheReload = authCacheExpiration.get(req.user.id);
-    if( userCacheReload && userCacheReload.exp < Date.now() ) {
+    if( userCacheReload && userCacheReload.exp > Date.now() ) {
       preDataProcess(userCacheReload.data)
       return next();
     }
@@ -389,7 +389,7 @@ app.use(async function(req,res,next){
         let dscUser = userCache.get(req.user.id) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
         data = await DB.users.new(dscUser); 
       }
-      authCacheExpiration.set(req.user.id,{data,exp: Date.now() + 120e3  })
+      authCacheExpiration.set(req.user.id,{data,exp: Date.now() + 10e3  })
       preDataProcess(data)
     });
 
