@@ -29,8 +29,8 @@ function itemsMatch(pot,recipe){
 router.get('/:endpoint', cache(0.1),  (req,res) => {
 
     let queries = {}
-    queries.crafted = true;
-    queries.display = true;
+    //queries.crafted = true;
+    //queries.display = true;
 
     if(req.params.endpoint == 'search'){
         Object.keys(req.query)
