@@ -2,20 +2,7 @@ var TIMER = null;
 
 VueSelect.VueSelect.methods.maybeAdjustScroll = () => false;
 
-const bgSelectItems = userdata.modules.bgInventory.map((bg) => {
-  let thisBgData = BGINFO.find((x) => x.code == bg) || {
-    name: "Unknown",
-    rarity: "C",
-    tags: "unknown test",
-  };
-  return {
-    name: thisBgData.name,
-    rarity: thisBgData.rarity,
-    tags: thisBgData.tags,
-    code: thisBgData.code,
-    img: "/backdrops/" + thisBgData.code + ".png",
-  };
-});
+
 
 var Chrome = window.VueColor.Chrome;
 
@@ -23,16 +10,12 @@ if (!userdata.modules.flairsInventory.includes("default"))
   userdata.modules.flairsInventory.push("default");
 const flairsAvailable = userdata.modules.flairsInventory;
 
-STKPAK = STKPAK.map((pack) => {
-  pack.size = STKINFO.filter((s) => s.series_id == pack.icon).length;
-  return pack;
-});
 
 const DASH = new Vue({
   el: "#dash",
   data: () => {
     return {
-      RSHP,
+      RSHP: {loading:true},
       featuredMarriage: userdata.featuredMarriage,
       message: "hello",
       favcolor: {
@@ -42,33 +25,21 @@ const DASH = new Vue({
       isColorpickerOpen: false,
       isFlairOpen: false,
       rars: ["C", "U", "R", "SR", "UR"],
-
-      selectBackground:
-        BGINFO.find((bg) => bg.code == userdata.modules.bgID) || "none",
-      selectSticker:
-        STKINFO.find((x) => x.id == userdata.modules.sticker) || "none",
-      selectBooster:
-        STKPAK.find(
-          (x) =>
-            x.icon ==
-            (STKINFO.find((y) => y.id == userdata.modules.sticker) || {})
-              .series_id
-        ) || "none",
+      selectBackground: 'LOADING...',
+      selectSticker:'LOADING...',
+      selectBooster: 'LOADING...',       
       selectFlair: userdata.modules.flairTop,
       flairsAvailable,
-
-      backgroundsAvailable: bgSelectItems,
-      stickerAvailable: STKINFO.filter((x) =>
-        userdata.modules.stickerInventory.includes(x.id)
-      ),
-      boostersAvailable: STKPAK,
+      backgroundsAvailable:[],
+      stickerAvailable: [],
+      boostersAvailable: [],
       Swal,
       search: "",
       select: "",
       tagline: userdata.modules.tagline,
       persotext: userdata.modules.persotext,
       frame: (userdata.switches || {}).profileFrame,
-      medals: MDINFO,
+      medals: [],
       medalsEquipped: [],
       hooperSettings: {
         itemsToShow: 5,
@@ -101,18 +72,18 @@ const DASH = new Vue({
       
     },
     toggleWifeOrder(by) {
-      if (this.sortWife == by) return DASH.RSHP.reverse();
+      if (this.sortWife == by) return this.RSHP.reverse();
 
       this.sortWife = by;
 
       if (by == "ring") {
-        DASH.RSHP.sort((x, y) => (x.ring < y.ring ? 1 : -1));
+        this.RSHP.sort((x, y) => (x.ring < y.ring ? 1 : -1));
       }
       if (by == "date") {
-        DASH.RSHP.sort((x, y) => x.since - y.since);
+        this.RSHP.sort((x, y) => x.since - y.since);
       }
       if (by == "lovp") {
-        DASH.RSHP.sort((x, y) => (x.lovepoints || 0) - (y.lovepoints || 0));
+        this.RSHP.sort((x, y) => (x.lovepoints || 0) - (y.lovepoints || 0));
       }
     },
     since(x) {
@@ -317,14 +288,16 @@ function seeEquips() {
 $("document").ready(() => setTimeout(() => DASH.$refs.flairs.update(), 1000));
 
 async function AUTOSAVE(what,silent) {
-  if (!TIMER && what == "FLAIR") return (TIMER = setTimeout(() => {}, 500));
-  if (TIMER) {
-    clearTimeout(TIMER);
-    TIMER = null;
-  }
+//if (!TIMER && what == "FLAIR") return (TIMER = setTimeout(() => {}, 500));
+////  if (!TIMER && what == "COLOR") return (TIMER = setTimeout(() => {}, 500));
+ // if (TIMER) {
+ //   clearTimeout(TIMER);
+ //   TIMER = null;
+ // }
+ if(['COLOR','FLAIR'].includes(what)) silent = true;
   if(!silent) $("#postloader").fadeIn("slow");
 
-  TIMER = setTimeout(() => {
+//  TIMER = setTimeout(() => {
     let relevantData = {
       flair: DASH.selectFlair,
       ptxt: DASH.persotext,
@@ -441,5 +414,70 @@ async function AUTOSAVE(what,silent) {
       "background: none; color: unset"
     );
     console.log(relevantData);
-  }, 1200);
+ // }, 1200);
 }
+
+
+fetch("/api/relationships?uid="+userinfo.id).then(r =>
+  r.json().then(res =>  DASH.RSHP = res.map(rel=> {rel.wife = rel.usersData.find(w=>w.id!=userdata.id); delete rel.usersData; return rel} )||[]  )
+);
+
+fetch("/api/items/search?type=boosterpack").then((r) =>
+  r.json().then((res) => {
+    DASH.boostersAvailable = res.map((pack) => {
+      pack.size = res.filter((s) => s.series_id == pack.icon).length;
+      return pack;
+    });
+    DASH.boostersAvailable = res;
+    console.log({bav:DASH.boostersAvailable})
+    fetch("https://beta.pollux.gg/api/user/" + userinfo.id + "/stickers").then(
+      (r) =>
+        r.json().then((res2) => {
+          console.log({res2})
+          DASH.stickerAvailable = res2;
+          DASH.selectSticker =
+            res2.find((x) => x.id == userdata.modules.sticker) || "none";
+
+          DASH.selectBooster =
+            res.find(
+              (x) =>
+                x.icon ==
+                (res2.find((y) => y.id == userdata.modules.sticker) || {})
+                  .series_id
+            ) || "none";
+        })
+    );
+  })
+);
+
+
+fetch("https://beta.pollux.gg/api/user/"+userinfo.id+"/bgs").then(r =>
+  r.json().then(res =>  {
+    console.log({res})
+    DASH.selectBackground = res.find((bg) => bg.code == userdata.modules.bgID) || "none";
+    
+    DASH.backgroundsAvailable =// res;
+    userdata.modules.bgInventory.map((bg) => {
+      let thisBgData = res.find((x) => x.code == bg) || {
+        name: "Unknown",
+        rarity: "C",
+        tags: "unknown test",
+      };
+      return {
+        name: thisBgData.name,
+        rarity: thisBgData.rarity,
+        tags: thisBgData.tags,
+        code: thisBgData.code,
+        img: "/backdrops/" + thisBgData.code + ".png",
+      };
+    });
+  } )
+);
+fetch("https://beta.pollux.gg/api/user/"+userinfo.id+"/medals").then(r =>
+  r.json().then(res => {
+    DASH.medals = res;
+    DASH.medalsEquipped = res.filter((m,i,a)=> userdata.modules.medals.includes(m.icon) && a.map(x=>x.icon).indexOf(m.icon)===i)
+  } )
+    
+);
+
