@@ -4,6 +4,26 @@ const express = require('express');
 const router = express.Router();
 const fx = require('../pipelines/globalFunctions.js');
 
+global.serversWithPollux = serversWithPollux ? serversWithPollux : new Map();
+const serverHasPollux = async (id) => {
+    
+    let hasP = serversWithPollux.get(id);
+    let hasPCheck = PLX.getRESTGuild(id)
+        .catch(()=>{
+            serversWithPollux.set(id,{res:false});
+            return false;
+        })
+        .then(r=>{
+            if (!r) return false;
+            serversWithPollux.set(id,{res:true});
+            return true;
+        })
+    
+    if (hasP) res = hasP.res;
+    else res = await hasPCheck;
+    return res === true;
+}
+
 
 router.get('/bsave', checkAuth, async (req,res)=>{
 
@@ -94,10 +114,16 @@ router.delete('/imgbookmarks/:id', async (req,res)=>{
 
 router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
  
-    const [ALLCOSM,ALLITEMS,BCOL] = await Promise.all([
+    const [ALLCOSM,ALLITEMS,BCOL,SERVEROWNERSHIP] = await Promise.all([
          DB.cosmetics.find({}).lean().exec(),
          DB.items.find({}).lean().exec(),
          DB.usercols.get(req.user.id),
+         Promise.all(req.user.guilds.map(async g=>{
+            g.rank= g.owner ? "Owner" : (g.permissions & 0x8) > 0 ? "Admin" : (g.permissions & 0x20) > 0 ? "Manager" : /*(await isAdmin(req,g.id)) ? "Moderator" :*/ 'Commoner';
+            g.hasPollux = !!(await serverHasPollux(g.id));
+            g.rankSort = g.rank == "Owner" ? 0 : g.rank == "Admin" ? 1 : g.rank == "Manager" ? 2 : "Moderator" ? 3 : 4;
+            return g;
+        }))
     ]);
 
 
@@ -107,12 +133,7 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
     const DCKINFO= ALLCOSM.filter(x=>x.type== "skin")
 
     
-    res.locals.userinfo.servers = await Promise.all(req.user.guilds.map(async g=>{
-        g.rank= g.owner ? "Owner" : (g.permissions & 0x8) > 0 ? "Admin" : (g.permissions & 0x20) > 0 ? "Manager" : (await isAdmin(req,g.id)) ? "Moderator" : 'Commoner';
-        g.hasPollux = !!(await PLX.getRESTGuild(g.id).catch(()=>false));
-        g.rankSort = g.rank == "Owner" ? 0 : g.rank == "Admin" ? 1 : g.rank == "Manager" ? 2 : "Moderator" ? 3 : 4;
-        return g;
-    })); 
+    res.locals.userinfo.servers = SERVEROWNERSHIP; 
 
     res.render('dashboard/main',{ALLITEMS,MDINFO,DCKINFO,
         boorucollection: BCOL?BCOL.collections.boorusave:[],
