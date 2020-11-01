@@ -94,29 +94,16 @@ router.delete('/imgbookmarks/:id', async (req,res)=>{
 
 router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
  
-    const [ALLCOSM,ALLITEMS,BCOL,RSHP] = await Promise.all([
+    const [ALLCOSM,ALLITEMS,BCOL] = await Promise.all([
          DB.cosmetics.find({}).lean().exec(),
          DB.items.find({}).lean().exec(),
          DB.usercols.get(req.user.id),
-         DB.relationships.aggregate([
-            {$match:{users:req.user.id}},
-            {$lookup:{from:"userdb",localField:"users",foreignField:"id",as:"usersData"}},
-            {$project:{"usersData.id":1,initiative:1,ring:1,since:1,type:1,lovepoints:1,"usersData.meta":1,"usersData.featuredMarriage":1,"usersData.modules.tagline":1}}
-        ]).allowDiskUse(!0).exec()
     ]);
-    let discordUserData = await Promise.all(
-        RSHP.map(usrData=>  usrData.usersData.map(usr=> userCache.get(usr.id) || PLX.getRESTUser(usr.id))  ).flat()
-    );
-    discordUserData.forEach(u=> userCache.set(u.id,u) )
-
-    
-    RSHP.forEach(rel=> rel.usersData = rel.usersData.map(usr=> (usr.meta = userCache.get(usr.id)) && usr ) )
 
 
-    const STKPAK = ALLITEMS.filter(x=>x.type== "boosterpack")
+
     const MDINFO = ALLCOSM.filter(x=>x.type== "medal"      )
-    const BGINFO = ALLCOSM.filter(x=>x.type== "background" )
-    const STKINFO= ALLCOSM.filter(x=>x.type== "sticker"    )
+
     const DCKINFO= ALLCOSM.filter(x=>x.type== "skin")
 
     
@@ -127,7 +114,7 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
         return g;
     })); 
 
-    res.render('dashboard/main',{ALLITEMS,MDINFO,BGINFO,STKINFO,STKPAK,DCKINFO,RSHP,
+    res.render('dashboard/main',{ALLITEMS,MDINFO,DCKINFO,
         boorucollection: BCOL?BCOL.collections.boorusave:[],
         endpoint: req.params.endpoint 
     })
