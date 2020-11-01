@@ -86,7 +86,7 @@ div#dash(plx-scrollspy="cls:plx-animation-slide-top-small; delay: 100 ")
                       div(:class='`plx-rarity ${option.rarity}`')
 
 
-      -var CURRPAK= STKPAK.find(x=> x.icon== (STKINFO.find(y=>y.id==userdata.modules.sticker)||{}).series_id )
+      
       .plx-width-1-1(class="plx-width-2-5@m")
         .dash-pill#sticker-bar(v-bind:style="{'border-color':favcolor.hex}")
           .background-slot(v-bind:style="`background-image:url('/build/boosters/showcase/${selectBooster.icon}.png'); background-size: 200%;`" )
@@ -105,7 +105,7 @@ div#dash(plx-scrollspy="cls:plx-animation-slide-top-small; delay: 100 ")
                   :options= "boostersAvailable.filter(x=>!!stickerAvailable.find(y=>y.series_id == x.icon))",
                   :filter= "stkFiltering",
                   :clearable= "false",
-                  :value= "boostersAvailable.find(x=> x.id == '"+(CURRPAK||{}).id+"') || {name:'none'}",
+                  :value= "boostersAvailable.find(x=> x.id ==  selectBooster.id) || {name:'none'}",
                   label='name'
                 )    
                   template(slot='selected-option', slot-scope='option')
@@ -164,7 +164,7 @@ div#dash(plx-scrollspy="cls:plx-animation-slide-top-small; delay: 100 ")
         
       mixin Medal (medal)
           .medal-chip.ui-draggable.drag(plx-tooltip=medal.name, data-medal = medal.id || medal.icon data-cat=medal.category.toLowerCase() data-search=medal.name+' '+medal.category data-rarity=medal.rarity)
-            .rarity: .plx-rarity-icon(class= medal.rarity)
+            .rarity: .plx-rarity-icon(class= medal.rarity, style="z-index:5")
             .face(style="background-image: url('/medals/"+medal.icon+".png');")
 
       #medals.plx-width-1-1
@@ -239,13 +239,14 @@ div#dash(plx-scrollspy="cls:plx-animation-slide-top-small; delay: 100 ")
                   .li(v-bind:class="{'plx-active': sortWife=='lovp'}"): a(@click="toggleWifeOrder('lovp')") LOVEPOINTS
 
 
-                div(v-for="rel in RSHP")
-                  .wife-block.plx-flex( v-bind:class="rel._id == featuredMarriage?'is-featured':''" v-if='rel.wife')
+                div(v-if="RSHP.loading !== true"): div(v-for="rel in RSHP" )
+                  
+                  .wife-block.plx-flex( v-bind:class="rel.id == featuredMarriage?'is-featured':''" v-if='rel.wife')
                       
-                    .avatar: img(:src="`https://cdn.discordapp.com/avatars/${rel.wife.id}/${rel.wife.meta.avatar}.${rel.wife.meta.avatar.startsWith('a_')?'gif':'png'}?size=64`")
+                    .avatar: img(:src="`https://cdn.discordapp.com/avatars/${rel.wife.id}/${rel.wife.avatar}.${rel.wife.avatar.startsWith('a_')?'gif':'png'}?size=64`")
                     .detail
                       .feats
-                        div(v-if="rel._id == rel.wife.featuredMarriage" plx-tooltip="This person features you in their profile! <3")  
+                        div(v-if="rel.id == rel.wife.featuredMarriage" plx-tooltip="This person features you in their profile! <3")  
                           i.fas.fa-star 
                         div(v-else  plx-tooltip="This person does not display you in their profile. &lt;/3")  
                           i.far.fa-star(style="opacity:.6")
@@ -255,19 +256,19 @@ div#dash(plx-scrollspy="cls:plx-animation-slide-top-small; delay: 100 ")
                         div(v-else   plx-tooltip="This person proposed to you!")
                           i.fas.fa-heart
                     .username
-                      span.name {{rel.wife.meta.username}}
-                      span.discrimin # {{rel.wife.meta.discriminator}} 
+                      span.name {{rel.wife.username}}
+                      span.discrimin # {{rel.wife.discriminator}} 
                     .since.mome {{since(rel.since)}}
                     .ring: img(:src="`/build/items/ring_${rel.ring}.png`")
                 
-                  div(plx-drop='mode:click; animation:plx-animation-slide-top-small' style="width:auto"): .wife-actions(:id="rel._id")
-                    .plx-button.plx-button-secondary(@click="changeFeatMarriage(rel._id)", :data-for="rel._id") 
+                  div(plx-drop='mode:click; animation:plx-animation-slide-top-small' style="width:auto"): .wife-actions(:id="rel.id")
+                    .plx-button.plx-button-secondary(@click="changeFeatMarriage(rel.id)", :data-for="rel.id") 
                         i.fas.fa-star
                         | FEATURE
-                    .plx-button.plx-button-warn(:data-for="rel._id" @click="Swal.fire('','To upgrade your ring, craft a higher-quality ring and re-propose to your current spouse.','info' )") 
+                    .plx-button.plx-button-warn(:data-for="rel.id" @click="Swal.fire('','To upgrade your ring, craft a higher-quality ring and re-propose to your current spouse.','info' )") 
                         i.fas.fa-ring
                         | UPGRADE
-                    .plx-button.plx-button-danger(:data-for="rel._id" @click="Swal.fire('','To divorce someone, use <code>p!divorce [USER ID]</code>.','info' )") 
+                    .plx-button.plx-button-danger(:data-for="rel.id" @click="Swal.fire('','To divorce someone, use <code>p!divorce [USER ID]</code>.','info' )") 
                         i.fas.fa-heart-broken
                         | DIVORCE
 
@@ -279,12 +280,6 @@ div#dash(plx-scrollspy="cls:plx-animation-slide-top-small; delay: 100 ")
 
 hr.plx-divider-icon
                
-script var RSHP = !{JSON.stringify(RSHP.map(rel=> {rel.wife = rel.usersData.find(w=>w.id!=userdata.id); delete rel.usersData; return rel} )||[])}
-script var STKPAK  = !{JSON.stringify(STKPAK)}
-script var STKINFO = !{JSON.stringify(STKINFO.filter(x=> userdata.modules.stickerInventory.includes(x.id)))}
-script var STKINFO3 = !{JSON.stringify(STKINFO)}
-script var BGINFO  = !{JSON.stringify(BGINFO.filter(x=> userdata.modules.bgInventory.includes(x.code)))}
-script var MDINFO  = !{JSON.stringify(MDINFO.filter(x=> userdata.modules.medalInventory.includes(x.icon)))}
 
 script(defer)
     include profile_edit.js
