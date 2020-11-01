@@ -58,16 +58,17 @@ block content
         script(src="/js/moment.js")
         script(src='/js/sweetalert.js')
         
+        - const isCurrent = (x) => endpoint === x ? 'plx-active' : ''
         ul.plx-switcher.plx-margin#pages
-            li   
+            li(class=isCurrent('profile'))   
                 include profile_edit
-            li
+            li(class=isCurrent('servers'))
                 include servers
-            li
-                include inventory                
-            li
+            li(class=isCurrent('inventory'))
+                include inventory
+            li(class=isCurrent('boorusave'))
                 include ../private/boorusave  
-            li
+            li(class=isCurrent('settings'))
                 include settings
                 p nobody here but us chickens
 
