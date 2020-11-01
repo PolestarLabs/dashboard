@@ -58,6 +58,36 @@ router.get('/:id/inventory', async (req,res)=>{
         res.json(userInventory)
 
 })
+router.get('/:id/stickers', async (req,res)=>{
+    const uID = res.locals.userID;
+        
+        let USR = await DB.users.get(uID);
+        let userInventory = USR.modules.stickerInventory;
+        let userMetaInventory = await DB.cosmetics.find({id: {$in: userInventory } });
+        
+        res.json(userMetaInventory)
+
+})
+router.get('/:id/medals', async (req,res)=>{
+    const uID = res.locals.userID;
+        
+        let USR = await DB.users.get(uID);
+        let userInventory = USR.modules.medalInventory;
+        let userMetaInventory = await DB.cosmetics.find({icon: {$in: userInventory } });
+        
+        res.json(userMetaInventory)
+
+})
+router.get(['/:id/bgs','/:id/backgrounds'], async (req,res)=>{
+    const uID = res.locals.userID;
+        
+        let USR = await DB.users.get(uID);
+        let userInventory = USR.modules.bgInventory;
+        let userMetaInventory = await DB.cosmetics.find({code: {$in: userInventory } });
+        
+        res.json(userMetaInventory)
+
+})
 
 
 router.get('/:id/commends', cache(360), async (req,res)=>{
