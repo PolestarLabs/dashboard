@@ -239,12 +239,7 @@ app.use(Passport.session());
 //======================================================================
 
 
-app.get('/auth', Passport.authenticate('discord', {scope: scopes}), function (req, res) {
-  //console.log(req,res)
-  
-});
-
-
+app.get('/auth', Passport.authenticate('discord', {scope: scopes}), (req, res,nex)=> nex() )
 
 app.get('/callback',
   Passport.authenticate('discord', {
@@ -257,9 +252,11 @@ app.get('/newserver', (...args) => simplepages().callback(...args));
 
 
 app.get('/logout', function (req, res) {
+  if(req.query.r=='blacklisted') res.locals.blacklisted = true;
   req.logout();
-  res.redirect('/');
+  res.redirect('/?bl=1');
 });  
+
 
 
 global.simplepages   = function simplepages(location=false){
@@ -359,6 +356,7 @@ app.use(async function(req,res,next){
   res.locals.EVENT=VARS.EVENT
   let preDataProcess = result=>{
     let USR = req.user;
+    if(result.blacklisted) return res.redirect('/logout?r=blacklisted');
     res.locals.userdata = result;
     res.locals.userinfo= {
       pix: (result.meta||{}).avatar || `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
@@ -394,7 +392,7 @@ app.use(async function(req,res,next){
     });
 
     await preUserData;    
-    next();
+    return next();
   }else{
     res.locals.userdata=null;
     res.locals.userinfo=null;
@@ -494,7 +492,19 @@ global.checkAuth = function checkAuth(req, res, next) {
 
 //app.use(compulsoryAuth)
 
-app.get('/', (...args)=> simplepages().index(...args));
+app.get('/', (req,res,rex)=>  {
+  if (req.query.ref) {
+    let ref = req.query.ref;
+    DB.serverDB.set(ref, {
+        $inc: {
+            'partnerDetails.refs': 1
+        }
+    });
+  }
+
+  if(res.headersSent) return;
+  return res.render("index",{index:true,blacklisted:req.query.bl==1 });
+});
 
 app.post('/checklogin', checkAuth, function (req, res) {
     res.sendStatus(200);
@@ -562,6 +572,7 @@ app.use(async function (err, req, res, next) {
       }
     }
   )).data.errors.find(er=>er.id==errorCode);
+  if (res.headersSent) return;
   console.log({errorData})
   res.render('error', { errorData }); 
 })
