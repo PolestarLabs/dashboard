@@ -4,7 +4,7 @@ const express = require('express');
 const router = express.Router();
 const fx = require('../pipelines/globalFunctions.js');
 
-global.serversWithPollux = serversWithPollux ? serversWithPollux : new Map();
+global.serversWithPollux = global.serversWithPollux ? serversWithPollux : new Map();
 const serverHasPollux = async (id) => {
     
     let hasP = serversWithPollux.get(id);
