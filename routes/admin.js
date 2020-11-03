@@ -89,6 +89,7 @@ if(!payload.first && svData && payload && (!req.body.noDM || userData.DMnotifs =
     if( svData.modules.FWELL.channel !== payload.b_chan) diff += `\nGoodbye Channel   : ${payload.w_chan }`;
     if( svData.modules.GREET.enabled !== payload.w_togg) diff += `\nWelcome Enabled   : ${payload.w_togg ? "✅" : "❌️"  }`;
     if( svData.modules.FWELL.enabled !== payload.b_togg) diff += `\nGoodbye Enabled   : ${payload.w_togg ? "✅" : "❌️"  }`;
+    if( svData.respondDisabled !== payload.res_disa) diff +=     `\Disabled Response  : ${payload.res_disa ? "✅" : "❌️"  }`;
     if( svData.modules.GREET.timer !== (payload.w_timeout || null)) diff +=`\nWelcome Timer     : ${payload.w_timeout || "//-NO TIMEOUT-"}`;
     if( svData.modules.FWELL.timer !== (payload.b_timeout || null)) diff +=`\nGoodbye Timer     : ${payload.w_timeout || "//-NO TIMEOUT-"}`;
     if( svData.modules.GREET.text !== payload.w_mess )   diff += `\nWelcome Text:     : ${payload.w_mess.slice(0,30) } `;
@@ -104,6 +105,7 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
 }
 
     const setPayload = {
+        'respondDisabled': payload.res_disa,
         'modules.MUTEROLE': payload.muterole,
         'modules.MODROLE': payload.modrole,
         'modules.DROPS': JSON.parse(payload.drops||false), 
@@ -126,11 +128,8 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
         setPayload['modules.LANGUAGE']= payload.language || 'en'
     }    
     updateGlobalInstances({id:SVID})
-    DB.servers.set(SVID,{
-        $set:  setPayload  
-    }).then(done=>{
-      //  res.sendStatus(200);
-    })
+    await DB.servers.set(SVID,{        $set:  setPayload      });
+    return res.status(200).json("OK");
     
 })
 
@@ -140,8 +139,9 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
 router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
 
     let payload = req.body;
+    let validator = payload.validator || payload.data?.validator
  
-    if(req.user.validator != payload.validator) return res.status(401).json("Validator Mismatch "+`${payload.validator} / ${req.user.validator}`);
+    if(req.user.validator != validator) return res.status(401).json("Validator Mismatch "+`${validator} / ${req.user.validator}`);
 
     let SVID = payload.serverid.toString();    
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
@@ -164,10 +164,9 @@ router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
     payload.server=SVID;
     delete payload.validator;
     delete payload.serverid;
-    DB.reactRoles.remove(payload)
-    .then(done=>{
-        return res.sendStatus(200);
-    })
+    await DB.reactRoles.remove(payload);
+
+    return res.sendStatus(200);
 
 })
 
@@ -445,7 +444,8 @@ async function ADMCHECKS(req,res,nex){
     req.handled = true;
     if(req.user.id ==='88120564400553984')  nex(); 
     let payload = req.body;
-    if(req.user.validator != payload.validator) return res.send({status:401,data:"Validator Mismatch "+`${payload.validator} / ${req.user.validator}`});
+    let validator = payload.validator || payload.data?.validator
+    if(req.user.validator != validator) return res.send({status:401,data:"Validator Mismatch "+`${validator} / ${req.user.validator}`});
     let SVID = payload.serverid.toString();    
     if(!(await isAdmin(req,SVID))) return res.send({status:401,data:"User is not Admin"});
     else nex();
