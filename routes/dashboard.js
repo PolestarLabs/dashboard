@@ -132,8 +132,10 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
 
     const DCKINFO= ALLCOSM.filter(x=>x.type== "skin")
 
-    
-    res.locals.userinfo.servers = SERVEROWNERSHIP; 
+    if(res.locals?.userinfo){
+
+        res.locals.userinfo.servers = SERVEROWNERSHIP; 
+    }
 
     res.render('dashboard/main',{ALLITEMS,MDINFO,DCKINFO,
         boorucollection: BCOL?BCOL.collections.boorusave:[],

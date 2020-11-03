@@ -90,11 +90,12 @@ html(class="no-js" lang=locale||"en")
             // Despite my ghoulish reputation, I really have the heart of a small boy. I keep it in a jar on my desk.
 
 
-    p(class='bl')= blacklisted + ""
     if blacklisted === true
-        script(src="/js/sweetalert.js")
-        script Swal.fire("You are blacklisted", "You cannot use Pollux's services anymore.", "error");
-  
+        if userdata && !userdata.blacklisted
+        else
+            script(src="/js/sweetalert.js")
+            script Swal.fire("You are blacklisted", "You cannot use Pollux's services anymore.", "error");
+    
     script(async defer).
 
             "use strict";
