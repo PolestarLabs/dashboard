@@ -74,7 +74,7 @@ router.post('/save',ADMCHECKS, async function(req,res){
     let svData= (await  DB.servers.get(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
 
-if(!payload.first && svData && payload && (!req.body.noDM || userData.DMnotifs === true)){
+if(!payload.first && svData && payload && (!req.body.noDM && userData?.switches?.notifications?.ownerNotif === true)){
 
     let diff=""
     if( svData.modules.MODROLE !== payload.modrole) diff +=      `\nModeration Role   : ${payload.modrole }`;
@@ -147,7 +147,7 @@ router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
 
     
-    if(!req.body.noDM || userData.DMnotifs !== false){
+    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
         let serverInfo= (await PLX.getRESTGuild(SVID));
         let userData = (await DB.users.get(serverInfo.ownerID));
         PLX.deleteMessage(payload.channel,payload.message)
@@ -182,7 +182,7 @@ router.delete("/levelrole",ADMCHECKS,async (req,res)=>{
         let serverInfo= (await PLX.getRESTGuild(SVID));
         let userData = (await DB.users.get(serverInfo.ownerID));
 
-        if(!req.body.noDM || userData.DMnotifs !== false){
+        if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
         PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
             embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
     
@@ -205,7 +205,7 @@ router.delete("/selfrole",ADMCHECKS,async (req,res)=>{
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
 
-    if(!req.body.noDM || userData.DMnotifs !== false){
+    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
 
     PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
         embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
@@ -235,7 +235,7 @@ router.patch("/levelrole",ADMCHECKS,async (req,res)=>{
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
 
-    if(!req.body.noDM || userData.DMnotifs !== false){
+    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
     PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
         embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 
@@ -261,7 +261,7 @@ router.patch("/selfrole",ADMCHECKS,async (req,res)=>{
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
     
-    if(!req.body.noDM || userData.DMnotifs !== false){
+    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
     PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
         embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 
@@ -294,7 +294,7 @@ router.put("/language",ADMCHECKS,async (req,res)=>{
             let serverInfo= (await PLX.getRESTGuild(SVID));
             let userData = (await DB.users.get(serverInfo.ownerID));
 
-            if(!req.body.noDM || userData.DMnotifs !== false){
+            if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
 
             PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
                 embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
@@ -340,7 +340,7 @@ router.put("/selfrole",ADMCHECKS,async (req,res)=>{
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
 
-    if(!req.body.noDM || userData.DMnotifs !== false){
+    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
     PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
         embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 
@@ -374,7 +374,7 @@ router.put("/levelrole",ADMCHECKS,async (req,res)=>{
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
 
-    if(!req.body.noDM || userData.DMnotifs !== false){
+    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
     PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
         embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 
@@ -409,7 +409,7 @@ router.put("/savechannelist",ADMCHECKS,async (req,res)=>{
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
 
-    if(!req.body.noDM || userData.DMnotifs !== false){
+    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
     PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
         embed: {color:0xff6699,description: `<@${req.user.id}> changed channel overrides for **${serverInfo.name}**'s
         Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
