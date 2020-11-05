@@ -173,4 +173,10 @@ router.use('/admin',checkAuth, (...args)=>{
 
   
 
+router.get("/error", async (req,res) => {
+  return res.render('thiswillerror');
+});
+
+  
+
   module.exports = router;
