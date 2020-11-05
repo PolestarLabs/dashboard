@@ -91,8 +91,7 @@ html(class="no-js" lang=locale||"en")
 
 
     if blacklisted === true
-        if userdata && !userdata.blacklisted
-        else
+        if !(userdata && !userdata.blacklisted)
             script(src="/js/sweetalert.js")
             script Swal.fire("You are blacklisted", "You cannot use Pollux's services anymore.", "error");
     
@@ -140,9 +139,11 @@ html(class="no-js" lang=locale||"en")
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
         gtag('config', 'UA-104940687-1');
-    script.
-        $( '[rel="preload"]' ).remove() 
-        $( 'script' ).remove()
+    script(defer).
+        $(document).onload(function(){
+            $( '[rel="preload"]' ).remove() 
+            $( 'script' ).remove()
+        })
 
 
 // Veni, vidi, vici
