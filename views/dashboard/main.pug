@@ -58,7 +58,7 @@ block content
         script(src="/js/moment.js")
         script(src='/js/sweetalert.js')
         
-        - const isCurrent = (x) => endpoint === x ? 'plx-active' : ''
+        - const isCurrent = (x) => endpoint === x || !endpoint ? 'plx-active' : ''
         ul.plx-switcher.plx-margin#pages
             li(class=isCurrent('profile'))   
                 include profile_edit
