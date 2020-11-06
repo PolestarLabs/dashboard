@@ -37,7 +37,10 @@ block content
       div(v-if="discovery.loading === false || !pot.length")
         p add items to the table
       .discovery-item(v-else)
-        p(v-if="discovery.possible") {{ discovery.possible }} possible items. Add more items to the table!
+        p(v-if="discovery.possible") {{ discovery.possible }} possible items. 
+          span(v-if="discovery.noMoreTable") You just need more of what you already have.
+          span(v-else) Add more items to the table!
+
         p(v-if="discovery.possible === 0") No items can be made out of this, try removing some items or try different items.
         .discovery-item(v-if="discovery.discovery")
           .item-container(:class="discovery.discovery.rarity")
