@@ -104,6 +104,10 @@ router.use(['/p','/profile','/user'], (...args)=>{
     let cm = fx.cmsSetup(req); 
     res.render('commands/cmdlist', {cm})
   });
+  router.get(['/craft','/crafting','/workshop'], async  (req,res)=> {
+    let cm = fx.cmsSetup(req); 
+    res.render('shop/crafting/workshop')
+  });
   router.post('/cmlist', (...args)=> simplepages().cmlist(...args));
 
 
