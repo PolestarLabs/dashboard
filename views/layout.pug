@@ -140,7 +140,7 @@ html(class="no-js" lang=locale||"en")
         gtag('js', new Date());
         gtag('config', 'UA-104940687-1');
     script(defer).
-        $(document).onload(function(){
+        $(document).load(function(){
             $( '[rel="preload"]' ).remove() 
             $( 'script' ).remove()
         })
