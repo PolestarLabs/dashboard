@@ -1,0 +1,68 @@
+extends ../../layout 
+block content
+    .wrapper
+    include ../../navbar
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js")
+
+        style 
+            include workshop.css
+            
+script(src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js")
+
+mixin craftSlot(item)
+  .item-container.filled(v-if=item @click="removeFromPot("+item+")", :class=item+".rarity", @contextmenu.prevent="removeFromPot("+item+",true)") 
+    .item-img(:style="`background:url(/build/items/${"+item+"?.icon||"+item+".id}.png)`")
+    .item-name {{#{item}.id}}
+    .count-badge {{#{item}.count}}
+  .item-container.empty(v-else)
+    .item-img
+    .item-name ---
+    .count-badge 0
+
+#crafting.plx-flex.plx-child-width-1-3
+  .crafting-table
+    .table-contents
+      .slot1
+        +craftSlot("pot[0]")
+      .slot2
+        +craftSlot("pot[1]")
+      .slot3
+        +craftSlot("pot[2]")
+
+  .discovery(style="border: solid 2px")
+    div(v-if="discovery.loading")
+      p LOADING...
+    div(v-if="discovery.loading === false || !pot.length")
+      p add items to the table
+    .discovery-item(v-else)
+      p(v-if="discovery.possible") {{ discovery.possible }} possible items. Add more items to the table!
+      p(v-if="discovery.possible === 0") No items can be made out of this, try removing some items or try different items.
+      .discovery-item(v-if="discovery.discovery")
+        .item-container(:class="discovery.discovery.rarity")
+          .item-img(
+            :style="`background:url(/build/items/${discovery.discovery.icon}.png)`"
+          )
+          .item-name {{ discovery.discovery.name.replace(/[A-z,0-9]/g, '?') }}
+        p(v-if="discovery.canCraftNow") Can be crafted now!
+          button.craft-me(@click="craft()") CRAFT
+
+  .inventory(style="height:100vh;overflow-y:scroll")
+    div(v-if="inventory.loading")
+      p LOADING....
+    .items-list(v-else)
+      p Inv Size: {{ inventory.length }}
+      ul.items
+        li.inv-item(v-for="item in inventory")
+          .item-container(
+            @click="addToPot(item)",
+            @contextmenu.prevent="addToPot(item, true)",
+            :class="[item.meta?.rarity, item.count === 0]"
+          )
+            .item-img(
+              :style="`background:url(/build/items/${item.meta?.icon || item.id}.png)`"
+            )
+            .item-name {{ item.meta?.name || item.id }}
+            .count-badge {{ item.count }}
+block scripts
+  script
+    include workshop.js
