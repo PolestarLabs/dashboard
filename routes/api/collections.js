@@ -1,4 +1,11 @@
-
+const RAR_COLS = {
+     C:  "gray"
+    ,U:  "green"
+    ,R:  "blue"
+    ,SR: "magenta"
+    ,UR: "orange"
+    ,XR: "red"
+}
 
 const express = require('express');
 const router = express.Router();
@@ -79,8 +86,9 @@ async function stickerCount(pack){
     return pack;
 }
 
+const pItemcol = (y) => y.map(x=>x.name[RAR_COLS[x.rarity]]).join('\n');
 
-router.post('/mix',cache(120),  async (req,res) => {
+router.post('/mix', async (req,res) => {
 
     const {pot} = req.body;
     const rars = ["C","U","R","SR","UR","XR"];
@@ -120,15 +128,26 @@ router.post('/mix',cache(120),  async (req,res) => {
         //crafted: !0, display: !0
     };
     let tCraftSize = ([...new Set( potTypeMap )]).length
-    console.log({tCraftSize})
+    console.log({tCraftSize,pot})
 
 
     
     let possible =  await DB.items.find(queryExact).lean().exec();
-    console.log(possible,pot)
+    console.log("\n--------------------------Check 1",pItemcol(possible) )
+
     if (!possible.length) possible = await DB.items.find(query).lean().exec();
     else possible.exact = true;
+
+    let insufficient = possible.filter(item=>{
+        let materials = item.materials.map(x=>x.id);
+        let ingreds   = pot.map(x=>x.id);
+        if( ingreds.length === materials.length ) {
+            possible.exact = true;
+            return true;
+        };
+    });
     
+    console.log("\n--------------------------Check 2", pItemcol(possible))
     if (!possible.length){
         
         const refinedPot = pot.map(item=> { item.count *= ((rars.indexOf(item.rarity)+1)/2); return item})
@@ -181,9 +200,14 @@ router.post('/mix',cache(120),  async (req,res) => {
             possible.notQuite = true
         }
   
-    } 
-        
+    }
 
+    console.log("Exact:",possible.exact)
+    console.log("typeCraft:",possible.exact)
+    console.log("notQuite:",possible.notQuite)
+
+        
+    console.log( pItemcol(possible) )  
 
     
     if (possible.exact && possible.length > 1){
@@ -201,7 +225,18 @@ router.post('/mix',cache(120),  async (req,res) => {
         possible.exact = true;
     }
 
-    
+    /*
+
+    COSMO MAY BE CONFUSING WITH THIS
+
+    if (insufficient){
+        let discovery = possible[0];
+        let canCraftNow = false;
+        let isDiscovery = itemsMatch(pot, discovery.materials);
+
+        return res.json({discovery, isDiscovery, canCraftNow});
+    }
+    */
 
     if (possible.typeCraft && !possible.notQuite){
 
