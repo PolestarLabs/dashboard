@@ -1,3 +1,4 @@
+
 const RAR_COLS = {
      C:  "gray"
     ,U:  "green"
@@ -96,12 +97,12 @@ router.post('/mix', async (req,res) => {
     
     let inventory, craftingHistory;
     if(req.user?.id){
-        let [userData,userStats] = await Promise.all([
+        let [userData,craftingBook] = await Promise.all([
             DB.users.get(req.user.id, {'modules.inventory':1,'counters.crafted':1}),
-            (await DB.users.get(req.user.id, {'modules.inventory':1,'counters.crafted':1}))?.data
+            (await DB.control.get(req.user.id, {'data.craftingBook':1}))?.craftingBook
         ]);
         inventory = (userData?.modules?.inventory || []).filter(x=>x.count > 0);
-        craftingHistory = (userStats?.data?.crafted || []).map(x=>x.id);
+        craftingHistory = (craftingBook || []).map(x=>x.id);
         
     } 
 
@@ -112,7 +113,7 @@ router.post('/mix', async (req,res) => {
             {materials: {$all:pot.map(i=>i.id)}},
             {'materials.id': {$all:pot.map(i=>i.id)}}
         ],
-        //crafted: !0, display: !0
+        crafted: !0, //display: !0
     };
     
 
@@ -125,7 +126,7 @@ router.post('/mix', async (req,res) => {
                 }).concat({ materials: {$size: pot.length} })
             },
         ],    
-        //crafted: !0, display: !0
+        crafted: !0, //display: !0
     };
     let tCraftSize = ([...new Set( potTypeMap )]).length
     console.log({tCraftSize,pot})
@@ -142,7 +143,8 @@ router.post('/mix', async (req,res) => {
         let materials = item.materials.map(x=>x.id);
         let ingreds   = pot.map(x=>x.id);
         if( ingreds.length === materials.length ) {
-            possible.exact = true;
+            possible.almost = true;
+            possible.noMoreTable = true;
             return true;
         };
     });
@@ -150,12 +152,12 @@ router.post('/mix', async (req,res) => {
     console.log("\n--------------------------Check 2", pItemcol(possible))
     if (!possible.length){
         
-        const refinedPot = pot.map(item=> { item.count *= ((rars.indexOf(item.rarity)+1)/2); return item})
+        const refinedPot = pot //.map(item=> { item.count *= ((rars.indexOf(item.rarity)+1)/2); return item})
         let querySameType = {
             $and: pot.map(itm=>{
                 let craftType = itm.type;
                 let threshold = refinedPot.filter(i=>i.type === craftType ).reduce((a,b)=> ({count: a.count + b.count}))?.count || 0;
-
+                console.log(threshold)
                 return {
                     
                     'typeCraft.count': { $lte: threshold },
@@ -164,7 +166,7 @@ router.post('/mix', async (req,res) => {
                 }
             })
             .concat({'typeCraft.type': {$all: potTypeMap ,}}),
-            //crafted: !0, display: !0
+            crafted: !0, //display: !0
         };
         console.log({refinedPot})
         possible = await DB.items.find(querySameType).lean().exec();
@@ -242,10 +244,15 @@ router.post('/mix', async (req,res) => {
 
         let discovery   = possible[0];
         
-        let canCraftNow = !possible.notQuite;
+        let canCraftNow = true //!possible.notQuite;
         let isDiscovery = true;
 
-        return res.json({discovery, isDiscovery, canCraftNow, typeCraft: true});
+        return res.json({
+            discovery,
+            isDiscovery,
+            canCraftNow,
+            typeCraft: true,            
+        });
         
     }
     
@@ -261,7 +268,8 @@ router.post('/mix', async (req,res) => {
     }else{
         return res.json({
             possible: possible.length ||0, 
-            inventory
+            inventory,
+            noMoreTable: possible.noMoreTable
             
         })
     };
@@ -286,5 +294,24 @@ router.post('/mix', async (req,res) => {
      
 })
 
+
+router.post('/create', checkAuth, async (req,res)=> {
+    const {pot,item} = req.body;
+
+    const userData = await DB.users.getFull(req.user.id);
+
+    await Promise.all(pot.map(async itm=>{
+        let itemToCheck = userData.modules.inventory.find(i=>i.id === itm.id);
+        if (itemToCheck.count < itm.count) {
+            res.status(403).json({status:"ERROR",message:"You dont have enough of ["+itm.id+"]"});
+            throw new Error("Invalid Inventory");
+        };
+        await userData.removeItem(itm.id,itm.count);
+    })).catch(e=>null);
+
+    await userData.addItem(item,1);
+    return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
+
+})
 
 module.exports = router
