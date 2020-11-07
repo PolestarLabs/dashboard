@@ -98,12 +98,12 @@ router.post('/mix', async (req,res) => {
     let inventory, craftingHistory;
     if(req.user?.id){
         let [userData,craftingBook] = await Promise.all([
-            DB.users.get(req.user.id, {'modules.inventory':1,'counters.crafted':1}),
-            (await DB.control.get(req.user.id, {'data.craftingBook':1}))?.craftingBook
+            DB.users.get( req.user.id, {'modules.inventory':1,'counters.crafted':1}),
+            (await DB.control.findOne( {id: req.user.id} , {'data.craftingBook':1}).lean())?.data?.craftingBook
         ]);
         inventory = (userData?.modules?.inventory || []).filter(x=>x.count > 0);
-        craftingHistory = (craftingBook || []).map(x=>x.id);
-        
+        craftingHistory = Object.keys(craftingBook)
+        console.log({craftingBook})
     } 
 
     if (!pot) return res.status(400).json({error: "No Pot"});
@@ -239,13 +239,14 @@ router.post('/mix', async (req,res) => {
         return res.json({discovery, isDiscovery, canCraftNow});
     }
     */
-
+   console.log({craftingHistory})
     if (possible.typeCraft && !possible.notQuite){
 
         let discovery   = possible[0];
         
         let canCraftNow = true //!possible.notQuite;
-        let isDiscovery = true;
+        
+        let isDiscovery = !craftingHistory.includes(possible[0].id);
 
         return res.json({
             discovery,
@@ -261,7 +262,7 @@ router.post('/mix', async (req,res) => {
 
         let discovery = possible[0];
         let canCraftNow = isExact(pot,discovery.materials);
-        let isDiscovery = itemsMatch(pot, discovery.materials);
+        let isDiscovery = !craftingHistory.includes(possible[0].id)
 
         return res.json({discovery, isDiscovery, canCraftNow});
         
@@ -306,11 +307,14 @@ router.post('/create', checkAuth, async (req,res)=> {
             res.status(403).json({status:"ERROR",message:"You dont have enough of ["+itm.id+"]"});
             throw new Error("Invalid Inventory");
         };
-        await userData.removeItem(itm.id,itm.count);
+       // await userData.removeItem(itm.id,itm.count);
     })).catch(e=>null);
 
+
     await userData.addItem(item,1);
+    await DB.control.set(req.user.id, {$inc: {[`data.craftingBook.${item}`]: 1} });
     return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
+
 
 })
 
