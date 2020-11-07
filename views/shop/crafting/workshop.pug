@@ -21,35 +21,43 @@ block content
       .item-name ---
       .count-badge 0
 
-  #crafting.plx-flex.plx-child-width-1-3
-    .crafting-table
-      .table-contents
-        .slot1
-          +craftSlot("pot[0]")
-        .slot2
-          +craftSlot("pot[1]")
-        .slot3
-          +craftSlot("pot[2]")
+  #crafting.plx-flex
+    .crafting-zone
+      .crafting-happening
+        svg.energy-bar
+          circle(cy="50%" cx="50%" r=250).trail
+          circle(cy="50%" cx="50%" r=250 v-bind:class = "potLevel()" )
+      
+        .crafting-table
+          .table-contents.plx-flex.plx-flex-around
+            .slot1
+              +craftSlot("pot[0]")
+            .slot2
+              +craftSlot("pot[1]")
+            .slot3
+              +craftSlot("pot[2]")
 
-    .discovery(style="border: solid 2px")
-      div(v-if="discovery.loading")
-        p LOADING...
-      div(v-if="discovery.loading === false || !pot.length")
-        p add items to the table
-      .discovery-item(v-else)
-        p(v-if="discovery.possible") {{ discovery.possible }} possible items. 
-          span(v-if="discovery.noMoreTable") You just need more of what you already have.
-          span(v-else) Add more items to the table!
+      .discovery 
+        div(v-if="discovery.loading")
+          p LOADING...
+        div(v-if="discovery.loading === false || !pot.length")
+          p add items to the table
+        .discovery-item(v-else)
+          p(v-if="discovery.possible") {{ discovery.possible }} possible items. 
+            span(v-if="discovery.noMoreTable") You just need more of what you already have.
+            span(v-else) Add more items to the table!
 
-        p(v-if="discovery.possible === 0") No items can be made out of this, try removing some items or try different items.
-        .discovery-item(v-if="discovery.discovery")
-          .item-container(:class="discovery.discovery.rarity")
-            .item-img(
-              :style="`background:url(/build/items/${discovery.discovery.icon}.png)`"
-            )
-            .item-name {{ discovery.discovery.name.replace(/[A-z,0-9]/g, '?') }}
-          p(v-if="discovery.canCraftNow") Can be crafted now!
-            button.craft-me(@click="craft()") CRAFT
+          p(v-if="discovery.possible === 0") No items can be made out of this, try removing some items or try different items.
+          .discovery-item(v-if="discovery.discovery")
+            .item-container(:class="discovery.discovery.rarity")
+              .item-img(
+                :style="`background:url(/build/items/${discovery.discovery.icon}.png)`",
+                :class="discovery.isDiscovery ? '' : 'revealed'"
+              )
+              .item-name(v-if="discovery.isDiscovery") {{ discovery.discovery.name.replace(/[A-z,0-9]/g, '?') }}
+              .item-name(v-else) {{ discovery.discovery.name }}
+            p(v-if="discovery.canCraftNow") Can be crafted now!
+              button.craft-me(@click="craft()") CRAFT
 
     .inventory(style="height:100vh;overflow-y:scroll")
       div(v-if="inventory.loading")

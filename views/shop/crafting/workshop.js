@@ -28,8 +28,10 @@ const CRAFTING = new Vue({
   
           this.pot.forEach(potItem=>{
               let costItem = this.discovery.typeCraft 
-                  ? cost.find(i=> i.type === potItem.type)
-                  : cost.find(i=> i.id === potItem.id);
+                  ? cost.find(i=> i.type || i === potItem.type)
+                  : cost.find(i=> i.id || i === potItem.id);
+
+                if (typeof costItem === 'string') costItem = {id:costItem,count:1};
   
               while(costItem.count > 0 && potItem.count > 0){
                   potItem.count -= 1;
@@ -49,7 +51,6 @@ const CRAFTING = new Vue({
               }
           })
   
-      
         let thisOnInventory = this.inventory.find(
           (i) => i.id === this.discovery.discovery.id
         );
@@ -62,6 +63,7 @@ const CRAFTING = new Vue({
           });
         }
   
+        
         this.commitCraft(this.discovery.discovery.id,payPot).then(res=>{
             console.log(res);
   
@@ -70,12 +72,16 @@ const CRAFTING = new Vue({
                 this.discovery.discovery.name +
                 " added to inventory."
               );
+              this.discovery = { loading: false };
+              this.fetchDiscovery();
           })
-        this.discovery = { loading: false };
+      
+        
+       
   
         //this.pot = []
   
-        this.fetchDiscovery();
+        
       },
       addToPot(item, all) {
         console.log(item);
@@ -131,7 +137,19 @@ const CRAFTING = new Vue({
           body: JSON.stringify({ pot: this.pot }),
         }).then((r) => r.json().then((res) => (this.discovery = res)));
       },
+
+        potLevel(){
+            let lv = 0;
+            this.pot[0] ? lv = 1 : 0;
+            this.pot[1] ? lv = 2 : 0;
+            this.pot[2] ? lv = 3 : 0;
+            this.discovery.canCraftNow ? lv = 5 : 0;
+
+            return "craft"+lv;
+        }
     },
+    
+    
   });
   
   fetch("https://beta.pollux.gg/api/user/88120564400553984/inventory").then((r) =>
