@@ -1,4 +1,4 @@
-
+const ECO = require("../../pipelines/economy.js");
 const RAR_COLS = {
      C:  "gray"
     ,U:  "green"
@@ -99,11 +99,11 @@ router.post('/mix', async (req,res) => {
     if(req.user?.id){
         let [userData,craftingBook] = await Promise.all([
             DB.users.get( req.user.id, {'modules.inventory':1,'counters.crafted':1}),
-            (await DB.control.findOne( {id: req.user.id} , {'data.craftingBook':1}).lean())?.data?.craftingBook
+            (await DB.control.findOne( {id: req.user.id} , {'data.craftingBook':1}).lean())?.data?.craftingBook || {}
         ]);
         inventory = (userData?.modules?.inventory || []).filter(x=>x.count > 0);
         craftingHistory = Object.keys(craftingBook)
-        console.log({craftingBook})
+       
     } 
 
     if (!pot) return res.status(400).json({error: "No Pot"});
@@ -298,22 +298,44 @@ router.post('/mix', async (req,res) => {
 
 router.post('/create', checkAuth, async (req,res)=> {
     const {pot,item} = req.body;
+    const itemToCraft = await DB.items.get({id:item});
 
-    const userData = await DB.users.getFull(req.user.id);
+    if(!itemToCraft || !itemToCraft.crafted){
+        return res.status(403).json({status:"ERROR",message:"This item can't be crafted"});
+    }
+    try{
 
-    await Promise.all(pot.map(async itm=>{
-        let itemToCheck = userData.modules.inventory.find(i=>i.id === itm.id);
-        if (itemToCheck.count < itm.count) {
-            res.status(403).json({status:"ERROR",message:"You dont have enough of ["+itm.id+"]"});
-            throw new Error("Invalid Inventory");
+        const userData = await DB.users.getFull(req.user.id);
+        const pay = pot.map(itm=>{
+            let itemToCheck = userData.modules.inventory.find(i=>i.id === itm.id);
+            if (itemToCheck.count < itm.count) {
+                //res.status(403).json({status:"ERROR",message:"You dont have enough of ["+itm.id+"]"});
+                throw new Error("Invalid Inventory");
+            };
+        return [itm.id,itm.count];
+    });
+    const payGem = Object.keys(itemToCraft.gemcraft)?.map(it=>{
+        let userBal = userData.modules[it];
+        let itm = itemToCraft.gemcraft[it];
+
+        if (userBal < itm) {
+            //res.status(403).json({status:"ERROR",message:"You dont have enough "+itm+"."});
+            throw new Error("Invalid Balance");
         };
-       // await userData.removeItem(itm.id,itm.count);
-    })).catch(e=>null);
-
-
+        return [userData.id,itm, "Crafting ["+itemToCraft.id+"]" , it === 'rubines' ? "RBN" : it === 'sapphires' ? "SPH" : "JDE" ];
+    });
+    
+    console.log(pay,payGem)
+    await Promise.all( pay.map(material=> userData.removeItem(...material)) );
+    await Promise.all( payGem.map(gems=> ECO.pay(...gems)) );
+    
     await userData.addItem(item,1);
+    
     await DB.control.set(req.user.id, {$inc: {[`data.craftingBook.${item}`]: 1} });
     return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
+}catch(err){
+    res.status(400).json({status:"ERROR",message: err});
+}
 
 
 })
