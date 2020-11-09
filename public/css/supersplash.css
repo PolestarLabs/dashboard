@@ -1,3 +1,43 @@
+.cl-preload .plx-scrollspy-inview{
+    display: none;
+  }
+  
+  .cl-loaded .plx-scrollspy-inview{
+    display: block;
+    animation-delay: 1s;
+
+  }
+  
+#curve-1,#curve-2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;  
+    pointer-events: none;
+  }
+  
+  #curve-2{
+    z-index: 11;
+    fill: var(--bg-main);
+    animation-duration: .8s;
+    animation-delay: .5s;
+  }
+  #curve-1{
+    z-index: 0;
+    fill: var(--bg-inverse);
+    mix-blend-mode:  overlay;
+    opacity: .7;
+    animation-duration: .8s;
+    animation-delay: .8s;
+  }
+.bigpic-container{
+    animation-duration: 1s;
+     animation-delay: 1.6s;
+}
+
+
+  
+
 
  .supersplash {
     background:linear-gradient(14deg,var(--secondary-color) 0%,var(--secondary-color) 41%,var(--secondary) 100%);
@@ -12,9 +52,11 @@
     background-image:url(/images/bgpatt.png);
     background-color:var(--secondary-color);
     backdrop-filter:blur(12px);
-    background-blend-mode:multiply
-   }
+    overflow: hidden;
+    background-blend-mode:multiply;
    
+   }
+
    .supersplash>p,
    .supersplash .title:not(h1),
    .supersplash h3 {
@@ -41,6 +83,7 @@
     font-size:5rem;
     --text-shadow: #113;
     font-weight:900;
+    line-height: 1;
     text-shadow:0 -2px 0 var(--text-shadow),0 2px 0 var(--text-shadow),2px 0 0 var(--text-shadow),-2px 0 0 var(--text-shadow),-4px 2px 0 var(--text-shadow),-2px 4px 0 var(--text-shadow),-6px 2px 0 var(--text-shadow),-6px 6px 0 var(--text-shadow),0 2px 3px #113a
    }
    .supersplash h3 {
