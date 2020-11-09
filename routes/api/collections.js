@@ -1,4 +1,13 @@
 const ECO = require("../../pipelines/economy.js");
+const baselineBonus = {
+    C:1,
+    U:2,
+    R:5,
+    SR:10,
+    UR:25,
+    XR:50,
+  }
+  
 const RAR_COLS = {
      C:  "gray"
     ,U:  "green"
@@ -95,13 +104,13 @@ router.post('/mix', async (req,res) => {
     const rars = ["C","U","R","SR","UR","XR"];
     const potTypeMap = pot.map(i=>i.type);
     
-    let inventory;
+    let inventory,craftingHistory;
     if(req.user?.id){
         let [userData] = await Promise.all([
             DB.users.get( req.user.id, {'modules.inventory':1}),          
         ]);
     let   inventory = (userData?.modules?.inventory || []).filter(x=>x.count > 0);
-    const craftingHistory = (userData?.modules?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
+    craftingHistory = (userData?.modules?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
        
     } 
 
@@ -329,7 +338,9 @@ router.post('/create', checkAuth, async (req,res)=> {
     await Promise.all( payGem.map(gems=> ECO.pay(...gems)) );
     
     await userData.addItem(item,1);
+    await DB.users.set(msg.author.id, {$inc: {'progression.craftingExp':baselineBonus[itemToCraft.rarity] * amount} });
     await DB.users.set({id:req.user.id, "modules.inventory":item }, {$inc: {"modules.inventory.$.crafted": 1} });
+
     
     return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
 }catch(err){
