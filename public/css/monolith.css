@@ -1301,3 +1301,28 @@ button span,.ti-tag span{
   justify-content: center;
   border-radius: 100%;
 }
+
+.rmb, .lmb{
+  display: flex;
+  align-items: center;
+}
+
+.rmb .st0, .lmb .st0{
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 8px
+}
+.rmb .st1 , .lmb .st1{
+  fill:   var(--secondary-color);
+}
+.rmb .icon,.lmb .icon{
+  width: 32px;
+  height: 46px;
+  overflow: hidden;
+  display: inline-block;
+  transform: scale(.7);
+  margin-right: 10px;
+}
+.lmb svg{
+  transform: translateY(-92px)
+}
