@@ -338,12 +338,13 @@ router.post('/create', checkAuth, async (req,res)=> {
     await Promise.all( payGem.map(gems=> ECO.pay(...gems)) );
     
     await userData.addItem(item,1);
-    await DB.users.set(msg.author.id, {$inc: {'progression.craftingExp':baselineBonus[itemToCraft.rarity] * amount} });
-    await DB.users.set({id:req.user.id, "modules.inventory":item }, {$inc: {"modules.inventory.$.crafted": 1} });
+    await DB.users.set(req.user.id, {$inc: {'progression.craftingExp':baselineBonus[itemToCraft.rarity] * 1} });
+    await DB.users.set({id:req.user.id, "modules.inventory.id":item }, {$inc: {"modules.inventory.$.crafted": 1} });
 
     
     return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
 }catch(err){
+    console.error(err)
     res.status(400).json({status:"ERROR",message: err});
 }
 
