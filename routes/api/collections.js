@@ -95,14 +95,13 @@ router.post('/mix', async (req,res) => {
     const rars = ["C","U","R","SR","UR","XR"];
     const potTypeMap = pot.map(i=>i.type);
     
-    let inventory, craftingHistory;
+    let inventory;
     if(req.user?.id){
-        let [userData,craftingBook] = await Promise.all([
-            DB.users.get( req.user.id, {'modules.inventory':1,'counters.crafted':1}),
-            (await DB.control.findOne( {id: req.user.id} , {'data.craftingBook':1}).lean())?.data?.craftingBook || {}
+        let [userData] = await Promise.all([
+            DB.users.get( req.user.id, {'modules.inventory':1}),          
         ]);
-        inventory = (userData?.modules?.inventory || []).filter(x=>x.count > 0);
-        craftingHistory = Object.keys(craftingBook)
+    let   inventory = (userData?.modules?.inventory || []).filter(x=>x.count > 0);
+    const craftingHistory = (userData?.modules?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
        
     } 
 
@@ -330,8 +329,8 @@ router.post('/create', checkAuth, async (req,res)=> {
     await Promise.all( payGem.map(gems=> ECO.pay(...gems)) );
     
     await userData.addItem(item,1);
+    await DB.users.set({id:req.user.id, "modules.inventory":item }, {$inc: {"modules.inventory.$.crafted": 1} });
     
-    await DB.control.set(req.user.id, {$inc: {[`data.craftingBook.${item}`]: 1} });
     return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
 }catch(err){
     res.status(400).json({status:"ERROR",message: err});
