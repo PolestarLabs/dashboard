@@ -20,7 +20,7 @@ block content
     include workshop.css
   script(src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.js")
 
-  section.supersplash( plx-parallax="bgy:-200")
+  section.supersplash( plx-parallax="bgy:-200;media: @m")
     svg(plx-scrollspy="cls:plx-animation-slide-left-medium; delay: 1s")#curve-1(version='1.1' xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' x='0px' y='0px' viewBox='0 0 1366 768' style='enable-background:new 0 0 1366 768;' xml:space='preserve')
       g
         polygon.st0(points='981.8,0 1442,0 1059,768 554,768 	')
@@ -41,15 +41,25 @@ block content
           br
           br
           .plx-flex.icons-row(plx-scrollspy="target: > a; cls: plx-animation-fade; delay: 100")
-              a.plx-width-1-3.icon-container(href="#basic" plx-scrollspy-class="plx-animation-slide-right-small")
-                  .icon: img(src="https://via.placeholder.com/120x120")
-                  .title Basic Items & Materials
-              a.plx-width-1-3.icon-container(href="#discovery" plx-scrollspy-class="plx-animation-slide-top-small")
-                  .icon: img(src="https://via.placeholder.com/120x120")
-                  .title Discovery Crafting
-              a.plx-width-1-3.icon-container(href="#advanced" plx-scrollspy-class="plx-animation-slide-left-small")
-                  .icon: img(src="https://via.placeholder.com/120x120")
-                  .title Specialised Crafting
+              a.plx-width-1-3.icon-container(href="#basic" plx-scrollspy-class="plx-animation-slide-right-small").hero-icon
+                  .icon: img(src="/images/craft1.png" width=120 height=120).pop
+                  .textcont(class="plx-visible@m")
+                    .title.textcont.stkpak   Basic stuff for beginners!
+                    .title.textcont.stkname Items & Materials  
+                  .title.mobile(class="plx-hidden@s")  Items & Materials  
+                  
+              a.plx-width-1-3.icon-container(href="#discovery" plx-scrollspy-class="plx-animation-slide-top-small").hero-icon
+                  .icon: img(src="/images/craft3.png" width=120 height=120).pop
+                  .textcont(class="plx-visible@m")
+                    .title.textcont.stkpak   How about something new?
+                    .title.textcont.stkname Discovery Crafting
+                  .title.mobile(class="plx-hidden@s")  Discovery Crafting
+              a.plx-width-1-3.icon-container(href="#advanced" plx-scrollspy-class="plx-animation-slide-left-small").hero-icon
+                  .icon: img(src="/images/craft2.png" width=120 height=120).pop
+                  .textcont(class="plx-visible@m")
+                    .title.textcont.stkpak   For veteran artisans!
+                    .title.textcont.stkname Specialised Crafting
+                  .title.mobile(class="plx-hidden@s")  Specialised Crafting
           //.plx-flex.main-button
               a.magic-outline.plx-button.plx-margin-left.plx-margin-bottom(type='button' href="#storetop" plx-scroll)
                   span See Store Listings
@@ -60,7 +70,7 @@ block content
               .icon 4
 
       .plx-width-1-2.bigpic-container(plx-scrollspy="cls:plx-animation-slide-right-medium; delay: 2s")
-          .bigpic: img(src="/images/pollux/plx_craft_800x600.png"  plx-parallax="y:200")
+          .bigpic: img(src="/images/pollux/plx_craft_800x600.png"  plx-parallax="y:200;media: @m")
 
     .bottom-board
         p board stuff goes here
@@ -159,7 +169,11 @@ block content
                 button.craft-me(@click="craft()" :disabled="!canCraft()") CRAFT
 
       .inventory
-        div(v-if="inventory.loading")
+        .items-list(v-if="!userdata")
+          p You need to be logged in to see your inventory here!
+          br
+          a.magic-outline.plx-button.plx-margin-left.plx-margin-bottom(type='button' onclick="login()") LOGIN
+        .items-list(v-else-if="inventory.loading")
           p LOADING....
         .items-list(v-else)
           p Items: {{ inventory.length }}
@@ -175,7 +189,8 @@ block content
                 )
                 .item-name {{ (item.meta||{}).name || item.id }}
                 .count-badge {{ item.count }}
-        .tutorial.plx-visible-s
+        br
+        .tutorial(class="plx-visible@m")
           .plx-flex.plx-flex-around
             .lmb
               .icon: include ../../../public/cur/mouse.svg
