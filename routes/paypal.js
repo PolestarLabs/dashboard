@@ -66,6 +66,7 @@ router.post('/place', async function (req, res) {
 })
 
 router.post('/authorized', async function (req, res) {
+
     paypal.configure({
         'mode': beta?'sandbox':'live',//'live', //sandbox or live
         'client_id':  beta? cfg.paypalClientID_sandbox:cfg.paypalClientID,
@@ -81,7 +82,9 @@ router.post('/authorized', async function (req, res) {
         } else {
             console.log("APPROVED".green)
 
-            let transData = await DB.audits.findOneAndUpdate({transactionId: payment.id},{$set:{'details.state':'approved'}});
+            await DB.audits.set({transactionId: payment.id},{$set:{'details.state':'approved'}});
+            let transData = await DB.audits.findOne({transactionId: payment.id}).lean();
+
             let updateInv = await inventoryUpdate(req.user.id,transData);
 
             return res.json(updateInv)
@@ -94,11 +97,12 @@ router.post('/authorized', async function (req, res) {
   async function paypalTransaction(req, res) {
 
     let item = req.body.item
-    DB.buyables.findOne({id: item}).then(konoItem => {
+    DB.buyables.findOne({id: item}).lean().then(konoItem => {
 
         const   Currency = req.body.currency||"USD";
         const   Custom   = req.body.custom;
         const   Quant    = Number(req.body.amt) || 1; 
+     
         const   Price    = (konoItem.price*RATES[Currency]).toFixed(2);
         const   TOTAL    = (Price * Quant).toFixed(2);
         let     ITEMS    = []
@@ -135,7 +139,7 @@ router.post('/authorized', async function (req, res) {
           console.error(error);
         } else {         
           PAYMENT_PAYLOAD.experience_profile_id = web_profile.id;
-          paypal.payment.create(PAYMENT_PAYLOAD, function (error, payment) {
+          paypal.payment.create(PAYMENT_PAYLOAD, async function (error, payment) {
             if (error) {
               console.log(error);
             } else {
@@ -156,7 +160,7 @@ router.post('/authorized', async function (req, res) {
                 payload.details.custom  = Custom
                  
 
-                DB.audits.new(payload)
+                await DB.audits.new(payload);
                 res.send(payment.id)
             }
           });
@@ -168,6 +172,8 @@ router.post('/authorized', async function (req, res) {
   
 
 async function inventoryUpdate(user,transaction){
+
+    console.log({transaction})
 
     const item = await DB.buyables.get(transaction.details.item_id);
     const meta = item.other;
