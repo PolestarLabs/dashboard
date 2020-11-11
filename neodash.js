@@ -104,6 +104,9 @@ app.use(function (req, res, next) {
     
     next();
 });
+app.use(bodyParser.json({
+  verify: (req, res, buffer) => { req.rawBody = buffer }
+}));
 
 // ========================================================================================================
 const webhook = (obj) => {
@@ -116,6 +119,7 @@ const webhook = (obj) => {
 const stripe = require('stripe')('sk_test_51HlCCKE9Tpa5TPNLkKRKC8vuce8Jrzg8Yj2pF1CPeL9ncTg6kPQfBXwRIFU1U6CG2DMn8fQuNYKKPbkC1oII7Bxs00bnvqi7BB')
 app.post('/webhook/bsian-stripe', async (req, res) => {
   try {
+    await webhook (req.body);
     await webhook(req.rawBody);
     let event;
     try {
@@ -218,9 +222,6 @@ app.use(bodyParser.urlencoded({
   extended: true,
    parameterLimit:50000,
   limit: '50mb'
-}));
-app.use(bodyParser.json({
-  verify: (req, res, buffer) => { req.rawBody = buffer }
 }));
 app.use(xmlparser());
 /*
