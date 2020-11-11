@@ -114,7 +114,7 @@ const webhook = (obj) => {
   })));
 }
 const stripe = require('stripe')('sk_test_51HlCCKE9Tpa5TPNLkKRKC8vuce8Jrzg8Yj2pF1CPeL9ncTg6kPQfBXwRIFU1U6CG2DMn8fQuNYKKPbkC1oII7Bxs00bnvqi7BB')
-app.post('/bsian-stripe', async (req, res) => {
+app.post('/webhook/bsian-stripe', async (req, res) => {
   try {
     await webhook(req.rawBody);
     let event;
