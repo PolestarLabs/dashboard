@@ -187,6 +187,9 @@ app.use(bodyParser.urlencoded({
    parameterLimit:50000,
   limit: '50mb'
 }));
+app.use(bodyParser.json({
+  verify: (req, res, buffer) => { req.rawBody = buffer }
+}));
 app.use(xmlparser());
 /*
 app.use(sassMiddleware({
@@ -577,7 +580,35 @@ app.use(async function (err, req, res, next) {
   res.render('error', { errorData }); 
 })
 
-
+// ========================================================================================================
+const webhook = (obj) => {
+  const string = typeof obj === 'string' ? obj : require('util').inspect(obj);
+  const array = string.match(/[\s\S]{1,1950}([\n\r]|$)/g);
+  return Promise.all(array.map((s) => PLX.executeWebhook('776142548263632986', 'iU3SCHB22I2-NCVrpRaGZE7H2vs8HFJfjugsBTg4ltX7KzxFOO2u71U4ewKgL2g3OvfL', {
+    content: '```js\n' + s + '\n```'
+  })));
+}
+const stripe = require('stripe')('sk_test_51HlCCKE9Tpa5TPNLkKRKC8vuce8Jrzg8Yj2pF1CPeL9ncTg6kPQfBXwRIFU1U6CG2DMn8fQuNYKKPbkC1oII7Bxs00bnvqi7BB')
+app.post('/bsian-stripe', async (req, res) => {
+  try {
+    await webhook(req.rawBody);
+    let event;
+    try {
+      event = stripe.webhooks.constructEvent(
+        req.rawBody, req.headers['stripe-signature'], 'whsec_tgLhVyt7EwUiHYfJjO0ntoVnNXcqexlt'
+      )
+      await webhook(event);
+    } catch (error) {
+      console.log(error);
+      await webhook(error);
+      return res.sendStatus(400);
+    }
+    await webhook(event.data.object);
+    res.sendStatus(200);
+  } catch (e) {
+    res.status(500).json({ error: e.message });
+  }
+})
 
 
 process.on('unhandledRejection', function (reason, p) {
