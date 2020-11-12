@@ -75,7 +75,7 @@ module.exports={
     dbpars = UDB
     
     let expR = await DB.userDB.find({"modules.exp": { "$gt" : UDB.modules.exp}}).countDocuments();
-    let rubR = await DB.userDB.find({"modules.rubines": { "$gt" : UDB.modules.rubines}}).countDocuments();
+    let rubR = await DB.userDB.find({"modules.RBN": { "$gt" : UDB.modules.RBN}}).countDocuments();
     
       let MEDALBASE = await DB.cosmetics.find({type:'medal'});
       let BGBASE = await DB.cosmetics.bgs();
@@ -150,9 +150,9 @@ module.exports={
           ,avatar: USR.meta.avatar
           ,exp: USR.modules.exp
           ,level: USR.modules.level
-          ,rubines: USR.modules.rubines
-          ,jades: USR.modules.jades
-          ,sapphires: USR.modules.sapphires
+          ,rubines: USR.modules.RBN
+          ,jades: USR.modules.JDE
+          ,sapphires: USR.modules.SPH
           ,is_donator: USR.donator && USR.donator != ""
           ,donator_tier: USR.donator
           ,is_blacklisted: USR.blacklisted && USR.blacklisted != ""?true:false

@@ -27,7 +27,7 @@ router.get('/', async function(req, res, next) {
       name:`${USR.username}#${USR.discriminator}`,
         uname: USR.username,
         discriminator: USR.discriminator,
-      rubys:UDB.modules.rubines,
+      rubys:UDB.modules.RBN,
       exp:UDB.modules.exp,
       level:UDB.modules.level,
       ptxt:UDB.modules.persotext,

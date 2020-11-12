@@ -124,26 +124,26 @@ block content
               .slot3: .spinCCW(:class='craftingNow?"animating-craft":"" ')
                 +craftSlot("pot[2]")
             .gemcraft(v-if="discovery.discovery && discovery.discovery.gemcraft")
-              .gem.rubines( 
-                v-bind:style="{opacity: Math.max(.5,discovery.discovery.gemcraft.rubines ||0)}",
+              .gem.RBN( 
+                v-bind:style="{opacity: Math.max(.5,discovery.discovery.gemcraft.RBN ||0)}",
                 :class="cantRBN?'cannotPay':''"
               ): .spinCCW(:class='craftingNow?"animating-craft":"" ')
                 .icon
-                .cost {{discovery.discovery.gemcraft.rubines}}
+                .cost {{discovery.discovery.gemcraft.RBN}}
 
               .gem.jades(  
-                v-bind:style="{opacity: Math.max(.5,discovery.discovery.gemcraft.jades ||0)}",
+                v-bind:style="{opacity: Math.max(.5,discovery.discovery.gemcraft.JDE ||0)}",
                 :class="cantJDE?'cannotPay':''"
               ): .spinCCW(:class='craftingNow?"animating-craft":"" ')
                 .icon
-                .cost {{discovery.discovery.gemcraft.jades}}
+                .cost {{discovery.discovery.gemcraft.JDE}}
 
-              .gem.sapphires( 
-                v-bind:style="{opacity: Math.max(.5,discovery.discovery.gemcraft.sapphires ||0)}",
+              .gem.SPH( 
+                v-bind:style="{opacity: Math.max(.5,discovery.discovery.gemcraft.SPH ||0)}",
                 :class="cantSPH?'cannotPay':''"
               ): .spinCCW(:class='craftingNow?"animating-craft":"" ')
                 .icon
-                .cost {{discovery.discovery.gemcraft.sapphires}}
+                .cost {{discovery.discovery.gemcraft.SPH}}
 
 
         .discovery 

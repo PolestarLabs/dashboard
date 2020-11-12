@@ -49,7 +49,7 @@ router.post('/imgbookmarks/expand', async (req,res)=>{
     try{
         if(!req.user) return res.sendStatus(401);
         let userdata = await DB.users.get(req.user.id);
-        if(userdata.modules.sapphires < 3) return res.status(403).send('Insufficient Funds');
+        if(userdata.modules.SPH < 3) return res.status(403).send('Insufficient Funds');
         if(!userdata.switches || userdata.switches.booruSlots === undefined ){
             await DB.users.set(req.user.id,{$set: {"switches.booruSlots":25} });
         }        

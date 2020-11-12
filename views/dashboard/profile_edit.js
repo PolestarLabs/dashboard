@@ -90,7 +90,7 @@ const DASH = new Vue({
       return moment(x).fromNow(true);
     },
     updateRubines(x) {
-      this.rubines = x || userdata.modules.rubines;
+      this.RBN = x || userdata.modules.RBN;
     },
     filterMeds() {
       if (this.timer) {

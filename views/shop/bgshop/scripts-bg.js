@@ -75,13 +75,13 @@ function checkUpdates() {
     xhr.onload = function () {
         let data = JSON.parse(xhr.response);
         $(".plx-tracker-rubines").numerator({
-            toValue: data.rubines
+            toValue: data.RBN
         })
         $(".plx-tracker-jades").numerator({
-            toValue: data.jades
+            toValue: data.JDE
         })
         $(".plx-tracker-sapphires").numerator({
-            toValue: data.sapphires
+            toValue: data.SPH
         })
     };
     xhr.send();

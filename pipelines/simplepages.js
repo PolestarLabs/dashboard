@@ -262,7 +262,7 @@ res.render('stata3')
     let UDB = dbpars
     
     let expR = await DB.userDB.find({"modules.exp": { "$gt" : UDB.modules.exp}}).countDocuments();
-    let rubR = await DB.userDB.find({"modules.rubines": { "$gt" : UDB.modules.rubines}}).countDocuments();
+    let rubR = await DB.userDB.find({"modules.RBN": { "$gt" : UDB.modules.RBN}}).countDocuments();
     
       let MEDALBASE = await DB.cosmetics.medals();
       let BGBASE = await DB.cosmetics.bgs();
@@ -358,7 +358,7 @@ res.render('stata3')
                 name: rae.tag || (rae.meta||{}).tag || (rae.name + "#" + (rae.discriminator||"????")),
                 exp: rae.modules.exp,
                 lv: rae.modules.level,
-                rubine: rae.modules.rubines,
+                rubine: rae.modules.RBN,
                 avi: (rae.meta||{}).avatar 
               }
 
@@ -394,7 +394,7 @@ res.render('stata3')
                 name: rae.tag || (rae.meta||{}).tag || (rae.name + "#" + (rae.discriminator||"????")),
                 exp: rae.modules.exp,
                 lv: rae.modules.level,
-                rubine: rae.modules.rubines,
+                rubine: rae.modules.RBN,
                 avi: (rae.meta||{}).avatar 
               }
 
@@ -442,8 +442,8 @@ res.render('stata3')
               }
             }).countDocuments();
             let rubR = DB.userDB.find({
-              "modules.rubines": {
-                "$gt": UDB.modules.rubines
+              "modules.RBN": {
+                "$gt": UDB.modules.RBN
               }
             }).countDocuments();
 
@@ -1148,8 +1148,8 @@ res.render('stata3')
           const PushMo = require('../../../core/modules/misc/rw_.js').queryGen;
           
 
-          if(konoItem.sendTo=="jades")          querystring = {$inc:{"modules.jades":QTD*1000}};
-          if(konoItem.sendTo=="sapphires")      querystring = {$inc:{"modules.sapphires":QTD}};
+          if(konoItem.sendTo=="jades")          querystring = {$inc:{"modules.JDE":QTD*1000}};
+          if(konoItem.sendTo=="sapphires")      querystring = {$inc:{"modules.SPH":QTD}};
           if(konoItem.sendTo=="inventory")      querystring = {$push:{"modules.inventory":meta.id}};   
           if(konoItem.sendTo=="bgInv")          querystring = {$addToSet:{"modules.bgInventory":meta.id}};   
           if(konoItem.sendTo=="stInv")          querystring = {$addToSet:{"modules.stickerInventory":meta.id}};   
@@ -1173,7 +1173,7 @@ res.render('stata3')
             switch(konoItem.id){
             case "aluminium":
               querystring = {
-                $inc:{"modules.sapphires":1},
+                $inc:{"modules.SPH":1},
                 $push:{
                   'modules.inventory':{
                     $each:['lootbox_C_O','lootbox_C_O','lootbox_C_O','lootbox_C_O','lootbox_C_O']}
@@ -1182,7 +1182,7 @@ res.render('stata3')
               break;
             case "carbon":
               querystring = {
-                $inc:{"modules.sapphires":5},
+                $inc:{"modules.SPH":5},
                 $push:{
                   'modules.inventory':{
                     $each:['lootbox_U_O','lootbox_U_O','lootbox_U_O','lootbox_U_O','lootbox_U_O']}
@@ -1191,7 +1191,7 @@ res.render('stata3')
               break;
             case "iridium":
               querystring = {
-                $inc:{"modules.sapphires":15},
+                $inc:{"modules.SPH":15},
                 $push:{
                   'modules.inventory':{
                     $each:['lootbox_R_O','lootbox_R_O','lootbox_R_O','lootbox_R_O','lootbox_R_O']}
@@ -1200,7 +1200,7 @@ res.render('stata3')
               break;
             case "palladium":
               querystring = {
-                $inc:{"modules.sapphires":25},
+                $inc:{"modules.SPH":25},
                 $push:{
                   'modules.inventory':{
                     $each:['lootbox_SR_O','lootbox_SR_O','lootbox_SR_O','lootbox_SR_O','lootbox_SR_O']}
@@ -1209,7 +1209,7 @@ res.render('stata3')
               break;
             case "uranium":
               querystring = {
-                $inc:{"modules.sapphires":50},
+                $inc:{"modules.SPH":50},
                 $push:{
                   'modules.inventory':{
                     $each:['lootbox_UR_O','lootbox_UR_O','lootbox_UR_O','lootbox_UR_O','lootbox_UR_O']}
@@ -1313,7 +1313,7 @@ response += "\nRegular Daily: "+myDaily
     if ((hardStreak%3) == 0) {
     response += "\n2-day Streak Bonus: "+1000+" Jades"
       await Promise.all([
-        DB.userDB.set(USERDATA.id, {$inc:{'modules.jades':1000,'modules.exp':50}}),
+        DB.userDB.set(USERDATA.id, {$inc:{'modules.JDE':1000,'modules.exp':50}}),
         ECO.receive(USERDATA.id,1000,"daily_3streak_website","JDE","+")
       ]);
     }

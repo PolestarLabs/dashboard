@@ -7,9 +7,9 @@ const CRAFTING = new Vue({
     discovery: { loading: false },
     userdata: userdata,
     balance: {
-      SPH: (userdata.modules||{}).sapphires||0,
-      RBN: (userdata.modules||{}).rubines||0,
-      JDE: (userdata.modules||{}).jades||0,
+      SPH: (userdata.modules||{}).SPH||0,
+      RBN: (userdata.modules||{}).RBN||0,
+      JDE: (userdata.modules||{}).JDE||0,
     },
     cantSPH: false,
     cantJDE: false,
@@ -33,19 +33,19 @@ const CRAFTING = new Vue({
       let GC = (this.discovery.discovery || {}).gemcraft;
       if (!this.discovery.discovery) return false;
       if (!GC) return true;
-      if (GC.jades > this.balance.JDE) {
+      if (GC.JDE > this.balance.JDE) {
         this.cantJDE = true;
         return false;
       } else {
         this.cantJDE = false;
       }
-      if (GC.rubines > this.balance.RBN) {
+      if (GC.RBN > this.balance.RBN) {
         this.cantRBN = true;
         return false;
       } else {
         this.cantRBN = false;
       }
-      if (GC.sapphires > this.balance.SPH) {
+      if (GC.SPH > this.balance.SPH) {
         this.cantSPH = true;
         return false;
       } else {

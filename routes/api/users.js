@@ -227,9 +227,9 @@ function parse_userdata(discordUser, USR, STATUS) {
         response.level = USR.modules.level;
         response.exp = USR.modules.exp;
         response.commends = USR.modules.commend;
-        response.rubines = USR.modules.rubines;
-        response.jades = USR.modules.jades;
-        response.sapphires = USR.modules.sapphires;
+        response.RBN = USR.modules.RBN;
+        response.JDE = USR.modules.JDE;
+        response.SPH = USR.modules.SPH;
         response.isDonator = USR.donator && USR.donator != "";
         response.donatorTier = USR.donator;
         response.isBlacklisted = USR.blacklisted && USR.blacklisted != "" ? true : false;

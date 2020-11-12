@@ -9,7 +9,7 @@ exports.run = async function(ITEM_IN,checking,req,res){
   
   let crafted_item = ITEMS.find(itm=>itm.id==ITEM_IN||itm.code==ITEM_IN);
     
-  const userData = await DB.userDB.findOne({id:req.user.id},{"modules.jades":1,"modules.sapphires":1,"modules.rubines":1,"modules.inventory":1});
+  const userData = await DB.userDB.findOne({id:req.user.id},{"modules.JDE":1,"modules.SPH":1,"modules.RBN":1,"modules.inventory":1});
   if(crafted_item){
     let ID = crafted_item.id
     let NAME = crafted_item.name
@@ -35,9 +35,9 @@ exports.run = async function(ITEM_IN,checking,req,res){
     
     console.log(GC)
     
-    if(GC.jades){
-      let afford = userData.modules.jades >= GC.jades;
-      let diff = Math.abs(userData.modules.jades - GC.jades);
+    if(GC.JDE){
+      let afford = userData.modules.JDE >= GC.JDE;
+      let diff = Math.abs(userData.modules.JDE - GC.JDE);
       let icona='yep';
       if(!afford){
         fails+=1
@@ -47,9 +47,9 @@ exports.run = async function(ITEM_IN,checking,req,res){
       
       
     
-    if(GC.rubines){
-      let afford = userData.modules.rubines >= GC.rubines;
-          let diff = Math.abs(userData.modules.rubines - GC.rubines);
+    if(GC.RBN){
+      let afford = userData.modules.RBN >= GC.RBN;
+          let diff = Math.abs(userData.modules.RBN - GC.RBN);
       let icona='yep';
       if(!afford){
         fails+=1
@@ -59,9 +59,9 @@ exports.run = async function(ITEM_IN,checking,req,res){
       
       
     
-    if(GC.sapphires){
-      let afford = userData.modules.sapphires >= GC.sapphires;
-      let diff = Math.abs(userData.modules.sapphires - GC.sapphires);
+    if(GC.SPH){
+      let afford = userData.modules.SPH >= GC.SPH;
+      let diff = Math.abs(userData.modules.SPH - GC.SPH);
       let icona='yep';
       if(!afford){
         fails+=1
@@ -87,9 +87,9 @@ exports.run = async function(ITEM_IN,checking,req,res){
     }else{   
       if(checking==="true") return res.send({title:"SUCCESS!"});
       
-            await ECO.pay(req.user.id,GC.rubines,"crafting_site","RBN");
-            await ECO.pay(req.user.id,GC.jades,"crafting_site","JDE");
-            await ECO.pay(req.user.id,GC.sapphires,"crafting_site","SPH");
+            await ECO.pay(req.user.id,GC.RBN,"crafting_site","RBN");
+            await ECO.pay(req.user.id,GC.JDE,"crafting_site","JDE");
+            await ECO.pay(req.user.id,GC.SPH,"crafting_site","SPH");
             
             MAT.forEach(async itm=>{
               await breakit(itm,req.user.id);
