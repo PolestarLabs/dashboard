@@ -6,7 +6,8 @@ head
 style 
     include style.css 
 style 
-script SVINFO = !{JSON.stringify(serverInfo)}
+
+script SVINFO = #{JSON.stringify(serverInfo)}
 body
     .subg(style= serverInfo.splash? `background-image: url('https://cdn.discordapp.com/splashes/${serverInfo.id}/${serverInfo.splash}.png?size=2048');`:"") 
     .bg

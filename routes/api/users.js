@@ -166,6 +166,36 @@ router.get('/:id/commends/:endpoint',cache(360), async (req,res)=>{
 })
 
 
+
+router.post(['/fanart-hearts/:operation/:id'], async (req,res)=>{
+
+    const uID = req.user.id;
+    if(!uID) return res.sendStatus(403);
+    let fana = await DB.collections.fanart.findOne({id:req.params.id});
+    if(!fana) return res.sendStatus(404);
+
+    if(req.params.operation === "add"){        
+        Promise.all([
+            DB.users.set(uID,{$addToSet: {'counters.hearts': req.params.id} }),
+            DB.collections.fanart.updateOne({id:req.params.id},{$inc:{hearts:1}})
+        ]).then(r=> res.sendStatus(200)).catch(e=> console.error(e) && res.sendStatus(500));
+    }else{
+        Promise.all([
+            DB.users.set(uID,{$pull: {'counters.hearts': req.params.id} }),
+            DB.collections.fanart.updateOne({id:req.params.id},{$inc:{hearts:-1}})
+        ]).then(r=> res.sendStatus(200)).catch(e=> console.error(e) && res.sendStatus(500));
+    }
+
+})
+
+
+
+
+
+
+
+
+
 module.exports = router
 
 async function parseUserAndReturn(uID, res) {

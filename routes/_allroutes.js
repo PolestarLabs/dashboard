@@ -169,6 +169,12 @@ router.use('/admin',checkAuth, (...args)=>{
     return paypal(...args);
   });
   
+  router.use('/fanart', (...args)=>{
+    if(process.env.NODE_ENV != "production" ) delete require.cache[require.resolve('./fanart')];
+    const fana = require('./fanart');
+    return fana(...args);
+  });
+  
   
   router.get('/invite', function (req, res) {
     //req.logout();

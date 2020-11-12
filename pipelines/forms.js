@@ -4,13 +4,13 @@ const fs = require("fs");
 const formidable = require('formidable')
 const md5 = require('md5')
 const path = require('path')
-var im = require('imagemagick');
+const IMAGEMAGICK = require('imagemagick');
 
 exports.run = function(req,res,form){
   
   return new Promise(async resolve=>{ 
   try{
-      let embed = new DB.RichEmbed;
+      let embed = {fields:[]};
       let ts = new Date()
             
 
@@ -19,15 +19,15 @@ exports.run = function(req,res,form){
      if (!req.user) {
        USR={username:"unauth",discriminator:"0000"}
      }
-    embed.setAuthor(`${USR.username}#${USR.discriminator}`,`https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,)
+    embed.author = { name:`${USR.username}#${USR.discriminator}`,avatar_url:`https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`}
       embed.description = "Submission from **"+ req.query.from+"** Form"
-      embed.setFooter(req.user.id)
+      embed.footer = {text: req.user.id}
       
-      embed.setTimestamp(ts)
+      embed.timestamp = ts
 
 if(req.query.type=='fanart'){
   
-    form.parse(req, function(err, fields, files) {      
+    form.parse(req, function(err, fields, files) {
            //console.log
         let new_path;
         let file_name; 
@@ -39,7 +39,7 @@ if(req.query.type=='fanart'){
             author = req.user? req.user.username+"#"+req.user.discriminator : "Anonymous"
             let ts = new Date().getTime()
             file_name = md5(ts+ident);
-            new_path =  "/root/v7/dash/public/images/artwork/"+ident+"/"+ file_name + '.' + file_ext; let thumb_path =  "/root/v7/dash/public/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext;                  
+            new_path =  appRoot+"/dashboard/public/images/artwork/"+ident+"/"+ file_name + '.' + file_ext; let thumb_path =   appRoot+"/dashboard/public/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext;
 
         DB.fanart.updateOne({id:ident+file_name}, {
           $set: {
@@ -77,7 +77,7 @@ if(req.query.type=='fanart'){
                     } else {
                         try{
                           ensureDirectoryExistence(thumb_path);
-                         im.resize({
+                         IMAGEMAGICK.resize({
                             srcPath: new_path,
                             dstPath: thumb_path,
                             width:   400
@@ -95,16 +95,16 @@ if(req.query.type=='fanart'){
                 });
             });
         });
-        embed.addField("Title:",fields.title||'-none-');
-        embed.setColor("#5257d1");
-        embed.addField("Description:",(fields.description||"-none-"));
-        embed.addField("Twitter:",fields.twitter||'-none-');
-        embed.addField("Artist Page:",fields.page||'-none-');
-        embed.setImage("http://pollux.fun/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext);
+        embed.fields.push({name:"Title:",value:fields.title||'-none-',inline:false});
+        embed.color = 0x5257d1;
+        embed.fields.push({name:"Description:", value: (fields.description||"-none-"), inline: false});
+        embed.fields.push({name:"Twitter:", value: fields.twitter||'-none-', inline: false});
+        embed.fields.push({name:"Artist Page:", value: fields.page||'-none-', inline: false});
+        embed.image = {url: "http://pollux.fun/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext};
  
       
          let embed2 = {}
-            embed.setColor("#5257d1")
+            embed.color = 0x5257d1
       embed2.fields = embed.fields
       embed2.author = embed.author
       //embed2.description = embed.description
@@ -120,7 +120,7 @@ if(req.query.type=='fanart'){
     
     form.parse(req, function(err, fields, files) {
 
-      embed.setColor("#e02b63")
+      embed.color = 0xe02b63
       
       if(req.query.from == "Parnership Update"){
         
@@ -150,7 +150,7 @@ if(req.query.type=='fanart'){
       Object.keys(fields).forEach(field=> {
         if(fields[field]){
           
-        embed.addField(field,fields[field],true);    
+        embed.fields.push({name:field,value:fields[field],inline:true});    
         }
       })
       
