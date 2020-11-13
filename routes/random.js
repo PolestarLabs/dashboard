@@ -23,6 +23,25 @@ router.get('/:gallery', async function (req, res) {
       });
 
 });
+router.get('/guess/:gallery', async function (req, res) {
+
+    let GAL = req.params.gallery;
+    const GalleryPath = path.resolve(__dirname+"/../../assets/build/guessing/"+GAL)
+
+    fs.readdir(GalleryPath, function (err, files) {
+
+        let rand = randomize(0, files.length - 1);       
+        let filepath_l = path.resolve(GalleryPath+"/" +files[rand])
+        //let file = fs.readFileSync(filepath);
+    
+        if(req.query.json==1){
+            return res.json({url:HOST+"/build/guessing/"+GAL+"/"+files[rand], names:files[rand].replace(/-/g,' ').split('.')[0].split(',') })
+      } 
+        res.sendFile(filepath_l)
+
+      });
+
+});
 
 router.get('/redir/:gallery/', async function (req, res) {
       let GAL = req.params.gallery;    
