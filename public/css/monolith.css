@@ -1124,7 +1124,8 @@ h5 {
  display:inline-flex;
  border:solid 2px var(--secondary-color);
  color:var(--text-accent);
- user-select:none
+ user-select:none;
+ background: none;
 }
 .magic-outline:hover {
  border:solid 2px #0dc;
