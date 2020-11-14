@@ -6,70 +6,73 @@ block content
 
     style 
         include gallery.css
-
-    .plx-container
-        br
-        h1.title  Fanart
-        h3.subtitle 
-        hr.plx-divider-small
-        p
-
-    hr.plx-divider-icon-fill
-    .plx-container
-        .section#main    
-            h2 
-            h4.subtitle 
-            p
-            hr
-    
-    script var galhearts = !{JSON.stringify( gallery.map(a=> ({id:a.id,hearts:a.hearts||0}) ) ) }
-    .gallery.plx-flex.plx-flex-wrap#fana
-        - const shuffle = function shuffle(r){for(var f,n,o=r.length;0!==o;)n=Math.floor(Math.random()*o),f=r[o-=1],r[o]=r[n],r[n]=f;return r}
-        each art in shuffle(gallery).filter(a=>a.author_ID != "88120564400553984").sort((a,b)=> a.extras.rank-b.extras.rank )
-                    
-            .container: .gal-entry(data-tilt-glare=true data-tilt-max=5 data-tilt-scale=1.1 data-tilt-max-glare="0.4" data-tilt )
-                .art(plx-lightbox)
-                    a( href=art.src)
-                        .image(plx-img data-src=art.src.replace('artwork','artwork/thumbs'))
-                    //.image-bg(plx-img data-src=art.src.replace('artwork','artwork/thumbs') )
-                if userdata
-                    a.heart-this(@click="heartit('"+art.id+"')" v-bind:class="isHearted('"+art.id+"') ? 'hearted' : '' ")
-                        i: .fas.fa-heart
-                        .content {{heartsOf('#{art.id}')}}
-                else
-                     a.heart-this(v-bind:class="isHearted('"+art.id+"') ? 'hearted' : '' ")
-                        i: .fas.fa-heart
-                        .content {{heartsOf('#{art.id}')}}
-                .artist.plx-flex.plx-flex-column
-                    .title #{art.title}
-                    .desc #{art.description}
-                    .spacer
-                    .attribution                        
-                        .author
-                            .brush: i: .fas.fa-paint-brush
-                            a(href="/profile/"+art.author_ID target="blank").truncate
-                                span.username #{art.author.split('#')[0]}
-                                span.hash #
-                                span.discrimin #{art.author.split('#')[1]}
-                        .social
-                            if (art.artistTwit)
-                                a(href="https://twitter.com/"+art.artistTwit): .fab.fa-twitter
-                            if (art.artistlink && art.artistlink.includes('http'))
-                                a(href=art.artistlink)
-                                    if  art.artistlink.includes('instagram')
-                                        .fab.fa-instagram
-                                    else if  art.artistlink.includes('deviantart')
-                                        .fab.fa-deviantart
-                                    else if  art.artistlink.includes('artstation')
-                                        .fab.fa-artstation
-                                    else if  art.artistlink.includes('tumblr')
-                                        .fab.fa-tumblr
-                                    else if  art.artistlink.includes('facebook')
-                                        .fab.fa-facebook
-                                    else
-                                        .fas.fa-globe
+    .wrapper
+        .plx-container
+            br
+            h1.title  Fanart
+            h3.subtitle 
+            hr.plx-divider-small
+            p 
+                | Artwork made with love by our community members, users, and friends! Send your artworks using either 
+                a(href="#form"): b this form 
+                | or tweeting them to 
+                a(href="https://twitter.com/maidpollux"): b @maidPollux
+                |!
+                br
+                | This gallery contains artwork not only from Pollux but from her friends. Event mascots that seasonally appear from time to time~
 
 
+            hr.plx-divider-icon 
+        
+        script var galhearts = !{JSON.stringify( gallery.map(a=> ({id:a.id,hearts:a.hearts||0}) ) ) }
+        .gallery.plx-flex.plx-flex-wrap#fana
+            - const shuffle = function shuffle(r){for(var f,n,o=r.length;0!==o;)n=Math.floor(Math.random()*o),f=r[o-=1],r[o]=r[n],r[n]=f;return r}
+            each art in shuffle(gallery).filter(a=>a.author_ID != "88120564400553984").sort((a,b)=> a.extras.rank-b.extras.rank )
+                        
+                .container: .gal-entry(data-tilt-glare=true data-tilt-max=5 data-tilt-scale=1.1 data-tilt-max-glare="0.4" data-tilt )
+                    .art(plx-lightbox)
+                        a( href=art.src)
+                            .image(plx-img data-src=art.src.replace('artwork','artwork/thumbs'))
+                        //.image-bg(plx-img data-src=art.src.replace('artwork','artwork/thumbs') )
+                    if userdata
+                        a.heart-this(@click="heartit('"+art.id+"')" v-bind:class="isHearted('"+art.id+"') ? 'hearted' : '' ")
+                            i: .fas.fa-heart
+                            .content {{heartsOf('#{art.id}')}}
+                    else
+                        a.heart-this(v-bind:class="isHearted('"+art.id+"') ? 'hearted' : '' ")
+                            i: .fas.fa-heart
+                            .content {{heartsOf('#{art.id}')}}
+                    .artist.plx-flex.plx-flex-column
+                        .title #{art.title}
+                        .desc #{art.description}
+                        .spacer
+                        .attribution                        
+                            .author
+                                .brush: i: .fas.fa-paint-brush
+                                a(href="/profile/"+art.author_ID target="blank").truncate
+                                    span.username #{art.author.split('#')[0]}
+                                    span.hash #
+                                    span.discrimin #{art.author.split('#')[1]}
+                            .social
+                                if (art.artistTwit)
+                                    a(href="https://twitter.com/"+art.artistTwit target="blank"): .fab.fa-twitter
+                                if (art.artistlink && art.artistlink.includes('http'))
+                                    a(href=art.artistlink target="blank")
+                                        if  art.artistlink.includes('instagram')
+                                            .fab.fa-instagram
+                                        else if  art.artistlink.includes('deviantart')
+                                            .fab.fa-deviantart
+                                        else if  art.artistlink.includes('artstation')
+                                            .fab.fa-artstation
+                                        else if  art.artistlink.includes('tumblr')
+                                            .fab.fa-tumblr
+                                        else if  art.artistlink.includes('facebook')
+                                            .fab.fa-facebook
+                                        else
+                                            .fas.fa-globe
+
+    br
+    hr.plx-divider-icon
     #form
         link(rel='stylesheet',type="text/css" href='/css/file.css')
         .plx-container
@@ -112,7 +115,9 @@ block content
                                 span.file-name#filename
                                     | NO FILE SELECTED
                         br
-                        input(type="submit" value="Upload").button.is-pink#send
+                        
+                        input(type="submit" value="Upload").magic-outline.plx-button.plx-margin-left.plx-margin-bottom#send
+                        
                     script.
                         var file = document.getElementById("file");
                         file.onchange = function(){
@@ -123,6 +128,10 @@ block content
                             }
                         };
 
+            hr.plx-divider-icon
+            br
+            br
+            br
 
 
 
