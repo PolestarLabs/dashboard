@@ -188,10 +188,11 @@ mixin ServerCard(Server,favs)
                 else
                     a.plx-button.plx-button-text(href='/invite' target='blank') ADD POLLUX
 
-ul(plx-accordion='collapsible: false')
+ul(plx-accordion='collapsible: true')
     li
         a.plx-container(href="#").plx-accordion-title
             h2.plx-title Favorite Servers
+            h4.subtitle Save here the servers you manage the most
             hr
         .plx-uncontainer.plx-accordion-content
             .plx-flex.plx-flex-center.plx-flex-wrap#faves
@@ -199,7 +200,7 @@ ul(plx-accordion='collapsible: false')
                     p.nofavs There are no favorited servers! 
                 each Server in SVS.filter(s=> s.faved )
                     +ServerCard(Server,true)
-        hr
+        
     li
         a.plx-container(href="#").plx-accordion-title
             h2.plx-title Servers I manage
@@ -215,6 +216,7 @@ ul(plx-accordion='collapsible: false')
     li
         a.plx-container(href="#").plx-accordion-title
             h2.plx-title Servers with Pollux
+            h4.subtitle Any servers you're in where you can find Pollux
             hr
         .plx-uncontainer.plx-accordion-content
             .plx-flex.plx-flex-center.plx-flex-wrap
