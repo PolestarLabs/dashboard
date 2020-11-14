@@ -54,7 +54,7 @@ html(class="no-js" lang=locale||"en")
         script(src="/js/plxui.js" async defer) 
         script(src="/js/plx-themes.js" async defer) 
         //script(src='https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js' defer)
-        script(src="/js/grimoire.js" defer)
+        //script(src="/js/grimoire.js" defer)
         script(defer)  window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date; ga('create','UA-104940687-1','auto');ga('send','pageview')
         script(src="https://www.google-analytics.com/analytics.js" defer)
         script(src="/js/login.js" async) 
@@ -95,40 +95,41 @@ html(class="no-js" lang=locale||"en")
             script(src="/js/sweetalert.js")
             script Swal.fire("You are blacklisted", "You cannot use Pollux's services anymore.", "error");
     
-    script(async defer).
-
-            "use strict";
-
-            !function() {
-            var t = window.driftt = window.drift = window.driftt || [];
-            if (!t.init) {
-                if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
-                t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
-                t.factory = function(e) {
-                return function() {
-                    var n = Array.prototype.slice.call(arguments);
-                    return n.unshift(e), t.push(n), t;
-                };
-                }, t.methods.forEach(function(e) {
-                t[e] = t.factory(e);
-                }), t.load = function(t) {
-                var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
-                o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
-                var i = document.getElementsByTagName("script")[0];
-                i.parentNode.insertBefore(o, i);
-                };
-            }
-            }();
-            drift.SNIPPET_VERSION = '0.3.1';
-            drift.load('tcfn6c8hruff');
-            if (userdata){
-                drift.identify(userinfo.id, {
-                    name: userinfo.name,
-                    servers: userinfo.guilds,
-                    avatar_url: userinfo.pix                 
-                });
-            }
     block scripts
+        if userinfo
+            script(async defer).
+
+                    "use strict";
+
+                    !function() {
+                    var t = window.driftt = window.drift = window.driftt || [];
+                    if (!t.init) {
+                        if (t.invoked) return void (window.console && console.error && console.error("Drift snippet included twice."));
+                        t.invoked = !0, t.methods = [ "identify", "config", "track", "reset", "debug", "show", "ping", "page", "hide", "off", "on" ], 
+                        t.factory = function(e) {
+                        return function() {
+                            var n = Array.prototype.slice.call(arguments);
+                            return n.unshift(e), t.push(n), t;
+                        };
+                        }, t.methods.forEach(function(e) {
+                        t[e] = t.factory(e);
+                        }), t.load = function(t) {
+                        var e = 3e5, n = Math.ceil(new Date() / e) * e, o = document.createElement("script");
+                        o.type = "text/javascript", o.async = !0, o.crossorigin = "anonymous", o.src = "https://js.driftt.com/include/" + n + "/" + t + ".js";
+                        var i = document.getElementsByTagName("script")[0];
+                        i.parentNode.insertBefore(o, i);
+                        };
+                    }
+                    }();
+                    drift.SNIPPET_VERSION = '0.3.1';
+                    drift.load('tcfn6c8hruff');
+                    if (userdata){
+                        drift.identify(userinfo.id, {
+                            name: userinfo.name,
+                            servers: userinfo.guilds,
+                            avatar_url: userinfo.pix                 
+                        });
+                    }
         
    
     script( type='application/ld+json')
@@ -140,7 +141,7 @@ html(class="no-js" lang=locale||"en")
         gtag('js', new Date());
         gtag('config', 'UA-104940687-1');
     script(defer).
-        $(document).load(function(){
+        $(document).on('load',function(){
             $( '[rel="preload"]' ).remove() 
             $( 'script' ).remove()
         })
