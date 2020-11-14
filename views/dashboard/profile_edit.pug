@@ -14,9 +14,13 @@ link(rel='stylesheet' href='/css/loader.css')
 style
     include profile.css
 
-div#dash(plx-scrollspy="cls:plx-animation-slide-top-small; delay: 100 ")
+div#dash( ).plx-position-relative
 
 
+    .c(style="position: fixed; bottom: 20px; left: 20px; z-index: 10")
+      a(@click='saveAll()').magic-outline.plx-button.plx-margin-left.plx-margin-bottom(type='button'  style="margin-top:100px")
+        i.fas.fa-save              
+        span &#x2002 Save All
 
     .main-profile.plx-flex(style="align-items: center; max-width:1250px; margin:auto " plx-scrollspy="cls:plx-animation-slide-top-small; delay: 600 ").plx-margin
       .avicontainer     
@@ -49,7 +53,7 @@ div#dash(plx-scrollspy="cls:plx-animation-slide-top-small; delay: 100 ")
         .num= userdata.modules.level
         .name LEVEL 
         
-    .plx-button.plx-button-primary(@click="saveAll()") Save All
+    
     .plx-container.plx-flex.plx-flex-wrap
       .plx-width-1-1(class="plx-width-3-5@m")
         .dash-pill#background-bar(v-bind:style="{'border-color':favcolor.hex}")
