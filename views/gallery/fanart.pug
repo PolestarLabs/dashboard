@@ -24,7 +24,8 @@ block content
     
     script var galhearts = !{JSON.stringify( gallery.map(a=> ({id:a.id,hearts:a.hearts||0}) ) ) }
     .gallery.plx-flex.plx-flex-wrap#fana
-        each art in gallery.sort((a,b)=> a.extras.rank-b.extras.rank)
+        - const shuffle = function shuffle(r){for(var f,n,o=r.length;0!==o;)n=Math.floor(Math.random()*o),f=r[o-=1],r[o]=r[n],r[n]=f;return r}
+        each art in shuffle(gallery).filter(a=>a.author_ID != "88120564400553984").sort((a,b)=> a.extras.rank-b.extras.rank )
                     
             .container: .gal-entry(data-tilt-glare=true data-tilt-max=5 data-tilt-scale=1.1 data-tilt-max-glare="0.4" data-tilt )
                 .art(plx-lightbox)
@@ -71,12 +72,17 @@ block content
 
     #form
         link(rel='stylesheet',type="text/css" href='/css/file.css')
-        .columns: .column.is-6: .notification.is-light
-            .title Submit Art
-            .subtitle Have a cute drawing of Pollux from your own? Send it here!
-            form(action="/sendform?type=fanart&from=Fanart+Submission" enctype="multipart/form-data" method="post")
+        .plx-container
+            h2.title Submit Art
+            h4.subtitle Have a cute drawing of Pollux from your own? Send it here!
+            br
+            form(action="/sendform?type=fanart&from=Fanart+Submission" enctype="multipart/form-data" method="post" target="_blank")
                 .columns
                     .column
+                        if userinfo && userinfo.id == "88120564400553984"
+                            .field
+                                label.label IN BEHALF OF 
+                                .control: input.input(type="text" name="behalf" )#beh
                         .field
                             label.label Fanart Title
                             .control: input.input(type="text" name="title" )#name
@@ -99,12 +105,12 @@ block content
                             label.file-label
                                 input.file-input(type='file', name='file')#file
                                 span.file-cta
-                                span.file-icon
-                                    i.fas.fa-upload
-                                span.file-label
-                                    | Choose a file…
+                                    span.file-icon
+                                        i.fas.fa-upload
+                                    span.file-label
+                                        | Choose a file…
                                 span.file-name#filename
-                                | NO FILE SELECTED
+                                    | NO FILE SELECTED
                         br
                         input(type="submit" value="Upload").button.is-pink#send
                     script.

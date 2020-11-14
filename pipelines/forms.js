@@ -27,17 +27,33 @@ exports.run = function(req,res,form){
 
 if(req.query.type=='fanart'){
   
-    form.parse(req, function(err, fields, files) {
+    form.parse(req, async function(err, fields, files) {
+
+      console.log(fields)
            //console.log
         let new_path;
         let file_name; 
+
+        let authorTag = req.user? req.user.username+"#"+req.user.discriminator : "Anonymous";
+        let authorID = ((req.user||{id:'anonymous'}).id);
+        let userData = req.user
+        if (fields.behalf) {
+          userData = await PLX.getRESTUser(fields.behalf);
+          if(!userData) return res.status(400).json("WRONG BEHALF - NO USER")
+          embed.author = { name:`${userData.username}#${userData.discriminator}`,avatar_url:`https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`}
+          authorTag = userData.username + "#" + userData.discriminator;
+          authorID = userData.id;
+
+        }
+
+        if(!files.file) return res.status(400).json("FILE IS REQUIRED");
         let old_path = files.file.path,
             file_size = files.file.size,
             file_ext = files.file.name.split('.').pop(),
             index = old_path.lastIndexOf('/') + 1,
-            ident = ((req.user||{id:'anonymous'}).id),
-            author = req.user? req.user.username+"#"+req.user.discriminator : "Anonymous"
-            let ts = new Date().getTime()
+            ident = authorID,
+            author = authorTag,
+            ts = new Date().getTime();
             file_name = md5(ts+ident);
             new_path =  appRoot+"/dashboard/public/images/artwork/"+ident+"/"+ file_name + '.' + file_ext; let thumb_path =   appRoot+"/dashboard/public/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext;
 
@@ -49,12 +65,12 @@ if(req.query.type=='fanart'){
             description: fields.description,
             title: fields.title,
             date: ts,
-
             artistTwit:fields.twitter,
             artistlink:fields.page,
             author: author,
             author_ID: ident,
-            publish:false
+            publish:false,
+            format: file_ext,
           }
         },{upsert:true}).then(x=>{"ok"});
       
@@ -77,6 +93,7 @@ if(req.query.type=='fanart'){
                     } else {
                         try{
                           ensureDirectoryExistence(thumb_path);
+                          console.log('imagik')
                          IMAGEMAGICK.resize({
                             srcPath: new_path,
                             dstPath: thumb_path,
@@ -100,7 +117,7 @@ if(req.query.type=='fanart'){
         embed.fields.push({name:"Description:", value: (fields.description||"-none-"), inline: false});
         embed.fields.push({name:"Twitter:", value: fields.twitter||'-none-', inline: false});
         embed.fields.push({name:"Artist Page:", value: fields.page||'-none-', inline: false});
-        embed.image = {url: "http://pollux.fun/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext};
+        embed.image = {url: HOST + "/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext};
  
       
          let embed2 = {}
@@ -112,9 +129,9 @@ if(req.query.type=='fanart'){
       embed2.title = "🖌 New Fanart Submission"
       embed2.footer = embed.footer
       //embed2.timestamp = embed.timestamp
-      embed2.image={url:"http://pollux.fun/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext}
+      embed2.image={url:HOST+"/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext}
       sendWebhook({embeds:[embed2]});
-      return res.redirect("/artwork");
+      return res.sendStatus(200) //res.redirect("/artwork");
     });
 }else{
     
@@ -201,15 +218,17 @@ let username= fields.username,
 request = require('request')
 function sendWebhook(data){  
   console.log(JSON.stringify(data))
-  let opts={    url:"https://discordapp.com/api/webhooks/488956526086717440/75qIsOYk_gMRNj12Zab2en-O9vqJnNJ1EF_Me8Z6YdOs7c9wNWFy28JNKPGd2sKRHkFl?wait=true",
-  form: data,
-     json:true,
+  let opts={    
+    url:"https://discordapp.com/api/webhooks/500544023988273154/JgZF9l4nPRQJ1lDu3ZisRMQx5vdRoOEJTZeFuu8F55fFclwKku_Jyn_YGRQDYnlYzNiB?wait=true",
+    body: data,
+    json:true,
   //  processData: false,
-            headers:{
-               'content-Type':'application/json'
-            },
-    method: 'POST'}
-      request(opts, function (error, response, body) {
-        console.log("WebHook'd")
-      })
+    headers:{
+    'content-Type':'application/json'
+    },
+    method: 'POST'
+  }
+  request(opts, function (error, response, body) {
+    console.log("WebHook'd")
+  })
 }

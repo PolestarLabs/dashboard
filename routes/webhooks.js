@@ -160,7 +160,7 @@ let fields = []
   if(p.object_kind == 'push'){
 
     
-     xxx=`**${p.user_name}** (\`@${p.user_username}\`) pushed to **[${p.project.name}](${p.project.web_url})**`
+     xxx=`**${p.user_name}** (\`@${p.user_username}\`) pushed to **[${p.project.name}](${p.project.web_url})** \`/${p.ref.split('/').pop() }\``
   p.user_avatar
   
  
@@ -207,22 +207,27 @@ let fields = []
   ]
 }
 console.log(p)
+console.log(p.project)
+console.log(p.project.avatar_url)
 
  if(descrip.length < 5) return res.send(400);
+
+let embed =   {
+  title,fields,
+  color:0xfc6d26 ,
+  description: descrip,
+  timestamp: new Date(),
+   thumbnail: {url: p.project.avatar_url },
+   footer:{text:'Gitlab',icon_url:"https://gitlab.com/assets/favicon-7901bd695fb93edb07975966062049829afb56cf11511236e61bcf425070e36e.png"}
+  }
+
+  console.log(embed)
+
 sendWebhook({
   avatar_url: p.user_avatar ||p.user.avatar_url,
   username: (p.user_username || p.user.username) + " @ Gitlab",
   content:xxx,
-  embeds:[
-  {
-    title,fields,
-    color:0xfc6d26 ,
-    description: descrip,
-    timestamp: new Date(),
-     //thumbnail: {url: (p.user_avatar||p.user.avatar_url).replace('s=80','s=64')},
-     footer:{text:'Gitlab',icon_url:"https://gitlab.com/assets/favicon-7901bd695fb93edb07975966062049829afb56cf11511236e61bcf425070e36e.png"}
-    }
-]
+  embeds:[embed]
 },"https://discordapp.com/api/webhooks/715119311559065671/qro-0ekHSuz-m3q_VBAfCL_oE4n6O0CIJG8PT4Tz04kr2cgn5EN0DDVfhB0Jvcm4KvMi?wait=true")
 
 
@@ -289,6 +294,7 @@ router.post('/:any', function (req, res) {
 
 
 function sendWebhook(data,url) {
+
   let opts = {
     url: url||"https://discordapp.com/api/webhooks/562584850826264586/k-b4xj-PzXT9GK1taQJNcl7WagefXr43SUT9gq9RuTAdUIKmnsF0djskR-C50rdv_XPB?wait=true",
     body: data,
@@ -299,7 +305,8 @@ function sendWebhook(data,url) {
     method: 'POST'
   }
   request(opts, function (error, response, body) {
-    console.log("WebHook'd")
+    console.log("WebHook'd".green)
+    console.log(JSON.stringify(data,0,2))
   })
 }
 

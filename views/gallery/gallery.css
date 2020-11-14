@@ -1,231 +1,229 @@
 .gal-entry .artist .title{
-    transform-origin: top;
-     transform: scale(.7) rotate(-5deg) translateY(-35px);
-    position: absolute;
-    width: 400px;
-    text-align: center;
-     z-index: 6;    
-     --this-shadow: var(--darker);
-     -webkit-text-stroke-width: 2px;
-     -webkit-text-stroke-color: var(--this-shadow);
-     transition: transform 0.5s, opacity 0.3s;
-     transition-delay: 0.1s;
-     font-family: "Panton Black","Panton";
-     font-weight:900;
-     line-height: 1;
-     color: #fff;
-     font-size: 24pt;
-     text-shadow: -1px 1px 1px var(--this-shadow), -4px 4px 1px var(--this-shadow), -3px 3px 1px var(--this-shadow),
-       -2px 2px 1px var(--this-shadow), -1px 1px 2px var(--this-shadow), -1px 1px 2px var(--this-shadow), -1px 1px 2px var(--this-shadow),
-       -1px 1px 2px var(--this-shadow), 0 0 2px var(--this-shadow), 0 0 2px var(--this-shadow), 0 0 2px var(--this-shadow), 0 0 3px var(--this-shadow);
-   
- }
+  transform-origin: top;
+   transform: scale(.7) rotate(-5deg) translateY(-35px);
+  position: absolute;
+  width: 400px;
+  text-align: center;
+   z-index: 6;    
+   --this-shadow: var(--darker);
+   -webkit-text-stroke-width: 2px;
+   -webkit-text-stroke-color: var(--this-shadow);
+   transition: transform 0.5s, opacity 0.3s;
+   transition-delay: 0.1s;
+   font-family: "Panton Black","Panton";
+   font-weight:900;
+   line-height: 1;
+   color: #fff;
+   font-size: 24pt;
+   text-shadow: -1px 1px 1px var(--this-shadow), -4px 4px 1px var(--this-shadow), -3px 3px 1px var(--this-shadow),
+     -2px 2px 1px var(--this-shadow), -1px 1px 2px var(--this-shadow), -1px 1px 2px var(--this-shadow), -1px 1px 2px var(--this-shadow),
+     -1px 1px 2px var(--this-shadow), 0 0 2px var(--this-shadow), 0 0 2px var(--this-shadow), 0 0 2px var(--this-shadow), 0 0 3px var(--this-shadow);
  
- 
- .gallery{
-     justify-content: center;
-   }
-   
-   .art .image,.art .image-bg{
-       width: 100%;
-      height: 100%;
-       background-repeat: no-repeat;
-       background-position:center;
-      // position: absolute;
-     }
-     .art .image{
-        background-size: contain;
-       background-size: cover;
-       z-index: 1;
-     }
-     .art .image-bg{
-       background-size: cover;
-       filter: blur(15px) brightness(.5);
-       
-     
-     }
-     .art{
-       overflow: hidden;
-       position: relative;
-       display: inline-block;
-       height: 300px;
-        width: 280px;
-       background: white;
-       border-radius: 5px 5px 0 0;
-       margin-bottom: 10px;
-       flex: 0 0 auto;
- 
-     }
- .container{
-       height: 360px;
-       margin: 8px 8px 10px 8px;
- }
-   .gal-entry{
-     width: 280px;
- 
-     display: flex;
-     flex-direction: column;
- 
-     background: var(--secondary-color);
- 
-     //border: solid 1px;
-     border-radius: 8px;
-     overflow: hidden;
-     box-shadow: 0 5px 20px -10px #112A;
-     backdrop-filter: blur(10px);
-   
-     
-     
-   }
- .container:hover{
-     z-index: 8;
- }
- .gal-entry:hover{
-  transition-delay: 0s !important;
- 
-    box-shadow: 0 5px 50px -20px #112;
-     height: auto;
- 
-   
- }
- .gal-entry:hover .desc{
- 
-   margin-top:35px;
-   margin-bottom: 15px;
-    height: auto;
- 
-   
- }
- .gal-entry  .artist{
-   display: flex;
-   flex-direction: column;
-   align-items: center;
-   justify-content: space-between;
-   flex: 1 1 auto;
- }
- .gal-entry .social{
-   margin-top: auto;
- }
- .gal-entry .title{
-   color: var(--text-extra-bold);
-     font-family: Panton;
-     font-size: 14pt;
-   font-weight: 600;
- }
- .gal-entry .desc{
-   margin-top: 15px;
-   font-size: 10pt;
-   max-width: 260px;
-   line-height: 1.2;  
-   font-style: italic;
-   font-family: quicksand;
-   //max-height: 50px;
-   height: 0;
-   overflow: hidden;
-   color: white;
- 
-   
- }
- 
-  
- .gal-entry .artist > span {
-   font-family: Panton;
-  
-   
- }
- 
- .gal-entry .artist .hash{
-   font-size: 8pt;
-   opacity: .5
- }
- .gal-entry .artist .discrimin{
-   font-size: 8pt;
-   opacity: .8;
- }
- 
- .attribution{
-   background: var(--darker);
-   width: 100%;
-   display: flex;
-   padding: 8px 12px;
-   box-sizing: border-box;
- }
- .author{
-   display: flex;
- }
- .author .username{
-   width: 200px;
-   color: white;
-   font-weight: 900;
-   
- }
- .brush{
-   margin-right: 8px;
-   color: var(--accent-color)
- }
- .social{
-   margin-left: auto;
-   display: flex;
- }
- .social a{
-   margin: 0 8px
- }
- 
- 
- 
- a.heart-this {
-   height: 32px;
-   width: 32px;
-   position: absolute;
-     display: flex;
-   align-items: center;
+}
+
+
+.gallery{
    justify-content: center;
-     transform: scale(1.2) translate(5px,5px);
-  
  }
  
- .heart-this i{
-   color: #448A;
-   position: absolute;
-   width: 100%;
-   height: 100%;
-   display: flex;
-   align-items: center;
-   justify-content: center;
-   transform: scale(1.5)
-   
- }
- .heart-this.hearted i{
-   color: red;
- }
- .heart-this .content{
-   position: absolute;
-   color: white;
-   font-weight: 900;
-   transform: scale(.7) translateX(-1px);
-   opacity: .8
-   
-   
- }
- 
- @media screen and (max-width: 500px){
-   .gal-entry{
+ .art .image,.art .image-bg{
      width: 100%;
-     max-width: 350px;
-     margin: 20px auto;
-     height: auto;
-    // pointer-events: none;
+    height: 100%;
+     background-repeat: no-repeat;
+     background-position:center;
+    // position: absolute;
+   }
+   .art .image{
+      background-size: contain;
+     background-size: cover;
+     z-index: 1;
+   }
+   .art .image-bg{
+     background-size: cover;
+     filter: blur(15px) brightness(.5);
+     
+   
    }
    .art{
-     width: 100%;
-     height: 400px;
+     overflow: hidden;
+     position: relative;
+     display: inline-block;
+     height: 300px;
+      width: 280px;
+     background: white;
+     border-radius: 5px 5px 0 0;
+     margin-bottom: 10px;
+     flex: 0 0 auto;
+
    }
-   .desc{
-     height: 100px !important;
-     margin-top: 30px !important;
-   }
-   .attribution a{
-     pointer-events:  all
-   }
- }
+.container{
+     height: 360px;
+     margin: 8px 8px 10px 8px;
+}
+ .gal-entry{
+   width: 280px;
+
+   display: flex;
+   flex-direction: column;
+
+   background: var(--secondary-color);
+
+   //border: solid 1px;
+   border-radius: 8px;
+   overflow: hidden;
+   box-shadow: 0 5px 20px -10px #112A;
+   backdrop-filter: blur(10px);
  
+   
+   
+ }
+.container:hover{
+   z-index: 8;
+}
+.gal-entry:hover{
+transition-delay: 0s !important;
+
+  box-shadow: 0 5px 50px -20px #112;
+   height: auto;
+
+ 
+}
+.gal-entry:hover .desc{
+
+ margin-top:35px;
+ margin-bottom: 15px;
+  height: auto;
+
+ 
+}
+.gal-entry  .artist{
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ justify-content: space-between;
+ flex: 1 1 auto;
+}
+.gal-entry .social{
+ margin-top: auto;
+}
+.gal-entry .title{
+ color: var(--text-extra-bold);
+   font-family: Panton;
+   font-size: 14pt;
+ font-weight: 600;
+}
+.gal-entry .desc{
+ margin-top: 15px;
+ font-size: 10pt;
+ max-width: 260px;
+ line-height: 1.2;  
+ font-style: italic;
+ font-family: quicksand;
+ //max-height: 50px;
+ height: 0;
+ overflow: hidden;
+ color: white;
+
+ 
+}
+
+
+.gal-entry .artist > span {
+ font-family: Panton;
+
+ 
+}
+
+.gal-entry .artist .hash{
+ font-size: 8pt;
+ opacity: .5
+}
+.gal-entry .artist .discrimin{
+ font-size: 8pt;
+ opacity: .8;
+}
+
+.attribution{
+ background: var(--darker);
+ width: 100%;
+ display: flex;
+ padding: 8px 12px;
+ box-sizing: border-box;
+}
+.author{
+ display: flex;
+}
+.author .username{
+ width: 200px;
+ color: white;
+ font-weight: 900;
+ 
+}
+.brush{
+ margin-right: 8px;
+ color: var(--accent-color)
+}
+.social{
+ margin-left: auto;
+ display: flex;
+}
+.social a{
+ margin: 0 8px
+}
+
+
+
+a.heart-this {
+ height: 32px;
+ width: 32px;
+ position: absolute;
+   display: flex;
+ align-items: center;
+ justify-content: center;
+   transform: scale(1.2) translate(5px,5px);
+
+}
+
+.heart-this i{
+ color: #448A;
+ position: absolute;
+ width: 100%;
+ height: 100%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ transform: scale(1.5)
+ 
+}
+.heart-this.hearted i{
+ color: red;
+}
+.heart-this .content{
+ position: absolute;
+ color: white;
+ font-weight: 900;
+ transform: scale(.7) translateX(-1px);
+ opacity: .8
+ 
+ 
+}
+
+@media screen and (max-width: 500px){
+ .container{
+   height: auto;
+   margin: 20px;
+   
+ }
+
+ .art{
+   width: 100%;
+   height: 400px;
+ }
+ .desc{
+   height: auto !important;
+   margin-top: 30px !important;
+ }
+ .attribution a{
+   pointer-events:  all
+ }
+}
