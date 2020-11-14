@@ -57,7 +57,73 @@ block content
                 button Reveal
 
             
+            section#partners.colorblock-flat
+                .plx-container
+                    h2.title part
+                    h4.subtitle subpart
+                    br
+                .plx-grid.plx-flex-wrap.plx-flex-around
+                    .plx-width-1-2(style="flex: 1 1 auto")
+                        div(plx-slider="center: true; autoplay: true; autoplay-interval: 4000; velocity: .6;") 
+                            .plx-position-relative.plx-visible-toggle                            
+                                ul.plx-slider-items.plx-grid                          
+                                    li.plx-width-1-1: div.plx-panel.plx-text-center
+                                        img(plx-img data-src="https://via.placeholder.com/720x280")
+                                        .plx-position-center.plx-panel
+                                            h1 Test
+                                            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic doloribus dolor tempora, magnam nobis, qui, dignissimos quo quod incidunt cum fuga corporis repudiandae vero cumque dicta modi officia officiis doloremque.
+                                    li.plx-width-1-1: div.plx-panel.plx-text-center
+                                        img(plx-img data-src="https://via.placeholder.com/720x280")
+                                        .plx-position-center.plx-panel
+                                            h1 Test
+                                            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic doloribus dolor tempora, magnam nobis, qui, dignissimos quo quod incidunt cum fuga corporis repudiandae vero cumque dicta modi officia officiis doloremque.
+                                    li.plx-width-1-1: div.plx-panel.plx-text-center
+                                        img(plx-img data-src="https://via.placeholder.com/720x280")
+                                        .plx-position-center.plx-panel
+                                            h1 Test
+                                            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic doloribus dolor tempora, magnam nobis, qui, dignissimos quo quod incidunt cum fuga corporis repudiandae vero cumque dicta modi officia officiis doloremque.
+                                    li.plx-width-1-1: div.plx-panel.plx-text-center
+                                        img(plx-img data-src="https://via.placeholder.com/720x280")
+                                        .plx-position-center.plx-panel
+                                            h1 Test
+                                            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic doloribus dolor tempora, magnam nobis, qui, dignissimos quo quod incidunt cum fuga corporis repudiandae vero cumque dicta modi officia officiis doloremque.
+                                    li.plx-width-1-1: div.plx-panel.plx-text-center
+                                        img(plx-img data-src="https://via.placeholder.com/720x280")
+                                        .plx-position-center.plx-panel
+                                            h1 Test
+                                            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic doloribus dolor tempora, magnam nobis, qui, dignissimos quo quod incidunt cum fuga corporis repudiandae vero cumque dicta modi officia officiis doloremque.                                    
+                            
+                                a(plx-slidenav-previous plx-slider-item='previous').plx-position-center-left
+                                a(plx-slidenav-next plx-slider-item='next').plx-position-center-right
+                                br
+                                .plx-text-center
+
+                                    ul( class="plx-thumbnav-nav plx-thumbnav  plx-margin").partSlider.plx-space-between.plx-margin-large.plx-padding-remove-top.plx-padding-remove-bottom
+                                        li(plx-slider-item=0).partSlider: img(src="https://via.placeholder.com/50x50")
+                                        li(plx-slider-item=1).partSlider: img(src="https://via.placeholder.com/50x50")
+                                        li(plx-slider-item=2).partSlider: img(src="https://via.placeholder.com/50x50")
+                                        li(plx-slider-item=3).partSlider: img(src="https://via.placeholder.com/50x50")
+                    .plx-width-2-5(style="flex:1 1 auto").plx-flex-around
+                        .plx-grid-small.plx-flex-wrap.plx-flex-center.plx-margin-medium.miniparts
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
             
+            section#staff.colorblock: .plx-container 
+                h3.title tm
+                .plx-card
+                    .plx-card-header Test 
+                    .plx-card-body Test test test 
+
+            section#minigames.colorblock: .plx-container 
+                pre= JSON.stringify(userinfo,null,3)
+
+            //.plx-uncontainer 
             section#quickie.colorblock
                 .plx-container(plx-scrollspy="target: h1,h5,p,.slideup,h3; cls: plx-animation-slide-bottom-medium; repeat: true; delay: 120")
                     h5.subhead Newbies Guide
@@ -144,9 +210,39 @@ block content
                                     span  if you still cannot understand it 
                         hr(style="margin:30px")
                         p.lead Pretty much everything can be set up from the Dashboard, if you find too difficult to understand the commands, try using it instead, it is easier, faster and more natural than typing a bunch of words!
-    
+    .sspycon(class="plx-visible@s")
+        .plx-nav(plx-scrollspy-nav="closest: li; scroll: true; offset: 80" plx-parallax="opacity:1,1,1,0; target: #content-roll" ).homenav
+            li: a(href="#top")
+            li
+                .homenav-item: a(href="#start")
+                    i.fas.fa-coffee
+                    span About
+            li
+                .homenav-item: a(href="#features")
+                    i.fas.fa-candy-cane
+                    span Features
+            li
+                .homenav-item: a(href="#economy")
+                    i.fas.fa-gem
+                    span Economy
+            li
+                .homenav-item: a(href="#partners")
+                    i.fas.fa-feather-alt
+                    span Partners
+            li
+                .homenav-item: a(href="#minigames")
+                    i.fas.fa-gamepad
+                    span Minigames
+            li
+                .homenav-item: a(href="#team")
+                    i.fas.fa-user-astronaut
+                    span Staff
+            li
+                .homenav-item: a(href="#quickie")
+                    i.fas.fa-rocket
+                    span Quickstart   
 
-    
+
         style footer{margin-top:200px}
 
 
