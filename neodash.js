@@ -288,9 +288,12 @@ app.get('/newserver', (...args) => simplepages().callback(...args));
 
 
 app.get('/logout', function (req, res) {
-  if(req.query.r=='blacklisted') res.locals.blacklisted = true;
   req.logout();
-  res.redirect('/?bl=1');
+  if(req.query.r=='blacklisted') {
+    res.locals.blacklisted = true;
+    return res.redirect('/?bl=1');
+  }
+  res.redirect('/');
 });  
 
 
