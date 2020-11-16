@@ -166,7 +166,7 @@ mixin ServerCard(Server,favs)
                     a.plx-button.plx-button-default(href='/top/'+Server.id target='blank') SEE RANKS
                 else
                     if Server.rank != 'Commoner' && Server.rank != 'Moderator'
-                        a.plx-button.plx-button-default(href='/invite' target='blank') ADD POLLUX
+                        a.plx-button.plx-button-default(href='/invite?sv='+Server.id target='blank') ADD POLLUX
 
                 
     //div( class='plx-width-1-3@l plx-width-1-2@m plx-width-1-1 '): .plx-card.plx-card-default(style="border-radius:8px")
