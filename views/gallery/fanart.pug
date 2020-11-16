@@ -77,61 +77,78 @@ block content
         link(rel='stylesheet',type="text/css" href='/css/file.css')
         .plx-container
             h2.title Submit Art
-            h4.subtitle Have a cute drawing of Pollux from your own? Send it here!
-            br
-            form(action="/sendform?type=fanart&from=Fanart+Submission" enctype="multipart/form-data" method="post" target="_blank")
-                .columns
-                    .column
-                        if userinfo && userinfo.id == "88120564400553984"
-                            .field
-                                label.label IN BEHALF OF 
-                                .control: input.input(type="text" name="behalf" )#beh
-                        .field
-                            label.label Fanart Title
-                            .control: input.input(type="text" name="title" )#name
+            h4.subtitle Have a cute drawing of Pollux or one of the mascots from your own? Send it here!
+            if !userinfo
+                p Please log-in before you can submit stuff here.
+            else
+                hr
+                p
+                    | This is a place to send any kind of visual arts that <b>you have drawn</b>. 
+                    | Please do not misuse this form by sending unrelated files or "tests". 
+                    | Otherwise you might be permanently penalised.
+                p 
+                    | If you need any references of Pollux or any of the mascots, feel free to ask at our discord server~!
 
-                        .field
-                            label.label Your Twitter (if any)
-                            .control: input.input(type="text" name="twitter" )#twitter
+                form(action="/sendform?type=fanart&from=Fanart+Submission" enctype="multipart/form-data" method="post" target="_blank")
+                    .columns.plx-flex.plx-flex-wrap
+                        .column.plx-width-1-1(class="plx-width-1-2@s" style="padding: 0 3rem;")
+                            if userinfo && userinfo.id == "88120564400553984"
+                                .field
+                                    label.label IN BEHALF OF 
+                                    .control: input.input(type="text" name="behalf" )#beh
+                                hr
+                            
+                            .control
+                                label.label Fanart Title
+                                input.input(type="text" name="title" )#name
+                                br
 
-                        .field
-                            label.label Your Artist Page (Deviantart/Tumblr/Website/Facebook)
-                            .control: input.input(type="text" name="page" )#page
+                            
+                            .control
+                                label.label Your Twitter (if any)
+                                input.input(type="text" name="twitter" )#twitter
+                                br
 
-                        .field
-                            label.label Description
-                            .control: textarea.textarea(type="textarea" name="description" )#name
-                        br
+                            
+                            .control
+                                label.label Your Artist Page (Deviantart/Tumblr/Website/Facebook)
+                                input.input(type="text" name="page" )#page
+                                br
 
-                        //.column
-                        .file.has-name.iis-fullwidth.is-dark.is-small
-                            label.file-label
-                                input.file-input(type='file', name='file')#file
-                                span.file-cta
-                                    span.file-icon
-                                        i.fas.fa-upload
-                                    span.file-label
-                                        | Choose a file…
-                                span.file-name#filename
-                                    | NO FILE SELECTED
-                        br
-                        
-                        input(type="submit" value="Upload").magic-outline.plx-button.plx-margin-left.plx-margin-bottom#send
-                        
-                    script.
-                        var file = document.getElementById("file");
-                        file.onchange = function(){
-                            if(file.files.length > 0)
-                            {
-                            console.log(file.files[0])
-                            document.getElementById('filename').innerHTML = 					file.files[0].name;
-                            }
-                        };
+                        .column.plx-width-1-1(class="plx-width-1-2@s" style="padding: 0 3rem;")
+                            .control.txt
+                                label.label Description
+                                textarea.textarea(type="textarea" name="description" )#name                                
 
-            hr.plx-divider-icon
-            br
-            br
-            br
+                            br
+                            .file.has-name.iis-fullwidth.is-dark.is-small(style="text-align: right")
+                                label.file-label
+                                    input.file-input(type='file', name='file')#file
+                                    span.file-cta
+                                        span.file-icon
+                                            i.fas.fa-upload
+                                        span.file-label
+                                            | Choose a file…
+                                    span.file-name#filename
+                                        | NO FILE SELECTED
+                            br
+                            
+                            input(type="submit" value="Upload").magic-outline.plx-button.plx-margin-left.plx-margin-bottom#send
+                            
+                        script.
+                            var file = document.getElementById("file");
+                            file.onchange = function(){
+                                if(file.files.length > 0)
+                                {
+                                console.log(file.files[0])
+                                document.getElementById('filename').innerHTML = 					file.files[0].name;
+                                }
+                            };
+
+                hr.plx-divider-icon
+                br
+                br
+                br
 
 
 
