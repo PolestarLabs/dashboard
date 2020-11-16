@@ -277,12 +277,6 @@ app.use(Passport.session());
 
 app.get('/auth', Passport.authenticate('discord', {scope: scopes}), (req, res,nex)=> nex() )
 
-app.get('/callback',
-  Passport.authenticate('discord', {
-    permissions: 66321471,
-    failureRedirect: '/test'
-  }),
-  (...args) => simplepages().callback(...args));
 
 app.get('/newserver', (...args) => simplepages().callback(...args));
 
