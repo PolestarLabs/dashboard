@@ -242,7 +242,7 @@ function parse_userdata(discordUser, USR, STATUS) {
             tagline: USR.modules.tagline,
             medals: USR.modules.medals
         };
-        response.inventorySize = USR.modules.inventory.reduce((a, b) => a + b.count, 0) || 0;
+        response.inventorySize = USR.modules.inventory?.reduce((a, b) => a + b.count, 0) || 0;
     }
     if (discordUser.error) {
         console.log("AAAAAAAAAAAAAAAAA".red)
