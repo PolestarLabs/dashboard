@@ -1,0 +1,108 @@
+mixin minifooter()
+    .minifooter.plx-flex.plx-flex-around(plx-slider-parallax="x:0,0, -500")
+        a.magic-outline.blue.plx-button.plx-invisible
+        block
+        
+
+
+- let nodrift = true
+style
+    include mobile.css
+
+.slide.plx-position-relative(plx-slider="finite: true")
+    .plx-slider-container
+        ul.plx-slider-items.screens
+
+            li.screenslide.plx-position-relative: .screen#start
+                .pollux-container(plx-slider-parallax="x:0, 200; opacity: 1,1,.5")
+                    .content-holder.bubble
+                        .backdrop.screen-1(plx-slider-parallax="x: -100,500")
+                        .img-container( plx-slider-parallax=" x: 0,0,150")
+                            img(src="/images/pollux/polluxv8.png")
+                .buffer
+                h1.title Pollux
+                h3.subtitle Your new favorite assistant
+                if !userinfo
+                    .infobox
+                        p
+                            | A feature-rich assistant focused in and entertainment and social activities.
+                            br
+                            | Pollux comes with a variety of cool functionalities and minigames with unmatched depth and ellaborate visuals.
+                            br
+                            | Count on her to keep the activity around your community always blooming.
+                    a.magic-outline.plx-button.login-main
+                        i.fas.fa-sign-in-alt
+                        span &#x2002 LOGIN
+                else
+                    .infobox
+                        p Welcome back, #{userinfo.uname}!
+                    a.magic-outline.plx-button.login-main.dashboard
+                            i.fas.fa-sign-in-alt
+                            span &#x2002 DASHBOARD
+                
+                +minifooter()
+                    a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 1500" plx-slider-item="next" )
+                        span See Features 
+                        i.fas.fa-arrow-right     
+            
+            
+            li.screenslide.plx-position-relative: .screen#features
+                .pollux-container
+                    .content-holder
+                        //img(src="/images/pollux/polluxv8.png")
+                        .backdrop.screen-1
+                .scroller-container(plx-slider-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scrollspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
+                    h1.title Slide 2
+                    h3.subtitle dddddddddddddd
+                    .buffer
+                    .infobox
+                        p Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis eveniet atque labore, ipsam quod pariatur voluptates reprehenderit voluptate nam, eaque laudantium. Accusamus, esse fugiat! Qui dicta alias excepturi ipsa incidunt!
+                    
+                    hr.plx-divider-icon
+
+                    
+                    h1.title Slide 2
+                    h3.subtitle dddddddddddddd
+                    .buffer
+                    .infobox
+                        p Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis eveniet atque labore, ipsam quod pariatur voluptates reprehenderit voluptate nam, eaque laudantium. Accusamus, esse fugiat! Qui dicta alias excepturi ipsa incidunt!
+                    
+                    hr.plx-divider-icon
+
+                    h1.title Slide 2
+                    h3.subtitle dddddddddddddd
+                    .buffer
+                    .infobox
+                        p Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis eveniet atque labore, ipsam quod pariatur voluptates reprehenderit voluptate nam, eaque laudantium. Accusamus, esse fugiat! Qui dicta alias excepturi ipsa incidunt!
+                    
+                    hr.plx-divider-icon
+
+                +minifooter()
+                    a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 1500"  )
+                        span Other 
+                        i.fas.fa-arrow-right     
+
+                
+
+            li.screenslide.plx-position-relative: .screen#other
+                .buffer
+                h1.title Slide 3
+                h3.subtitle d
+
+                .infobox
+                    p Lorem ipsum, dolor sit amet consectetur adipisicing elit. Omnis eveniet atque labore, ipsam quod pariatur voluptates reprehenderit voluptate nam, eaque laudantium. Accusamus, esse fugiat! Qui dicta alias excepturi ipsa incidunt!
+
+                +minifooter()
+                    a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 1500"  )
+                        span Go wawa 
+                        i.fas.fa-arrow-right     
+                
+        a.magic-outline.blue.plx-button.plx-position-absolute.invite-button
+            i.fab.fa-discord              
+            span Invite Now
+
+
+
+        a.plx-slidenav-previous.plx-position-center-left(plx-slidenav-previous href="#" plx-slider-item="previous" )
+        a.plx-slidenav-next.plx-position-center-right(plx-slidenav-next href="#" plx-slider-item="next" )
+    ul.plx-slider-nav.plx-dotnav
