@@ -16,6 +16,16 @@ html(class="no-js" lang=locale||"en")
         link(rel="manifest" href="/js/manifest.json")
 
         
+        link(rel="preload" href="/fonts/panton/panton-black-webfont.woff2" as="font" type="font/woff2")
+        link(rel="preload" href="/fonts/panton/panton-bold-webfont.woff2" as="font" type="font/woff2")
+        link(rel="preload" href="/fonts/panton/panton-light-webfont.woff2" as="font" type="font/woff2")
+        link(rel="preload" href="/fonts/panton/panton-regular-webfont.woff2" as="font" type="font/woff2")
+        link(rel="preload" href="/fonts/panton/panton-thin-webfont.woff2" as="font" type="font/woff2")
+        link(rel="preload" href="/fonts/proximasoft/proxima-nova-soft-black" as="font" type="font/woff")
+        link(rel="preload" href="/fonts/proximasoft/proxima-nova-soft-bold" as="font" type="font/woff")
+        link(rel="preload" href="/fonts/proximasoft/proxima-nova-soft-normal" as="font" type="font/woff")
+        link(rel="preload" href="/fonts/proximasoft/proxima-nova-soft-light" as="font" type="font/woff")
+        
         link(rel="preload" href="/css/plx.css"      as="style")
         link(rel="preload" href='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js' as="script")
         link(rel="preload" href="/css/monolith.css" as="style")
@@ -59,6 +69,7 @@ html(class="no-js" lang=locale||"en")
         script(src="https://www.google-analytics.com/analytics.js" defer)
         script(src="/js/login.js" async) 
         
+        
         block nopace
 
         if opengraph&&opengraph.sitename === "POLLUX MARKETPLACE"
@@ -96,7 +107,7 @@ html(class="no-js" lang=locale||"en")
             script Swal.fire("You are blacklisted", "You cannot use Pollux's services anymore.", "error");
     
     block scripts
-        if userinfo
+        if userinfo && !nodrift
             script(async defer).
 
                     "use strict";
@@ -145,7 +156,7 @@ html(class="no-js" lang=locale||"en")
             $( '[rel="preload"]' ).remove() 
             $( 'script' ).remove()
         })
-
+    script(src="/js/why.js" async defer) 
 
 // Veni, vidi, vici
 
