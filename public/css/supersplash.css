@@ -66,22 +66,35 @@
 
 
 
-.cl-preload .plx-scrollspy-inview{
+.cl-preload .supersplash .plx-scrollspy-inview{
 display: none;
 }
 
-.cl-loaded .plx-scrollspy-inview{
+.cl-loaded .supersplash .plx-scrollspy-inview{
 display: block;
 animation-delay: 1s;
 
 }
 
-#curve-1,#curve-2 {
+#curve-2{
 position: absolute;
-top: 0;
+bottom: -50px;
 left: 0;
 width: 100%;  
 pointer-events: none;
+}
+#curve-1 {
+  position: absolute;
+top:  0;
+right: 0;
+height: 100vh;  
+  width: auto;
+
+pointer-events: none;
+}
+#curve-1 g{
+  transform-origin: center;
+  transform: scale(2);
 }
 
 #curve-2{
@@ -101,6 +114,7 @@ animation-delay: .8s;
 .bigpic-container{
 animation-duration: 1s;
  animation-delay: 1.6s;
+  bottom: 0;
 }
 
 .pop{
@@ -130,6 +144,7 @@ background-color:var(--secondary-color);
 backdrop-filter:blur(12px);
 overflow: hidden;
 background-blend-mode:multiply;
+  max-height: 100vw;
 
 }
 
@@ -160,7 +175,8 @@ font-size:5rem;
 --text-shadow: #113;
 font-weight:900;
 line-height: 1;
-text-shadow:0 -2px 0 var(--text-shadow),0 2px 0 var(--text-shadow),2px 0 0 var(--text-shadow),-2px 0 0 var(--text-shadow),-4px 2px 0 var(--text-shadow),-2px 4px 0 var(--text-shadow),-6px 2px 0 var(--text-shadow),-6px 6px 0 var(--text-shadow),0 2px 3px #113a
+text-shadow:0 -2px 0 var(--text-shadow),0 2px 0 var(--text-shadow),2px 0 0 var(--text-shadow),-2px 0 0 var(--text-shadow),-4px 2px 0 var(--text-shadow),-2px 4px 0 var(--text-shadow),-6px 2px 0 var(--text-shadow),-6px 6px 0 var(--text-shadow),0 2px 3px #113a;
+filter: drop-shadow(0 0 1px #112) drop-shadow(-1px 1px 0px #112) drop-shadow(0 0 0px #112);
 }
 .supersplash h3 {
 font-weight:600
@@ -207,9 +223,16 @@ background-image:linear-gradient(#FFF0,var(--accent-color) 200% )
 
 
 
-
+@media screen and (max-width: 1000px){
+  .bigpic{
+    transform: scale(1.2)
+  }
+}
 
 @media screen and (max-width: 600px){
+  .bigpic{
+    transform: scale(.9) translateX(150px)
+  }
   #curve-2{
     bottom: -2px;
     top: auto;
@@ -271,11 +294,11 @@ backdrop-filter: blur(5px);
   .icons-row{
     height: 150px;
     margin-top: -75px;
-    margin-bottom: 38px;
+    margin-bottom: 80px;
 
   }
   .icons-row .icon{
-    width: 80%;
+    /*! width: 80%; */
     filter: drop-shadow(0px 3px 5px #112);
    
   }
@@ -303,7 +326,7 @@ backdrop-filter: blur(5px);
   }
   .title.mobile{
     line-height: 1;
-    font-size: 10pt;
+    font-size: 12pt;
     margin-left: -15px;
     margin-top: -20px;
     z-index: 10;
