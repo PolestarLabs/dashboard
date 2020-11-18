@@ -475,7 +475,8 @@ nav:not(.home) .login:before,
  margin:-2px -29px 0 10px;
  border-radius:3px;
  text-indent:500px;
- height:60px
+ height:60px;
+  z-index: 1000;
 }
 .login:hover  {
  filter:hue-rotate(265deg) brightness(1.25); 
