@@ -462,7 +462,7 @@ nav:not(.home) .login:before,
  box-sizing:border-box
 }
 .login>* {
- font-family:product sans;
+ font-family:Quicksand;
  font-style:italic;
  font-weight:700;
  color:#fff!important;
@@ -957,7 +957,7 @@ div:not(.plx-open) .faders {
  bottom:0;
  left:0;
  display:flex;
- font-family:product sans;
+ font-family:Quicksand;
  color:#fff;
  z-index:2;
  font-size:18px;
