@@ -57,23 +57,7 @@ if(req.query.type=='fanart'){
             file_name = md5(ts+ident);
             new_path =  appRoot+"/dashboard/public/images/artwork/"+ident+"/"+ file_name + '.' + file_ext; let thumb_path =   appRoot+"/dashboard/public/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext;
 
-        DB.fanart.updateOne({id:ident+file_name}, {
-          $set: {
-            hash: file_name,
-            src: "/images/artwork/"+ident+"/"+ file_name + '.' + file_ext,
-            //thumb: "/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext,
-            description: fields.description,
-            title: fields.title,
-            date: ts,
-            artistTwit:fields.twitter,
-            artistlink:fields.page,
-            author: author,
-            author_ID: ident,
-            publish:false,
-            format: file_ext,
-          }
-        },{upsert:true}).then(x=>{"ok"});
-      
+
       
         function ensureDirectoryExistence(filePath) {
           var dirname = path.dirname(filePath);
@@ -85,10 +69,15 @@ if(req.query.type=='fanart'){
         }
 
         fs.readFile(old_path, function(err, data) {
-            ensureDirectoryExistence(new_path);
-            fs.writeFile(new_path, data, function(err) {
+          if (err) return console.error(err);
+          
+          ensureDirectoryExistence(new_path);
+          fs.writeFile(new_path, data, function(err) {
+            if (err) return console.error(err);
+            
                 fs.unlink(old_path, function(err) {
                     if (err) {
+                        console.error(err)
                         res.semd("ERROR")          
                     } else {
                         try{
@@ -99,13 +88,33 @@ if(req.query.type=='fanart'){
                             dstPath: thumb_path,
                             width:   400
                           }, function(err, stdout, stderr){
-                            if (err) res.send(err);
+                            if (err) console.log(err) && res.send(err);
                             console.log('resized image to fit within 600');
                           });
                       
+                          DB.fanart.updateOne({id:ident+file_name}, {
+                            $set: {
+                              hash: file_name,
+                              src: "/images/artwork/"+ident+"/"+ file_name + '.' + file_ext,
+                              //thumb: "/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext,
+                              description: fields.description,
+                              title: fields.title,
+                              date: ts,
+                              artistTwit:fields.twitter,
+                              artistlink:fields.page,
+                              author: author,
+                              author_ID: ident,
+                              publish:false,
+                              format: file_ext,
+                            }
+                          },{upsert:true}).then(x=>{
+
+                            res.status(200);
+                          });
+                        
                       
-                        res.status(200);
                         }catch(e){
+                          console.error(e)
                           res.send("OK!")
                         }
                     }
