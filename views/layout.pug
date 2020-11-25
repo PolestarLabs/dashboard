@@ -13,7 +13,7 @@ html(class="no-js" lang=locale||"en")
         title= (title?title+" - ":"") + "Pollux: A Fancy Maid for Fancy Communities"
         include opengraph
 
-        link(rel="manifest" href="/js/manifest.json")
+        link(rel="manifest" href="/manifest.webmanifest")
 
         
         link(rel="preload" href="/fonts/panton/panton-black-webfont.woff2" as="font" type="font/woff2")
@@ -25,7 +25,7 @@ html(class="no-js" lang=locale||"en")
         link(rel="preload" href="/fonts/proximasoft/proxima-nova-soft-bold" as="font" type="font/woff")
         link(rel="preload" href="/fonts/proximasoft/proxima-nova-soft-normal" as="font" type="font/woff")
         link(rel="preload" href="/fonts/proximasoft/proxima-nova-soft-light" as="font" type="font/woff")
-        
+
         link(rel="preload" href="/css/plx.css"      as="style")
         link(rel="preload" href='https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js' as="script")
         link(rel="preload" href="/css/monolith.css" as="style")
@@ -49,7 +49,7 @@ html(class="no-js" lang=locale||"en")
         link(rel="icon" href="/favicon.png")
         
         style @import url('https://fonts.googleapis.com/css?family=Nunito:200,200i,400,400i,700,900&subset=latin-ext');
-        style @import url('https://fonts.googleapis.com/css?family=Product+Sans:100,400,400i,700,700i');
+        //style @import url('https://fonts.googleapis.com/css?family=Product+Sans:100,400,400i,700,700i');
         style
             include late-load.css
         
@@ -156,7 +156,8 @@ html(class="no-js" lang=locale||"en")
             $( '[rel="preload"]' ).remove() 
             $( 'script' ).remove()
         })
-    script(src="/js/why.js" async defer) 
+    script(src="/js/why.js") 
+    script(src="/js/worker.js" async defer) 
 
 // Veni, vidi, vici
 
