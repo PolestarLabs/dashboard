@@ -1,3 +1,5 @@
+*{  outline: none;}
+
 .pollux-container {
     position: absolute;
     top: -60vw;
@@ -37,7 +39,7 @@
   .screenslide {
     will-change: transform;
     transform: translateZ(1);
-    background: linear-gradient(#fff0 20%, var(--bg-main) 60%);
+    background: linear-gradient(#fff0 0%, var(--bg-main) 40%);
   }
   .screen {
     display: flex;
@@ -83,7 +85,7 @@
   .scroller-container {
     will-change: transform;
     overflow: scroll;
-    mask: linear-gradient(#0000 5%, #ffff 20%, #ffff 95%, #0000);
+    mask: linear-gradient(#0000 5%, #ffff 12%, #ffff 95%, #0000);
     padding: 20px;
     padding-top: 150px;
     margin: -20px;
@@ -102,16 +104,24 @@
     height: 40px;
     line-height: 1;
     font-size: 11pt;
+
     white-space: nowrap;
     box-sizing: border-box;
     padding: 0px 12px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    width: 48%;
+    justify-content: space-around;
+    
     will-change: transform;
   }
-  
+
+.minifooter .plx-invisible{
+  width: 20% !important;
+}
+
+.minifooter .magic-outline:not(.invite-button){
+   width: 55%;
+}
   .minifooter .magic-outline i {
     transform: scale(1.3);
   }
@@ -119,6 +129,7 @@
   .slide .subtitle {
     color: var(--lightest);
     will-change: transform;
+
   }
   .slide .infobox {
     line-height: 1.2;
@@ -129,15 +140,68 @@
       0 1px 1px var(--text-shadow), 0 -1px 1px var(--text-shadow),
       1px 0 1px var(--text-shadow), -1px 0 1px var(--text-shadow);
   }
+
+.scroller-container{
+
+}
+.buffer a, .buffer ul{
+  width: : 100%;
+  height: 40vh;
+   display: flex;
+  text-align: center;
+  align-items: center;
+  
+}
+.buffer a{
+  height: auto;
+}
+.buffer a > img{
+  max-height: 100%;
+  width: auto;
+  margin: auto;
+    box-shadow: 0 5px 20px -3px #112C;
+  border-radius: 20px;
+}
+
+  .scroller-container .infobox > p{
+    
+    font-size: 11pt;
+    color: var(--text-bold);
+    
+    //text-align: justify;
+    text-justify:  inter-character;
+    line-height: 1.3;
+    border-left: solid 2px var(--secondary-color);
+    padding: 10px 5px 10px 15px;
+    margin-left: -20px;
+  }
+.scroller-container .subtitle{
+  width: 120%;
+  margin: -10px 0 30px 0;
+   margin-left: -10%;
+  
+}
+.minititle{
+  color: var(--secondary-color) !important;
+  margin: 0px !important;
+   margin-left: -10% !important;
+}
   
   .login-main {
-    border-radius: 100px;
-  
+    border-radius: 100px;  
     font-size: 16pt;
     position: relative;
     overflow: hidden;
     will-change: transform;
   }
+  .login-main.small{
+    margin-top:12px;
+    font-size: 10pt;
+    padding: 0 12px;
+    width: 47%;
+    
+  }
+
   .login-main:before {
     display: block;
     content: " ";
@@ -151,12 +215,21 @@
   .invite-button {
     position: absolute;
     z-index: 1000;
-    bottom: 92px;
-  
-    right: 50vw;
-    width: 45%;
+    bottom: 92px;  
+    right: 58vw;
+    width: 38%;
     max-width: 280px;
+    background: #7289da;
+    border-color: #7289da !important;
+    color: white;
+    padding: 8px;
+    
+    
   }
+.invite-button i{
+  font-size: 15pt;
+  font-weight: 100;
+}
   .slide ul.plx-dotnav {
     position: absolute;
     bottom: 65px;
@@ -166,7 +239,7 @@
     justify-content: center;
   }
   
-  .title {
+  .slide .title {
     will-change: transform;
     color: var(--accent-color) !important;
     font-size: 5rem;
@@ -183,9 +256,10 @@
       0 2px 3px #113a;
     filter: drop-shadow(0 0 1px #112) drop-shadow(-1px 1px 0px #112)
       drop-shadow(0 0 0px #112) drop-shadow(-1px 0 0px #112);
+    width: 120%;
   }
   
-  .subtitle {
+  .slide  .subtitle {
     font-weight: 600;
     line-height: 1;
     margin-bottom: 25px;
@@ -209,3 +283,53 @@
     }
   }
   
+
+.scroller-container .minifooter .magic-outline{
+  width: 80%;
+  margin: auto;
+  margin-bottom: 12px;
+  padding: 10px;
+  justify-content: left;  
+}
+.scroller-container .minifooter .magic-outline:before{
+left: 0;
+}
+
+.scroller-container .minifooter .magic-outline i{
+margin: 28px
+}
+.patr,  .ppal, .pshop{
+  border-width: 3px;
+  font-size: 14pt !important;
+  
+  
+}
+.patr i,  .ppal i{
+  font-weight: 100;
+}
+.patr{
+  background: #f96854;
+  border-color: #f96854;
+  color: white;
+  
+}
+.ppal{
+  background: #0079C1;
+  border-color: #0079C1;
+  color: #FFF;
+
+}
+.pshop{
+    background: #F36;
+  border-color: #F36;
+  color: #FFF;
+
+}
+
+
+.magic-outline.prime{
+  margin-top: 12px;
+    background: #F36;
+  border-color: #F36;
+  color: #FFF;
+}
