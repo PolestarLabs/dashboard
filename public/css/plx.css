@@ -1,6 +1,6 @@
 
 html {
-    font-family: "Varela Round","Nunito","Quicksand",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: "Quicksand",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-size: 16px;
     font-weight: 400; 
     line-height: 1.5;
@@ -219,7 +219,7 @@ h4,
 h5,
 h6 {
     margin: 0 0 20px 0;
-    font-family: "Nunito",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: "Panton", "Quicksand",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     font-weight: 400;
     color: var( --text-bold);
     text-transform: none
@@ -3251,7 +3251,7 @@ ul.plx-nav-sub {
     min-height: 80px;
     padding: 0 15px;
     font-size: .875rem;
-    font-family: "Nunito",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: "Quicksand",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     text-decoration: none
 }
 
@@ -4632,7 +4632,7 @@ ul.plx-nav-sub {
 
 .plx-tooltip {
     display: none;
-    font-family: 'Varela Round';
+    font-family: 'Quicksand';
     letter-spacing: 1px;
     position: absolute;
     z-index: 1030;
@@ -6588,7 +6588,7 @@ iframe.plx-cover {
 
 .plx-logo {
     font-size: 1.5rem;
-    font-family: "Nunito",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    font-family: "Quicksand",-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
     color: var(--text-dim-mid);
     text-decoration: none
 }

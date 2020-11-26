@@ -31,23 +31,54 @@ block content
         include ../navbar
 
         style.
-            body{
-                background: #F2F2FF
-            }
-            .colorfit{
-            padding: 20px;
-            width: 150px;
-            }
-            .colorfit .bg{
-            height: 130px;
-            width: 130px;
-            margin: 0 auto 20px;
-            border-radius: 5px
-            }
-            .colorfit p {margin: 0}
+                    body{
+                    background: #F2F2FF
+                    }
+                    .colorfit{
+                    padding: 20px;
+                    width: 150px;
+                    margin: 14px;
+                    padding: 12px 20px 25px 20px;
+                    }
+                    .colorfit .name{
+                    font-weight: 800 !important;
+                    font-size: 18px
+                    }
+                    .colorfit .bg{
+                    height: 130px;
+                    width: 130px;
+                    margin: 0 auto 20px;
 
 
-        .itsa-paper
+                    border-radius: 5px
+                    }
+                    .colorfit p {margin: 0}
+
+                    @media screen and (max-width:920px){
+                    .colorfit{
+                    display: flex;
+                    width: 300px;
+                    flex-wrap: wrap;
+                    margin: 10px 0; 
+
+
+                    }
+                    .colorfit .name{
+                    width: 100%;
+                    margin-bottom: 10px;
+                    }
+                    .colorfit .bg{
+                    height: 100px;
+                    width: 100px;
+                    margin: 0 20px 20px 0;
+
+
+                    border-radius: 5px
+                    }
+                    }
+
+
+        .paperback
 
 
             br
@@ -92,7 +123,7 @@ block content
                         +colorfit("Metro Midnight",'#2B2B3B','533 C','95 72 15 67')
                         +colorfit("Vitorian Black",'#1B1B2B','7547 C','99 74 31 84')
                    
-                    h4: b Character Colors
+                    h4: b Character Colors (Old)
                     br
 
                     .plx-flex.plx-flex-between.plx-flex-wrap
@@ -102,8 +133,55 @@ block content
                         +colorfit("Eyes",'#90E050')
                         +colorfit("Glasses",'#E73A5D')
                         +colorfit("Crystals",'#FF5599')
+                    
+                    h4: b Character Colors (New)
+                    br
+                    .plx-flex.plx-flex-between.plx-flex-wrap
+                        +colorfit("Hair Matte",'#45A5FC')
+                        +colorfit("Hair Tips",'#6E38BD')
+                        +colorfit("Inner Hair",'#FA5FAC')
+                        +colorfit("Skin",'#FFE0EB')
+                        +colorfit("Eyes",'#2BF0AA')
+                        +colorfit("Glasses",'#E73A5D')
+                        +colorfit("Crystals",'#FF70CC')
+                        +colorfit("Soft Whites",'#DAE0FB')
+                        +colorfit("Soft Blacks",'#434D8A')
+                        +colorfit("Deep Blacks",'#353565')
 
                     br    
+                    hr.plx-divider-icon
+                    h2#colors Typefaces
+
+
+                    h1.title Display: Panton SemiBold
+                    h2.subtitle Subtitles: Panton Light
+                    p(style="font-family: Panton;")
+                        span(style="font-family: Panton; font-weight: 900; font-style: italic; font-size:28pt") 012345 
+                        span(style="font-family: Panton; font-weight: 300; font-style: italic; font-size:26pt") 012345
+                        br 
+                        b Numbers: 
+                        | Panton Black Italic
+                    p(style="font-family: Panton;font-weight: 400; ") Panton is our all-around display typeface. Used mainly to display important numbers and titles. Panton is slightly geometric and with a strong presence, the sophisticated and modern look fits with Pollux's bold conceptual nature as well as her personality, at the same time providing good contrast with our body typeface Quicksand which is in charge of conveying the softness aspect. And as a bonus, the slight similarity of Panton Caps with Uni Sans hints to our relationship with the Discord platform.
+
+                    h4: b Body Titles: Panton Regular
+                    br
+                    p 
+                        b
+                            | Body: Quicksand
+                        br
+                        | Quicksand was chosen as our main body typeface for its rounded stems and noticeably geometric nature. Quicksand translates the soft and amicable nature of Pollux while keeping the modern feel. As well as providing the ideal visual contrast to Panton as a Title+Body pair. Together both fonts form a balance of strong and sophisticated with friendly and approachable.
+                    p(style="font-family: Nunito")
+                        b
+                            | Body-alt: Nunito
+                        br
+                        | Nunito is our secondary body typeface, mostly used in more "serious sam" contexts. Nunito also bears round terminals and soft geometric shapes which keeps the same wavelength as Quicksand, though it is better suited for longer bodies of text due to its smaller visual footprint and more condensed kerning. Used mainly in fine-print like our Terms of Service and some smaller text that would otherwise be harder to read with the slim stems of Quicksand.
+
+                    .plx-flex
+                        div(style="border: solid 1px var(--dark);border-radius:5px").plx-button.plx-button-default.plx-button-info Buttons: Proxima Nova Soft
+                        div
+                    p(style="font-family: Proxima Soft")
+                        | Proxima Nova Soft was originally to be used as body font. Just like Nunito and Quicksand, it has proeminent rounded stems and it is noticeably geometric. Although Proxima was deemed "way too sober" even for our serious-sam standards, its neutral yet noticeably rounded capitals were the perfect fit for our buttons as it is considerably less organic and much thicker than our other body typefaces. Proxima Nova is there to keep the mood but break a bit of the monotony by standing out wherever it is placed.
+
                     br    
                     br    
                     br    

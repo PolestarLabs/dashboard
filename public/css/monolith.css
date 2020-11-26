@@ -1,5 +1,5 @@
-@import "https://fonts.googleapis.com/css?family=Quicksand:400,900";
-@import "https://fonts.googleapis.com/css?family=Varela+Round";
+/*@import "https://fonts.googleapis.com/css?family=Quicksand:400,900";
+@import "https://fonts.googleapis.com/css?family=Varela+Round";*/
 @import "https://fonts.googleapis.com/css?family=Share+Tech+Mono";
 @keyframes slowblink {
  40%,
@@ -462,9 +462,9 @@ nav:not(.home) .login:before,
  box-sizing:border-box
 }
 .login>* {
- font-family:Quicksand;
+ font-family:Panton;
  font-style:italic;
- font-weight:700;
+ font-weight:600;
  color:#fff!important;
  text-transform:none;
  z-index:0
@@ -498,7 +498,6 @@ nav:not(.home) .login:before,
  opacity:.7
 }
 .navnumbers {
- font-family:varela round!important;
  font-weight:100!important;
  font-size:.85rem!important;
  margin-top:4px
@@ -618,7 +617,7 @@ font-family: panton;
 }
 h4,
 h5 {
- font-family:varela round
+ /*font-family:varela round*/
 }
 h1.title {
  font-weight:700;
@@ -791,6 +790,48 @@ div:not(.plx-open) .faders {
   display:none
  }
 }
+
+
+
+.paperback {
+  background:var(--lightest);
+  color:var(--pre-dark);
+  padding:48px 64px
+ }
+ .paperback .title, .paperback h1, .paperback h2, .paperback h3, .paperback h4, .paperback h5 {
+  color:var(--pre-dark)
+ }
+ .paperback h3,
+ h4,
+ h5 {
+  opacity:.9;
+  margin-bottom:4px
+ }
+ .paperback p {
+  margin-top:4px
+ }
+ .paperback p b {
+  color:#224
+ }
+ .paperback a {
+  color:#58f;
+  border-bottom:dashed 1px #10f8
+ }
+ .paperback a:hover {
+  color:#85f;
+  border-bottom:solid 1px #10f5;
+  text-decoration:none
+ }
+ .paperback a:visited {
+  color:#67aa;
+  border-bottom:dotted 1px #10f8;
+  text-decoration:none
+ }
+ .paperback hr {
+  opacity:.2
+ }
+
+
 @media screen and (min-width:900px) and (max-width:1200px) and (min-height:1200px) {
  #side-rotation-nav {
   transform-origin:0 -50%
@@ -824,7 +865,10 @@ div:not(.plx-open) .faders {
   width:100vh
  }
 }
-@media(max-width:640px) {
+@media screen and (max-width:640px) {
+  .paperback {
+    padding:  12px ;
+}
  .underbar {
   top:12px!important;
   margin-bottom:25px
@@ -1031,43 +1075,8 @@ div:not(.plx-open) .faders {
   background-color:auto
  }
 }
-.itsa-paper {
- background:var(--lightest);
- color:var(--dark);
- padding:48px 64px
-}
-.itsa-paper .title {
- color:var(--dark)
-}
-.itsa-paper h3,
-h4,
-h5 {
- opacity:.9;
- margin-bottom:4px
-}
-.itsa-paper p {
- margin-top:4px
-}
-.itsa-paper p b {
- color:#224
-}
-.itsa-paper a {
- color:#58f;
- border-bottom:dashed 1px #10f8
-}
-.itsa-paper a:hover {
- color:#85f;
- border-bottom:solid 1px #10f5;
- text-decoration:none
-}
-.itsa-paper a:visited {
- color:#67aa;
- border-bottom:dotted 1px #10f8;
- text-decoration:none
-}
-.itsa-paper hr {
- opacity:.2
-}
+
+
 .chanlink a {
  color:inherit!important;
  border-bottom:none!important
