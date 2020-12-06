@@ -42,6 +42,11 @@ router.use("/userio", async (...args) => {
     return (require('./user-io.js'))( ...args);
 });
 
+router.use("/hangmaid", async (req,res) => {
+    if(req.query.refresh) delete require.cache[require.resolve('./hangmaid')];
+    return (require('./hangmaid.js'))(req,res);
+});
+
 
 router.use(["/booster/:pack/:B/:A/:Anew/:Bnew/output.gif",], async (...args) => {
     return (require('./event/booster.js'))( ...args);
@@ -60,7 +65,6 @@ router.use("/flag", async (...args) => {
 })
 
 router.use("/repipe/:url", async (req,res) => {
-
 
     let Picto = require('../../../bot/core/utilities/Picto')
 
