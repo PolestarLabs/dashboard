@@ -1,5 +1,8 @@
-/*@import "https://fonts.googleapis.com/css?family=Quicksand:400,900";
-@import "https://fonts.googleapis.com/css?family=Varela+Round";*/
+/*
+@import "https://fonts.googleapis.com/css?family=Quicksand:400,900";
+@import "https://fonts.googleapis.com/css?family=Varela+Round";
+*/
+
 @import "https://fonts.googleapis.com/css?family=Share+Tech+Mono";
 @keyframes slowblink {
  40%,
@@ -816,7 +819,7 @@ div:not(.plx-open) .faders {
  .paperback a {
   color:#58f;
   border-bottom:dashed 1px #10f8
- }
+ }=
  .paperback a:hover {
   color:#85f;
   border-bottom:solid 1px #10f5;

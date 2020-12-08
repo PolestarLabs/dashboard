@@ -115,7 +115,7 @@ if(req.query.type=='fanart'){
                       
                         }catch(e){
                           console.error(e)
-                          res.send("OK!")
+                          res.send("OK?")
                         }
                     }
                 });

@@ -3,11 +3,11 @@
 .pollux-container {
     position: absolute;
     top: -60vw;
-    left: -25vw;
+    left: -5vw;
     z-index: -1;
     will-change: transform;
   }
-  .plx-slider-container {
+  .plx-switcher-container {
     overflow: visible;
   }
   .bubble {
@@ -67,7 +67,7 @@
     background-color: var(--secondary-color);
     background-image: url(/images/pollux/tea.png);
     position: absolute;
-    left: -50%;
+    
     background-size: 500px;
   }
   .bubble {
@@ -230,7 +230,7 @@
   font-size: 15pt;
   font-weight: 100;
 }
-  .slide ul.plx-dotnav {
+  ul.plx-dotnav {
     position: absolute;
     bottom: 65px;
     margin: auto;
@@ -332,4 +332,7 @@ margin: 28px
     background: #F36;
   border-color: #F36;
   color: #FFF;
+}
+.backbutton{
+  display: block !important;
 }

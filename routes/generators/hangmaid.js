@@ -40,10 +40,11 @@ router.get('/', async (req,res)=>{
     const polly = Picto.new(500,666);
     const _ply = polly.getContext('2d');
 
+    //ctx.setTransform(1,.05, 0, 1, 0, 0);
     ctx.rotate(-0.0999);
     ctx.translate(-75, -55);
 
-    let {a:attempts,g:guesses,e:ended} = req.query;
+    let {a:attempts,g:guesses,e:ended,h:hint} = req.query;
     
     attempts = attempts || "";
     guesses = guesses?.split('') || ['_','_','_','_','_']; 
@@ -95,9 +96,12 @@ router.get('/', async (req,res)=>{
     ctx.restore();
     
     let attempts_text = Picto.tag(ctx,attempts.split('').join('-'),'40pt "Coming Home", Pangolin','#c40e0e' ).item;
+    let hint_text = Picto.tag(ctx,`(${hint})`,'20pt "Coming Home", Pangolin','#1b52c3' ).item;
     
     ctx.drawImage(attempts_text,ax-attempts_text.width,ay);
+    ctx.drawImage(hint_text,ax-hint_text.width,ay-50);
     
+
     //ctx.globalCompositeOperation = 'multiply';
     ctx.globalAlpha = .85;
     //if(ended === 'win') ctx.drawImage(PARTS.green,0,0);

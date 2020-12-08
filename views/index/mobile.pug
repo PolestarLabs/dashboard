@@ -1,24 +1,32 @@
 mixin minifooter()
-    .minifooter.plx-flex.plx-flex-around(plx-slider-parallax="x:0,0, -500")
+    .minifooter.plx-flex.plx-flex-around()
         a.magic-outline.blue.plx-button.plx-invisible
         block
         
-
+mixin bubble(item,opts={})
+    .pollux-container(  style= opts.dim ? "mask: linear-gradient(135deg, #FFF 20%,#0000 80%);" : "")
+        .content-holder.bubble
+            .backdrop.screen-1(style=`background-image: ${opts.bgImg}`)
+            .img-container(style=`transform: ${opts.transform}`)
+                img(src="/images/pollux/"+(item||"polluxv8")+".png" )
 
 - let nodrift = true
 style
     include mobile.css
 
-.slide.plx-position-relative(plx-slider="finite: true; draggable: false")
-    .plx-slider-container
-        ul.plx-slider-items.screens
+.slide.plx-position-relative
+    //(plx-switcher="finite: true; draggable: true")
+    //.plx-switcher-container
+    //ul.plx-subnav.plx-tab-dash
+        li: a 1 
+        li: a 2
+        li: a 3
+        li: a 4
+    div 
+        ul.plx-switcher.screens#screens
 
             li.screenslide.plx-position-relative: .screen#start
-                .pollux-container(plx-slider-parallax="x:0, 200; opacity: 1,1,.5")
-                    .content-holder.bubble
-                        .backdrop.screen-1(plx-slider-parallax="x: -100,500")
-                        .img-container( plx-slider-parallax=" x: 0,0,150")
-                            img(src="/images/pollux/polluxv8.png")
+                +bubble()
                 .buffer
                 h1.title Pollux
                 h3.subtitle Your new favorite assistant
@@ -54,7 +62,7 @@ style
 
                 
                 +minifooter()
-                    a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 500" plx-slider-item="next" )
+                    a.magic-outline.plx-button(plx-switcher-item="next" )
                         
                         i.fas.fa-star
                         span Features 
@@ -62,11 +70,8 @@ style
             
             
             li.screenslide.plx-position-relative: .screen#features
-                .pollux-container
-                    .content-holder
-                        //img(src="/images/pollux/polluxv8.png")
-                        .backdrop.screen-1
-                .scroller-container(plx-slider-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
+                +bubble()
+                .scroller-container(plx-switcher-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
                     h1.title Ranking System
                     h3.subtitle Make it to the top!
                     .buffer(plx-lightbox)
@@ -205,7 +210,7 @@ style
                     hr.plx-divider-icon
 
                 +minifooter()
-                    a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 500" plx-slider-item="next" )
+                    a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
                         i: .fas.fa-vial
                         span Advanced
                         i.fas.fa-arrow-right
@@ -213,11 +218,8 @@ style
 
                 
             li.screenslide.plx-position-relative: .screen#features
-                .pollux-container
-                    .content-holder
-                        //img(src="/images/pollux/polluxv8.png")
-                        .backdrop.screen-1
-                .scroller-container(plx-slider-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
+                +bubble("science-colcor-800",{transform:"translate(-30px,50px) scale(.8)",dim:true,bgImg:'url(/images/pollux/cogs.png);background-size: 40%;'})
+                .scroller-container(plx-switcher-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
                     //.nobuffer(plx-lightbox)
                         - var link = "https://media.discordapp.net/attachments/488142034776096772/779327618561343539/profile.png"
                         a(href=link)
@@ -286,14 +288,15 @@ style
 
 
                 +minifooter()
-                    a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 500" plx-slider-item="next" )
+                    a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
                         i.fas.fa-heart
                         span Community
                         i.fas.fa-angle-double-right
 
 
             li.screenslide.plx-position-relative: .screen#features
-                .scroller-container(plx-slider-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
+                +bubble()
+                .scroller-container(plx-switcher-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
                     .buffer
                     h1.title Polluxverse
                     h3.subtitle All things Pollux and some more!
@@ -314,13 +317,14 @@ style
                         p We only exist because of the voluntary contributions of our community, become part of it by supporting us becoming a PRIME member.
 
                 +minifooter()
-                    a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 500" plx-slider-item="next" )
+                    a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
                         i.fas.fa-atom
                         span Get PRIME
                         i.fas.fa-angle-double-right
 
             li.screenslide.plx-position-relative: .screen#features
-                .scroller-container(plx-slider-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
+                +bubble()
+                .scroller-container(plx-switcher-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
                     
                     h1.title Pollux PRIME
                     h3.subtitle Join the treehouse squad today!
@@ -333,34 +337,40 @@ style
                             br
                             | The newest stuff will always be launched for PRIME servers first.
 
-                    .minifooter.plx-flex.plx-flex-around(plx-slider-parallax="y:0,0, 500").plx-flex-wrap
+                    .minifooter.plx-flex.plx-flex-around(plx-switcher-parallax="y:0,0, 500").plx-flex-wrap
                         
-                        a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 500"  ).pshop.login-main
+                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).pshop.login-main
                             i.fas.fa-credit-card
                             span Prime Shop
                         br
-                        a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 500"  ).patr.login-main
+                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).patr.login-main
                             i.fab.fa-patreon
                             span Patreon
                         br
-                        a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 500"  ).ppal.login-main
+                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).ppal.login-main
                             i.fab.fa-paypal
                             span PayPal
                     hr.plx-divider-icon
                     br
                 +minifooter()
-                        a.magic-outline.plx-button(plx-slider-parallax="x:0,0, 500"  )
+                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  )
                             i.fas.fa-atom
                             span Prime Info
                                 
+            li.backbutton: a.plx-slidenav-previous.plx-position-top-left(plx-slidenav-previous href="#" plx-switcher-item="previous" )
                 
         a.magic-outline.blue.plx-button.plx-position-absolute.invite-button
             i.fab.fa-discord              
             span INVITE ME!
                     
+    
+    
 
 
-
-        a.plx-slidenav-previous.plx-position-top-left(plx-slidenav-previous href="#" plx-slider-item="previous" )
-        //a.plx-slidenav-next.plx-position-center-right(plx-slidenav-next href="#" plx-slider-item="next" )
-    ul.plx-slider-nav.plx-dotnav
+        //a.plx-slidenav-next.plx-position-center-right(plx-slidenav-next href="#" plx-switcher-item="next" )
+    ul.plx-switcher-nav.plx-dotnav( plx-switcher="connect: #screens;animation: plx-animation-slide-right-medium, plx-animation-slide-left-medium;" , style="justify-content: inherit")
+        li: a 
+        li: a 
+        li: a 
+        li: a 
+        li: a 
