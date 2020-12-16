@@ -11,7 +11,7 @@ let CURRCHOICE = {
     let ITEMCHOICE = {   
         name:"item",
         required: true,
-        description: "⚱️ The item to be posted",
+        description: "⚱️ The item's name or ID",
         type: 3,  
     }
 
@@ -85,12 +85,7 @@ module.exports = {
                     description: "⚱️ The item you want to search.",
                     type: 1,
                     options: [
-                        {
-                            name: "item",
-                            description: "The item name or ID.",
-                            type: 3,
-                            required: true
-                        }
+                        ITEMCHOICE
                     ]
                     
 
