@@ -180,7 +180,7 @@ Promise.promisifyAll(require("mongoose"));
 Object.assign(global,require("../bot/core/utilities/Gearbox").Global)
 
 //-- PASSPORT  
-const scopes = ['identify', 'guilds','connections'];
+const scopes = ['identify', 'guilds','connections','applications.commands'];
 Passport.serializeUser((user, done) => {
   done(null, user);
 }); 
@@ -463,7 +463,7 @@ const auth = async function(req, res, next) {
   if(req.url.includes('commands'))     return next();
   if(req.url.includes('cmlist'))     return next();
   if(req.url.endsWith('/bsave'))     return next();
-  if(req.url.endsWith('/invite'))     return next();
+  //if(req.url.endsWith('/invite'))     return next();
   if(req.url.includes('/auth'))     return next();
 
   
