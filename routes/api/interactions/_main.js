@@ -48,6 +48,9 @@ router.post("/", async (req, res) => {
   if (req.body.type === 1) {
     return res.json({ type: 1 });
   } else {
+
+    console.log((require('util')).inspect(req.body.data,{colors:true,depth:8}))
+
     let command = require( `./${req.body.data.name}.js` );
     if(!command) return res.status(400).json("Nope");
     else res.json( await command.exec(req, req.body) );
@@ -79,7 +82,6 @@ function RegisterAllCommands(){
 
 function RegisterCommand(cmd){
   if ( !cmd.name && !cmd.description) return null;
-  console.log(cmd,"... reg.")
   return axios.post(`https://discord.com/api/v8/applications/${cfg.clientID_laris + ( (cmd.beta??true) ?'/guilds/277391723322408960':'') }/commands` ,
   {
     name:    cmd.name,
