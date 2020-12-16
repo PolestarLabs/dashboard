@@ -7,18 +7,18 @@ function NameSplitter(name, end) {
 module.exports = {
     name: "ship",
     beta: true,
-    description: "Love calculator for two people",
+    description: "💗 A fancy Love Calculator for two people!",
     options: [
       {
         type: 6,
         name: "lovey",
-        description: "The first person to calculate a match",
+        description: "💜 The first person for the match",
         required: true,
       },
       {
         type: 6,
         name: "dovey",
-        description: "The second person to calculate a match",
+        description: "💛 The second person for match",
         required: true,
       }
     ],
@@ -30,6 +30,10 @@ module.exports = {
       const serverData = await DB.servers.get(params.guild_id);
 
       const LANG = serverData.modules.LANGUAGE || 'en';
+      
+      let reject;
+      if (!(TargetA && TargetB)) reject = $t("responses.ship.needTupipo", { lngs: [LANG,'en', 'dev' ] });
+      if (TargetA.id === TargetB.id) reject = $t("responses.ship.need2diffpipo", { lngs: [LANG,'en', 'dev'] });
 
       const SHIPNAME = NameSplitter(TargetA.username) + NameSplitter(TargetB.username, true);
       const rand = randomize(0, 100);
@@ -39,10 +43,10 @@ module.exports = {
       else response = $t(`responses.ship.quotes.${Math.floor(rand / 10)}.${randomize(0, 1)}`, { lngs: [LANG,'en','dev'] });
 
       return {
-          type: 4,
-          data: {
-            //content: ,
-            embeds: [
+        type: 4,
+        data: {
+            content: reject ,
+            embeds:reject?[]:[
               {
                 description: `**${response}**`,
                 image: {url: `${HOST}/generators/ship.png?av1=${TargetA.id}::${TargetA.avatar}&av2=${TargetB.id}::${TargetB.avatar}&spn=${SHIPNAME}&pct=${rand}`  }
