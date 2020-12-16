@@ -7,6 +7,4 @@ modules.export = {
             }
           });
     }
-}
-    
-    
+}    
