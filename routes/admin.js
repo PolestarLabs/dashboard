@@ -129,7 +129,12 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
     }    
     updateGlobalInstances({id:SVID})
     await DB.servers.set(SVID,{        $set:  setPayload      });
-    return res.status(200).json("OK");
+    try{
+        console.log(req.handled,"handled")
+        return res.sendStatus(200);
+    }catch(err){
+        console.error(err)
+    }
     
 })
 
@@ -165,8 +170,12 @@ router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
     delete payload.validator;
     delete payload.serverid;
     await DB.reactRoles.remove(payload);
-
-    return res.sendStatus(200);
+    try{
+        console.log(req.handled,"handled")
+        return res.sendStatus(200);
+    }catch(err){
+        console.error(err)
+    }
 
 })
 
