@@ -4,9 +4,24 @@ const nacl = require("tweetnacl");
 const cfg = require('../../../config.js');
 const publicKey = cfg.pubKey; 
 
+
 router.get("/test", (rq,rs) => {
     console.log("test OK")
     return rs.json("OK");
+} )
+
+router.post(["/test","/test2"],(rq,rs) => {
+
+  console.log("test OK")
+  console.log(rq.rawBody)
+  console.log(rq.rawBody2)
+  return rs.json({
+    received: {
+      body: rq.body,
+      rawBody: rq.rawBody,
+      rawBodyMystery: rq.rawBody2
+    }
+  });
 } )
 
 router.post("/", async (req, res) => {
