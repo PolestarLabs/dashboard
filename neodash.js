@@ -116,6 +116,7 @@ const webhook = (obj) => {
     content: '```js\n' + s + '\n```'
   })));
 }
+/*
 const stripe = require('stripe')('sk_test_51HlCCKE9Tpa5TPNLkKRKC8vuce8Jrzg8Yj2pF1CPeL9ncTg6kPQfBXwRIFU1U6CG2DMn8fQuNYKKPbkC1oII7Bxs00bnvqi7BB')
 app.post('/webhook/bsian-stripe', async (req, res) => {
   try {
@@ -138,7 +139,7 @@ app.post('/webhook/bsian-stripe', async (req, res) => {
     res.status(500).json({ error: e.message });
   }
 })
-
+*/
 // =======================================================================================
 
 const dbURL = 'mongodb://polaris:geminisbeta@138.201.158.163:27472/polaris';
