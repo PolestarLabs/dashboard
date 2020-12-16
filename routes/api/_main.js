@@ -82,7 +82,7 @@ router.use(["/cosmetics/"], async (...args) => {
 });
 
 router.use(["/interactions/"], async (...args) => {
-    delete require.cache[(require.resolve('./interactions'))];
+    delete require.cache[(require.resolve('./interactions/_main.js'))];
     return  (require('./interactions/_main.js'))( ...args);
 
 });
