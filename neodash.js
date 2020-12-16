@@ -180,7 +180,7 @@ Promise.promisifyAll(require("mongoose"));
 Object.assign(global,require("../bot/core/utilities/Gearbox").Global)
 
 //-- PASSPORT  
-const scopes = ['identify', 'guilds','connections','applications.commands'];
+const scopes = ['identify', 'guilds','connections'];
 Passport.serializeUser((user, done) => {
   done(null, user);
 }); 
