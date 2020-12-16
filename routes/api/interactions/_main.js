@@ -1,8 +1,12 @@
 const express = require("express");
+const axios = require("axios");
 const router = express.Router();
 const nacl = require("tweetnacl");
 const cfg = require('../../../config.js');
 const publicKey = cfg.pubKey; 
+const readdirAsync = Promise.promisify(require("fs").readdir);
+
+
 
 
 router.get("/test", (rq,rs) => {
@@ -24,8 +28,10 @@ router.post(["/test","/test2"],(rq,rs) => {
   });
 } )
 
+
+
 router.post("/", async (req, res) => {
-  console.log(req.body);
+  RegisterAllCommands()
 
   const signature = req.get("X-Signature-Ed25519");
   const timestamp = req.get("X-Signature-Timestamp");
@@ -48,6 +54,26 @@ router.post("/", async (req, res) => {
   }
 });
 
+function RegisterAllCommands(){
+  readdirAsync("./").then((comms) => {
+    comms.forEach(async cmd => {
+        const cmdName = cmd.split('.')[0];
+        if (cmdName.startsWith('_')) return;
+        let cmdFile = require("./"+cmdName+".js");
+        if (cmdFile) RegisterCommand(cmdFile);
+    })
+  })
+}
+
+function RegisterCommand(cmd){
+  return axios.post(`https://discord.com/api/v8/applications/${cfg.clientID_laris}/commands` ,
+  {
+    content:    cmd.content,
+    description: cmd.description
+  },
+  {headers: { Authorization: PLX.token }})
+} 
 
 
 module.exports = router;
+RegisterAllCommands();
