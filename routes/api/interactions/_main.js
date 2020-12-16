@@ -86,6 +86,7 @@ function RegisterCommand(cmd){
     //type: cmd.type || 4,
     description: cmd.description,
     options: cmd.options,
+    choices: cmd.choices,
   },
   {headers: { Authorization: PLX.token }})
 } 
