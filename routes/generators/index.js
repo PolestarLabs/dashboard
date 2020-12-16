@@ -64,7 +64,7 @@ router.use("/flag", async (...args) => {
     return (require('./flag.js'))( ...args);
 })
 
-router.use("/ship", async (...args) => {
+router.use("/ship.png", async (...args) => {
     return (require('./ship.js'))( ...args);
 })
 
