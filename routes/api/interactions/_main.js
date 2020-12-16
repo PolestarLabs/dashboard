@@ -2,24 +2,7 @@ const express = require("express");
 const router = express.Router();
 const nacl = require("tweetnacl");
 const cfg = require('../../../config.js');
-const publicKey = cfg.publicKey; 
-
-/*
-router.use(function(req, res, next) {
-  var data = "";
-  req.on("data", function(chunk) {
-    data += chunk;
-  });
-  req.on("end", function() {
-    req.rawBody = data;
-    req.body = JSON.parse(data);
-    next();
-  });
-});
-*/
-// I believe we do have raw body already
-console.log('entrypoint')
-
+const publicKey = cfg.pubKey; 
 
 router.get("/test", (rq,rs) => {
     console.log("test OK")
@@ -44,12 +27,9 @@ router.post("/", async (req, res) => {
   if (req.body.type === 1) {
     return res.json({ type: 1 });
   } else {
-    res.json({
-      type: 4,
-      data: {
-        content: "is this person gay? yes."
-      }
-    });
+    let command = require( `./${req.body.data.name}.js` );
+    if(!command) return res.status(400).json("Nope");
+    else res.json( await command.exec(req) );
   }
 });
 
