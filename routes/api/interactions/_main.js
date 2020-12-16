@@ -50,26 +50,42 @@ router.post("/", async (req, res) => {
   } else {
     let command = require( `./${req.body.data.name}.js` );
     if(!command) return res.status(400).json("Nope");
-    else res.json( await command.exec(req) );
+    else res.json( await command.exec(req, req.body) );
   }
 });
 
 function RegisterAllCommands(){
-  readdirAsync("./").then((comms) => {
+  readdirAsync(__dirname).then((comms) => {
     comms.forEach(async cmd => {
-        const cmdName = cmd.split('.')[0];
+      const cmdName = cmd.split('.')[0];
+        console.log(" Registering Interaction ".bgBlue + " " + cmdName)
         if (cmdName.startsWith('_')) return;
-        let cmdFile = require("./"+cmdName+".js");
-        if (cmdFile) RegisterCommand(cmdFile);
+        try{
+          delete require.cache[require.resolve("./"+cmdName+".js")];
+          let cmdFile = require("./"+cmdName+".js");
+          if (cmdFile) RegisterCommand(cmdFile).catch(err=>{
+            console.error( JSON.stringify(err.response.data,0,2) )
+            console.error(` ${cmdName} `.bgRed)
+          });
+        }catch(err){
+          console.error(" Interaction ERROR ".bgRed + " " + cmd);
+          console.error(err)
+          console.error("---------------------------------------".gray)
+        }
+
     })
   })
 }
 
 function RegisterCommand(cmd){
-  return axios.post(`https://discord.com/api/v8/applications/${cfg.clientID_laris}/commands` ,
+  if ( !cmd.name && !cmd.description) return null;
+  console.log(cmd,"... reg.")
+  return axios.post(`https://discord.com/api/v8/applications/${cfg.clientID_laris + ( (cmd.beta??true) ?'/guilds/277391723322408960':'') }/commands` ,
   {
-    content:    cmd.content,
-    description: cmd.description
+    name:    cmd.name,
+    //type: cmd.type || 4,
+    description: cmd.description,
+    options: cmd.options,
   },
   {headers: { Authorization: PLX.token }})
 } 
