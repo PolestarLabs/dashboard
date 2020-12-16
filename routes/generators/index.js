@@ -64,6 +64,10 @@ router.use("/flag", async (...args) => {
     return (require('./flag.js'))( ...args);
 })
 
+router.use("/ship", async (...args) => {
+    return (require('./ship.js'))( ...args);
+})
+
 router.use("/repipe/:url", async (req,res) => {
 
     let Picto = require('../../../bot/core/utilities/Picto')
