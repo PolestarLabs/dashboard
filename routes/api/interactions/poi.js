@@ -3,8 +3,8 @@ modules.export = {
         return res.json({
             type: 4,
             data: {
-              content: "is this person salty? yes."
+              content: "poi poi poi poi"
             }
           });
     }
-}    
+}
