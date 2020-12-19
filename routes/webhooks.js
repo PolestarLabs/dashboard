@@ -84,7 +84,7 @@ router.post('/drift', function (req, res) {
     }
   }
 
-  let webhookUrl = "https://discordapp.com/api/webhooks/687786088202633275/lnY7fjJ0_T8Tq1HCKGOHyRReDxlLgMxBKHY7GCOj0Lxt04Qe7Z1ovsWpWshFVFgEGkMC?wait=true"
+  let webhookUrl = 'https://discord.com/api/webhooks/789665054081417287/UcKjPPvBpEpU7UO4DrpSnGY4JsvVw6WeAFnH0y8Z0gkyXQB6AnTanCr2CbyiEZjU8KDM?wait=true'
   embed = {}
   embed.description = payload.data.body
   if (id == 1447159) {
