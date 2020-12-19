@@ -83,7 +83,6 @@ const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const xmlparser = require('express-xml-bodyparser');
-const sassMiddleware = require('node-sass-middleware');
 
 
 const formidable = require('formidable');

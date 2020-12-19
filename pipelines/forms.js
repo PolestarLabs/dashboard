@@ -139,7 +139,7 @@ if(req.query.type=='fanart'){
       embed2.footer = embed.footer
       //embed2.timestamp = embed.timestamp
       embed2.image={url:HOST+"/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext}
-      sendWebhook({embeds:[embed2]});
+      sendWebhook({embeds:[embed2]}, "https://discord.com/api/webhooks/789738553037946932/2dn-1c_EzaABoCufkZ-CHMoK7TqHtCm5UGkhGSq6F3p-h0CQ_4je_YPMiyaSUWRjlWQV?wait=true");
       return res.sendStatus(200) //res.redirect("/artwork");
     });
 }else{
@@ -212,7 +212,7 @@ let username= fields.username,
       //embed2.description = embed.description
       embed2.color = embed.color
       //embed2.timestamp = embed.timestamp
-      sendWebhook({"embeds":[embed2]});
+      sendWebhook({"embeds":[embed2]} ,"https://discord.com/api/webhooks/789738553037946932/2dn-1c_EzaABoCufkZ-CHMoK7TqHtCm5UGkhGSq6F3p-h0CQ_4je_YPMiyaSUWRjlWQV?wait=true");
 
 
     })
@@ -225,10 +225,10 @@ let username= fields.username,
   
 }
 request = require('request')
-function sendWebhook(data){  
+function sendWebhook(data,url){  
   console.log(JSON.stringify(data))
   let opts={    
-    url:"https://discordapp.com/api/webhooks/500544023988273154/JgZF9l4nPRQJ1lDu3ZisRMQx5vdRoOEJTZeFuu8F55fFclwKku_Jyn_YGRQDYnlYzNiB?wait=true",
+    url: url || "https://discordapp.com/api/webhooks/500544023988273154/JgZF9l4nPRQJ1lDu3ZisRMQx5vdRoOEJTZeFuu8F55fFclwKku_Jyn_YGRQDYnlYzNiB?wait=true",
     body: data,
     json:true,
   //  processData: false,
