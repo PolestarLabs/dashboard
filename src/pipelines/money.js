@@ -1,6 +1,6 @@
 const request = require('request');
 // const gear = require('../../core/gearbox.js');
-const cfg = require('../../config.json');
+const cfg = require('../../config.js');
 var paypal = require('paypal-rest-sdk');
 
 /*

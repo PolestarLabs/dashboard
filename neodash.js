@@ -215,7 +215,7 @@ let discordStrategy = new Strategy({
 Passport.use(discordStrategy);
 PassportRefresh.use(discordStrategy);
 
-app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
+app.use(favicon(path.join(__dirname, 'src/public', 'favicon.png')));
 app.use(cookieParser());
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({
@@ -236,7 +236,7 @@ app.use(sassMiddleware({
 }));
 */
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', path.join(__dirname, 'src/views'));
 app.set('view engine', 'pug'); 
 
 

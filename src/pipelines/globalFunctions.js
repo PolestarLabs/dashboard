@@ -1,5 +1,5 @@
 const request = require("request");
-const cfg = require('../config')
+const cfg = require('../../config')
 const Path = require('path')
 
 // const DB = require('../database') 
