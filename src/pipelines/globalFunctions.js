@@ -149,8 +149,8 @@ module.exports = {
   }
 
 ,getComms: function getComms(json,aliases) {
-  let path =  Path.resolve(__dirname,"../../bot/core" )
-  let path_polaris = Path.resolve(__dirname + "../../../bot/core")
+  let path =  Path.resolve(__dirname,"../../../bot/core" )
+  let path_polaris = Path.resolve(__dirname + "../../../../bot/core")
   let files = fs.readdirSync(path + "/commands")
   let COMMANDS = {}
   let hidden = false;
@@ -174,7 +174,7 @@ module.exports = {
 
     let morefiles = fs.readdirSync(filedir)    
    global.appRoot = Path.resolve(path,"..")
-   global.paths =  require(Path.resolve(__dirname,'../../bot/utils/paths'));
+   global.paths =  require(Path.resolve(__dirname,'../../../../bot/utils/paths'));
    global._emoji = ()=>({});
 
       for (y = 0; y < morefiles.length; y++) {

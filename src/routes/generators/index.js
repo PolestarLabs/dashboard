@@ -70,7 +70,7 @@ router.use("/ship.png", async (...args) => {
 
 router.use("/repipe/:url", async (req,res) => {
 
-    let Picto = require('../../../bot/core/utilities/Picto')
+    let Picto = require('../../../../bot/core/utilities/Picto')
 
     let base = await Picto.getCanvas(decodeURI(req.params.url));
 
