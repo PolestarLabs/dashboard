@@ -1,0 +1,186 @@
+extends ../layout 
+block content
+    .wrapper
+        -currentPage = 'events'
+        include ../navbar
+
+        style.
+          .message{
+                  background: #1112;
+                  padding: 8px;
+                  margin: 24px;
+                  border-radius: 3px;
+                  overflow: hidden;
+                  border: solid 1px #AAC2
+                }
+                .message-body{
+                // background: blue
+                }
+                .message-header{
+                // background:green;
+                  border-radius: 2px;
+                  padding: 2px 8px;
+                  //text-transform: uppercase;
+                  font-weight: 111;
+                  color: var(--text-extra-bold);
+                    border-bottom: solid 1px #AAC1;
+                  border-left: solid 3px #85FA
+                    
+                }
+                .columns{
+                  display: flex;
+                }
+                @media screen and (max-width:600px){
+                  .columns{flex-direction: column}
+                }
+                .column{
+                  display: block;
+                flex-basis: 0;
+                flex-grow: 1;
+                flex-shrink: 1;
+                padding: 0.75rem;
+                  
+                }
+                .is-2{
+                  flex: none;
+                width: 25%;
+                }
+                .is-3{
+                flex: none;
+                width: 16.66667%;
+                  font-weight: 100;
+                  font-size: 13px
+                }
+                .message a{
+                    text-decoration: none;
+                }
+                .message .button {
+                  background: #85f;
+                  text-align: center;
+                  padding: 8px 16px;
+                  border-radius: 2px;
+                  color: white;
+                  text-transform: uppercase;
+                  font-weight: 600;
+                  font-size: 16px;
+                  font-family: Proxima Soft;
+                }
+                .message .button:hover{
+                  background: #0DC
+                }
+                .is-auto{
+
+                }.box{
+                  background: #10101a33;
+                  padding: 12px;
+                  border-radius: 4px
+                    
+                }
+        - let r = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+        .plx-background-cover(plx-parallax="bgy: 100,400" style='background-image: url(/images/heads/market'+r+'.png)').pictoheader.dark
+          .plx-container
+              br
+              h1.title Events
+              h3.subtitle Special season-flavored minigames and collectibles available for a limited time. Only with Pollux 
+              hr.plx-divider-small
+              p 
+                  | Events usually happen in worldwide holidays which are used as a theme for it. Such event gets special collectibles and a limited time collecting minigame to be exchanged by <span>Sapphires</span> and items exclusive to that event.
+
+        hr.plx-divider-icon-fill
+        .plx-container
+            .section#ongoing    
+                h2.title Ongoing Events 
+                h4.subtitle Events active right now
+                p: i There are no events ongoing at the moment
+                hr
+            .section#upcoming
+                h2.title Upcoming Events 
+                h4.subtitle Confirmed future events
+                p: i There are no events scheduled for the next weeks
+                hr 
+            .section#past
+                h2.title Past Events 
+                h4.subtitle Previous events no longer running
+                
+                .message
+                  .message-header Halloween Event : Gravedigging Tomblifters
+                  .message-body
+                    .columns 
+                      .column.is-2
+                        img(src="/build/event/halloween18/logo.png" width="200px").level-left
+                      .column.is-3            
+                        div 
+                          p From November 1st 2018 to November 18th 2018
+                          a(href="/events/halloween18"): .button More Info
+                      .column.is-auto            
+                        .box.is-purple
+                          p Get your shovel, dig out coffins, and use their clothes as spook fuel for trick or treating!
+                          p The more spooky you are, more candy. And more candy means... well, see by yourself!
+                .message
+                  .message-header Solstice Event : Flowers and Snowflakes
+                  .message-body
+                    .columns 
+                      .column.is-2
+                        img(src="/images/event/logo_en.png" width="200px").level-left
+                      .column.is-3            
+                        div 
+                          p From September 2nd 2018 to October 10th 2018
+                          a(href="/events/solstice18"): .button More Info
+                      .column.is-auto            
+                        .box.is-purple
+                          p Choose your favorite among the two mascots and collect Flowers and Snowflakes to offer to Summer and Winter spirits. You can only represent one team, no going back. So choose wisely!
+                          p Each priestess has their own set of rewards throughout the event, stick with the team that you like the rewards the most!        
+                      
+                .message
+                  .message-header Easter 2018
+                  .message-body
+                    .columns 
+                      .column.is-2
+                        img(src="/images/easterev18.png" width="200px").level-left
+                      .column.is-3            
+                        div 
+                          p From April 1st 2018 to April 22nd 2018
+                          a(href="/events/easter2018"): .button More info! 
+                      .column.is-auto            
+                        .box.is-purple
+                          p Collect and trade eggs around and exchange them for Pollux Goodies!
+                .message
+                  .message-header Christmas Event: PolluXmas
+                  .message-body
+                    .columns 
+                      .column.is-2
+                        img(src="/images/polluxmas.png" width="200px").level-left
+                      .column.is-3            
+                        div 
+                          p From December 18th 2017 to January 5th 2018
+                          a(href="/events/xmas17"): .button More info! 
+                      .column.is-auto            
+                        .box.is-purple
+                          p Pieces of toys for Santa's assembly factories were lost during shipping. Most of them were recovered, except for the winding keys. Two elves were assigned to recover them, you should collect them and give to them, the global event payout will depend on how much they can collect.
+                          p Each elf has special abilities that will help you get event cosmetics for your profile.
+                      
+                .message
+                  .message-header Halloween Event
+                  .message-body
+                    .columns 
+                      .column.is-2
+                        img(src="/images/halloween_2017.png" width="200px").level-left
+                      .column.is-3
+            
+                        div 
+                          p From October 15th 2017 to November 5th 2017
+                          a(href="/events/halloween_2017"): .button More info! 
+              
+                      .column.is-auto
+                        .box.is-purple
+                          p Collect candies around with <code>p!trickortreat</code> and get Ranked to earn lots of exclusive goodies!
+                          p Random Event Lootbox drops within servers!
+                    
+                 
+        
+                
+                hr.plx-divider-icon
+
+
+
+block scripts

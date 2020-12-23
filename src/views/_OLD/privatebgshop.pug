@@ -1,0 +1,225 @@
+extends layout
+mixin rarity(r,RR)
+      .level
+        .level-right
+          figure.image.is-48x48
+            img(src="/images/tiers/"+RR+".png")
+          .title: b!= "&#x2003 "+r.toUpperCase()
+
+block content
+  style.
+    .swal2-image{
+        transform:scale(.6)
+    }
+        .topzera{background-image: url(#{serverinfo.partnerDetails.picture});}
+  -
+    var groupBy = function(xs, key) {
+    return xs.reduce(function(rv, x) {
+    (rv[x[key]] = rv[x[key]] || []).push(x);
+    return rv;
+    }, {});
+    };
+    
+  link(rel='stylesheet',type="text/css" href='/css/pace.css')  
+  
+  if opengraph
+    -let bgColor = opengraph.color || "#f43074"
+    -
+      function invertcolore(hex, bw) {
+          if (hex.indexOf('#') === 0) {
+              hex = hex.slice(1);
+          }
+          // convert 3-digit hex to 6-digits.
+          if (hex.length === 3) {
+              hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+          }
+          if (hex.length !== 6) {
+              throw new Error('Invalid HEX color.');
+          }
+          var r = parseInt(hex.slice(0, 2), 16),
+              g = parseInt(hex.slice(2, 4), 16),
+              b = parseInt(hex.slice(4, 6), 16);
+          if (bw) {
+              return (r * 0.299 + g * 0.587 + b * 0.114) > 186
+                  ? '#000000'
+                  : '#FFFFFF';
+          }
+          // invert color components
+          r = (255 - r).toString(16);
+          g = (255 - g).toString(16);
+          b = (255 - b).toString(16);
+          // pad each with zeros and return
+          return "#" + padZero(r) + padZero(g) + padZero(b);
+      }
+
+    -let invertcolor= invertcolore(bgColor,true)    
+    style.
+      .hero.is-bold .navbar-item:not(.lv2){
+        color: #{invertcolor}!important;
+      }
+      
+  
+    .hero.is-bold(style="background:"+bgColor+";color:"+invertcolor+"!important")
+          include navbas
+  else
+    .hero.is-bold.is-primary
+      include navbas
+          
+  .nano
+    .container.preloder
+        style
+          include hearty 
+          div.grid-big 
+            - for (i=0; i<25; i++)
+              div.cell-1
+        br
+        br
+        p.title LOADING
+      
+    .topzera
+    .nano-content.division.prelod: .container.fullheight.stripedown
+      div#top
+        br
+        p.title.is-2: b #{serverinfo.meta.name} Exclusive Shop
+
+        -const t = translation.website
+        -const r = translation.rarity || {r:"Rare",ur:"Ultra Rare", sr:"Super Rare",c:"Common", u:"Uncommon"}
+
+        .container.is-fluid.division2(style="height: 100%")
+          #list           
+            .level
+              .level-item
+                .level
+                  p: b Rarity &#x2003
+                  div.control.level-left: .select.is-small: select#filter-rar
+                          each i in ["","C","U","R","SR","UR"]
+                              option()= i
+              .level-item
+                .level
+                  p: b Tags &#x2003
+                  input(type=text placeholder="tags")#filter-tag
+              .level-item
+                //.level
+                  p: b Include Event &#x2003
+                  label.switch
+                    input(type="checkbox" checked)#filter-event
+                    span.slider
+              .level-item
+                .level
+                  p: b Results per page &#x2003
+                  div.control.level-left: .select.is-small: select#filter-max
+                          each i in [50,100,200]
+                              option()= i
+              a(index=1).button.pgi GO
+            -var price = {UR:22520,SR:10000,R:6200,U:2800,C:1260}
+            #bgfilt
+
+          if userinfo
+            if userinfo.id=='88120564400553984'
+              -ongoingEvent = 'valentines'
+
+
+
+
+
+  .sidepanel-bg.hidden.backbut
+  .sidepanel
+    .titlebox
+      a.backbut: span.fa.fa-arrow-left
+      span.title.is-marginless.level-right(style="display:inline;float: right;")#supername.truncate Purchase Background &#x2003
+    #eve
+    .bgPic
+      img(src="/backdrops/5zhr3HWlQB4OmyCBFyHbFuoIhxrZY6l6.png")#bgpic
+    .code 
+      span Code: &#x2003
+      span#bgcode --waiting for code--
+    br
+    .prices
+      .r.level.row
+        span.level-left Rubines: &#x2003
+        .level-item
+        span.level-right.rubinePrice.countup
+        //(data-start=0 data-count=0)= 0 
+        img(src="/images/rubine.png").currIcon.level-right
+        .buythis.rubinePrice(currency="rubines").button.level-right.is-small BUY
+
+      .j.level.row
+        span.level-left Jades: &#x2003
+        .level-item
+        span.level-right.jadePrice.countup
+        //(data-start=0 data-count=0)= 0 
+        img(src="/images/jade.png").currIcon.level-right
+        .buythis.jadePrice(currency="jades").button.level-right.is-small BUY
+
+      .s.level.row
+        span.level-left Sapphires: &#x2003
+        .level-item
+        span.level-right.sapphirePrice.countup
+        //(data-start=0 data-count=0)= 0 
+        img(src="/images/sapphire.png").currIcon.level-right
+        .buythis.sapphirePrice(currency="sapphires").button.level-right.is-small BUY
+
+
+      //.e.level.row#yesevent.is-hidden
+          span.level-left Event Currency: &#x2003
+          .level-item
+            .p-title
+              b
+                .level-right.eventPrice.title.b.countup
+                .b500.small Winding Keys
+
+          //(data-start=0 data-count=0)= 0 
+          img(src="/images/eventToken").currIcon-large.level-right
+          .buythis.eventPrice(currency="event").button.level-right.is-small BUY
+
+
+      p Tags
+      #bgbartags.box
+
+      if userinfo
+        p Your Funds:
+        #usinfo.box
+            .level-item
+              img(src="/images/rubine.png").currIcon.level-left
+              p &#x2000;&#x2715;&#x2000
+              p.b900#rfunds.countup(data-start=0 data-count=(userdata.modules.rubines||0))=0
+            .level-item
+              img(src="/images/jade.png").currIcon.level-left
+              p &#x2000;&#x2715;&#x2000
+              p.b900#jfunds.countup(data-start=0 data-count=(userdata.modules.jades||0))=0
+            .level-item
+              img(src="/images/sapphire.png").currIcon.level-left
+              p  &#x2000; &#x2715 &#x2000;
+              p.b900#sfunds.countup(data-start=0 data-count=(userdata.modules.sapphires||0))=0
+            if ongoingEvent
+              .level-item
+                img(src="/images/eventToken").currIcon.level-left
+                p &#x2000;&#x2715;&#x2000
+                p.b900#efunds.countup(data-start=0 data-count=(userdata.eventGoodie))=0
+
+      else
+        p.retex Please LOGIN to check your funds and buy this BG.
+        div.navbar-item.level-right
+            a(onclick="javascript:login()").navbar-right.button.is-primary.has-addons.is-small
+                span.icon.is-pulled-left
+                  i.fa.fa-sign-in-alt
+                //span.divider  &#x2004
+                div( style="border-left:1px solid #844;border-right:1px solid #eee; opacity:.15;height:28px")
+                span.divider  &#x2000
+                span.is-pulled-right=translation.website.login || "Login"
+
+
+
+
+block scripts
+  script(src='/js/pace.js')
+  script(src="/js/countUp.js")
+  script(src="https://cdnjs.cloudflare.com/ajax/libs/jquery-touch-events/1.0.5/jquery.mobile-events.js")
+  script.
+        $(document).ready(() => {
+          $.get(`bg/1`, function (data) {
+            $('#bgfilt').html(data);
+          })
+        })
+
+

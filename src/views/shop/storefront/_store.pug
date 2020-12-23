@@ -1,0 +1,251 @@
+extends ../../layout
+
+mixin shopcard()
+  div(v-if="item" )
+    .header
+      
+      .s-title.truncate(:plx-tooltip="item.name") {{item.name}}
+      .icon
+        i.far.fas(:class="`fa-star`")
+      .subheader
+        .text.truncate {{ ((item.event?item.event+" event":'')||item.category||item.series||item.BUNDLE||(item.for?item.for+" deck":'')||"").toUpperCase() }}
+    .rartag
+    .body
+      .timer(v-if="item.expires && item.expires > Date.now()")
+        div(:plx-countdown='`date: ${new Date(item.expires).toISOString()} `')
+          div
+            span.plx-countdown-days
+            span.sep DAYS
+          div
+            span.plx-countdown-hours
+            span.sep HR
+          div
+            span.plx-countdown-minutes
+            span.sep MIN
+          div
+            span.plx-countdown-seconds
+            span.sep SEC
+
+      .img(v-if='item.type == "background"').background
+        .bg-image( v-bind:style="{backgroundImage: `url('/backdrops/${item.code}.png')`}")
+        .artist-tag(v-if="item.artistName")
+          i.fas.fa-paint-brush
+          a(:href="item.artistLink" target="blank") {{item.artistName}}
+      .img(v-else-if='item.type == "medal"').medal
+        img(:src="`/medals/${item.icon||item.id}.png`")
+      .img(v-else-if='item.type == "sticker"').sticker
+        img(:src="`/stickers/${item.id}.png`")
+        .sticker-bpack(v-bind:style="{'background-image': `url(/build/boosters/showcase/${item.series_id}.png)`}")
+      .img(v-else-if='item.type == "boosterpack"').sticker
+        img(:src="`/build/boosters/showcase/${item.icon}.png`")
+      //.img(v-if='item.type == "item"').item
+      .img(v-else-if='item.type == "skin"').skin
+        //assuming it is always DECK for now
+        // PLEASE CHANGE THIS
+        .container
+          img(:src="`/build/cards/${item.id.split('_').join('/')}/${item.id.startsWith('tarot')? 'star':'HQ'}.png`")
+          img(:src="`/build/cards/${item.id.split('_').join('/')}/backface.png`")
+      .img(v-else).item
+        img(:src="`/build/items/${item.id}.png`")
+
+
+    .footer.plx-flex.plx-flex-wrap
+
+        .button(v-if="item.buyable === false && !item.crafted || item.rarity == 'XR' && !item.crafted" @click="setCurrentItem(item)" plx-toggle="#modal-special"  ).special.alt
+            i: .fas.fa-star
+            .price Special
+
+        .button(v-else-if='item.event', :class="hasItem(item)?'disabled':''").event.alt
+          i: .plx-token.icon24.curr_icon_3
+          .price
+            span.face() {{ miliarize(item.price || (defaultPrices[item.type]||{})[item.rarity] * defaultPrices.tokenModifier || "N/A" ,0,' ')}}
+
+
+        .button(
+          v-else-if='item.type == "sticker" || item.type == "boosterpack"',
+          plx-toggle="#modal-pack",
+          @click="setCurrentItem(item)"
+        ).sticker.alt
+          i: .fas.fa-info-circle
+          .price PACK INFO
+
+            
+        .button(v-else-if="hasItem(item)" style="padding:0 5px", :class="hasItem(item)?'disabled':''")
+            i: .fas.fa-check.icon24
+            .price Obtained
+
+
+        .button(v-else-if="item.type == 'skin'"  ).advcraft.alt
+          i: .fas.fa-vial
+          .price ADV. CRAFT
+
+        .button(v-else-if="item.crafted"  ).craft.alt
+          i: .fas.fa-flask
+          .price CRAFT INFO
+        
+        .button(
+          v-else-if="item.type",
+          style="padding:0 5px",
+          :class="hasItem(item)?'disabled':''",
+          plx-toggle="#modal-buy",
+
+          @click="setCurrentItem(item)"
+
+        )
+          //.isnew 
+            +svgBadge('discount')               
+                .txt-num 75
+                  span.txt-percent % 
+                  .txt-off OFF 
+          i: .plx-rubine.icon24.curr_icon_3
+          .price
+            span.face() {{ miliarize(item.price || (defaultPrices[item.type]||{})[item.rarity] || "N/A" ,0,' ')}}
+          //.button(style="padding:0 5px")
+          i: .plx-sapphire.icon24.curr_icon_3
+          .price
+            span.face() {{ miliarize( Math.ceil((item.price || (defaultPrices[item.type]||{})[item.rarity]||0) * defaultPrices.sapphireModifier) || "N/A" ,0,' ') }}
+        
+        
+        .button(v-else style="padding:0 5px").dead
+          .price: span.face LOADING...
+ 
+        a(:href="`/marketplace/sell?type=${item.type}&finder=${item.code||item.id||item.icon}`" plx-tooltip="Sell in Marketplace").button(v-if="hasItem(item)" style="padding:0 5px").sellbut
+          i: .fas.fa-shopping-cart.icon24
+        
+
+
+block head
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
+
+  link(rel='stylesheet' href="/css/store.css")
+  link(rel='stylesheet' href="/css/rarityboxes.css")
+  link(rel='stylesheet' href="/css/supersplash.css")
+  link(rel='stylesheet' href="/css/bundles.css")
+  link(rel='stylesheet' href="/css/sfront_marketplace.css") 
+
+  
+block content
+
+    -currentPage = 'market'
+    include ../../navbar
+
+    section#title.supersplash
+      include section_top
+
+ 
+    #storefront
+        a#storetop
+        .wealth.plx-flex.plx-flex-around(plx-sticky)
+            if userdata
+                .RBN
+                    span.plx-rubine.icon32.curr_icon_3
+                    span= miliarize(userdata.modules.RBN) || 0
+                .sapphires
+                    span.plx-sapphire.icon32.curr_icon_3
+                    span= miliarize(userdata.modules.SPH) || 0
+                .jades
+                    span.plx-jade.icon32.curr_icon_3
+                    span= miliarize(userdata.modules.JDE) || 0
+                .tokens
+                    span.plx-token.icon32.curr_icon_3
+                    span= miliarize(userdata.eventGoodie) || 0
+            else
+              p
+                a(onclick="login()")
+                  i: .fas.fa-sign-in-alt
+                  | Login  &#x2000
+                | to see your balance
+
+    
+    
+       
+        .plx-flex.plx-width-1-1
+            //
+            .store-sidebar
+              ul.store-nav.plx-subnav(plx-sticky="offset:50; bottom: #endof",  plx-switcher="connect:.store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small; active: 0")
+                  li.megastroke.menuitem(plx-filter-control="filter: *" ).plx-active
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-star
+                          label  Arrivals
+                  li.megastroke.menuitem(plx-filter-control="filter: .limited" ).plx-active
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-hourglass-half
+                          label  Limited Time
+
+                  li.megastroke.menuitem(plx-filter-control="filter: .background ; group: type" )
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-cubes
+                          label  Bundles
+                  li.megastroke.menuitem(plx-filter-control="filter: .medal ; group: type" )
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-images
+                          label  Backgrounds
+                  li.megastroke.menuitem(plx-filter-control="filter: .sticker ; group: type" )
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-bullseye
+                          label  Medals
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" )
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-store
+                          label  Marketplace
+                  //hr
+                  br
+                  li.menulabel.plx-disabled
+                      a Coming Soon:
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" ).plx-disabled
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-calendar
+                          label  Event Shop
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" ).plx-disabled
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-sync-alt
+                          label  Daily Shop
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" ).plx-disabled
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-ankh
+                          label  Pawn Shop
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" ).plx-disabled
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-parachute-box
+                          label  Supplier
+                  div(style="margin-bottom:10rem")
+              
+            ul.store-main.plx-width-1-1.store-tab-content.plx-switcher
+                
+                    li#arrivals
+                        include pages/arrivals
+                    li#timed
+                        include pages/timed
+                    li#bundles
+                        include pages/bundles
+                    li#backgrounds
+                        include pages/backgrounds
+                    li#medals
+                        include pages/medals        
+                    li#marketplace
+                        include pages/marketplace
+
+
+        #modals-galore
+          #modal-buy(plx-modal plx-flex-top)
+            include modals/buy_item
+
+          #modal-craft(plx-modal plx-flex-top)
+            include modals/craft_item
+
+          #modal-pack(plx-modal plx-flex-top)
+            include modals/pack_info
+
+          #modal-special(plx-modal plx-flex-top)
+            include modals/special
+    #endof
+
+    
+
+
+
+    style #footer{margin-top: -5rem}                
+block scripts
+  script(src='js/sweetalert.js')
+  script
+    include storefront.js

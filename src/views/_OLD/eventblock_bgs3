@@ -1,0 +1,51 @@
+if userinfo
+  if userinfo.id=='88120564400553984'
+    -ongoingEvent = 'halloween_2017'
+
+if ongoingEvent
+  div(class=" box has-text-centered super-filter EV UR SR R U C FLW SFK neutral")
+    .message.is-paddingless
+        ul.menu-list.level
+          .level-item
+          li:   a.is-active.itm.super-filter-button(data-filter="all")= t.all || "All"
+          //li:   a.itm.super-filter-button(data-filter="EV"): b= "EVENT"
+          li:   a.itm.super-filter-button(data-filter="UR")= r.ur
+          li:   a.itm.super-filter-button(data-filter="SR")= r.sr
+          li:   a.itm.super-filter-button(data-filter="R")= r.r
+          li:   a.itm.super-filter-button(data-filter="U")= r.u
+          li:   a.itm.super-filter-button(data-filter="C")= r.c
+          li:   a.itm.super-filter-button(data-filter="SFK") ❄️
+          li:   a.itm.super-filter-button(data-filter="FLW") 🌸
+          li:   a.itm.super-filter-button(data-filter="neutral") 🏵️
+          .level-item
+
+    .level.is-mobile
+      .level-right
+        div
+          .title: b!= "🏵️ event backgrounds".toUpperCase()
+          .subtitle More info on how to obtain them <a href="/events/halloween18"> HERE </a>.
+      .level-left
+
+        //figure.image.is-128x128(style="height:64px")
+          //img(src="/images/event.png" height="64px")
+
+    -let rarmult = {UR:280,SR:140,R:80,U:50,C:25}
+    
+    div
+      each val in imgboxe.EV
+        -let p1 = rarmult[val.rarity] *100
+        -let p2 = Math.floor(p1 * 18.874) || false;
+        -let p3 = Math.ceil(p1 / 3000 || false)|| false;
+        -let p4 = false //rarmult[val.rarity]
+        -let faction = val.filter
+        -let R=val.rarity+" EV "+faction
+        -let C=val.name
+        -let U="/backdrops/"+val.name+".png"
+        a.openiv(namae=val.name uri=U class=R tags=tags[val.name]).filter.super-filter.evholder
+          img(src="/backdrops/"+val.code+".png" class="round-5  bgr nofilter event ")
+          img(src="/images/tiers/"+val.rarity+".png").rarEv
+    
+    
+    ins( class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-client="ca-pub-6458250766331979" data-ad-slot="5383934607")
+  
+  hr

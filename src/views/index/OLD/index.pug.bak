@@ -1,0 +1,266 @@
+extends layout
+block content
+    include navbar
+    style
+        include home.css
+
+    #bgHex
+        .container( plx-parallax="x: 0,0; y: -10,30;viewport: .7;target: #start")
+            video(autoplay loop muted playsinline  plx-parallax=" y: 0,50; target: body")
+                source(src="/video/polluxhexaback.webm" type="video/webm")
+    .plx-uncontainer 
+            .splash_container( plx-parallax="opacity: 1,1; y:0,-100;vi6ewport: .5;tyarget: #start")
+                div( plx-parallax="   y: 30,-250;xviewport: 1;target: body")
+                    img(plx-img data-src="/images/pollux/idpollux_right_s2_dark.png" alt="Pollux Artwork by @arion910 and @dasFlicksie")#splash.plx-animation-plx
+                //img(src="https://via.placeholder.com/600x800").splash
+    #t
+    .plx-container 
+        section#top.plx-animation-plx
+            //h1.title.plx-text-bold Pollux
+            img(style="min-width: 300px; width: 55%;margin: 10px 30px 40px 20px;" src="/images/pollux_typ.svg" plx-parallax="opacity:1,0; y: 10,250")
+            h2.subtitle( plx-parallax="opacity:1,0;y: 0,250;") A fancy maid for fancy places
+    #content-roll
+        .plx-uncontainer
+            section#start.colorblock: .plx-container 
+                h3.title Intro
+                p.plx-column-1-2.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Curabitur dictum nunc nunc. Nullam varius venenatis ligula a euismod. Proin rutrum, lectus nec gravida vehicula, massa quam faucibus purus, nec interdum quam nulla sit amet dui. In pulvinar sollicitudin ligula dignissim ultrices. Nulla tempor suscipit enim, vitae sollicitudin dolor molestie eget. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Pellentesque a elit vel odio eleifend scelerisque id sit amet nibh. Pellentesque nec purus vitae elit finibus aliquet. Sed ac metus facilisis, hendrerit dolor at, vestibulum eros.
+
+                    Nunc venenatis mi id varius laoreet. Aenean ornare ipsum sed tortor iaculis, eu laoreet neque pulvinar. Curabitur sodales, felis eget suscipit dictum, dui purus ultrices nibh, imperdiet tristique orci enim a mi. Sed in viverra dui. In lobortis a leo ac facilisis. Sed fringilla odio sapien, nec imperdiet augue condimentum id. Etiam condimentum pellentesque euismod. Sed tincidunt congue magna, vitae rhoncus orci blandit sit amet. Mauris blandit sed arcu nec condimentum. Pellentesque viverra eu enim ac sodales. In vitae enim a felis facilisis commodo eu eu massa. Nunc lobortis mauris nec ligula aliquet commodo sed quis augue. Etiam sem nisl, finibus tempor magna ut, elementum viverra libero. Cras porta velit orci, a condimentum neque ultrices ac.
+
+                p.plx-column-1-4.
+                    Donec posuere finibus molestie. Praesent ut vulputate neque. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean convallis leo in orci consectetur, a fermentum mi facilisis. Etiam commodo, dui quis pretium ultrices, metus diam rutrum magna, vitae malesuada dolor enim vel quam. Suspendisse lacinia tempor dui. Nulla imperdiet viverra nulla, a viverra metus posuere vitae. Aliquam in lectus in eros posuere vulputate sit amet ut risus.
+
+                p.plx-column-1-3.
+                    Pellentesque egestas eros sit amet auctor tincidunt. Duis a justo id enim tristique posuere. Cras sollicitudin magna leo, ut finibus enim elementum eu. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut accumsan sapien eget felis rhoncus, sit amet ullamcorper magna suscipit. Mauris faucibus mollis massa in cursus. Integer in magna sit amet arcu congue condimentum. Maecenas sed est sapien. Aliquam et dictum enim, at efficitur metus. Donec posuere nisl quis metus blandit, eu dapibus augue ornare. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sed augue gravida, egestas tellus id, dignissim sem. Nunc iaculis nibh non mi aliquam, vel tincidunt leo gravida. Duis facilisis erat sed ex dictum egestas. Donec at efficitur massa, et elementum velit.
+            
+            //.plx-container 
+            section#features.colorblock: .plx-container 
+                h3.title feats
+                .plx-grid
+                    .plx-width-1-3
+                        p AAA
+                    .plx-width-1-3
+                        p AAA
+                    .plx-width-1-3
+                        p AA
+                button Reveal
+            section#economy.colorblock: .plx-container 
+                h3.title feats
+                .plx-grid
+                    .plx-width-1-3
+                        p AAA
+                    .plx-width-1-3
+                        p AAA
+                    .plx-width-1-3
+                        p AA
+                button Reveal
+
+            
+            section#partners.colorblock-flat
+                .plx-container
+                    h2.title part
+                    h4.subtitle subpart
+                    br
+                .plx-grid.plx-flex-wrap.plx-flex-around
+                    .plx-width-1-2(style="flex: 1 1 auto")
+                        div(plx-slider="center: true; autoplay: true; autoplay-interval: 4000; velocity: .6;") 
+                            .plx-position-relative.plx-visible-toggle                            
+                                ul.plx-slider-items.plx-grid                          
+                                    li.plx-width-1-1: div.plx-panel.plx-text-center
+                                        img(plx-img data-src="https://via.placeholder.com/720x280")
+                                        .plx-position-center.plx-panel
+                                            h1 Test
+                                            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic doloribus dolor tempora, magnam nobis, qui, dignissimos quo quod incidunt cum fuga corporis repudiandae vero cumque dicta modi officia officiis doloremque.
+                                    li.plx-width-1-1: div.plx-panel.plx-text-center
+                                        img(plx-img data-src="https://via.placeholder.com/720x280")
+                                        .plx-position-center.plx-panel
+                                            h1 Test
+                                            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic doloribus dolor tempora, magnam nobis, qui, dignissimos quo quod incidunt cum fuga corporis repudiandae vero cumque dicta modi officia officiis doloremque.
+                                    li.plx-width-1-1: div.plx-panel.plx-text-center
+                                        img(plx-img data-src="https://via.placeholder.com/720x280")
+                                        .plx-position-center.plx-panel
+                                            h1 Test
+                                            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic doloribus dolor tempora, magnam nobis, qui, dignissimos quo quod incidunt cum fuga corporis repudiandae vero cumque dicta modi officia officiis doloremque.
+                                    li.plx-width-1-1: div.plx-panel.plx-text-center
+                                        img(plx-img data-src="https://via.placeholder.com/720x280")
+                                        .plx-position-center.plx-panel
+                                            h1 Test
+                                            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic doloribus dolor tempora, magnam nobis, qui, dignissimos quo quod incidunt cum fuga corporis repudiandae vero cumque dicta modi officia officiis doloremque.
+                                    li.plx-width-1-1: div.plx-panel.plx-text-center
+                                        img(plx-img data-src="https://via.placeholder.com/720x280")
+                                        .plx-position-center.plx-panel
+                                            h1 Test
+                                            p Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic doloribus dolor tempora, magnam nobis, qui, dignissimos quo quod incidunt cum fuga corporis repudiandae vero cumque dicta modi officia officiis doloremque.                                    
+                            
+                                a(plx-slidenav-previous plx-slider-item='previous').plx-position-center-left
+                                a(plx-slidenav-next plx-slider-item='next').plx-position-center-right
+                                br
+                                .plx-text-center
+
+                                    ul( class="plx-thumbnav-nav plx-thumbnav  plx-margin").partSlider.plx-space-between.plx-margin-large.plx-padding-remove-top.plx-padding-remove-bottom
+                                        li(plx-slider-item=0).partSlider: img(src="https://via.placeholder.com/50x50")
+                                        li(plx-slider-item=1).partSlider: img(src="https://via.placeholder.com/50x50")
+                                        li(plx-slider-item=2).partSlider: img(src="https://via.placeholder.com/50x50")
+                                        li(plx-slider-item=3).partSlider: img(src="https://via.placeholder.com/50x50")
+                    .plx-width-2-5(style="flex:1 1 auto").plx-flex-around
+                        .plx-grid-small.plx-flex-wrap.plx-flex-center.plx-margin-medium.miniparts
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+                             img(src="https://via.placeholder.com/100x100").plx-card.plx-margin-bottom.plx-width-1-4
+            
+            section#staff.colorblock: .plx-container 
+                h3.title tm
+                .plx-card
+                    .plx-card-header Test 
+                    .plx-card-body Test test test 
+
+            section#minigames.colorblock: .plx-container 
+                pre= JSON.stringify(userinfo,null,3)
+
+            //.plx-uncontainer 
+            section#quickie.colorblock
+                .plx-container(plx-scrollspy="target: h1,h5,p,.slideup,h3; cls: plx-animation-slide-bottom-medium; repeat: true; delay: 120")
+                    h5.subhead Newbies Guide
+                    h1.title How to Pollux 101
+                    div
+                        h3.lead
+                            | Pollux can be potentially complex depending on your needs. So here's a really compact intro to get started with Pollux:
+
+                    p.lead: i I want Pollux for
+                    .plx-grid.plx-grid-large.plx-flex-around.slideup(plx-scrollspy="target: li; cls: plx-animation-slide-left-small; repeat: true; delay: 60")
+                        .plx-width-1-1(class="plx-width-1-2@s")
+                            h3.subhead Softmod and User Management 
+                                p.lead
+                            | Moderation is not Pollux's focus, but she provides some features on that.
+                            ul.plx-text-muted.plx-list.featli
+                                li 
+                                    span Use 
+                                    code.mistyblue p!modrole 
+                                        code [@Role]
+                                    span to assign a moderation/administrative role. These users can edit server settings in the <a href=/dashboard>Dashboard</a>
+                                li 
+                                    span Use 
+                                    code.mistyblue p!muterole 
+                                        code [@Role]
+                                    span to assign a role for muted users. These users cannot type in any channels.
+                                li 
+                                    span Automatic roles added to users in certain levels can be set up only in the Dashboard. Insert the role, and the level. 0 to add it upon joining.
+                                li
+                                    span Self-assignable roles can be set in the Dashboard, and via Discord using 
+                                    code.mistyblue p!autorole add 
+                                        code [@Role Name] 
+                                        code ["shorthand"]
+                                    span where "shorthand" (quotes required), are something other than the rolename to be used to aquire the role using
+                                    code.mistyblue p!roleme shorthand
+                                    span , or 
+                                    code.mistyblue p!roleme Role Name
+                                li 
+                                    span Disable commands and features with
+                                    code.mistyblue p!disable 
+                                        code [command]
+                            
+                        .plx-width-1-1(class="plx-width-1-2@s")
+                            h3.subhead.subhead--light Cosmetics, Lootoxes and Profiles
+
+                            p.lead
+                            | Pollux's cosmetics suite is enabled by default.
+                            ul.plx-text-muted.plx-list.featli
+                                li 
+                                    span Use 
+                                    code.mistyblue p!disable 
+                                        code [DROPS | EXP | LVUP]
+                                    span to disable Lootboxes / Experience Points / Level Up Messages
+                                li 
+                                    span Use 
+                                    code.mistyblue p!lootbox
+                                    span to see if you hold any boxes. Or
+                                    code.mistyblue p!lootbox open 
+                                        code [tier (
+                                            span.optional C | U | R | SR | UR | EV
+                                            | )]
+                                    span to open a Lootbox of a specific rarity tier. Then 
+                                    code.mistyblue reroll | keep
+                                    span depending on whether you like the contents or not. Rerolls cost <b>Rubines</b>, so do it wisely.
+                                    
+                                li 
+                                    span The best, hassle-free way to get your Rubines is with
+                                    code.mistyblue p!daily
+                                    span , the more you do it, the more Rubines you get every day.
+                                    
+                                li
+                                    span If you want to give a Lootbox to someone else, do
+                                    code.mistyblue p!trade box 
+                                        code [@User]
+                                    span , then the number of the tier displayed in the message afterwards, then "ok".
+                                    
+                                li
+                                    span Equip your cosmetics using the Dashboard
+                                    
+                                li
+                                    span Marriage relies in the <a href="/crafting">Crafting System</a> give it a good read and also try 
+                                    code.mistyblue p!marry help
+                                    span , or
+                                    code.mistyblue p!craft help
+                                    span  if you still cannot understand it 
+                        hr(style="margin:30px")
+                        p.lead Pretty much everything can be set up from the Dashboard, if you find too difficult to understand the commands, try using it instead, it is easier, faster and more natural than typing a bunch of words!
+    .sspycon(class="plx-visible@s")
+        .plx-nav(plx-scrollspy-nav="closest: li; scroll: true; offset: 80" plx-parallax="opacity:1,1,1,0; target: #content-roll" ).homenav
+            li: a(href="#top")
+            li
+                .homenav-item: a(href="#start")
+                    i.fas.fa-coffee
+                    span About
+            li
+                .homenav-item: a(href="#features")
+                    i.fas.fa-candy-cane
+                    span Features
+            li
+                .homenav-item: a(href="#economy")
+                    i.fas.fa-gem
+                    span Economy
+            li
+                .homenav-item: a(href="#partners")
+                    i.fas.fa-feather-alt
+                    span Partners
+            li
+                .homenav-item: a(href="#minigames")
+                    i.fas.fa-gamepad
+                    span Minigames
+            li
+                .homenav-item: a(href="#team")
+                    i.fas.fa-user-astronaut
+                    span Staff
+            li
+                .homenav-item: a(href="#quickie")
+                    i.fas.fa-rocket
+                    span Quickstart   
+
+
+        style footer{margin-top:200px}
+
+
+
+
+block scripts
+    //script.
+        if ("serviceWorker" in navigator) {
+        if (navigator.serviceWorker.controller) {
+            console.log("[PWA Builder] active service worker found, no need to register");
+        } else {
+            // Register the service worker
+            navigator.serviceWorker
+            .register("pwabuilder-sw.js", {
+                scope: "./"
+            })
+            .then(function (reg) {
+                console.log("[PWA Builder] Service worker has been registered for scope: " + reg.scope);
+            });
+        }
+        }

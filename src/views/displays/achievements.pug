@@ -1,0 +1,139 @@
+extends ../layout 
+block content
+    .wrapper
+        include ../navbar 
+
+        style 
+
+        - let r = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+        .plx-background-cover(plx-parallax="bgy: 100,400" style='background-image: url(/images/heads/office'+r+'.png)').pictoheader.dark
+            .plx-container
+                br
+                h1.title Achievements
+                h3.subtitle dfsfgdfgdfgfdh
+                hr.plx-divider-small
+                p bleh
+
+        hr.plx-divider-icon-fill
+        .plx-container
+            .section#main    
+                h2  aaa 
+                h4.subtitle bbb
+                p awa
+                style.
+                    .achievement{
+                        background:#2b2b3b;
+                        margin: 12px;
+                        padding: 8px;
+                        border-radius: 10px;
+                        flex: 1 1 47%;
+                        
+                        }
+
+                        .a-title{
+                        font-weight: 600;
+                        font-size: 20px;
+                        }
+                        .a-subtitle{
+                        color: #88A;
+                        font-weight: 100;
+                        }
+                        .date{
+                        color: var(--secondary-color)
+                        }
+                        .hidden{
+                        opacity: .5;
+                        }
+                        .nope{
+                        color: #cc2222
+                        }
+                        .a-icon{
+                        float: left;
+                        background:red;
+                        height:64px;
+                        width:64px;
+                        margin-right: 10px;
+                         border-radius: 8px;
+                        }
+                        .a-progress progress{
+                            height:8px;
+                        }
+                        .translucent{
+                            opacity: .4
+                        }
+                        .tier{
+                            float:right
+                        }
+                div(plx-filter='.achievements')
+                    ul.plx-flex.plx-subnav.plx-subnav-pill.subnavite
+                        li(plx-filter-control="") 
+                            a.plx-button-secondary.c-outline.custom All
+                        li(plx-filter-control=".unlocked") 
+                            a.plx-button-secondary.c-outline.custom Unlocked
+                        li(plx-filter-control=".locked") 
+                            a.plx-button-secondary.c-outline.custom Locked
+                        //li(plx-filter-control=".unrevealed") 
+                            a.plx-button-secondary.c-outline.custom Hidden
+                    ul.plx-flex.plx-subnav.plx-subnav-pill.subnavite
+
+                        li(plx-filter-control="sort: data-progress; order: toggle") 
+                            a.plx-button.plx-button-secondary.c-outline.custom  Progress 
+                        li(plx-filter-control="sort: data-exp; order: toggle") 
+                            a.plx-button.plx-button-secondary.c-outline.custom EXP
+                        //li(plx-filter-control=".unrevealed") 
+                            a.plx-button-secondary.c-outline.custom Hidden
+
+
+                    ul.plx-flex.plx-flex-around.plx-flex-wrap.achievements
+                        - var achUserData = targdata || userdata
+                        - function hasAchiev(achiev,who=achUserData){return who && who.modules.achievements && who.modules.achievements.map(x=>x.id).includes(achiev.id)}
+                        each achiev in ACHDB
+                            - let chk = (checks.find(chk=>chk.achievement == achiev.id)||{}).progress || {current:0, goal:1, percent:0}
+                            - let current = typeof chk.current != 'number' ? !!chk.current?1:0 : chk.current
+                            - let percent = current == chk.goal ? 1 : chk.percent >= 1 ? 1 : chk.percent || 0;
+
+                            .achievement.plx-width-1-1(class="plx-width-1-2@m" data-exp=achiev.tier data-progress=percent class=(hasAchiev(achiev,userdata)?"unlocked":"locked")+(achiev.reveal_level > 0 && (!userdata || userdata.modules.level < achiev.reveal_level)?" unrevealed":"" ) )
+                                .tier= achiev.tier*100 +" EXP"
+                                if  achiev.reveal_level > 0 && (!userdata || userdata.modules.level < achiev.reveal_level)
+                                    if hasAchiev(achiev,userdata)
+                                        .a-icon: img(src="/build/achievements/"+(achiev.icon||"noicon")+".png")
+                                        .a-title= achiev.name
+                                        .a-subtitle.nope= achiev.description                                    
+                                    else
+                                        .a-icon(class=(!hasAchiev(achiev,userdata)?"translucent":"") ): img(src="/build/achievements/hidden.png")
+                                        .a-title.hidden [HIDDEN]
+                                        .a-subtitle.nope You need to reach <b>Level #{achiev.reveal_level}</b> to reveal this. 
+                                    if !achUserData
+                                        a( onclick="login()") LOGIN
+                                else
+                                    .a-icon(class=(!hasAchiev(achiev,userdata)?"translucent":"") ): img(src="/build/achievements/"+(achiev.icon||"noicon")+".png" )
+                                    .a-title= achiev.name
+                                    .a-subtitle.yep= achiev.description
+
+
+
+                                small.a-progress=    `${current}/${chk.goal} (${percent*100}%)`
+                                    progress.plx-progress(value=current  max=chk.goal)
+
+                                if hasAchiev(achiev,achUserData)
+                                    small: .a-subtitle.yep Unlocked  
+                                        span.date(data-ts= achUserData.modules.achievements.find(x=>x.id==achiev.id).unlocked)
+                                else
+                                    small: .a-subtitle.nope Locked
+                                    
+
+                hr
+
+
+
+
+block scripts
+    script(src="/js/moment.js")
+    script.
+        $('.date').each(function () {
+            var ts = $(this).data('ts')
+            x = moment(ts).format('MMM D YYYY, h:mm A')
+            //y = moment(ts).format('h:mm A')
+            $(this).html(x);
+            //$(this).html(y);
+        })

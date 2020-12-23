@@ -1,0 +1,66 @@
+#bg-img-container.plx-position-center-right.faders
+    img(src="/backdrops/5zhr3HWlQB4OmyCBFyHbFuoIhxrZY6l6.png" style="animation-delay:500ms" plx-img ).plx-animation-slide-bottom-small#bg-image
+#funds.plx-position-bottom-right(style="animation-delay:800ms").plx-animation-slide-right-small.faders
+    h5.subtitle Your Funds
+    .plx-flex
+        if userinfo
+            #fundsRubine.plx-flex.fundslot
+                .plx-rubine.icon32
+                .fundsAmount.plx-tracker-rubines.odometer #{userdata.modules.RBN}
+            #fundsJade.plx-flex.fundslot
+                .plx-jade.icon32
+                .fundsAmount.plx-tracker-jades.odometer #{userdata.modules.JDE}            
+            #fundsSapphire.plx-flex.fundslot
+                .plx-sapphire.icon32
+                .fundsAmount.plx-tracker-sapphires.odometer #{userdata.modules.SPH}
+        else
+            p Please login to unlock your items             
+
+.plx-offcanvas-bar.plx-padding-small.faders
+    button.plx-offcanvas-close(type='button', plx-close='')
+    .title-block
+        h3.title
+            img#bg-rarity.icon32(style="margin-bottom: 12px; margin-right: 12px; height:50px; width:50px")
+            span#bg-title BG NAME
+        h4.subtitle#bg-code.mono BG CODE
+
+    .artistSlot
+        span Credit
+        br
+        a(href="#" target="blank")#bg-artist Artist
+        img#artistPic
+
+
+    //span Unlock with
+    dl.pricechart.plx-description-list 
+        dt.price-item Rubines 
+        dd.plx-animation-slide-left-medium.delay500
+            .plx-rubine.icon32
+            .price-num#price-RBN  0
+            button.buythis.plx-button.ul-button-default.plx-button-small UNLOCK
+
+        dt.price-item Jades 
+        dd.plx-animation-slide-left-medium.delay750
+            .plx-jade.icon32
+            .price-num#price-JDE  0
+            button.buythis.plx-button.ul-button-default.plx-button-small UNLOCK
+
+        dt.price-item Sapphires 
+        dd.plx-animation-slide-left-medium.delay1000
+            .plx-sapphire.icon32
+            .price-num#price-SPH  0
+            button.buythis.plx-button.ul-button-default.plx-button-small UNLOCK
+
+        dt.price-item Event Tokens 
+        dd.plx-animation-slide-left-medium.delay1250
+            .plx-event.icon32
+            .price-num#price-EVT  0
+            button.buythis.plx-button.ul-button-default.plx-button-small UNLOCK
+
+    //dt.price-item Prismarines 
+        dd
+            .plx-rubine.icon32
+            .price-num  1
+            button.buythis.plx-button.ul-button-default.plx-button-small UNLOCK
+
+

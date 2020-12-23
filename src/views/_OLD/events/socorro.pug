@@ -1,0 +1,164 @@
+extends ../layout
+block content
+
+  .hero.is-pink.is-bold
+    include ../navbas
+
+
+
+  .is-fullwidth.nano: .nano-content
+    br
+    .container.level
+      .level-left
+        div
+          .title.is-1: b Halloween Event 2018
+          .subtitle.is-3 Gravedigging Tomblifters 
+      img(src="/build/event/halloween18/logo.png" width="300px").level-left
+      
+    //hr
+    .container
+      .section#story.foo2
+        .title.is-2: b Story
+        .subtitle.is-4 A little flavor to the event
+        hr
+        .columns.box(style="background:url('/build/event/halloween18/guide/noxbkk.png');background-size:cover")
+          .column.is-7
+
+            .title Not your usual evening
+            .subtitle 
+              p What a night to be alive (or not).
+              br
+              p Discordsville will be having a gloomy week this month. People rushing into graveyards and digging up graves in order to find the spookiest of costumes... All of this thanks to the influence of some mischievous underworldling.
+              br
+              p The Underworld has a brand new Gravekeeper, actually an apprentice, and her boss is not around. She has decided it would be a perfect opportunity to force us mortals to obtain candy for her. All she needs you to do is dig up some graves, put on some spooky outfits, and remember "all your candy, is her candy now".  
+
+      hr
+      .section#elves.foo2
+        .columns
+          .column(style="text-align:right !important")
+            p The objective of this event is to gather Garments from the dead, it's not like they need them anymore anyways. Each garment has a built-in Spook Power, that varies according to a few things.  
+            br
+            b.title.is-5.b500 Rarities:
+            br
+            p Garment itself can have one of the 5 well-known tiers, each tier tells the base Spook Power of the item.
+            br
+            b.title.is-5.b500 Costume:
+            br
+            p Each Garment is part of a Costume set, some costumes are rarer than others, and these have a slightly increased amount of Spook Power on them. Also, having a full set of a Costume provides extra Spook!
+            br
+            b.title.is-5.b500 Aspect:
+            br
+            p On top of all that, the Garments carry an aspect, which tells how much extra Spook they posses. There are 40 unique Aspects, each one with its own Spook level! It is up to you to find out which one is the best, and gather them.
+            br
+            br
+            p The stronger your outfit is, the spookier you'll be. More spooks means more candy, so make sure you're always top-notch with your attire! You can only spook every 6 hours, except if you buy a Decoy Doll from Noctix.
+            p Spooking also wears out your Costume, which means the more you use it, the weaker it gets, to the point that you'll obtain no more candy from it. At that point you should just get rid of it and go after more!
+            br
+            p You can trade Garments with other players, that can be useful when you dig out only hats and shoes and don't want to wander around in your panties.
+            br
+            p Garments you're not using anymore can be kept as a Memento, the Memento collection records which unique costume pieces you've collected. Completing the collection will grant you some neat bonuses.
+
+          .column(style="text-align:right !important")
+            //img(src="/build/event/halloween18/guide/csk.png" width="400px" )
+            img(src="/build/event/halloween18/guide/wdb.png" width="400px" )
+            img(src="/build/event/halloween18/guide/sets.png" width="400px" )
+            //img(src="/build/event/halloween18/guide/spk.png"  width="400px")
+            img(src="/build/event/halloween18/guide/mmto.png" width="400px" )
+           
+   
+      .section#nox.foo2
+        .title.is-2: b Cast
+        .subtitle.is-4 Who's here for this event 
+        hr
+            
+        .columns.is-mobile
+          .column(style="text-align:right !important")
+
+            .foo
+              img(src="/images/noctixmug.png" style="max-height:80vh" )
+
+          .column
+            
+            .foo(style="margin-top:100px")
+              .title: b Noctix 
+              .subtitle  The Underworld's Gravekeeper
+              p: i A master in the arts of trickery and prestidigitation. But not as savvy in what she's been assigned to do. Having a candy-addict demon in charge of gravekeeping during halloween isn't a good idea. Noctix will sneakingly use her powers to trick peoples minds into thinking that digging graves up is perfectly normal. What could possibly go wrong?
+              br
+              p In this event you're gonna satisfy her candy-hunger while she satisfies your collecting addiction, win-win! And by the way, she loves tomato juice. What? Did you think the stuff in her cup was blood? Ew, gross!
+            br
+      
+      hr
+      .section#elves.foo2
+        .columns
+          .column.is-3(style="text-align:right !important")
+            img(src="/images/eventToken.png")
+          .column.is-1
+          .column
+            .title Introducing Event Tokens
+
+            p Back in "PolluXmas", our 2017 Christmas Event, we had the ability to buy event items from the Shops using "Winding Keys", a special Event Currency. The original idea for this event was to use "Soul Shards" as an event currency. But having a global, event-neutral Event Currency was thought to be a better idea. In this event we'll be testing them out and see if they don't hurt the theme of the event.
+            p: b This event's Tokens can be obtained by talking to Noctix using the Gravekeeper command.
+
+      
+      hr
+      .section#goods.foo2
+        .columns.is-marginless
+          .column.is-6
+            .title.b500T Participating
+            style .tlist li{margin-bottom:12px}
+            ul(style="list-style: initial;padding:12px;").tlist
+              br
+              li 
+                p  <code>p!dig</code>(6 Hours cooldown) Dig out a Casket, open caskets to get costume pieces from it. Caskets cannot be traded.
+                p <b> You will need to craft a Shovel in order to dig</b>               
+                
+
+              li 
+                p <code>p!casket [open]</code>Show how many Caskets you have in your backyard, or open them.
+                img(src="/build/event/halloween18/guide/csk.png"  )
+
+              li 
+                p  <code>p!wardrobe [trade|destroy|memento]</code> Displays your wardrobe contents with available Garments and their bonuses.
+                p 
+                |  Posting <code>trade</code>as an argument starts a trading process, which should be agreed to by both users. The full command to trade Garments is <code>p!wardrobe trade [GARMENT ID] [@USER]</code>
+                img(src="/build/event/halloween18/guide/trd2.png"  )
+              li 
+                |  The <code>destroy</code>argument does what it says on the tin. Use it to shred a garment and get 1000 Jades for it. Command usage is <code>p!wardrobe destroy [GARMENT ID]</code>
+              li 
+                |  And finally, <code>keep</code> or <code>memento</code>will add the item permanently to your Memento collection. Use it with <code>p!wardrobe memento [GARMENT ID]</code>
+            .notification.is-warning 
+              |  <b>GARMENT ID</b> is the number of the POSITION IN YOUR WARDROBE that Garment is occupying.
+            img(src="/build/event/halloween18/guide/polluxboo_m.png" height="420px" )
+          .column.is-6
+            .title.b500T Costume Management
+            ul(style="list-style: initial;padding:12px;").tlist
+              br
+              li 
+                |  <code>p!costume [equip|unequip|set gender]</code> Used alone, this command shows you the visual appearance of your current costume, alongside its Spook Power, amount of Candy and Caskets. Can be used with <code>@USER</code> to see someone elses attire.
+              li 
+                |  Using <code>equip</code>is just like the wardrobe commands, you designate a Wardrobe slot position and that item will be equipped onto your character, but <code>unequip</code>works a bit different: you can unequip it the classic way, using slot IDs, or telling which part you want to unequip from. Options are <code>p!costume unequip [head|body|legs|all]</code>
+              li 
+                p  And for last, <code>set gender</code>changes your spookster avatar for a boy or a girl. Some costume designs may change from one to another, some don't change at all. Rarer costumes have completely different looks in each. Usage is <code>p!costume set gender [girl|boy]</code>.
+                img(src="/build/event/halloween18/guide/gends.png"  )
+
+              li 
+                p Once you're all set, you can now use <code>p!spook</code> and get your candies according to your Spook Power!
+                img(src="/build/event/halloween18/guide/spk.png"  )
+
+              li 
+                |  <code>p!gravekeeper</code>Teleports you to the Underworld to visit Noctix, she will sell you EVENT TOKENS in exchange for CANDY(1:1) or RUBINES (85:1)
+                img(src="/build/event/halloween18/guide/unk.png" )
+
+              .notification.is-info 
+                |  <b>EVENT TOKENS</b> can be spent in the BG Shop and Medal Shop, you cannot exchange them for other currencies. They are kept after the end of the event, but there is no guarantee they'll not be wiped at some time, we don't advise saving them on purpose.
+
+block scripts
+  script(src='/js/truelite.js')
+  script( src="https://unpkg.com/scrollreveal/dist/scrollreveal.min.js")
+  //script.
+    window.sr = ScrollReveal({ reset: true,
+   container:'.nano-content'
+   ,viewFactor: 0.000008
+    });
+    sr.reveal('.foo', { duration: 200 });
+    sr.reveal('.foo2', { duration: 500,viewFactor: 0.00001 });

@@ -1,0 +1,156 @@
+[{
+    "code": ["en","en-us","en-gb","en-uk","en-ca"],
+    "iso": "en",
+    "name": "english",
+    "name-e": "english",
+    "flag": ":flag_gb:"
+    ,"site-flag":"GB"
+    ,"sec-flag":"united-states"
+  },{
+    "code": ["es"],
+    "iso": "es-ES",
+    "name": "español",
+    "name-e": "spanish",
+    "flag": ":flag_es:"
+    ,"site-flag":"ES"
+    ,"sec-flag":"spain"
+  },{ 
+    "code": ["cr","cree"],
+    "iso": "cr", 
+    "name": "CREE",
+    "name-e": "CREE",
+    "flag": ":cowboy:"
+    ,"site-flag":"CR"
+    ,"sec-flag":"united-states"
+  },{
+    "code": ["cz","cs"],
+    "iso": "cs",
+    "name": "čeština",
+    "name-e": "czech",
+    "flag": ":flag_cz:"
+    ,"site-flag":"CZ"
+    ,"sec-flag":"czech-republic"
+  },{
+    "code": ["pt","pt-br","caralho"],
+    "iso": "pt-BR",
+    "name": "português brasileiro",
+    "name-e": "Brazilian Portuguese",
+    "flag": ":flag_br:"
+    ,"site-flag":"BR"
+    ,"sec-flag":"brazil"
+  },{
+    "code": ["pt-pt","pt-eu"],
+    "iso": "pt",
+    "name": "português europeu",
+    "name-e": "European Portuguese",
+    "flag": ":flag_pt:"
+    ,"site-flag":"PT"
+    ,"sec-flag":"portugal"
+  },{
+    "code": ["ro"],
+    "iso": "ro",
+    "name": "română",
+    "name-e": "romanian",
+    "flag": ":flag_ro:"
+    ,"site-flag":"RO"
+    ,"sec-flag":"romania"
+  },{
+    "code": ["zh","ch","zh-tw"],
+    "iso": "zh-TW",
+    "name": "繁體中文",
+    "name-e": "traditional chinese",
+    "flag": ":flag_tw:"
+    ,"site-flag":"TW"
+    ,"sec-flag":"taiwan"
+  },{
+    "code": ["de"],
+    "iso": "de",
+    "name": "deutsch",
+    "name-e": "german",
+    "flag": ":flag_de:"
+    ,"site-flag":"DE"
+    ,"sec-flag":"germany"
+
+  },{
+    "code": ["fr"],
+    "iso": "fr",
+    "name": "français",
+    "name-e": "french",
+    "flag": ":flag_fr:"
+    ,"site-flag":"FR"
+    ,"sec-flag":"france"
+
+  },{
+    "code": ["hu","my"],
+    "iso": "hu",
+    "name": "magyar",
+    "name-e": "hungarian",
+    "flag": ":flag_hu:"
+    ,"site-flag":"HU"
+    ,"sec-flag":"hungary"
+  },{
+    "code": ["ru","py"],
+    "iso": "ru",
+    "name": "русский",
+    "name-e": "russian",
+    "flag": ":flag_ru:"
+    ,"site-flag":"RU"
+    ,"sec-flag":"russia"
+    },{
+    "code": ["ko"],
+    "iso": "ko",
+    "name": "한국어",
+    "name-e": "Korean",
+    "flag": ":flag_kr:"
+    ,"site-flag":"KR"
+    ,"sec-flag":"south-korea"
+    },{
+    "code": ["by"],
+    "iso": "by",
+    "name": "белорусский",
+    "name-e": "Belarusian",
+    "flag": ":flag_by:"
+    ,"site-flag":"BY"
+    ,"sec-flag":"belarus"
+    },{
+    "code": ["pl","pol"],
+    "iso": "pl",
+    "name": "Polski",
+    "name-e": "Polish",
+    "flag": ":flag_pl:"
+    ,"site-flag":"PL"
+    ,"sec-flag":"poland"
+    },{
+    "code": ["uk","ua"],
+    "iso": "ua",
+    "name": "українська",
+    "name-e": "Ukrainian",
+    "flag": ":flag_ua:"
+    ,"site-flag":"UA"
+    ,"sec-flag":"ukraine"
+     },{
+    "code": ["bg"],
+    "iso": "bg",
+    "name": "български",
+    "name-e": "Bulgarian",
+    "flag": ":flag_bg:"
+    ,"site-flag":"BG"
+    ,"sec-flag":"bulgaria"
+     },{
+    "code": ["jp","ja"],
+    "iso": "jp",
+    "name": "日本語",
+    "name-e": "Japanese",
+    "flag": ":flag_jp:"
+    ,"site-flag":"JP"
+    ,"sec-flag":"japan"
+  },{
+    "code": ["tr","tur"],
+    "iso": "tr",
+    "name": "Türkçe",
+    "name-e": "Turkish",
+    "flag": ":flag_tr:"
+    ,"site-flag":"TR"
+    ,"sec-flag":"turkey"
+  }
+]

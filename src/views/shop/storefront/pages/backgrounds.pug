@@ -1,0 +1,26 @@
+.plx-position-relative.plx-width-1-1(style="padding-bottom: 5rem")
+    section.intro.plx-container.margin-top-mobo.plx-margin-top
+        h1.title Backgrounds Rotation
+        h3.subtitle Weekly roundup of buyable backdrops to decorate your profile
+        p Every week we have a selection of {{backgrounds.length}} backgrounds that can be obtained at your choice from our BGShop.
+        
+        h5 Next Rotation
+        div(:plx-countdown='`date: ${ firstOfWeek(Date.now()+7*24*60*60e3).toISOString() } `').plx-rotation-counter
+            div
+                span.plx-countdown-days
+                span.sep DAYS
+            div.flex-row
+                span.plx-countdown-hours
+                span.colon :
+            div.flex-row
+                span.plx-countdown-minutes
+                span.colon :
+            div.flex-row
+                span.plx-countdown-seconds
+         
+
+
+    ul.plx-flex.plx-flex-wrap.plx-flex-center 
+        li(v-for="(item,i) in backgrounds" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small
+            .shopbox( :class="[hasItem(item)?'obtained':'',item.type,'raritybox',item.rarity].join(' ')" )
+                +shopcard()

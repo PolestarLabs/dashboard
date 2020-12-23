@@ -1,0 +1,11 @@
+
+.plx-modal-dialog(:class="currentModalItem.rarity + ' ' + (currentModalItem.type === 'background'?'plx-width-2-3@m '+currentModalItem.type:'') ").plx-margin-auto-vertical.raritybox 
+
+        .plx-modal-body(style="background:var(--bg-darker)")
+            button.plx-modal-close-default(type='button', plx-close).modal-close
+
+            h2.plx-modal-title {{currentModalItem.name}}
+            h5.subtitle {{rarity(currentModalItem.rarity)}} {{currentModalItem.type}}
+
+            p {{currentModalItem.howto}}
+ 

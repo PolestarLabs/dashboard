@@ -1,0 +1,74 @@
+
+
+extends ../../layout 
+block content
+    .wrapper
+        -currentPage = 'market'
+        include ../../navbar
+
+        style 
+            include market.css
+        - let r = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+        .plx-background-cover(plx-parallax="bgy: 100,400" style='background-image: url(/images/heads/market'+r+'.png)').pictoheader.dark
+            .plx-container
+                br
+                h1.title Marketplace
+                h3.subtitle Buy, sell, or just window shop goods from other users
+                hr.plx-divider-small
+                p The Marketplace can be also accessed from within Discord using <code class="mistyblue">+marketplace</code>
+
+        hr.plx-divider-icon-fill
+        .plx-container
+            .section#buy(plx-filter="target: #trade-dock")
+                h2.title Recent Listings 
+                h4.subtitle 
+                p These are the current listings sorted by post date.
+                hr
+                //ul 
+                    li(plx-filter-control="filter: [data-rarity='UR']; group: rarity"): a() UR
+                    li(plx-filter-control="filter: [data-rarity='R']; group: rarity"): a() R
+                //ul 
+                    li(plx-filter-control="filter: [data-itype='background']; group: type"): a() BG
+                    li(plx-filter-control="filter: [data-itype='medal']; group: type"): a() MD
+                form.plx-flex
+                    .field(class="plx-width-1-3@m plx-width-1-1"): .control#search
+                        label.label Search
+                            input(type='input' name="filter" placeholder="search the marketplace...").input
+                br
+                                
+                #trade-dock.trade-clickable
+                    -pagination = sellPages
+                    include list
+                    //each entry in marketplace                    
+                        include market_entry_sell
+                .page-load-status
+                    .infinite-scroll-request ロード中...
+                    .infinite-scroll-error 
+                        hr.plx-divider-icon
+                        br
+                        br
+
+               
+        hr
+        br
+        br
+        //form(method="POST" action="./marketplace")
+            select( name="item_id")
+                each i in fullbase
+                    option i.id
+            input( type="text" name="item_type" value="junk")
+            input( type="number" name="price" value="1000")
+            input( type="text" name="currency" value="RBN")
+            input( type="text" name="author" value=userinfo?userinfo.id:"354285599588483082")
+            input( type="submit" value="Submit")
+        
+        //pre#alpha= JSON.stringify(fullbase,null,2)
+        //pre#beta= JSON.stringify(pagination,null,2)
+
+
+block scripts 
+    
+    script(src="/js/moment.js")
+    script(async='', src='https://static.addtoany.com/menu/page.js')
+    script
+        include market.js

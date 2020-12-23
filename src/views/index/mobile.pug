@@ -1,0 +1,376 @@
+mixin minifooter()
+    .minifooter.plx-flex.plx-flex-around()
+        a.magic-outline.blue.plx-button.plx-invisible
+        block
+        
+mixin bubble(item,opts={})
+    .pollux-container(  style= opts.dim ? "mask: linear-gradient(135deg, #FFF 20%,#0000 80%);" : "")
+        .content-holder.bubble
+            .backdrop.screen-1(style=`background-image: ${opts.bgImg}`)
+            .img-container(style=`transform: ${opts.transform}`)
+                img(src="/images/pollux/"+(item||"polluxv8")+".png" )
+
+- let nodrift = true
+style
+    include mobile.css
+
+.slide.plx-position-relative
+    //(plx-switcher="finite: true; draggable: true")
+    //.plx-switcher-container
+    //ul.plx-subnav.plx-tab-dash
+        li: a 1 
+        li: a 2
+        li: a 3
+        li: a 4
+    div 
+        ul.plx-switcher.screens#screens
+
+            li.screenslide.plx-position-relative: .screen#start
+                +bubble()
+                .buffer
+                h1.title Pollux
+                h3.subtitle Your new favorite assistant
+                if !userinfo
+                    .infobox
+                        p
+                            | A feature-rich assistant focused in and entertainment and social activities.
+                            br
+                            br
+                            | Pollux comes with a variety of cool functionalities and minigames with unmatched depth and ellaborate visuals.
+                        p
+                            | Count on her to keep the activity around your community always blooming.
+                    a.magic-outline.plx-button.login-main
+                        i.fas.fa-sign-in-alt
+                        span &#x2002 LOGIN
+                else
+                    .infobox
+                        p Welcome back, #{userinfo.uname}!
+                    a.magic-outline.plx-button.login-main.dashboard
+                            i.fas.fa-address-card
+                            span &#x2002 DASHBOARD
+                    .plx-flex.plx-flex-around
+                        a.magic-outline.plx-button.login-main.small.comms
+                            i.fas.fa-cogs
+                            span &#x2002 COMMANDS
+                        a.magic-outline.plx-button.login-main.small.supp
+                            i.fas.fa-question
+                            span &#x2002 SUPPORT
+                    if userdata && !userdata.donator
+                        a.magic-outline.plx-button.login-main.prime
+                            i.fas.fa-atom
+                            span &#x2002 Become PRIME
+
+                
+                +minifooter()
+                    a.magic-outline.plx-button(plx-switcher-item="next" )
+                        
+                        i.fas.fa-star
+                        span Features 
+                        i.fas.fa-angle-double-right
+            
+            
+            li.screenslide.plx-position-relative: .screen#features
+                +bubble()
+                .scroller-container(plx-switcher-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
+                    h1.title Ranking System
+                    h3.subtitle Make it to the top!
+                    .buffer(plx-lightbox)
+                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779400852024590366/unknown.png"
+                        a(href=link)
+                            img(src=link)
+                    .infobox
+                        p 
+                            | Rank your members activity with our custom ranking system!
+                            //br 
+                            // | You can set up how fast people level up 
+                            br 
+                            br 
+                            | Leaderboards for the most active users of your server that can be retrieved either via command or on its own dedicated page
+                        p
+                            | Everything from the comfort of our new <a href="/dashboard">Dashboard</a>
+                    .nobuffer.noshade
+                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779404782578040882/12.png"
+                        img(src=link)
+ 
+                    
+                    
+                    hr.plx-divider-icon
+
+                    .nobuffer(plx-lightbox)
+                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779327618561343539/profile.png"
+                        a(href=link)
+                            img(src=link)
+                    h1.title Custom Profiles
+                    h3.subtitle Decor up to eleven!
+                    .infobox
+                        p 
+                            | We've proudly rised the standards on profile customization within the bots scene, and in the latest update we're rising it again, by revamping and polishing our well known and loved Profilecards even more! They're still the prettiest ones around to this day, and with the widest range of customizability! You can be conservative, kitschy, exotic, thematic... anything that fits your style!
+                            br 
+                            br 
+                            | You can decorate your profiles with FRAMES, BACKDROPS, MEDALS, STICKERS, FLAIRS, RINGS, COLORS, and some TEXT to be sure your message goes through.
+                        p
+                            | Everything from the comfort of our new <a href="/dashboard">Dashboard</a>
+                    
+                    
+                    hr.plx-divider-icon
+                    
+                    
+                    h1.title Collectibles
+                    h3.subtitle The joy of completionists!
+                    .buffer
+                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779361966929084421/unknown.png" // dly
+                         a(href=link)
+                            img(src=link)
+                            
+                    .infobox
+                        p 
+                            | Collecting stuff can always be fun, the joy of completing a collection or getting that one item you want. You might not want to put effort in decorate a profile, but if you enjoy collecting stuff, we got you covered too!
+                        p
+                            | All of our cosmetics are also collectibles. Just like everything else with Pollux. You can collect not just decor stuff, but also a whole sort of items, some of them can be even used to unlock more cool stuff!
+                    
+
+                    
+                    
+                    hr.plx-divider-icon
+
+                    .buffer
+                        - var links = ["https://media.discordapp.net/attachments/488142034776096772/779353424612819014/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779353404060729344/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779359215596470272/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779359836680618014/unknown.png"]
+                        .p-slides(plx-slideshow="autoplay:true; autoplay-interval=1500")
+                            ul.plx-slideshow-items(plx-lightbox)
+                                each item in links
+                                    li: a(href=item): img(src=item)
+                    h1.title Minigames
+                    h3.subtitle Spruce up your server with the prettiest chat minigames!
+                    .infobox
+                        p Build your own virtual casino with our set of minigames, both single and multi player. We got the fanciest Blackjack, Slot Machine, and Roulette game. As well as some more fun and unusual minigames like Flag Guesser, Black Metal Band Guesser, and of course a Trivia Game too.
+                    
+                    hr.plx-divider-icon
+                    
+                    h1.title Solid Economy System
+                    h3.subtitle Your efforts are protected!
+                    
+                    .infobox(plx-lightbox).buffer
+                        p 
+                            | Our special three-currency based system was further enhanced to make sure the economy is strong and keeps the players investments protected.
+                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779360698680606760/unknown.png" // dly
+                        a(href=link)
+                            img(src=link)
+                        h4.subtitle.minititle Revamped Daily Bonuses! 
+                        p 
+                            | Dailies now award a variety of items you can use to obtain several things and expand your playing options.
+                            br
+                            | They now also award Boxes and other special items!
+                            
+
+                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779360399006629898/unknown.png" // bal
+                        a(href=link)
+                            img(src=link)
+                        p
+                            | The currencies are now specialized and indirectly interchangeable.
+                            br
+                            br
+                            | You can keep track of your spendings with the transaction logs!
+                    
+
+                    
+                    hr.plx-divider-icon
+
+                    h1.title The Ultimate Community Pack
+                    h3.subtitle Make your community fancy and engaging with our super pretty toolkit.
+                    
+                    .infobox
+                        ul
+                            li Server levels and rankings
+                            li Reaction Roles
+                            li Custom Currency
+                            li Basic moderation kit
+                            li And many more new stuff coming every month.
+
+                        - var links = ["https://media.discordapp.net/attachments/488142034776096772/779372441213468682/Ik1eEONlUj.gif","https://cdn.discordapp.com/attachments/488142034776096772/779373448395751454/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779372862871044096/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779372702611800114/unknown.png"]
+                        .buffer.p-slides(plx-slideshow="autoplay:true; autoplay-interval=1500")
+                            ul.plx-slideshow-items(plx-lightbox)
+                                each item in links
+                                    li: a(href=item): img(src=item)
+                        br
+                        br
+                        h4.subtitle.minititle Theme Events: Spruce up your server with the prettiest chat minigames!
+                        p Our exclusive global events introduce refreshing new features and minigames for everyone to play and obtain exclusive seasonal decor items and collectibles!
+                            
+                        .buffer(plx-lightbox)
+                            - var link = "https://cdn.discordapp.com/attachments/488142034776096772/779377050837712896/unknown.png" // bal
+                            a(href=link)
+                                img(src=link)
+                        h4.subtitle.minititle Lootboxes: 
+                        p 
+                            | Reward activity in your community with our beloved lootboxes! Random drops from time to time based on activity. 
+                            br
+                            | These boxes come filled with all sorts of collectibles and cosmetics for you.
+
+
+                    hr.plx-divider-icon
+
+                +minifooter()
+                    a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
+                        i: .fas.fa-vial
+                        span Advanced
+                        i.fas.fa-arrow-right
+   
+
+                
+            li.screenslide.plx-position-relative: .screen#features
+                +bubble("science-colcor-800",{transform:"translate(-30px,50px) scale(.8)",dim:true,bgImg:'url(/images/pollux/cogs.png);background-size: 40%;'})
+                .scroller-container(plx-switcher-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
+                    //.nobuffer(plx-lightbox)
+                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779327618561343539/profile.png"
+                        a(href=link)
+                            img(src=link)
+                    h1.title Advanced Stuff
+                    h3.subtitle For those who seek something more
+                    .infobox
+                        p 
+                            | If you feel like investing more time and effort playing with Pollux. We have a series of cool modules designed not just to extend your experience but also give you some more room for creativity!
+                            br
+                            br
+                            | Both hardcore and casual players can come enjoy their time by specializing in different things. Like crafting, exploring, synthesizing items, and more!
+                        br
+                        hr.plx-divider-icon
+                        br
+
+                        h1.title Crafting
+                        h3.subtitle Mix, Create, Discover!
+
+                        .buffer(plx-lightbox)
+                            - var link = "https://media.discordapp.net/attachments/488142034776096772/779420696719392768/unknown.png" 
+                            a(href=link)
+                                img(src=link)
+                        
+                        p If you enjoy exploring and poking around with putting things together and see what comes out of it. Our crafting system is one of the richest you'll find. You can craft from recipes, or just experiment with stuff you have in your hands and see what comes out of it!
+                        
+                        hr.plx-divider-icon
+                        
+                        h1.title Adventure Mode
+                        h3.subtitle It is back! Better than ever
+                        
+                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779419609178439690/unknown.png" 
+                        a(href=link)
+                            img(src=link)
+                            
+                        p 
+                            | You asked for it and it is back! The "Venture Forth" minigame from the Hallowinter 2019 event has been upgraded to a full minigame module!
+                            br
+                            | Explore different places and landscape to find and collect all sorts of stuff and unveil stories and mysteries from Pollux's universe!
+
+                        hr.plx-divider-icon
+
+                        h1.title The Marketplace
+                        h3.subtitle Now everyone can be a merchant
+                        p 
+                            |Ran out of money and have an item you don't like taht much? You can now sell it in the User Marketplace for some easy virtual bucks.
+                            br
+                            | Or you can turn it into your primary source of Pollux income by specializing in selling stuff there.
+                    
+                        hr.plx-divider-icon
+                    
+                        h1.title The Storefront
+                        h3.subtitle Your new hub for decor and other items
+
+                                
+                        - var link = "https://cdn.discordapp.com/attachments/488142034776096772/779421042182979654/unknown.png" 
+                        a(href=link)
+                            img(src=link)
+                        p
+                           | All the newest items available and shops are now available under <a href="/shop">The Storefront</a>
+                           br
+                           br
+                           | Most of our items are contributed by our enthusiastic community. In which we're always in touch with!
+                        
+                        hr.plx-divider-icon
+
+
+                +minifooter()
+                    a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
+                        i.fas.fa-heart
+                        span Community
+                        i.fas.fa-angle-double-right
+
+
+            li.screenslide.plx-position-relative: .screen#features
+                +bubble()
+                .scroller-container(plx-switcher-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
+                    .buffer
+                    h1.title Polluxverse
+                    h3.subtitle All things Pollux and some more!
+
+                    .infobox
+                        p 
+                            | Pollux goes beyond of just bot minigames. We have a thriving family of players and other friends that gather around for gaming, music, or just chit-chat. 
+                            br 
+                            | Join us to participate in polls, several seasonal server-events, giveaways, and many more!
+                            br 
+                            br 
+                            | Since you're here, check out some of the <a href="/fanart" target="blank">fan arts</a> submitted by our community members!
+                        br 
+
+                    h1.title Pollux PRIME
+                    h3.subtitle Support the project and get awesome perks
+                    .infobox
+                        p We only exist because of the voluntary contributions of our community, become part of it by supporting us becoming a PRIME member.
+
+                +minifooter()
+                    a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
+                        i.fas.fa-atom
+                        span Get PRIME
+                        i.fas.fa-angle-double-right
+
+            li.screenslide.plx-position-relative: .screen#features
+                +bubble()
+                .scroller-container(plx-switcher-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
+                    
+                    h1.title Pollux PRIME
+                    h3.subtitle Join the treehouse squad today!
+
+                    .infobox
+                        p 
+                            | With Pollux PRIME you have access to many perks and bonuses every day!
+                            br
+                            | You also get a special version of Pollux which is isolated from the public version. This means she's better, faster and stronger!
+                            br
+                            | The newest stuff will always be launched for PRIME servers first.
+
+                    .minifooter.plx-flex.plx-flex-around(plx-switcher-parallax="y:0,0, 500").plx-flex-wrap
+                        
+                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).pshop.login-main
+                            i.fas.fa-credit-card
+                            span Prime Shop
+                        br
+                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).patr.login-main
+                            i.fab.fa-patreon
+                            span Patreon
+                        br
+                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).ppal.login-main
+                            i.fab.fa-paypal
+                            span PayPal
+                    hr.plx-divider-icon
+                    br
+                +minifooter()
+                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  )
+                            i.fas.fa-atom
+                            span Prime Info
+                                
+            li.backbutton: a.plx-slidenav-previous.plx-position-top-left(plx-slidenav-previous href="#" plx-switcher-item="previous" )
+                
+        a.magic-outline.blue.plx-button.plx-position-absolute.invite-button
+            i.fab.fa-discord              
+            span INVITE ME!
+                    
+    
+    
+
+
+        //a.plx-slidenav-next.plx-position-center-right(plx-slidenav-next href="#" plx-switcher-item="next" )
+    ul.plx-switcher-nav.plx-dotnav( plx-switcher="connect: #screens;animation: plx-animation-slide-right-medium, plx-animation-slide-left-medium;" , style="justify-content: inherit")
+        li: a 
+        li: a 
+        li: a 
+        li: a 
+        li: a 

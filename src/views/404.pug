@@ -1,0 +1,21 @@
+extends  layout 
+block content
+    .wrapper
+        include  navbar
+        style body{cursor: url(/cur/zoom.png),zoom-in}
+        br
+        - r = Math.floor(Math.random() * (1 - 0 + 2) + 0);
+        script $('#preloader').remove()
+        br
+        br
+        .plx-flex(style="flex-direction: column; text-align: center; justify-content: space-around;    align-items: center;")
+            .gifsquare(style="display:inline-block;margin:40px; border-radius:10px; background-position: center center; background-image: url(/images/gif/404"+(r)+'.gif);background-size:cover; width:360px;height:360px;') 
+
+            .plx-width-expand(style="align-items: center")
+                h1(style="font-size:100pt").title 404
+                h4.subtitle Our army of page flipping anime girls couldn't find this page
+
+
+        br
+
+block scripts

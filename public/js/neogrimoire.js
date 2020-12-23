@@ -1,5 +1,0 @@
-console.log("grimoire")
-
-
-
-    var GRIMOIRE={artistPics:{Drawkill:"https://a.deviantart.net/avatars/d/r/drawkill.gif",Tacozama:"https://a.deviantart.net/avatars/t/a/tacozama.jpg","Shunya Yamashita":"https://s3.zerochan.net/Yamashita.Shunya%27s.One.Voice.240.476973.jpg","Kaneoya Sachiko":"https://a.deviantart.net/avatars/k/a/kaneoyasachiko.jpg?7","Flicky":"https://pbs.twimg.com/profile_images/856605120292937729/sg46Jvql_400x400.jpg","Towhee":"https://a.deviantart.net/avatars/c/i/cinnamoochii.png?13","Yomieda":"https://i1.sndcdn.com/avatars-000437048034-0xmrbj-t200x200.jpg","HK":"","A.J. Manzanedo":"","-mysitis-":"","Akira Toriyama":"","Official Artwork":"","Snapshot":"","Gashi-Gashi":"","Public Domain":"","Giorgio Vasari":"","HeartPuff":"","Apofiss":"","kuroseP":"","Leah Villanueva":"","Miata":"","Derivative Work":"https://creativecommons.org/images/deed/sa_white_x2.png","YuzaHunter":"","Yuumei":"","大馬場十三":"","":""}}

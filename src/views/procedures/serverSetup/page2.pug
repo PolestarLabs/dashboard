@@ -1,0 +1,18 @@
+p Now, would you like to enable some cool stuff?
+form#switches
+    label.switch      Lootbox Drops  
+        input(type="checkbox" data-key="DROPS"  checked=true).check#selA
+        span.slider.lite
+    label.switch       Level Up Messages (Global) 
+        input(type="checkbox" data-key="LVUP"  checked=true).check#selB
+        span.slider.lite
+    label.switch       Level Up Messages (Local) 
+        input(type="checkbox" data-key="LOCAL"  checked=true).check#selC
+        span.slider.lite
+
+script. 
+    informationFill.compute2= function(){
+        payload.drops = $("#selA")[0].checked
+        payload.lvup = $("#selB")[0].checked
+        payload.lvuploc = $("#selC")[0].checked
+    }        

@@ -240,10 +240,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug'); 
 
 
-app.use(Express.static(path.join(__dirname, 'public')));
+app.use(Express.static(path.join(__dirname, './src/public')));
 app.use(Express.static(path.join(__dirname, '../assets/imgres')));
 app.use(Express.static(path.join(__dirname, '../assets/cosmetics')));
-app.use("/images", Express.static(path.join(__dirname, 'public/images')));
+app.use("/images", Express.static(path.join(__dirname, './src/public/images')));
 app.use("/images", Express.static(path.join(__dirname, '../assets/website')));
 app.use("/flairs",    Express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
 app.use("/medals",    Express.static(path.join(__dirname, '../assets/cosmetics/medals')));
@@ -293,14 +293,14 @@ app.get('/logout', function (req, res) {
 
 
 global.simplepages   = function simplepages(location=false){
-  delete require.cache[require.resolve('./routes/'+(location||"simplepages"))];    
+  delete require.cache[require.resolve('./src/routes/'+(location||"simplepages"))];    
   //delete require.cache[require.resolve('./routes/globalFunctions.js')];    
-  return require(__dirname+'/routes/'+(location||"simplepages"));
+  return require(__dirname+'/src/routes/'+(location||"simplepages"));
 };  
 global.complexpages  = function complexpages(location=false){
-  delete require.cache[require.resolve('./pipelines/'+(location||"/complexpages"))];    
+  delete require.cache[require.resolve('./src/pipelines/'+(location||"/complexpages"))];    
   //delete require.cache[require.resolve('./routes/globalFunctions.js')];    
-  return require(__dirname+'/pipelines/'+(location||"/complexpages")); 
+  return require(__dirname+'/src/pipelines/'+(location||"/complexpages")); 
 };
 
 /* FANCY LOGGING */
@@ -382,7 +382,7 @@ const AcquireDiscordPayload = (TOKEN,req) => {
   discordStrategy.userProfile(TOKEN, FUD => ( (FUD||{}).id && FUD.provider == 'discord') ? req.user = freshUserData : null )
 }
 
-const VARS = require("./pipelines/vars.js");
+const VARS = require("./src/pipelines/vars.js");
 const authCacheExpiration = new Map();
 
 app.use(async function(req,res,next){
@@ -545,8 +545,8 @@ app.post('/checklogin', checkAuth, function (req, res) {
    
 app.post('/sendform', async function (req, res) {
   let form = new formidable.IncomingForm();
-  delete require.cache[require.resolve('./pipelines/forms.js')];
-  require('./pipelines/forms.js').run(req, res,form).then(status => res.send(status))
+  delete require.cache[require.resolve('./src/pipelines/forms.js')];
+  require('./src/pipelines/forms.js').run(req, res,form).then(status => res.send(status))
 });
  
 app.get('/test', (...args)=> simplepages().test(...args));
@@ -560,8 +560,8 @@ app.get('/callback',
 
   
 app.use('/', (...args)=>{
-  delete require.cache[require.resolve('./routes/_allroutes')];
-  const router = require('./routes/_allroutes');
+  delete require.cache[require.resolve('./src/routes/_allroutes')];
+  const router = require('./src/routes/_allroutes');
   return router(...args);    
 });
         

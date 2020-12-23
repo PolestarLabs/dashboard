@@ -1,0 +1,210 @@
+extends ../layout 
+block content
+    .wrapper
+        include ../navbar
+
+        style 
+        - let r = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+        .plx-background-cover(plx-parallax="bgy: 100,400" style='background-image: url(images/heads/legal'+r+'.png)').pictoheader.dark
+            .plx-container
+                style: include legal.css
+                div(plx-img data-src="/images/pollux/igiari.png" plx-parallax="bgy: 0,200"  ).igiari
+                br
+                h1.title Terms of Use
+                h3.subtitle All the legal jibber jabber and then some more
+                hr.plx-divider-small
+                p
+                    | By accessing this website at https://pollux.gg, you are agreeing to be bound by these terms of service, all applicable laws and regulations, and agree that you are responsible for compliance with any applicable local laws.
+                    | If you do not agree with any of these terms, you are prohibited from using or accessing this site. The materials contained in this website are protected by applicable copyright and trademark law.
+        hr.plx-divider-icon-fill
+        .plx-container: .section#cash-shop
+            h1.title Website and Bot Terms
+            h4.subtitle This covers usage of both this website and Pollux Discord Bot
+            p A simplified version of these terms can be found at our <a href='/support' target='blank'>Discord Server</a> at the <code class="chanlink"><a href="https://discordapp.com/channels/277391723322408960/450920072949530634/450950728874328065" target=blank >#rules</a></code>Channel, under the <b>Rules for Users</b> section.
+            br         
+        .plx-container.paperback
+            h2.title Service Usage Terms
+            h4.title: b Grinding and Farming
+            p It is considered GRINDING whenever a user creates, uses, offers, promotes, advertises, makes available and/or distributes any of the following:
+                ul
+                    li <b>Bots</b>: Any code and/or software, not expressly authorized, that allows the automated control of activities, or any other feature, e.g. the automated posting of messages to autopick Lootboxes;
+                    li <b>Cheats</b>: Methods not expressly authorized, influencing and/or facilitating progress, including exploits of any in-game bugs, and thereby granting you and/or any other user an advantage over other players not using such methods;
+                    li <b>Hacks</b>: Accessing or modifying the website in any manner not expressly authorized; and/or
+                    li Any code and/or software, that can be used to automate or simulate activities on a person's behalf thereof which changes and/or facilitates progress or other functionality;
+
+            p We reserve the right to suspend your account temporarily at any time if we believe your account is benefitting from any of the aforementioned or assisting therein.
+            p It is considered FARMING whenever a user <b>manually</b> uses features intensively in order to optimise their progress. This practice is not encouraged, but also not strictly forbidden. We may at our sole discretion suspend temporarily your account at any time if we deem you're abusing the service by doing this.
+            ul 
+                li Addendum - <b>Bot Farms:</b> Servers dedicated for the sole purpose of collectivelly progressing in one or more Discord Bots, or that incentivise mass messaging certain channels to increase odds of a Random Number Generator feature to be favorable to user's progress. Regardless if by manual or automated means.
+                    p The above is not allowed and will be penalised accordingly if one comes to our knowledge.
+                    
+            h4.title: b Collateral Grinding
+            p "Grinding for another bot" still falls under the same aforementioned penalties. The sole act of Grinding is bannable per se, and should never be used. 
+  
+            h4.title: b Exploitation of Bugs and Glitches
+            p Taking advantage of any unexpected/unintended behaviour caused by bugs and/or glitches to speed your progress is not allowed. Vulnerabilities such as these should be reported at our <a href='/support' target='blank'>Discord Server</a> at the <code class="mistyblue chanlink"><a href="https://discordapp.com/channels/277391723322408960/352885796799512577" target='blank'>#bug-reports</a></code>Channel. 
+
+            h4.title: b Partnered Servers Etiquette
+            p A user may have their account suspended or banned if by any means they hurt Discord's <a href="https://discordapp.com/guidelines" target="blank">Community Guidelines</a> in any of our Partners' and Affiliates' Discord servers. As well as in our own. 
+            
+            hr
+            h2.title User Suspension and Blacklisting
+
+            h4.title: b Suspension
+            p Any mechanism administered by us to disallow the usage of Pollux's features is considered a suspension. Suspensions may overlap with Blacklistings, though suspensions aren't kept on record after they expire, Blacklists are.
+            h4.title: b Blacklist
+            p Blacklisted users cannot use any of Pollux's functionalities. All of their account information will be kept frozen for investigation or deletion. After a user is blacklisted, they can choose to just give up on using Pollux, or file an appeal at our <a href='/support' target='blank'>Discord Server</a>, describing why they believe the blacklist should be reconsidered. 
+            p At a first occurrence, the user will be suspended by a undetermined, yet finite, time. Ranging from 5 days to 1 month. Pollux Team reserves the right to delay any blacklist appeal for any reason at their discretion. Following occurrences of a Blacklist to the same user may be dealt with more severe penalties, like 1 month suspension and/or a full wipe of their user content.
+            p It is at our discretion to rollback or remove any items from your account when lifting a Blacklist.
+            h4.title: b Redlist
+            p Some users are not allowed to coexist with Pollux at all, these are called Redlisted Users, servers in which these users are members are not allowed to use Pollux unless said user is expelled.
+            p Users can be Redlisted if they do serious offenses to Discord's <a href="https://discordapp.com/guidelines" target="blank">Community Guidelines</a>, like Raiding, Fraud, or any Illegal Activity. Redlists are unrevokable unless stated otherwise.
+
+            hr
+
+            h2.title General Website Terms 
+            h4.title: b Use License
+
+            p Permission is granted to temporarily download one copy of the materials (information or software) on the Pollux website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not: modify or copy the materials; use the materials for any commercial purpose, or for any public display (commercial or non-commercial); attempt to decompile or reverse engineer any software contained on the Pollux website; remove any copyright or other proprietary notations from the materials; or transfer the materials to another person or “mirror” the materials on any other server. This license shall automatically terminate if you violate any of these restrictions and may be terminated by Pollux at any time. Upon terminating your viewing of these materials or upon the termination of this license, you must destroy any downloaded materials in your possession whether in electronic or printed format.
+
+            h4.title: b Disclaimer
+
+            p The materials on Pollux are provided “as is”. Pollux makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties, including without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights. Further, Pollux does not warrant or make any representations concerning the accuracy, likely results, or reliability of the use of the materials on its Internet web site or otherwise relating to such materials or on any sites linked to this site.
+
+            h4.title: b Limitations
+
+            p In no event shall Pollux or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Pollux's Internet site, even if Pollux or a Pollux authorized representative has been notified orally or in writing of the possibility of such damage. Because some jurisdictions do not allow limitations on implied warranties, or limitations of liability for consequential or incidental damages, these limitations may not apply to you.
+
+            h4.title: b Revisions and Errata
+
+            p The materials appearing on Pollux's web site could include technical, typographical, or photographic errors. Pollux does not warrant that any of the materials on its web site are accurate, complete, or current. Pollux may make changes to the materials contained on its web site at any time without notice. Pollux does not, however, make any commitment to update the materials.
+
+            h4.title: b Links
+
+            p Pollux has not reviewed all of the sites linked to its Internet web site and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by Pollux of the site. Use of any such linked website is at the user's own risk.
+
+            h4.title: b Site Terms of Use Modifications
+
+            p Pollux may revise these terms of use for its web site at any time without notice. By using this website you are agreeing to be bound by the then-current version of these Terms and Conditions of Use.
+
+            h4.title: b Governing Law
+
+            p Any claim relating to Pollux's web site shall be governed by the laws of the State of Rio Grande do Sul - Brazil without regard to its conflict of law provisions.
+            br
+        .plx-container: .section#cash-shop
+            br
+            hr.plx-divider-icon
+
+            h1.title Cash Shop Terms
+            h4.subtitle For everyone who obtained paid Digital or Physical goods
+            p These terms apply exclusively via our <a href="#">Cash Shop</a>, this does not include direct donations via PayPal or pledges through Patreon.
+            br 
+        .plx-container.paperback
+                h2.title Cash Shop Terms Applicable to all Pollux online purchases
+
+                h4.title: b Pricing.
+
+                p.
+                    Pollux Team shall have the right at any time, prior to our  acceptance of your order, to withdraw any discount and/or to revise prices to take into account increases in costs including (without limitation) costs of any materials, carriage, labor or the increase or imposition of any tax, duty or other levy and any variation in exchange rates. Any prices, quotations and descriptions made or referred to on the Pollux's Cash Shop are subject to availability, do not constitute an offer and may be withdrawn or revised at any time prior to our express acceptance of your order (as described below). We reserve the right to notify you of any mistakes in Product descriptions or errors in pricing prior to product dispatch. In such event if you choose to continue with fulfilment of the order, you acknowledge that the product or service will be provided in accordance with such revised description or corrected price.
+
+                h4.title: b Payment.
+
+                p.
+                    Different payment methods, such as credit card, direct debit or Buffer Balance, may be available to you when making a purchase through Pollux's Cash Shop and other services. When you use third party payment and billing providers, such as PayPal, that provider's additional terms, and costs, may apply. It is your obligation to pay all Federal, State and local taxes associated with the receipt or use of the digital goods which you purchase from us.
+
+                h4.title: b Currencies.
+
+                p.
+                    Depending on your country of residence, and the particular item that you use to make a purchase, you may be able to choose from several different currencies to purchase goods online from Pollux.
+
+                h4.title: b Revised Terms.
+
+                p.
+                    We may, from time to time, change, modify or update these Cash Shop Terms, and the revised Cash Shop Terms will apply to all subsequent purchases. You agree that you will review the Cash Shop Terms before any purchase. For easier reference, we will change the “Last revised” date below.
+
+                h4.title: b Limitation of Liability.
+
+                p.
+                    To the maximum extent permitted by applicable law, we will not be liable for damages of any kind arising from the use of the Cash Shop, including, but not limited to any indirect, incidental, punitive, special or consequential damages. In no event shall Pollux's aggregate liability, whether arising in contract, tort, strict liability or otherwise, exceed the total fees paid by you to Pollux during the thirty (30) days immediately prior to the time such claim arose.
+
+                h4.title: b Indemnification.
+
+                p.
+                    You shall indemnify us against any and all liabilities, claims and costs incurred by, or made against, Pollux as a direct or indirect result of Pollux performing Services or carrying out any work on or to the products where this has been done to your (or your representative's) specific requirements or specifications; causing an infringement or alleged infringement of any proprietary rights of any third party. To the fullest extent permitted by law, and save where expressly set out in any License Terms or in any other agreements between the parties, Pollux shall have no liability to you in the event of the products or services infringing or being alleged to infringe the proprietary rights of any third party. In the event that the products are or may be the subject of patent, copyright, database right, registered design, trademark or other rights of any third party, you should refer to the relevant terms of the licensor/owner. Pollux shall only be obliged to transfer to you only such right or title as Pollux has.
+
+                h4.title: b Governing Law.
+
+                p.
+                    The Cash Shop Terms shall be governed by and construed in accordance with the law of the State of Rio Grande do Sul - Brazil, excluding its conflicts of law rules and excluding the UN Convention on Contracts for the International Sale of Goods. If you access the Service from New Zealand, and are a resident of New Zealand, The New Zealand Consumer Guarantees Act of 1993 ("Act") may apply to the purchase of tangible goods and/or services supplied by Pollux to you. If the Act applies, then notwithstanding any other provision in this Agreement, you may have rights or remedies as set out in the Act which may apply in addition to, or, to the extent that they are inconsistent, instead of, the rights or remedies set out in this Agreement.
+
+                h4.title: b Place of Jurisdiction.
+
+                p.
+                    To the fullest extent permissible under applicable law, you expressly agree that exclusive jurisdiction for any claim or action arising out of or relating to these Cash Shop Terms shall be a court of competent jurisdiction located in Porto Alegre, Rio Grande do Sul, Brazil.
+
+                h4.title: b Force Majeure.
+
+                p.
+                    Pollux Team shall not be liable to you, nor held in breach of contract, for any loss or damage which may be suffered as a direct or indirect result of Pollux being prevented, hindered or delayed in the performance by circumstances beyond our reasonable control including (but not limited to) any act of God, war, riot, civil commotion, government action, explosion, fire, flood, storm, accident, strike, lock-out, trade dispute or labor disturbance, breakdown of plant or machinery, interruption in the supply of power or materials and in such event Pollux may elect to cancel your order and refund any payments made.
+
+                h4.title: b Entire Agreement.
+
+                p.
+                    You acknowledge that these Cash Shop Terms supersede and cancel all previous contracts or agreements whether oral or written, express or implied, between Pollux and you with regards to your ability to purchase goods or services from Pollux's Cash Shop. These Cash Shop Terms prevail over any other terms or conditions contained in or referred to other agreements between the parties or implied by trade, custom or course of dealing. Any purported terms or conditions to the contrary are hereby excluded to the fullest extent legally permitted.
+                
+                hr
+                h2.title Cash Shop Terms for Digital Content and Services
+
+                h4.title: b Orders for Digital Content and Services.
+
+                p.
+                    By placing an order on the Pollux Cash Shop, you agree that you are submitting a binding offer to purchase digital content, such as digital currency and digital content for Pollux products (“Digital Content”) or service from Pollux Based upon your billing address. YOU HEREBY EXPRESSLY AGREE THAT THE SUPPLY OF DIGITAL CONTENT AND THE PERFORMANCE OF POLLUX'S SERVICES BEGINS IMMEDIATELY AFTER THE CONFIRMATION IS SENT.
+
+                h4.title: b All Sales for Digital Content or Services are Final.
+
+                p.
+                    No refunds are permitted except with respect to any statutory warranties or guaranties that cannot be excluded or limited by law.
+                hr
+                h2.title Cash Shop Terms for Physical Products
+
+                h4.title: b Pricing - Physical Products.
+
+                p.
+                    The prices listed for physical goods available through Pollux's Cash Shop (referred to herein as “Merchandise”) do not include shipping, handling or taxes, if applicable. Prior to checking out, we will add all applicable shipping, handling and taxes to the price for the Merchandise you are purchasing. We also reserve the right to notify you of any mistakes in product descriptions or errors in pricing prior to product dispatch. In such event if you choose to continue with fulfilment of the order, you acknowledge that the Merchandise will be provided in accordance with such revised description or corrected price.
+
+                h4.title: b Orders for Merchandise.
+
+                p.
+                    By placing an order for Merchandise through Pollux's Cash Shop, you agree that you are submitting a binding offer to purchase the Merchandise from us. Your order is accepted and a contract concluded once we send you a confirmation message.
+
+                h4.title: b Shipping.
+
+                p
+                    | Merchandise will be shipped F.O.B. Porto Alegre, South Rio Grande, Brazil, unless we designates otherwise. International customers hereby acknowledge and agree that: 
+                    ul
+                        li (i) Merchandise is shipped from Brazil; and 
+                        li (ii) you are solely responsible for any and all applicable import duties, customs fees, and taxes.
+
+                h4.title: b Delivery.
+
+                p.
+                    Delivery timescales/dates specified for the delivery of Merchandise to you, in any order acknowledgement, acceptance or elsewhere are estimates only, and while we endeavour to meet such timescales or dates, we do not undertake to dispatch products and/or commence services by a particular date or dates and shall not be liable to you in respect of delays or failure to do so. Merchandise delivery shall be to a valid address to the address submitted by you, and once we deliver the Merchandise to a transportation carrier at the designated shipping point, our liability as to delivery ceases, and title and risk of loss passes to you.
+
+                h4.title: b Acceptance/Rejection/Returns.
+
+                p
+                    | With regards to purchases of Merchandise from Pollux's Cash Shop, note that you shall have a period of thirty (30) days following your receipt of Merchandise to examine it to confirm that it conforms to this Agreement and the offer made by us. You may reject the Merchandise by returning it to us (at your expense) along with a copy of the receipt or other proof of purchase if the Merchandise does not conform to this terms of this Agreement and the offer made by us. After we have received your valid return, We will either: 
+                    ul
+                        li (i) repair the Merchandise, 
+                        li (ii) replace the Merchandise with an item of equivalent value; 
+                        li (iii) credit the credit card used to pay for the product an amount equal to the value of the Merchandise (as determined by us in its reasonable discretion), or 
+                        li (iv) provide another remedy which we determine in good faith is appropriate in the specific circumstances. 
+                    | Lastly, note that all claims whether based on contract, negligence, strict liability or otherwise are waived unless made in writing and received by us within thirty (30) days after your receipt of Merchandise.
+
+
+                p
+                hr.plx-divider-icon
+
+
+
+block scripts

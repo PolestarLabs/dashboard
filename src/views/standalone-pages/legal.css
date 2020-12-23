@@ -1,0 +1,21 @@
+.pictoheader{
+    position: relative;
+   }
+.pictoheader p{
+   z-index: 1;
+   position: relative;
+   margin-right: 20%
+}
+   .igiari{
+   position: absolute;
+       width: 100%;
+       height: 90%;
+       display: block;
+       bottom:0;
+       right:0 ;
+       opacity:.8;
+       background-size: contain;
+       background-repeat: no-repeat;
+       background-position: bottom right;
+       
+   }

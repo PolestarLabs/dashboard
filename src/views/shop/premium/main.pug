@@ -1,0 +1,71 @@
+extends ../../layout 
+
+mixin storeCard(item,options)
+  .shopbox(class=item.rarity)
+    .header
+      .s-title= item.name
+      .icon
+        i.far.fas(class="fa-"+item.class)
+    //.subheader
+        .text= item.description
+    .rartag
+    .body
+      .img
+        img(src="/"+item.img+".png"  style="height:180px")
+    .footer
+        .button(
+          plx-toggle= (options.preIn||item.id =='handle')? false :"target: #modal-buy;  animation: plx-animation-fade ",
+          class= options.preIn || "plx-buy-button",
+          id=item.id,
+          data-img=item.img,
+          data-item=item.name,
+          data-price=item.price,
+          data-dsc=item.description
+        )
+          i.fas.fa-dollar-sign
+          .price
+            span.face(data-original=item.price)= item.price
+            span.cents(data-original=item.price) .00
+ 
+          
+
+
+block content
+    .wrapper
+        include ../../navbar
+
+        style 
+            include shops.css
+    .plx-container
+        br
+        h1.title Premium Shop
+        h3.subtitle Support Pollux and get special perks!
+        hr.plx-divider-small
+        .currencychoose
+            span.b500(style="font-size:1.5rem") Select Currency
+            span.b500 &#x2003
+            .select: select#currency-select.is-small
+                option#USD USD
+                option#EUR EUR
+                //option#GBP GBP
+                option#BRL BRL
+
+    .plx-uncontainer.plx-flex.plx-flex-center.plx-flex-wrap
+        each item in base
+            +storeCard(item,{preIn:item.preInput})
+
+    #modal-buy(hidden)
+        .buy-modal-box
+            button.plx-close-large(plx-close plx-toggle='target:#modal-buy;animation: plx-animation-fade')
+            .content
+
+    //pre= JSON.stringify(base,0,2)
+
+
+block scripts
+    script(src="/js/sweetalert.js")
+    //script(src="https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js")
+    script(src="https://www.paypalobjects.com/api/checkout.js")
+    //script(src="https://www.paypal.com/sdk/js?client-id=AZjn2PyQsJ_wppkBVOiirPytTrwJ66rFUH0Vv96L_Qn_kr2cM7HpzSg4us03Ipl7JHnO56W20cyuV-Gw")
+    script
+        include pp_int.js

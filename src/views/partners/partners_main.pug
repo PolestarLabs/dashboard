@@ -1,0 +1,113 @@
+extends ../layout 
+block head
+    
+  
+
+block content
+    .wrapper
+        -currentPage = 'partners'
+        include ../navbar
+
+        style 
+            include partners.css
+
+        - let r = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+        .plx-background-cover(plx-parallax="bgy: 100,400" style='background-image: url(/images/heads/office'+r+'.png)').pictoheader.dark
+            .plx-container
+                h1.title Partners
+                h3.subtitle wawawawa
+                hr.plx-divider-small
+
+        hr.plx-divider-icon-fill
+        .plx-container
+            div(data-plxTgt=".plxFilter" )#plx-filter
+
+                -
+                    function cleanTags(input){
+                        return input.split(",").map(inStr=> 
+                            inStr.trim()
+                                 .normalize('NFKD')
+                                 .replace(/[\u0300-\u036f]/g, "")
+                                 .replace(/\s+/g,"_")
+                                 .replace(/\//g,"--")
+                                 .toLowerCase()
+                            );
+                    }
+
+                -tags=[]
+                -alltags= tags.concat.apply([],partners.map(x=>cleanTags(x.partnerDetails.tags)))
+                -alltags = alltags.filter((v,i,a)=> a.indexOf(v)===i)
+
+                //ul.plx-subnav.plx-subnav-pill
+                    li(data-plxFilt="ALL").plx-flbtn: a All
+
+                        each tag in alltags.sort()
+                            li(data-plxFilt=`.${tag}`).plx-flbtn: a=  tag.replace(/_/g," ")
+
+                div
+                        
+                    #diamond 
+                        h2 Diamond Partners
+                        h4.subtitle Sponsors and major partners
+
+                    hr.plx-divider-icon
+                    
+                    #gold 
+                        h3 Gold Partners
+                        h4.subtitle Large communities with strongly engaged creators                
+
+        .plx-not-container
+                    div(plx-slider="center: true; autoplay: true; autoplay-interval: 4000; velocity: .6;").plx-width-1-1
+                        .plx-position-relative.plx-visible-toggle
+                            ul( class="plx-thumbnav-nav plx-thumbnav  plx-margin").partSlider
+                                each guild,i in partners.filter(p=>p.partnerDetails.tier<=2)                                   
+                                    li(plx-slider-item=i): a(): img(src=guild.meta.icon).partSliderIcon
+
+                            ul.plx-slider-items(class="plx-child-width-1-1@s plx-child-width-1-2@")
+                                each guild in partners.filter(p=>p.partnerDetails.tier<=2)                                  
+                                    li(): .plx-card.gold(id=guild.id class=cleanTags(guild.partnerDetails.tags)   plx-slider-parallax="x: 100,-100").plxFilter
+                                        include card-generic
+
+        .plx-container
+                    hr.plx-divider-icon 
+                    
+                    #silver 
+                        h2.subhead Silver Partners
+                        br
+                        h4.subtitle Emerging communities that stand-out in the crowd
+
+                    div
+                        each guild in partners.filter(p=>p.partnerDetails.tier==3)
+                            .plx-card.silver(class=cleanTags(guild.partnerDetails.tags)).plxFilter
+                                include card-generic             
+
+                    hr.plx-divider-icon
+                    
+                    #bronze 
+                        h2.subhead Bronze Partners
+                        br
+                        h4.subtitle More communities you might find interesting!
+
+
+                    //.plx-flex.partners-roll-4.plx-flex-around.partnerFilter(style="flex-wrap:wrap")
+                    each guild in partners.filter(p=>p.partnerDetails.tier>=4)
+                        .plx-card.bronze(class=cleanTags(guild.partnerDetails.tags)).plxFilter
+                            include card-generic
+                    hr.plx-divider-icon
+                        
+                    //hr 
+                    //.partners-roll-5
+                        include card-R                    
+                    //pre= partners.filter(pe=>pe.partnerDetails.tier==2) 
+                    //pre= partners.map(pe=>pe.partnerDetails.tier) 
+                    
+                    //pre= partners    
+
+block scripts
+    script.
+        $('#plx-filter').on('click','.plx-flbtn',function(){
+            let filterClass= $(this).data('plxfilt');
+            if(filterClass == "ALL") return $($("#plx-filter").data('plxtgt')).slideDown('fast');
+            $($("#plx-filter").data('plxtgt')).slideUp('fast')
+            $(filterClass).slideDown('fast');
+        })

@@ -1,0 +1,167 @@
+extends layout
+mixin rarity(r,RR)
+      .level
+        .level-right
+          figure.image.is-48x48
+            img(src="/images/tiers/"+RR+".png")
+          .title: b!= "&#x2003 "+r.toUpperCase()
+
+
+
+block content
+  style.
+      .evholder{
+        position:relative;
+      }
+      .rarEv{
+        position:absolute;
+        height:32px;
+        right:12px;
+        bottom:12px;
+        z-index: 1;
+      }
+      @media screen and (max-width:800px){
+      .relamob{
+      
+        position: relative !important;
+      }
+        .round-5 {
+            width: 40% !important;
+        }
+      }
+      
+      
+  .hero.is-primary.is-bold
+        include navbas
+
+
+  .nano
+    .container.preloder
+        style
+          include hearty 
+
+
+          div.grid-big
+            - for (i=0; i<25; i++)
+              div.cell-1
+        br
+        br
+        p.title LOADING
+        //div.loadere
+          div.bare
+            div.bareb
+    .container.nano-content.division.prelod
+
+        br
+        .level-item
+
+        .level-left
+            div
+              p.title: b Background Catalog
+        .level-item
+            p.subtitle Decorate your profilecard with a pic that match your likes.
+        hr
+        p Choose as many as you want from the #{BGBASE.length} BGs available in stock, while you can only have one equipped, you can store all of them in your inventory!
+        
+        include eventblock_medal
+        
+        .container.columns.is-fluid.gaps#tabB.tabcontainer.division2(style="height: 100%")
+          .column.is-2: .box.chandiv.nano#list: .nano-content
+
+            -const t = translation.website
+            -const r = translation.rarity || {r:"Rare",ur:"Ultra Rare", sr:"Super Rare",c:"Common", u:"Uncommon"}
+
+
+
+            aside.menu(style="margin:20px").is-hidden-mobile
+              p.menu-label= t.rarity || "Rarity"
+              ul.menu-list
+
+                li:   a.is-active.itm.super-filter-button(data-filter="all")= t.all || "All"
+                li:   a.itm.super-filter-button(data-filter="EV"): b= "EVENT "
+                li:   a.itm.super-filter-button(data-filter="UR")= r.ur
+                li:   a.itm.super-filter-button(data-filter="SR")= r.sr
+                li:   a.itm.super-filter-button(data-filter="R")= r.r
+                li:   a.itm.super-filter-button(data-filter="U")= r.u
+                li:   a.itm.super-filter-button(data-filter="C")= r.c
+              p.menu-label= t.tags || "Tags"
+
+              -const tg = [{tag:"game",name:"Games"},{tag:"anime",name:"Anime"},{tag:"movie",name:"Movies"},{tag:"landscape",name:"Scenery"},{tag:"girl",name:"Girls"},{tag:"boy",name:"Boys"},{tag:"abstract",name:"Abstract"},{tag:"other",name:"Other"}]
+
+              ul.menu-list
+
+                each tag in tg
+                  li:   a.itm.filter-button(data-filter=tag.tag)= tag.name
+
+
+
+
+
+          .column: .chandiv.nano#list: .nano-content.relamob
+
+
+
+
+            if ongoingEvent
+              div(class=" box has-text-centered super-filter EV UR SR R U C")
+                .level.is-mobile
+                  .level-right
+                    .title: b!= "event backgrounds".toUpperCase()
+                  .level-left
+                    
+                    figure.image.is-128x128(style="height:64px")
+                      img(src="/images/event.png" height="64px")
+                each val in imgboxe.EV
+                  a(class="super-filter EV "+val.rarity title=val.name  href="/backdrops/"+val.name+".png" data-lightbox="EV" price="150000" tags="event "+ongoingEvent).evholder
+                    img(src="/backdrops/"+val.name+".png" class="round-5 filter event "+ongoingEvent)
+                    img(src="/images/tiers/"+val.rarity+".png").rarEv
+
+
+            div(class=" box has-text-centered super-filter UR")
+              +rarity(r.ur,"UR")
+              each val in imgboxe.UR
+                 a(title=val[1]  href=val[0]  data-lightbox="UR" price="225201" tags=tags[val[1]])
+                    img(src=val[0] class="round-5 filter "+tags[val[1]])
+
+            div(class=" box has-text-centered super-filter SR")
+              +rarity(r.sr,"SR")
+              each val in imgboxe.SR
+                  a(title=val[1]  href=val[0]  data-lightbox="SR" price="10000" tags=tags[val[1]])
+                    img(src=val[0] class="round-5 filter "+tags[val[1]])
+
+            div(class=" box has-text-centered super-filter R")
+
+              +rarity(r.r,"R")
+              each val in imgboxe.R
+                a(title=val[1]  href=val[0]  data-lightbox="R" price="6200" tags=tags[val[1]])
+                  img(src=val[0] class="round-5 filter "+tags[val[1]])
+
+            div(class=" box has-text-centered super-filter U")
+              +rarity(r.u,"U")
+
+              each val in imgboxe.U
+                a(title=val[1]  href=val[0]  data-lightbox="U" price="2800" tags=tags[val[1]])
+                  img(src=val[0] class="round-5 filter "+tags[val[1]])
+
+            div(class=" box has-text-centered super-filter C")
+              +rarity(r.c,"C")
+              each val in imgboxe.C
+                a(title=val[1]  href=val[0] data-lightbox="C" price="1260" tags=tags[val[1]])
+                  img(src=val[0] class="round-5 filter "+tags[val[1]])
+
+            div(class=" box has-text-centered super-filter PEV UR SR R U C")
+                .level.is-mobile
+                  .level-right
+                    .title: b!= "past event backgrounds".toUpperCase()
+                  .level-left
+                each val in imgboxe.PEV
+                  a(class="super-filter EV "+val.rarity).evholder
+                    img(src="/backdrops/"+val.name+".png" class="round-5 filter event ")  
+                    img(src="/images/tiers/"+val.rarity+".png").rarEv
+
+
+
+
+block scripts
+  script(src='/js/lightbox.js')
+

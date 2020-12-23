@@ -1,0 +1,19 @@
+
+
+include ../../tools/mixins
+form.levelrole_item(id="autorole-"+i data-index=i)        
+    .level(class=`lvrl-${i}-view`  ).noinput= lvrl[1]
+    input.level(hidden type="number" class=`lvrl-${i}-view` value=lvrl[1] name="level")
+    span &#x2003
+    .rolename(class=`lvrl-${i}-view`).noinput= thisRole.name || "<DELETED ROLE>"
+    .rolename(hidden class=`lvrl-${i}-view`).withinput
+        +roleSelect("levrole-select-2",roleInfo,thisRole.id)
+    .plx-flex.plx-flex-around
+        a(hidden data-index=i plx-toggle=`target: .lvrl-${i}-view` class=`lvrl-${i}-view` ).plx-button.lvlrole-edit.plx-button-default.plx-button-small
+            i.fas.fa-undo-alt
+        button(type="submit" data-index=i plx-toggle=`target: .lvrl-${i}-view` ).plx-button.lvlrole-save.plx-button-secondary.plx-button-small(hidden class=`lvrl-${i}-view`)
+            i.fas.fa-save
+        a(data-index=i plx-toggle=`target: .lvrl-${i}-view` class=`lvrl-${i}-view` ).plx-button.lvlrole-edit.plx-button-primary.plx-button-small
+            i.fas.fa-pencil-alt
+        a(data-index=i data-level=lvrl[1] data-role=lvrl[0] class=`lvrl-${i}-view`).plx-button.lvlrole-del.plx-button-danger.plx-button-small
+            i.fas.fa-trash

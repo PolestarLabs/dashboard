@@ -1,0 +1,68 @@
+mixin GCARD(g,h)     
+  div.gcard.yepPol_duo
+    div.hexContainer
+      div.smolHex(class=p style="background-image:url('"+g.icon+"')")
+        div.shexTop
+        div.shexBottom
+    p.mid= g.name
+    if h
+      if (g.perms =='owner'||g.perms =='adm')&& g.present
+        a(href="/admin/"+g.id).trichBut
+          button.button.is-small.manage.is-ruby Manage
+
+      if g.perms == "owner" && !g.present
+        a(href="https://goo.gl/qkGqqU").trichBut
+          button.button.is-small.is-primary.is-outlined.addme Add Pollux to this Server
+  style.
+    .nopePol_duo{
+      display:none;
+    }
+    .gcard{
+      position:relative;
+      background-color: #f6f6fb;
+      box-shadow: 0 2px 3px rgba(47, 45, 56, 0.1), 0 0 0 1px rgba(45, 43, 54, 0.1);
+      color: #85859A;
+      max-width: 100%;
+      position: relative; 
+      height: 64px;
+      margin: 8px;
+      width: 30%;
+      border-radius: 4px;
+      display: inline-block;
+    }
+    .trichBut{
+      position: absolute;
+      right: 0;
+      bottom: 8px;
+    }
+    @media screen and (max-width:800px){
+      .gcard{
+        width:100%;
+      }
+    }
+
+
+
+.nano: .nano-content: .padded
+      
+  .title.is-4: b My Servers
+  
+  //if userinfo.id == '163200584189476865'||userinfo.id == "88120564400553984"
+    p= "TESTING"
+    pre= JSON.stringify(guilds,null,2)
+  
+  .inv_box.flexboxi
+    if discordOutage == true
+      .title "DISCORD UNDERGOING MAJOR OUTAGE"
+      .subtitle "Pollux Database works fine, but any Discord-related Action will not be saved!"
+    else
+      each g in guilds
+        if g.perms == 'mod' || g.perms =='adm'||g.perms =='owner'
+          +GCARD(g,true)
+          
+  br
+  .title.is-4: b Servers with Pollux
+  .inv_box.flexboxi
+      each g2 in guilds
+        if (g2.perms != 'mod' && g2.perms !=='adm'||g2.perms !=='owner') && g2.present 
+            +GCARD(g2)     

@@ -1,0 +1,42 @@
+extends layout
+block content
+
+  .hero.is-pink.is-bold
+    include navbas
+    
+    
+  link(rel='stylesheet' href='/css/leaderboardy.css') 
+  .nano: .nano-content.padded: .container
+    .columns
+      .column.is-10
+        .title.is-2: b Local Leaderboards
+        //p.subtitle This server's ranks, you can edit them from here as you wish, and share the public view here: --link--
+      .column.is-2
+
+    hr
+    //pre= JSON.stringify(loranks,null,2)
+    .columns
+      .column
+        .title
+          i.icon: .fas.fa-trophy
+          span &#x2004 Top #{loranks.length}
+        //p.subtitle Users that are above Lv0
+
+
+    .locrancines        
+      each user, pos in loranks
+        .level.locrank
+          .level-left.posi
+            p= pos+1
+          .level-left.photo
+            img(src=user.pix width="100px")
+          .level-item.uname
+            p= user.tag
+          .level-left.levele
+            p= user.level
+          .level-item
+          .level-right &#x2003
+          .level-right.exper
+            p= user.exp
+
+

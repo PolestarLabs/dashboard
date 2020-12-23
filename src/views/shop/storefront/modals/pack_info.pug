@@ -1,0 +1,73 @@
+
+.plx-modal-dialog(:class="currentModalItem.rarity + ' ' + (currentModalItem.type === 'background'?'plx-width-2-3@m '+currentModalItem.type:'') ").plx-margin-auto-vertical.raritybox 
+    div(v-for="pack in [currentModalItem.packData || currentModalItem]" v-if="pack.gemcraft")
+        button.plx-modal-close-default(type='button', plx-close).modal-close
+        .plx-modal-header
+            h2.plx-modal-title {{pack.name}}
+            h5.subtitle {{rarity(pack.rarity)}} Boosterpack
+
+
+        .plx-modal-body(style="background:var(--bg-darker)").plx-flex
+
+            .plx-width-1-1(class="plx-width-1-2@m")
+                h3.title Pack Information
+                    h5.subtitle {{rarity(pack.rarity)}} Boosterpack
+                    p.plx-margin-remove-bottom
+                        b Size: 
+                        span {{pack.size}}
+                        br 
+                        .plx-flex
+                            div(v-for="rar in ['C','U','R','SR','UR']")
+                                span.plx-rarity-icon.icon24(:class="rar")
+                                span {{pack.content.filter(x=>x.rarity==rar).length}}
+                    b Materials:
+                    ul.plx-margin-remove-top
+                        li(v-for="m in pack.materials", :plx-tooltip="(pack.materialsData.find(x=>x.id==(m.id||m))||'').name" ).plx-flex
+                            .icon24(v-bind:style="{backgroundImage:`url(/build/items/${m.id||m}.png)`}")
+                            span × {{m.count}}
+                        li.plx-flex
+                            .plx-jade.icon24
+                            span × {{pack.gemcraft.JDE}}
+    
+                    b Crafting Cost:
+                    ul.plx-margin-remove-top
+                        li.plx-flex
+                            .plx-rubine.icon24
+                            span × {{pack.gemcraft.RBN}}
+                        li.plx-flex
+                            .plx-sapphire.icon24
+                            span × {{pack.gemcraft.SPH}}
+                    
+            .plx-width-1-1(class="plx-width-1-2@m")
+                .booster-pack-display(v-if="!displayStickerinfo")
+                    a.the-booster(v-bind:style="{backgroundImage:`url(/build/boosters/showcase/${pack.icon}.png)`}", @click="displayPackinfo= !displayPackinfo")
+            
+ 
+
+             
+            
+        .plx-modal-footer.plx-text-right.plx-flex.plx-flex-right
+            button.plx-button.plx-button-default.plx-modal-close(type='button') Cancel
+            a.button.limitless.search( :href="`/shop/marketplace?search=${pack.icon}`"  )
+                .plx-margin-auto
+                i: .fas.fa-search 
+                .plx-margin-auto
+                .price
+                    span.face() 
+                        .mainface SEARCH
+                        .subface Stickers in marketplace
+                .plx-margin-auto
+ 
+
+            a.button.limitless.craft(  :href="`/crafting?search=${pack.icon}`"  )
+                .plx-margin-auto
+                i: .fas.fa-flask 
+                .plx-margin-auto
+                .price
+                    span.face() 
+                        .mainface CRAFT
+                        .subface Boosterpack
+                .plx-margin-auto
+ 
+                    
+            //button.plx-button.plx-button-primary(type='button') Save

@@ -1,0 +1,66 @@
+extends layout
+
+block content
+  style.
+    body{
+      background:black
+    }
+  h1= message
+  h2= error.status
+  pre= error.stack
+  br
+  hr
+  .columns(style="text-align:center")
+    .column.is-1.is-hidden-mobile
+    .column.is-3
+      img(src="/images/oops.png" ).is-hidden-mobile
+      img(src="/images/oops.png" style='height:40vh').is-hidden-desktop
+    .column.is-auto.is-hidden-mobile
+      .title
+        span.is-large: b Oopsie! 
+        span Something went wrong...
+      .subtitle!= "<b>"+error.name+"</b>: "+message.split(/[\n\r]/g).slice(-1).pop()
+      -let stuff = message.split(/[\n\r]/g)[0].split('/').slice(5).join(' > ').split(":");
+      p= stuff[0].replace('.pug','.plx')
+      p= "Line: "+ stuff[1]
+      // #{error.stack}
+    .column.is-auto.is-hidden-desktop
+      .title
+        span.is-large: b Oopsie! 
+      .subtitle Something went wrong...
+      p!= "<b>"+error.name+"</b>: "+message.split(/[\n\r]/g).slice(-1).pop()
+      -let stuff_m = message.split(/[\n\r]/g)[0].split('/').slice(5).join(' > ').split(":");
+      p= stuff_m[0].replace('.pug','.plx')
+      p= "Line: "+ stuff_m[1]
+      // #{error.stack}
+    .column.is-1.is-hidden-mobile
+  .level
+    .level-item
+    .level-item
+    .level-item
+    .level-item
+    .level-item
+    a.level-right.button(href="https://discord.gg/s32Bwfw") Report this at #bug-reports channel
+    .level-item
+  hr 
+
+block scripts
+  script var errordata = (!{ JSON.stringify(errorData != null ? errorData : false) })
+  script.
+       drift.on('ready',function(api, payload) { 
+  
+          api.showWelcomeMessage({            
+            message:`Looks like you got an error!
+            
+            This is the error's description:
+            ${errordata.description} [ID: ${errordata.id}]
+             `,
+            // a string. replaces the default welcome message with a custom one.
+
+            // a url. replaces the default avatar with a custom one.
+            
+            sender: { id: "auto" , name:"Very Angry Australis",  avatarUrl:"https://cdn.discordapp.com/attachments/488142034776096772/561100013971701780/australis_judgesyou.png" }
+            // an id that can be used to specify an agent the message shows from
+          })
+          
+        })
