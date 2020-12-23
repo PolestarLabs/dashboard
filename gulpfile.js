@@ -4,8 +4,9 @@ const image = require("gulp-image");
 const debug = require("gulp-debug");
 const minify = require("gulp-minify");
 const clean = require("gulp-clean");
+const font = require("gulp-font");
 
-const ignore = ["!./**/*OLD*/**.*", "!./**/*OLD*.*"];
+const ignore = ["!./**/*OLD*/**.*", "!./**/*OLD*.*", "!./**/_OLD/**/*.*"];
 
 const inDir = "src"
 const outDir = "dist";
@@ -36,14 +37,20 @@ function assets() {
         .pipe(dest(out));
 }
 
+function fonts() {
+	return src(["./src/public/fonts/proximasoft/*.woff", "./src/public/fonts/!(proximasoft)/*.woff2"])
+		.pipe(debug())
+		.pipe(dest(out));
+}
+
 function others() {
-    return src(["./src/**/*.*", "!./src/+(public|views)/**/*.js", `!./src/**/*.{css,${imgExt}}`, ...ignore])
+    return src(["./src/**/*.*", "!./src/+(public|views)/**/*.js", "!./src/public/fonts/**/*.*", `!./src/**/*.{css,${imgExt}}`, ...ignore])
         .pipe(debug())
         .pipe(dest(out));
 }
 
-exports.build = series(css, js, assets, others);
-exports.buildClean = series(clear, css, js, assets, others);
+exports.build = series(css, js, assets, fonts, others);
+exports.buildClean = series(clear, css, js, assets, fonts, others);
 
 const imgExt = [
 	"ase",
