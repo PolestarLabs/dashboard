@@ -44,7 +44,7 @@ function fonts() {
 		.pipe(debug())
 		.pipe(dest(out));
 }
-*/
+
 function others() {
     return src(["./src/**/*.*", "!./src/+(public|views)/**/*.js", "!./src/public/fonts/**/*.*", `!./src/**/*.{css,${imgExt}}`, ...ignore])
         .pipe(debug())
