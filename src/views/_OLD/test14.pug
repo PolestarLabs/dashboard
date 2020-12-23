@@ -1,0 +1,216 @@
+extends layout-new
+block head
+  link(rel="manifest" href="/manifest.json")
+  //link(href='/lib/bootstrap/css/bootstrap.min.css', rel='stylesheet')
+  link(href='/css/style-tter.css', rel='stylesheet')
+  link(href='/lib/animate/animate.min.css', rel='stylesheet')
+  link(href='/lib/ionicons/css/ionicons.min.css', rel='stylesheet')
+  
+block content
+  include templates
+  include faq
+  #vodparent
+    video(   autoplay muted loop id="bghex")
+      source( src="/video/polluxhexa.webm" type="video/webm")
+  .hero.is-ruby.is-bold(style="position:relative;z-index:20")
+    .is-marginless
+      include navbas2
+
+  .seminavigation
+    a.semi.scx0.divlink(data-dest=0 href="#screen0")
+      i.fa.fa-home
+      //span Home
+    a.semi.sc1.divlink(data-dest=1 href="#screen1")
+      i.fa.fa-heart
+      //span Feats
+    a.semi.sc2.divlink(data-dest=2 href="#screen2")
+      i.fa.fa-gem
+      //span Economy
+    a.semi.sc2.divlink(data-dest=3 href="#screen3")
+      i.fas.fa-question-circle
+      //span FAQ
+    a.semi.sc3.divlink(data-dest=4 href="#screen4")
+      i.fa.fa-shopping-basket 
+      //span Last
+      
+  .is-fullwidth.nano: .nano-content#nano1
+    //.polluxi2.parallax
+    #element.polluxi1.parallax1.foo3.is-hidden-mobile
+    .polluxi2.is-hidden-desktop
+    #screen0.screen(data-page=0)
+      h1.is-ultra.slideL-500ms.title: b.noshadblak Pollux
+      h2.subtitle.slideL-1s.is-2: b A fancy maid for fancy communities
+      
+      a.button
+        .icon: i.fab.fa-discord
+        span ADD TO YOUR SERVER
+      a.nex(data-dest=1).divlink: i.fa.fa-chevron-down
+      
+      
+    #screen1.screen(data-page=1): .foo
+      a.nex(data-dest=2).divlink: i.fa.fa-chevron-down
+      h2.ttl Core Features
+      h3.sttl What people love Pollux for
+      .txt
+      .hexes.foo2
+        .hex(data-pos=1 style="background-image: url('/images/hex1.png');")
+        .hex(data-pos=2 style="background-image: url('/images/hex2.png');")
+        .hex(data-pos=3 style="background-image: url('/images/hex3.png');")
+        br
+        .hex(data-pos=4 style="background-image: url('/images/hex4.png');")
+        .hex(data-pos=5 style="background-image: url('/images/hex6.png');")
+
+    #screen2.screen(data-page=2): .foo
+      a.nex(data-dest=3).divlink: i.fa.fa-chevron-down
+      h2.ttl Cosmetics and Goodies
+      h3.sttl Like no other!
+      .whateveres
+      .whateveres
+      .whateveres
+      
+    #screen3.screen(data-page=3): .foo2
+        a.nex(data-dest=3).divlink: i.fa.fa-chevron-down
+        h2.ttl asd asd a sd as
+        h3.sttl asda sd asd asd 
+        
+        ul#faq-list.wow.bounceIn
+          each item,i in FAQ
+            li
+              a.collapsed(data-toggle='collapse', href='#faq-'+i)!=item.title
+                i.ion-android-remove
+              .collapse(data-parent='#faq-list' id="faq-"+i)
+                p!=item.text
+          
+    // #faq
+    //2
+  
+    #screen4.screen.foo(data-page=4)
+      h2.ttl asd asd a sd as
+      h3.sttl asda sd asd asd 
+      a.nex(data-dest=0).divlink: i.fa.fa-chevron-up
+      .whateveres3
+      .whateveres3
+      .whateveres3
+      .whateveres3
+      .whateveres3
+      .whateveres3
+    
+    //.columns
+      .column.is-4: .featurebox
+        .bx-title
+          p Jade
+        .bx-main
+          img(src="/images/jade.png")
+        .bx-tx
+          p Lorem Ipsum
+        .bx-button
+          .button OK
+          
+      .column.is-4: .featurebox
+        .bx-title
+          p Rubine
+        .bx-main
+          img(src="/images/rubine.png")
+        .bx-tx
+          p Lorem Ipsum
+        .bx-button
+          .button OK
+          
+      .column.is-4: .featurebox
+        .bx-title
+          p Sapphire
+        .bx-main
+          img(src="/images/sapphire.png")
+        .bx-tx
+          p Lorem Ipsum
+        .bx-button
+          .button OK
+          
+        
+        
+        
+        
+        
+block scripts
+  script(src='/lib/bootstrap/js/bootstrap.bundle.min.js')
+  script(src='/lib/easing/easing.min.js')
+  script.
+    //new WOW().init()
+    $(document).ready(function(){
+      //setTimeout(function(){location.reload();console.log('ref')},81s000)
+    })
+        var vid = document.getElementById("bghex");
+    vid.addEventListener("timeupdate", function () {
+        n= $('#bghex')
+        if(this.currentTime >= 22.0) {
+            n.fadeOut(3000)
+        }
+        if(this.currentTime == 0.0) {
+            n.fadeIn(3000)
+        }
+    });
+  script( src="https://unpkg.com/scrollreveal/dist/scrollreveal.min.js")
+  script(src="/js/paroller.js")
+  script.
+    window.sr = ScrollReveal({ reset: true,
+   container:'.nano-content'
+    });
+        window.bsr = ScrollReveal({ reset: true,
+   container:'.nano-content'
+   ,viewFactor: 0.2
+   ,afterReset: function (domEl) {   
+      $(domEl).removeClass('hex'+$(domEl).data('pos'))     }
+        ,beforeReveal: function (domEl) {     
+      $(domEl).addClass('hex'+$(domEl).data('pos'))
+     }
+    });
+    
+    var navadd = function (domEl) {
+                            var page = $(domEl).data('page');
+                            $(".sc"+[page]).addClass('selet')    
+                   }
+    var navrem = function (domEl) {
+                            var page = $(domEl).data('page');
+                             $(".sc"+[page]).removeClass('selet')    
+                   }
+    var remAnim = function (domEl) {
+    
+      $(domEl).removeClass('animated')
+      $(domEl).fadeOut()
+    }
+    var addAnim = function (domEl) {
+      remAnim(domEl)
+      $(domEl).addClass('animated')
+      $(domEl).fadeIn()
+
+    }
+    
+    
+    bsr.reveal('.hex', { duration: 200 });
+    sr.reveal('.foo', { duration: 200 ,   afterReveal: navadd ,beforeReset:navrem});
+    sr.reveal('.foo2', { duration: 500,viewFactor: 0.1 });
+    sr.reveal('.foo3', { duration: 500,viewFactor: .3 , afterReveal: navadd ,beforeReset:navrem});
+    sr.reveal('.wow', { duration: 500,viewFactor: 0.3 });
+    $('#nano1').snapscroll();
+      $(".divlink").click(function() {
+            var wawwe = "#screen"+$(this).data('dest');
+            console.log(wawwe)
+        $('.nano-content').animate({
+            scrollTop: $(wawwe).get(0).offsetTop
+        }, 800,'swing');
+      });
+          $(function(){
+              var layer1 = $('#screen0');
+              var obj = $('#element');
+                  $('#nano1').scroll(function(){
+                     var distance = layer1.outerHeight() + obj.outerHeight() + 30;    
+                     console.log( this.scrollTop/$(this).innerHeight() * distance/5)
+                    this.scrollTop/$(this).innerHeight() * distance/5>=742?obj.fadeOut():obj.fadeIn();
+                     var pos = (this.scrollTop/$(this).innerHeight() * distance/3.5);
+                     obj.css('top', pos);
+              });
+          });
+
+  
+  
+  

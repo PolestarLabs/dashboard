@@ -1,0 +1,51 @@
+-let regx = /\d{1,3}(?=(\d{3})+(?!\d))/g
+-let subs = '$& '
+.wealth
+  .rubines
+    span.plx-rubine.icon32.curr_icon_3        
+    span= miliarize(userprofile.modules.RBN) || 0
+    span &#x2001;
+  .jades
+    span.plx-jade.icon32.curr_icon_3        
+    span= miliarize(userprofile.modules.JDE) || 0
+    span &#x2001;
+  .sapphires
+    span.plx-sapphire.icon32.curr_icon_3        
+    span= miliarize(userprofile.modules.SPH) || 0
+    span &#x2001;
+           
+.completionist-container      
+  .comp-bar(v-for="(data,i) in completionist")
+    .bar
+      .plx-progress-alt
+        .inner-bar(v-bind:style="{width: 1+((data).val / (data).max * 100 )+'%' }")
+      .sub  
+        .label {{data.label}}
+        .completion  
+          animated-number(  :value="(data).val" :duration="1800"   :round="true" :delay='2200')
+          |/{{ (data).max }}  
+    .percentile
+      animated-number(  :value="(data).val / (data).max * 100" :duration="1800"   :round="true" :delay='2000')
+      | %
+
+.bg(plx-toggle=' target:.toggle-lateral; cls: expanded; delay: 500; mode: hover')
+  img(src="https://beta.pollux.gg/backdrops/"+userprofile.modules.bgID+".png")    
+  .bginfo.toggle-lateral 
+    span(v-if='bgData.loading')
+      span {{bgInfo(userprofile.modules.bgID)}}
+      i.fas.fa-cog.fa-spin      
+    span(v-else)
+      .plx-rarity-icon(:class='bgData.rarity') 
+      span {{bgData.name}} 
+      br
+    div(v-if='bgDataMarket.cheapest' )
+        span.fromprice  From: {{bgDataMarket.cheapest.price}} {{bgDataMarket.cheapest.currency}}
+        button.plx-button.plx-button-default.plx-button-primary(:href="`https://beta.pollux.gg/shop/marketplace/entry/${bgDataMarket.cheapest.id}`")
+          | Find in Marketplace
+    div(v-else )
+          | No marketplace entries.
+
+.medals.toggle-lateral
+  each MDL in userprofile.modules.medals
+    .medal 
+      img(src="https://beta.pollux.gg/medals/"+MDL+".png")

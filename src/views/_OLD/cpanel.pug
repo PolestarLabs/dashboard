@@ -1,0 +1,40 @@
+extends layout
+block content
+  .is-fullwidth.nano: .nano-content
+    .columns
+      .column.is-6
+        include set/medalform
+      .column.is-6
+        include set/bgform
+    .columns
+      .column.is-6
+        table.table
+          for med in MEDALBASE
+            tr
+              td: img(src="/medals/"+med.icon+".png" width="60px")
+              td: b= med.name
+              td= med.icon
+              td: img(src="/images/tiers/"+med.rarity+".png" width="40px")
+              td= med.tags
+              td: .tag.is-info= med.category
+              td!= med.buyable === true ? "<img src='https://cdn.discordapp.com/emojis/339398829050953728.png' width='30px'>" : "<img src='https://cdn.discordapp.com/emojis/339398829088571402.png' width='30px'>"
+              td!= med.droppable == "TRUE" ? "<img src='https://cdn.discordapp.com/emojis/339398829050953728.png' width='30px'>" : "<img src='https://cdn.discordapp.com/emojis/339398829088571402.png' width='30px'>"
+    
+      .column.is-6
+        table.table  
+          for bg in BGBASE
+            tr
+              td: img(src="/backdrops/"+bg.name+".png" width="100px")
+              td: img(src="/images/tiers/"+bg.rarity+".png" width="40px")
+              td= bg.name
+              td= bg.tags
+              td= bg.category
+              td!= bg.buyable === true ? "<img src='https://cdn.discordapp.com/emojis/339398829050953728.png' width='30px'>" : "<img src='https://cdn.discordapp.com/emojis/339398829088571402.png' width='30px'>"
+              td!= bg.droppable == "TRUE" ? "<img src='https://cdn.discordapp.com/emojis/339398829050953728.png' width='30px'>" : "<img src='https://cdn.discordapp.com/emojis/339398829088571402.png' width='30px'>"
+    
+    
+    //
+      .column.is-3: .notification.is-light
+        pre=JSON.stringify(BGBASE,null,4)
+      .column.is-3: .notification.is-light
+        pre=JSON.stringify(MEDALBASE,null,4)

@@ -1,0 +1,96 @@
+extends layout
+
+mixin medalsmk
+      -var it = 0;
+      while it < 9
+        if user.modules.medals[it] != undefined
+          -var medal_icon = user.modules.medals[it][0]
+        else
+          -var medal_icon = [0,0]
+
+
+        if medal_icon!=0 && user.modules.medals[it]!=[0,0]
+          img(src="/medals/"+medal_icon+".png")
+        else
+          img(src="/medals/undefined.png")
+          //li.drop.ui-droppable.medalSlot
+        -it++
+
+mixin mockup
+  div.profileMock(style="z-index:999; position:relative; transform:scale(.7) translateX(-25%) translateY(-28%)")
+      img.mainframe(src="http://i.imgur.com/PuDHUx5.png" style="max-width:400px !important")
+      div#bgm
+        img.level-item(src="/backdrops/"+user.modules.bgID+".png")#userbp
+      div#ptxmock
+        p= user.modules.persotext
+      div#medalmocks.level
+        +medalsmk
+      div.hexagon(style="background-image:url('"+userinfo.pix+"')")
+          div.hexTop
+          div.hexBottom
+
+block head
+  style.
+
+      .tabcontainer{
+        position:relative;
+        //bottom:16px;
+        //top:16px;
+      }
+block content
+  -let bgInv = user.modules.bgInventory
+
+
+
+
+  //pre= JSON.stringify(user,null,5)
+  .hero.is-primary.is-bold
+      include navbas
+
+      .level.topbar.is-hidden-mobile
+            .level-left
+              //img(src=userinfo.pix).image(height="128px")
+              div: .floatnglow: .hexagon(style="transform:scale(1.2) translate(20px,40px);background-image:url('"+userinfo.pix+"');")
+                div.hexTop
+                div.hexBottom
+            div &#x2003
+            div &#x2003
+            div &#x2003
+            div &#x2003
+            .level-left
+                div
+                  p.title: b= userinfo.uname
+                  p.subtitle= userinfo.name
+            .level-item
+                p(class="subtitle")!= "<b>ID </b>"+userinfo.id
+            .level-item
+            .level-item
+
+
+      div
+        .tabs.is-centered.is-boxed.striped-pink
+
+          ul
+            li#a1.tab.is-active(data-target="overviewSettings"): a(href="#/overview")= translation.website.overview || "Overview"
+            li#a2.tab(data-target="profileSettings").is-hidden-mobile: a(href="#/profile")= translation.website.profile ||  "Profile"
+            li#a3.tab(data-target="guildsets"): a(href="#/servers")= translation.website.myServs|| "My Servers"
+            li#a4.tab(data-target="soon").is-hidden-mobile: a(href="#/inventory")=translation.website.inventory||  "Inventory"
+
+  .nano: .nano-content: .container
+        br
+        #overviewSettings.tabcontainer.hidden
+            include dash/overview
+        #profileSettings.tabcontainer.hidden.is-hidden-mobile
+            include dash/profile
+        #guildsets.tabcontainer.hidden
+            include dash/guilds
+        #soon.tabcontainer.hidden.is-hidden-mobile
+            include soon
+
+block scripts
+  script(src="js/countUp.js")
+  script(src="/js/dashboard_operations.js")
+  include reloader
+  block scripts
+
+block footer

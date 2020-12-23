@@ -1,0 +1,376 @@
+include ../tools/mixins
+-const NOTIFS = ((userdata.switches||{}).notifications||{})
+section.plx-container#settings-options
+    h1.title Notifications
+    h3.subtitle Configure what to be notified via DMs to you
+    hr
+    .plx-grid
+        div(style="display: inline-flex;")
+            +pinkSwitch("enable-dm-alerts-sv-changes", null ,(userdata.switches||{ownerNotif:false}).ownerNotif)
+                p
+                    b  Enable DM Notifications on Server Changes
+                    br
+                    i  Notify when someone does changes to settings in a server you own.
+
+            +pinkSwitch("dm-welcome-opt-out","Opt-out of Welcome DMs",(userdata.switches||{dmWelcome:false}).dmWelcome)
+                 p
+                    b  Enable Welcome DM Messages
+                    br
+                    i  Opt-in or out from receiving DM messages upon joining a server that uses them.
+        
+        div.plx-width-1-1
+            ul(plx-accordion="multiple: true").categs-container
+                -let item= "misc-notifs" 
+                li.categ(id='misc_notifications')
+                    .plx-magic-input
+                        .plx-pink-check                            
+                            input.markall(data-cat=item type="checkbox" id=item name=item checked= false )
+                            label(for=item) 
+                    
+                    a.plx-accordion-title
+                            h5.title Receive DMs about updates and new features
+                            .help Receive new commands, bugfixes, cosmetics-packs releases, announcements, patch notes directly in your DMS 
+                    .plx-accordion-content
+                        .container                           
+
+                            -var subitem = 'new_command' 
+                            label.a-comand(class="cat_misc-notifs")
+                                input.command-toggle(type="checkbox" id=subitem checked= (typeof NOTIFS.newCommand == 'boolean') ? NOTIFS.newCommand : false)  
+                                span New Commands
+                            -subitem    = 'patch_note' 
+                            label.a-comand(class="cat_misc-notifs")
+                                input.command-toggle(type="checkbox" id=subitem checked= (typeof NOTIFS.patchNotes == 'boolean') ? NOTIFS.patchNotes : false)  
+                                span Patch Notes
+                            -subitem    = 'events' 
+                            label.a-comand(class="cat_misc-notifs")
+                                input.command-toggle(type="checkbox" id=subitem checked= (typeof NOTIFS.events == 'boolean') ? NOTIFS.events : true)  
+                                span Events
+                            -subitem    = 'cosmetics' 
+                            label.a-comand(class="cat_misc-notifs")
+                                input.command-toggle(type="checkbox" id=subitem checked= (typeof NOTIFS.newCosmetics == 'boolean') ? NOTIFS.newCosmetics : false)  
+                                span New Cosmetics
+                            -subitem    = 'general_announcements' 
+                            label.a-comand(class="cat_misc-notifs")
+                                input.command-toggle(type="checkbox" id=subitem checked= (typeof NOTIFS.miscAnnouncements == 'boolean') ? NOTIFS.miscAnnouncements : false)  
+                                span Other Pollux Announcements
+                            -subitem    = 'partner_announcements' 
+                            label.a-comand(class="cat_misc-notifs")
+                                input.command-toggle(type="checkbox" id=subitem checked= (typeof NOTIFS.partnerAnnouncements == 'boolean') ? NOTIFS.partnerAnnouncements : false)  
+                                span Partners Announcements
+
+    hr.plx-divider-icon
+    br
+    br
+    br
+
+-const ATTR = (userdata.switches||{}).variables || []        
+-const SKINS = (userdata.modules.skins || {})
+
+-const myDeckCasino = SKINS.blackjack || "default"
+-const myDeckTarot  = SKINS.tarot || "default"
+
+-const myDecks  = DCKINFO//.filter(t=>userdata.modules.skinInventory.includes(t.id))
+
+-const DEFAULT_DECK_C = {for:'casino', id:'casino_default',name: 'Standard Casino Deck', rarity: 'C', localizer:'default'}
+-const DEFAULT_DECK_T = {for:'tarot', id:'tarot_default',name: 'Standard Tarot Deck', rarity: 'C', localizer:'default'}
+
+-myDecks.unshift(DEFAULT_DECK_C)
+-myDecks.unshift(DEFAULT_DECK_T)
+
+script var decksAvailableCasino = !{JSON.stringify(myDecks.filter(d=>d.for=='casino') )} 
+script var myDeckCasino = !{JSON.stringify(DCKINFO.find(x=>x.id==myDeckCasino)||DEFAULT_DECK_C )} 
+script var decksAvailableTarot = !{JSON.stringify(myDecks.filter(d=>d.for=='tarot') )} 
+script var myDeckTarot = !{JSON.stringify(DCKINFO.find(x=>x.id==myDeckTarot)||DEFAULT_DECK_T )} 
+script var ATTR = !{JSON.stringify(ATTR)} 
+ 
+
+style
+    include attribs.css
+
+section.plx-container#roleplay
+    h1.title RPG Attributes / Annotations
+    h3.subtitle Manage your Roleplay Module attribute list
+
+    .attrib-list.plx-flex.plx-flex-wrap
+        .attrib( v-for="(attr,i) in attributes" :class=`(highlight == attr.tag ? 'is-highlighted' : '' ) + (attr.tag.startsWith('!')? 'macro' : '' )` )
+            a(@click="attributes=attributes.filter((_,y)=>y!=i)").tag-delete: i.fas.fa-times-circle
+
+            .tag
+                b(v-if="editing!==i"  @click="editing=i") {{attr.tag}}
+                b.editing(v-if="editing===i")
+                    input(type='text' v-model="attr.tag"  @keyup.tab="editing=attributes[i].tag"  @keyup.enter="editing=null" @focus="$event.target.select()")
+                    a.close(@click="editing=null"): i.fas.fa-times-circle
+
+            .value.editing(v-if="editing==attr.tag")
+                input(type='text' v-model="attr.value" @keyup.enter="editing=null"  @focus="$event.target.select()" )
+                a.close(@click="editing=null"): i.fas.fa-times-circle
+
+            .value(v-if="editing!=attr.tag" @click="editing=attr.tag")
+                .piece(v-for="(part,i) in attr.value.match(/[0-9]?d[0-9]+|[A-z]+|[\(\)+\/*\-]|[0-9]+/g)",
+                    :class="isMacro(attr) && isTag(part) ? 'm-tag' : isMacro(attr) && !isTag(part) && isDice(part) ? 'is-dice'+' is-'+diceValue(part) : '' ",
+                    @mouseover=`isMacro(attr) &&  isTag(part) ? highlight = part : null`,
+                    @mouseout='isMacro(attr) && isTag(part) ? highlight = null : null',
+                    :plx-tooltip="isMacro(attr) && isTag(part) ? attributes.find(x=>x.tag==part).value : null"
+                )
+                    
+                    span.dice( v-if="isMacro(attr) && diceValue(part) == '8'")
+                        svg.svg-inline--fa.fa-dice-d8.fa-w-16(aria-hidden='true', focusable='false', data-prefix='fal', data-icon='dice-d8', role='img', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 512 512')
+                            path(fill='currentColor', d='M502.1 232.1L279.9 9.9C273.3 3.3 264.6 0 256 0s-17.3 3.3-23.9 9.9L9.9 232.1c-13.2 13.2-13.2 34.5 0 47.7L232.1 502c6.6 6.6 15.2 9.9 23.9 9.9s17.3-3.3 23.9-9.9l222.2-222.2c13.2-13.1 13.2-34.5 0-47.7zM240 464.7L61.2 285.9 240 362.5zm0-137L43.7 243.6 240 47.3zm32 137V362.5l178.8-76.6zm0-137V47.3l196.3 196.3z')
+                    span.dice( v-else-if="isMacro(attr) && diceValue(part) == '4'")
+                        svg.svg-inline--fa.fa-dice-d4.fa-w-16(aria-hidden='true', focusable='false', data-prefix='fal', data-icon='dice-d4', role='img', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 512 512')
+                            path(fill='currentColor', d='M504.9 289.03L280.84 11.86C274.45 3.96 265.23 0 256 0s-18.45 3.96-24.85 11.86L7.1 289.03c-11.31 14-8.84 34.57 5.47 45.49l224.05 170.94c5.72 4.37 12.55 6.55 19.38 6.55s13.66-2.18 19.38-6.55l224.05-170.94c14.31-10.92 16.78-31.5 5.47-45.49zM31.99 309.14L240 51.75v416.04L31.99 309.14zM256.02 480h.03l-.01.01-.02-.01zM272 467.82v-416l208.02 257.26L272 467.82z')
+                    span.dice(v-else-if="isMacro(attr) && Number(diceValue(part)) >= '20'")
+                        svg.svg-inline--fa.fa-dice-d20.fa-w-14(aria-hidden='true', focusable='false', data-prefix='fal', data-icon='dice-d20', role='img', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 448 512')
+                            path(fill='currentColor', d='M431.88 116.13L239.88 4.3a31.478 31.478 0 0 0-31.76 0l-192 111.84C6.15 121.94 0 132.75 0 144.46v223.09c0 11.71 6.15 22.51 16.12 28.32l192 111.83a31.478 31.478 0 0 0 31.76 0l192-111.83c9.97-5.81 16.12-16.62 16.12-28.32V144.46c0-11.71-6.15-22.52-16.12-28.33zM224 57.62L318.7 176H129.3L224 57.62zM124.62 208h198.75L224 369.47 124.62 208zm68.28 171.99L55.92 362.87l44.43-133.28 92.55 150.4zm154.75-150.41l44.43 133.28-136.98 17.13 92.55-150.41zm7.17-59.69L262.67 54.72l138.01 80.78-45.86 34.39zm-261.64 0l-46.24-34.68 138.54-80.7-92.3 115.38zm-16.01 27.98l-45.13 135.4.17-169.12 44.96 33.72zM208 414.12v56.43L85.4 398.8 208 414.12zm155.6-15.45L240 470.84v-56.72l123.6-15.45zm7.23-200.8l45.15-33.86-.17 168.79-44.98-134.93zM224.14 480h.17l-.09.05-.08-.05z')
+                    span.dice(v-else-if="isMacro(attr) && diceValue(part) == '12'")
+                        svg.svg-inline--fa.fa-dice-d12.fa-w-16(aria-hidden='true', focusable='false', data-prefix='fal', data-icon='dice-d12', role='img', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 512 512')
+                            path(fill='currentColor', d='M505.24 178.49l-47.7-95.41a63.972 63.972 0 0 0-28.62-28.62l-95.41-47.7A63.905 63.905 0 0 0 304.89 0h-97.78c-9.94 0-19.73 2.31-28.62 6.76l-95.41 47.7a63.972 63.972 0 0 0-28.62 28.62l-47.7 95.41A63.874 63.874 0 0 0 0 207.11v97.78c0 9.94 2.31 19.73 6.76 28.62l47.7 95.41a63.972 63.972 0 0 0 28.62 28.62l95.41 47.7a64.07 64.07 0 0 0 28.62 6.76h97.78c9.94 0 19.73-2.31 28.62-6.76l95.41-47.7a63.972 63.972 0 0 0 28.62-28.62l47.7-95.41a64.07 64.07 0 0 0 6.76-28.62v-97.78c0-9.94-2.31-19.74-6.76-28.62zm-29.55 12.44l-95.58 109.23L272 246.11V140.22l156.94-42.8 46.75 93.51zM308.8 480H203.2l-55.29-152.06L256 273.89l108.09 54.05L308.8 480zM199.55 32h112.89l82.85 41.42L256 111.41 116.71 73.42 199.55 32zM83.06 97.42L240 140.22V246.1l-108.11 54.05-95.58-109.22 46.75-93.51zM32 312.45v-77.88l81.99 93.7 48.42 133.16-74.56-37.28L32 312.45zm392.15 111.7l-74.56 37.28 48.42-133.16 81.99-93.7v77.88l-55.85 111.7z')
+                    span.dice(v-else-if="isMacro(attr) && diceValue(part) == '10'")
+                        svg.svg-inline--fa.fa-dice-d10.fa-w-16(aria-hidden='true', focusable='false', data-prefix='fal', data-icon='dice-d10', role='img', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 512 512')
+                            path(fill='currentColor', d='M503.88 261.29L279.8 10.64C273.45 3.55 264.72 0 256 0s-17.45 3.55-23.8 10.64L8.12 261.29c-11.81 13.21-10.6 33.5 2.69 45.22l224.08 197.52c6.03 5.32 13.57 7.97 21.11 7.97 7.54 0 15.08-2.66 21.11-7.97L501.19 306.5c13.29-11.71 14.49-32.01 2.69-45.21zM256 297.95l-75.86-50.57 75.86-177 75.86 177L256 297.95zm-107.28-58.24L47.69 264.97 220.97 71.12l-72.25 168.59zm214.56 0L291.03 71.12 464.5 265.01l-101.22-25.3zM31.91 282.62l.01.04-.03-.02.02-.02zm17.03 15.03l108.34-27.09 82.76 55.19v140.22L48.94 297.65zM271.96 465.9V325.75l82.76-55.19 108.2 27.06L271.96 465.9z')
+                    span.dice( v-else-if="isMacro(attr)&& !isTag(part)  && isDice(part)")
+                        svg.svg-inline--fa.fa-dice-d6.fa-w-14(aria-hidden='true', focusable='false', data-prefix='fal', data-icon='dice-d6', role='img', xmlns='http://www.w3.org/2000/svg', viewBox='0 0 448 512')
+                            path(fill='currentColor', d='M431.88 116.13L239.88 4.3a31.478 31.478 0 0 0-31.76 0l-192 111.84C6.15 121.94 0 132.75 0 144.46v223.09c0 11.71 6.15 22.51 16.12 28.32l192 111.83a31.478 31.478 0 0 0 31.76 0l192-111.83c9.97-5.81 16.12-16.62 16.12-28.32V144.46c0-11.71-6.15-22.52-16.12-28.33zM224 32.08l175.75 102.86L224 237.48 47.83 134.7 224 32.08zM32.21 162.65L208 265.18v205.37L32 367.54l.21-204.89zM240 470.84V265.18l175.98-102.64-.21 205.67L240 470.84z')
+
+                    span {{part}}
+      
+        .attrib.plus(@click="addAttr()") +
+    .plx-align-right
+        a(@click='saveAttr()').magic-outline.plx-button.plx-margin-left.plx-margin-bottom(type='button')
+            i.fas.fa-save              
+            span &#x2002 Save
+        a(@click='resetAttr()').magic-outline.red.plx-button.plx-margin-left.plx-margin-bottom(type='button')
+            i.fas.fa-undo-alt              
+            span &#x2002 Reset
+    hr
+    br
+    br
+    br
+
+each d in DCKINFO.map(x=>x.localizer)
+        style
+            |    body::after{
+            |        position:absolute; width:0; height:0; overflow:hidden; z-index:-1;  
+            |        content:url('/build/cards/casino/#{d}/backface.png')
+            |        content:url('/build/cards/casino/#{d}/SA.png')
+            |         url('/build/cards/casino/#{d}/HQ.png')
+            |          url('/build/cards/casino/#{d}/C10.png')
+            |          url('/build/cards/casino/#{d}/D7.png')
+            |          url('/build/cards/casino/#{d}/SJ.png')
+            |          url('/build/cards/casino/#{d}/H2.png')
+            |          url('/build/cards/casino/#{d}/CK.png')
+            |           url('/build/cards/casino/#{d}/D3.png');   
+            |    }     
+section.plx-container#custom-options
+    h1.title Customization
+    h3.subtitle Personalize other things which you're allowed to
+    hr
+    .plx-container.plx-grid
+        #select-deck.plx-width-1-1(class='plx-width-1-2@m')
+            h3.title Casino Deck
+            h5.subtitle Deck used in BLACKJACK and future Casino minigames   
+            v-select(
+                @input="onChangeDeck",
+                v-model="selectDeckCasino"
+                :options= "decksAvailableCasino",
+                :filterable= "false",
+                :clearable= "false",
+                :searchable= "false",
+                :select-on-tab = "false",
+                :value= `decksAvailableCasino.find(x=>x.id=='${myDeckCasino.id}')`,
+                label='name',
+                @search:blur="isSearchBlurCasino=true",
+                @search:focus="isSearchBlurCasino=false"
+            ) 
+                template(slot='selected-option', slot-scope='option')
+                    span(style='transform:translateY(-5px)')
+                        .plx-rarity-icon(:class='option.rarity') 
+                        span.sticker-sel-span &#x2000 {{option.name}}
+                        
+                template(slot='option', slot-scope='option')
+                    .stick-sel-opt
+                        .deck-backface(:style="`background-image:url('/build/cards/casino/${option.localizer}/backface.png')`"  class="plx-visible@m")
+                        .deck-icon(:style="`background-image:url('/build/cards/casino/${option.localizer}/HQ.png')`"  class="plx-visible@m")
+                        span(style='transform:translateY(-5px)')
+                            .plx-rarity-icon(:class='option.rarity')
+                            | &#x2000 {{option.name}} 
+            .deck-demo.casino
+                each card,y in ['SA','HQ','C10','D7','SJ','H2','CK','D3']
+                    transition(name="deck-reveal" )
+                        .deckcard(:style=`{'transition-delay': '${1+.013*(y*y)}s'}` v-show="isSearchBlurCasino")
+                            .face(:style="`background-image:url('/build/cards/casino/${selectDeckCasino.localizer}/"+card+".png')`")
+                                .backface(:style="`background-image:url('/build/cards/casino/${selectDeckCasino.localizer}/backface.png')`")
+            
+        
+        #select-deck.plx-width-1-1(class='plx-width-1-2@m')
+            h3.title Tarot Deck
+            h5.subtitle Deck used in Tarot spreads and minigames   
+            v-select(
+                @input="onChangeDeck",
+                v-model="selectDeckTarot"
+                :options= "decksAvailableTarot",
+                :filterable= "false",
+                :clearable= "false",
+                :searchable= "false",
+                :select-on-tab = "false",
+                :value= `decksAvailableTarot.find(x=>x.id=='${myDeckTarot.id}')`,
+                label='name',
+                @search:blur="isSearchBlurTarot=true",
+                @search:focus="isSearchBlurTarot=false"
+            ) 
+                template(slot='selected-option', slot-scope='option')
+                    span(style='transform:translateY(-5px)')
+                        .plx-rarity-icon(:class='option.rarity') 
+                        span.sticker-sel-span &#x2000 {{option.name}}
+                        
+                template(slot='option', slot-scope='option')
+                    .stick-sel-opt
+                        .deck-backface(:style="`background-image:url('/build/cards/tarot/${option.localizer}/backface.png')`"  class="plx-visible@m")
+                        .deck-icon(:style="`background-image:url('/build/cards/tarot/${option.localizer}/star.png')`"  class="plx-visible@m")
+                        span(style='transform:translateY(-5px)')
+                            .plx-rarity-icon(:class='option.rarity')
+                            | &#x2000 {{option.name}} 
+                            span.author by 
+                                a(:href='option.author_link') {{option.author}}
+            .deck-demo.tarot
+                each card,y in ['lovers','death','hanged','chariot','hiero','magician','moon','devil']
+                    transition(name="deck-reveal" )
+                        .deckcard(:style=`{'transition-delay': '${1+.013*(y*y)}s'}` v-show="isSearchBlurTarot")
+                            .face(:style="`background-image:url('/build/cards/tarot/${selectDeckTarot.localizer}/"+card+".png')`")
+                                .backface(:style="`background-image:url('/build/cards/tarot/${selectDeckTarot.localizer}/backface.png')`")
+            
+    br   
+    .plx-flex.plx-flex-center
+        a(@click='howToDeck()').magic-outline.plx-button.plx-margin-left.plx-margin-bottom(type='button')#howtoDeck
+                i.fas.fa-question              
+                span &#x2002 How to obtain more decks
+    hr
+    br
+    br
+    br
+
+script.
+
+    const Customization = new Vue({
+        el: "#custom-options",
+        components: {
+            "v-select": VueSelect.VueSelect
+        },
+        data:{
+            selectDeckTarot: myDeckTarot,
+            decksAvailableTarot,
+            isSearchBlurTarot: true,
+             selectDeckCasino: myDeckCasino,
+            decksAvailableCasino,
+            isSearchBlurCasino: true
+
+
+        },
+        methods:{
+            onChangeDeck(){
+               saveDeck(this)
+            },
+            howToDeck(){
+                Swal.fire({
+                    //title: 
+                    html: "Decks can be obtained via <b>Specialized Crafting</b>" 
+                    ,type: 'info'
+                    ,confirmButtonText: 'Hmmm I see...'
+                })
+            }
+        }
+    })
+
+    const Roleplay = new Vue({
+        el: "#roleplay",
+        components: {
+        
+        },
+        data:{
+            attributes:  [...ATTR]
+            ,attributes_bkp:  [...ATTR]
+            ,highlight: ''    
+            ,editing: ''      
+        },
+        methods:{
+            enableEditing(){                
+                this.editing = true;
+            },
+            addAttr(){                
+                this.attributes.push({tag:'new_tag',value:'new value'})
+            },
+            saveAttr(){                
+               saveAttr(this.attributes)
+            },
+            resetAttr(){                
+                this.attributes =  [...ATTR]
+            },
+            isMacro(attr){
+                return attr.tag.startsWith('!')
+            },
+            isDice(v){
+                if(!v.includes('d')) return false;
+                return v.match(/[0-9]?d[0-9]+/g)
+            },
+            diceValue(v){
+                if(!v.includes('d')) return null;
+                return v.replace(/[0-9]?d([0-9]+)/g,'$1')
+            },
+            isTag(part){
+                return this.attributes.map(x=>x.tag).includes(part) 
+            },
+            isHighlighted(item){
+               return this.highlight == item
+            }
+        }
+    })
+
+    function saveDeck(C){
+        Promise.all([fetch(`/dash/misc/skin`,{
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+            body: JSON.stringify({ skinFor: 'casino', skinId: C.selectDeckCasino.localizer  }),
+            method:"PATCH"
+        }),
+         fetch(`/dash/misc/skin`,{
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+            body: JSON.stringify({ skinFor: 'tarot', skinId: C.selectDeckTarot.localizer  }),
+            method:"PATCH"
+        })]).then(res=> processRes(res,"Skins","Deck Skins Saved!") )
+    }
+
+    function saveAttr(attrSet){
+        fetch(`/dash/misc/attr`,{
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+            body: JSON.stringify({ attrSet }),
+            method:"PATCH"
+        }).then(res=> processRes(res,"Attributes","Attributes Saved!") )
+    }
+
+
+    $('#settings-options input').change(function(){
+
+        let settings = {
+             ownerNotif: $('#enable-dm-alerts-sv-changes').prop('checked')
+            ,dmWelcome: $('#dm-welcome-opt-out').prop('checked')
+            ,newCommand: $('#new_command').prop('checked')
+            ,patchNotes: $('#patch_note').prop('checked')
+            ,events: $('#events').prop('checked')
+            ,newCosmetics: $('#cosmetics').prop('checked')
+            ,miscAnnouncements: $('#general_announcements').prop('checked')
+            ,partnerAnnouncements: $('#partner_announcements').prop('checked')
+        };
+
+        console.log({settings});
+
+        return fetch(`/dash/misc/notifs`,{
+            headers: { "Content-Type": "application/json; charset=utf-8" },
+            body: JSON.stringify( settings ),
+            method:"PATCH"
+        }).then(res => processRes(res,"Notifications","Notification Settings Saved!") );
+          
+    })
+
+    $(".markall").click(function () {
+        var cat = $(this).data('cat')
+        $('.cat_' + cat +' input').prop('checked', this.checked);
+    })

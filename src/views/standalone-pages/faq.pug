@@ -1,0 +1,394 @@
+extends ../layout 
+block content
+    .wrapper
+        include ../navbar
+
+        style 
+        - let r = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+        .plx-background-cover(plx-parallax="bgy: 100,400" style='background-image: url(images/heads/office'+r+'.png)').pictoheader.dark
+            .plx-container
+                br
+                h1.title FAQ
+                h3.subtitle Frequently Asked Questions
+                hr.plx-divider-small
+
+                p 
+                    | Through many centuries of existence, mankind had a myriad of questions, most of them unanswered.
+                    br
+                    | Fortunately, that's not the case here. These are the most common questions people ask when looking for support, all answered!  
+        hr.plx-divider-icon-fill
+        .plx-container
+            style.
+                .plx-accordion-title i{color: #f58} .plx-accordion-title{color: var(--text-extra-bold)}
+                .plx-accordion>li{
+                        border: solid 1px #AAA3;
+                        border-radius: 3px;
+                        padding: 12px 24px;
+                    }
+            -
+                let faqs=[
+
+                 ]
+            ul(plx-accordion)
+                li
+                    a.plx-accordion-title 
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span  How do I invite Pollux to my server?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | This one is easy: Click <b><a href="/invite">here</a></b> and let the magic happen. Zvarri!
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span What can this beautiful lady do? What are the commands?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | You can either ask her with <code>+help</code> or if you're too shy for it, check the <b><a href="/commands">Commands Page</a></b>. You can see detailed info on every command using <code>+help <code>command</code></code>
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span I think she's broken. She's not responding/offline.
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | She probably ran out of batteries and needs some winding. Join our server and check <b>#information</b> channel (alternatively you can check 
+                            a(href="https://twitter.com/maidpollux" target='blank') Pollux's Twitter
+                            | ), if there's nothing there relating to your issue, contact support in any of both. 
+                
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span I think I made a fucky wucky. How do I restore/reverse/reset it?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Fear not! The <b><a href="/dashboard">Dashboard</a></b> is the place where you can fix everything wrong with your life. Except for broken hearts...
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span I really like Pollux and I'd like to donate, how can I do it and do I get any perks for it?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Yes you get! You can support the project in a wide range of ways: 
+                            a(href="https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=8JDLAY5TFU9D6&source=url" target="blank") PayPal
+                            |, 
+                            a(href="https://patreon.com/join/pollux" target="blank") Patreon
+                            |, our own 
+                            a(href="/shop/premium" target="blank") Cash Shop
+                            |, and even 
+                            a(href="https://pag.ae/bbwkFvg" target="blank") some weird barcode method that's apparently only accepted in Brazil
+                            |. 
+                            br
+                            | We've already had many other donation methods like crypto, wiretransfer and even cash. Contact us directly if you're feeling generously exotic.
+                            br
+                            i We do not accept Activision stocks as donation.
+                            
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span Is there going to be X or Y feature?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Maybe... we have a 
+                            a(href='https://reddit.com/r/pollux' target='blank'): b Subreddit 
+                            | where everyone can post anything freely, including suggestions of ideas of stuff. Why Rreddit? Because it is easier to go through than a Discord channel + it has a nice upvoting and commenting system.
+                
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span What are the languages supported and how do I change it?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Pollux has been taught several languages by natives of each one. She currently speaks all of these:
+                            br
+                            -cmdlangs = ["English: [+lang en]","Pусский: [+lang ru]","Polski: [+lang pl]","Português Brazuca: [+lang pt-br]","Türkçe: [+lang tr]","Español: [+lang es]","Čeština: [+lang cs]","Deutsch: [+lang de]","Français: [+lang fr]","한국어: [+lang ko]","Română: [+lang ro]","Magyar: [+lang hu]","беларуская: [+lang by]","Yкраїнська: [+lang ua]","繁體中文: [+lang zh-tw]","日本語: [+lang jp]","български: [+lang bg]"]
+                            each flag,i in ["united-states","russia","poland","brazil","turkey","spain","czech-republic","germany","france","south-korea","romania","hungary","belarus","ukraine","taiwan","japan","bulgaria"]
+                                img(src="/build/guessing/guessflags/"+flag+".png" plx-tooltip="title: "+cmdlangs[i] width='32px')
+                                | &#x2001 
+                            br
+                            | Move your cursor over a flag to see the command used to enable the language
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span Can I run my own version of Pollux?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Short answer: No.
+                            | Long answer: Nope.
+                            br
+                            | Pollux open-sourced code is for reference purposes only and is not meant for self-hosting. Please do not insist.
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span Is there a Beta version I can test? How do I put it on my server?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | There is. You can add the beta by just copying Pollux's invite and pasting the Beta's ID on it. Be advised that the Beta is very unstable and has a separate database from the live version which is constantly destroyed, nplxed, burnt, and wiped. Not fun.
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span Is there going to be an event? / When does the event start?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Event information is all in our 
+                            a(href='/events' target='blank'): b Events Page
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span How do I change/get Background/Profile Text/Medals/Flairs?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Profile customisation can be done entirely via 
+                            a(href='/dashboard' target='blank'): b Dashboard
+                            |, but you can also use commands to change it from Discord:
+                            br
+                            code +personaltxt
+                            code +background
+                            code +favcolor
+                            code +tagline       
+                            br 
+                            | Flairs, Stickers and Medals can only be equipped from the Dashboard
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span How do I get Lootboxes? Can I drop them on demand?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | You can get Lootboxes from drops. Lootbox drops are <b>enabled by default</b> in your server as she joins, unless you configured otherwise. She will drop a box at random from time to time. Every message has an approximated 0.1% chance of dropping one. 
+                            b Using bots or macros to force drops is not allowed and we log and store every message that triggers a drop
+                            |, with all information about the server, channel, and users participating in the raffle. If we deem that certain drops are not legitimate we may take action at our discretion to penalise the users involved.
+                            br
+                            | Penalties may include but are not limited to: 
+                            ul 
+                                li Suspension of your Pollux account
+                                li Removal or reset of EXP, Levels, Inventory Items, and Rubines
+                                li Removal of earned Cosmetics and Lootboxes
+                                li A full wipe of your account 
+                                li Permanent ban of using Pollux    
+
+                            | Lootboxes can also be acquired from Events and other special situations. 
+                            br
+                            | To open your Lootboxes, use <code>+open lootbox [tier]</code>
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span Is Blackjack rigged? How many decks does Pollux use? What set of rules does she use? Why am I so bad at it?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Calm down, one thing at a time. Blackjack is not rigged, it is a gambling game based solely in RNG, with just a bit of skill involved. Several decks were added to avoid card counting, one popular technique to outplay the dealer in irl Blackjack. Pollux does not use any exotic rules. You probably should take a look at 
+                            a(href='https://media.discordapp.net/attachments/277392183387226113/362286362742751242/atlantic-city.png' target='blank') this
+                            | .
+               
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span What are Rubines and what are they used for? How do I obtain them?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Rubines are bright-pink gemstones made of special hexagonal scalenohedrons of Al₂O₃:Cr, used for pretty much everything! 
+                            | They're the main Currency used by Pollux for all sorts of stuff. Buying backgrounds, medals, spending on marriage affairs, as well paying for crafting services.
+                            br
+                            | You can get rubines with daily bonuses (<code>+daily</code>) which increase with your streak! Some minigames like gambling ones can give you a chance to increase your balance. Lootboxes often contain a bunch of them inside, and duplicate items grant you some too.
+                            
+                
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span Can I give Rubines/Jades/Sapphires/Boxes to someone?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Depends- No- No- No- and Yes.
+                            br
+                            | Trading Rubines directly to other users has been heavily exploited previously, so it was removed in favor of the 
+                            a(href="/shop/marketplace" target='blank') User Marketplace
+                            | . Donators and Partners can still transfer them directly as they're easier to keep our eyes on.
+                            br
+                            | Jades are a crafting material, not a currency. So they aren't tradeable.
+                            br
+                            | Sapphires are premium currency, and cannot be traded directly. But can be used as payment in the 
+                            a(href="/shop/marketplace" target='blank') User Marketplace
+                            | . 
+                            br
+                            | Boxes can be traded normally, as long as they have the "tradeable" flag. Gift boxes and Event boxes cannot be traded.
+                            br
+                            br
+                            | Every trade is logged and can be consulted afterwards. If you run in any trouble with them, please contact support.
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span Can I trade/give backgrounds, medals and stickers?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Yes. You should first pack them as a gift, which will cost you some Rubines and Jades. Alternatively you can sell them at the 
+                            a(href="/shop/marketplace" target='blank') Marketplace 
+                            | if you're exchanging them for Rubines or Sapphires.
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span How do I get Sapphires?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Sapphires can be obtained in a variety of ways:
+                            ul
+                                li Every 200 dailies
+                                li Every 365 dailies
+                                li There's a 0.1% chance to find it Ultra Rare Lootboxes 
+                                li Donating
+                                li Purchasing them at the <a href="/shop/premium" target="blank"><b>Premium Shop</b></a>
+                                li Some <a href="/events" target="blank"><b>events</b></a> may award them as a higher prize.
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span Can I upload custom backgrounds? 
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | No as that completely defeats the purpose of saving Rubines to afford them. And also for QA reasons we're slowing down on user submitted content.
+                            | BUT, you can still suggest them at the 
+                            a(href='https://reddit.com/r/pollux' target='blank'): b subreddit
+                            | . Every cosmetic suggestion <b>must</b> contain source/artist information and a official link to their page. 
+                            br
+                            | Some 
+                            a(href="/donate" target='blank') donation tiers 
+                            | allow you to have one Background of your choice to be released into the shop. It will remain as a XR for as long as you are a supporter. Afterwards it will be added to the 'Community Items'
+                     
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span Pollux says I'm blacklisted! What do I do?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Regret your sins and seek redemption.
+                            br
+                            | If you think you've been Blacklisted by mistake, or if you think you're worthy of a second chance, stop by our server under #blacklist-appeals channel.
+                            br
+                            | Ask someone to try <code>+whyblacklisted [@yourself]</code> to see why were you blacklisted.
+                     
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span How do I disable the Global Prefix (p!)? 
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Head to our 
+                            a(href='/dashboard' target='blank'): b Dashboard
+                            | , at Servers > Manage > Global Options set the "Enable Global Prefix" option to OFF and then save.
+                     
+                     
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span What are these boosterpacks and how do I use them? 
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Boosterpacks are the new source of Stickers, which used to come singly in Lootboxes. Boosters will stack into a specific pocket in your Inventory dedicated to them. You can access this inventory via two ways:
+                            br
+                            code +inventory
+                            br 
+                            code +boosterpack
+                            br
+                            | To open directly a specific pack you can use the full command:
+                            br
+                            code +boosterpack open [Sticker Series ID]
+                            br
+                            br
+                            | Boosterpacks contains 2 random stickers of any rarity, regardless of what rarity was the box you got it from was, boosterpacks themselves have rarity tiers of their own (as shown below) . Duped stickers don't stack and currently aren't exchanged for Rubines, if you got all dupes, that's just too bad. An exchange-for-jades thingy will be added as an Anti-Frustration-Feature(TM) later on.
+                            br
+                            br
+                            | Boosterpacks cannot be traded or given away
+                            br
+                            a(href='/stickers' target='blank') You can see all stickers from every pack here
+                            
+
+                li
+                    a.plx-accordion-title  
+                        i.far.fa-question-circle
+                        | &#x2003
+                        span What are Lovepoints and how do I get them?
+                    .plx-accordion-content
+                        p
+                            i.fas.fa-reply
+                            | &#x2003
+                            | Lovepoints are still being introduced, some commands will award you with them, and other commands will interact with your Lovepoints or change behaviour depending on your current amount of LP.
+
+                     
+                     
+
+                     
+
+                     
+
+
+block scripts

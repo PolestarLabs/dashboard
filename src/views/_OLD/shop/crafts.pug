@@ -1,0 +1,412 @@
+extends ../layout
+
+mixin craft(item)
+  -let ICON = item.icon?"/build/items/"+item.icon+".png":"https://i.pinimg.com/originals/28/11/c1/2811c10cdfe70434cc61043fd6dd85b3.jpg";
+  -let ID = item.id
+  -let NAME = item.name
+  -let CODE = item.code
+  -let MAT = item.materials
+  -let GC = item.gemcraft
+  -GCRAF = []  
+  
+ 
+  -GC.jades ? GCRAF.push({name:"Jades",rarity:GC.jades,icon:'jadegem',gem:true}) : false;
+  -GC.rubines ? GCRAF.push({name:"Rubines",rarity:GC.rubines,icon:'rubinegem',gem:true}) : false;
+  -GC.sapphires ? GCRAF.push({name:"Sapphires",rarity:GC.sapphires,icon:'sapphiregem',gem:true}) : false;
+  
+
+  .craft-box(id=ID)
+  
+    table.cbx-table
+      tr
+        td(colspan=4)
+          .name= NAME
+        td( width="80px")
+          //.friendcode= ID
+          .a.button(data-item=ID data-icon=ICON style="padding:0").copyCode.is-small CRAFT
+      tr
+        td(rowspan=7).craft-img
+          img(src=ICON width="98px" height="98px")
+          //.button.is-purple.is-small OK
+        td 
+          .nt &#x2003
+      tr.si
+        //td(colspan=2)
+          .nt Mystery Code:
+        td(colspan=2)
+          .nt Crafting Code:
+      tr.si
+        td(colspan=4)
+          .code= ID
+        
+            
+      tr.materials 
+        td(colspan=2)
+          .nt Material Items
+      
+      tr
+        td(colspan=4)
+          if MAT
+            each i in MAT
+              -let itmt = items.find(i2=>i2.id==i);
+              -itmt = !itmt ? itmt=i : itmt;
+              if itmt
+                -let iICON = itmt.icon?"/build/items/"+itmt.icon+".png":"https://i.pinimg.com/originals/28/11/c1/2811c10cdfe70434cc61043fd6dd85b3.jpg";  
+                a(href="#"+(itmt.id||"") data-dest=itmt.id).material
+                  img(src=iICON width="32px" title=itmt.name+" ("+itmt.rarity+")").mattie
+          if MAT.length===0 
+                span ---
+                img(src="/build/items/rubinegem.png" height="32px" style="display:inline;opacity:0pointer-events:none;visibility:hidden;").mattie
+      tr.gemcraft 
+        td(colspan=2)
+          .nt Material Gems
+          
+      tr
+        td(colspan=4)
+          if GCRAF
+              each i in GCRAF
+                -let itmt = items.find(i2=>i2.id==i);
+                -itmt = !itmt ? itmt=i : itmt;
+                if itmt
+                  -let iICON = itmt.icon?"/build/items/"+itmt.icon+".png":"https://i.pinimg.com/originals/28/11/c1/2811c10cdfe70434cc61043fd6dd85b3.jpg";  
+                  a(href="#"+(itmt.id||"") data-dest=itmt.id).material
+                    img(src=iICON width="32px" title=itmt.name+" ("+itmt.rarity+")").mattie
+                  -
+                    var miliarize= function(numstring,strict,symbol){
+                      let sym = symbol||"." 
+                      if (!numstring)return 0 ;
+                        if (typeof numstring == "number"){
+                            numstring = numstring.toString()
+                        }
+                        if(numstring.length < 4)return numstring;
+
+                        var stashe = numstring.replace(/\B(?=(\d{3})+(?!\d))/g, sym).toString();
+
+                        if(strict==="ultra"){
+                            return stashe;
+                        }
+
+                        if(strict){
+
+                            //log(stashe)
+                            //log(typeof stashe)
+                            var stash = stashe.split(sym)
+                        switch(stash.length){
+                            case 1:
+                                return stash;
+                            case 2:
+                                if(stash[1]!="000") break;
+                                return stash[0]+"K";
+                            case 3:
+                                if(stash[2]!="000") break;
+                                return stash[0]+sym+stash[1][0]+stash[1][1]+"Mi";
+                            case 4:
+                                if(stash[3]!="000") break;
+                                return stash[0]+sym+stash[1][0]+stash[1][1]+"Bi";
+                             }
+
+                            return stashe;
+                        }        
+
+                        stash = stashe.split(sym)
+                        switch(stash.length){
+                            case 1:
+                                return stash.join(" ");
+                            case 2:
+                                if(stash[0].length<=1) break;
+                                return stash[0]+"K";
+                            case 3:
+                                return stash[0]+"Mi";
+                            case 4:
+                                return stash[0]+"Bi";
+                             }
+                         return stashe;
+                      }
+                      var J = miliarize(itmt.rarity,true)
+                      
+                  span=J
+
+          if MAT.length===0 
+
+                  img(src="/x" width="32px" style="opacity:0pointer-events:none;visibility:hidden;").mattie
+
+  
+  
+  //
+    .craft-img
+      img(src=ICON width="98px" height="98px")
+    .craft-info 
+      .name= NAME
+
+      .si
+        .nt Mystery Craft Code
+        .code= CODE
+      .si
+        .nt Friendly Craft Code
+        .friendcode= ID
+
+      .materials 
+        .nt Material Items
+          if MAT
+            each i in MAT
+              -let itmt = items.find(i2=>i2.id==i);
+              -let iICON = itmt&&itmt.icon?"/build/items/"+itmt.icon+".png":"https://i.pinimg.com/originals/28/11/c1/2811c10cdfe70434cc61043fd6dd85b3.jpg";  
+              img(src=iICON width="32px").mattie
+
+        
+        
+block content
+  
+  style.
+
+      .craftboxes{
+         display: flex;
+          flex-wrap: wrap;
+        }
+
+         .craft-box {
+            padding: 8px;
+            background: #2b2b38;
+            margin: 10px;
+            /* display: flex; */
+            min-width: 386px;
+            max-width: 425px;
+            flex: 1 1 auto;
+            height: 220px;
+            border-radius: 5px;
+            /* justify-content: space-around; */
+            /* align-content: flex-start; */
+            /* flex-flow: row wrap; */
+        }
+
+        .craft-img{
+          width:128px;
+        } 
+        .craft-img img{
+         margin:8px;
+          margin-top:28px
+        }
+
+        .mattie{
+          margin: 4px 10px;
+        }
+
+        .craft-info{
+          margin-left: 10px;
+          display:inline-block;  
+          width:230px
+        }
+
+        .si{
+          margin: 2px 2px 2px 8px; 
+          font-size: .8rem;
+        }
+
+        td .name{
+           margin-bottom: 2px;
+           font-weight: 600;
+           font-size: 1.2rem
+         }
+
+        .nt{
+          font-size:10px;
+          font-weight: 500;
+        }
+
+        .code {
+              font-size: .7rem;
+              font-family: monospace;
+              background: #1118;
+              padding: 1px 3px;
+              margin: 0 2px;
+              width: 90%;
+              border-radius: 4px;
+              letter-spacing: 4px;
+              text-indent: 4px;
+          }
+          .blink{
+            box-shadow: inset 0px 0px 10px #fADA
+          }
+          #imaginaryPlace{
+            opacity:0
+          }
+
+
+
+  .hero.is-primary
+    include ../navbas
+    include ../templates 
+  .is-fullwidth.nano: .nano-content
+    br
+    article.container(style="padding:5px;")
+      header
+        h1.title.is-2: b Crafting Workshop
+        h1.subtitle.is-4 Cheatsheet for creating items from Jades or from other items
+      hr
+      br   
+      
+      .message.is-purple
+        .message-header
+          p How to perform crafts?
+        .message-body
+          p To craft an item you first need to know what are you trying to do, Pollux's crafting system cannot fuse random items <b>yet</b>. 
+          p Get the crafting code of the desired item
+          p Then back on Discord, type <code>p!craft [ITEM CODE]</code>, you <b>must</b> have the material items in your inventory and the required gems to create it!
+
+      h2.title.is-4: b Class I - Common
+      h2.subtitle.is-6 Usually junk items that can be crafted with just Jades
+      
+      hr
+      
+      
+      .craftboxes
+        //if userdata && userdata.id === "88120564400553984"
+          -items = items.map(x=>{x.crafted = true; return x}).filter(x=>x.code &&(x.type!="boosterpack"&&x.crafted==false))
+      
+      .craftboxes
+        -items_c = items.filter(it=> it.crafted && it.rarity == "C")       
+        each itm in items_c
+          +craft(itm)
+
+      
+      
+      br
+      
+      h2.title.is-4: b Class II - Uncommon
+      h2.subtitle.is-6 More useful goods composed of at least one Class I item
+      
+      hr 
+            
+      .craftboxes
+        -items_u = items.filter(it=> it.crafted && it.rarity == "U")       
+        each itm in items_u
+          +craft(itm)
+      br
+      
+      h2.title.is-4: b Class III - Rare
+      h2.subtitle.is-6 Cool stuff made of at least one Class II item or Rubines
+      
+      hr
+            
+      .craftboxes
+        -items_r = items.filter(it=> it.crafted && it.rarity == "R")       
+        each itm in items_r
+          +craft(itm)
+      br
+      
+      h2.title.is-4: b Class IV - Super Rare
+      h2.subtitle.is-6 Fancy things you need at least one Class III item or   1 Sapphire to craft
+      
+      hr
+            
+      .craftboxes
+        -items_sr = items.filter(it=> it.crafted && it.rarity == "SR")       
+        each itm in items_sr
+          +craft(itm)
+      br
+      
+      h2.title.is-4: b Class V - Ultra Rare
+      h2.subtitle.is-6 The Legendary items, usually needs things like Sapphires or Class IV items to craft 
+      
+      hr
+            
+      .craftboxes
+        -items_ur = items.filter(it=> it.crafted && it.rarity == "UR")       
+        each itm in items_ur
+          +craft(itm)
+      br
+      input(type="text")#imaginaryPlace
+      
+  block scripts
+    script.
+      $(".material").click(function(){
+        var dest = $(this).data('dest')
+        $("#"+dest).addClass('blink')
+        setTimeout(function(){
+          $("#"+dest).removeClass('blink')
+        },2000)
+      })
+      $(".copyCode").click(function(){
+        let item = $(this).data('item')
+        let icon = $(this).data('icon')
+        //$("#imaginaryPlace").val(text)
+        //$("#imaginaryPlace").select();
+        //document.execCommand("copy");
+        //swal("Crafting Code copied!",'Now go paste it on Discord','success');
+          swal({
+          title: "Ready to craft this?",
+          html: "All materials and gems will be removed from your inventory",
+          imageUrl: icon,
+          showCancelButton: true,
+          confirmButtonColor: $(this).css('background-color'),
+          confirmButtonText: "Sure",
+          cancelButtonText: "I'm not ready for this...",
+          showLoaderOnConfirm: true,
+          preConfirm: (hm) => {
+            return new Promise((resolve) => {
+              setTimeout(f => {                
+                let postage = $.post('/craft',{
+                    item,
+                    checking: true
+                  });
+                  
+                  postage.done(function(data){
+
+                if (data.title!=="SUCCESS!") {
+                  swal.showValidationError(`
+                  Oopsie... you don't seem to have all materials required!<br>
+                  This is what is missing:<br>
+                  <ul><li>
+                    ${data.UNNAFORDS.join("</li><li>")}
+                  </ul></li>
+                  `)
+                  $(".swal2-confirm").hide()
+                  $(".swal2-cancel").html("Oof")
+                  $(".swal2-title").html("Ready to craft thi... god dammit")
+                }
+                resolve("OK")
+                })
+              }, 1200)
+            })
+          }
+        }).then((result) => {
+          if (result.value) {
+          
+              let postage = $.post('/craft',{
+                    item,
+                    checking: false
+                  });
+
+              postage.done(function(data){
+                console.log(data)
+                if(data.title=="UNAFFORD")swal("Oopsie Woopsie","ERROR#1 : Crafting Materials not Found",'error');
+                if(data.title=="CANTBUY")swal("Oopsie Woopsie","ERROR#2 : Cannot Craft",'error');
+                if(data.title=="DUPLICATE")swal("Oopsie Woopsie","ERROR#3 : Unique",'error');
+                if(data.title=="SUCCESS!"){
+                        swal(
+                              {
+                                title: "OK",
+                                text: "ok",
+                                type: 'success',
+                                showCancelButton: false,
+                                confirmButtonText: "yarr",     
+                                showLoaderOnConfirm: true
+                              }
+                          )
+                }          
+
+              })
+              postage.fail(function(data){
+                login();
+              })      
+
+
+          } 
+        })
+        
+      })
+    
+      
+    
+    
+ 

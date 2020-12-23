@@ -1,0 +1,110 @@
+extends ../../layout 
+block head          
+    script window.paceOptions = {document:false,ghostTime: 800, restartOnRequestAfter: 300, }
+block content
+    .wrapper
+        -currentPage = 'market'
+        include ../../navbar
+        style 
+            include style-bg.css
+        
+        +rotated-sidebar([
+                {item:"Rotation",href:"#rotation"},
+                (!event?{item:"Event",href:"#event"}:false),
+                {item:"Community",href:"#community"},
+                {item:"Suggest",href:"#suggest"},
+            ])
+
+        - let r = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+        .plx-background-cover(plx-parallax="bgy: 100,400" style='background-image: url(/images/heads/shop'+r+'.png)').pictoheader.dark
+            .plx-container
+                br
+                h1.title Background Shop
+                h3.subtitle Decorate your profilecard with one of our community-picked images.
+                hr.plx-divider-small
+                
+        hr.plx-divider-icon-fill
+        .plx-container
+            .section#rotation    
+                h2.title Featured Rotation
+                div(plx-filter="target: .rotationFilter" style="font-weight: 700;")
+                    ul.plx-subnav.plx-subnav-pill
+                        li(plx-filter-control=""): a All
+                        li(plx-filter-control=".rar-C"): a C
+                        li(plx-filter-control=".rar-U"): a U
+                        li(plx-filter-control=".rar-R"): a R
+                        li(plx-filter-control=".rar-SR"): a SR
+                        li(plx-filter-control=".rar-UR"): a UR
+                    .bg-clickable.rotationFilter(plx-grid).plx-grid-small
+                        each bg in bgBase.reverse().slice(0,20)
+                            if bg
+                                .plx-width-1-2(class="plx-width-1-5@m "+("rar-"+bg.rarity) )
+                                    include bg_element
+
+            hr
+            .section#event    
+                h2.title Event Items
+                h4.subtitle Available for a limited time only during this event!
+                div(plx-filter="target: .rotationFilter" style="font-weight: 700;")
+                    ul.plx-subnav.plx-subnav-pill
+                        li(plx-filter-control=""): a All
+                        li(plx-filter-control=".rar-C"): a C
+                        li(plx-filter-control=".rar-U"): a U
+                        li(plx-filter-control=".rar-R"): a R
+                        li(plx-filter-control=".rar-SR"): a SR
+                        li(plx-filter-control=".rar-UR"): a UR
+                    .bg-clickable.rotationFilter(plx-grid).plx-grid-small
+                        each bg in bgBase.reverse().slice(0,30)
+                            if bg
+                                .plx-width-1-2(class="plx-width-1-5@m "+("rar-"+bg.rarity) )
+                                    include bg_element
+
+
+            hr.plx-divider-icon
+            
+            .section#community    
+                h2.title Community Backgrounds
+                h4.subtitle Always available, can be unlocked with Rubines, Jades and Sapphires. Or synthetized with Cosmo Gems
+                form.plx-grid
+                    .field(class="plx-width-1-2@m plx-width-1-1"): .control#search
+                        label.label Search Tags
+                            input(type='input' name="filter" placeholder="example: Anime Game").input
+                    .field(class="plx-width-1-6@m plx-width-1-4"): .control
+                        label.label Event
+                            .div
+                                input(type='checkbox' name="event" style="width:36px;height:36px;").plx-checkbox
+                    .field(class="plx-width-1-6@m plx-width-1-2"): .control
+                        label.label Tier
+                            .div
+                                .select: select(  name="rarity")
+                                    option(data-id="") All
+                                    option(data-id="C") Common
+                                    option(data-id="U") Uncommon
+                                    option(data-id="R") Rare
+                                    option(data-id="SR") Super Rare
+                                    option(data-id="UR") Ultra Rare
+
+                    .field(class="plx-width-1-6@m plx-width-1-4"): .control
+                        label.label &#x200b                  
+                            .div
+                                input(type='submit' value="GO" formmethod="post").plx-button.plx-button-primary
+                #test-toast-res Vira a porra desse iPad fazendo o favor
+                #bg-dock.bg-clickable
+                    include list
+            
+            hr.plx-divider-icon
+            .section#suggest
+                h2.title Suggestions
+                h4.subtitle Have a cool idea of a background to add? Or perhaps you're an artist and want to include your work here.
+
+                p Hop into our <a href="/support">Discord Server</a> or <a href="https://reddit.com/r/Pollux">Subreddit</a> and submit it! 
+                
+
+
+    #get-bg(plx-offcanvas=' overlay:true;')
+            include pane
+        
+
+block scripts
+    script 
+        include scripts-bg.js     

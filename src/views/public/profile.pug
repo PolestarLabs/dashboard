@@ -1,0 +1,187 @@
+extends ../layout 
+
+block nopace
+  -var nopace = false
+
+mixin progressBar(val,max,label,format)
+  .comp-bar
+    .bar
+      .plx-progress-alt
+        .inner-bar(v-bind:style=`{width: 1+(${val} / ${max} * 100 )+'%' }`)
+      .sub  
+        .label= label
+        .completion  
+          animated-number(  :value=val :duration="1800"   :round="true" :delay='00' :format-value="n=> "+format+"?miliarize(n,1,' '):n")
+          | / #{ miliarize(max,true,' ') }
+    .percentile
+      animated-number(  :value=`${val} / ${max} * 100` :duration="1200"   :round="true" :delay='00' )
+      | %
+
+block head
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
+  script(  src="https://unpkg.com/animated-number-vue@1.0.0/dist/AnimatedNumber.umd.min.js") 
+  script( async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js")
+  script( data-ad-client="ca-pub-6458250766331979" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" )
+block content
+  .wrapper
+    //-index=true
+    include ../navbar
+    //style 
+      include ../home.css
+
+
+  -
+    let preFavColor =  hexToHSL(userprofile.modules.favcolor)    
+    const FAVCOLOR = HSLToHex(preFavColor.h,(preFavColor.s > 80 ? 70 : preFavColor.s-10), (preFavColor.l < 25 ? 25 : preFavColor.l) )
+
+ 
+  style :root{--favcolor-not-so-dim: #{FAVCOLOR}77; --favcolor-dim: #{FAVCOLOR}15; --favcolor: #{FAVCOLOR}} .favc-color{color: #{FAVCOLOR}}
+  style .has-user-bg{ background-image:url('https://beta.pollux.gg/backdrops/#{userprofile.modules.bgID}.png')}
+ 
+  .plx-animation-kenburns.background-container.has-user-bg
+
+  style
+    include profile.css      
+  style
+      include ../private/imgallery.css
+  style.
+      .plx-itmcard{
+          background: #0b0b2025;
+          border-radius: 10px;
+          border: solid 1px var(--favcolor-not-so-dim);
+          padding: 10px;
+          margin: -10px -20px;
+          margin-right: 10px;
+          backdrop-filter: blur(2px);
+      
+          }
+          
+          .plx-itmcard:hover .img-nsfw {
+              transition-delay: 1s;
+              cursor: url(/cur/pointer.png), pointer;
+          
+          }
+
+  
+  #profile
+    .profile-header.plx-flex.plx-flex-between.plx-relative
+      .profile-header-container
+        .userblock.large(plx-sticky='top:200; animation: plx-animation-slide-top; offset: 50' plx-parallax="x:-200;easing:1;media:@m")
+          .avatar(plx-parallax="stroke: 45")
+          
+            img.hexagon(src=userprofile.meta.avatar width="150px")
+            .avatar-frame 
+              if(userprofile.switches && userprofile.donator)
+                //img(src=`https://beta.pollux.gg/build/profile/frames/${userprofile.donator}.png` class=userprofile.switches.profileFrame?'':'disengaged' alt="FRAME")
+              
+              img(src="/build/web-profile/plain_hex.svg" plx-svg).back-svg-frame
+              img(src="/build/web-profile/plain_hex.svg" plx-svg).svg-shine
+
+          .info.plx-flex.plx-flex-column
+            .username.plx-flex.plx-flex-start
+              .name= userprofile.meta.username
+              .discrimin= userprofile.meta.discriminator
+              .badge
+            .tagline= userprofile.modules.tagline
+            .progressbar
+              -let level   = userprofile.modules.level
+              -let exp     = userprofile.modules.exp
+              -let f       = 0.0427899
+              -let toThis  = Math.trunc(Math.pow(level / f, 2));
+              -let toNex   = Math.trunc(Math.pow((level + 1) / f, 2))
+              -let expNeed = exp - toThis
+              -let range   = toNex - toThis
+
+              +progressBar(expNeed, range ,"EXP",!0)
+
+        .numbersblock.plx-flex
+          .rep(plx-parallax="y:200")
+            .number= miliarize(userprofile.modules.rep)
+            .sub Reputation
+          .level(plx-parallax="y:150")
+            .number= miliarize(userprofile.modules.level)
+            .sub Level
+          
+
+      .header-background(plx-parallax='blur:15;media:@m; ')
+        .bg-banner( plx-parallax="bgy: 200;bgx:00; " ).has-user-bg.plx-animation-kenburns
+        .favcol-grad
+
+    .profile-container.plx-flex.plx-flex-between.plx-flex-wrap.plx-relative
+      .bg-container.has-user-bg(plx-parallax="opacity:0,.01,.2; blur:50px,50px,15px;viewport:.1; media: @m")
+      .profile-contents.plx-width-1-1(class="plx-width-3-4@m")
+        .profile-sticky
+          .wealth.plx-flex.plx-flex-around
+              .rubines
+                  span.plx-rubine.icon64.curr_icon_3
+                  span= miliarize(userprofile.modules.RBN) || 0
+              .sapphires
+                  span.plx-sapphire.icon64.curr_icon_3
+                  span= miliarize(userprofile.modules.RBN) || 0
+              .jades
+                  span.plx-jade.icon64.curr_icon_3
+                  span= miliarize(userprofile.modules.RBN) || 0
+              .tokens
+                  span.plx-token.icon64.curr_icon_3
+                  span= miliarize(userprofile.eventGoodie) || 0
+
+          .column1.plx-width-1(class="plx-width-2-3@m")
+             
+            .infobox.plx-flex.plx-flex-around
+                  .flair
+                      img(src= `/flairs/${userprofile.modules.flairTop}.png` )
+                  .divider
+                  .about.plx-flex.plx-flex-column
+                      .text= userprofile.modules.persotext
+                      .signature= userprofile.meta.username
+            .profile-box
+              
+              
+        ul.profile-nav.plx-subnav(plx-switcher="connect: .profile-tab-content; animation: plx-animation-slide-right-small, plx-animation-slide-right-small; active: 0")
+          li: a Overview
+          li: a Commends
+          li: a Achievements
+          li: a Collections
+          li: a Gallery
+        ul.profile-tab-content.plx-switcher
+          li#overview
+            include pages/overview
+          li#commends
+            include profile_pieces/commend
+          li#achievements
+          li#collections
+          
+          li#gallery
+            include pages/gallery
+            
+      .profile-sidebar.plx-width-1-1(class="plx-width-1-4@m")
+        include sidebar
+
+
+      .plx-container
+        hr.plx-divider-icon
+
+  #ads(style="display:none;")
+    .sidebar
+      // Sidebar Profile Ad
+      script(async='', src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js')
+      ins.adsbygoogle(style='display:block', data-ad-client='ca-pub-6458250766331979', data-ad-slot='7628843587', data-ad-format='auto', data-full-width-responsive='true')
+      script (adsbygoogle = window.adsbygoogle || []).push({});
+  .bottom
+    script(async='', src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js')
+    ins( class="adsbygoogle" style="display:inline-block;width:970px;height:90px" data-ad-client="ca-pub-6458250766331979" data-ad-slot="5383934607")
+    ins.adsbygoogle(style='display:block;', data-ad-client='ca-pub-6458250766331979', data-ad-slot='6727945018', data-ad-format='auto', data-full-width-responsive='true')
+    script (adsbygoogle = window.adsbygoogle || []).push({});
+    amp-ad(width='100vw', height='320', type='adsense', data-ad-client='ca-pub-6458250766331979', data-ad-slot='7628843587', data-auto-format='rspv', data-full-width='')
+        div(overflow)
+  
+
+block scripts
+    
+    script const userprofile = !{JSON.stringify( userprofile )}
+    script const {stickersSize, backgroundsSize, medalsSize,} = !{JSON.stringify({stickersSize, backgroundsSize, medalsSize,})}
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/TweenMax.min.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js")
+    script
+        include profile.js

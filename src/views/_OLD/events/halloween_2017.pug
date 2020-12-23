@@ -1,0 +1,72 @@
+extends ../layout
+block content
+
+  .hero.is-pink.is-bold
+    include ../navbas
+
+
+
+  .is-fullwidth.nano: .nano-content
+    br
+    .container.level
+      .level-left
+        div
+          .title: b Halloween Event 
+          .subtitle Get spoopy and collect all the goodies from October 15th to November 5th
+      img(src="/images/halloween_2017.png" width="400px").level-left
+      
+    hr
+    .container
+      .title.b500T GOODIES 
+        br
+        br
+        .columns
+          .column
+            .subtitle Exclusive Backgrounds
+              a(href="/images/hallow.png" data-lightbox="h") 
+                img(src="/images/hallow.png" width="400px").level-left
+          .column
+            .subtitle Exclusive Medals
+              a(href="/images/hallow2.png" data-lightbox="h2") 
+                img(src="/images/hallow2.png" width="400px").level-left
+
+          .column
+            .subtitle Pink Skull Flair        
+              br
+              br
+              a(href="/images/x0ws0vzz.png" data-lightbox="x0ws0vzz") 
+                img(src="/images/x0ws0vzz.png" width="400px").level-left
+      
+      hr
+      .columns
+        .column.is-6
+          .section
+            .title.b500T Participating as a Server
+            br
+            .subtitle Joining
+            p Every Server Owner will be notified of the event by replying Pollux with "halloween", you will receive some goodies to be used as prize for any halloween events you may want to host on your own server.
+            p Each one will receive 5 Event Lootboxes, one of every Rarity Tier + 1 Common Event Lootbox for every 100 members in their servers, capping in 15 total.
+            hr
+            .subtitle Eligibility
+            p Not all Servers will be participating on the event, because there are always those who will not play fairly. So, for your Server be automatically Eligible, you will need to match all these criteria:
+            ul(style="list-style: initial;padding:12px;")
+              li Your Server has a Human : Bot ratio below 10%
+              li Your Server must have been created before October 1st
+              li Pollux must be in your server since October 1st or before
+            br
+            small For the last two items, you can still have your server included by asking for a whitelist, contact <b>Flicky#9065</b> or join the Support Server to be verified an whitelisted. 
+            hr
+        .column.is-6
+          .section
+            .title.b500T Participating as a User
+            br
+            .subtitle Having fun
+            p As a user, all you need to do is have fun! Be active as Event Lootboxes drop, get them from your Server's event if any, 
+            
+            hr
+            .subtitle Trick or Treat
+            p You can also collect candies with <code>p!trickortreat</code> in as much server as you can find me. The top ranked ones will get some goodies in the end of the event!
+
+
+block scripts
+  script(src='/js/truelite.js')

@@ -1,0 +1,25 @@
+script.
+    informationFill.compute5= function(){
+      
+    }
+    $("#top").animate({height:'100%'},1000);
+
+    $("#next").css({transition:'transform 800ms ease',transform:'scale(0)'},1000)
+    $("#bottom").animate({height:0},800)
+    $("#configging").animate({opacity:0},800,"swing",function(){
+        if(STATUS=="OK"){
+            $('wrapper').addClass("success")
+               // $("#top").css({background:'rgb(62, 166, 88) none repeat scroll 0% 0%'},500);
+            $("#configging").html("All set! You can now check the dashboard for more options!<br><a target='blank' href='/admin/#{serverInfo.id}' class='gotoDash pink-button'>ADMIN PANEL</a><br><a href='/dashboard' target='blank' class='gotoDash pink-button purple-button'>USER DASHBOARD</a> <br><a href='/commands' target='blank' class='gotoDash pink-button purple-button'>COMMANDS LIST</a> <br><a target='blank' href='/discord' class='gotoDash pink-button purple-button'>DISCORD SERVER</a>")
+            $("#configging").animate({opacity:1,"margin-top": "20%", "margin-left":  "50px","margin-right":  "50px",'font-size': "20px"},1200)
+        }else{
+            $('wrapper').addClass("fail")
+              //  $("#top").css({background:'#e73e3e'},500);
+            $("#configging").html("<b>AN ERROR HAS OCURRED</b><br><br>Something went wrong while trying to save your settings, please contact support. <br><a href='/support' class='gotoDash'>PLS HELP</a>")
+            $("#configging").animate({opacity:1,"margin-top": "40%", "margin-left":  "50px","margin-right":  "50px",'font-size': "20px"},1200)
+
+        }
+    })
+ 
+    
+   

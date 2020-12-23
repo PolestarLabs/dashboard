@@ -1,0 +1,55 @@
+
+.plx-modal-dialog(:class="currentModalItem.rarity + ' ' + (currentModalItem.type === 'background'?'plx-width-2-3@m '+currentModalItem.type:'') ").plx-margin-auto-vertical.raritybox 
+    div
+        button.plx-modal-close-default(type='button', plx-close).modal-close
+        .plx-modal-header
+            h2.plx-modal-title {{currentModalItem.name}}
+            h5.small.subtitle
+                | {{rarity(currentModalItem.rarity)}}  {{currentModalItem.type}}
+
+        .plx-modal-body.plx-flex.plx-flex-wrap(style="background:var(--bg-darker)")
+            .plx-width-1-1(class="plx-width-1-2@m").plx-flex.plx-flex-column
+                .bg-tags-container.plx-flex.plx-flex-wrap.plx-space-between
+                    .plx-label.plx-bg-tag.plx-margin-small-bottom.plx-margin-small-right(v-for="item in createBgTags(currentModalItem)") 
+                        span(style="opacity:.3") # 
+                        | {{item}}
+                p(style="font-family: Quicksand") 
+                    b Experts opinion on this background
+                    br
+                    i(style="font-weight:100") {{bs(currentModalItem)}}
+                .plx-flex(v-if="currentModalItem.artistName").plx-margin-auto-top.plx-margin-remove-bottom
+                        i: .fas.fa-paint-brush
+                        | &#x2003;
+                        a(:href="currentModalItem.artistLink") {{currentModalItem.artistName}}
+                         
+            .plx-width-1-1(class="plx-width-1-2@m")
+                .bg-on-ppc-container(v-if="currentModalItem && currentModalItem.type === 'background'")
+                    .bg-on-ppc
+                        canvas#pppc(width=800, height=600)
+                        | {{renderPPC(currentModalItem.code)}}
+                .medal-container(v-else-if="currentModalItem && currentModalItem.type === 'medal'")
+                    .medal(plx-img :data-src="`/medals/${currentModalItem.icon}.png`" width="100px" height="100px")
+                .flair-container(v-else-if="currentModalItem && currentModalItem.type === 'flair'")
+                    .flair(plx-img :data-src="`/medals/${currentModalItem.id}.png`")
+            
+        .plx-modal-footer.plx-text-right.plx-flex.plx-flex-right
+            button.plx-button.plx-button-default.plx-modal-close(type='button') Cancel
+            .button.RBN(@click="buyStoreItem(currentModalItem.type,currentModalItem.code)")
+                .plx-margin-auto
+                i: .plx-rubine.icon24.curr_icon_3
+                .plx-margin-auto
+                .price
+                    span.face() {{ miliarize(currentModalItem.price || (defaultPrices[currentModalItem.type]||{})[currentModalItem.rarity] || "N/A" ,1,' ')}}
+                .plx-margin-auto
+ 
+
+            .button.sapphires(@click="buyStoreItem(currentModalItem.type,currentModalItem.code,'SPH')")
+                .plx-margin-auto
+                i: .plx-sapphire.icon24.curr_icon_3
+                .plx-margin-auto
+                .price
+                    span.face() {{ miliarize( Math.ceil((currentModalItem.price || (defaultPrices[currentModalItem.type]||{})[currentModalItem.rarity]||0) * defaultPrices.sapphireModifier) || "N/A" ,0,' ') }}
+                .plx-margin-auto
+ 
+                    
+            //button.plx-button.plx-button-primary(type='button') Save

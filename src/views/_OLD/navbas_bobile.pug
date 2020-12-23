@@ -1,0 +1,212 @@
+link(rel='stylesheet' type="text/css" href='/css/navbas_next.css')
+nav.header-nav.nano: .nano-content
+  a.header-nav__close(href='#0', title='close')
+    span Close
+  .header-nav__content
+    h3 POLLUX
+    
+    if !userinfo
+      div.navbar-item.is-marginless.is-paddingless
+        a.navbas-login(onclick="javascript:login()").navbar-right
+          .but.purpleshit.is-hidden-mobile
+          .buttex
+            span.is-pulled-right=translation.website.login || "Login"
+            span.divider  &#x2000
+            span.icon.is-pulled-left: i.fa.fa-sign-in-alt
+
+    else
+      .usermug
+        img(src=userinfo.pix)
+      span.usernameinfo= userinfo.name
+      ul.header-nav__list
+        li 
+          a(href="/dashboard").navbar-item.lv2
+            span.icon.is-pulled-left: i.fas.fa-cogs
+            span.divider  &#x2000
+            span.is-2.b500= translation.website.dash || "Dashboard"
+
+        li 
+          a(href="/profile/me").navbar-item.lv2
+            span.icon.is-pulled-left: i.fa.fa-id-card
+            span.divider  &#x2000
+            span Profile
+
+        li 
+      hr.navbar-divider
+      if userdata
+        .curcho_dis
+          .currencysho.curr
+              img(src="/images/rubine.png").curr_icon_3.level-start
+              span.level-end= "" + miliarize(userdata.modules.rubines,false,' ')
+          .currencysho.curr
+              img(src="/images/jade.png").curr_icon_3.level-start
+              span.level-end= "" + miliarize(userdata.modules.jades,false,' ')
+          .currencysho.curr
+              img(src="/images/sapphire.png").curr_icon_3.level-start
+              span.level-end= "" + miliarize(userdata.modules.sapphires,false,' ')
+
+      //a(href="/bgshop").navbar-item.lv2=translation.website.bgshop || "Background Shop"
+      //a(href="/medalshop").navbar-item.lv2=translation.website.mdshop || "Medal Shop"
+      //a(href="/leaderboards").navbar-item.lv2=translation.website.rank || "Rankings"
+
+      hr.navbar-divider
+      a(href="/logout" style="margin: auto;width: 100%;").button.is-danger.level-item.is-small=translation.website.logout || "LOGOUT"
+
+
+    ul.header-nav__list
+      li: a.navbar-item(href='/commands')
+        span.icon(style='/*color: #222*/;'): i.fas.fa-cogs
+        span= translation.website.commands
+      li.navbar-item.navbar-link.has-dropdown.is-hoverable.mininav.crudetrig
+        span.icon(style='/*color: #222*/;'): i.fa.fa-shopping-basket
+        span Rubine Market
+        span &#x2003
+        .navbar-dropdown.semiblacktex.is-boxed.crudemenuitem
+          a.navbar-item(href='/bgshop')
+            span.icon(style='color: #333 !important;'): i.fas.fa-images
+            span Background Shop
+          a.navbar-item(href='/medalshop')
+            span.icon(style='color: #333 !important;'): i.fab.fa-first-order
+            span Medal Shop
+          a.navbar-item(href='/crafting')
+            span.icon(style='color: #333 !important;'): i.fas.fa-flask
+            span Crafting
+          a.navbar-item(href='/stickers')
+            span.icon(style='color: #333 !important;'): i.fas.fa-splotch
+            span Profile Stickers
+      //a.navbar-item(href='http:/
+
+      li: a.navbar-item(href='/partners').beta
+        span.icon(style='/*color: #222*/;'): i.fa.fa-heart
+        span Partners
+
+      li.navbar-item.navbar-link.has-dropdown.is-hoverable.mininav.crudetrig
+        span.icon(style='/*color: #222*/;'): i.fa.fa-star
+        span Events
+        span &#x2003
+        .navbar-dropdown.semiblacktex.is-boxed.crudemenuitem
+          p.navbar-item(style="pointer-events:none") No Ongoing Events
+
+          .navbar-divider
+          a.navbar-item(href='/events')
+            span.icon(style='color: #333 !important;'): i.fa.fa-calendar
+            span See all events Information
+
+      li: a.navbar-item(href='/donate')
+        span.icon(style='/*color: #222*/;'): i.fa.fa-gift
+        span Donate
+      li: a.navbar-item(href='/info')
+        span.icon(style='/*color: #222*/;'): i.fa.fa-info-circle
+        span Info
+      li: a.navbar-item(href='/artwork')
+        span.icon(style='/*color: #222*/;'): i.fa.fa-paint-brush
+        span Artwork 
+        
+    if home
+      p Home Navigation
+      ul.header-nav__list
+        li.current
+          a.smoothscroll(href='#home', title='home') Home
+        li
+          a.smoothscroll(href='#about', title='about') About
+        li
+          a.smoothscroll(href='#services', title='services') Services
+        li
+          a.smoothscroll(href='#works', title='works') Works
+        li
+          a.smoothscroll(href='#contact', title='contact') Contact
+    p
+      | Pollux is a personal project created and mantained by 
+      a(href='#who') individuals
+      | , any issues should be directed at them.
+    ul.header-nav__social
+      //li
+        a(href='#0')
+          i.fab.fa-facebook
+      li
+        a(href='https://twitter.com/maidpollux')
+          i.fab.fa-twitter
+      li
+        a(href='https://reddit.com/r/pollux')
+          i.fab.fa-reddit
+      li
+        a(href='https://steamcommunity.com/groups/PolluxMansion')
+          i.fab.fa-steam
+      li
+        a(href='https://discordapp.com/invite/54D3j4')
+          i.fab.fa-discord
+style.
+  /* menu is open
+ * ----------------------------------------------- */
+  .menu-is-open .header-nav {
+    -webkit-transform: translateX(0);
+    -ms-transform: translateX(0);
+    transform: translateX(0);
+    visibility: visible;
+    -webkit-overflow-scrolling: touch;
+  }
+  .menu-is-open .header-nav .header-nav__content {
+    opacity: 1;
+    visibility: visible;
+    -webkit-transition-property: all;
+    transition-property: all;
+    -webkit-transition-duration: 0.5s;
+    transition-duration: 0.5s;
+    -webkit-transition-timing-function: ease-in-out;
+    transition-timing-function: ease-in-out;
+    -webkit-transition-delay: 0.3s;
+    transition-delay: 0.3s;
+    left: 0;
+  }
+script.
+
+   /* OffCanvas Menu
+    * ------------------------------------------------------ */
+    var clOffCanvas = function() {
+
+        var menuTrigger     = $('.menuOpen'),
+            nav             = $('.header-nav'),
+            closeButton     = nav.find('.header-nav__close'),
+            siteBody        = $('body'),
+            mainContents    = $('section, footer');
+
+        // open-close menu by clicking on the menu icon
+        menuTrigger.on('click', function(e){
+            e.preventDefault();
+          console.log("a")
+            siteBody.toggleClass('menu-is-open');
+        });
+
+        // close menu by clicking the close button
+        closeButton.on('click', function(e){
+            e.preventDefault();
+            menuTrigger.trigger('click');
+        });
+
+        // close menu clicking outside the menu itself
+        siteBody.on('click', function(e){
+            if( !$(e.target).is('li,span, .header-nav, .header-nav__content, .menuOpen , .menuOpen span') ) {
+                console.log(e.target)
+                
+                siteBody.removeClass('menu-is-open');
+            }
+        });
+
+    };
+    $(document).ready(function(){
+      console.log('ready')
+      clOffCanvas()
+  
+    })
+    $('.crudetrig').click(function(e){
+      console.log($(this).find($('.crudemenuitem.opencrudes')).length)
+      if($(this).find($('.crudemenuitem.opencrudes')).length!==0){
+      console.log('close')
+        $(this).find($('.crudemenuitem')).removeClass('opencrudes')
+      }else{
+      console.log('open')
+        $('.opencrudes').removeClass('opencrudes')
+        $(this).find($('.crudemenuitem')).addClass('opencrudes')      
+      }
+      })
+          

@@ -1,0 +1,14 @@
+.plx-position-relative.plx-width-1-1(style="padding-bottom: 5rem")
+    section#arrivals-intro.plx-container.margin-top-mobo
+        h1.title Limited Time Items
+        h3.subtitle Grab them now before they're gone
+        p Here are all items that might not be here again tomorrow, they're seasonal items added on special occasions or events.
+   
+
+    ul.plx-flex.plx-flex-wrap.plx-flex-center#backgrounds
+        li(v-for="(item,i) in backgrounds" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}" v-if="item.expires > Date.now()").plx-animation-slide-bottom-small
+            .shopbox( :class="[hasItem(item)?'obtained':'',item.type,'raritybox',item.rarity].join(' ')" )
+                +shopcard()
+        div(v-if="!backgrounds.filter || !backgrounds.filter(x=>x.expires>Date.now()).length") 
+            br
+            h3.subtitle Looks like they're all gone!

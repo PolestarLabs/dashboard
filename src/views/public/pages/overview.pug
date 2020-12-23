@@ -1,0 +1,78 @@
+.ov-cointainer.plx-flex.plx-flex-around.plx-flex-wrap
+
+    .plx-width-1(class="plx-width-2-3@m").plx-flex.plx-flex-column
+        h4 Married to
+        include ../uwubar
+
+  
+    .plx-width-1(class="plx-width-1-3@m").plx-flex.plx-flex-column.plx-padding-small
+
+        h4 Also married to:
+        .profile-box.marriages
+            a.wife-miniavi(v-for="rel in relationships" v-if='rel.users && !rel.users.includes(wifeData.id)', v-bind:class=" {initiative:rel.initiative==parseWife(rel).id }  ", :plx-tooltip="parseWife(rel).username+'#'+parseWife(rel).discriminator", :href="'/profile/'+parseWife(rel).id" )
+                img( :src="`https://cdn.discordapp.com/avatars/${parseWife(rel).id}/${parseWife(rel).avatar}.${parseWife(rel).avatar.startsWith('a_')?'gif':'png'}?size=64`")
+       
+            
+        .profile-box
+
+
+
+
+    .column1.plx-width-1(class="plx-width-1-1@m").plx-flex.plx-flex-around.plx-flex-wrap
+        .plx-width-1(class="plx-width-1-3@m" style="z-index:2" ).plx-flex.plx-flex-column.plx-padding-small
+            h4 Equipped Medals
+            .profile-box.plx-flex.plx-flex-center.plx-flex-wrap.medals
+                each medal,i in userprofile.modules.medals || [0,0,0,0,0,0,0,0,0]
+                    .medal
+                        if medal
+                            img(src=`/medals/${medal}.png` width='33%')
+                    if medal
+                        .medal-drop(plx-drop="pos:top-center; " )
+                            img(src=`/medals/${medal}.png`)
+                            .content(v-if="medals["+i+"]")
+                                span.name
+                                    span: .plx-rarity-icon(:class="medals["+i+"].rarity")
+                                    span {{medals[#{i}].name}}
+                                span.sub {{medals[#{i}].category}}
+                                a.market-button(:href="`/marketplace?search=${medals["+i+"].icon}`" plx-tooltip="animation: plx-animation-slide-right-small;pos: left; title: Search Marketplace").plx-button.plx-button-secondary: i.fas.fa-search-dollar
+                            .content(v-else) 
+                                span Loading...
+                                
+
+
+        .plx-width-1(class="plx-width-1-3@m").plx-flex.plx-flex-column.plx-padding-small
+            h4  Equipped Sticker
+            .profile-box.sticker
+                img(src=`/stickers/${userprofile.modules.sticker||'undefined'}.png` width=200)
+ 
+                div(v-if='sticker' :class="'plx-icon plx-icon-32 plx-rarity '+sticker.rarity")
+                span.itm-name(v-if='sticker') {{sticker.name}}
+                span.itm-pack(v-if='sticker') {{sticker.series}}
+                span.itm-pack(v-else) No Sticker Equipped
+                
+                a(v-if='sticker').market-button(:href="`/marketplace?search=wawa`" plx-tooltip="animation: plx-animation-slide-right-small;pos: left; title: Search Marketplace").plx-button.plx-button-secondary: i.fas.fa-search-dollar
+                
+
+        .plx-width-1(class="plx-width-1-3@m").plx-flex.plx-flex-column.plx-padding-small
+            h4  Equipped Background
+            .profile-box.background
+                .bg-img-box.has-user-bg
+                    
+ 
+                div(v-if='background' :class="'plx-icon plx-icon-32 plx-rarity '+background.rarity")
+                span.itm-name(v-if='background') {{background.name}}
+                span.itm-pack(v-if='background && background.event') Event Background ({{background.event}})
+                span.itm-pack(v-else-if='background && background.exclusive') Exclusive Background
+                span.itm-pack(v-else-if='background && background.BUNDLE') Bundle Background ({{background.BUNDLE}})
+                span.itm-pack(v-else-if='background && background.legacy') Legacy Background
+                span.itm-pack(v-else) Regular Background
+                a.market-button(:href="`/marketplace?search=wawa`" plx-tooltip="animation: plx-animation-slide-right-small;pos: left; title: Search Marketplace").plx-button.plx-button-secondary: i.fas.fa-search-dollar
+
+                 
+
+
+    //.column2.plx-width-1(class="plx-width-1-3@m").plx-padding-small
+      
+    .ad-space(v-html="AS1")
+        // Pollux Profile Overview Bottom
+        

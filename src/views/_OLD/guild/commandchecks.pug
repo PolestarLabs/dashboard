@@ -1,0 +1,178 @@
+include ../templates
+-let CHANNEL = chandata.constructor == Array ? chandata.find(c=>c.id==IDDE||svChannels[0].id) : chandata 
+-let item2
+-let servchan = svChannels.find(c=>CHANNEL.id==c.id)||server.meta.channels[IDDE]
+.nano: .nano-content(style="padding:0px 25px 0px 10px").fullheight.chanblock
+  .columns.is-mobile
+    .column.is-9
+      .title.is-3
+        i.icon: .fab.fa-slack-hash  
+        span.b500 &#x2004 #{(servchan||CHANNEL).name}
+      p.subtitle= IDDE||CHANNEL.id
+      p= (servchan||{topic:'No Channel Description'}).topic
+    .column.is-3
+      if (servchan||{nsfw}).nsfw
+        img(src='http://i0.kym-cdn.com/photos/images/newsfeed/000/905/126/ae6.jpg' width='100px')
+        .help.is-danger This is a NSFW Channel
+       
+      
+  hr
+      
+  .columns    
+    .column    
+      .title
+        i.icon: .fas.fa-language
+        span &#x2004 Channel Language
+      p.subtitle The language I'll speak on this channel-only.
+      p.help This setting overrides Server Language entirely.
+      //p= CHANNEL.LANGUAGE
+      // pre=pre=JSON.stringify(chandata,null,2)
+    .column
+      br
+      br
+      .control.level-left(style="margin-bottom: 80px;"): .select: select#lang2
+          each L,i in langs
+            if L.iso == CHANNEL.LANGUAGE
+              option(id=L.iso data-description=L.english value = L.iso data-imagesrc="/images/flags/"+L.flag+".png" selected)= L.name
+          each L,i in langs
+            //else
+            if L.iso != CHANNEL.LANGUAGE
+              option(id=L.iso data-description=L.english value = L.iso data-imagesrc="/images/flags/"+L.flag+".png")= L.name
+    
+  hr    
+  .columns
+    .column.is-6
+      .title.is-5
+        i.icon: .fas.fa-cube 
+        span: b &#x2004 Drops
+      p.subtitle.is-6 Allow Lootboxes to drop at this channel    
+      -item2   = CHANNEL.modules.DROPS
+      +checkLine1(item2,"chkdrops")
+      hr
+      
+    .column.is-6
+      .title.is-5
+        i.icon: .fas.fa-arrow-up 
+        span: b &#x2004 Level Up
+      p.subtitle.is-6 Display LevelUp notices for this channel  
+      -item2   = CHANNEL.modules.LVUP
+      +checkLine1(item2,"lvup")
+      hr
+       
+  .columns
+    .column.is-6
+      .title.is-5
+        i.icon: .fas.fa-star 
+        span: b &#x2004 EXP Bypass
+      p.subtitle.is-6 Ignores this channel for <b>Local EXP</b>
+      -let item4   = !CHANNEL.modules.EXP
+      +checkLine1(item4,"bypass")
+      hr
+      
+    .column.is-6
+      .title.is-5
+        i.icon: .fas.fa-crosshairs
+        span: b &#x2004 Ignore Snipes
+      p.subtitle.is-6 Spam Buster and Nightwatch will <b>not</b> take actions
+      -let item3   = CHANNEL.modules.BYPASS
+      +checkLine1(item3,"igsnipes")
+      hr
+      
+
+  .title.is-5
+    i.icon: .fas.fa-tasks 
+    span: b &#x2004 Command Switches
+  p.subtitle.is-6 Disable chunks of the bot's feats not suitable for this channel
+  
+  .columns.is-multiline.comandines#locals 
+    -let locdis = CHANNEL.modules.DISABLED
+    each cmds, cat in commands.CMS.tree
+      -cat = cat.replace('!','')
+      .column.is-6-desktop.comandine
+        .message.is-light
+          .message-header
+            p= cat
+            label.chkcmd
+              
+              input(type='checkbox' checked=false data-cat=cat).markall
+              span.chk.plus
+          .message-body 
+            each cmd in cmds
+              span.itemy
+                span= cmd
+                label.chkcmd
+                  input(type='checkbox' class="cat "+cat checked=!locdis.includes(cmd) data-cmd=cmd)
+                  span.chk
+  hr
+  .columns 
+    .column
+      -
+        let save_channel_button = {
+          theme:'is-ruby savchan_button', 
+          classes:'fas fa-save',
+          colA: '#ccc',
+          colB: '#aaa', 
+          caption: 'SAVE',
+          id: 'savchan'
+        }
+        
+      +iconButton(save_channel_button)
+    .column
+  br
+  p
+script.
+    var langsel = '#{CHANNEL.LANGUAGE}'||'en'
+    function getPayload_channel(){
+   
+      var payload = {}
+      payload["LANGUAGE"]  = langsel
+      payload["modules.LVUP"]  = $('#lvup_o').prop('checked')
+      payload["modules.DROPS"]  = $('#chkdrops_o').prop('checked')
+      payload["modules.EXP"]  = !$('#bypass_o').prop('checked')
+      payload["modules.BYPASS"]  = $('#igsnipes_o').prop('checked')
+      
+      payload["modules.DISABLED"] =[]
+      $('#locals .cat:not(:checked)').each(function(){
+         payload["modules.DISABLED"].push($(this).data('cmd'))
+      })
+      return payload
+    }
+    
+    function saveAchan(payload) {
+      $.when($.post("/process/save_channel_payload", {
+      payload,
+      server:SERVER_ID,
+      channel: "!{IDDE||CHANNEL.id}",
+      mee:"UPDATE CHANNEL SETTINGS"
+      })).then(data => {
+        if (data=='ALRITE')swal({type:'success',timer:2000});
+        else if (data=='FORBIDDEN')swal('Error',"Don't XSS me yo piece of fuck!",'error');
+        else swal('Error',"",'error');
+      })
+    }
+
+    $('#lang2').ddslick({
+    height:'40vh',
+      onSelected: function(s){
+      langsel =(s.selectedData.value);
+    }   
+    })
+  $(document).ready(function(){
+     $(".nano").nanoScroller();   
+    
+    $(".switches_o").click(function(){
+      var tgt = "#c_"+$(this).data('target')
+    console.log(tgt)
+      $(tgt).html(this.checked?"  ON":"  OFF")
+    })
+    
+    $("#locals .markall").click(function(){
+      var cat = $(this).data('cat')
+      $('#locals .cat.'+cat).prop('checked', this.checked);
+    })
+   
+    $("#savchan").click(function(){
+      saveAchan(getPayload_channel())
+    })
+    
+  })

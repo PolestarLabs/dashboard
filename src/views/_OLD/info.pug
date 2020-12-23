@@ -1,0 +1,336 @@
+extends layout
+block content
+
+  style.
+    figure img{
+     // border-radius:100% !important
+    }
+    .is-6{
+      font-size:.75rem !important
+    }
+    .hexagon,.smolHex{
+      filter: drop-shadow(0px 0px 1px #fff) drop-shadow(1px 1px 2px rgba(44, 44, 44, 0.5));
+    }
+    .section{
+     padding-top:0 !important
+    }
+
+    .uhere{
+      border: dashed 2px;
+      opacity: .3;
+      height:100%;
+      display:flex;
+      align-items:center;
+      text-align:center;
+      border-radius:3px;
+    }
+    .uhere p{
+      color:#ccc;
+      width: 100%;
+      font-size:22px;
+      font-weight: 100;
+      text-transform: uppercase;
+      text-align: center
+    }
+        .uhere:hover{
+      border-color:white;
+      opacity: .6;
+    }
+  mixin card(pic, name, tag, occ, desc, size)
+    .column.is-4
+      .card
+        //.card-image: figure.image
+          img(src=pic)
+
+        .card-content.level
+        
+            figure.image.is-96x96
+              if size == "big"
+                div.hexagon(style="transform:scale(1) translateY(-10px) translateX(-10px);background-image:url('"+ pic +"')")
+                  div.hexTop
+                  div.hexBottom
+              else
+                div.smolHex(style="transform:scale(1.2)translateY(12px);background-image:url('"+ pic +"')")
+                  div.shexTop
+                  div.shexBottom
+
+
+            .media-content
+              p.title.is-5: b= name
+              p.subtitle.is-6= tag
+
+              small!= occ.replace(/,/g," · ")
+
+        //.card-content
+          p= desc
+          small: i= occ
+
+  mixin datacard(user, occ, desc, size)
+    -let guy  = bot.find(u=>u.id==user)
+    if guy
+     
+      -let pic  = guy.avatar.replace('2048','256')
+      -let name = guy!=undefined ? guy.displayName : "unknown"
+      -let tag  = guy.tag
+      .column.is-one-third-desktop.is-12-mobile
+        .card(style="height:150px")
+          //.card-image: figure.image
+            img(src=pic)
+
+          .card-content.level.is-hidden-touch
+              figure.image.is-96x96
+                if size == "big"
+                  div.hexagon(style="transform:scale(1) translateY(-10px) translateX(-10px);background-image:url('"+pic+"')")
+                    div.hexTop
+                    div.hexBottom
+                else
+                  div.smolHex(style="transform:scale(1.3)translateY(12px);background-image:url('"+pic+"')")
+                    div.shexTop
+                    div.shexBottom
+
+
+              .media-content
+                p.title.is-5: b: a(href='/profile/'+guy.id)= name
+                  small: i.fa.fa-external-link(style="transform:scale(.5)")
+                p.subtitle.is-6= tag
+
+                small!= occ.replace(/,/g," · ")
+          .card-content.level.is-hidden-desktop
+
+            .columns.is-mobile
+              .column.is-3-mobile
+                -let prop = user=="88120564400553984"?1.6:1.3
+                -prop = size == "big"?prop:1
+                div.smolHex(style="transform:scale("+prop+")translateY(0px);background-image:url('"+pic+"')")
+                  div.shexTop
+                  div.shexBottom
+              .column.is-4-mobile(style="text-align:center; line-height:13px")
+                small(style="font-size:10px;")!= occ.replace(/,/g," · ").replace(">","><br>\n")
+              .column.is-5-mobile(style="text-align:right")
+                p(style="color:#aaa"): b= name
+                small= tag
+
+  .hero.is-pink.is-bold
+    include navbas
+
+
+
+  .is-fullwidth.nano: .nano-content
+    br
+    .container
+      .title: b Information
+      .subtitle Who's Pollux, and who's behind her
+      hr
+      .section
+
+        .subtitle: b: i "Basic Moderation, Advanced Fun"
+        p Pollux is before anything else, a social/community bot, her main focus is to boost interaction between users in their own servers and also cross-server by providing from the well known general-purpose bots' commands to entertain everyone around and a basic but solid moderation toolset, to lots of  unique-to-Pollux features like the cross-server dynamic economy system.
+        br
+        br
+        .subtitle: b: i Solid Cross-server Economy with enough freedom
+        p Pollux gives Server owners more options to promote events in their servers using her features, Pollux is the first (and so far the only) bot which gives Server owners enough liberty to handle its virtual currency to use as prizes and rewards to their members, while still making sure that the economy stays solid. This is made by making the value of the money proportional to the money circulating and server activities, so no one can multiply money by just creating multiple accounts and servers.
+        br
+        br
+        .subtitle: b: i Things are just much more pretty and usable with Pollux
+        p  Pollux is created entirely by a Visual and UX Designer which happens to be a web-development enthusiast, so besides many bots out there, if Pollux have the chance to present things in an eye-candy way, she surely will. On top of that, usability issues from many other bots that always bugged me are considerably adressed here, and since end-users can always surprise us, this aspect of Pollux is what receives the most attention on every update
+        br
+        br
+        .subtitle: b: i Your virtual Community Manager
+        p!= "Pollux is your Server's personal automated maid, she will entertain your members with her <i>forFun</i> commandset, watch for achievements, level ups, and drops, all if you allow her to do so, most of those are disabled by default, so be sure to enable it."
+        br
+        br
+        .subtitle: b: i Cute but Deadly
+        p!= "She can keep stuff going the way they're supposed to even when you're away. She watches for unwanted invite links, mention spams, general message flood, and can be even more deadly to spammers and raiders with the introduction of <b>Nightwatch Mode</b> which will put her on a state of <u>Zero Tolerance</u> to anything she judges malicious for 6 hours while you and most of your moderation body are away to sleep. At the end of the Nightwatch period, she will send you a Report of every warning, kick, ban, and tags she commited during the watch."
+        br
+        br
+        .subtitle: b: i Goodies!
+        p Pollux bears the best and most advanced Loot system out there! Randomised Lootboxes which can be awarded by leveling up, or by activity drops on chatrooms. Lootboxes have a random chance of containing either Rubines, the main currency, Jades, the secondary currency, Backgrounds, Colors, Medals, and Stamps. Which can be either stored on your inventory, used to customise yours, or even stored to the Server's safe to be later on used as rewards to members or put for sale!
+          
+        br
+        br
+        br
+         
+        .level
+          .level-item
+            image.divisi(src="/images/divider.png" style="filter:invert(100%); mix-blend-mode: lighten;")
+      .title: b Team
+      .subtitle All people involved in this project and which without them, there would be no Pollux at all
+      hr
+      .section
+        p.title Developers
+        p.subtitle The ones that brought Pollux into living
+
+        .columns
+          
+            +datacard("88120564400553984","Creator,Developer,Designer","more text","big")
+
+
+        hr
+        p.title Staff
+        p.subtitle People that contribute a lot to this project.
+        .columns.is-multiline.is-mobile
+           +datacard("163200584189476865","Supermod, Elite Tester, Database Breaker","more text","no_big")
+           //+datacard("200044537270370313","Bot Haxxor, Professional Abuser","more text","no_big")
+           +datacard("288495729088004096","Dev Secretary, Task Manager","more text","no_big")
+           +datacard("250764795207352322","Top Consultant, Asset Provider","more text","no_big")
+           +datacard("305016960133890049","Twitter Impersonator, Asset Helper","more text","no_big")
+           +datacard("132022438040043520","Sneaky Bug Ambusher, Democracy Bringer","more text","no_big")
+        
+        hr
+        p.title Donators
+        p.subtitle People that keep this project alive
+        .columns.is-multiline.is-mobile
+            //+datacard("360894787785719809","<img src='images/donate/uranium.png' width='50px'> Uranium Donator","more text","big")
+            +datacard("302638230594125825","<img src='images/donate/uranium.png' width='50px'> Uranium Donator","more text","big")
+            +datacard("322657736611332097","<img src='images/donate/uranium.png' width='50px'> Uranium Donator","more text","big")
+            +datacard("180653744466296833","<img src='images/donate/uranium.png' width='50px'> Uranium Donator","more text","big")
+            +datacard("155323155735511041","<img src='images/donate/uranium.png' width='50px'> Uranium Donator","more text","big")
+            
+            
+            +datacard("409480390303285270","<img src='images/donate/palladium.png' width='50px'> Palladium Donator","more text","big")
+            +datacard("298867009649901569","<img src='images/donate/palladium.png' width='50px'> Palladium Donator","more text","big")
+            +datacard("142436217747800065","<img src='images/donate/palladium.png' width='50px'> Palladium Donator","more text","big")
+            +datacard("310296184436817930","<img src='images/donate/palladium.png' width='50px'> Palladium Donator","more text","big")
+            
+            
+            
+            +datacard("250779089395384320","<img src='images/donate/iridium.png' width='45px'> Iridium Donator","more text","big")
+            +datacard("134726089237856256","<img src='images/donate/iridium.png' width='45px'> Iridium Donator","more text","big")
+            //+datacard("169551262981816321","<img src='images/donate/iridium.png' width='45px'> Iridium Donator","more text","big")
+            +datacard("287841189422694401","<img src='images/donate/iridium.png' width='45px'> Iridium Donator","more text","big")
+            +datacard("186203438588100609","<img src='images/donate/iridium.png' width='45px'> Iridium Donator","more text","big")
+            +datacard("285972431506505729","<img src='images/donate/iridium.png' width='45px'> Iridium Donator","more text","big")
+            +datacard("423195608870813709","<img src='images/donate/aluminium.png' width='40px'> Iridium Donator","more text","big2")
+            +datacard("319907555201515520","<img src='images/donate/aluminium.png' width='40px'> Iridium Donator","more text","big2")
+            +datacard("249685429278867456","<img src='images/donate/aluminium.png' width='40px'> Iridium Donator","more text","big2")
+            +datacard("281629327551102988","<img src='images/donate/aluminium.png' width='40px'> Iridium Donator","more text","big2")
+            +datacard("318159939027730433","<img src='images/donate/aluminium.png' width='40px'> Iridium Donator","more text","big2")
+            +datacard("298116221235232769","<img src='images/donate/aluminium.png' width='40px'> Iridium Donator","more text","big2")
+            
+            //+datacard("200044537270370313","<img src='images/donate/iridium.png' width='45px'> Iridium Donator","more text","big")
+            
+
+
+            //
+              +datacard("323058223559213067","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("163200584189476865","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("132022438040043520","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("180653744466296833","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("250764795207352322","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("276293445239308298","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("258436189407674368","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("401914497142620163","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("258436189407674368","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("214390405041487874","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("156481129828843522","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("250765591697162240","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("134121605612699650","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("425798861836124164","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+              +datacard("302362370829844490","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+            //+datacard("329562125083082752","<img src='images/donate/aluminium.png' width='40px'> Aluminium Donator","more text","big2")
+            .column.is-4
+              a(href="/donate").card.uhere 
+                p
+                  icon.icon
+                    i.fa.fa-plus-square-o
+                  br
+                  span You Here
+        hr
+        p.title Translators
+        p.subtitle Thank these guys for teaching Pollux how to speak your native language
+        .columns.is-multiline.is-mobile
+          
+
+            +datacard("289807824698081280","<img src='images/flags/DE.png'> German","more text","not_big")
+
+            +datacard("163200584189476865","<img src='images/flags/CZ.png'> Czech","more text","not_big")
+
+            +datacard("216901800899510272","<img src='images/flags/PT.png'> EU Portuguese","more text","not_big")
+
+            +datacard("188494184691269632","<img src='images/flags/ES.png'> Spanish","more text","not_big") 
+
+            +datacard("323058223559213067","<img src='/images/flags/FR.png'> French <br> <img src='/images/flags/RO.png'> Romanian","more text","not_big")
+          
+            +datacard("165961444389683202","<img src='/images/flags/RO.png'> Romanian","more text","not_big")
+
+            +datacard("351448328246001665","<img src='images/flags/DE.png'> German","more text","not_big")
+            
+            +datacard("281161111468769282","<img src='images/flags/HU.png'> Hungarian","more text","not_big")
+            +datacard("327129699904126976","<img src='images/flags/DE.png'> German","more text","not_big")
+            +datacard("240135890427576321","<img src='images/flags/TW.png'> Chinese(Traditional)","more text","not_big")
+            +datacard("315541510315573259","<img src='images/flags/CN.png'> Chinese(Simplified)","more text","not_big")
+            +datacard("200044537270370313",`
+            <img src='build/flags/KR.png'height="16px">
+            <img src='build/flags/RU.png'height="16px"> 
+            <img src='build/flags/BG.png'height="16px"> 
+            <img src='build/flags/BY.png'height="16px"> 
+            <img src='build/flags/UA.png'height="16px"> 
+            <img src='build/flags/PL.png'height="16px"> 
+            <br>
+            Korean, Slav Languages            
+            `,"more text","not_big")
+            +datacard("160089011455655936","<img src='build/flags/SA.png'height=\"16px\"> Arabic","more text","not_big") 
+            
+            +datacard("288495729088004096","<img src='build/flags/ES.png'height=\"16px\"> Spanish<br><img src='build/flags/JP.png'height=\"16px\"> Japanese","more text","not_big")
+            
+            +datacard("250764795207352322","<img src='build/flags/ES.png'height=\"16px\"> Spanish","more text","not_big") 
+            +datacard("326830759031734272","<img src='build/flags/SE.png'height=\"16px\"> Swedish","more text","not_big") 
+            +datacard("254986454818619392","<img src='build/flags/SE.png'height=\"16px\"> Swedish","more text","not_big") 
+            +datacard("388091883701927936","<img src='build/flags/RU.png'height=\"16px\"> Russian<br><img src='build/flags/BY.png'height=\"16px\"> Belarusian","more text","not_big") 
+            +datacard("137258219910201345","<img src='build/flags/NL.png'height=\"16px\"> Dutch","more text","not_big") 
+            +datacard("203215024586620929","<img src='build/flags/BG.png'height=\"16px\"> Bulgarian","more text","not_big") 
+            +datacard("305016960133890049","<img src='build/flags/DE.png'height=\"16px\"> German","more text","not_big") 
+            +datacard("132860550672547840","<img src='build/flags/ID.png'height=\"16px\"> Indonesian","more text","not_big") 
+            +datacard("213711446570172416","<img src='build/flags/PL.png'height=\"16px\"> Polish","more text","not_big") 
+            +datacard("325680064119439360","<img src='build/flags/PL.png'height=\"16px\"> Polish","more text","not_big") 
+            +datacard("174622753666629632","<img src='build/flags/BR.png'height=\"16px\"> Brazilian Portuguese","more text","not_big") 
+            
+
+        
+        hr
+        p.title Partners
+        p.subtitle Community leaders partnered with Pollux
+        .columns.is-multiline.is-mobile  
+            +datacard("184895922952601600","Th3 Bratvas","more text")
+            +datacard("366346359584063488","Banzai Animes","more text")
+            +datacard("165961444389683202","Anime Gallery","more text")
+            +datacard("189455887008661513","Hyperdimension Gaming","more text")
+            +datacard("132022438040043520","Imperium Soval","more text")
+            +datacard("409480390303285270","Arcade","more text")
+            +datacard("288495729088004096","Santuario Bot","more text")
+            +datacard("305016960133890049","The Krusty Krab","more text")
+            +datacard("211260587038998528","StrateGRY","more text")
+        
+        hr
+        p.title Special Thanks
+        p.subtitle Amazing people that helped with Pollux's growth
+        .columns.is-multiline.is-mobile
+          
+            if userinfo
+              +datacard(userinfo.id,"Lovely User","more text")
+            // +datacard("163200584189476865","Supermod, Elite Tester, Database breaker","more text","no_big")
+            //+datacard("200044537270370313","Bot Haxxor, Professional Abuser","more text","no_big")
+            //+datacard("132022438040043520","Sneaky Bug Ambusher, Gambling Addict","more text","no_big")
+            //+datacard("288495729088004096","Dev Secretary, Task Manager","more text","no_big")
+            +datacard("189455887008661513","Monster Girl Compendium Catalog","more text")
+            +datacard("359925352061075468","The Ultimate Bug Reporter, Helpful User","more text")
+            
+            +datacard("323058223559213067","Exclusive Ultra Fancy French Support, Meme Machine","more text")
+    
+            +datacard("255692208022355968","Project Assistant, Asset Provider","more text")
+  
+            +datacard("203139018760781824","Many Crazy Ideas, Proficient Helper","more text")
+
+            +datacard("169213934094647298","Debbuger, Feature Idealist","more text")
+
+            +datacard("312955521873346570","Bot Crasher","more text")
+            +datacard("200044537270370313","Bot Crasher++","more text")
+            //+datacard("248485475642245130","Pollux Home Sketch","more text")
+            +datacard("226976267382161408","First-steps Advisor","more text")
+            +datacard("164779118024589312","Coin Flipper,Feature Idealist","more text")
+  
+            +datacard("146631978018406400","Community Helper","more text")
+            +datacard("261281931822497794","Community Helper","more text")
+
+        hr
+block scripts

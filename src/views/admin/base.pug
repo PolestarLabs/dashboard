@@ -1,0 +1,71 @@
+extends ../layout 
+block content
+    script var channelInfo = !{JSON.stringify(channelInfo)}
+    .wrapper
+        include ../navbar
+
+        style.
+            .settings-container{
+                background:white;
+                color: #3b3b4b;
+                padding: 50px 20px 100vh 50px;
+                margin-bottom: -100px;
+            }
+            .settings-container .title{
+                color: #3b3b4b;
+                font-weight: 900;
+            }
+            .underbar{
+                top:60px;
+                z-index: 990;
+            }
+            .underbar .plx-width-1-2 {
+                padding-left: 0;
+                margin-left: 10px
+            }
+
+            @media screen and (max-width:900px){ .settings-container{padding-top:0px} .underbar .plx-width-1-2{padding-left:25px;margin-left:auto} }
+
+            .dash_side{
+                
+                padding-left: 25px;
+                padding-right: 15px;
+                padding-bottom: 80px;
+                display: block;
+                background: #1b1b2B;
+                box-shadow: 2px 2px 10px #0B0B1B55;
+                //height: 100%;
+                }
+            .dash_side .plx-nav-header{
+                color: #5b5b6b;
+                letter-spacing: 2px;
+                text-transform: uppercase; 
+            }
+            .dash_side li.plx-active>a{
+                color: var(--accent-color);
+                font-weight: 600;
+            }
+            .dash_side .plx-nav-sub{
+                border-color: #aaa2
+            }
+ 
+
+        .plx-grid
+            .plx-width-1-5(class="plx-visible@m" style=" background: #1b1b2B; xmin-width:280px; max-width: 360px" )
+                div(plx-sticky="bottom: true; offset: 50"  style="overflow-y:scroll; max-height:100vh; z-index: 0; xmin-width:280px; max-width: 350px")
+                    include pane
+            .plx-width-expand.settings-container.against-white-bg          
+                include menus
+                
+
+
+    #options(plx-offcanvas class="plx-hidden@m")
+        .plx-offcanvas-bar.plx-padding-remove
+            button.plx-offcanvas-close(type='button', plx-close='')
+            include pane
+
+
+block scripts
+ script 
+    include admpanel.js
+    

@@ -1,0 +1,113 @@
+-var logterms = {act:{},mod:{},adv:{}}
+-logterms.activity = translation.website.activity ||  "Activity"
+-logterms.act.userJoin = translation.website.userJoin || "User Joins Server"
+-logterms.act.userLeave = translation.website.userLeave || "User Leaves Server"
+-logterms.act.messDel = translation.website.messDel || "Message Deleted"
+-logterms.act.messEdit = translation.website.messEdit || "Message Edited"
+
+-logterms.moderation = translation.website.moderation ||  "Moderation"
+-logterms.mod.usrKick = translation.website.usrKick || "User Kicked"
+-logterms.mod.usrBan = translation.website.usrBan || "User Banned"
+-logterms.mod.usrMute = translation.website.usrMute || "User Muted"
+-logterms.mod.usrUnmute = translation.website.usrUnmute || "User Unmuted"
+
+-logterms.advanced = translation.website.advanced ||  "Advanced"
+-logterms.adv.usrPhoto = translation.website.usrPhoto || "User Photo Changed"
+-logterms.adv.usrNick = translation.website.usrNick || "User Name or Nick Changed"
+-logterms.adv.usrRoles = translation.website.usrRoles || "User Roles Updated"
+-logterms.adv.newChan = translation.website.newChan || "Channel Created"
+-logterms.adv.delChan = translation.website.delChan || "Channel Deleted"
+-logterms.adv.newRole = translation.website.newRole || "Role Created"
+-logterms.adv.uptRole = translation.website.uptRole || "Role Updated"
+-logterms.adv.revokeBan = translation.website.revokeBan || "Ban Revoked"
+-logterms.adv.permsEdit = translation.website.permsEdit || "Permissions Edited"
+
+-var serverlogs=  server.logs|| {act:{userJoin:!0,userLeave:!0,messDel:!1,messEdit:!1},mod:{usrBan:!0,usrKick:!0,usrMute:!0,usrUnmute:!0},adv:{newChan:!1,newRole:!1,permsEdit:!1,revokeBan:!0,uptRole:!1,delChan:!1,usrNick:!0,usrPhoto:!1,usrRoles:!1}};
+
+
+-
+  let save_log_button = {
+    theme:'is-ruby savlog_button',
+    classes:'fas fa-save',
+    colA: '#ccc',
+    colB: '#aaa',
+    caption: 'SAVE',
+    id: 'save_log'
+    }
+
+
+
+
+.nano: .nano-content.padded(style="padding-right:55px")
+  .columns
+    .column.is-10
+      .title.is-2: b Advanced Activity Logging
+      p.subtitle Pick what will or will not be logged
+    .column.is-2
+      +iconButton(save_log_button)
+  hr
+  br
+  .columns
+    //SPAM BUSTER-------------------------------------
+    .column
+      .title
+        i.icon: .fas.fa-comment-alt  
+        span &#x2004 General Activity
+      p.subtitle.is-5 Really common events that may be fired several times
+      br       
+      ul
+        for itm, ky in logterms.act
+          li.level
+            .level-left
+              label.switch
+                -let V = serverlogs.act[ky]=='true' || serverlogs.act[ky]==true ;
+                input(type="checkbox" data-key=ky.toString() data-type="act" checked=V).check
+                span.slider.lite
+            .level-left: p &#x2003
+            .level-left: p=itm
+            .level-item
+      
+
+      hr
+      .title
+        i.icon: .fas.fa-gavel  
+        span &#x2004 Moderation Logs
+      p.subtitle.is-5 Logs actions taken by moderators on members
+      br 
+      ul
+        for itm, ky in logterms.mod
+          li.level
+            .level-left
+              label.switch
+                -let V = serverlogs.mod[ky]=='true' || serverlogs.mod[ky]==true ;
+                input(type="checkbox" data-key=ky.toString() data-type="mod" checked=V).check
+                span.slider.lite
+            .level-left: p &#x2003
+            .level-left: p=itm
+            .level-item
+
+      
+    hr
+    .column
+      .title
+        i.icon: .fas.fa-cubes  
+        span &#x2004 Advanced Logs
+      p.subtitle.is-5 Logs several other information
+      br 
+      -var disa = ["usrRoles","newRole","uptRole","revokeBan","permsEdit"]
+      ul
+        for itm, ky in logterms.adv
+          li.level(class=disa.includes(ky.toString())?"generally-disabled":"ok").wwawa
+            .level-left
+              label.switch
+                -let V = serverlogs.adv[ky]=='true' || serverlogs.adv[ky]==true ;
+                input(type="checkbox" data-key=ky.toString() data-type="adv" checked=V).check
+                span.slider.lite
+            .level-left: p &#x2003
+            .level-left: p=itm
+            .level-item
+
+  hr
+  +iconButton(save_log_button)
+  br
+  script.

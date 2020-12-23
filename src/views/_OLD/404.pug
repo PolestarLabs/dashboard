@@ -1,0 +1,60 @@
+html
+  head
+    title "NOT FOUND"
+    link(href='https://fonts.googleapis.com/css?family=Varela' rel='stylesheet' type='text/css')
+    link(rel='stylesheet', href='/css/caralho.css')
+
+  body
+    style.
+      body{
+        overflow:hidden;
+      }  
+        
+        .bgg{
+          background-image:url("/images/bglab.png");
+          background-size: cover;
+          position:absolute;
+          width:100vw;
+          height:100vh;
+          opacity:.0;
+          filter: blur(40px)
+        }
+        .scale{
+        transform:scale(5) translateY(30%);
+        top:50%;
+        
+        }
+      
+              .glitch{
+              cursor:default;
+              user-select: none;
+          text-align: center;
+          color:#eb4598;
+          font-size:10px;
+          position:relative;
+          width:400px;
+          text-align: center;
+          margin:0 auto;
+          animation: glow 13s 1s infinite linear !important;
+        }
+
+        @keyframes glow{
+          0%{
+          //text-shadow: 0 0 0px rgba(235, 69, 152, 0.1);
+          //filter: drop-shadow(0 0 0px rgba(255, 0, 226, 0.1))
+          }
+          50%{
+         // text-shadow: 0 0 50px rgba(235, 69, 152, 0.1);
+          //filter: drop-shadow(0 0 10px rgba(255, 0, 226, 0.1))
+          }
+          100%{
+          //text-shadow: 0 0 0px rgba(255, 255, 255, 0);
+          //filter: drop-shadow(0 0 0px rgba(255, 0, 226, 0.1))
+          
+          }
+        }
+      
+    .bgg
+    .scale
+      .glitch(data-text="UNAVAILABLE") UNAVAILABLE!
+

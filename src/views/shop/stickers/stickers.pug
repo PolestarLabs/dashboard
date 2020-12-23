@@ -1,0 +1,142 @@
+extends ../../layout 
+block head
+  script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.11/vue.min.js')
+  script(src='https://unpkg.com/hooper@0.3.4/dist/hooper.js')
+  script(  src="https://unpkg.com/animated-number-vue@1.0.0/dist/AnimatedNumber.umd.min.js")  
+
+block content
+    -const STKPAK = stickers.concat(collection.map(x=>x.series_id).filter((x,i,a)=> a.indexOf(x) == i).map(x=> !stickers.find(y=> x==y.icon ) && {icon: x, name: x, rarity: 'XR' ,_id: '587ecc20' } ).filter(x=>!!x) )
+    -const STIKS = collection
+    script var STKPAK = !{JSON.stringify(STKPAK)}
+    script var STIKS = !{JSON.stringify(collection)}
+    style
+      include stickers-new.css
+
+    .wrapper
+        -currentPage = 'market'
+        include ../../navbar
+        - let r = Math.floor(Math.random() * (1 - 0 + 1) + 0);
+        .plx-background-cover(plx-parallax="bgy: 100,400" style='background-image: url(/images/heads/shop'+r+'.png)').pictoheader.dark
+            .plx-container
+                br
+                h1.title Sticker Collection
+                h3.subtitle Add extra charm to your Profilecard with stickers! Over #{collection.length} to collect.
+                hr.plx-divider-small
+
+                p 
+                    | Profile Stickers can be obtained from special Boosterpacks that are dropped from Lootboxes. Check here all Stickers available in each series.
+                    br
+                    | If you're looking for <b>physical</b> stickers, check the <a href="/merch">Merch Shop</a>!
+
+        hr.plx-divider-icon-fill
+        .plx-container
+            .section#main    
+                h2.title
+                h4.subtitle 
+                p
+
+        .plx-uncontainer#stickers
+
+
+          .stickerpak-select: .plx-position-relative
+            hooper( style="height: 380px; max-height:30vh ; padding: 0"  :settings="hooperSettings" ref="paks" @slide="onslidePacks")
+                hooper-pagination( slot="hooper-addons")
+                slide(v-for="(pak,idx) in STKPAK" :key="idx" :index="idx"  ) 
+                    img(:src="`https://beta.pollux.gg/build/boosters/showcase/${pak.icon}.png`" @mouseup="selectPack(idx,pak)")
+
+                    
+                
+                hooper-navigation( slot="hooper-addons")
+
+
+            .stk-metadata.plx-padding.plx-position-top-left 
+              h1.title
+                img.icon64(:src="`https://beta.pollux.gg/images/tiers/new/${selectedPakComplete.rarity}.png`")
+                | \#{{currentIndex+1}} {{selectedPakComplete.name}}
+              h3.subtitle
+                span(v-for="rar in ['C','U','R','SR','UR']" style="width:2rem")
+                  .plx-rarity-icon(:class='rar')
+                  b: animated-number(style="width:2rem;display:inline-block" :value="STIKS.filter(x=>x.series_id == selectedPak && x.rarity == rar).length" :duration="800" :easing="'easeOutExpo'" :round="true")
+                span(v-if="STIKS.find(x=>x.series_id == selectedPak && x.rarity == 'XR')")
+                  .plx-rarity-icon.XR
+                  b {{STIKS.filter(x=>x.series_id == selectedPak && x.rarity == 'XR').length}}
+                  
+              //p
+                b Release: 
+                span {{calculateTime(selectedPakComplete).toDateString().split(' ')[1]}}
+                span -
+                animated-number(  :value="calculateTime(selectedPakComplete).getDate()" :duration="800" :easing="'easeOutExpo'" :round="true")
+                span -
+                animated-number(  :value="calculateTime(selectedPakComplete).getYear()+1900" :duration="800" :easing="'easeOutExpo'" :round="true")
+                span                
+                br
+                b Stickers: 
+                span {{STIKS.filter(x=>x.series_id == selectedPak).length}}
+
+
+          .plx-uncontainer(style="min-height: 50vh;margin-top:80px").pack-info
+            .plx-width-1-1(class="plx-width-2-3@m").sticker-pool
+              each pack in STKPAK
+                transition(name='fade')
+                  .stickercollection.plx-flex.plx-flex-center.plx-flex-wrap(v-if="selectedPak == '"+pack.icon+"'")
+                    .sticker(v-for="(sticker,index) in STIKS.filter(x=>x.series_id == '"+pack.icon+"')" v-bind:style=userinfo?"{opacity: 0.125+hasSticker(sticker)}":'')
+                      img( :src="'https://beta.pollux.gg/stickers/'+sticker.id+'.png'" )
+                      .textcont 
+                        .stkname {{sticker.name}}
+                        .stkpak {{sticker.series}}
+                        .stars(:class="sticker.rarity=='XR'?'ultra':''")          
+
+                          .star1(v-bind:class="setStar(sticker)>=1?'colored':''"): i.fa.fa-star
+                          .star2(v-bind:class="setStar(sticker)>=2?'colored':''"): i.fa.fa-star
+                          .star3(v-bind:class="setStar(sticker)>=3?'colored':''"): i.fa.fa-star
+                          .star4(v-bind:class="setStar(sticker)>=4?'colored':''"): i.fa.fa-star
+                          .star5(v-bind:class="setStar(sticker)==5?'colored':''"): i.fa.fa-star
+            .plx-width-1-1(class="plx-width-1-3@m")
+              .plx-darkbox
+                p
+                  b Release: 
+                  span {{calculateTime(selectedPakComplete).toDateString().split(' ')[1]}}
+                  span -
+                  animated-number(  :value="calculateTime(selectedPakComplete).getDate()" :duration="800" :easing="'easeOutExpo'" :round="true")
+                  span -
+                  animated-number(  :value="calculateTime(selectedPakComplete).getYear()+1900" :duration="800" :easing="'easeOutExpo'" :round="true")
+                  span                
+                  br
+                  b Stickers: 
+                  span {{STIKS.filter(x=>x.series_id == selectedPak).length}}
+                if userinfo
+                  .plx-progress-alt
+                    .inner-bar(v-bind:style="{width: 1+(packProgress()).pct +'%' }")
+                      .percentile
+                        animated-number(  :value="(packProgress()).val" :duration="800" :easing="'easeOutExpo'" :round="true")
+                        |/{{ (packProgress()).max }} ({{(packProgress()).pct}}%)
+                  .plx-magic-input(style="position: relative  ;z-index:9")
+                    .plx-flex
+                        .plx-flex-start  
+                          .plx-pink-check
+                            input(type="checkbox" id='toggle_owned' name='toggle_owned' v-model="toggleOwned" )
+                            label(for='toggle_owned')
+                        .plx-flex-end   
+                            | TOGGLE OWNED
+                p COMPLETION REWARDS 
+                each pack in STKPAK
+                  transition(name='fade')
+                    .packrewards(v-if="selectedPak == '"+pack.icon+"' && selectedPakComplete.rewards"  )
+                      .reward(v-for="reward in selectedPakComplete.rewards")
+                        .medalreward(v-if="reward.type == 'medal'")
+                          | MEDAL
+                          .img-container
+                            img(:src="`/medals/${reward.id}.png`")
+                        .bgreward(v-if="reward.type == 'background'")
+                          | BACKGROUND
+                          .img-container
+                            img(:src="`/backdrops/${reward.id}.png`")
+                        .flairreward(v-if="reward.type == 'flair'")
+                          | FLAIR
+                          .img-container
+                            img(:src="`/build/flairs/top/${reward.id}.png`")
+                          
+
+block scripts
+  script
+    include stickers.js

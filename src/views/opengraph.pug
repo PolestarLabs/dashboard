@@ -1,0 +1,30 @@
+
+if opengraph
+  meta(name="theme-color" content=(opengraph.color||"#db4584"))
+  meta(property='og:type', content= opengraph.type||'website')
+  if opengraph.type=='arcticle'
+    //-ts =  new Date(entry.timestamp).toISOString(); 
+    //meta(property='og:article:published_time', content= opengraph.ts||ts )
+    //meta(property='og:article:author', content= opengraph.author||"user" )
+  meta(property='og:site_name', content= opengraph.sitename || 'Pollux - A Fancy Maid for Fancy Communities')
+  meta(property='og:title', content=(opengraph.title||"Pollux Web Dashboard "))
+  meta(property='og:description', content=(opengraph.description||'Pollux is your personal Discord Artificial Maid ready to make your days in Discord much more fun and more pretty. '))
+  meta(property='og:image', content=(opengraph.image||'https://cdn.discordapp.com/attachments/435196699259043851/438874840657690635/unknown.png'))
+  if opengraph.large
+    meta(name='twitter:card', content='summary_large_image')
+    meta(name='twitter:site', content='@dasflicksie')
+    meta(name='twitter:creator', content='@dasflicksie')
+
+else  
+  block opengraph
+  meta(name="theme-color" content="#db4584")
+  meta(property='og:type', content='website')
+  meta(property='og:site_name', content='Pollux')
+  meta(property='og:title', content='Pollux - A Fancy Maid for Fancy Communities.')
+  meta(property='og:description', content='Pollux is your personal Discord Artificial Maid ready to make your days in Discord much more fun and more pretty.')
+  meta(property='og:image', content='https://cdn.discordapp.com/attachments/435196699259043851/438874840657690635/unknown.png')
+  meta(name='twitter:card', content='summary_large_image')
+  meta(name='twitter:site', content='@dasflicksie')
+  meta(name='twitter:creator', content='@dasflicksie')
+
+meta(name="og:url" content="https://pollux.fun")

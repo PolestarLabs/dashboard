@@ -1,0 +1,24 @@
+extends  layout 
+block content
+    .wrapper
+        include  navbar
+
+        br
+        br
+        .plx-flex(style="flex-direction: column; text-align: center; justify-content: space-around;    align-items: center;")
+            .gifsquare(style="display:inline-block;margin:30px; border-radius:10px;background-position: center center; background-image: url(/images/gif/auth.gif);background-size:cover; width:360px;height:360px;") 
+
+            .plx-width-expand(style="align-items: center")
+                h1.title LOGIN REQUIRED
+                h3.subtitle  Psst. You first need to log in before accessing this page!
+                p Click the big purple button above and authenticate yourself
+                .help: a(onclick="login()") or here...
+
+
+        br
+        br
+        br
+
+
+
+block scripts

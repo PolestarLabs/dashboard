@@ -1,0 +1,44 @@
+-
+    query = "?"+pagination.url.split("?").slice(1)
+    first  = -1+ 1                      + query 
+    minus3 = -1+ pagination.current-3   + query
+    minus2 = -1+ pagination.current-2   + query
+    minus1 = -1+ pagination.current-1   + query
+    curr   = -1+ pagination.current     + query   
+    plus1  = -1+ pagination.current+1   + query
+    plus2  = -1+ pagination.current+2   + query
+    plus3  = -1+ pagination.current+3   + query
+    last   = -1+ pagination.L           + query
+    previous = "#"      
+
+//pre= JSON.stringify(pagination,null,3)
+ul.plx-pagination(style="display:none")
+    if pagination.L >1
+        if pagination.current > 1
+            li: a.plx-pg-nav(data-link=minus1 class= pagination.P > 0 ? "": "plx-disabled"): span <
+        if pagination.current != 1
+            li: a.plx-pg-nav(data-link=first) 1
+        if pagination.elpis_prv
+            li.plx-disabled: span ...
+        if !(pagination.current +2 < pagination.L)  && pagination.current -3 > 1  && !(pagination.current-3==2 &&pagination.elpis_prv)
+            li: a.plx-pg-nav(data-link=minus3)= pagination.current-3
+        if !(pagination.current +1 < pagination.L)  && pagination.current -2 > 1
+            li: a.plx-pg-nav(data-link=minus2)= pagination.current-2
+        if pagination.current -1 > 1
+            li: a.plx-pg-nav(data-link=minus1)= pagination.current-1
+        li.plx-active: a.plx-pg-nav(data-link=curr)= pagination.current  
+        if pagination.current +1 < pagination.L
+            li: a.plx-pg-nav(data-link=plus1)= pagination.current +1
+        if !(pagination.current -1 > 1) && pagination.current +2 < pagination.L
+            li: a.plx-pg-nav(data-link=plus2)= pagination.current +2
+        if !(pagination.current -2 > 1) && pagination.current +3 < pagination.L   && !(pagination.current+3==pagination.L-1 &&pagination.elpis_nex)
+            li: a.plx-pg-nav(data-link=plus3)= pagination.current +3
+        if pagination.elpis_nex
+            li.plx-disabled: span ...
+        if pagination.current !=pagination.L
+            li: a.plx-pg-nav(data-link=last)= pagination.L
+        if pagination.current < pagination.L
+            li: a.plx-pg-nav.plx-nav-next(data-link=plus1 class= pagination.current < pagination.L ? "": "plx-disabled"): span >
+
+
+    
