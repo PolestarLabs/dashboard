@@ -3,7 +3,7 @@ const router = express.Router()
 const beta = true; 
 
 const request = require('request');
-const cfg = require('../config.js');
+const cfg = require('../../config.js');
 const paypal = require('paypal-rest-sdk');
 
 const headers = {

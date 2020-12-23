@@ -4,7 +4,7 @@ const Canvas = require('canvas')
 
 router.get('/lunanuli.png', async (req,res)=>{
     
-    let Picto = require('../../../../bot/core/utilities/Picto')
+    let Picto = require('../../../../../bot/core/utilities/Picto')
     const canvas = Picto.new(800,600);
     const ctx = canvas.getContext('2d')
     

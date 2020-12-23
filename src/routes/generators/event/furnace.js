@@ -3,7 +3,7 @@ const router = express.Router();
 
 router.get('/', async (req,res)=>{
     
-    let Picto = require('../../../bot/core/utilities/Picto')
+    let Picto = require('../../../../bot/core/utilities/Picto')
     const canvas = Picto.new(600,600);
     const ctx = canvas.getContext('2d')
     const F =  Number(req.query.f)||0;

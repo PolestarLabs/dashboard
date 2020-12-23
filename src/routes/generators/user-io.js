@@ -4,7 +4,7 @@ const router = express.Router();
 
 router.get('/:inout/:userID/minimal.png', async (req,res)=>{
     
-    let Picto = require('../../../bot/core/utilities/Picto')
+    let Picto = require('../../../../bot/core/utilities/Picto')
 
     const inout  = req.params.inout
     const userID = req.params.userID
