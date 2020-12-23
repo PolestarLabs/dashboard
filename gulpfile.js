@@ -1,42 +1,49 @@
-const { join } = require("path");
 const { parallel, series, src, dest } = require("gulp");
 const cleanCSS = require("gulp-clean-css");
 const image = require("gulp-image");
 const debug = require("gulp-debug");
 const minify = require("gulp-minify");
+const clean = require("gulp-clean");
 
-const ignore = ["!./**/*OLD*/*.*", "!./**/*OLD*.*"];
+const ignore = "!./**/(*OLD*/*.*|**/*OLD*.*)";
 
+const inDir = "src"
 const outDir = "dist";
-const out = (file) => file.base.replace("views", join(outDir, "views")).replace("public", join(outDir, "public"));
+const out = (file) => file.base.replace(inDir, outDir);
+
+function clean() {
+	return src("./dist", { allowEmpty: true })
+		.pipe(clean({ force: true }));
+}
 
 function css() {
-    return src(["./public/**/*.css", "./views/**/*.css", ...ignore])
+    return src(["./src/**/*.css", ignore])
         .pipe(debug())
         .pipe(cleanCSS())
         .pipe(dest(out));
 }
 
 function js() {
-    return src(["./public/**/*.js", "./views/**/*.js", ...ignore])
+    return src(["./src/**/*.js", ignore])
         .pipe(debug())
         .pipe(minify())
         .pipe(dest(out));
 }
 
 function assets() {
-    return src([`./public/**/*.{${imgExt}}`, `./views/**/*.{${imgExt}}`, ...ignore])
+    return src([`./src/**/*.{${imgExt}}`, ignore])
         .pipe(image())
         .pipe(dest(out));
 }
 
 function others() {
-    return src(["./public/**/*.*", "./views/**/*.*", `!./**/*.{css,js,${imgExt}}`, ...ignore])
+    return src(["./src/**/*.*", `!./**/*.{css,js,${imgExt}}`, ignore])
         .pipe(debug())
         .pipe(dest(out));
 }
 
 exports.build = series(css, js, assets, others);
+exports.buildClean = series(clean, css, js, assets, others);
 
 const imgExt = [
 	"ase",
