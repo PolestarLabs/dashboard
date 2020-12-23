@@ -39,7 +39,6 @@ function assets() {
 
 // TODO modular check for best font per type
 // TODO add convertion of ttf to woff if no woff
-
 function fonts() {
 	return src(["./src/public/fonts/proximasoft/*.woff", "./src/public/fonts/!(proximasoft)/*.woff2"])
 		.pipe(debug())
