@@ -26,7 +26,7 @@ global.cacheFunction = (duration) => {
 }
 global.userCache = new Map();
 
-const config = require('./config.js');
+const config = require('../config.js');
 
 
 global.hasPolluxRole = function hasPolluxRole(req,roleID){
@@ -151,7 +151,7 @@ const dbOptions = {
 }
 
 global.PLX = new Eris.Client(config.token_laris,{restMode:true})
-Object.assign(PLX,require("../bot/core/utilities/Gearbox").Client);
+Object.assign(PLX,require("../../bot/core/utilities/Gearbox").Client);
 
 (require('@polestar/database_schema'))({
   url: dbURL,
@@ -176,7 +176,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.Promise = require('bluebird');
 Promise.promisifyAll(require("mongoose"));
-Object.assign(global,require("../bot/core/utilities/Gearbox").Global)
+Object.assign(global,require("../../bot/core/utilities/Gearbox").Global)
 
 //-- PASSPORT  
 const scopes = ['identify', 'guilds','connections'];
@@ -215,7 +215,7 @@ let discordStrategy = new Strategy({
 Passport.use(discordStrategy);
 PassportRefresh.use(discordStrategy);
 
-app.use(favicon(path.join(__dirname, 'src/public', 'favicon.png')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 app.use(cookieParser());
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({
@@ -236,14 +236,14 @@ app.use(sassMiddleware({
 }));
 */
 // view engine setup
-app.set('views', path.join(__dirname, 'src/views'));
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug'); 
 
 
-app.use(Express.static(path.join(__dirname, './src/public')));
+app.use(Express.static(path.join(__dirname, './public')));
 app.use(Express.static(path.join(__dirname, '../assets/imgres')));
 app.use(Express.static(path.join(__dirname, '../assets/cosmetics')));
-app.use("/images", Express.static(path.join(__dirname, './src/public/images')));
+app.use("/images", Express.static(path.join(__dirname, './public/images')));
 app.use("/images", Express.static(path.join(__dirname, '../assets/website')));
 app.use("/flairs",    Express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
 app.use("/medals",    Express.static(path.join(__dirname, '../assets/cosmetics/medals')));
@@ -293,14 +293,14 @@ app.get('/logout', function (req, res) {
 
 
 global.simplepages   = function simplepages(location=false){
-  delete require.cache[require.resolve('./src/routes/'+(location||"simplepages"))];    
+  delete require.cache[require.resolve('./routes/'+(location||"simplepages"))];    
   //delete require.cache[require.resolve('./routes/globalFunctions.js')];    
-  return require(__dirname+'/src/routes/'+(location||"simplepages"));
+  return require(__dirname+'/routes/'+(location||"simplepages"));
 };  
 global.complexpages  = function complexpages(location=false){
-  delete require.cache[require.resolve('./src/pipelines/'+(location||"/complexpages"))];    
+  delete require.cache[require.resolve('./pipelines/'+(location||"/complexpages"))];    
   //delete require.cache[require.resolve('./routes/globalFunctions.js')];    
-  return require(__dirname+'/src/pipelines/'+(location||"/complexpages")); 
+  return require(__dirname+'/pipelines/'+(location||"/complexpages")); 
 };
 
 /* FANCY LOGGING */
@@ -382,7 +382,7 @@ const AcquireDiscordPayload = (TOKEN,req) => {
   discordStrategy.userProfile(TOKEN, FUD => ( (FUD||{}).id && FUD.provider == 'discord') ? req.user = freshUserData : null )
 }
 
-const VARS = require("./src/pipelines/vars.js");
+const VARS = require("./pipelines/vars.js");
 const authCacheExpiration = new Map();
 
 app.use(async function(req,res,next){
@@ -545,8 +545,8 @@ app.post('/checklogin', checkAuth, function (req, res) {
    
 app.post('/sendform', async function (req, res) {
   let form = new formidable.IncomingForm();
-  delete require.cache[require.resolve('./src/pipelines/forms.js')];
-  require('./src/pipelines/forms.js').run(req, res,form).then(status => res.send(status))
+  delete require.cache[require.resolve('./pipelines/forms.js')];
+  require('./pipelines/forms.js').run(req, res,form).then(status => res.send(status))
 });
  
 app.get('/test', (...args)=> simplepages().test(...args));
@@ -560,8 +560,8 @@ app.get('/callback',
 
   
 app.use('/', (...args)=>{
-  delete require.cache[require.resolve('./src/routes/_allroutes')];
-  const router = require('./src/routes/_allroutes');
+  delete require.cache[require.resolve('./routes/_allroutes')];
+  const router = require('./routes/_allroutes');
   return router(...args);    
 });
         

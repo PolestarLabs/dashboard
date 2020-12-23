@@ -12,10 +12,10 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(Express.static(path.join(__dirname, './src/public')));
+app.use(Express.static(path.join(__dirname, './public')));
 app.use(Express.static(path.join(__dirname, '../assets/imgres')));
 app.use(Express.static(path.join(__dirname, '../assets/cosmetics')));
-app.use("/images", Express.static(path.join(__dirname, './src/public/images')));
+app.use("/images", Express.static(path.join(__dirname, './public/images')));
 app.use("/images", Express.static(path.join(__dirname, '../assets/website')));
 app.use("/flairs",    Express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
 app.use("/medals",    Express.static(path.join(__dirname, '../assets/cosmetics/medals')));
