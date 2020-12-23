@@ -5,45 +5,45 @@ const debug = require("gulp-debug");
 const minify = require("gulp-minify");
 const clean = require("gulp-clean");
 
-const ignore = "!./**/(*OLD*/*.*|**/*OLD*.*)";
+const ignore = ["!./**/*OLD*/**.*", "!./**/*OLD*.*"];
 
 const inDir = "src"
 const outDir = "dist";
 const out = (file) => file.base.replace(inDir, outDir);
 
-function clean() {
+function clear() {
 	return src("./dist", { allowEmpty: true })
 		.pipe(clean({ force: true }));
 }
 
 function css() {
-    return src(["./src/**/*.css", ignore])
+    return src(["./src/**/*.css", ...ignore])
         .pipe(debug())
         .pipe(cleanCSS())
         .pipe(dest(out));
 }
 
 function js() {
-    return src(["./src/**/*.js", ignore])
+    return src(["./src/+(views|public)/**/*.js", ...ignore])
         .pipe(debug())
         .pipe(minify())
         .pipe(dest(out));
 }
 
 function assets() {
-    return src([`./src/**/*.{${imgExt}}`, ignore])
+    return src([`./src/**/*.{${imgExt}}`, ...ignore])
         .pipe(image())
         .pipe(dest(out));
 }
 
 function others() {
-    return src(["./src/**/*.*", `!./**/*.{css,js,${imgExt}}`, ignore])
+    return src(["./src/**/*.*", "!./src/+(public|views)/**/*.js", `!./src/**/*.{css,${imgExt}}`, ...ignore])
         .pipe(debug())
         .pipe(dest(out));
 }
 
 exports.build = series(css, js, assets, others);
-exports.buildClean = series(clean, css, js, assets, others);
+exports.buildClean = series(clear, css, js, assets, others);
 
 const imgExt = [
 	"ase",
