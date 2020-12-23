@@ -39,12 +39,13 @@ function assets() {
 
 // TODO modular check for best font per type
 // TODO add convertion of ttf to woff if no woff
+
 function fonts() {
 	return src(["./src/public/fonts/proximasoft/*.woff", "./src/public/fonts/!(proximasoft)/*.woff2"])
 		.pipe(debug())
 		.pipe(dest(out));
 }
-
+*/
 function others() {
     return src(["./src/**/*.*", "!./src/+(public|views)/**/*.js", "!./src/public/fonts/**/*.*", `!./src/**/*.{css,${imgExt}}`, ...ignore])
         .pipe(debug())
@@ -53,6 +54,7 @@ function others() {
 
 exports.build = series(css, js, assets, fonts, others);
 exports.buildClean = series(clear, css, js, assets, fonts, others);
+exports.buildNoAssets = series(clear, css, js, fonts, others);
 
 const imgExt = [
 	"ase",
