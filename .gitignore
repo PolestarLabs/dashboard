@@ -3,5 +3,6 @@
 /config.js
 /public/images/
 *.png
-
 *.bak.*
+package-lock.json
+dist
