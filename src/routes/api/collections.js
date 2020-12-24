@@ -100,6 +100,8 @@ const pItemcol = (y) => y.map(x=>x.name[RAR_COLS[x.rarity]]).join('\n');
 
 
 //FIXME[epic=flicky] Crafting Discovery: Items already crafted are still showing as "????"
+//TODO Crafting Discovery: Cosmo Fragments situation, make logic suggest one tier above the highest known recipe (unknown) IF affordable, otherwise show highest affordable
+//     ALTERNATIVE: Remove cosmo shards from discovery and make their own mixing pipeline (or advanced crafting)
 
 router.post('/mix', async (req,res) => {
 
