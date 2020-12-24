@@ -84,7 +84,8 @@
   
   .scroller-container {
     will-change: transform;
-    overflow: scroll;
+    overflow-y: scroll;
+    overflow-x: hidden;
     mask: linear-gradient(#0000 5%, #ffff 12%, #ffff 95%, #0000);
     padding: 20px;
     padding-top: 150px;

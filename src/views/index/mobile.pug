@@ -8,7 +8,7 @@ mixin bubble(item,opts={})
         .content-holder.bubble
             .backdrop.screen-1(style=`background-image: ${opts.bgImg}`)
             .img-container(style=`transform: ${opts.transform}`)
-                img(src="/images/pollux/"+(item||"polluxv8")+".png" )
+                img(plx-img src="/images/pollux/"+(item||"polluxv8")+".png" )
 
 - let nodrift = true
 style
@@ -77,7 +77,7 @@ style
                     .buffer(plx-lightbox)
                         - var link = "/images/showcase/lead.png"
                         a(href=link)
-                            img(src=link)
+                            img(plx-img src=link)
                     .infobox
                         p 
                             | Rank your members activity with our custom ranking system!
@@ -89,8 +89,8 @@ style
                         p
                             | Everything from the comfort of our new <a href="/dashboard">Dashboard</a>
                     .nobuffer.noshade
-                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779404782578040882/12.png"
-                        img(src=link)
+                        - var link = "/images/showcase/mockup.png"
+                        img(plx-img src=link)
  
                     
                     
@@ -99,7 +99,7 @@ style
                     .nobuffer(plx-lightbox)
                         - var link = "/images/showcase/profile.png"
                         a(href=link)
-                            img(src=link)
+                            img(plx-img src=link)
                     h1.title Custom Profiles
                     h3.subtitle Decor up to eleven!
                     .infobox
@@ -120,7 +120,7 @@ style
                     .buffer
                         - var link = "https://media.discordapp.net/attachments/488142034776096772/779361966929084421/unknown.png" // dly
                          a(href=link)
-                            img(src=link)
+                            img(plx-img src=link)
                             
                     .infobox
                         p 
@@ -134,11 +134,11 @@ style
                     hr.plx-divider-icon
 
                     .buffer
-                        - var links = ["https://media.discordapp.net/attachments/488142034776096772/779353424612819014/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779353404060729344/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779359215596470272/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779359836680618014/unknown.png"]
+                        - var links = ["https://media.discordapp.net/attachments/488142034776096772/779353424612819014/unknown.png","/images/showcase/roulette.png","https://media.discordapp.net/attachments/488142034776096772/779359215596470272/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779359836680618014/unknown.png"]
                         .p-slides(plx-slideshow="autoplay:true; autoplay-interval=1500")
                             ul.plx-slideshow-items(plx-lightbox)
                                 each item in links
-                                    li: a(href=item): img(src=item)
+                                    li: a(href=item): img(plx-img src=item)
                     h1.title Minigames
                     h3.subtitle Spruce up your server with the prettiest chat minigames!
                     .infobox
@@ -154,7 +154,7 @@ style
                             | Our special three-currency based system was further enhanced to make sure the economy is strong and keeps the players investments protected.
                         - var link = "https://media.discordapp.net/attachments/488142034776096772/779360698680606760/unknown.png" // dly
                         a(href=link)
-                            img(src=link)
+                            img(plx-img src=link)
                         h4.subtitle.minititle Revamped Daily Bonuses! 
                         p 
                             | Dailies now award a variety of items you can use to obtain several things and expand your playing options.
@@ -164,7 +164,7 @@ style
 
                         - var link = "https://media.discordapp.net/attachments/488142034776096772/779360399006629898/unknown.png" // bal
                         a(href=link)
-                            img(src=link)
+                            img(plx-img src=link)
                         p
                             | The currencies are now specialized and indirectly interchangeable.
                             br
@@ -190,7 +190,7 @@ style
                         .buffer.p-slides(plx-slideshow="autoplay:true; autoplay-interval=1500")
                             ul.plx-slideshow-items(plx-lightbox)
                                 each item in links
-                                    li: a(href=item): img(src=item)
+                                    li: a(href=item): img(plx-img src=item)
                         br
                         br
                         h4.subtitle.minititle Theme Events: Spruce up your server with the prettiest chat minigames!
@@ -199,7 +199,7 @@ style
                         .buffer(plx-lightbox)
                             - var link = "/images/showcase/box.png" // bal
                             a(href=link)
-                                img(src=link)
+                                img(plx-img src=link)
                         h4.subtitle.minititle Lootboxes: 
                         p 
                             | Reward activity in your community with our beloved lootboxes! Random drops from time to time based on activity. 
@@ -223,7 +223,7 @@ style
                     //.nobuffer(plx-lightbox)
                         - var link = "/images/showcase/profile.png"
                         a(href=link)
-                            img(src=link)
+                            img(plx-img src=link)
                     h1.title Advanced Stuff
                     h3.subtitle For those who seek something more
                     .infobox
@@ -240,9 +240,9 @@ style
                         h3.subtitle Mix, Create, Discover!
 
                         .buffer(plx-lightbox)
-                            - var link = "https://media.discordapp.net/attachments/488142034776096772/779420696719392768/unknown.png" 
+                            - var link = "/images/showcase/craft.png" 
                             a(href=link)
-                                img(src=link)
+                                img(plx-img src=link)
                         
                         p If you enjoy exploring and poking around with putting things together and see what comes out of it. Our crafting system is one of the richest you'll find. You can craft from recipes, or just experiment with stuff you have in your hands and see what comes out of it!
                         
@@ -253,7 +253,7 @@ style
                         
                         - var link = "/images/showcase/venture.png" 
                         a(href=link)
-                            img(src=link)
+                            img(plx-img src=link)
                             
                         p 
                             | You asked for it and it is back! The "Venture Forth" minigame from the Hallowinter 2019 event has been upgraded to a full minigame module!
@@ -277,7 +277,7 @@ style
                                 
                         - var link = "/images/showcase/storefront.png" 
                         a(href=link)
-                            img(src=link)
+                            img(plx-img src=link)
                         p
                            | All the newest items available and shops are now available under <a href="/shop">The Storefront</a>
                            br
