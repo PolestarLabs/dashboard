@@ -241,20 +241,20 @@ app.set('view engine', 'pug');
 
 
 app.use(Express.static(path.join(__dirname, './public')));
-app.use(Express.static(path.join(__dirname, '../assets/imgres')));
-app.use(Express.static(path.join(__dirname, '../assets/cosmetics')));
+app.use(Express.static(path.join(__dirname, '../../assets/imgres')));
+app.use(Express.static(path.join(__dirname, '../../assets/cosmetics')));
 app.use("/images", Express.static(path.join(__dirname, './public/images')));
-app.use("/images", Express.static(path.join(__dirname, '../assets/website')));
-app.use("/flairs",    Express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
-app.use("/medals",    Express.static(path.join(__dirname, '../assets/cosmetics/medals')));
-app.use("/stickers",  Express.static(path.join(__dirname, '../assets/cosmetics/stickers')));
-app.use("/boosters",  Express.static(path.join(__dirname, '../assets/build/boosters')));
-app.use("/backdrops", Express.static(path.join(__dirname, '../assets/cosmetics/backdrops')));
-app.use("/build",     Express.static(path.join(__dirname, '../assets/build')));
+app.use("/images", Express.static(path.join(__dirname, '../../assets/website')));
+app.use("/flairs",    Express.static(path.join(__dirname, '../../assets/cosmetics/flairs')));
+app.use("/medals",    Express.static(path.join(__dirname, '../../assets/cosmetics/medals')));
+app.use("/stickers",  Express.static(path.join(__dirname, '../../assets/cosmetics/stickers')));
+app.use("/boosters",  Express.static(path.join(__dirname, '../../assets/build/boosters')));
+app.use("/backdrops", Express.static(path.join(__dirname, '../../assets/cosmetics/backdrops')));
+app.use("/build",     Express.static(path.join(__dirname, '../../assets/build')));
 //backwards compat
-app.use("/build/backdrops", Express.static(path.join(__dirname, '../assets/cosmetics/backdrops')));
-app.use("/build/stickers",  Express.static(path.join(__dirname, '../assets/cosmetics/stickers')));
-app.use("/build/flairs/top",    Express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
+app.use("/build/backdrops", Express.static(path.join(__dirname, '../../assets/cosmetics/backdrops')));
+app.use("/build/stickers",  Express.static(path.join(__dirname, '../../assets/cosmetics/stickers')));
+app.use("/build/flairs/top",    Express.static(path.join(__dirname, '../../assets/cosmetics/flairs')));
 
 
 app.use(exSession({
@@ -330,7 +330,7 @@ app.use(logger(function(tokens,req,res){
 /* --------------- */
 const i18n = require("./locales.js");
 app.use(i18n({
-  translationsPath: (path.join(__dirname, '../bot/locales')),
+  translationsPath: (path.join(__dirname, '../../bot/locales')),
   defaultLang: "en",
   //  browserEnable :false,
   siteLangs: ["en", "cz", "es", "fr", "pt-br", "pt", "ru","jp","tr","ko","de","pl"],
