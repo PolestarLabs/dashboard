@@ -149,6 +149,7 @@ const AsanaTask = async id => {
   }
   return task;
 }
+let sendingNotes = false;
 router.post('/asana', async  (req,res) =>{
 
   console.log( JSON.stringify(req.body,0,2))
@@ -198,6 +199,12 @@ router.post('/asana', async  (req,res) =>{
           description = `**${user.name}** has assigned the task [**${task.name}**](${task.link}) to **${task.assignee?.name || "nobody"}**.`
         }
         if(ev.change.field == "notes"){
+          if(sendingNotes) return;
+          sendingNotes = true;
+          setTimeout(() => {
+            sendingNotes = false;
+          }, 120e3);
+          
           description = `
           **${user.name}** has **updated** the task [**${task.name}**](${task.link}).
           *Description:*
