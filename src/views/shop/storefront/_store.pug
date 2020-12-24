@@ -111,8 +111,6 @@ mixin shopcard()
  
         a(:href="`/marketplace/sell?type=${item.type}&finder=${item.code||item.id||item.icon}`" plx-tooltip="Sell in Marketplace").button(v-if="hasItem(item)" style="padding:0 5px").sellbut
           i: .fas.fa-shopping-cart.icon24
-        
-
 
 block head
   script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
@@ -129,6 +127,8 @@ block content
     -currentPage = 'market'
     include ../../navbar
 
+    // TODO[epic=flicky] Storefront - Unfinished
+    
     section#title.supersplash
       include section_top
 
@@ -160,14 +160,14 @@ block content
     
        
         .plx-flex.plx-width-1-1
-            //
+
             .store-sidebar
               ul.store-nav.plx-subnav(plx-sticky="offset:50; bottom: #endof",  plx-switcher="connect:.store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small; active: 0")
                   li.megastroke.menuitem(plx-filter-control="filter: *" ).plx-active
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-star
                           label  Arrivals
-                  li.megastroke.menuitem(plx-filter-control="filter: .limited" ).plx-active
+                  li.megastroke.menuitem(plx-filter-control="filter: .limited" )
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-hourglass-half
                           label  Limited Time
