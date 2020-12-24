@@ -165,11 +165,12 @@ router.post('/asana', async  (req,res) =>{
     let author;
     let fields = []
     let color = 0xff6978;
+    let image;
     
     let user = await AsanaUser(ev.user.gid);
     let thumbnail = {url: user.avatar}
 
-    if(ev.resource.resource_type == "task" || ev.resource.resource_type == "story" ){
+    if(ev.resource.resource_type == "task" || ev.resource.resource_type == "story" ||  ev.resource.resource_type == "attachment" ){
 
       let task = ev.resource.resource_type == "task" ? await AsanaTask(ev.resource.gid) : await AsanaTask(ev.parent.gid);
       if (!task) return;
@@ -218,10 +219,22 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
         }
       }
       if(ev.action == 'added'){
-        //console.log("ADDED".blue)
-        //console.log( ev )
-        //console.log( "-----------".gray )
-        if(ev.resource.resource_type == "story"){
+        if(ev.resource.resource_type == "attachment"){
+          //console.log("ATTACH".blue)
+          //console.log( ev )
+          //console.log( "-----------".gray )
+          
+          let attachment = ((await axios.get(`https://app.asana.com/api/1.0/attachments/${ev.resource.gid}`,{headers: {Authorization:`Bearer ${cfg.asana}`}}))?.data?.data);
+          if (!attachment) return console.log ({attachment});
+          let parentTask = await AsanaTask(attachment.parent.gid);
+          description = `**${user.name}** added an attachment to the task [**${task.name}**](${parentTask.permalink_url}).
+          📎 [${attachment.name}](${attachment.permanent_url})
+          `
+          image = {url: attachment.view_url + attachment.name.split('.').pop() };
+          footer = {};
+
+        }
+        else if(ev.resource.resource_type == "story"){      
           
           let story = task.stories?.find(s=>s.gid === ev.resource.gid);
           if (!story) return console.log({story});
@@ -235,8 +248,9 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
           color= story.type=='system' ? 0xb3c3c7 : 0x48dafd;
           description = `${story.type=='system'? '⚙️':'💬'} - ${story.text}`;
           footer = {};
+          
         }
-        else if( ev.parent.resource_type == "project" || ev.parent.resource_type == "task" ){
+        else if( ev.parent.resource_type == "project" || ev.parent.resource_type == "task" && ev.resource.resource_type != "attachment" ){
           description = `**${user.name}** has created the task [**${task.name || "UNTITLED TASK"}**](${task.link}).`
           
           
@@ -246,9 +260,8 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
         }
       }
       
-      let embed = {author,description,fields,color,thumbnail,footer};
+      let embed = {author,description,fields,color,thumbnail,footer,image};
       if (description.length){      
-  
         
         if(req.query.type?.includes("dev")){
           //console.log("TASK".green + " | " + "DEV".blue)
@@ -308,9 +321,6 @@ console.log(
   return res.send(200)
 
 })
-
-
-
 
 router.post('/gitlab', function (req, res) {
   let p = req.body;
@@ -404,8 +414,6 @@ sendWebhook({
   
 })
 
-
-
 router.get('/minecraft', function (req, res) {
   let payload = req.body;
 
@@ -418,9 +426,6 @@ router.get('/minecraft', function (req, res) {
   res.send(200)
   
 })
-
-
-
 router.post('/minecraft', async function (req, res) {
   let payload = req.body.body;
   try{
@@ -439,9 +444,6 @@ router.post('/minecraft', async function (req, res) {
   res.send(200)
   
 })
-
-
-
 
 router.post('/:any', function (req, res) {
   let payload = req.body;
