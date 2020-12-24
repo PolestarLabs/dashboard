@@ -1,3 +1,4 @@
+// TODO[epic=flicky] Storefront/Bundles - Finish bundles subpage
 -
     bundle = {      
       "name" : "Bowsette Deluxe Bundle", 
@@ -83,6 +84,7 @@
             //p <b>Victory Day</b> is a holiday that commemorates the victory of the Soviet Union over Nazi Germany in the Great Patriotic War. It was first inaugurated in the 16 republics of the Soviet Union, following the signing of the German Instrument of Surrender late in the evening on 8 May 1945 (after midnight, thus on 9 May Moscow Time). The Soviet government announced the victory early on 9 May after the signing ceremony in Berlin. Though the official inauguration occurred in 1945 the holiday became a non-labour day only in 1965 and only in certain Soviet republics.
         .preview
             ul.plx-thumbnav(plx-lightbox)
+                // TODO[epic=flicky] Storefront/Bundles - Convert this to Vue
                 each item in bundle.items
                     - let gallery = item.type == 'background' ? 'backdrops' : item.type == 'medal' ? 'medals' : item.type == 'sticker' ? 'stickers' : item.type == 'item' ? 'items' : 'build';
                     - let imgsrc = 'http://pollux.fun/' + gallery + '/' + item.id + '.png';
