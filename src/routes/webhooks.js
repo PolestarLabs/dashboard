@@ -253,7 +253,7 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
           }
           thumbnail = {};
           color= story.type=='system' ? 0xb3c3c7 : 0x48dafd;
-          description = `${story.type=='system'? '⚙️':'💬'} - ${story.text}`;
+          if(story.text.length) description = `${story.type=='system'? '⚙️':'💬'} - ${story.text}`;
           footer = {};
           
         }
