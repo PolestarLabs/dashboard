@@ -1,14 +1,14 @@
 nav.plx-navbar.plx-nav-container.topbar(plx-navbar class=index?"home":"" plx-sticky=index?"animation: plx-animation-slide-top-medium;top: 90vh; bottom: true":"")
     .plx-navbar-left
         div(style="top: 0;position: absolute;")
-            a.sidewinders.left-sw.bg-discord(class="plx-visible@s")  
+            a.sidewinders.left-sw.bg-discord(class="plx-visible@s" href="#")  
                 i.fab.fa-discord
                 .hidden-desc Discord Server
-            a.sidewinders.left-sw.bg-twitter(class="plx-visible@m")      
+            a.sidewinders.left-sw.bg-twitter(class="plx-visible@m" href="#")      
                 i.fab.fa-twitter
                 .hidden-desc @maidPollux
             if !!index       
-                a.sidewinders.left-sw.bg-reddit(class="plx-visible@l ")      
+                a.sidewinders.left-sw.bg-reddit(class="plx-visible@l " href="#")      
                     i.fab.fa-reddit
                     .hidden-desc /r/Pollux
 
@@ -72,7 +72,7 @@ nav.plx-navbar.plx-nav-container.topbar(plx-navbar class=index?"home":"" plx-sti
                                                 
                 li.lv1-nav(href="/events" class="plx-visible@l " + (currentPage==="events"?"is-current":"") )
                     i.fas.fa-star
-                    a.arrowlink Events
+                    a(href="#").arrowlink Events
                     .plx-navbar-dropdown.ballooned.event_menu
                         div
                             .mkmenu_title Ongoing

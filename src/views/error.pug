@@ -47,6 +47,8 @@ block content
 block scripts
   script var errordata = (!{ JSON.stringify(errorData != null ? errorData : false) })
   script.
+      if(drift){
+
        drift.on('ready',function(api, payload) { 
   
           api.showWelcomeMessage({            
@@ -64,3 +66,4 @@ block scripts
           })
           
         })
+      }

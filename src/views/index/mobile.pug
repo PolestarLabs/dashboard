@@ -1,6 +1,6 @@
 mixin minifooter()
     .minifooter.plx-flex.plx-flex-around()
-        a.magic-outline.blue.plx-button.plx-invisible
+        .magic-outline.blue.plx-button.plx-invisible
         block
         
 mixin bubble(item,opts={})
@@ -39,30 +39,30 @@ style
                             | Pollux comes with a variety of cool functionalities and minigames with unmatched depth and ellaborate visuals.
                         p
                             | Count on her to keep the activity around your community always blooming.
-                    a.magic-outline.plx-button.login-main
+                    a(href="/auth").magic-outline.plx-button.login-main
                         i.fas.fa-sign-in-alt
                         span &#x2002 LOGIN
                 else
                     .infobox
                         p Welcome back, #{userinfo.uname}!
-                    a.magic-outline.plx-button.login-main.dashboard
+                    a(href="/dash").magic-outline.plx-button.login-main.dashboard
                             i.fas.fa-address-card
                             span &#x2002 DASHBOARD
                     .plx-flex.plx-flex-around
-                        a.magic-outline.plx-button.login-main.small.comms
+                        a(href="/commands").magic-outline.plx-button.login-main.small.comms
                             i.fas.fa-cogs
                             span &#x2002 COMMANDS
-                        a.magic-outline.plx-button.login-main.small.supp
+                        a(href="/discord").magic-outline.plx-button.login-main.small.supp
                             i.fas.fa-question
                             span &#x2002 SUPPORT
                     if userdata && !userdata.donator
-                        a.magic-outline.plx-button.login-main.prime
+                        a(href="/prime").magic-outline.plx-button.login-main.prime
                             i.fas.fa-atom
                             span &#x2002 Become PRIME
 
                 
                 +minifooter()
-                    a.magic-outline.plx-button(plx-switcher-item="next" )
+                    a.magic-outline.plx-button(plx-switcher-item="next" href="#")
                         
                         i.fas.fa-star
                         span Features 
@@ -75,7 +75,7 @@ style
                     h1.title Ranking System
                     h3.subtitle Make it to the top!
                     .buffer(plx-lightbox)
-                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779400852024590366/unknown.png"
+                        - var link = "/images/showcase/lead.png"
                         a(href=link)
                             img(src=link)
                     .infobox
@@ -97,7 +97,7 @@ style
                     hr.plx-divider-icon
 
                     .nobuffer(plx-lightbox)
-                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779327618561343539/profile.png"
+                        - var link = "/images/showcase/profile.png"
                         a(href=link)
                             img(src=link)
                     h1.title Custom Profiles
@@ -186,7 +186,7 @@ style
                             li Basic moderation kit
                             li And many more new stuff coming every month.
 
-                        - var links = ["https://media.discordapp.net/attachments/488142034776096772/779372441213468682/Ik1eEONlUj.gif","https://cdn.discordapp.com/attachments/488142034776096772/779373448395751454/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779372862871044096/unknown.png","https://media.discordapp.net/attachments/488142034776096772/779372702611800114/unknown.png"]
+                        - var links = ["/images/showcase/event.webm","https://cdn.discordapp.com/attachments/488142034776096772/779373448395751454/unknown.png","/images/showcase/evt1.png","https://media.discordapp.net/attachments/488142034776096772/779372702611800114/unknown.png"]
                         .buffer.p-slides(plx-slideshow="autoplay:true; autoplay-interval=1500")
                             ul.plx-slideshow-items(plx-lightbox)
                                 each item in links
@@ -197,7 +197,7 @@ style
                         p Our exclusive global events introduce refreshing new features and minigames for everyone to play and obtain exclusive seasonal decor items and collectibles!
                             
                         .buffer(plx-lightbox)
-                            - var link = "https://cdn.discordapp.com/attachments/488142034776096772/779377050837712896/unknown.png" // bal
+                            - var link = "/images/showcase/box.png" // bal
                             a(href=link)
                                 img(src=link)
                         h4.subtitle.minititle Lootboxes: 
@@ -210,7 +210,7 @@ style
                     hr.plx-divider-icon
 
                 +minifooter()
-                    a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
+                    a(href="#").magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
                         i: .fas.fa-vial
                         span Advanced
                         i.fas.fa-arrow-right
@@ -221,7 +221,7 @@ style
                 +bubble("science-colcor-800",{transform:"translate(-30px,50px) scale(.8)",dim:true,bgImg:'url(/images/pollux/cogs.png);background-size: 40%;'})
                 .scroller-container(plx-switcher-parallax="opacity:0,1,1; x: 100,0,0;y:100vh,0,0" plx-scroallspy="cls:plx-animation-slide-left-medium;target: > *; delay: 50")
                     //.nobuffer(plx-lightbox)
-                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779327618561343539/profile.png"
+                        - var link = "/images/showcase/profile.png"
                         a(href=link)
                             img(src=link)
                     h1.title Advanced Stuff
@@ -251,7 +251,7 @@ style
                         h1.title Adventure Mode
                         h3.subtitle It is back! Better than ever
                         
-                        - var link = "https://media.discordapp.net/attachments/488142034776096772/779419609178439690/unknown.png" 
+                        - var link = "/images/showcase/venture.png" 
                         a(href=link)
                             img(src=link)
                             
@@ -275,7 +275,7 @@ style
                         h3.subtitle Your new hub for decor and other items
 
                                 
-                        - var link = "https://cdn.discordapp.com/attachments/488142034776096772/779421042182979654/unknown.png" 
+                        - var link = "/images/showcase/storefront.png" 
                         a(href=link)
                             img(src=link)
                         p
@@ -288,7 +288,7 @@ style
 
 
                 +minifooter()
-                    a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
+                    a(href="#").magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
                         i.fas.fa-heart
                         span Community
                         i.fas.fa-angle-double-right
@@ -317,7 +317,7 @@ style
                         p We only exist because of the voluntary contributions of our community, become part of it by supporting us becoming a PRIME member.
 
                 +minifooter()
-                    a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
+                    a(href="/prime").magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500" plx-switcher-item="next" )
                         i.fas.fa-atom
                         span Get PRIME
                         i.fas.fa-angle-double-right
@@ -339,27 +339,27 @@ style
 
                     .minifooter.plx-flex.plx-flex-around(plx-switcher-parallax="y:0,0, 500").plx-flex-wrap
                         
-                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).pshop.login-main
+                        a(href="/shop/prime").magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).pshop.login-main
                             i.fas.fa-credit-card
                             span Prime Shop
                         br
-                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).patr.login-main
+                        a(href="https://patreon.com/join/pollux").magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).patr.login-main
                             i.fab.fa-patreon
                             span Patreon
                         br
-                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).ppal.login-main
+                        a(href="/paypal").magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  ).ppal.login-main
                             i.fab.fa-paypal
                             span PayPal
                     hr.plx-divider-icon
                     br
                 +minifooter()
-                        a.magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  )
+                        a(href="/prime").magic-outline.plx-button(plx-switcher-parallax="x:0,0, 500"  )
                             i.fas.fa-atom
                             span Prime Info
                                 
             li.backbutton: a.plx-slidenav-previous.plx-position-top-left(plx-slidenav-previous href="#" plx-switcher-item="previous" )
                 
-        a.magic-outline.blue.plx-button.plx-position-absolute.invite-button
+        a(href="/invite").magic-outline.blue.plx-button.plx-position-absolute.invite-button
             i.fab.fa-discord              
             span INVITE ME!
                     
@@ -369,8 +369,8 @@ style
 
         //a.plx-slidenav-next.plx-position-center-right(plx-slidenav-next href="#" plx-switcher-item="next" )
     ul.plx-switcher-nav.plx-dotnav( plx-switcher="connect: #screens;animation: plx-animation-slide-right-medium, plx-animation-slide-left-medium;" , style="justify-content: inherit")
-        li: a 
-        li: a 
-        li: a 
-        li: a 
-        li: a 
+        li: a(href="#")
+        li: a(href="#")
+        li: a(href="#")
+        li: a(href="#")
+        li: a(href="#")
