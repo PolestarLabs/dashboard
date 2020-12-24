@@ -227,7 +227,7 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
           let attachment = ((await axios.get(`https://app.asana.com/api/1.0/attachments/${ev.resource.gid}`,{headers: {Authorization:`Bearer ${cfg.asana}`}}))?.data?.data);
           if (!attachment) return console.log ({attachment});
           let parentTask = await AsanaTask(attachment.parent.gid);
-          description = `**${user.name}** added an attachment to the task [**${task.name}**](${parentTask.permalink_url}).
+          description = `**${user.name}** added an attachment to the task [**${task.name}**](${parentTask.link}).
           📎 [${attachment.name}](${attachment.permanent_url})
           `
           image = {url: attachment.view_url + attachment.name.split('.').pop() };
@@ -238,7 +238,7 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
           
           let story = task.stories?.find(s=>s.gid === ev.resource.gid);
           if (!story) return console.log({story});
-          if (['assigned','unassigned','marked_complete'].includes(story.resource_subtype)) return;
+          if (['assigned','unassigned','marked_complete','attachment_added'].includes(story.resource_subtype)) return;
           author = {
             name: user.name + ` @ 📇 ${task.name}`,
             icon_url: user.avatar,
@@ -264,6 +264,7 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
       if (description.length){      
         
         if(req.query.type?.includes("dev")){
+          return;
           //console.log("TASK".green + " | " + "DEV".blue)
           //console.log( task.name , req.query)
           //if( !task.memberships.some(t=>t.project.name.includes("Dev")) ) return;
