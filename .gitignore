@@ -7,3 +7,6 @@
 package-lock.json
 dist
 *.webm
+*.woff2
+*.woff
+*.ttf
