@@ -1,6 +1,9 @@
 // const DB = require('../database')
 const express = require('express')
+
 const router = express.Router()
+const axios = require('axios');
+const cfg = require('../../config.js')
 const fx = require('../pipelines/globalFunctions.js');
 request = require('request')
 
@@ -116,6 +119,167 @@ router.post('/drift', function (req, res) {
 
     })
   }
+})
+
+const AsanaUser = async id => {
+  let res = await axios.get(`https://app.asana.com/api/1.0/users/${id}`,{headers: {Authorization:`Bearer ${cfg.asana}`}});
+  let preuser = res.data.data;
+  let user = {
+    name: preuser.name,
+    avatar: preuser.photo["image_36x36"]
+  }
+  return user;
+}
+const AsanaStory = async id => ((await axios.get(`https://app.asana.com/api/1.0/tasks/${id}/stories`,{headers: {Authorization:`Bearer ${cfg.asana}`}}))?.data?.data);
+const AsanaTask = async id => {
+  let res = await axios.get(`https://app.asana.com/api/1.0/tasks/${id}`,{headers: {Authorization:`Bearer ${cfg.asana}`}}).catch(err=>null);
+  if (!res) return null;
+  let pretask = res.data.data;
+  let task = {
+    name: pretask.name,
+    completed: pretask.completed,
+    link: pretask.permalink_url,
+    notes: pretask.notes,
+    assignee: pretask.assignee,
+    parent: pretask.parent,
+    workspace: pretask.workspace,
+    tags: pretask.tags,
+    memberships: pretask.memberships,
+    stories: await AsanaStory(id)
+  }
+  return task;
+}
+router.post('/asana', async  (req,res) =>{
+
+  console.log( JSON.stringify(req.body,0,2))
+//console.log( await AsanaUser(req.body?.events[0]?.user?.gid) )
+
+  if(req.headers["x-hook-secret"]){
+    res.setHeader("X-Hook-Secret",req.headers["x-hook-secret"]);
+  }
+
+  req.body?.events?.forEach( async ev=>{
+    if(!ev.user.gid) return console.log({ev},"NO USER");
+
+    let description = "";
+    let author;
+    let fields = []
+    let color = 0xff6978;
+    
+    let user = await AsanaUser(ev.user.gid);
+    let thumbnail = {url: user.avatar}
+
+    if(ev.resource.resource_type == "task" || ev.resource.resource_type == "story" ){
+
+      let task = ev.resource.resource_type == "task" ? await AsanaTask(ev.resource.gid) : await AsanaTask(ev.parent.gid);
+      if (!task) return;
+      let footer = task.assignee ? {
+        text: task.assignee.name + " is assigned to this Task",
+        icon_url: (await AsanaUser(task.assignee.gid))?.avatar
+      } : {
+        text: "This Task has not been assigned to a specific person"
+      }
+
+      if(ev.action == 'changed'){
+
+        
+        if(ev.change.field == "completed" && task.completed == true){ 
+          description = `✅ **${user.name}** marked the task  [**${task.name}**](${task.link}) as **COMPLETE** `  
+          color = 0x27dd86
+        }
+        if(ev.change.field == "completed" && task.completed == false){
+          description = `❎ **${user.name}** has **reverted completion** for the task [**${task.name}**](${task.link}).`  
+          }
+          if(task.parent){
+            fields.push({name:"Parent",value:task.parent.name})
+        }
+        if(ev.change.field == "assignee"){
+          description = `**${user.name}** has assigned the task [**${task.name}**](${task.link}) to **${task.assignee?.name || "nobody"}**.`
+        }
+        if(ev.change.field == "notes"){
+          description = `
+          **${user.name}** has **updated** the task [**${task.name}**](${task.link}).
+          *Description:*
+          \`\`\`
+${task.notes.replace(/\n\n/,"\n") || "[Description Removed]"}
+          \`\`\`
+          
+          `
+        }
+        if(ev.change.field == "tags"){
+          description = `
+          **${user.name}** has **updated** the task [**${task.name}**](${task.link}).
+          *Tags:*
+          \`\`\`
+${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
+          \`\`\`
+          
+          `
+        }
+      }
+      if(ev.action == 'added'){
+        //console.log("ADDED".blue)
+        //console.log( ev )
+        //console.log( "-----------".gray )
+        if(ev.resource.resource_type == "story"){
+          
+          let story = task.stories?.find(s=>s.gid === ev.resource.gid);
+          if (!story) return console.log({story});
+          if (['assigned','unassigned','marked_complete'].includes(story.resource_subtype)) return;
+          author = {
+            name: user.name + ` @ 📇 ${task.name}`,
+            icon_url: user.avatar,
+            url: task.link
+          }
+          thumbnail = {};
+          color= story.type=='system' ? 0xb3c3c7 : 0x48dafd;
+          description = `${story.type=='system'? '⚙️':'💬'} - ${story.text}`;
+          footer = {};
+        }
+        else if( ev.parent.resource_type == "project" || ev.parent.resource_type == "task" ){
+          description = `**${user.name}** has created the task [**${task.name || "UNTITLED TASK"}**](${task.link}).`
+          
+          
+          if(task.parent) fields.push({name:"Parent",value:`[**${task.parent.name}**](https://app.asana.com/0/${task.workspace.gid}/${task.parent.gid})`});        
+          if(task.tags.length) fields.push({name:"Tags",value:  `${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[No Tags]"}` });
+          if(task.notes) fields.push({name:"Description", value: `${task.notes}` , inline:false});
+        }
+      }
+      
+      let embed = {author,description,fields,color,thumbnail,footer};
+      if (description.length){      
+  
+        
+        if(req.query.type?.includes("dev")){
+          //console.log("TASK".green + " | " + "DEV".blue)
+          //console.log( task.name , req.query)
+          //if( !task.memberships.some(t=>t.project.name.includes("Dev")) ) return;
+          sendWebhook({
+            avatar_url: "https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/asana-512.png",
+            username: "ASANA DEV",
+            embeds: [embed]
+            }, "https://discord.com/api/webhooks/789636259713646633/1-AMyV1XYv7FIHLAQCLftAf-jGaea7n6jPSJ8AoFHl8FrIziqzMP_Ni8xUvE4EgFTlCi?wait=true"
+            )
+        }
+        if(req.query.type?.includes("art")){
+          //if( !task.memberships.some(t=>t.project.name.includes("Art")) ) return;
+          sendWebhook({
+            avatar_url: "https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/asana-512.png",
+            username: "ASANA ART",
+            embeds: [embed]
+          }, "https://discord.com/api/webhooks/789626182722650153/vfe3UisVaH72hWRcAOtlB1O0Ka7ufiHzJan4XlBt04_WmUHtZBvIufwipGbreq77yy6I?wait=true"
+          )
+        }
+      }
+      
+     
+    }
+
+  })
+
+
+
+  return res.sendStatus(200);
 })
 
 router.get('/pubhub', function (req, res) {
