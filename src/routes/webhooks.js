@@ -264,7 +264,7 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
       if (description.length){      
         
         if(req.query.type?.includes("dev")){
-          return;
+
           //console.log("TASK".green + " | " + "DEV".blue)
           //console.log( task.name , req.query)
           //if( !task.memberships.some(t=>t.project.name.includes("Dev")) ) return;
