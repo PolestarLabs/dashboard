@@ -53,7 +53,7 @@ function others() {
 
 exports.build = series(css, js, assets, fonts, others);
 exports.buildClean = series(clear, css, js, assets, fonts, others);
-exports.buildNoAssets = series(clear, css, js, fonts, others);
+exports.buildNoAssets = series( css, js, fonts, others);
 
 const imgExt = [
 	"ase",
