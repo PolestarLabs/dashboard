@@ -250,7 +250,7 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
           footer = {};
           
         }
-        else if( ev.parent.resource_type == "project" || ev.parent.resource_type == "task" && ev.resource.resource_type != "attachment" ){
+        else if( ev.parent.resource_type == "project" || ev.parent.resource_type == "task" && task.tags && task.description && ev.resource.resource_type != "attachment" ){
           description = `**${user.name}** has created the task [**${task.name || "UNTITLED TASK"}**](${task.link}).`
           
           
