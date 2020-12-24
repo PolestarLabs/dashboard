@@ -291,6 +291,14 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
           }, "https://discord.com/api/webhooks/789626182722650153/vfe3UisVaH72hWRcAOtlB1O0Ka7ufiHzJan4XlBt04_WmUHtZBvIufwipGbreq77yy6I?wait=true"
           )
         }
+        if(req.query.type?.includes("housekeep")){          
+          sendWebhook({
+            avatar_url: "https://cdn3.iconfinder.com/data/icons/popular-services-brands-vol-2/512/asana-512.png",
+            username: "ASANA KEEPER",
+            embeds: [embed]
+          }, "https://discord.com/api/webhooks/789638561157873735/EsPFmMyCtRnswzJgoZYYKxrQV4TYswF0GUn5L2KRtCL27MqQa75n8FSLD61ynau65RRn?wait=true"
+          )
+        }
       }
       
      
