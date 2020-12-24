@@ -238,7 +238,7 @@ ${task.tags?.map(t=> ` \`[🏷️${t.name}]\` `).join('') || "[Tags Removed]"}
           
           let story = task.stories?.find(s=>s.gid === ev.resource.gid);
           if (!story) return console.log({story});
-          if (['assigned','unassigned','marked_complete','attachment_added'].includes(story.resource_subtype)) return;
+          if (['assigned','unassigned','marked_complete','attachment_added','removed_from_tag','added_to_task'].includes(story.resource_subtype)) return;
           author = {
             name: user.name + ` @ 📇 ${task.name}`,
             icon_url: user.avatar,
