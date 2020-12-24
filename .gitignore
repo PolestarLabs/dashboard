@@ -6,3 +6,4 @@
 *.bak.*
 package-lock.json
 dist
+*.webm
