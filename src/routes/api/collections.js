@@ -98,6 +98,9 @@ async function stickerCount(pack){
 
 const pItemcol = (y) => y.map(x=>x.name[RAR_COLS[x.rarity]]).join('\n');
 
+
+//FIXME[epic=flicky] Crafting Discovery: Items already crafted are still showing as "????"
+
 router.post('/mix', async (req,res) => {
 
     const {pot} = req.body;

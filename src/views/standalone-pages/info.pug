@@ -117,6 +117,18 @@ block content
                 br
                 hr.plx-divider-icon
                 br
+                h3: b Junior Dev Team
+                p Our trainees from associated projects
+                br
+        .plx-uncontainer
+                .stafroll.special
+                    .staffcard(v-for="usr in staffMembers.filter(c=>c.cls=='jun')")
+                        +staffcard
+
+        .plx-container
+                br
+                hr.plx-divider-icon
+                br
                 h3: b Special Thanks 
                 br
         .plx-uncontainer
@@ -311,7 +323,7 @@ block scripts
                  [
                     {
                         id: "88120564400553984",
-                        title: "Creator, BDFL",
+                        title: "Lead Designer, BDFL",
                         dsc: "Designer, Developer, Illustrator and some more",
                         cls: "lead",
                         meta : {loading:true}
@@ -328,14 +340,14 @@ block scripts
                     {
                         id: "124989722668957700",//mitch
                         title: "Developer",
-                        dsc: "Code Contributor",
+                        dsc: "Code Contributor, Javascript Astronaut",
                         cls:"dev",
                         meta : {loading:true}
                     },
                     {
                         id: "253600545972027394",//bsian
                         title: "Developer",
-                        dsc: "Code Review",
+                        dsc: "Code Review, Typescript Evangelizer",
                         cls:"dev",
                         meta : {loading:true}
                     },
@@ -348,17 +360,17 @@ block scripts
 
                     },
                     {
-                        id: "554608299669192725",//bannieh
+                        id: "540940594164400169",//vio
                         title: "Artist",
-                        dsc: "Sticker Illustrations",
+                        dsc: "Illustrator, Concept Artist",
                         cls:"art",
                         meta : {loading:true}
 
                     },
                     {
-                        id: "540940594164400169",//vio
+                        id: "762491688345141249",//bannieh
                         title: "Artist",
-                        dsc: "Background Artist, Concept Artist",
+                        dsc: "Sticker Illustrations",
                         cls:"art",
                         meta : {loading:true}
 
@@ -366,7 +378,7 @@ block scripts
                      {
                         id: "301178935004233729",//42ne
                         title: "Project Manager",
-                        dsc: "Community and Staff Management",
+                        dsc: "Community and Staff Management, Incidental Artist",
                         cls:"dev",
                         meta : {loading:true}
 
@@ -424,6 +436,30 @@ block scripts
                         title: "Support",
                          dsc: "Portuguese",
                         cls:"sup",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "395788326835322882",// 
+                        title: "Junior Dev",
+                        dsc: "ChinoKafuu Bot Team, Spontaneous self-combuster",
+                        cls:"jun",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "268526982222970880",// 
+                        title: "Junior Dev",
+                        dsc: "ChinoKafuu Bot Team",
+                        cls:"jun",
+                        meta : {loading:true}
+
+                    },
+                    {
+                        id: "673677252462116874",// 
+                        title: "Junior Dev",
+                        dsc: "Minigames Experimentalist, Incidental Ghost",
+                        cls:"jun",
                         meta : {loading:true}
 
                     },
