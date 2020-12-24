@@ -215,6 +215,7 @@ ${task.notes.replace(/\n\n/,"\n") || "[Description Removed]"}
           `
         }
         if(ev.change.field == "tags"){
+          return;
           description = `
           **${user.name}** has **updated** the task [**${task.name}**](${task.link}).
           *Tags:*
