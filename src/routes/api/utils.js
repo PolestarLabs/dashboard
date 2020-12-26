@@ -1,6 +1,9 @@
 const express = require('express');
 const router = express.Router();
 
+router.get('/webdaily', async (req, res) => {
+    res.json(req.user);
+})
 
 router.post('/webdaily', async (req,res)=>{
 
