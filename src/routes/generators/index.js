@@ -68,6 +68,11 @@ router.use("/ship.png", async (...args) => {
     return (require('./ship.js'))( ...args);
 })
 
+router.use("/weather.png", async (req,res) => {
+    if(req.query.refresh) delete require.cache[require.resolve('./weather.js')];
+    return (require('./weather.js'))(req,res);
+})
+
 router.use("/repipe/:url", async (req,res) => {
 
     let Picto = require('../../../../bot/core/utilities/Picto')
