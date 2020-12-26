@@ -5,7 +5,7 @@ const router = express.Router();
 router.post('/webdaily', async (req,res)=>{
 
     const userID = req.user.id;
-    
+
     /*
 
         > get userdata
@@ -26,8 +26,9 @@ router.post('/webdaily', async (req,res)=>{
         >
         > return payload with next daily and counter to expiration and whether insurance is in place
 
-    */
+     */
 
+    res.json(req.user);
 })
 
 router.post('/webcraft', async (req,res)=>{
