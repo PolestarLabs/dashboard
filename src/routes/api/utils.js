@@ -4,7 +4,7 @@ const router = express.Router();
 const DAILY_COOLDOWN = 22 * 60 * 60e3;
 
 router.get('/webdaily', async (req, res) => {
-    if (!req.user) res.status(401).json({ message: 'Log in' });
+    if (!req.user) return res.status(401).json({ message: 'Log in' });
     const now = Date.now();
 
     const daily = await DB.users.getFull(req.user.id).then((u) => u.counters.daily);
