@@ -5,7 +5,7 @@ const router = express.Router();
 const DAILY_COOLDOWN = 22 * 60 * 60e3;
 const EXPIRE_COOLDOWN = DAILY_COOLDOWN * 2.1;
 
-function getDailyMeta(daily) {
+function getDailyMeta(daily, req) {
     const now = Date.now();
     const availableIn = Math.max(0, DAILY_COOLDOWN + daily.last - now);
     const streakExpiresIn = Math.max(0, EXPIRE_COOLDOWN + daily.last - now);
@@ -26,7 +26,8 @@ router.get('/webdaily', async (req, res) => {
     if (!req.user) return res.status(401).json({ message: 'Log in' });
 
     const daily = await DB.users.getFull(req.user.id).then((u) => u.counters.daily);
-    const dailyMeta = getDailyMeta(daily);
+    const dailyMeta = getDailyMeta(daily, req);
+    dailyMeta.discordUser = req.user;
     res.json(dailyMeta);
 })
 
