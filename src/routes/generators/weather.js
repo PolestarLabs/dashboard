@@ -2,6 +2,67 @@ const Picto = require('../../../../bot/core/utilities/Picto');
 const express = require('express');
 const router = express.Router();
 
+
+
+const GFX_TABLE = [
+    {   "code": 0,   "condition": "tornado",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "storm",   "shade_day": 3,   "shade_night": 2,   "icon": 9 },
+    {   "code": 1,   "condition": "tropical storm",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "storm",   "shade_day": 3,   "shade_night": 2,   "icon": 9 },
+    {   "code": 2,   "condition": "hurricane",   "sky": "night_thunder",   "sky_night": "night_thunder",   "pollux": "storm",   "shade_day": 2,   "shade_night": 2,   "icon": 9 },
+    {   "code": 3,   "condition": "severe thunderstorms",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "storm",   "shade_day": 3,   "shade_night": 2,   "icon": 8 },
+    {   "code": 4,   "condition": "thunderstorms",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "storm",   "shade_day": 3,   "shade_night": 2,   "icon": 8 },
+    {   "code": 5,   "condition": "mixed rain and snow",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 3,   "shade_night": 2,   "icon": 22 },
+    {   "code": 6,   "condition": "mixed rain and sleet",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 3,   "shade_night": 2,   "icon": 22 },
+    {   "code": 7,   "condition": "mixed snow and sleet",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 3,   "shade_night": 2,   "icon": 22 },
+    {   "code": 8,   "condition": "freezing drizzle",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "light_rain",   "shade_day": 3,   "shade_night": 2,   "icon": 12 },
+    {   "code": 9,   "condition": "drizzle",   "sky": "blue_rain",   "sky_night": "night_rain",   "sky6": "twilight_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 1,   "shade6": 4,   "icon": 3 },
+    {   "code": 10,   "condition": "freezing rain",   "sky": "lilac_rain",   "sky_night": "night_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 13 },
+    {   "code": 11,   "condition": "showers",   "sky": "blue_rain",   "sky_night": "night_rain",   "sky6": "twilight_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "shade6": 4,   "icon": 16 },
+    {   "code": 12,   "condition": "rain",   "sky": "overcast_rain",   "sky_night": "night_rain",   "sky6": "twilight_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "shade6": 4,   "icon": 14 },
+    {   "code": 13,   "condition": "snow flurries",   "sky": "blue_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 11 },
+    {   "code": 14,   "condition": "light snow showers",   "sky": "blue_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 12 },
+    {   "code": 15,   "condition": "blowing snow",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 5 },
+    {   "code": 16,   "condition": "snow",   "sky": "blue_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 11 },
+    {   "code": 17,   "condition": "hail",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "storm",   "shade_day": 0,   "shade_night": 2,   "icon": 7 },
+    {   "code": 18,   "condition": "sleet",   "sky": "blue_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 4 },
+    {   "code": 19,   "condition": "dust",   "sky": "dusk",   "sky_night": "night",   "sky6": "dusk",   "pollux": "storm",   "shade_day": 1,   "shade_night": 2,   "icon": 10 },
+    {   "code": 20,   "condition": "foggy",   "sky": "lilac_foggy",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 17 },
+    {   "code": 21,   "condition": "haze",   "sky": "lilac_foggy",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 17 },
+    {   "code": 22,   "condition": "smoky",   "sky": "lilac_foggy",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 17 },
+    {   "code": 23,   "condition": "blustery",   "sky": "lilac_foggy",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 17 },
+    {   "code": 24,   "condition": "windy",   "sky": "overcast_clouds",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 10 },
+    {   "code": 25,   "condition": "cold",   "sky": "blue",   "sky_night": "night",   "pollux": "cold",   "shade_day": 0,   "shade_night": 2,   "icon": 4 },
+    {   "code": 26,   "condition": "cloudy",   "sky": "overcast_clouds",   "sky_night": "night_clouds",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15 },
+    {   "code": 27,   "condition": "mostly cloudy (night)",   "sky": "lilac_foggy",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 21 },
+    {   "code": 28,   "condition": "mostly cloudy (day)",   "sky": "overcast_clouds",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15 },
+    {   "code": 29,   "condition": "partly cloudy (night)",   "sky": "night_clouds",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 21 },
+    {   "code": 30,   "condition": "partly cloudy (day)",   "sky": "cyan_clouds",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15 },
+    {   "code": 31,   "condition": "clear (night)",   "sky": "night",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 2 },
+    {   "code": 32,   "condition": "sunny",   "sky": "cyan",   "sky_night": "night",   "sky6": "dusk",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "shade6": 1,   "icon": 6 },
+    {   "code": 33,   "condition": "fair (night)",   "sky": "lilac",   "sky_night": "night",   "sky6": "dusk",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "shade6": 1,   "icon": 21 },
+    {   "code": 34,   "condition": "fair (day)",   "sky": "blue",   "sky_night": "night",   "sky6": "dusk",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15 },
+    {   "code": 35,   "condition": "mixed rain and hail",   "sky": "overcast_rain",   "sky_night": "night_rain",   "sky6": "twilight_rain",   "pollux": "rain",   "shade_day": 0,   "shade_night": 2,   "shade6": 4,   "icon": 7 },
+    {   "code": 36,   "condition": "hot",   "sky": "cyan",   "sky_night": "night",   "sky6": "dusk_sun",   "pollux": "hot",   "shade_day": 0,   "shade_night": 2,   "shade6": 4,   "icon": 6 },
+    {   "code": 37,   "condition": "isolated thunderstorms",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "rain",   "shade_day": 0,   "shade_night": 2,   "icon": 8 },
+    {   "code": 38,   "condition": "scattered thunderstorms",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "storm",   "shade_day": 0,   "shade_night": 2,   "icon": 8 },
+    {   "code": 39,   "condition": "scattered showers (day)",   "sky": "blue_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 16 },
+    {   "code": 40,   "condition": "heavy rain",   "sky": "overcast_rain",   "sky_night": "night_rain",   "sky6": "twilight_rain",   "pollux": "rain",   "shade_day": 0,   "shade_night": 2,   "shade6": 4,   "icon": 14 },
+    {   "code": 41,   "condition": "scattered snow showers (day)",   "sky": "blue_rain",   "sky6": "twilight_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 22 },
+    {   "code": 42,   "condition": "heavy snow",   "sky": "overcast_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 22 },
+    {   "code": 43,   "condition": "blizzard",   "sky": "overcast_snow",   "pollux": "storm",   "shade_day": 0,   "shade_night": 2,   "icon": 5 },
+    {   "code": 44,   "condition": "not available",   "sky": "night_thunder",   "pollux": "storm",   "shade_day": 0,   "shade_night": 2,   "icon": 5 },
+    {   "code": 45,   "condition": "scattered showers (night)",   "sky": "night_rain",   "pollux": "storm",   "shade_day": 0,   "shade_night": 2,   "icon": 20 },
+    {   "code": 46,   "condition": "scattered snow showers (night)",   "sky": "night_snow",   "pollux": "storm",   "shade_day": 0,   "shade_night": 2,   "icon": 12 },
+    {   "code": 47,   "condition": "scattered thundershowers",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "storm",   "shade_day": 0,   "shade_night": 2,   "icon": 8 }
+   ]
+
+
+
+
+
+
+
+
+
 const YAHOO_CODES = [
   
   "tornado",
@@ -55,90 +116,24 @@ const YAHOO_CODES = [
 "droplets"  
 ]
   
-
-const WeatherCache = new Map();
-
- 
-const ASSETS = {
-    //BASE
-    //frame: '/build/weather/frame.png'    
-    template: '/build/weather/template.png'
-    //POLLUXES
-    ,plx_kinda_hot: '/build/weather/polluxes/kinda_hot.png'
-    //SKYLINES
-    ,sky_clear: '/build/weather/skylines/clear.png'
-    ,sky_cloudy: '/build/weather/skylines/cloudy.png'
-    ,sky_droplets: '/build/weather/skylines/droplets.png'
-    ,sky_flake: '/build/weather/skylines/flake.png'
-    ,sky_fog: '/build/weather/skylines/fog.png'
-    ,sky_snow:'/build/weather/skylines/heavy snow.png'
-    ,sky_lightrain: '/build/weather/skylines/lightrain.png'
-    ,sky_cloudy:'/build/weather/skylines/night cloudy.png'
-    ,sky_overcast: '/build/weather/skylines/overcast.png'
-    ,sky_showers :'/build/weather/skylines/showers.png'
-    ,sky_snow_showers:'/build/weather/skylines/snow showers.png'
-    ,sky_snow: '/build/weather/skylines/snow.png'
-    ,sky_storm :'/build/weather/skylines/storm.png'
-    ,sky_sunny: '/build/weather/skylines/sunny.png'
-    ,sky_thundersnow :'/build/weather/skylines/thundersnow.png'
-    ,sky_Thunderstorms :'/build/weather/skylines/Thunderstorms.png'
-    ,sky_tornado: '/build/weather/skylines/tornado.png'
-    ,sky_wind: '/build/weather/skylines/wind.png'
-    
-    //BACKDROPS
-    ,bg_deepskyblue: '/build/weather/bg_deepskyblue.png'
-    ,bg_dusk: '/build/weather/bg_dusk.png'
-    ,bg_midnight: '/build/weather/bg_midnight.png'
-    ,bg_palelune: '/build/weather/bg_palelune.png'
-    ,bg_violettwilight: '/build/weather/bg_violettwilight.png'
-    ,bg_winternoon: '/build/weather/bg_winternoon.png'
-
-    // ICONS
-    ,clear: '/build/weather/icons_new/clear.png'
-    ,cloudy: '/build/weather/icons_new/cloudy.png'
-    ,droplets: '/build/weather/icons_new/droplets.png'
-    ,frost: '/build/weather/icons_new/frost.png'
-    ,'heavy snow': '/build/weather/icons_new/heavy snow.png'
-    ,'night cloudy': '/build/weather/icons_new/night cloudy.png'
-    ,'night partly cloudy with rain': '/build/weather/icons_new/night partly cloudy with rain.png'
-    ,overcast: '/build/weather/icons_new/overcast.png'
-    ,'partly cloudy with rain': '/build/weather/icons_new/partly cloudy with rain.png'
-    ,rain: '/build/weather/icons_new/rain.png'
-    ,showers: '/build/weather/icons_new/showers.png'
-    ,'snow showers': '/build/weather/icons_new/snow showers.png'
-    ,snow: '/build/weather/icons_new/snow.png'
-    ,storm: '/build/weather/icons_new/storm.png'
-    ,sunny: '/build/weather/icons_new/sunny.png'
-    ,thundersnow: '/build/weather/icons_new/thundersnow.png'
-    ,Thunderstorms: '/build/weather/icons_new/thunderstorms.png'
-    ,tornado: '/build/weather/icons_new/tornado.png'
-    ,wind: '/build/weather/icons_new/wind.png'
-   
-   
-    //problematic ones
-    ,"partly cloudy with rain": '/build/weather/skylines/partly cloudy with rain.png'
-    ,"night partly cloudy with rain": '/build/weather/skylines/night partly cloudy with rain.png'
-    
-}
-
 const STROKE_COLOR = "#1b1c25";
-
-Object.keys(ASSETS).forEach(item=> WeatherCache.set(item, Picto.getCanvas(HOST + ASSETS[item] ) ));
+const DEFAULT_POLLUX = "kinda_hot";
+const DEFAULT_SKY = "blue";
 
 function inoffensivePolygon(stroke,fill,round){
-    const canvas = Picto.new(160,100);
+    const canvas = Picto.new(320,200);
     const ctx = canvas.getContext('2d');
 
     ctx.fillStyle = fill || "red";
     ctx.strokeStyle = stroke || "blue";
     if (round) ctx.lineJoin = "round";
     
-    ctx.lineWidth = 15;
+    ctx.lineWidth = 30;
     ctx.beginPath();
-    ctx.moveTo(15, 7);
-    ctx.lineTo(139, 7);
-    ctx.lineTo(140, 68);
-    ctx.lineTo(8,52);
+    ctx.moveTo(15*2, 7);
+    ctx.lineTo(139*2, 7);
+    ctx.lineTo(140*2, 68*2);
+    ctx.lineTo(8*2,52*2);
     ctx.closePath();
     ctx.stroke();
     ctx.fill();
@@ -163,37 +158,41 @@ function aggressivePolygon(stroke,fill,round,bkg){
     ctx.closePath();
     ctx.fill();
     if(bkg){
+        ctx.globalAlpha = .5
         console.log({bkg})
         ctx.save();
         ctx.clip();
         ctx.drawImage(bkg, 425-288, 0,288,144);
         ctx.closePath();
         ctx.restore();
+        ctx.globalAlpha = 1
     }
     
     ctx.stroke();
     return canvas;
 }
-function createMinicard(temp,unit,day,icon){
-    const canvas = Picto.new(155,100);
+function createMinicard(temp,unit="C",day,icon){
+    const canvas = Picto.new(310,200);
     const ctx = canvas.getContext('2d');
 
-    ctx.drawImage(inoffensivePolygon(STROKE_COLOR,STROKE_COLOR),10,20);
+    ctx.drawImage(inoffensivePolygon(STROKE_COLOR,STROKE_COLOR),20,40);
     ctx.drawImage(inoffensivePolygon(STROKE_COLOR, "#3347c0"),0,0);
 
-    let TEMP = Picto.tag(ctx,parseInt(temp) + "°","italic 900 30pt 'Panton Black' ",'white').item;
-    let DAY = Picto.tag(ctx,day ,"900 16pt 'AvenirNextRoundedW01-Bold' ",'#EEEFFFAF').item;
+    let TEMP_MAX = Picto.tag(ctx,  parseInt(temp[0]||0) + "° △","italic 900 36pt 'Panton Black' ",'white').item;
+    let TEMP_MIN = Picto.tag(ctx,  parseInt(temp[1]||0) + "° ▽","italic 900 36pt 'Panton Black' ",'white').item;
+    let DAY = Picto.tag(ctx,day ,"900 28pt 'AvenirNextRoundedW01-Bold' ",'#EEEFFFAF').item;
 
-    ctx.drawImage( TEMP, 15, 12 );
+    ctx.drawImage( TEMP_MAX, 177-TEMP_MAX.width, 16 );
+    ctx.drawImage( TEMP_MIN, 170-TEMP_MIN.width, 8+TEMP_MAX.height );
     ctx.rotate( 0.08235987755982988 );
-    ctx.drawImage( DAY, 23, 52 );
-    ctx.drawImage( icon, 90, 0 ,50,50);
+    ctx.drawImage( DAY, 46, 109 );
+    ctx.drawImage( icon, 180, 0 ,100,100);
 
 
     return canvas;
     
 }
-function createCountryTag(city,country,flag,bkg,time){
+function createCountryTag(city,country,flag,bkg,time="12:59 PM"){
     const canvas = Picto.new(480,155);
     const ctx = canvas.getContext('2d');
     ctx.drawImage( aggressivePolygon(STROKE_COLOR,STROKE_COLOR) , 20,15);
@@ -201,6 +200,7 @@ function createCountryTag(city,country,flag,bkg,time){
     
     
     let COUNTRY = Picto.tag(ctx,country.toUpperCase() ,"900 14pt 'AvenirNextRoundedW01-Regular' ",'#DEDEF0',{style: STROKE_COLOR, line: 8}).item;
+    let TIME = Picto.tag(ctx, time ,"900 14pt 'AvenirNextRoundedW01-Regular' ",'#DEDEF0',{style: STROKE_COLOR, line: 8}).item;
     let CITY = Picto.tag(ctx,city ,"900 28pt 'AvenirNextRoundedW01-Bold' ",'#FFF',{style: STROKE_COLOR, line: 10}).item;
     let CITY_SHADOW = Picto.tag(ctx,city ,"900 28pt 'AvenirNextRoundedW01-Bold' ",STROKE_COLOR,{style: STROKE_COLOR, line: 10}).item;
     
@@ -211,6 +211,8 @@ function createCountryTag(city,country,flag,bkg,time){
     ctx.drawImage( CITY, 113, 8, Math.min(CITY.width, 310), CITY.height) ;
     ctx.rotate( 0.02235987755982988*1.8 );
     ctx.drawImage( COUNTRY, 123, 55, Math.min(COUNTRY.width, 310), 25) ;
+    Picto.roundRect(ctx,350,65,90,30,15,STROKE_COLOR)
+    ctx.drawImage( TIME, 352, 68,TIME.width,24) ;
 
 
     return canvas;
@@ -219,93 +221,141 @@ function createCountryTag(city,country,flag,bkg,time){
 router.get('/', async (req,res)=>{
     
     if (!req.query.furball) return res.status(400).json("The cat is missing");
-    
     let payload;
     try{
         payload = JSON.parse(new Buffer( req.query.furball , 'base64').toString('utf-8'));
     }catch(err){
         return res.status(400).json("This is not my cat!");        
     }
+    
 
+    const CONDITION = GFX_TABLE.find( c => c.code === payload.code );
+
+    if (!CONDITION) CONDITION =  {
+        condition: "sunny",
+        sky: "cyan",
+        sky_night: "night",
+        pollux: "default",
+        shade_day: 0,
+        shade_night: 2,
+        shade6: 1
+    };
+    
+    
+    const ISO = payload.country.iso.toLowerCase();
+    const COUNTRY = payload.country.name;
+    const COUNTRY_FLAG = COUNTRY.toLowerCase().replace(/ +/,"-");
+    const LOCAL_TIME = new Date().toLocaleTimeString(Date.now(), {hour: '2-digit', minute: '2-digit', timeZone: payload.timezone_id });
+    const TEMPERATURE = payload.curr || payload.temp || 0;
+    const T_UNIT = payload.unit || "C"
+    
+   
+
+    const localTimeParsed = new Date( "1/1/2020 " + LOCAL_TIME);
+    const sunsetParsed = new Date( "1/1/2020 " + payload.sunset);
+    const sunriseParsed = new Date( "1/1/2020 " + payload.sunrise);
+    const beforeSunset   = sunsetParsed > localTimeParsed; 
+    const pastSunrise  = new Date( "1/1/2020 " + payload.sunrise) < localTimeParsed;
+    const duskInterval = [new Date( new Date(sunsetParsed).setHours(sunsetParsed.getHours() - 1)), new Date(new Date(sunsetParsed).setHours(sunsetParsed.getHours() + 1))];
+    
+    const isNight = !beforeSunset || !pastSunrise;
+    const isDusk  = localTimeParsed > duskInterval[0] && localTimeParsed < duskInterval[1];
+
+    console.log({
+        LOCAL_TIME,
+        localTimeParsed,
+sunsetParsed,
+sunriseParsed,
+beforeSunset,
+pastSunrise,
+duskInterval,
+isNight,
+isDusk,
+ 
+    })
+    
+    const SKY = isDusk 
+        ? CONDITION.sky6 || CONDITION.sky
+        : isNight
+            ? CONDITION.sky_night || CONDITION.sky
+            : CONDITION.sky || DEFAULT_SKY;
+
+    const SHADE = isDusk 
+        ? CONDITION.shade6 || CONDITION.shade_day
+        : isNight
+            ? CONDITION.shade_night || CONDITION.shade_day
+            : CONDITION.shade_day || 0;
+    
+    const W_POLLUX = CONDITION.pollux;
+    // TODO: Add temperature variation;
+
+    
     
     const canvas = Picto.new(800,600);
     const ctx = canvas.getContext('2d');
-console.log(payload)
-    const ISO = payload.country.iso.toLowerCase();
-
-    //let _TEMPLATE = await WeatherCache.get('template');
-    let _FLAG     = await Picto.getCanvas(HOST + `/build/guessing/guessflags/${ payload.country.name.toLowerCase().replace(/ +/,"-") }.png`);
-    let _PREPLX     = await Picto.getCanvas(HOST + `/build/weather/precomps/${ "kinda_hot_deep" }.png`);
-    let _BKG     = await Picto.getCanvas(HOST + `/build/weather/skylines/${  YAHOO_CODES[payload.code] || 'clear'}.png`);
-    let _POLY     = await WeatherCache.get('plx_kinda_hot');
-    let _MAP      = await Picto.getCanvas(HOST + `/build/world/${ISO.toLowerCase()}/512.png`);
-    let _ICON     = await WeatherCache.get( YAHOO_CODES[payload.code] );
-    let _MINI1     = await WeatherCache.get( YAHOO_CODES[payload.week[0].code] );
-    let _MINI2     = await WeatherCache.get( YAHOO_CODES[payload.week[1].code]  );
-    let _MINI3     = await WeatherCache.get( YAHOO_CODES[payload.week[2].code]  );
-    let _BACKDROP = await WeatherCache.get('bg_deepskyblue');
-    console.log(YAHOO_CODES[payload.code] )
-    console.table({_MINI1,_MINI2,_MINI3})
-
-    /*
-        droplets_purple.png
-        kinda_hot_bright.png
-        kinda_hot_deep.png
-        kinda_hot_dusk.png
-        light_rain_day.png
-        light_rain_dusk.png
-        light_rain_night.png
-    */
-
-    //ctx.drawImage(_TEMPLATE,0,0);
-    //ctx.drawImage(_BACKDROP,0,0);
-    ctx.drawImage(_PREPLX,0,0);
     
+    const [_MAP, _FLAG, _SKY, _POLY, _ICON, _MINI1, _MINI2, _MINI3, _SKYLINE] = await Promise.all([
+         Picto.getCanvas(HOST + `/build/world/${ISO.toLowerCase()}/512.png`)
+        ,Picto.getCanvas(HOST + `/build/guessing/guessflags/${ COUNTRY_FLAG }.png`)
+        ,Picto.getCanvas(HOST + `/build/weather/backdrops/${  SKY  }.png`)
+        ,Picto.getCanvas(HOST + `/build/weather/polluxes/${ W_POLLUX }-${ SHADE }.png`)
+        ,Picto.getCanvas(HOST + `/build/weather/icons_new/${ CONDITION.icon }.png`)
+        ,Picto.getCanvas(HOST + `/build/weather/icons_new/${ GFX_TABLE.find(c=>c.code === payload.week[0].code).icon }.png`)
+        ,Picto.getCanvas(HOST + `/build/weather/icons_new/${ GFX_TABLE.find(c=>c.code === payload.week[1].code).icon }.png`)
+        ,Picto.getCanvas(HOST + `/build/weather/icons_new/${ GFX_TABLE.find(c=>c.code === payload.week[2].code).icon }.png`)
+        ,Picto.getCanvas(HOST + `/build/weather/skylines/${  CONDITION.skyline || CONDITION.icon }.png`)
+    ]);
+
+
+    ctx.drawImage(_SKY,0,0);
+    
+    // DRAW MAP
     ctx.save();
     ctx.globalAlpha =.4
     ctx.globalCompositeOperation = 'overlay'
     ctx.drawImage( _MAP,  325,105,350,350);
     ctx.restore();
+
+    //DRAW POLLUX
+    ctx.drawImage(_POLY,0,0);
+    
     ctx.save();
-    
-    
+
+    // DRAW WEEK CARDS
     ctx.translate(610,170)
     ctx.rotate( -.19235987755982988 );
-    let avgTemp1 = ((payload.week[0].high||0) + (payload.week[0].low||0)) / 2;
-    ctx.drawImage(createMinicard( avgTemp1,"C", payload.week[0].day.slice(0,3),_MINI1 ),0,0);
+    ctx.drawImage(createMinicard( [payload.week[0].high,payload.week[0].low], T_UNIT, payload.week[0].day,_MINI1 ),0,0,155,100);
     
     ctx.translate( 10,85);
     ctx.rotate( .19235987755982988 );
-    let avgTemp2 = ((payload.week[1].high||0) + (payload.week[1].low||0)) / 2;
-    ctx.drawImage(createMinicard( avgTemp2,"C", payload.week[1].day.slice(0,3),_MINI2 ),0,0);
+    ctx.drawImage(createMinicard( [payload.week[1].high,payload.week[1].low], T_UNIT, payload.week[1].day,_MINI2 ),0,0,155,100);
     
     ctx.translate( 10,85);
     ctx.rotate( .19235987755982988 );
-    let avgTemp3 = ((payload.week[2].high||0) + (payload.week[2].low||0)) / 2;
-    ctx.drawImage(createMinicard( avgTemp3,"C", payload.week[2].day.slice(0,3),_MINI3 ),0,0);
+    ctx.drawImage(createMinicard( [payload.week[2].high,payload.week[2].low], T_UNIT, payload.week[2].day,_MINI3 ),0,0,155,100);
     
     ctx.restore();
     
+    // DRAW LOCATION CARD
     ctx.rotate( -.05835987755982988 );
-    ctx.drawImage(createCountryTag( payload.city,payload.country.name,_FLAG,_BKG,"4:15 AM"),-40,490);
+    ctx.drawImage(createCountryTag( payload.city,payload.country.name,_FLAG,_SKYLINE,LOCAL_TIME),-40,490);
     ctx.restore();
     
-    const tempNow = payload.curr || payload.temp || 0;
-
-    let TEMP = Picto.tag(ctx,tempNow ,"italic 900 120pt 'Panton Black' ",'#FFF',{style: STROKE_COLOR, line: 25}).item;
-    let TEMP_SHADOW = Picto.tag(ctx,tempNow ,"italic 900 120pt 'Panton Black' ",STROKE_COLOR,{style: STROKE_COLOR, line: 25}).item;
     
+    // DRAW TEMP
+    let TEMP = Picto.tag(ctx,TEMPERATURE ,"italic 900 120pt 'Panton Black' ",'#FFF',{style: STROKE_COLOR, line: 25}).item;
+    let TEMP_SHADOW = Picto.tag(ctx,TEMPERATURE ,"italic 900 120pt 'Panton Black' ",STROKE_COLOR,{style: STROKE_COLOR, line: 25}).item;
     ctx.drawImage( TEMP_SHADOW, 680+10 -TEMP.width ,470+10);
     ctx.drawImage( TEMP,        680 -TEMP.width ,470);
     
-    TEMP = Picto.tag(ctx,"°C" ,"italic 900 62pt 'Panton Black' ",'#FFF',{style: STROKE_COLOR, line: 25}).item;
-    TEMP_SHADOW = Picto.tag(ctx,"°C" ,"italic 900 62pt 'Panton Black' ",STROKE_COLOR,{style: STROKE_COLOR, line: 25}).item;
+    // RECYCLE VAR FOR UNIT
+    TEMP = Picto.tag(ctx,"°"+T_UNIT ,"italic 900 62pt 'Panton Black' ",'#FFF',{style: STROKE_COLOR, line: 25}).item;
+    TEMP_SHADOW = Picto.tag(ctx,"°"+T_UNIT ,"italic 900 62pt 'Panton Black' ",STROKE_COLOR,{style: STROKE_COLOR, line: 25}).item;
+    ctx.drawImage( TEMP_SHADOW, 630+10 ,530+10);
+    ctx.drawImage( TEMP,        630 ,530);
     
-    ctx.drawImage( TEMP_SHADOW, 620+10 ,530+10);
-    ctx.drawImage( TEMP,        620 ,530);
-    
-    console.log(YAHOO_CODES[payload.code])
-    ctx.drawImage( _ICON,  600,35,180,180);
+    // CONDITION
+    ctx.drawImage( _ICON,  580,20,200,200);
 
     
 
