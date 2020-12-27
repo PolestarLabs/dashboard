@@ -3,6 +3,10 @@ const EventEmitter = require('events');
 const path = require('path')
 const fs = require('fs')
 const Canvas = require('canvas') 
+
+module.exports = async function(req,res){
+
+
     SERIES = req.params.pack;
     A =  req.params.A;
     B =  req.params.B;
@@ -159,4 +163,4 @@ const Canvas = require('canvas')
 
         return ctx;
     }
-    
+}

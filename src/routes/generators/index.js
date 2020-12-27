@@ -49,7 +49,7 @@ router.use("/hangmaid", async (req,res) => {
 
 
 router.use(["/booster/:pack/:B/:A/:Anew/:Bnew/output.gif",], async (...args) => {
-    return (require('./event/booster.js'))( ...args);
+    return (require('./booster.js'))( ...args);
 })
 
 router.use("/event/furnace.png", async (...args) => {
