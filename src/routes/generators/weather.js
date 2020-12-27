@@ -2,18 +2,71 @@ const Picto = require('../../../../bot/core/utilities/Picto');
 const express = require('express');
 const router = express.Router();
 
+const YAHOO_CODES = [
+  
+  "tornado",
+"tornado",
+"tornado",
+"Thunderstorms",
+"Thunderstorms",
+"snow",
+"snow",
+"snow",
+"snow",
+"lightrain",
+"snow",
+"showers",
+"showers",
+"storm",
+"snow",
+"storm",
+"snow",
+"heavy snow",
+"snow",
+"wind",
+"fog",
+"fog",
+"fog",
+"wind",
+"wind",
+"flake",
+"cloudy",
+"night cloudy",
+"cloudy",
+"night cloudy",
+"overcast",
+"clear",
+"sunny",
+"clear",
+"sunny",
+"snow showers",
+"sunny",
+"Thunderstorms",
+"Thunderstorms",
+"Thunderstorms",
+"partly cloudy with rain",
+"thundersnow",
+"snow",
+"thundersnow",
+"overcast",
+"thunderstorms",
+"snow",
+"thunderstorms",
+"droplets"  
+]
+  
+
 const WeatherCache = new Map();
 
  
 const ASSETS = {
     //BASE
-    frame: '/build/weather/frame.png'
-    ,miniframe1: '/build/weather/miniframe1.png'
-    ,template: '/build/weather/template.png'
+    //frame: '/build/weather/frame.png'    
+    template: '/build/weather/template.png'
     //POLLUXES
     ,plx_kinda_hot: '/build/weather/polluxes/kinda_hot.png'
     //SKYLINES
-    ,sky_clear: '/:build/weather/skylines/clear.png'
+    ,sky_clear: '/build/weather/skylines/clear.png'
     ,sky_cloudy: '/build/weather/skylines/cloudy.png'
     ,sky_droplets: '/build/weather/skylines/droplets.png'
     ,sky_flake: '/build/weather/skylines/flake.png'
@@ -39,6 +92,28 @@ const ASSETS = {
     ,bg_palelune: '/build/weather/bg_palelune.png'
     ,bg_violettwilight: '/build/weather/bg_violettwilight.png'
     ,bg_winternoon: '/build/weather/bg_winternoon.png'
+
+    // ICONS
+    ,clear: '/build/weather/icons_new/clear.png'
+    ,cloudy: '/build/weather/icons_new/cloudy.png'
+    ,droplets: '/build/weather/icons_new/droplets.png'
+    ,frost: '/build/weather/icons_new/frost.png'
+    ,'heavy snow': '/build/weather/icons_new/heavy snow.png'
+    ,'night cloudy': '/build/weather/icons_new/night cloudy.png'
+    ,'night partly cloudy with rain': '/build/weather/icons_new/night partly cloudy with rain.png'
+    ,overcast: '/build/weather/icons_new/overcast.png'
+    ,'partly cloudy with rain': '/build/weather/icons_new/partly cloudy with rain.png'
+    ,rain: '/build/weather/icons_new/rain.png'
+    ,showers: '/build/weather/icons_new/showers.png'
+    ,'snow showers': '/build/weather/icons_new/snow showers.png'
+    ,snow: '/build/weather/icons_new/snow.png'
+    ,storm: '/build/weather/icons_new/storm.png'
+    ,sunny: '/build/weather/icons_new/sunny.png'
+    ,thundersnow: '/build/weather/icons_new/thundersnow.png'
+    ,Thunderstorms: '/build/weather/icons_new/thunderstorms.png'
+    ,tornado: '/build/weather/icons_new/tornado.png'
+    ,wind: '/build/weather/icons_new/wind.png'
+   
    
     //problematic ones
     ,"partly cloudy with rain": '/build/weather/skylines/partly cloudy with rain.png'
@@ -106,12 +181,13 @@ function createMinicard(temp,unit,day,icon){
     ctx.drawImage(inoffensivePolygon(STROKE_COLOR,STROKE_COLOR),10,20);
     ctx.drawImage(inoffensivePolygon(STROKE_COLOR, "#3347c0"),0,0);
 
-    let TEMP = Picto.tag(ctx,temp + "°","italic 900 30pt 'Panton Black' ",'white').item;
+    let TEMP = Picto.tag(ctx,parseInt(temp) + "°","italic 900 30pt 'Panton Black' ",'white').item;
     let DAY = Picto.tag(ctx,day ,"900 16pt 'AvenirNextRoundedW01-Bold' ",'#EEEFFFAF').item;
 
     ctx.drawImage( TEMP, 15, 12 );
     ctx.rotate( 0.08235987755982988 );
     ctx.drawImage( DAY, 23, 52 );
+    ctx.drawImage( icon, 90, 0 ,50,50);
 
 
     return canvas;
@@ -142,17 +218,35 @@ function createCountryTag(city,country,flag,bkg,time){
 
 router.get('/', async (req,res)=>{
     
+    if (!req.query.furball) return res.status(400).json("The cat is missing");
+    
+    let payload;
+    try{
+        payload = JSON.parse(new Buffer( req.query.furball , 'base64').toString('utf-8'));
+    }catch(err){
+        return res.status(400).json("This is not my cat!");        
+    }
 
-
+    
     const canvas = Picto.new(800,600);
     const ctx = canvas.getContext('2d');
+console.log(payload)
+    const ISO = payload.country.iso.toLowerCase();
 
-    let _TEMPLATE = await WeatherCache.get('template');
-    let _FLAG     = await Picto.getCanvas(HOST + "/build/guessing/guessflags/south-korea.png");
-    let _PREPLX     = await Picto.getCanvas(HOST + "/build/weather/precomps/light_rain_day.png");
+    //let _TEMPLATE = await WeatherCache.get('template');
+    let _FLAG     = await Picto.getCanvas(HOST + `/build/guessing/guessflags/${ payload.country.name.toLowerCase().replace(/ +/,"-") }.png`);
+    let _PREPLX     = await Picto.getCanvas(HOST + `/build/weather/precomps/${ "kinda_hot_deep" }.png`);
+    let _BKG     = await Picto.getCanvas(HOST + `/build/weather/skylines/${  YAHOO_CODES[payload.code] || 'clear'}.png`);
     let _POLY     = await WeatherCache.get('plx_kinda_hot');
+    let _MAP      = await Picto.getCanvas(HOST + `/build/world/${ISO.toLowerCase()}/512.png`);
+    let _ICON     = await WeatherCache.get( YAHOO_CODES[payload.code] );
+    let _MINI1     = await WeatherCache.get( YAHOO_CODES[payload.week[0].code] );
+    let _MINI2     = await WeatherCache.get( YAHOO_CODES[payload.week[1].code]  );
+    let _MINI3     = await WeatherCache.get( YAHOO_CODES[payload.week[2].code]  );
     let _BACKDROP = await WeatherCache.get('bg_deepskyblue');
-    let _BKG      = await WeatherCache.get('sky_lightrain');
+    console.log(YAHOO_CODES[payload.code] )
+    console.table({_MINI1,_MINI2,_MINI3})
+
     /*
         droplets_purple.png
         kinda_hot_bright.png
@@ -163,40 +257,57 @@ router.get('/', async (req,res)=>{
         light_rain_night.png
     */
 
-    ctx.drawImage(_TEMPLATE,0,0);
+    //ctx.drawImage(_TEMPLATE,0,0);
     //ctx.drawImage(_BACKDROP,0,0);
     ctx.drawImage(_PREPLX,0,0);
     
     ctx.save();
+    ctx.globalAlpha =.4
+    ctx.globalCompositeOperation = 'overlay'
+    ctx.drawImage( _MAP,  325,105,350,350);
+    ctx.restore();
+    ctx.save();
+    
     
     ctx.translate(610,170)
     ctx.rotate( -.19235987755982988 );
-    ctx.drawImage(createMinicard(21,"C","mon"),0,0);
+    let avgTemp1 = ((payload.week[0].high||0) + (payload.week[0].low||0)) / 2;
+    ctx.drawImage(createMinicard( avgTemp1,"C", payload.week[0].day.slice(0,3),_MINI1 ),0,0);
+    
     ctx.translate( 10,85);
     ctx.rotate( .19235987755982988 );
-    ctx.drawImage(createMinicard(25,"C","tue"),0,0);
+    let avgTemp2 = ((payload.week[1].high||0) + (payload.week[1].low||0)) / 2;
+    ctx.drawImage(createMinicard( avgTemp2,"C", payload.week[1].day.slice(0,3),_MINI2 ),0,0);
+    
     ctx.translate( 10,85);
     ctx.rotate( .19235987755982988 );
-    ctx.drawImage(createMinicard(17,"C","wed"),0,0);
+    let avgTemp3 = ((payload.week[2].high||0) + (payload.week[2].low||0)) / 2;
+    ctx.drawImage(createMinicard( avgTemp3,"C", payload.week[2].day.slice(0,3),_MINI3 ),0,0);
     
     ctx.restore();
     
     ctx.rotate( -.05835987755982988 );
-    ctx.drawImage(createCountryTag("Seoul","South Korea",_FLAG,_BKG,"4:15 AM"),-40,490);
+    ctx.drawImage(createCountryTag( payload.city,payload.country.name,_FLAG,_BKG,"4:15 AM"),-40,490);
     ctx.restore();
     
-    let TEMP = Picto.tag(ctx,"37" ,"italic 900 120pt 'Panton Black' ",'#FFF',{style: STROKE_COLOR, line: 25}).item;
-    let TEMP_SHADOW = Picto.tag(ctx,"37" ,"italic 900 120pt 'Panton Black' ",STROKE_COLOR,{style: STROKE_COLOR, line: 25}).item;
+    const tempNow = payload.curr || payload.temp || 0;
+
+    let TEMP = Picto.tag(ctx,tempNow ,"italic 900 120pt 'Panton Black' ",'#FFF',{style: STROKE_COLOR, line: 25}).item;
+    let TEMP_SHADOW = Picto.tag(ctx,tempNow ,"italic 900 120pt 'Panton Black' ",STROKE_COLOR,{style: STROKE_COLOR, line: 25}).item;
     
     ctx.drawImage( TEMP_SHADOW, 680+10 -TEMP.width ,470+10);
     ctx.drawImage( TEMP,        680 -TEMP.width ,470);
-   
+    
     TEMP = Picto.tag(ctx,"°C" ,"italic 900 62pt 'Panton Black' ",'#FFF',{style: STROKE_COLOR, line: 25}).item;
     TEMP_SHADOW = Picto.tag(ctx,"°C" ,"italic 900 62pt 'Panton Black' ",STROKE_COLOR,{style: STROKE_COLOR, line: 25}).item;
     
     ctx.drawImage( TEMP_SHADOW, 620+10 ,530+10);
     ctx.drawImage( TEMP,        620 ,530);
-   
+    
+    console.log(YAHOO_CODES[payload.code])
+    ctx.drawImage( _ICON,  600,35,180,180);
+
+    
 
     let result = canvas.toBuffer();
 
@@ -208,3 +319,5 @@ router.get('/', async (req,res)=>{
 })
 
 module.exports = router
+
+
