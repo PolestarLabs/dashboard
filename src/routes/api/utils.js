@@ -1,36 +1,46 @@
+const { is } = require('bluebird');
 const express = require('express');
 const router = express.Router();
 
 const DAILY_COOLDOWN = 22 * 60 * 60e3;
+const EXPIRE_COOLDOWN = DAILY_COOLDOWN * 2.1;
+
+function getDailyMeta(daily) {
+    const now = Date.now();
+    const availableIn = Math.max(0, DAILY_COOLDOWN + daily.last - now);
+    const streakExpiresIn = Math.max(0, EXPIRE_COOLDOWN + daily.last - now);
+    return {
+        availableIn,
+        available: availableIn === 0,
+        highest: daily.highest,
+        currentStreak: daily.streak - 1,
+        streak: daily.streak,
+        streakExpiresIn,
+        streakExpired: streakExpiresIn === 0,
+        insured: daily.insured, 
+        id: req.user.id
+    }; // Do it server side since client's clock could be out of sync
+}
 
 router.get('/webdaily', async (req, res) => {
     if (!req.user) return res.status(401).json({ message: 'Log in' });
-    const now = Date.now();
 
     const daily = await DB.users.getFull(req.user.id).then((u) => u.counters.daily);
-    const availableIn = Math.max(0, DAILY_COOLDOWN + daily.last - now);
-    const dailyMeta = {
-        availableIn,
-        available: availableIn === 0,
-        streak: daily.streak,
-        highest: daily.highest,
-        id: req.user.id
-    }; // Do it server side since client's clock could be out of sync
+    const dailyMeta = getDailyMeta(daily);
+    dailyMeta.discordUser = req.user;
     res.json(dailyMeta);
 })
 
-router.post('/webdaily', async (req,res)=>{
-
-    const userID = req.user.id;
-
+router.post('/webdaily', async (req, res) => {
+    
     /*
 
-        > get userdata
-        > check last daily
-        > determine grace period
-        > define if keep OR delete streak
-        > checks for insurance
-        > clone to bkp then destroy streak OR reverse decision
+        > get userdata!
+        > check last daily!
+        > determine grace period!
+        > define if keep OR delete streak!
+        > checks for insurance!
+        > clone to bkp then destroy streak OR reverse decision?
         > checks if donator/has bonuses
         > applies bonus
         > check if milestone
