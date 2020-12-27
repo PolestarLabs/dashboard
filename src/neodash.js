@@ -369,7 +369,7 @@ fs.readdir('/home/pollux/polaris/bot/locales/' , (err,list) => {
         }
         //console.log("• ".green, "Translation Engine Loaded")
 
-        global.i18nx = i18next;
+        global.i18n = i18next;
         global.$t = t     
     });
 });
