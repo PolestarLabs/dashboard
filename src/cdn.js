@@ -16,17 +16,17 @@ app.use(Express.static(path.join(__dirname, './public')));
 app.use(Express.static(path.join(__dirname, '../assets/imgres')));
 app.use(Express.static(path.join(__dirname, '../assets/cosmetics')));
 app.use("/images", Express.static(path.join(__dirname, './public/images')));
-app.use("/images", Express.static(path.join(__dirname, '../assets/website')));
-app.use("/flairs",    Express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
-app.use("/medals",    Express.static(path.join(__dirname, '../assets/cosmetics/medals')));
-app.use("/stickers",  Express.static(path.join(__dirname, '../assets/cosmetics/stickers')));
-app.use("/boosters",  Express.static(path.join(__dirname, '../assets/build/boosters')));
-app.use("/backdrops", Express.static(path.join(__dirname, '../assets/cosmetics/backdrops')));
-app.use("/build",     Express.static(path.join(__dirname, '../assets/build')));
-
-app.use("/build/backdrops", Express.static(path.join(__dirname, '../assets/cosmetics/backdrops')));
-app.use("/build/stickers",  Express.static(path.join(__dirname, '../assets/cosmetics/stickers')));
-app.use("/build/flairs/top",    Express.static(path.join(__dirname, '../assets/cosmetics/flairs')));
+app.use("/images", Express.static(path.join(__dirname, '../../assets/website')));
+app.use("/flairs",    Express.static(path.join(__dirname, '../../assets/cosmetics/flairs')));
+app.use("/medals",    Express.static(path.join(__dirname, '../../assets/cosmetics/medals')));
+app.use("/stickers",  Express.static(path.join(__dirname, '../../assets/cosmetics/stickers')));
+app.use("/boosters",  Express.static(path.join(__dirname, '../../assets/build/boosters')));
+app.use("/backdrops", Express.static(path.join(__dirname, '../../assets/cosmetics/backdrops')));
+app.use("/build",     Express.static(path.join(__dirname, '../../assets/build')));
+//backwards compat
+app.use("/build/backdrops", Express.static(path.join(__dirname, '../../assets/cosmetics/backdrops')));
+app.use("/build/stickers",  Express.static(path.join(__dirname, '../../assets/cosmetics/stickers')));
+app.use("/build/flairs/top",    Express.static(path.join(__dirname, '../../assets/cosmetics/flairs')));
  
 // CATCH 404
 app.use(function (req, res, next) {
