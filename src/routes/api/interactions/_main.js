@@ -2,7 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const router = express.Router();
 const nacl = require("tweetnacl");
-const cfg = require('../../../config.js');
+const cfg = require('../../../../config.js');
 const publicKey = cfg.pubKey; 
 const readdirAsync = Promise.promisify(require("fs").readdir);
 
