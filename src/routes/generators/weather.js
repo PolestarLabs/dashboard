@@ -242,9 +242,9 @@ router.get('/', async (req,res)=>{
     };
     
     
-    const ISO = payload.country.iso.toLowerCase();
+    const ISO = payload.country.iso?.toLowerCase();
     const COUNTRY = payload.country.name;
-    const COUNTRY_FLAG = COUNTRY.toLowerCase().replace(/ +/,"-");
+    const COUNTRY_FLAG = payload.flag_override || COUNTRY.toLowerCase().replace(/ +/,"-");
     const LOCAL_TIME = new Date().toLocaleTimeString(Date.now(), {hour: '2-digit', minute: '2-digit', timeZone: payload.timezone_id });
     const TEMPERATURE = payload.curr || payload.temp || 0;
     const T_UNIT = payload.unit || "C"
@@ -293,17 +293,31 @@ isDusk,
     
     const canvas = Picto.new(800,600);
     const ctx = canvas.getContext('2d');
+
+    const easterEgg = {};
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
+
+    if( payload.region === " RS" && payload.country.name === "Brazil" ){
+        easterEgg.flag = "/build/guessing/guessflags/riograndense-republic.png"
+        payload.country.name = "Riograndense Republic"
+        easterEgg.map = "/build/weather/eggs/provincia.png"
+    }
+
+    ///////////////////////////////////////////////
+    ///////////////////////////////////////////////
     
     const [_MAP, _FLAG, _SKY, _POLY, _ICON, _MINI1, _MINI2, _MINI3, _SKYLINE] = await Promise.all([
-         Picto.getCanvas(HOST + `/build/world/${ISO.toLowerCase()}/512.png`)
-        ,Picto.getCanvas(HOST + `/build/guessing/guessflags/${ COUNTRY_FLAG }.png`)
-        ,Picto.getCanvas(HOST + `/build/weather/backdrops/${  SKY  }.png`)
-        ,Picto.getCanvas(HOST + `/build/weather/polluxes/${ W_POLLUX }-${ SHADE }.png`)
-        ,Picto.getCanvas(HOST + `/build/weather/icons_new/${ CONDITION.icon }.png`)
+         Picto.getCanvas(HOST + ( easterEgg.map || payload.map_override || `/build/world/${ISO}/512.png`) )
+        ,Picto.getCanvas(HOST + ( easterEgg.flag || `/build/guessing/guessflags/${ COUNTRY_FLAG }.png`) )
+        ,Picto.getCanvas(HOST + ( easterEgg.sky || `/build/weather/backdrops/${  SKY  }.png`) )
+        ,Picto.getCanvas(HOST + ( easterEgg.pollux || `/build/weather/polluxes/${ W_POLLUX }-${ SHADE }.png`) )
+        ,Picto.getCanvas(HOST + ( easterEgg.condition || `/build/weather/icons_new/${ CONDITION.icon }.png`) )
         ,Picto.getCanvas(HOST + `/build/weather/icons_new/${ GFX_TABLE.find(c=>c.code === payload.week[0].code).icon }.png`)
         ,Picto.getCanvas(HOST + `/build/weather/icons_new/${ GFX_TABLE.find(c=>c.code === payload.week[1].code).icon }.png`)
         ,Picto.getCanvas(HOST + `/build/weather/icons_new/${ GFX_TABLE.find(c=>c.code === payload.week[2].code).icon }.png`)
-        ,Picto.getCanvas(HOST + `/build/weather/skylines/${  CONDITION.skyline || CONDITION.icon }.png`)
+        ,Picto.getCanvas(HOST + ( easterEgg.skyline || `/build/weather/skylines/${  CONDITION.skyline || CONDITION.icon }.png`) )
     ]);
 
 
