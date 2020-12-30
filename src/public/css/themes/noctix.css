@@ -19,12 +19,14 @@ html{
     
    --accent-color-light: #2B2C5B;
   --accent-color: #39216C;
+  --accent-color-alt: #A25;
   --accent-color-mid: #39216C;
   --accent-color-strong: #3B2073;
   --accent-color-dark: #220F35;
   
   --secondary-color:  #88272C;
   --secondary-color-alt:  #6A283B;
+  --secondary-color-strong:  #A25;
   
     /*
   --mid-main: var(--light2);
