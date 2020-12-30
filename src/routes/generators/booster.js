@@ -12,8 +12,9 @@ module.exports = async function(req,res){
     B =  req.params.B;
     newA = req.params.Anew == "true";
     newB = req.params.Bnew == "true";
-    CACHE_PATH = "cache/" + `${SERIES}-${A}-${B}-${newA}-${newB}` + ".gif";
-    if (fs.existsSync(path.resolve(CACHE_PATH))) {
+    const CACHE_PATH = appRoot + "/cache/" + `${SERIES}-${A}-${B}-${newA}-${newB}` + ".gif";
+    if (fs.existsSync((CACHE_PATH))) {
+        console.log("FILE EXISTS")
         return res.sendFile(path.resolve(CACHE_PATH))
     };
 
@@ -34,7 +35,7 @@ module.exports = async function(req,res){
         filename: "test",
         cache: true,
         repeat: -1,
-        highWaterMark: 64000
+        highWaterMark: 64000000
 
         //  transparentColor: 0x2C2F33,
     }
@@ -54,10 +55,12 @@ module.exports = async function(req,res){
     gif.on('data', data => {buffers.push(data);});
     
     gif.once('end', async () => {
+        console.log("GIF END")
         let concat = Buffer.concat(buffers);
+        console.log("END WRITE AT ",CACHE_PATH)
         fs.writeFile(CACHE_PATH, concat,()=>console.log('ok'));        
         res.send( Buffer.concat(buffers) );
-        concat = null;
+        //concat = null;
         //this.emit("done", {buffers:this.buffers,file:'cache/'+options.filename+'.gif'} );
     });
 
@@ -76,20 +79,24 @@ module.exports = async function(req,res){
 
 
     function generate(fun) {
-        let framesDone = 0
-        let frameNumber = 0
-        //Array(this.lastFrame).fill(null).forEach(async (n, frameNumber) => {
-        while (frameNumber < options.lastFrame) {
-            (async ()=> {
-                let frame = fun(frameNumber);
-                gif.addFrame(frame.getImageData(0, 0, options.w, options.h).data);
-                framesDone++
-                if (framesDone === options.lastFrame) gif.finish();
-        })()
-            frameNumber++
-        }
+        console.log("RENDER START")
+        let frameNumber = 0;
+        renderedFrames = [];
+        // Array(this.lastFrame).fill(null).forEach(async (n, frameNumber) => {
+        
+        Array(options.lastFrame-1).fill(" ").map((_,frameNumber)=>{
+          const frame = fun(frameNumber);
+          renderedFrames.push(frame);
+        });
+        renderedFrames.forEach(frame=>{
+          gif.addFrame(frame.getImageData(0, 0, options.w, options.h).data);
+        });
+    
+        gif.finish();
+        console.log("RENDER END")
     }
 
+   
 
     generate(pandemonium);
 
