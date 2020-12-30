@@ -414,13 +414,15 @@ let embed =   {
 
   console.log(embed)
 
-sendWebhook({
-  avatar_url: p.user_avatar ||p.user.avatar_url,
-  username: (p.user_username || p.user.username) + " @ Gitlab",
-  content:xxx,
-  embeds:[embed]
-},"https://discordapp.com/api/webhooks/715119311559065671/qro-0ekHSuz-m3q_VBAfCL_oE4n6O0CIJG8PT4Tz04kr2cgn5EN0DDVfhB0Jvcm4KvMi?wait=true")
+  const payload = {
+    avatar_url: p.user_avatar ||p.user.avatar_url,
+    username: (p.user_username || p.user.username) + " @ Gitlab",
+    content:xxx,
+    embeds:[embed]
+  }
 
+  sendWebhook(payload, "https://discord.com/api/webhooks/715119311559065671/qro-0ekHSuz-m3q_VBAfCL_oE4n6O0CIJG8PT4Tz04kr2cgn5EN0DDVfhB0Jvcm4KvMi?wait=true")
+  sendWebhook(payload, "https://discord.com/api/webhooks/793902216099659837/3zp10RNA1L-mo4jo-RDgx2PFPBhmNx7k0f8fnNCsYe5vqYxuCVfYHXJcQcoqmFWKAz5O?wait=true")
 
   return res.send(200);
   
