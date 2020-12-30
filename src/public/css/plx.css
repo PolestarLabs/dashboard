@@ -4794,7 +4794,7 @@ ul.plx-nav-sub {
     }
 }
 
-[class*=plx-animation-] {
+.cl-loaded [class*=plx-animation-] {
     animation-duration: .5s;
     animation-timing-function: ease-out;
     animation-fill-mode: both;
