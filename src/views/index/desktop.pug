@@ -1,18 +1,21 @@
+link(rel="stylesheet" href="/css/index-desktop.css")
+
 mixin magicPatreon()
    a(href="#").magic-outline.plx-button
         i.fas.fa-sign-in-alt
         span &#x2002 
             block
 
+.pollux-img(plx-parallax="y:-500")
+    img(src="/images/pollux/polluxv8.png").plx-animation-slide-bottom-medium(style="animation-delay:.8s")
 section#splash
+    .background(plx-parallax="opacity: 1 ,.85 ,.5")
     //h1.title Pollux
     //h2.subtitle Your favorite new assistant
 
-    .pollux-img
-        img(src="/images/pollux/polluxv8.png")
 
-    h1.title Your new favorite assistant 
-    p.infobox
+    h1.title.plx-animation-slide-top-small(style="animation-delay:1s" plx-parallax="y:-500") Your new favorite assistant 
+    p.infobox.plx-animation-slide-top-small(style="animation-delay:1.5s"  plx-parallax="y:-500")
         | Pollux is a feature-rich assistant focused on entertainment and social activities. Equipped with a variety of cool functionalities and minigames with unmatched depth and ellaborate visuals.
         br
         | Count on her to keep the activity around your community always blooming. 
@@ -43,6 +46,7 @@ section#splash
 
 
 section#features
+    .background(plx-parallax="opacity: 1 ,.5;viewport: 0.5")
     .mock-container
         .ava
             .img
@@ -52,77 +56,81 @@ section#features
 
 
     .feature-cards
-        .fcard
-            .co-frame
+        .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-left; repeat: true")
+            .co-frame.odd
             .icon
                 img(src="/images/craft3.png")
-            h3.title Ranking System
-            h4.sub Make it to the top!
-            p
-                | Rank your members activity with our custom ranking system!
-                br 
-                | Leaderboards for the most active users of your server that can be retrieved either via command or on its own dedicated page
+            .details
+                h3.title Ranking System
+                h4.sub Make it to the top!
+                p
+                    | Rank your members activity with our custom ranking system!
+                    br 
+                    | Leaderboards for the most active users of your server that can be retrieved either via command or on its own dedicated page
 
         
-        .fcard
-            .co-frame
+        .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-right; repeat: true")
+            .co-frame.even
             .icon
                 img(src="/images/craft3.png")
-            h3.title Custom Profiles
-            h4.sub Decor up to eleven!
-            p 
-                | We've proudly rised the standards on profile customization within the bots scene, and in the latest update we're rising it again, by revamping and polishing our well known and loved Profilecards even more! They're still the prettiest ones around to this day, and with the widest range of customizability! You can be conservative, kitschy, exotic, thematic... anything that fits your style!
-                br 
-                | You can decorate your profiles with FRAMES, BACKDROPS, MEDALS, STICKERS, FLAIRS, RINGS, COLORS, and some TEXT to be sure your message goes through.
+            .details
+                h3.title Custom Profiles
+                h4.sub Decor up to eleven!
+                p 
+                    | We've proudly rised the standards on profile customization within the bots scene, and in the latest update we're rising it again, They're still the prettiest ones around to this day, and with the widest range of customizability! You can be conservative, kitschy, exotic, thematic... anything that fits your style!
 
         
-        .fcard
-            .co-frame
+        .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-left; repeat: true")
+            .co-frame.odd
             .icon
                 img(src="/images/craft3.png")
-            h3.title Collectibles
-            h4.sub The joy of completionists!
-            p 
-                | Collecting stuff can always be fun, the joy of completing a collection or getting that one item you want. You might not want to put effort in decorate a profile, but if you enjoy collecting stuff, we got you covered too!
-                br
-                | All of our cosmetics are also collectibles. Just like everything else with Pollux. You can collect not just decor stuff, but also a whole sort of items, some of them can be even used to unlock more cool stuff!
-        
-        .fcard
-            .co-frame
+            .details
+                h3.title Collectibles
+                h4.sub The joy of completionists!
+                p 
+                    | Collecting stuff can always be fun, the joy of completing a collection or getting that one item you want. You might not want to put effort in decorate a profile, but if you enjoy collecting stuff, we got you covered too!
+                    br
+                    //| All of our cosmetics are also collectibles. Just like everything else with Pollux. You can collect not just decor stuff, but also a whole sort of items, some of them can be even used to unlock more cool stuff!
+    
+        .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-right; repeat: true")
+            .co-frame.even
             .icon
                 img(src="/images/craft3.png")
-            h3.title Minigames
-            h4.sub The prettiest ones around! Never be bored Again.
-            p 
-                |  Build your own virtual casino with our set of minigames, both single and multi player. We got the fanciest Blackjack, Slot Machine, and Roulette game. As well as some more fun and unusual minigames like Flag Guesser, Black Metal Band Guesser, and of course a Trivia Game too.
+            .details
+                h3.title Minigames
+                h4.sub The prettiest ones around! Never be bored Again.
+                p 
+                    |  Build your own virtual casino with our set of minigames, both single and multi player. We got the fanciest Blackjack, Slot Machine, and Roulette game. As well as some more fun and unusual minigames like Flag Guesser, Black Metal Band Guesser, and of course a Trivia Game too.
+            
         
-        
-        .fcard
-            .co-frame
+        .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-left; repeat: true")
+            .co-frame.odd
             .icon
                 img(src="/images/craft3.png")
-            h3.title Solid Economy System
-            h4.sub Your efforts are protected!
-            p 
-                | Our special three-currency based system was further enhanced to make sure the economy is strong and keeps the players time-investments protected.
+            .details
+                h3.title Solid Economy System
+                h4.sub Your efforts are protected!
+                p 
+                    | Our special three-currency based system was further enhanced to make sure the economy is strong and keeps the players time-investments protected.
+
+                        
+    
+        .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-right; repeat: true")
+            .co-frame.even
+            .icon
+                img(src="/images/craft3.png")
+            .details
+                h3.title Seasonal Events
+                h4.sub "...and now for something completelly different!"
+                p 
+                    | Yet another Pollux trademark. Spruce up your server with the prettiest chat minigames!
+                    br
+                    | Our exclusive global events introduce refreshing new features and minigames for everyone to play and obtain exclusive seasonal decor items and collectibles!
 
                        
         
-        .fcard
-            .co-frame
-            .icon
-                img(src="/images/craft3.png")
-            h3.title Seasonal Events
-            h4.sub "...and now for something completelly different!"
-            p 
-                | Yet another Pollux trademark. Spruce up your server with the prettiest chat minigames!
-                br
-                | Our exclusive global events introduce refreshing new features and minigames for everyone to play and obtain exclusive seasonal decor items and collectibles!
-
-                       
         
-        
-        .fcard
+        .fcard-finale
             .icon
             h3.title The Ultimate Community Pack
             h4.sub Make your community fancy and engaging with our super pretty toolkit.
