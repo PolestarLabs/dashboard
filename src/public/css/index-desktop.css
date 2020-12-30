@@ -1,6 +1,7 @@
 html{
     background-image: url('/images/pollux/tea.png');
     background-color: var(--secondary-color);
+  background-blend-mode: overlay;
   }
   nav{
     background-image: linear-gradient(#002F,#0000);
@@ -15,29 +16,75 @@ html{
   }
 html.cl-preload *{
     animation-name: none !important;
-}  
+}
 
-#splash h1.title{
+#splash h1.title, .fcard-finale .title{
   will-change: transform;
-  color: var(--accent-color) !important;
+  color: var(--accent-color-alt, var(--accent-color)) !important;
   font-size: 5rem;
-  --text-shadow: #321b51;
+  --text-shadow: #220b41;
   font-weight: 700;
   line-height: 1.2;
   text-shadow: 0 -2px 0 var(--text-shadow), 0 2px 0 var(--text-shadow), 2px 0 0 var(--text-shadow), -2px 0 0 var(--text-shadow), -4px 2px 0 var(--text-shadow), -2px 4px 0 var(--text-shadow);
   filter: drop-shadow(0 0 1px var(--text-shadow)) drop-shadow(-1px 1px 0px var(--text-shadow)) drop-shadow(0 0 0px var(--text-shadow)) drop-shadow(-1px 0 0px var(--text-shadow)) drop-shadow(-1px 0 0px var(--text-shadow)) drop-shadow(-1px 0 0px var(--text-shadow)) drop-shadow(-1px 0 0px var(--text-shadow));
 }
-#splash p {
+#splash p ,.learnmore, .fcard-finale{
   color: white !important;
-  --text-shadow: #321b51;
-  font-size: 1.7rem;
-  width: 1000px;
-  margin: 20px auto 100px;
-   line-height: 1.2;
-   font-weight: 700;
+  --text-shadow: #220b41;
   text-shadow: 0 -1px 0 var(--text-shadow), 0 1px 0 var(--text-shadow), 1px 0 0 var(--text-shadow), -1px 0 0 var(--text-shadow), -2px 1px 0 var(--text-shadow), -1px 2px 0 var(--text-shadow);
   filter: drop-shadow(0 0 1px var(--text-shadow)) drop-shadow(-1px 1px 0px var(--text-shadow)) drop-shadow(0 0 0px var(--text-shadow)) drop-shadow(-1px 0 0px var(--text-shadow))  
 }
+.learnmore{
+    font-size: 2rem;
+}
+.fcard-finale{
+  margin: 100px auto;
+  width: 100%;  
+}
+.fcard-finale *{
+  font-size: 2rem;
+  font-weight: 700;
+}
+.fcard-finale .title{
+  margin-bottom: -2rem;
+  color: var(--secondary-color) !important;
+  
+}
+.fcard-finale .sub{
+
+  color: var(--secondary-color);
+  filter: brightness(1.5)
+}
+#splash p {
+  color: white !important;
+  font-size: 1.7rem;
+  width: 1000px;
+  margin: 20px auto 100px;
+   line-height: 1.1;
+   font-weight: 200;
+}
+#splash .buttons{
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  margin-top: auto;
+  margin-bottom: 80px;
+
+}
+  section#splash{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 95vh;
+    padding: 35vh 0 0 0;
+    text-align: center;
+    box-sizing:  border-box;
+    background-image: linear-gradient(#15153500 20%,#321b51BB 60%,#15153500);
+    margin-top: -50px;
+    
+    
+  }
   
 section{
   z-index: 0;
@@ -54,16 +101,7 @@ section{
   margin: auto;
   filter: drop-shadow(0 0 20px #0055)
 }
-  section#splash{
-    position: relative;
-    height: 95vh;
-    padding: 50vh 0 0 0;
-    text-align: center;
-    box-sizing:  border-box;
-    background-image: linear-gradient(#15153500 20%,#321b51BB 60%,#15153500);
-    margin-top: -50px;
-    
-  }
+
 section#splash h1{
   
 }
@@ -79,7 +117,7 @@ section#splash h1{
     content: " ";
     display: block;
     position: absolute;
-
+  z-index: -1;
  
          
   }
@@ -122,12 +160,16 @@ section#splash h1{
     justify-content: center;
     gap: 22px;
     perspective: 2800px;
+    line-height: 1.3
   }
   .feature-cards > .fcard .icon{
-    height: 128px;
-    width: 128px;
+    //height: 128px;
+    width: 250px;
     flex: 0 0 auto;
-    margin-right: 20px
+    margin: auto 20px auto 10px;
+    border-radius: 10px;
+    overflow: hidden;
+
   }
   .fcard .details{
     display: flex;
@@ -151,26 +193,78 @@ section#splash h1{
       
   }
   .fcard{  
-   border: solid 15px #10203F;
-   border-radius: 55px;
-  background: var(--secondary-color);
-  color: var(--color-contrast);
- // height: 250px;
-  padding: 10px;
- 
-
+    border: solid 15px #10203F;
+    border-radius: 55px;
+    background: var(--secondary-color);
+    color: var(--color-contrast);
+    box-sizing: border-box;
+    padding: 10px;
     margin-top: 10px;    
-    flex: 0 1 45%;    
+    flex: 0 1 48%;
   }
   .fcard h3, .fcard h4{
     color: var(--color-contrast);
   }
+
+@media screen and (max-width:1400px){
+  section#features{ 
+    padding: 0 50px;
+  }
+  .fcard{  
+    border: solid 10px #10203F;
+    padding: 0 10px 0 0;
+    font-size: 12px;
   
+  }
+  .fcard .sub{
+    font-size: 14px !important;
+  }
+.feature-cards > .fcard .icon{
+    width: 30%;
+  }
+  .fcard{ 
+      transform: rotateY(15deg) skewX(1.6deg);
+      box-shadow: -5px 5px 0px 5px #10203FAE,0 10px 50px -5px #83FA;
+
+  }
+ .fcard:nth-child(2n+2){ 
+      transform: rotateY(-15deg) skewX(-1.6deg);
+      box-shadow: 5px 5px 0px 5px #10203FAE,0 10px 50px -5px #83FA;
+      
+  }
+}
+  @media screen and (max-width:1050px){
+  .fcard{  
+    border: solid 10px #10203F;   
+    padding: 20px;    
+    font-size: 12px;
+    overflow: hidden;
   
+    }
+
+.fcard:hover .details{
+ text-shadow: 1px 1px 12px 4px #000
   
+}
+  
+  .feature-cards > .fcard .icon{
+   opacity: 0;
+    position: absolute;
+    z-index: -1;
+    top: 0;
+    left: -10px;
+    width: 100%;
+    transition: opacity .5s;
+  }
+    
+.feature-cards > .fcard:hover .icon{
+  opacity: .6;
+}
+    
   .details >.sub{
     font-size: 14pt;
   }
+    }
   #features >.feature-cards .fcard{
     display: flex;
   }
