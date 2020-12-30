@@ -15,7 +15,7 @@
  } 
 }
 html.cl-preload{ 
-  overflow: hidden !important;
+  //overflow: hidden !important;
 }
 .pace-done #preloader {
  opacity:0;
