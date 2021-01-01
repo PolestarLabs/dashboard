@@ -1,0 +1,41 @@
+.supershadow-title {
+  text-shadow: 0 -2px 0 var(--text-shadow), 0 2px 0 var(--text-shadow),
+    2px 0 0 var(--text-shadow), -2px 0 0 var(--text-shadow),
+    -4px 2px 0 var(--text-shadow), -2px 4px 0 var(--text-shadow);
+  filter: drop-shadow(0 0 1px var(--text-shadow))
+    drop-shadow(-1px 1px 0px var(--text-shadow))
+    drop-shadow(0 0 0px var(--text-shadow))
+    drop-shadow(-1px 0 0px var(--text-shadow))
+    drop-shadow(-1px 0 0px var(--text-shadow))
+    drop-shadow(-1px 0 0px var(--text-shadow))
+    drop-shadow(-1px 0 0px var(--text-shadow));
+}
+.supershadow-text {
+  text-shadow: 0 -1px 0 var(--text-shadow), 0 1px 0 var(--text-shadow),
+    1px 0 0 var(--text-shadow), -1px 0 0 var(--text-shadow),
+    -2px 1px 0 var(--text-shadow), -1px 2px 0 var(--text-shadow);
+  filter: drop-shadow(0 0 1px var(--text-shadow))
+    drop-shadow(-1px 1px 0px var(--text-shadow))
+    drop-shadow(0 0 0px var(--text-shadow))
+    drop-shadow(-1px 0 0px var(--text-shadow));
+}
+
+.supershadow-tools {
+  --outline-1: 1px 1px 1px var(--line-col), -1px -1px 1px var(--line-col),
+    -1px 1px 1px var(--line-col), 1px 0px 1px var(--line-col),
+    -1px 0px 1px var(--line-col), 0px 1px 1px var(--line-col),
+    0px -1px 1px var(--line-col);
+  --outline-2: 2px 2px 0px var(--line-col), 2px -2px 1px var(--line-col),
+    -2px -2px 1px var(--line-col), -2px 2px 1px var(--line-col),
+    2px 0px 1px var(--line-col), 2px 0px 0px var(--line-col),
+    -2px 0px 0px var(--line-col), 0px 2px 0px var(--line-col),
+    0px -2px 0px var(--line-col), -2px 0px 0px var(--line-col),
+    0px 2px 0px var(--line-col), 0px -2px 1px var(--line-col);
+  --extrusion: -2px 3px 1px var(--line-col), -1px 4px 1px var(--line-col),
+    3px 2px 1px var(--line-col), 4px 1px 1px var(--line-col),
+    0px 5px 1px var(--line-col), 1px 6px 1px var(--line-col),
+    3px 6px 1px var(--line-col);
+  --extrusion-1: 1px 1px 1px var(--line-col), 2px 2px 1px var(--line-col),
+    3px 3px 1px var(--line-col);
+  --thin-drop: drop-shadow(2px 1px 0px var(--line-col));
+}
