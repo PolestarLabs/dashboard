@@ -1,9 +1,5 @@
-/*
-@import "https://fonts.googleapis.com/css?family=Quicksand:400,900";
-@import "https://fonts.googleapis.com/css?family=Varela+Round";
-*/
-
 @import "https://fonts.googleapis.com/css?family=Share+Tech+Mono";
+
 @keyframes slowblink {
  40%,
  to {
@@ -15,7 +11,7 @@
  } 
 }
 html.cl-preload{ 
-  //overflow: hidden !important;
+  /*overflow: hidden !important;*/
 }
 .pace-done #preloader {
  opacity:0;
@@ -25,20 +21,34 @@ html.cl-preload{
 body,
 html {
  overflow-x:hidden;
-
  display: flex;
  flex-direction: column;
- 
-}
-html{
 }
 body{
   position: relative;
   overflow:hidden;
 }
-b {
-/*color:var(--text-bold)*/
+
+html,body,div {
+  scrollbar-width:thin;
+  scrollbar-color:var(--accent-color-strong) #1b1b1f55
+ }
+::-webkit-scrollbar {
+ width:10px
 }
+::-webkit-scrollbar-thumb {
+ background:var(--accent-color-strong);
+ opacity: .8;
+ border-radius:20px
+}
+::-webkit-scrollbar-track {
+ background:#0b0b10;
+ border-radius:20px
+}
+
+
+b {/*color:var(--text-bold)*/}
+
 .lh-1 {
  line-height:1.1
 }
@@ -82,26 +92,6 @@ footer a:hover {
  left:0;
  transform:rotate(-90deg);
  transform-origin:0 -90%
-}
-* {
-}
-html,
-body,
-div {
- scrollbar-width:thin;
- scrollbar-color:var(--accent-color-strong) #1b1b1f55
-}
-::-webkit-scrollbar {
- width:10px
-}
-::-webkit-scrollbar-thumb {
- background:var(--accent-color-strong);
- opacity: .8;
- border-radius:20px
-}
-::-webkit-scrollbar-track {
- background:#0b0b10;
- border-radius:20px
 }
 
 .ballooned {
@@ -819,7 +809,7 @@ div:not(.plx-open) .faders {
  .paperback a {
   color:#58f;
   border-bottom:dashed 1px #10f8
- }=
+ }
  .paperback a:hover {
   color:#85f;
   border-bottom:solid 1px #10f5;
@@ -1340,3 +1330,4 @@ button span,.ti-tag span{
 .lmb svg{
   transform: translateY(-92px)
 }
+
