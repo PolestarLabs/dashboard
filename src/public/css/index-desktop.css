@@ -1,39 +1,61 @@
+@import  url("fancycard.css");
+@import "supershadows.css";
+
+
 html{
-    background-image: url('/images/pollux/tea.png');
-    background-color: var(--secondary-color);
+  background-image: url('/images/pollux/tea.png');
+  background-color: var(--secondary-color);
   background-blend-mode: overlay;
-  }
-  nav{
-    background-image: linear-gradient(#002F,#0000);
-  }
-  nav.plx-active{
-    box-shadow: none;
-    height: 100px;
-    background-image: linear-gradient(#0028,#0000);
-  }
-  nav.plx-active >.login{
-  height: 40px;
-  }
+}
+nav{
+  background-image: linear-gradient(#002F,#0000);
+}
+nav.plx-active{
+  box-shadow: none;
+  height: 100px;
+  background-image: linear-gradient(#0028,#0000);
+}
+nav.plx-active >.login{
+height: 40px;
+}
 html.cl-preload *{
-    animation-name: none !important;
+  animation-name: none !important;
 }
 
 #splash h1.title, .fcard-finale .title{
-  will-change: transform;
-  color: var(--accent-color-alt, var(--accent-color)) !important;
-  font-size: 5rem;
-  --text-shadow: #220b41;
-  font-weight: 700;
-  line-height: 1.2;
-  text-shadow: 0 -2px 0 var(--text-shadow), 0 2px 0 var(--text-shadow), 2px 0 0 var(--text-shadow), -2px 0 0 var(--text-shadow), -4px 2px 0 var(--text-shadow), -2px 4px 0 var(--text-shadow);
-  filter: drop-shadow(0 0 1px var(--text-shadow)) drop-shadow(-1px 1px 0px var(--text-shadow)) drop-shadow(0 0 0px var(--text-shadow)) drop-shadow(-1px 0 0px var(--text-shadow)) drop-shadow(-1px 0 0px var(--text-shadow)) drop-shadow(-1px 0 0px var(--text-shadow)) drop-shadow(-1px 0 0px var(--text-shadow));
+will-change: transform;
+color: var(--accent-color-alt, var(--accent-color)) !important;
+font-size: 5rem;
+--text-shadow: #220b41;
+font-weight: 700;
+line-height: 1.2;
 }
+
+
+
 #splash p ,.learnmore, .fcard-finale{
   color: white !important;
   --text-shadow: #220b41;
-  text-shadow: 0 -1px 0 var(--text-shadow), 0 1px 0 var(--text-shadow), 1px 0 0 var(--text-shadow), -1px 0 0 var(--text-shadow), -2px 1px 0 var(--text-shadow), -1px 2px 0 var(--text-shadow);
-  filter: drop-shadow(0 0 1px var(--text-shadow)) drop-shadow(-1px 1px 0px var(--text-shadow)) drop-shadow(0 0 0px var(--text-shadow)) drop-shadow(-1px 0 0px var(--text-shadow))  
+ }
+
+.learnmore{
+  font-size: 2rem;
 }
+.fcard-finale{
+margin: 100px auto;
+width: 100%;  
+}
+.fcard-finale *{
+font-size: 2rem;
+font-weight: 700;
+}
+.fcard-finale .title{
+margin-bottom: -2rem;
+color: var(--secondary-color) !important;
+
+}
+
+
 .learnmore{
     font-size: 2rem;
 }
@@ -302,3 +324,9 @@ section#splash h1{
         transform: translateX(0) rotateY(-15deg) skewX(-1.6deg);
     }
 }
+
+
+
+
+
+
