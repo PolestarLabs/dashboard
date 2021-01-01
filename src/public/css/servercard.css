@@ -1,11 +1,3 @@
-@charset "UTF-8";
-* {
-  font-family: rounded, sans-serif;
-}
-
-html {
-  background: #223;
-}
 
 .plx-card {
   transition: all 600ms ease;
