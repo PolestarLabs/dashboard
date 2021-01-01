@@ -15,8 +15,8 @@ section#splash
     //h2.subtitle Your favorite new assistant
 
 
-    h1.title.plx-animation-slide-top-small(style="animation-delay:1s" plx-parallax="y:-500") Your new favorite assistant 
-    p.infobox.plx-animation-slide-top-small(style="animation-delay:1.5s"  plx-parallax="y:-500")
+    h1.title.supershadow-title.plx-animation-slide-top-small(style="animation-delay:1s" plx-parallax="y:-500") Your new favorite assistant 
+    p.infobox.supershadow-text.plx-animation-slide-top-small(style="animation-delay:1.5s"  plx-parallax="y:-500")
         | Pollux is a feature-rich assistant focused on entertainment and social activities. Equipped with a variety of cool functionalities and minigames with unmatched depth and ellaborate visuals.
         br
         | Count on her to keep the activity around your community always blooming. 
@@ -136,9 +136,9 @@ section#features
         
         .fcard-finale
             .icon
-            h3.title The Ultimate Community Pack
-            h4.sub Make your community fancy and engaging with our super pretty toolkit.
-            ul
+            h3.title.supershadow-title The Ultimate Community Pack
+            h4.sub.supershadow-title Make your community fancy and engaging with our super pretty toolkit.
+            ul.supershadow-text
                 li Server levels and rankings
                 li Reaction Roles
                 li Custom Currency
@@ -154,6 +154,58 @@ section#features
     // three at a time? off-center vertical
             OR
     // 2 x 3 grid
+
+mixin fancyCard(title,main,icon,direction)
+    .fancy-card(class=direction)
+        .fancy-card-background.clipped-all
+        .fancy-card-visuals.clipped-bottom
+            img(src=main plx-scrollspy="cls: plx-animation-slide-bottom; repeat: true").main
+            .icon
+                img(src=icon plx-scrollspy="cls: plx-animation-scale-up; repeat: true")
+        .fancy-card-container
+            .fancy-card-textarea
+                block
+            .fancy-card-floating-title
+                h3(plx-scrollspy="cls: plx-animation-slide-"+direction+"-medium; repeat: true; delay:100").supershadow-tools!= title
+
+section#test
+    div(plx-scrollspy="cls: plx-animation-slide-bottom-small; repeat: true")
+        +fancyCard("Activities<span class='minitext'>&</span> Minigames", "/images/pollux/plx_craft_640x480.png","/images/craft3.png","right")
+            div(plx-scrollspy="target: *; cls: plx-animation-slide-left-medium; repeat: true;delay:100")
+                h4.f-title-1.supershadow-tools Casual
+                ul.supershadow-tools
+                    li Blackjack
+                    li Roulette
+                    li Guess the Flag
+                    li Hangmaid
+                    li Trivia
+
+                h4.f-title-2.supershadow-tools Advanced
+                ul.supershadow-tools
+                    li Special modes for Classic Minigames:
+                        | •   Time Attack, Endless, Sudden Death
+                    li Adventure Islands
+                    li Airliner Tycoon
+                    li Cooking
+
+    div(plx-scrollspy="cls: plx-animation-slide-bottom-medium; repeat: true")
+        +fancyCard("Crafting Workshop", "/images/pollux/plx_craft_640x480.png","/images/craft3.png","left")
+            div(plx-scrollspy="target: *; cls: plx-animation-slide-left-medium; repeat: true;delay:100")
+                h4.f-title-1.supershadow-tools Casual
+                ul.supershadow-tools 
+                    li Create common items with ease
+                    li Pay with Rubines and Jades
+                    li Simplified progression
+                    li Discovery
+
+                h4.f-title-2.supershadow-tools Advanced
+                ul.supershadow-tools 
+                    li Specialize in crafting for others
+                    li Create exclusive items
+                    li Only spend materials and recipes
+                    li Sell & offer your services for Rubines
+
+
 
 
 
