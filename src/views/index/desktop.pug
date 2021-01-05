@@ -7,9 +7,46 @@ mixin magicPatreon()
         span &#x2002 
             block
 
-.pollux-img(plx-parallax="y:800")
+.pollux-img(plx-parallax="y:-200")
     img(src="/images/pollux/polluxv8.png").plx-animation-slide-bottom-medium(style="animation-delay:.8s")
-section#splash
+
+.halftones
+        
+
+section#splash-b
+    //.halftones
+        .halftone.l
+        .halftone.r
+    .big-fucking-square-1
+    .big-fucking-square-2
+    .big-damn-polly
+        .image
+    .plx-logo-sp(plx-parallax="opacity: 1,0;y:200")
+        img(src="/images/logo.png")
+
+
+
+
+section#feats-b
+    .block.plx-double-border.supershadow-tools
+        .block-top
+
+        .block-body
+            h2.title
+                span.normal SOCIAL AND FUN:  
+                    span.yellow REACTION  ROLES
+                    |, 
+                    span.pinku LEVELS  & RANKING
+                    |, 
+                    span.normal AND MORE ! 
+            .content 
+                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi, incidunt recusandae? Tempore doloribus modi, veniam eius deserunt reiciendis. Doloribus, corrupti! Accusamus, culpa esse cupiditate quaerat odit minus similique consectetur nobis?
+
+        .block-bottom
+
+
+//section#splash
+    
     .background(aplx-parallax="opacity: 1 ,.85 ,.7")
     //h1.title Pollux
     //h2.subtitle Your favorite new assistant
@@ -50,6 +87,7 @@ section#splash
 
 
 section#features
+
     .background(aplx-parallax="opacity: 1 ,.7;viewport: 0.5")
     .mock-container
         .ava
@@ -134,16 +172,28 @@ section#features
                        
         
         
-        .fcard-finale
-            .icon
-            h3.title.supershadow-title The Ultimate Community Pack
-            h4.sub.supershadow-title Make your community fancy and engaging with our super pretty toolkit.
-            ul.supershadow-text
-                li Server levels and rankings
-                li Reaction Roles
-                li Custom Currency
-                li Basic moderation kit
-                li And many more new stuff coming every month.
+section#pack
+    .fcard-finale
+        .halftones
+        .icon
+        h3.title.supershadow-title The Ultimate Community Pack
+        h4.sub.supershadow-title Make your community fancy and engaging with our super pretty toolkit.
+        ul.supershadow-text
+            li 
+                i.fas.fa-trophy.color-secondary
+                | Server levels and rankings
+            li 
+                i.fas.fa-mouse-pointer.color-secondary
+                | Reaction Roles
+            li 
+                i.fas.fa-money-bill-wave.color-secondary
+                | Custom Currency
+            li 
+                i.fas.fa-gavel.color-secondary
+                | Basic moderation kit
+            li 
+                i.fas.fa-star.color-secondary
+                | And many more new stuff coming every month.
 
 
     // OPTION A: small card with feature icon + mini text <--
@@ -160,7 +210,8 @@ mixin fancyCard(title,main,icon,direction)
         .fancy-card-background.clipped-all
         .fancy-card-frame
         .fancy-card-visuals.clipped-bottom
-            img(src=main plx-scrollspy="cls: plx-animation-slide-bottom; repeat: true").main
+            .main-container(plx-scrollspy="cls: plx-animation-slide-bottom; repeat: true")
+                img(src=main ).main
             .icon
                 img(src=icon plx-scrollspy="cls: plx-animation-scale-up; repeat: true")
         .fancy-card-container
@@ -169,26 +220,8 @@ mixin fancyCard(title,main,icon,direction)
             .fancy-card-floating-title
                 h3(plx-scrollspy="cls: plx-animation-slide-"+direction+"-medium; repeat: true; delay:100").supershadow-tools!= title
 
-section#test
-    div(plx-scrollspy="cls: plx-animation-slide-bottom-small; repeat: true")
-        +fancyCard("Activities<span class='minitext'>&</span> Minigames", "/images/pollux/plx_craft_640x480.png","/images/craft3.png","right")
-            div(plx-scrollspy="target: *; cls: plx-animation-slide-left-medium; repeat: true;delay:100")
-                h4.f-title-1.supershadow-tools Casual
-                ul.supershadow-tools
-                    li Blackjack
-                    li Roulette
-                    li Guess the Flag
-                    li Hangmaid
-                    li Trivia
-
-                h4.f-title-2.supershadow-tools Advanced
-                ul.supershadow-tools
-                    li Special modes for Classic Minigames:
-                        | •   Time Attack, Endless, Sudden Death
-                    li Adventure Islands
-                    li Airliner Tycoon
-                    li Cooking
-
+section#test.plx-flex-wrap
+    .halftones
     div(plx-scrollspy="cls: plx-animation-slide-bottom-medium; repeat: true")
         +fancyCard("Crafting Workshop", "/images/pollux/plx_craft_640x480.png","/images/craft3.png","left")
             div(plx-scrollspy="target: *; cls: plx-animation-slide-left-medium; repeat: true;delay:100")
@@ -205,108 +238,177 @@ section#test
                     li Create exclusive items
                     li Only spend materials and recipes
                     li Sell & offer your services for Rubines
-
-
-
-
-
-section#advanced
-
-    h1 Enjoy it in your own way! Casual or Hardcore. 
-    h2 Delve deeper and explore our never-ending paths of global progression.
-
-    p In addition to minigames and "e-toys", Pollux also provides an ellaborated social sphere with its own global progression system.
-
-    .adv-feat(plx-lightbox)
-        - var link = "/images/showcase/craft.png" 
-        a(href=link)
-            img(plx-img src=link)
-        h3.title Crafting
-        h4.sub Mix, Create, Discover!
-        p If you enjoy exploring and poking around with putting things together and see what comes out of it. Our crafting system is one of the richest you'll find. You can craft from recipes, or just experiment with stuff you have in your hands and see what comes out of it!
-    
-    .adv-feat(plx-lightbox)
-        - var link ="/images/showcase/venture.png" 
-        a(href=link)
-            img(plx-img src=link)
-        h1.title Adventure Mode
-        h3.subtitle It is back! Better than ever
-        p 
-            | You asked for it and it is back! The "Venture Forth" minigame from the Hallowinter 2019 event has been upgraded to a full minigame module!
+    .supershadow-tools.fc-description(plx-scrollspy="cls: plx-animation-slide-left-medium; repeat: true")
+        p
+            | A crafting system for the fans of mixing and throwing things together and explore what kinds of things can be done out of it. 
             br
-            | Explore different places and landscape to find and collect all sorts of stuff and unveil stories and mysteries from Pollux's universe!
-
-    .adv-feat(plx-lightbox)
-        - var link = "/images/showcase/storefront.png" 
-        a(href=link)
-            img(plx-img src=link)
-        h1.title The Marketplace
-        h3.subtitle Now everyone can be a merchant
-        p 
-            | Ran out of money and have an item you don't like taht much? You can now sell it in the User Marketplace for some easy virtual bucks.
             br
-            | Or you can turn it into your primary source of Pollux income by specializing in selling stuff there.
-    //
-        .adv-feat                    
-        .adv-feat
-        .adv-feat
+            | Crafting can be either casual, for making items you might need right now without much hassle, or advanced where you invest some time and learn the system to create more items and even have an extra source of income!
+
+    br
 
 
-    // description - problem solving
-    // "liquid"/open card - advanced feats
+    .supershadow-tools.fc-description(plx-scrollspy="cls: plx-animation-slide-right-medium; repeat: true")
 
-section#partners
+        p
+            | Build your own virtual casino with our set of minigames, both single and multi player. 
+            br
+            br
 
-    h1.title Trusted by the best communities
-    h3.subtitle Meet some of sponsors and best partners
+            | We got the fanciest Blackjack, Slot Machine, and Roulette game. As well as some more fun and unusual minigames like Flag Guesser, Black Metal Band Guesser, and of course a Trivia Game too.
+            br
+            br
+            | New minigames are added in every Event!
 
-    .commun-part
-        //test
-        -var guild = {partnerDetails:{feats:"",langs:"",tags:""}}
-        .plx-card.bronze
-            .pxc-bg(style=`background-image:url('${guild.partnerDetails.picture}')`)   
-            .pxc-avatar
-                img(src= "http://i.imgur.com/PHCigiW.png") 
-            .pxc-stopper    
-            .pxc-subcard
-                .pxc-title guild.meta.name
-                .pxc-sub guild.partnerDetails.description
+    div(plx-scrollspy="cls: plx-animation-slide-bottom-small; repeat: true")
+        +fancyCard("Activities<span class='minitext'>&</span> Minigames", "/images/pollux/cards_polluxcards.png","/images/craft1.png","right")
+            div(plx-scrollspy="target: *; cls: plx-animation-slide-left-medium; repeat: true;delay:100")
+                h4.f-title-1.supershadow-tools Casual
+                ul.supershadow-tools
+                    li Blackjack
+                    li Roulette
+                    li Guess the Flag
+                    li Hangmaid
+                    li Trivia
+
+                h4.f-title-2.supershadow-tools Advanced
+                ul.supershadow-tools
+                    li Special modes for Classic Minigames:
+                        | •   Time Attack, Endless, Sudden Death
+                    li Adventure Islands
+                    li Airliner Tycoon
+                    li Cooking
+   
+    br
+
+
+
+    div(plx-scrollspy="cls: plx-animation-slide-bottom-medium; repeat: true")
+        +fancyCard("Community<span class='minitext'>&</span> Polluxverse", "/images/pollux/pollux_selfie.png","/images/craft2.png","left")
+            div(plx-scrollspy="target: *; cls: plx-animation-slide-left-medium; repeat: true;delay:100")
+                //h4.f-title-1.supershadow-tools Theme Events
+
+                h4.f-title-1.supershadow-tools Community
+                ul.supershadow-tools 
+                    li Fanart Gallery
+                    li Cosmetics & Decor Labs
+                    li Giveaways
+                    li Gaming & Watching Parties
                 
-                .pxc-feats
-                    each feat in guild.partnerDetails.feats.split(',')
-                            span= feat
-                .pxc-tags
-                    each tag in guild.partnerDetails.tags.split(',')
-                            div= tag
-                .bottom-row  
-                    .pxc-info
-                        .flags
-                            each lang in guild.partnerDetails.langs.split(',')
-                                span
-                                    img(src="http://beta/pollux.gg/images/flags/"+(lang.split('-')[1]||lang||"EN").toUpperCase().trim().slice(0,2)+".png")
-                        .region= guild.partnerDetails.region
-                    
-                    .links
-                        a.site(uk-tooltip="WEBSITE")
-                            i.fas.fa-globe-americas 
-                        a.link(uk-tooltip="DISCORD SERVER").discordLink
-                            i.fab.fa-discord
-                        a.shop(uk-tooltip="EXCLUSIVE POLLUX SHOP")
-                            i.fas.fa-shopping-bag 
-    // shorrt panel with partners
+                h4.f-title-2.supershadow-tools Polluxverse
+                ul.supershadow-tools                     
+                    li Event Mascots
+                    li RPG Elements
+                    li Storyline Items
+                    li Original Cosmetics
 
-section#community
-    .image-slot
-        .img
-    h1.title Polluxverse
-    h3.subtitle All things Pollux and some more!
-    p 
-        | Pollux goes beyond of just bot minigames. We have a thriving family of players and other friends that gather around for gaming, music, or just chit-chat. 
-        br 
-        | Join us to participate in polls, several seasonal server-events, giveaways, and many more!
-        br 
-        br 
-        | Since you're here, check out some of the <a href="/fanart" target="blank">fan arts</a> submitted by our community members!
+    .supershadow-tools.fc-description(plx-scrollspy="cls: plx-animation-slide-left-medium; repeat: true")
+        p
+            | Pollux goes beyond of just bot minigames. We have a thriving family of players and other friends that gather around for gaming, music, or just chit-chat.
+            br
+            | Join us to participate in polls, several seasonal server-events, giveaways, and many more!
+
+
+
+//
+
+    section#advanced
+
+        h1 Enjoy it in your own way! Casual or Hardcore. 
+        h2 Delve deeper and explore our never-ending paths of global progression.
+
+        p In addition to minigames and "e-toys", Pollux also provides an ellaborated social sphere with its own global progression system.
+
+        .adv-feat(plx-lightbox)
+            - var link = "/images/showcase/craft.png" 
+            a(href=link)
+                img(plx-img src=link)
+            h3.title Crafting
+            h4.sub Mix, Create, Discover!
+            p If you enjoy exploring and poking around with putting things together and see what comes out of it. Our crafting system is one of the richest you'll find. You can craft from recipes, or just experiment with stuff you have in your hands and see what comes out of it!
+        
+        .adv-feat(plx-lightbox)
+            - var link ="/images/showcase/venture.png" 
+            a(href=link)
+                img(plx-img src=link)
+            h1.title Adventure Mode
+            h3.subtitle It is back! Better than ever
+            p 
+                | You asked for it and it is back! The "Venture Forth" minigame from the Hallowinter 2019 event has been upgraded to a full minigame module!
+                br
+                | Explore different places and landscape to find and collect all sorts of stuff and unveil stories and mysteries from Pollux's universe!
+
+        .adv-feat(plx-lightbox)
+            - var link = "/images/showcase/storefront.png" 
+            a(href=link)
+                img(plx-img src=link)
+            h1.title The Marketplace
+            h3.subtitle Now everyone can be a merchant
+            p 
+                | Ran out of money and have an item you don't like taht much? You can now sell it in the User Marketplace for some easy virtual bucks.
+                br
+                | Or you can turn it into your primary source of Pollux income by specializing in selling stuff there.
+        //
+            .adv-feat                    
+            .adv-feat
+            .adv-feat
+
+
+        // description - problem solving
+        // "liquid"/open card - advanced feats
+
+    section#partners
+
+        h1.title Trusted by the best communities
+        h3.subtitle Meet some of sponsors and best partners
+
+        .commun-part
+            //test
+            -var guild = {partnerDetails:{feats:"",langs:"",tags:""}}
+            .plx-card.bronze
+                .pxc-bg(style=`background-image:url('${guild.partnerDetails.picture}')`)   
+                .pxc-avatar
+                    img(src= "http://i.imgur.com/PHCigiW.png") 
+                .pxc-stopper    
+                .pxc-subcard
+                    .pxc-title guild.meta.name
+                    .pxc-sub guild.partnerDetails.description
+                    
+                    .pxc-feats
+                        each feat in guild.partnerDetails.feats.split(',')
+                                span= feat
+                    .pxc-tags
+                        each tag in guild.partnerDetails.tags.split(',')
+                                div= tag
+                    .bottom-row  
+                        .pxc-info
+                            .flags
+                                each lang in guild.partnerDetails.langs.split(',')
+                                    span
+                                        img(src="http://beta/pollux.gg/images/flags/"+(lang.split('-')[1]||lang||"EN").toUpperCase().trim().slice(0,2)+".png")
+                            .region= guild.partnerDetails.region
+                        
+                        .links
+                            a.site(uk-tooltip="WEBSITE")
+                                i.fas.fa-globe-americas 
+                            a.link(uk-tooltip="DISCORD SERVER").discordLink
+                                i.fab.fa-discord
+                            a.shop(uk-tooltip="EXCLUSIVE POLLUX SHOP")
+                                i.fas.fa-shopping-bag 
+        // shorrt panel with partners
+
+    section#community
+        .image-slot
+            .img
+        h1.title Polluxverse
+        h3.subtitle All things Pollux and some more!
+        p 
+            | Pollux goes beyond of just bot minigames. We have a thriving family of players and other friends that gather around for gaming, music, or just chit-chat. 
+            br 
+            | Join us to participate in polls, several seasonal server-events, giveaways, and many more!
+            br 
+            br 
+            | Since you're here, check out some of the <a href="/fanart" target="blank">fan arts</a> submitted by our community members!
 
 
 
