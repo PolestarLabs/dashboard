@@ -1331,3 +1331,7 @@ button span,.ti-tag span{
   transform: translateY(-92px)
 }
 
+
+.color-secondary{ color: var(--secondary-color) !important }
+.color-accent{ color: var(--accent-color) !important }
+.color-contrast{ color: var(--text-contrast) !important }
