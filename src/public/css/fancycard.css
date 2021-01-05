@@ -44,7 +44,7 @@ section#test {
   transform: scaleX(-1);
 }
 .fancy-card.right > .fancy-card-container,
-.fancy-card.right > .fancy-card-visuals > img,
+.fancy-card.right > .fancy-card-visuals img,
 .fancy-card.right > .fancy-card-background:after {
   transform: scaleX(-1);
 }
@@ -95,11 +95,13 @@ section#test {
 .fancy-card .clipped-bottom {
   clip-path: var(--clip-bottom);
 }
-
+.fancy-card .main-container{
+  height: 100%;
+}
 .fancy-card img.main {
   bottom: -15px;
   position: relative;
-  width: 45%;
+  height: 100%; 
 }
 .fancy-card .icon {
   position: absolute;
@@ -187,4 +189,120 @@ section#test {
 }
 .fancy-card .f-title-2 {
   color: #fc5ccc;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#splash-b{
+  height: 100vh;
+  background-image: url(/images/tea.png);
+  background-size: cover;
+}
+  /*
+#splash-b:before{
+  content:" ";
+  background-image: linear-gradient(90deg ,var(--secondary-color),var(--accent-color));
+  background-color: var(--bg-main);
+  //background-blend-mode:  color-burn;
+  filter: saturate(1.2);
+  height: 100%;
+  width: 100%;
+  display: block;
+  position: absolute;
+ z-index: -1;
+  //mix-blend-mode:   color;
+  //opacity: .5
+  
+}
+*/
+#splash{
+  display: none !important;
+}
+#features, #features .background{
+  background: none !important;
+}
+
+.big-fucking-square-1{
+  position: absolute;
+  width: 1800px;
+  height: 1800px;
+  background: var(--accent-color);
+  transform: rotate(45deg);
+  transform-origin: top right;
+  right: 50vw;
+  top: 150vh;
+  opacity:.6;
+   // mix-blend-mode:   multiply;
+ 
+}
+
+.big-fucking-square-2{
+  opacity:.6;
+  position: absolute;
+  width: 1800px;
+  height: 1800px;
+  background: var(--accent-color);
+  transform: rotate(-45deg);
+  transform-origin: top left;
+  left: 50vw;
+  top: 50vw;
+  //mix-blend-mode:   multiply;
+}
+
+.plx-logo-sp{
+  //opacity: 0;
+  position: absolute;
+  width: 45vw;
+  top: 34vh;
+  right: 5vw;
+  max-width: 600px;
+}
+
+
+.halftones{
+
+  mix-blend-mode: color-burn;
+  left: 0;
+  top:0;
+  height: 100%;
+  width: 100vw;
+  
+  position: absolute;
+  z-index: 0;
+  opacity: .5
+}
+.halftones:before,.halftones:after{
+  background: url(/images/halftone.png);
+  background-size: contain;
+  width: 30vw;
+  max-width: 400px;
+  height: 100%;
+  position: absolute;
+  content:""
+}
+.halftones:before{
+   left: 0;  
+}
+.halftones:after{
+  right: 0;
+  transform: scaleX(-1);
+ 
 }
