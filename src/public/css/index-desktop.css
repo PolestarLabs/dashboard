@@ -1,5 +1,6 @@
-@import  url("fancycard.css");
+@import "fancycard.css";
 @import "supershadows.css";
+@import "doubleborder.css";
 
 
 html{
@@ -59,9 +60,25 @@ color: var(--secondary-color) !important;
 .learnmore{
     font-size: 2rem;
 }
+
+
 .fcard-finale{
   margin: 100px auto;
   width: 100%;  
+  background: var(--accent-color);
+  position: relative;
+  z-index: 2;
+  padding: 100px 100px 120px;
+  clip-path: polygon(0 100px, 100% 0, 100% 100%, 0 90% );
+  transform: translateY(200px);
+}
+.fcard-finale ul{
+  list-style: none;
+}
+.fcard-finale li i{
+  margin-right: 1rem;
+  width: 2em;
+  text-align: center;
 }
 .fcard-finale *{
   font-size: 2rem;
@@ -198,6 +215,10 @@ section#splash h1{
     flex-direction: column;
     align-items: start;
   }
+  .fcard.plx-animation-slide-fcard-right .details{
+    padding-left: 05px;
+    align-items: end;
+  }
   .details > h3.title {
     margin-bottom: -40px; 
     margin-top: 10px;
@@ -212,6 +233,9 @@ section#splash h1{
  .fcard:nth-child(2n+2){ 
       transform: rotateY(-15deg) skewX(-1.6deg);
       box-shadow: 5px 10px 0px 5px #10203FAE,0 10px 50px -5px #83FA;
+     display: flex;
+   flex-direction: row-reverse;
+
       
   }
   .fcard{  
@@ -329,4 +353,48 @@ section#splash h1{
 
 
 
+#test{
+  background-image:url(/images/bg-grey.jpg);
+  background-size: cover;
+  background-position: center;
+  background-attachment:  fixed;
+  background-blend-mode: overlay;
+  padding: 200px 1vw;
+  background-color: var(--accent-color);
+  z-index: 1;
+  position: relative;
+  display: flex;
+  justify-content: space-evenly;
+}
 
+
+.fc-description {
+
+  --line-col: #112;  
+  text-shadow: var(--outline-1), var(--outline-1);  
+  filter: drop-shadow(0 0 0.5px var(--line-col));
+  color: white;
+  max-width:600px;
+  padding-left:40px;
+  box-sizing: border-box;
+  display: flex;  
+  align-items: center;
+  font-size: 14pt
+}
+
+
+
+
+
+
+
+
+
+
+
+
+#feats-b {
+  position: relative;
+  padding: 100px;
+  
+}
