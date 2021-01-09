@@ -1,0 +1,240 @@
+@import "rarityboxes.css";
+
+
+
+.other-tiers,.common-tiers{
+  display: flex;
+  justify-content: center;
+  z-index: 1;
+position:relative;  
+}
+.tier-card,.mini-tier-card{
+      padding: 2px;
+  border-width: 4px;
+    margin: 10px;
+   width: 300px;
+ 
+position:relative;  
+
+
+transition: transform .2s ease;
+}
+.common-tiers .tier-card:hover{
+  transform: scale(1.1)
+}
+.tier-card > .inner{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+
+    box-sizing:border-box;
+
+
+}
+
+.tier-card div > *, .tier-card .button,.other-tiers .button{
+    color: white;
+    text-shadow: 1px 1px 5px #1138;
+}
+.tier-card .inner > .tier-icon{
+  position: absolute;
+  mix-blend-mode:  overlay;
+  transform: translateY(-50px)
+}
+.tier-card .button .tier-icon img, .other-tiers .button img{
+  filter: brightness(100);
+  display: inline;
+  line-height: 1;
+  width: 20px;
+}
+.common-tiers .tier-card.best{
+  overflow: hidden;
+}
+.common-tiers .tier-card.best:after{
+  content:"Recommended";
+  position: absolute;
+  font-family: quicksand;
+  text-transform: uppercase;
+  font-weight: 600;
+  background: var(--secondary-color-alt);
+  color: white;//var(--plx-yellow);
+  text-shadow: 0 0 2px #112, 0 1px 1px #112, 0 1px 1px #112, 0 0 1px #112, 0 0 1px #112;
+  transform: rotate(30deg);
+  padding: 3px 50px;
+  z-index: 3;
+  top: 30px;
+  right: -45px;
+  box-shadow: 0 0 2px #112A ,0 3px 20px -2px  var(--secondary-color-alt);;
+}
+.common-tiers .tier-card .title{
+  font-weight: 900;
+  font-size: 1.5em;
+  flex: 0 0 auto;
+  margin-bottom: 0;
+}
+
+.common-tiers .tier-card .desc{
+  font-weight: 600;
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+
+.common-tiers .tier-card ul.perks{
+  font-weight: 600;
+  flex: 1 0 auto;
+
+}
+.tier-card .inner{
+  background: none ;
+  padding: 20px;
+  /*! position: relative; */
+  
+  /*! box-sizing: border-box; */
+}
+.tier-card .inner > *{
+  z-index: 1;
+}
+.tier-card .inner:before{
+  position: absolute;
+  z-index: 0;
+  background: url('/images/halftone.png');
+  width: 100%;
+  height: 100%;
+  bottom: 0;
+  left: 0;
+  background-size: 300px;
+  background-repeat: repeat-y;
+  content: "";
+  transform: rotate(-0deg);
+  transform-origin: bottom;
+  mix-blend-mode: overlay;
+}
+  
+.tier-card > .inner >.price{
+  font-weight: 900;
+  font-style: italic;
+  margin: 20px 20px 0px;
+  font-size: 5rem;
+  width: 120%;
+  text-align: center;
+  background-image: linear-gradient( #1120,#1158,#1120)
+}
+.tier-card .price .dol{
+  font-size: 2rem;
+    font-weight: 600;
+  vertical-align: middle;
+  margin-right: 5px
+}
+
+.tier-card ul{
+  font-family: quicksand;
+  width: 280px;
+  list-style:none;
+  padding-left: 0;
+  font-size: 10pt;
+}
+
+.tier-card ul li{
+  background: #1158;
+  border-radius: 30px;
+  padding: 3px 10px;
+  margin-bottom: 8px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  
+}
+.tier-card ul li > *{
+
+}
+.tier-card ul li span{
+  margin: 0 3px 0 5px;
+}
+.tier-card li:before{
+  content:"\f00c";
+  font-family: "Font Awesome 5 Free";
+  font-weight: 900;
+  margin-right: 10px;
+  color: var(--accent-color)
+}
+.tier-card li .rar{
+  display: flex;
+  align-items: center;
+}
+.tier-card li .rar .plx-rarity-icon{
+ transform: translateY(.2px)
+}
+
+
+
+.other-tiers{
+  display: flex;
+  justify-content: center; 
+  flex-wrap: wrap;
+  transform: scale(.8);
+
+}
+.mini-tier-card{
+  padding: 2px;
+  border-width: 4px;
+  position: relative;
+  z-index: 1;
+  width: 480px;
+  flex: 0 0 auto;
+  height: 150px;
+  
+}
+.mini-tier-card .price{
+  display: flex;
+  justify-content: right;
+  align-items: center;
+}
+.mini-tier-card .inner{
+  width: 100%;
+  flex-direction: row;
+}
+
+.mini-tier-card > .inner >.price{
+  font-weight: 900;
+  font-style: italic;
+  margin: 0;
+  font-size: 4rem;
+  width: 250px;
+  text-align: center;
+  background-image: none;
+  margin: -20px 20px 50px 0;
+  line-height: 1;
+}
+.mini-tier-card .button{
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+}
+.mini-tier-card .inner > .icon {
+  position: absolute;
+  height: 100%;
+  mix-blend-mode:  overlay;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  mix-blend-mode: color-dodge;
+}
+.mini-tier-card .inner > .icon img{
+  height: 180px;
+  transform: translateY(15px);
+  opacity: .2;
+  
+  
+}
+.mini-tier-card h5{
+  font-size: 30px;
+  font-weight: 600
+}
+.mini-tier-card h6{
+margin: 0
+  
+}
