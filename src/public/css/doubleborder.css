@@ -1,5 +1,11 @@
 
 .plx-double-border{
+  max-width: 1200px;
+  margin: auto;
+  margin-bottom: 150px;
+  }
+
+.plx-double-border{
     height: 300px;
     position: relative;
   }
