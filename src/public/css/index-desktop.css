@@ -95,6 +95,10 @@ color: var(--secondary-color) !important;
   padding: 100px 100px 120px;
   clip-path: polygon(0 100px, 100% 0, 100% 100%, 0 90% );
   transform: translateY(200px);
+  box-sizing: border-box;
+}
+#advanced .fcard-finale{
+   margin: -320px 0 100px 0 ;
 }
 .fcard-finale ul{
   list-style: none;
@@ -113,14 +117,18 @@ color: var(--secondary-color) !important;
   color: var(--secondary-color) !important;
 }
 #premium .plx-container .title{
-  margin: 5rem 0 2rem 0;
+  margin: 10rem 0 2rem 0;
   color: var(--accent-color) !important;
 }
-  
+#premium .plx-container {
+  margin-bottom: 50px
+}
+
 .fcard-finale .sub{
   color: var(--secondary-color);
   filter: brightness(1.5)
 }
+
 #premium:before{
   content:"";
   width: 100%;
@@ -304,7 +312,8 @@ section#splash h1{
 @media screen and (max-width:1400px){
   #splash .info{
     transform: scale(.85);
-    transform-origin: top left
+    transform-origin: top left;
+    height: 77vh;
   }
   .pollux-img .yet-another-dummy-container{
     transform: scale(.8);
@@ -480,7 +489,8 @@ section#splash h1{
   position: relative;
   border-radius: 10px;
   box-shadow: 0 0 20px -5px #113;
-  margin-top: 40px
+  margin-top: 40px;
+  margin-bottom: 50px;
 }
 .explanation-box::before{
   content:"";
