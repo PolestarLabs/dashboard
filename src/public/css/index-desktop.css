@@ -1,13 +1,35 @@
 @import "fancycard.css";
 @import "supershadows.css";
 @import "doubleborder.css";
+@import "tierboxes.css";
 
 
-html{
-  background-image: url('/images/pollux/tea.png');
-  background-color: var(--secondary-color);
+#weeb:before{
+ background-image: url('/images/bg-grey.jpg');
+  content:"";
+  width: 100vw;
+  height: 100vh;
+  display: block;
+  position: fixed;
+  top:0;
+    background-color:var(--bg-darker);
   background-blend-mode: overlay;
+  background-size: cover;
+  z-index: -2
 }
+#weeb{
+  margin-top: -60px;
+  padding-top: 60px;
+  
+  //background-image: url('/images/pollux/tea.png');
+  
+  background-image: url('/images/index/background.png');
+  //background-image: url('/images/index/background.png');
+  //background-color: var(--secondary-color);
+  //background-color: var(--bg-main);
+  background-blend-mode:  color-dodge;
+}
+
 nav{
   background-image: linear-gradient(#002F,#0000);
 }
@@ -26,12 +48,14 @@ html.cl-preload *{
 #splash h1.title, .fcard-finale .title{
 will-change: transform;
 color: var(--accent-color-alt, var(--accent-color)) !important;
-font-size: 5rem;
+font-size: 4rem;
 --text-shadow: #220b41;
 font-weight: 700;
-line-height: 1.2;
+line-height: 1.3;
 }
-
+#splash h1.title{
+  font-size: 3rem;
+}
 
 
 #splash p ,.learnmore, .fcard-finale{
@@ -96,10 +120,10 @@ color: var(--secondary-color) !important;
 }
 #splash p {
   color: white !important;
-  font-size: 1.7rem;
-  width: 1000px;
-  margin: 20px auto 100px;
-   line-height: 1.1;
+  font-size: 1.3rem;
+  width: 500px;
+  margin: 00px 0 130px 100px;
+   line-height: 1.3;
    font-weight: 200;
 }
 #splash .buttons{
@@ -116,11 +140,12 @@ color: var(--secondary-color) !important;
     display: flex;
     flex-direction: column;
     height: 95vh;
-    padding: 35vh 0 0 0;
-    text-align: center;
+    padding: 75px 25px;
+    /*! text-align: center; */
     box-sizing:  border-box;
-    background-image: linear-gradient(#15153500 20%,#321b51BB 60%,#15153500);
-    margin-top: -50px;
+    background-image: linear-gradient(#15154500 30%,#321b61AB 60%,#15153500 70%);
+    /*! margin-top: -50px; */
+    
     
     
   }
@@ -129,20 +154,23 @@ section{
   z-index: 0;
 }
   .pollux-img{
-    position: fixed;
-    z-index: 0;  
+    position: absolute;
+    z-index: -1;  
     top: -200px;
     text-align: center;
     width: 100%;
+  
   }
 .pollux-img img{
   height: 2000px;
   margin: auto;
+    transform: translate(150px,500px) scale(1.5) !important;
   filter: drop-shadow(0 0 20px #0055)
 }
 
 section#splash h1{
   
+  margin-left: 100px;
 }
   #splash .background{
     
@@ -190,7 +218,11 @@ section#splash h1{
   }
   
   section#premium{
-    background:  var(--bg-darkest);
+    background-color:  var(--secondary-color);
+    background-image: url(/images/pollux/tea.png);
+    background-blend-mode: overlay;
+    padding-bottom: 300px;
+    margin-bottom: -200px;
   }
   
   .feature-cards {
@@ -205,6 +237,7 @@ section#splash h1{
     //height: 128px;
     width: 250px;
     flex: 0 0 auto;
+    
     margin: auto 20px auto 10px;
     border-radius: 10px;
     overflow: hidden;
@@ -240,7 +273,7 @@ section#splash h1{
   }
   .fcard{  
     border: solid 15px #10203F;
-    border-radius: 55px;
+    border-radius: 25px;
     background: var(--secondary-color);
     color: var(--color-contrast);
     box-sizing: border-box;
@@ -351,6 +384,12 @@ section#splash h1{
 
 
 
+.firstView__link {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  
+}
 
 
 #test{
@@ -365,6 +404,11 @@ section#splash h1{
   position: relative;
   display: flex;
   justify-content: space-evenly;
+  background-blend-mode: multiply;
+
+  z-index: 1;
+  position: relative;
+  display: flex;
 }
 
 
