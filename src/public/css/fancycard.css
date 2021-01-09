@@ -1,9 +1,4 @@
-section#test {
-  background-color: #223;
-  z-index: 1;
-  position: relative;
-  display: flex;
-}
+
 
 .fancy-card {
   width: 737px;
@@ -234,7 +229,7 @@ section#test {
 }
 */
 #splash{
-  display: none !important;
+  /*! display: none !important; */
 }
 #features, #features .background{
   background: none !important;
@@ -245,6 +240,7 @@ section#test {
   width: 1800px;
   height: 1800px;
   background: var(--accent-color);
+  //background: var(--secondary-color);
   transform: rotate(45deg);
   transform-origin: top right;
   right: 50vw;
@@ -260,16 +256,18 @@ section#test {
   width: 1800px;
   height: 1800px;
   background: var(--accent-color);
+  //background: var(--secondary-color);
   transform: rotate(-45deg);
   transform-origin: top left;
   left: 50vw;
   top: 50vw;
   //mix-blend-mode:   multiply;
+  
 }
 
 .plx-logo-sp{
   //opacity: 0;
-  position: absolute;
+  /*! position: absolute; */
   width: 45vw;
   top: 34vh;
   right: 5vw;
