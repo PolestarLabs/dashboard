@@ -1,28 +1,54 @@
 link(rel="stylesheet" href="/css/index-desktop.css")
 link(rel="stylesheet" href="/css/servercard.css")
 
-mixin magicPatreon()
-   a(href="#").magic-outline.plx-button
-        i.fas.fa-sign-in-alt
+mixin magicPatreon(price,icon)
+   a(href="#").plx-button.button
+        i
+            .tier-icon
+                img(src="/images/donate/icony/"+icon+"-small.png")
         span &#x2002 
             block
 
-.pollux-img(plx-parallax="y:-200")
-    img(src="/images/pollux/polluxv8.png").plx-animation-slide-bottom-medium(style="animation-delay:.8s")
+.pollux-img(plx-parallax="y:500;opacity:1,1,0")
+    .plx-animation-slide-bottom-medium(style="animation-delay:.8s")
+        img(src="/images/pollux/polluxv8.png")
 
 .halftones
         
 
-section#splash-b
+section#splash
+    .firstView__link
+        img(src="/images/index/ornate.png")
     //.halftones
         .halftone.l
         .halftone.r
-    .big-fucking-square-1
-    .big-fucking-square-2
+    .square-container-1.plx-animation-slide-left-medium(style="animation-delay:1s")
+        .big-fucking-square-1
+    .square-container-2.plx-animation-slide-right-medium(style="animation-delay:1s")
+        .big-fucking-square-2
     .big-damn-polly
         .image
-    .plx-logo-sp(plx-parallax="opacity: 1,0;y:200")
+    //.plx-logo-sp(plx-parallax="opacity: 1,0;y:200")
         img(src="/images/logo.png")
+    .plx-logo-sp(plx-parallax="opacity: 1,0;y:200")
+        img(src="/images/logo.png" style="animation-delay:1.1s"  ).plx-animation-slide-bottom-medium
+    h1.title.supershadow-title.plx-animation-slide-left-medium(style="animation-delay:1.2s" plx-parallax="y:-500") Your new favorite assistant 
+    p.infobox.supershadow-text.plx-animation-slide-left-medium(style="animation-delay:1.3s"  plx-parallax="y:-500")
+        | A feature-rich assistant focused on entertainment and social activities. Equipped with a variety of cool functionalities and minigames with unmatched depth and ellaborate visuals.
+        br
+        | Count on her to keep the activity around your community always blooming. 
+    
+
+    .buttons
+        a(href="#" onclick="install()").magic-outline.blue.plx-button.invite-button
+            i.fab.fa-discord
+            span &#x2002 INSTALL
+        a(href="/#features" plx-scroll).plx-button.learnmore.supershadow-tools.supershadow-text
+            i.fas.fa-arrow-down
+            span &#x2002 CHECK IT OUT!
+        a(href="#" onclick="login()" ).magic-outline.plx-button.login-main
+            i.fas.fa-sign-in-alt
+            span &#x2002 LOGIN
 
 
 
@@ -40,9 +66,41 @@ section#feats-b
                     |, 
                     span.normal AND MORE ! 
             .content 
-                | Lorem ipsum dolor sit amet consectetur adipisicing elit. Animi, incidunt recusandae? Tempore doloribus modi, veniam eius deserunt reiciendis. Doloribus, corrupti! Accusamus, culpa esse cupiditate quaerat odit minus similique consectetur nobis?
+                | Still the prettiest ones around to this day! With the widest range of customizability. You can be conservative, kitschy, exotic... Anything that fits your style!
+                br
+                br
+                | Rank your members activity with our custom ranking system! Leaderboards for the most active users of your server that can be retrieved either via command or on its own dedicated page.
 
-        .block-bottom
+        .block-bottom.skew1
+
+
+    .block.plx-double-border.supershadow-tools
+        .block-top.skew1
+
+        .block-body
+            h2.title
+                span.normal COLECTIBLES AND  DECOR !  
+                    span.yellow COMPLETIONISTS  
+                    |, 
+                    span.pinku PARADISE  
+                    |, 
+                    span.normal !
+            .content 
+                
+                .boxed
+                    | OVER 
+                    span.purple 2000 
+                    | ITEMS TO COLLECT AND CHOOSE FROM
+                    br
+                    .parenthesis
+                        | ( AND WE WILL NOT DELETE YOUR STUFF )
+                    | BACKGROUNDS, MEDALS, FLAIRS, STICKERS, DECKS, CARDS 
+                    span.purple AND MANY MORE 
+                    | !
+
+                
+
+        .block-bottom.skew2
 
 
 //section#splash
@@ -51,23 +109,6 @@ section#feats-b
     //h1.title Pollux
     //h2.subtitle Your favorite new assistant
 
-
-    h1.title.supershadow-title.plx-animation-slide-top-small(style="animation-delay:1s" plx-parallax="y:-500") Your new favorite assistant 
-    p.infobox.supershadow-text.plx-animation-slide-top-small(style="animation-delay:1.5s"  plx-parallax="y:-500")
-        | Pollux is a feature-rich assistant focused on entertainment and social activities. Equipped with a variety of cool functionalities and minigames with unmatched depth and ellaborate visuals.
-        br
-        | Count on her to keep the activity around your community always blooming. 
-
-    .buttons
-        a(href="#" onclick="install()").magic-outline.blue.plx-button.invite-button
-            i.fab.fa-discord
-            span &#x2002 INSTALL
-        a(href="/#features" plx-scroll).plx-button.learnmore
-            i.fas.fa-arrow-down
-            span &#x2002 CHECK IT OUT!
-        a(href="#" onclick="login()" ).magic-outline.plx-button.login-main
-            i.fas.fa-sign-in-alt
-            span &#x2002 LOGIN
 
 
     // Pollux image
@@ -421,46 +462,224 @@ section#premium
 
 
     .common-tiers
-        .tier-card
+        .tier-card.raritybox.U: .inner
+            .tier-icon
+                img(src="/images/donate/aluminium.png")
             h4.title Aluminium
             h5.desc The most economic
-        .tier-card.best
+            h6.price
+                span.dol $
+                span.number 5
+            ul.perks
+                li 
+                    | 3 
+                    span.saph Sapphires
+                    | 1st Month
+                li  Daily Bonus Boost
+                li  
+                    | 1 
+                    b (random) 
+                    | Pollux 
+                    span.stick Profile Sticker
+                li 
+                    | 3 bonus 
+                    span.saph  sapphires
+                    | every month
+                li 
+                    | 5 
+                    span.rar.U
+                        i.plx-rarity-icon.U
+                        | Uncommon
+                    span.box Funboxes
+                
+            .button.special.alt
+                i: .fas.fa-star
+                .price Special
+            +magicPatreon(2,"aluminium","3326865")
+                | Details
+
+        .tier-card.best.raritybox.responses.toggle.disabledComSer.raritybox.R: .inner
+            .tier-icon
+                img(src="/images/donate/lithium.png")
             h4.title Lithium / Iridium
             h5.desc The most popular
-        .tier-card
+            h6.price
+                span.dol $
+                span.number 15
+            ul.perks
+                li 
+                    | 10 
+                    span.saph Sapphires
+                    | 1st Month
+                li  Daily Bonus Boost
+                li  
+                    | 2*                    
+                    | Pollux 
+                    span.stick Profile Stickers
+                li 
+                    | 12 bonus 
+                    span.saph  sapphires
+                    | every month
+                li 
+                    | 5 
+                    span.rar.SR
+                        i.plx-rarity-icon.SR
+                        | Super-Rare 
+                    span.box Funboxes
+                li A custom Profile Background
+
+            +magicPatreon(2,"lithium","3326881")
+                | Details
+        .tier-card.raritybox.SR: .inner
+            .tier-icon
+                img(src="/images/donate/palladium.png",)
             h4.title Palladium
             h5.desc The best value
-        .tier-card
+            h6.price
+                span.dol $
+                span.number 25
+            ul.perks
+                li 
+                    | 15 
+                    span.saph Sapphires
+                    | 1st Month
+                li  Daily Bonus Boost
+                li  
+                    | 3**                    
+                    | Pollux 
+                    span.stick Profile Stickers
+                li 
+                    | 20 bonus 
+                    span.saph  sapphires
+                    | every month
+                li 
+                    | 5 
+                    span.rar.SR
+                        i.plx-rarity-icon.SR
+                        | Super-Rare 
+                    span.box Funboxes
+                li A custom Profile Background
+                li A custom Profile Link
+
+
+
+            +magicPatreon(2,"palladium",'3326882')
+                | Details
+        .tier-card.UR.raritybox: .inner
+            .tier-icon
+                img(src="/images/donate/zircon.png")
             h4.title Zirconium
             h5.desc The unique perks
+            h6.price
+                span.dol $
+                span.number 50
+            ul.perks
+                li 
+                    | 25 
+                    span.saph Sapphires
+                    | 1st Month
+                li  Daily Bonus Boost
+                li  
+                    | 4***                    
+                    | Pollux 
+                    span.stick Profile Stickers
+                li 
+                    | 30 bonus 
+                    span.saph  sapphires
+                    | every month
+                li 
+                    | 8 
+                    span.rar.UR
+                        i.plx-rarity-icon.UR
+                        | Super-Rare 
+                    span.box Funboxes
+                li A custom Profile Background
+                li A custom Profile Link
+                li Free Shipping on Pollux merch
+                li 2 Custom Commands
+
+            +magicPatreon(2,"zircon")
+                | Details
+
+    .explanation-box
+        
+        span.aster
+            i.fas.fa-asterisk
+        span Latest sticker announced + previous month one  
+        br
+        span.aster
+            i.fas.fa-asterisk
+            i.fas.fa-asterisk
+        span Latest sticker announced + previous month one + one random
+        br
+        span.aster
+            i.fas.fa-asterisk
+            i.fas.fa-asterisk
+            i.fas.fa-asterisk
+        span Latest sticker announced + previous month one + two random
 
     p We have other options with slightly different perks or directed at large communities with multiple PRIME memberships at once:
 
     .other-tiers
-        .mini-tier-card
-            h5 Plastic
-            h6 Show some love
-            +magicPatreon(2)
+        .mini-tier-card.raritybox.C.tier-card: .inner
+            .icon: img(src="/images/donate/plastic.png")
+            .text
+                h5 Plastic
+                h6 Show some love
+                ul.mini
+                    li Special Flair
+            .price 
+                .dol $
+                .number 2
+            +magicPatreon(2,"plastic")
                 | Details
-        .mini-tier-card
-            h5 Iron/Carbon
-            h6 More perks that fit your pocket
-            +magicPatreon(10)
+        .mini-tier-card.raritybox.U.tier-card: .inner
+            .icon: img(src="/images/donate/carbon.png")
+            .text
+                h5 Iron/Carbon
+                h6 More perks that fit your pocket
+                ul.mini
+                    li Latest Pollux Sticker
+            .price 
+                .dol $
+                .number 10
+            +magicPatreon(10,"carbon")
                 | Details
-        .mini-tier-card
-            h5 Uranium
-            h6 For large-community owners and power-players
-            +magicPatreon(75)
+        .mini-tier-card.raritybox.R.tier-card: .inner
+            .icon: img(src="/images/donate/uranium.png")
+            .text
+                h5 Uranium
+                h6 For large-community owners and power-players
+                ul.mini
+                    li Pollux Sticker Boosters
+            .price 
+                .dol $
+                .number 75
+            +magicPatreon(75,"uranium")
                 | Details
-        .mini-tier-card
-            h5 Astatine
-            h6 The supporters elite
-            +magicPatreon(100)
+        .mini-tier-card.raritybox.SR.tier-card: .inner
+            .icon: img(src="/images/donate/astatine.png")
+            .text
+                h5 Astatine
+                h6 The supporters elite
+                ul.mini
+                    li Custom Server Shops
+            .price 
+                .dol $
+                .number 100
+            +magicPatreon(100,"astatine")
                 | Details
-        .mini-tier-card
-            h5 Antimatter+
-            h6 The ultimate sponsors
-            +magicPatreon(500)
+        .mini-tier-card.raritybox.UR.tier-card: .inner
+            .icon: img(src="/images/donate/antimatter.png")
+            .text
+                h5 Antimatter+
+                h6 The ultimate sponsors
+                ul.mini
+                    li Additional Gift Subs
+            .price 
+                .dol $
+                .number 500
+            +magicPatreon(500,"antimatter")
                 | Details
 
         
