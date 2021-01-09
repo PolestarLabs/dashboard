@@ -156,7 +156,7 @@ color: var(--secondary-color) !important;
     display: flex;
     flex-direction: column;
     height: 95vh;
-    padding: 75px 25px;
+    padding: 25px 25px;
     /*! text-align: center; */
     box-sizing:  border-box;
     background-image: linear-gradient(#15154500 30%,#321b61AB 60%,#15153500 70%);
@@ -302,6 +302,14 @@ section#splash h1{
   }
 
 @media screen and (max-width:1400px){
+  #splash .info{
+    transform: scale(.85);
+    transform-origin: top left
+  }
+  .pollux-img .yet-another-dummy-container{
+    transform: scale(.8);
+    transform-origin: top left
+  }
   section#features{ 
     padding: 0 50px;
   }

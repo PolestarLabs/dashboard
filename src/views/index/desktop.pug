@@ -11,7 +11,8 @@ mixin magicPatreon(price,icon)
 
 .pollux-img(plx-parallax="y:500;opacity:1,1,0")
     .plx-animation-slide-bottom-medium(style="animation-delay:.8s")
-        img(src="/images/pollux/polluxv8.png")
+        .yet-another-dummy-container
+            img(src="/images/pollux/polluxv8.png")
 
 .halftones
         
@@ -19,24 +20,20 @@ mixin magicPatreon(price,icon)
 section#splash
     .firstView__link
         img(src="/images/index/ornate.png")
-    //.halftones
-        .halftone.l
-        .halftone.r
     .square-container-1.plx-animation-slide-left-medium(style="animation-delay:1s")
         .big-fucking-square-1
     .square-container-2.plx-animation-slide-right-medium(style="animation-delay:1s")
         .big-fucking-square-2
     .big-damn-polly
         .image
-    //.plx-logo-sp(plx-parallax="opacity: 1,0;y:200")
-        img(src="/images/logo.png")
-    .plx-logo-sp(plx-parallax="opacity: 1,0;y:200")
-        img(src="/images/logo.png" style="animation-delay:1.1s"  ).plx-animation-slide-bottom-medium
-    h1.title.supershadow-title.plx-animation-slide-left-medium(style="animation-delay:1.2s" plx-parallax="y:-500") Your new favorite assistant 
-    p.infobox.supershadow-text.plx-animation-slide-left-medium(style="animation-delay:1.3s"  plx-parallax="y:-500")
-        | A feature-rich assistant focused on entertainment and social activities. Equipped with a variety of cool functionalities and minigames with unmatched depth and ellaborate visuals.
-        br
-        | Count on her to keep the activity around your community always blooming. 
+    .info
+        .plx-logo-sp(plx-parallax="opacity: 1,0;y:200")
+            img(src="/images/logo.png" style="animation-delay:1.1s"  ).plx-animation-slide-bottom-medium
+        h1.title.supershadow-title.plx-animation-slide-left-medium(style="animation-delay:1.2s" plx-parallax="y:-500") Your new favorite assistant 
+        p.infobox.supershadow-text.plx-animation-slide-left-medium(style="animation-delay:1.3s"  plx-parallax="y:-500")
+            | A feature-rich assistant focused on entertainment and social activities. Equipped with a variety of cool functionalities and minigames with unmatched depth and ellaborate visuals.
+            br
+            | Count on her to keep the activity around your community always blooming. 
     
 
     .buttons
@@ -351,15 +348,17 @@ section#test.plx-flex-wrap
 
 
 
-//
 
-    section#advanced
+section#advanced
+    .fcard-finale
+        .halftones
 
-        h1 Enjoy it in your own way! Casual or Hardcore. 
-        h2 Delve deeper and explore our never-ending paths of global progression.
+        h3.title.supershadow-title Enjoy it in your own way! Casual or Hardcore. 
+        h4.sub.supershadow-title Delve deeper and explore our never-ending paths of global progression.
 
         p In addition to minigames and "e-toys", Pollux also provides an ellaborated social sphere with its own global progression system.
 
+//
         .adv-feat(plx-lightbox)
             - var link = "/images/showcase/craft.png" 
             a(href=link)
@@ -621,8 +620,8 @@ section#premium.supershadow-tools
             i.fas.fa-asterisk
             i.fas.fa-asterisk
         span Latest sticker announced + previous month one + two random
-
-    p We have other options with slightly different perks or directed at large communities with multiple PRIME memberships at once:
+    .plx-container
+        p.supershadow-text  We have other options with slightly different perks or directed at large communities with multiple PRIME memberships at once:
 
     .other-tiers
         .mini-tier-card.raritybox.C.tier-card: .inner
