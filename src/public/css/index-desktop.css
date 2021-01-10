@@ -271,7 +271,9 @@ section#premium {
   align-items: start;
   pointer-events: none;
 }
-
+.feature-cards > .fcard .icon img{
+  width: 100%;
+}
 .fcard:hover .icon {
   mask: linear-gradient(-90deg, #000f, #fff);
   filter: blur(0) brightness(1);
