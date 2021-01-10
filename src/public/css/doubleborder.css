@@ -1,92 +1,88 @@
-
-.plx-double-border{
+.plx-double-border {
   max-width: 1200px;
   margin: auto;
   margin-bottom: 150px;
-  }
+}
 
-.plx-double-border{
-    height: 300px;
-    position: relative;
-  }
-  .plx-double-border > div{
-    background: var(--background,var(--bg-main,#223));
-    border: solid 2px var(--inner-border,white);
-    box-sizing: border-box;
-    position: relative;   
-  }
-  .plx-double-border .skew1{
-      transform: skewY(3deg);  
-  }
-  .plx-double-border .skew2{
-      transform: skewY(-3deg);  
-  }
-  .plx-double-border .block-bottom ,.plx-double-border .block-top {
-    height: 150px;
-    width: 100%;
-    position: relative;
-    display: block;
-    top: -10px;
-    left: -10px;
-    z-index: -1;
-    border: solid 10px var(--outer-border,#113);
-    box-sizing: content-box;
-    border-radius: 20px;
-    
-  }
-  
-  .plx-double-border .block-body{  
-    border-top: none;
-    border-bottom: none;   
-    padding: 20px 50px;
-    
-  }
+.plx-double-border {
+  height: 300px;
+  position: relative;
+}
+.plx-double-border > div {
+  background: var(--background, var(--bg-main, #223));
+  border: solid 2px var(--inner-border, white);
+  box-sizing: border-box;
+  position: relative;
+}
+.plx-double-border .skew1 {
+  transform: skewY(3deg);
+}
+.plx-double-border .skew2 {
+  transform: skewY(-3deg);
+}
+.plx-double-border .block-bottom,
+.plx-double-border .block-top {
+  height: 150px;
+  width: 100%;
+  position: relative;
+  display: block;
+  top: -10px;
+  left: -10px;
+  z-index: -1;
+  border: solid 10px var(--outer-border, #113);
+  box-sizing: content-box;
+  border-radius: 20px;
+}
 
-.plx-double-border > div:before{
-  content:" ";
+.plx-double-border .block-body {
+  border-top: none;
+  border-bottom: none;
+  padding: 20px 50px;
+}
+
+.plx-double-border > div:before {
+  content: " ";
   width: 100%;
   position: absolute;
   display: block;
-  top:0;
+  top: 0;
 }
-  .plx-double-border > div:not(.block-body):before{       
-    height: 100%;  
-    border: solid 2px var(--inner-border,white);
-    border-radius: 10px;
-    box-sizing: border-box;
-    z-index: 1;  
-    left: 0;
-  }
-  .plx-double-border .block-body:before{
-    content:" ";
-    height: 90%;
-    left: -12px;
-    z-index: -2;
-    border: solid 12px var(--outer-border,#113);     
-  }
+.plx-double-border > div:not(.block-body):before {
+  height: 100%;
+  border: solid 2px var(--inner-border, white);
+  border-radius: 10px;
+  box-sizing: border-box;
+  z-index: 1;
+  left: 0;
+}
+.plx-double-border .block-body:before {
+  content: " ";
+  height: 90%;
+  left: -12px;
+  z-index: -2;
+  border: solid 12px var(--outer-border, #113);
+}
 
-  .plx-double-border .block-bottom{
-    margin-top:  -80px;
-    
-  }
-  .plx-double-border .block-top {
-    margin-bottom: -120px;
-  }
+.plx-double-border .block-bottom {
+  margin-top: -80px;
+}
+.plx-double-border .block-top {
+  margin-bottom: -120px;
+}
 
-
-.block{
+.block {
   --background: var(--secondary-color);
 }
 
-.block .title{
+.block .title {
   text-align: center;
 }
-.block .title > span{
+.block .title > span {
   text-transform: uppercase;
   --line-col: #223;
-   text-shadow: var(--outline-1), var(--outline-2), var(--extrusion);
+  text-shadow: var(--outline-1), var(--outline-2), var(--extrusion);
   font-weight: 900;
-  filter: var(--thin-drop) ;
+  filter: var(--thin-drop);
   line-height: 0.8;
   font-style: italic;
   margin-bottom: 50px;
@@ -94,40 +90,34 @@
   max-width: 85%;
   font-size: 20pt;
   display: inline-block;
-  
 }
 
-.title .pinku{
-  color: var(--accent-color)
+.title .pinku {
+  color: var(--accent-color);
 }
-.title .yellow{
-  color: var(--plx-yellow)
+.title .yellow {
+  color: var(--plx-yellow);
 }
-.block .title:before, .block .title:after{
-    text-shadow: none;
+.block .title:before,
+.block .title:after {
+  text-shadow: none;
   font-style: normal;
   color: var(--bg-main);
-  
+
   font-size: small;
   letter-spacing: 8px;
-  
 }
-.block .title:before{
+.block .title:before {
   content: "●⏺◯";
   margin-right: 0px;
-
-  
 }
-.block .title:after{
+.block .title:after {
   content: "◯⏺●";
   margin-left: 20px;
-
-  
 }
 
-.block .content{
-   --line-col: #223;
-   text-shadow: var(--outline-1), var(--outline-1);
+.block .content {
+  --line-col: #223;
+  text-shadow: var(--outline-1), var(--outline-1);
   color: white;
- 
 }
