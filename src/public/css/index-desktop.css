@@ -554,3 +554,12 @@ section#premium {
 .adv-feat img {
   border-radius: 15px;
 }
+#splash .magic-outline.blue{
+  background: var(--plx-blue);
+}
+#splash .magic-outline{
+  background: var(--secondary-color)
+}
+#splash .magic-outline:hover{
+  filter: brightness(1.2)
+}
