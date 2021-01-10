@@ -599,7 +599,7 @@ mask: linear-gradient(90deg, #000A,#FFF);}
   font-size: 15pt;
 }
 
-.adv-feat:nth-child(3n+2){
+.adv-feat:nth-child(2n+1){
   flex-direction: row-reverse;
 }
 
