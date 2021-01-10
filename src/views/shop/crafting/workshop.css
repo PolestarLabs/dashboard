@@ -442,6 +442,37 @@ height: 99% !important;
   /*! pointer-events: none; */
 }
 
+@media screen and (max-width: 1400px){
+  .crafting-zone{
+transform: scale(.8) translate(-100px,-100px);
+ 
+  /*! pointer-events: none; */
+}
+  .crafting-zone{
+    width: 560px;
+  }
+  .inventory {
+     transform:  translate(0,50px);
+  }
+  .inventory .items-list{
+   
+     height: 400px;
+     margin-right: 50px;
+     overflow: scroll;
+  }
+  ul.items{
+      height: 400px;
+   
+  }
+  .inventory .items-list > .items{
+
+   
+    transform: scale(.9);
+    transform-origin: top;
+}
+
+}
+
 .crafting-table .slot1 {
   transform: translate(-90px, 120px);
 }
@@ -606,7 +637,7 @@ circle.craft5 {
   }
 }
 
-@media screen and (max-height: 600px) {
+@media screen and (max-width: 600px) {
   .crafting-zone {
     height: 50vh;
     transform: translate(calc(50vw + -400px), -25px);
