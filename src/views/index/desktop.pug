@@ -62,15 +62,26 @@ section#feats-b
                     span.pinku LEVELS  & RANKING
                     |, 
                     span.normal AND MORE ! 
-            .content 
-                | Still the prettiest ones around to this day! With the widest range of customizability. You can be conservative, kitschy, exotic... Anything that fits your style!
-                br
-                br
-                | Rank your members activity with our custom ranking system! Leaderboards for the most active users of your server that can be retrieved either via command or on its own dedicated page.
+            .content.plx-flex
+                .left
+                    img(src="/images/showcase/lead_dks.png")
+                .center
+                    | Still the prettiest ones around to this day! With the widest range of customizability. You can be conservative, kitschy, exotic... Anything that fits your style!
+                    br
+                    br
+                    | Rank your members activity with our custom ranking system! Leaderboards for the most active users of your server that can be retrieved either via command or on its own dedicated page.
+                .right
+                    img(src="/images/showcase/profile_dsk.png")
 
         .block-bottom.skew1
 
-
+    br
+    br
+    br
+    br
+    br
+    br
+    br
     .block.plx-double-border.supershadow-tools
         .block-top.skew1
 
@@ -94,40 +105,19 @@ section#feats-b
                     | BACKGROUNDS, MEDALS, FLAIRS, STICKERS, DECKS, CARDS 
                     span.purple AND MANY MORE 
                     | !
+                   
+                    
 
                 
 
         .block-bottom.skew2
 
 
-//section#splash
-    
-    .background(aplx-parallax="opacity: 1 ,.85 ,.7")
-    //h1.title Pollux
-    //h2.subtitle Your favorite new assistant
-
-
-
-    // Pollux image
-        -- emerge from bottom
-        -- centered?
-
-    // brief description
-    // small description
-    // buttons
-        - add to discord
-        - info (scroll down) or (login)
-
-
-
-    // OPTIONAL
-        -- pollux splash image goes down on scroll and fits circle in next section (discord screen mockup)
-
 
 section#features
 
     .background(aplx-parallax="opacity: 1 ,.7;viewport: 0.5")
-    .mock-container
+    //.mock-container
         .ava
             .img
         .msg
@@ -135,11 +125,12 @@ section#features
             p Lorem ipsum dolor sit amet
 
 
-    .feature-cards
+    .feature-cards(plx-lightbox="animation: slide")
         .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-left; repeat: true")
             .co-frame.odd
             .icon
-                img(src="/images/showcase/lead_dks.png")
+                a(href="/images/showcase/lead.png" data-caption="Rank your members activity with our custom ranking system!\nLeaderboards for the most active users of your server that can be retrieved either via command or on its own dedicated page")
+                    img(src="/images/showcase/lead_dks.png")
             .details
                 h3.title Ranking System
                 h4.sub Make it to the top!
@@ -152,7 +143,8 @@ section#features
         .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-right; repeat: true")
             .co-frame.even
             .icon
-                img(src="/images/showcase/profile_dsk.png")
+                a(href="/images/showcase/profile.png" data-caption="We've proudly rised the standards on profile customization within the bots scene, and in the latest update we're rising it again, They're still the prettiest ones around to this day, and with the widest range of customizability! You can be conservative, kitschy, exotic, thematic... anything that fits your style!")
+                    img(src="/images/showcase/profile_dsk.png")
             .details
                 h3.title Custom Profiles
                 h4.sub Decor up to eleven!
@@ -163,7 +155,8 @@ section#features
         .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-left; repeat: true")
             .co-frame.odd
             .icon
-                img(src="/images/showcase/loot_dsk.png")
+                a(href="/images/showcase/loot.png" data-caption="Collecting stuff can always be fun, the joy of completing a collection or getting that one item you want. You might not want to put effort in decorate a profile, but if you enjoy collecting stuff, we got you covered too!\nAll of our cosmetics are also collectibles. Just like everything else with Pollux. You can collect not just decor stuff, but also a whole sort of items, some of them can be even used to unlock more cool stuff!")
+                    img(src="/images/showcase/loot_dsk.png")
             .details
                 h3.title Collectibles
                 h4.sub The joy of completionists!
@@ -175,7 +168,8 @@ section#features
         .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-right; repeat: true")
             .co-frame.even
             .icon
-                img(src="/images/showcase/roulette_dsk.png")
+                a(href="/images/showcase/roulette.png" data-caption="Build your own virtual casino with our set of minigames, both single and multi player. We got the fanciest Blackjack, Slot Machine, and Roulette game. As well as some more fun and unusual minigames like Flag Guesser, Black Metal Band Guesser, and of course a Trivia Game too.")
+                    img(src="/images/showcase/roulette_dsk.png")
             .details
                 h3.title Minigames
                 h4.sub The prettiest ones around! Never be bored Again.
@@ -186,7 +180,8 @@ section#features
         .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-left; repeat: true")
             .co-frame.odd
             .icon
-                img(src="/images/showcase/daily_dsk.png")
+                a(href="/images/showcase/daily.png" data-caption="Our special three-currency based system was further enhanced to make sure the economy is strong and keeps the players time-investments protected.")
+                    img(src="/images/showcase/daily_dsk.png")
             .details
                 h3.title Solid Economy System
                 h4.sub Your efforts are protected!
@@ -198,7 +193,8 @@ section#features
         .fcard(plx-scrollspy=" cls: plx-animation-slide-fcard-right; repeat: true")
             .co-frame.even
             .icon
-                img(src="/images/showcase/jiang_dsk.png")
+                a(href="/images/showcase/jiang_dsk.png" data-caption="Our exclusive global events introduce refreshing new features and minigames for everyone to play and obtain exclusive seasonal decor items and collectibles!")
+                    img(src="/images/showcase/jiang_dsk.png")
             .details
                 h3.title Seasonal Events
                 h4.sub "...and now for something completelly different!"
@@ -233,15 +229,6 @@ section#pack
                 i.fas.fa-star.color-secondary
                 | And many more new stuff coming every month.
 
-
-    // OPTION A: small card with feature icon + mini text <--
-    // OPTION B: screen mockup with feature + mini text
-    
-    // web / discord (webdaily and other web-based actions)
-
-    // three at a time? off-center vertical
-            OR
-    // 2 x 3 grid
 
 mixin fancyCard(title,main,icon,direction)
     .fancy-card(class=direction)
@@ -350,34 +337,59 @@ section#test.plx-flex-wrap
 
 
 section#advanced
-    .fcard-finale
+    .fcard-finale.supershadow-tools
         .halftones
 
         h3.title.supershadow-title Enjoy it in your own way! Casual or Hardcore. 
         h4.sub.supershadow-title Delve deeper and explore our never-ending paths of global progression.
 
-        p In addition to minigames and "e-toys", Pollux also provides an ellaborated social sphere with its own global progression system.
+        p In addition to minigames and "e-toys", Pollux also provides an elaborated social sphere with its own global progression system.
 
-//
-        .adv-feat(plx-lightbox)
+        .adv-feat(plx-lightbox).plx-flex.plx-flex-between
             - var link = "/images/showcase/craft.png" 
             a(href=link)
                 img(plx-img src=link)
-            h3.title Crafting
-            h4.sub Mix, Create, Discover!
-            p If you enjoy exploring and poking around with putting things together and see what comes out of it. Our crafting system is one of the richest you'll find. You can craft from recipes, or just experiment with stuff you have in your hands and see what comes out of it!
+            .text
+                .supershadow-text
+                    h3.title Crafting
+                    h4.sub Mix, Create, Discover!
+                    p If you enjoy exploring and poking around with putting things together and see what comes out of it. Our crafting system is one of the richest you'll find. You can craft from recipes, or just experiment with stuff you have in your hands and see what comes out of it!
+                    br
+                a(href="/crafting#discovery" data-type="iframe" data-attrs="width: 1300; height: 700;").plx-button.plx-button-default.plx-button-secondary
+                    i: .fas.fa-vial
+                    span &#x2003;
+                    span TRY NOW!
         
-        .adv-feat(plx-lightbox)
+        hr.plx-divider-icon
+        .adv-feat(plx-lightbox).plx-flex.plx-flex-between
             - var link ="/images/showcase/venture.png" 
             a(href=link)
                 img(plx-img src=link)
-            h1.title Adventure Mode
-            h3.subtitle It is back! Better than ever
-            p 
-                | You asked for it and it is back! The "Venture Forth" minigame from the Hallowinter 2019 event has been upgraded to a full minigame module!
-                br
-                | Explore different places and landscape to find and collect all sorts of stuff and unveil stories and mysteries from Pollux's universe!
+            .text.supershadow-text
+                h1.title Adventure Mode
+                h3.sub It is back! Better than ever
+                p 
+                    | You asked for it and it is back! The "Venture Forth" minigame from the Hallowinter 2019 event has been upgraded to a full minigame module!
+                    br
+                    | Explore different places and landscape to find and collect all sorts of stuff and unveil stories and mysteries from Pollux's universe!
+        br
+        hr.plx-divider-icon
+        .adv-feat(plx-lightbox).plx-flex.plx-flex-between
+            - var link ="/images/showcase/inventory.png" 
+            a(href=link)
+                img(plx-img src=link)
+            .text.supershadow-text
+                h1.title Adventure Mode
+                h3.sub It is back! Better than ever
+                p 
+                    | You asked for it and it is back! The "Venture Forth" minigame from the Hallowinter 2019 event has been upgraded to a full minigame module!
+                    br
+                    | Explore different places and landscape to find and collect all sorts of stuff and unveil stories and mysteries from Pollux's universe!
+        br
+        br
+ 
 
+//
         .adv-feat(plx-lightbox)
             - var link = "/images/showcase/storefront.png" 
             a(href=link)
