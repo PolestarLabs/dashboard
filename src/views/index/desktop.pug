@@ -1,8 +1,8 @@
 link(rel="stylesheet" href="/css/index-desktop.css")
 link(rel="stylesheet" href="/css/servercard.css")
 
-mixin magicPatreon(price,icon)
-   a(href="#").plx-button.button
+mixin magicPatreon(price,icon,tierid)
+   a(href=`https://www.patreon.com/join/pollux/checkout?rid=${tierid}` target="blank").plx-button.button
         i
             .tier-icon
                 img(src="/images/donate/icony/"+icon+"-small.png")
@@ -359,7 +359,7 @@ section#advanced
                     i: .fas.fa-vial
                     span &#x2003;
                     span TRY NOW!
-        
+        br
         hr.plx-divider-icon
         .adv-feat(plx-lightbox).plx-flex.plx-flex-between
             - var link ="/images/showcase/venture.png" 
@@ -379,12 +379,10 @@ section#advanced
             a(href=link)
                 img(plx-img src=link)
             .text.supershadow-text
-                h1.title Adventure Mode
-                h3.sub It is back! Better than ever
+                h1.title New Inventory
+                h3.sub Know exactly what you have
                 p 
-                    | You asked for it and it is back! The "Venture Forth" minigame from the Hallowinter 2019 event has been upgraded to a full minigame module!
-                    br
-                    | Explore different places and landscape to find and collect all sorts of stuff and unveil stories and mysteries from Pollux's universe!
+                    | The inventory system was overhauled with new visuals and more specific types of items so you know exactly what's in your pockets!
         br
         br
  
@@ -507,7 +505,7 @@ section#premium.supershadow-tools
                         | Uncommon
                     span.box Funboxes
                 
-            .button.special.alt
+            //.button.special.alt
                 i: .fas.fa-star
                 .price Special
             +magicPatreon(2,"aluminium","3326865")
@@ -613,7 +611,7 @@ section#premium.supershadow-tools
                 li Free Shipping on Pollux merch
                 li 2 Custom Commands
 
-            +magicPatreon(2,"zircon")
+            +magicPatreon(2,"zircon","3326897")
                 | Details
 
     .explanation-box
@@ -646,7 +644,7 @@ section#premium.supershadow-tools
             .price 
                 .dol $
                 .number 2
-            +magicPatreon(2,"plastic")
+            +magicPatreon(2,"plastic","3326854")
                 | Details
         .mini-tier-card.raritybox.U.tier-card: .inner
             .icon: img(src="/images/donate/carbon.png")
@@ -658,7 +656,7 @@ section#premium.supershadow-tools
             .price 
                 .dol $
                 .number 10
-            +magicPatreon(10,"carbon")
+            +magicPatreon(10,"carbon","3326868")
                 | Details
         .mini-tier-card.raritybox.R.tier-card: .inner
             .icon: img(src="/images/donate/uranium.png")
@@ -670,7 +668,7 @@ section#premium.supershadow-tools
             .price 
                 .dol $
                 .number 75
-            +magicPatreon(75,"uranium")
+            +magicPatreon(75,"uranium",'3326899')
                 | Details
         .mini-tier-card.raritybox.SR.tier-card: .inner
             .icon: img(src="/images/donate/astatine.png")
@@ -682,7 +680,7 @@ section#premium.supershadow-tools
             .price 
                 .dol $
                 .number 100
-            +magicPatreon(100,"astatine")
+            +magicPatreon(100,"astatine",'2735294')
                 | Details
         .mini-tier-card.raritybox.UR.tier-card: .inner
             .icon: img(src="/images/donate/antimatter.png")
@@ -694,7 +692,7 @@ section#premium.supershadow-tools
             .price 
                 .dol $
                 .number 500
-            +magicPatreon(500,"antimatter")
+            +magicPatreon(500,"antimatter",'3326916')
                 | Details
 
         
