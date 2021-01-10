@@ -385,84 +385,7 @@ section#advanced
                     | The inventory system was overhauled with new visuals and more specific types of items so you know exactly what's in your pockets!
         br
         br
- 
 
-//
-        .adv-feat(plx-lightbox)
-            - var link = "/images/showcase/storefront.png" 
-            a(href=link)
-                img(plx-img src=link)
-            h1.title The Marketplace
-            h3.subtitle Now everyone can be a merchant
-            p 
-                | Ran out of money and have an item you don't like taht much? You can now sell it in the User Marketplace for some easy virtual bucks.
-                br
-                | Or you can turn it into your primary source of Pollux income by specializing in selling stuff there.
-        //
-            .adv-feat                    
-            .adv-feat
-            .adv-feat
-
-
-        // description - problem solving
-        // "liquid"/open card - advanced feats
-
-    section#partners
-
-        h1.title Trusted by the best communities
-        h3.subtitle Meet some of sponsors and best partners
-
-        .commun-part
-            //test
-            -var guild = {partnerDetails:{feats:"",langs:"",tags:""}}
-            .plx-card.bronze
-                .pxc-bg(style=`background-image:url('${guild.partnerDetails.picture}')`)   
-                .pxc-avatar
-                    img(src= "http://i.imgur.com/PHCigiW.png") 
-                .pxc-stopper    
-                .pxc-subcard
-                    .pxc-title guild.meta.name
-                    .pxc-sub guild.partnerDetails.description
-                    
-                    .pxc-feats
-                        each feat in guild.partnerDetails.feats.split(',')
-                                span= feat
-                    .pxc-tags
-                        each tag in guild.partnerDetails.tags.split(',')
-                                div= tag
-                    .bottom-row  
-                        .pxc-info
-                            .flags
-                                each lang in guild.partnerDetails.langs.split(',')
-                                    span
-                                        img(src="http://beta/pollux.gg/images/flags/"+(lang.split('-')[1]||lang||"EN").toUpperCase().trim().slice(0,2)+".png")
-                            .region= guild.partnerDetails.region
-                        
-                        .links
-                            a.site(uk-tooltip="WEBSITE")
-                                i.fas.fa-globe-americas 
-                            a.link(uk-tooltip="DISCORD SERVER").discordLink
-                                i.fab.fa-discord
-                            a.shop(uk-tooltip="EXCLUSIVE POLLUX SHOP")
-                                i.fas.fa-shopping-bag 
-        // shorrt panel with partners
-
-    section#community
-        .image-slot
-            .img
-        h1.title Polluxverse
-        h3.subtitle All things Pollux and some more!
-        p 
-            | Pollux goes beyond of just bot minigames. We have a thriving family of players and other friends that gather around for gaming, music, or just chit-chat. 
-            br 
-            | Join us to participate in polls, several seasonal server-events, giveaways, and many more!
-            br 
-            br 
-            | Since you're here, check out some of the <a href="/fanart" target="blank">fan arts</a> submitted by our community members!
-
-
-
-//SOMETHING NEEDS TO GO HERE
 
 section#premium.supershadow-tools
 
@@ -694,9 +617,3 @@ section#premium.supershadow-tools
                 .number 500
             +magicPatreon(500,"antimatter",'3326916')
                 | Details
-
-        
-
-
-    // 3 main tiers
-    // other tiers
