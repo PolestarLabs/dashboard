@@ -92,9 +92,9 @@ router.get(['/:id/bgs','/:id/backgrounds'], async (req,res)=>{
 
 router.get('/:id/commends', cache(360), async (req,res)=>{
     const uID = res.locals.userID;
-    if(!req.query.full)  return res.json( await DB.commends.get(uID || req.user.id , {_id: 0, __v:0}) );
+    if(!req.query.full)  return res.json( await DB.commends.parseFull(uID || req.user.id ) );
     if(req.query.full==1){
-        const userCommends = (await DB.commends.get(uID || req.user.id , {_id: 0, __v:0}));
+        const userCommends = (await DB.commends.parseFull(uID || req.user.id , {_id: 0, __v:0}));
         if(!userCommends)  return res.status(404).json(null);
         let users =  [...new Set(
                 userCommends.whoIn.map(u=>u.id).slice(0,10).concat(userCommends.whoOut.map(u=>u.id).slice(0,10))
