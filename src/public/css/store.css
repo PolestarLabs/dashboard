@@ -925,3 +925,11 @@
    opacity: .5;
    filter: saturate(0)
  }
+
+ 
+#medals .shopbox{
+  max-width: 200px;
+}
+#medals .shopbox .img{
+  max-width: 100px;
+}
