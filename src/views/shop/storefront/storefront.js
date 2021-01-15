@@ -66,6 +66,9 @@ const STORE = new Vue({
     hideOwnedArrivals: false,
     displayPackinfo:false,
     displayStickerinfo: false,
+    currentPage:{
+      medals: 0,
+    }
  
   },
   computed: {
@@ -172,9 +175,18 @@ const STORE = new Vue({
         filter.click();
       }, 800);
     },
+    storepage(type,store,max,jump){
+      this[store] = [];
+      fetch(`/api/cosmetics/search?type=${type}&lim=${max||20}&skip=${jump*(max||20)}`).then((r) =>
+        r.json().then(async (res) => this[store] = res )
+      )
+    }
   },
 });
 console.log(STORE);
+
+ 
+
 Promise.all([
   fetch("/api/cosmetics/search?type=background&lim=20").then((r) =>
     r.json().then(async (res) => STORE.arrivals.push(...res))
