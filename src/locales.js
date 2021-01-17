@@ -24,6 +24,7 @@ function getLangFromCookie (req, cookieName) {
     } 
   } 
 }
+
  
 function loadLangJSONFiles (langPath, defaultLang,siteLangs) {
   var i18n = [];
