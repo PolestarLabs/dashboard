@@ -158,9 +158,9 @@ Object.assign(PLX,require("../../bot/core/utilities/Gearbox").Client);
   options: dbOptions,
 }).then(Connection => {
   global.DB  = Connection;
-  app.listen(4728, function (err) {
+  app.listen( process.env.DASHPORT || 4728, function (err) {
     if (err) return console.log(err)
-    console.log('Listening at http://localhost:4728/')
+    console.log('Listening at http://localhost:'+((process.env.DASHPORT||4728) +"").blue )
   })
   
 })
@@ -239,22 +239,23 @@ app.use(sassMiddleware({
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug'); 
 
+const ASSETS_PATH = process.env.ASSETS_PATH || "/home/pollux/polaris/ASSETS/";
 
 app.use(Express.static(path.join(__dirname, './public')));
-app.use(Express.static(path.join(__dirname, '../../assets/imgres')));
-app.use(Express.static(path.join(__dirname, '../../assets/cosmetics')));
+app.use(Express.static(path.join( ASSETS_PATH, './imgres')));
+app.use(Express.static(path.join( ASSETS_PATH, './cosmetics')));
 app.use("/images", Express.static(path.join(__dirname, './public/images')));
-app.use("/images", Express.static(path.join(__dirname, '../../assets/website')));
-app.use("/flairs",    Express.static(path.join(__dirname, '../../assets/cosmetics/flairs')));
-app.use("/medals",    Express.static(path.join(__dirname, '../../assets/cosmetics/medals')));
-app.use("/stickers",  Express.static(path.join(__dirname, '../../assets/cosmetics/stickers')));
-app.use("/boosters",  Express.static(path.join(__dirname, '../../assets/build/boosters')));
-app.use("/backdrops", Express.static(path.join(__dirname, '../../assets/cosmetics/backdrops')));
-app.use("/build",     Express.static(path.join(__dirname, '../../assets/build')));
+app.use("/images", Express.static(path.join( ASSETS_PATH, './website')));
+app.use("/flairs",    Express.static(path.join( ASSETS_PATH, './cosmetics/flairs')));
+app.use("/medals",    Express.static(path.join( ASSETS_PATH, './cosmetics/medals')));
+app.use("/stickers",  Express.static(path.join( ASSETS_PATH, './cosmetics/stickers')));
+app.use("/boosters",  Express.static(path.join( ASSETS_PATH, './build/boosters')));
+app.use("/backdrops", Express.static(path.join( ASSETS_PATH, './cosmetics/backdrops')));
+app.use("/build",     Express.static(path.join( ASSETS_PATH, './build')));
 //backwards compat
-app.use("/build/backdrops", Express.static(path.join(__dirname, '../../assets/cosmetics/backdrops')));
-app.use("/build/stickers",  Express.static(path.join(__dirname, '../../assets/cosmetics/stickers')));
-app.use("/build/flairs/top",    Express.static(path.join(__dirname, '../../assets/cosmetics/flairs')));
+app.use("/build/backdrops", Express.static(path.join( ASSETS_PATH, './cosmetics/backdrops')));
+app.use("/build/stickers",  Express.static(path.join( ASSETS_PATH, './cosmetics/stickers')));
+app.use("/build/flairs/top",    Express.static(path.join( ASSETS_PATH, './cosmetics/flairs')));
 
 
 app.use(exSession({

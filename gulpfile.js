@@ -32,7 +32,7 @@ function js() {
 }
 
 function assets() {
-    return src([`./src/**/*.{${imgExt}}`, ...ignore])
+    return src([`./src/**/*.{${imgExt}}`,`../../DEV/dashboard/src/**/*.{${imgExt}}`, ...ignore])
         .pipe(image())
         .pipe(dest(out));
 }

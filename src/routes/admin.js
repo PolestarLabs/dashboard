@@ -465,8 +465,8 @@ module.exports = router
 
 global.GLOBALINSTANCES = [
     {
-        ip:"136.243.78.7",
-        prefix:90,
+        ip: "136.243.78.7",
+        prefix: process.env.MICRO_PORT_PREFIX || 90,
         clusters: 5,
         get ports(){
             return [...Array(this.clusters).keys()].map(clu=> this.prefix+clu.toString().padStart(2,"0"))
