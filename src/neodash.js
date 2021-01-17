@@ -331,7 +331,7 @@ app.use(logger(function(tokens,req,res){
 /* --------------- */
 const i18n = require("./locales.js");
 app.use(i18n({
-  translationsPath: (path.join(__dirname, '../../bot/locales')),
+  translationsPath:   process.env.LOCALES_PATH,
   defaultLang: "en",
   //  browserEnable :false,
   siteLangs: ["en", "cz", "es", "fr", "pt-br", "pt", "ru","jp","tr","ko","de","pl"],
@@ -343,11 +343,11 @@ app.use(i18n({
 const i18next = require('i18next');
 const i18n_backend = require('i18next-node-fs-backend');
 const backendOptions = {
-    loadPath: '/home/pollux/polaris/bot/locales/{{lng}}/{{ns}}.json',
+    loadPath:  process.env.LOCALES_PATH+'/{{lng}}/{{ns}}.json',
     jsonIndent: 2
 };
  
-fs.readdir('/home/pollux/polaris/bot/locales/' , (err,list) => {
+fs.readdir( process.env.LOCALES_PATH , (err,list) => {
   //console.log(list)
     i18next.use(i18n_backend).init({
         backend: backendOptions,

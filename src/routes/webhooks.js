@@ -356,10 +356,10 @@ let fields = []
   
 
   if(p.ref.includes("live")){
-    (require('child_process'))exec(`git reset --hard origin/live`, {cwd:  process.cwd() });
+    (require('child_process')).exec(`git reset --hard origin/live`, {cwd:  process.cwd() });
   }
   if(p.ref.includes("master") && p.project.name === 'Pollux'){
-    (require('child_process'))exec(`git reset --hard origin/master`, {cwd: "/home/pollux/polaris/LIVE/beta" });
+    (require('child_process')).exec(`git reset --hard origin/master`, {cwd: "/home/pollux/polaris/LIVE/beta" });
   }
  
   descrip =( p.commits.map(c=>
