@@ -151,7 +151,7 @@ const dbOptions = {
 }
 
 global.PLX = new Eris.Client(config.token_laris,{restMode:true})
-Object.assign(PLX,require("../../bot/core/utilities/Gearbox").Client);
+Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client);
 
 (require('@polestar/database_schema'))({
   url: dbURL,
@@ -176,7 +176,7 @@ mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.Promise = require('bluebird');
 Promise.promisifyAll(require("mongoose"));
-Object.assign(global,require("../../bot/core/utilities/Gearbox").Global)
+Object.assign(global,require( process.env.BOT_PATH + '/core/utilities/Gearbox' ).Global)
 
 //-- PASSPORT  
 const scopes = ['identify', 'guilds','connections'];
