@@ -331,7 +331,7 @@ app.use(logger(function(tokens,req,res){
 /* --------------- */
 const i18n = require("./locales.js");
 app.use(i18n({
-  translationsPath: (path.join(__dirname, process.env.LOCALES_PATH)),
+  translationsPath:   process.env.LOCALES_PATH,
   defaultLang: "en",
   //  browserEnable :false,
   siteLangs: ["en", "cz", "es", "fr", "pt-br", "pt", "ru","jp","tr","ko","de","pl"],
