@@ -152,8 +152,8 @@ module.exports = {
 
 ,getComms: function getComms(json,aliases) {
   console.log({BOT_PATH})
-  let path =  Path.resolve( BOT_PATH,"/core" )
-  let path_polaris = Path.resolve( BOT_PATH,"/core")
+  let path =  Path.resolve( BOT_PATH,"./core" )
+  let path_polaris = Path.resolve( BOT_PATH,"./core")
   let files = fs.readdirSync(path + "/commands")
   let COMMANDS = {}
   let hidden = false;
