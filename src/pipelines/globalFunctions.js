@@ -151,6 +151,7 @@ module.exports = {
   }
 
 ,getComms: function getComms(json,aliases) {
+  console.log({BOT_PATH})
   let path =  Path.resolve( BOT_PATH,"/core" )
   let path_polaris = Path.resolve( BOT_PATH,"/core")
   let files = fs.readdirSync(path + "/commands")
@@ -181,8 +182,7 @@ module.exports = {
 
       for (y = 0; y < morefiles.length; y++) {
 
-        if (!["imgreactor.js","unstructured"].includes(morefiles[y])) {
-          
+        if (!["imgreactor.js","unstructured"].includes(morefiles[y])) {          
           
           morefiles[y]=(morefiles[y].replace(".js", ""))
           COMMANDS.list.push(morefiles[y].replace(".js", ""))
