@@ -75,7 +75,7 @@ router.use("/weather.png", async (req,res) => {
 
 router.use("/repipe/:url", async (req,res) => {
 
-    let Picto = require('../../../../bot/core/utilities/Picto')
+    let Picto = require(process.env.BOT_PATH+"/core/utilities/Picto")
 
     let base = await Picto.getCanvas(decodeURI(req.params.url));
 
