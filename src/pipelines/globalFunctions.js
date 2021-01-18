@@ -151,7 +151,6 @@ module.exports = {
   }
 
 ,getComms: function getComms(json,aliases) {
-  console.log({BOT_PATH})
   let path =  Path.resolve( BOT_PATH,"./core" )
   let path_polaris = Path.resolve( BOT_PATH,"./core")
   let files = fs.readdirSync(path + "/commands")
@@ -163,7 +162,7 @@ module.exports = {
    // console.log(files)
 
   for (i = 0; i < files.length; i++) {
-    let filedir = Path.resolve(path, "commands/" , files[i]);
+    let filedir = Path.resolve(path, "./commands/" , files[i]);
 
     if (files[i] != "dev" &&
       files[i] != "experimental" &&
@@ -177,7 +176,7 @@ module.exports = {
 
     let morefiles = fs.readdirSync(filedir)    
    global.appRoot = Path.resolve(path,"..")
-   global.paths =  require(Path.resolve( BOT_PATH, "/utils/paths"));
+   global.paths =  require(Path.resolve( BOT_PATH, "./utils/paths"));
    global._emoji = ()=>({});
 
       for (y = 0; y < morefiles.length; y++) {
