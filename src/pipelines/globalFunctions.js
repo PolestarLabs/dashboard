@@ -1,3 +1,5 @@
+const BOT_PATH = process.env.BOT_PATH;
+const LOCALES_PATH = process.env.LOCALES_PATH;
 const request = require("request");
 const cfg = require('../../config')
 const Path = require('path')
@@ -127,12 +129,12 @@ module.exports = {
     let json 
     
     try{
-      json = JSON.parse(fs.readFileSync(__dirname + "/../../../polaris/bot/locales/" + (lang||"dev") + "/commands.json"))
+      json = JSON.parse(fs.readFileSync( LOCALES_PATH + (lang||"dev") + "/commands.json"))
     }
     catch(e){
       console.log(e)
       
-        json = JSON.parse(fs.readFileSync(__dirname + "/../../../bot/locales/" + (lang||"dev") + "/commands.json"))
+        json = JSON.parse(fs.readFileSync( LOCALES_PATH + (lang||"dev") + "/commands.json"))
     }
     let aliases = {} // just in case so it doesnt break
     json.lang = lang;
@@ -149,8 +151,8 @@ module.exports = {
   }
 
 ,getComms: function getComms(json,aliases) {
-  let path =  Path.resolve(__dirname,"../../../bot/core" )
-  let path_polaris = Path.resolve(__dirname + "../../../../bot/core")
+  let path =  Path.resolve( BOT_PATH,"/core" )
+  let path_polaris = Path.resolve( BOT_PATH,"/core")
   let files = fs.readdirSync(path + "/commands")
   let COMMANDS = {}
   let hidden = false;
@@ -174,7 +176,7 @@ module.exports = {
 
     let morefiles = fs.readdirSync(filedir)    
    global.appRoot = Path.resolve(path,"..")
-   global.paths =  require(Path.resolve(__dirname,'../../../bot/utils/paths'));
+   global.paths =  require(Path.resolve( BOT_PATH, "/utils/paths"));
    global._emoji = ()=>({});
 
       for (y = 0; y < morefiles.length; y++) {
