@@ -1,7 +1,7 @@
 const ECO = require("../../../pipelines/economy.js");
 const express = require("express");
 const router = express.Router();
-const { bgPrices, medalPrices,sapphireModifier, jadeModifier, tokenModifier } = require("../../../../bot/resources/lists/GlobalNumbers.js");
+const { bgPrices, medalPrices,sapphireModifier, jadeModifier, tokenModifier } = require( process.env.BOT_PATH + "/resources/lists/GlobalNumbers.js" );
 const defaultPrices = {
     background: bgPrices,
     bundle: bgPrices * 10,
