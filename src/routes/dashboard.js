@@ -1,5 +1,4 @@
 const ECO = require('../pipelines/economy.js')
-const DB = require('../database');
 const express = require('express');
 const router = express.Router();
 const fx = require('../pipelines/globalFunctions.js');
