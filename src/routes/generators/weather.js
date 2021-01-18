@@ -1,4 +1,4 @@
-const Picto = require('../../../../bot/core/utilities/Picto');
+const Picto = require(process.env.BOT_PATH+"/core/utilities/Picto");
 const express = require('express');
 const router = express.Router();
 
