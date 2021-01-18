@@ -49,9 +49,7 @@ global.compulsoryAuth = async function checkAuthTwo(req, res, next) {
   try{
 
     if (req.isAuthenticated()){
-      if((await hasPolluxRole(req,"278985430844833792"))&& req.url.includes('/dashboard/')  ){
-        return next();
-      }else if(await hasPolluxRole(req,"612479032566480926")){
+      if(req.user.guilds.find(g=>g.id==='363476237118734349')){
         return next();
       }else{
         return auth(req,res,next);
@@ -467,14 +465,23 @@ const auth = async function(req, res, next) {
   if(req.url.includes('/auth'))     return next();
 
   
-  var user = simpleauth(req)
+  //var user = simpleauth(req)
 
-  compulsoryAuth(req,res,next);
+  if(!req.isAuthenticated()){
+
+   //return  compulsoryAuth(req,res,next);
+  }
   
-  if(!req.isAuthenticated() && !req.url.includes('/auth')) return res.redirect('/auth');
+  
+  //if(!req.isAuthenticated() && !req.url.includes('/auth') && !req.url.includes('callback')) return res.status(302).redirect('/auth');
+  //else if(req.url.includes('/auth')) return next();
   if(req.isAuthenticated()){
+    if( !req.user.guilds.find(g=>g.id==='363476237118734349'))  return res.status(401).send("User not eligible for beta access");
     if(await hasPolluxRole(req,"278985430844833792") && req.url.includes('/dash') ) return next();
     if(await hasPolluxRole(req,"612479032566480926")) return next();
+  }else{
+    if(!req.url.includes("call")) return res.redirect('/auth');
+    else return next();
   }
   
   if(req.headers['referer']==='http://opengraphcheck.com' || req.headers['user-agent']==='Mozilla/5.0 (compatible; Discordbot/2.0; +https://discordapp.com)'){
@@ -485,11 +492,13 @@ const auth = async function(req, res, next) {
      return next()
    }
 
+   /*
   if (!user || !admins[user.name] || admins[user.name].password !== user.pass) {
     res.set('WWW-Authenticate', 'Basic realm="wawa"')
     //return response.redirect('/auth')
     return res.status(401).send()
   }
+  */
   return next()
 }
 
@@ -524,7 +533,7 @@ global.checkAuth = function checkAuth(req, res, next) {
 
 
 
-//app.use(compulsoryAuth)
+app.use(auth);
 
 app.get('/', (req,res,rex)=>  {
   if (req.query.ref) {
