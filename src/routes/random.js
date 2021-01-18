@@ -6,7 +6,7 @@ const path = require('path');
 router.get('/:gallery', async function (req, res) {
 
     let GAL = req.params.gallery;
-    const GalleryPath = path.resolve(__dirname+"/../../assets/build/galleries/"+GAL)
+    const GalleryPath = path.resolve( process.env.ASSETS_PATH,"./build/galleries/"+GAL)
 
 
     fs.readdir(GalleryPath, function (err, files) {
@@ -26,7 +26,7 @@ router.get('/:gallery', async function (req, res) {
 router.get('/guess/:gallery', async function (req, res) {
 
     let GAL = req.params.gallery;
-    const GalleryPath = path.resolve(__dirname+"/../../assets/build/guessing/"+GAL)
+    const GalleryPath = path.resolve( process.env.ASSETS_PATH,"./build/guessing/"+GAL)
 
     fs.readdir(GalleryPath, function (err, files) {
 
@@ -45,7 +45,7 @@ router.get('/guess/:gallery', async function (req, res) {
 
 router.get('/redir/:gallery/', async function (req, res) {
       let GAL = req.params.gallery;    
-      const GalleryPath = path.resolve(__dirname+"/../../assets/build/galleries/"+GAL)
+      const GalleryPath = path.resolve(process.env.ASSETS_PATH,"./build/galleries/"+GAL)
       fs.readdir(GalleryPath, function (err, files) {
             let rand = randomize(0, files.length - 1);       
             let filepath = HOST + "/build/galleries/"+GAL+"/" + encodeURIComponent(files[rand])   
@@ -57,7 +57,7 @@ router.get('/redir/:gallery/', async function (req, res) {
   });
 router.get('/:gallery/size', async function (req, res) {
       let GAL = req.params.gallery;   
-      const GalleryPath = path.resolve(__dirname+"/../../assets/build/galleries/"+GAL)   
+      const GalleryPath = path.resolve(process.env.ASSETS_PATH,"./build/galleries/"+GAL)   
       fs.readdir(GalleryPath, function (err, files) {
           res.json(files.length)  
         });  
@@ -65,7 +65,7 @@ router.get('/:gallery/size', async function (req, res) {
 
 router.get('/:gallery/:index', async function (req, res) {
       let GAL = req.params.gallery;
-      const GalleryPath = path.resolve(__dirname+"/../../assets/build/galleries/"+GAL)
+      const GalleryPath = path.resolve(_process.env.ASSETS_PATH,"./build/galleries/"+GAL)
       let IND = Number(req.params.index.split('.')[0]) || 0;      
       fs.readdir(GalleryPath, function (err, files) {
             IND =  Math.abs(IND) >= files.length  ? files.length - 1 : Math.abs(IND) ;   
@@ -78,7 +78,7 @@ router.get('/:gallery/:index', async function (req, res) {
 router.get('/:gallery/filter/:filter', async function (req, res) {
       let GAL = req.params.gallery;
       let FIL =  req.params.filter.split('.')[0];
-      const GalleryPath = path.resolve(__dirname+"/../../assets/build/galleries/"+GAL)
+      const GalleryPath = path.resolve(process.env.ASSETS_PATH,"./build/galleries/"+GAL)
 
       fs.readdir(GalleryPath, function (err, files) {
             files=files.filter(f=>f.includes(FIL))||files;
