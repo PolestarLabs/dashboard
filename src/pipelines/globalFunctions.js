@@ -183,6 +183,7 @@ module.exports = {
 
         if (!["imgreactor.js","unstructured"].includes(morefiles[y])) {
           
+          
           morefiles[y]=(morefiles[y].replace(".js", ""))
           COMMANDS.list.push(morefiles[y].replace(".js", ""))
           let smolAlias = Object.keys(aliases).map(a=>{return {alias: a, comm: aliases[a]}});
