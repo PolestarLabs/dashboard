@@ -148,7 +148,7 @@ const dbOptions = {
   connectTimeoutMS: 30000,
 }
 
-global.PLX = new Eris.Client(config.token_laris,{restMode:true})
+global.PLX = new Eris.Client(config.token,{restMode:true});
 Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client);
 
 (require('@polestar/database_schema'))({
