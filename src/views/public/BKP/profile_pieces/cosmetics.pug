@@ -29,7 +29,7 @@
       | %
 
 .bg(plx-toggle=' target:.toggle-lateral; cls: expanded; delay: 500; mode: hover')
-  img(src="https://beta.pollux.gg/backdrops/"+userprofile.modules.bgID+".png")    
+  img(src="/backdrops/"+userprofile.modules.bgID+".png")    
   .bginfo.toggle-lateral 
     span(v-if='bgData.loading')
       span {{bgInfo(userprofile.modules.bgID)}}
@@ -40,7 +40,7 @@
       br
     div(v-if='bgDataMarket.cheapest' )
         span.fromprice  From: {{bgDataMarket.cheapest.price}} {{bgDataMarket.cheapest.currency}}
-        button.plx-button.plx-button-default.plx-button-primary(:href="`https://beta.pollux.gg/shop/marketplace/entry/${bgDataMarket.cheapest.id}`")
+        button.plx-button.plx-button-default.plx-button-primary(:href="`/shop/marketplace/entry/${bgDataMarket.cheapest.id}`")
           | Find in Marketplace
     div(v-else )
           | No marketplace entries.
@@ -48,4 +48,4 @@
 .medals.toggle-lateral
   each MDL in userprofile.modules.medals
     .medal 
-      img(src="https://beta.pollux.gg/medals/"+MDL+".png")
+      img(src="/medals/"+MDL+".png")

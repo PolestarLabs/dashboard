@@ -117,7 +117,7 @@ const CRAFTING = new Vue({
   
 
           notify(
-            `<img width=50 src='https://beta.pollux.gg/build/items/${this.discovery.discovery.icon}.png'/> ` +
+            `<img width=50 src='/build/items/${this.discovery.discovery.icon}.png'/> ` +
               this.discovery.discovery.name +
               " added to inventory."
           );
@@ -167,7 +167,7 @@ const CRAFTING = new Vue({
     commitCraft(item, pot) {
       console.log({ pot });
       return new Promise(async (resolve) => {
-        fetch("https://beta.pollux.gg/api/crafting/create", {
+        fetch("/api/crafting/create", {
           method: "POST",
           headers: { "Content-Type": "application/json; charset=utf-8" },
           body: JSON.stringify({ pot, item }),
@@ -177,7 +177,7 @@ const CRAFTING = new Vue({
     fetchDiscovery() {
       this.discovery = { loading: true };
       if (!this.pot.length) return (this.discovery = { loading: false });
-      fetch("https://beta.pollux.gg/api/crafting/mix", {
+      fetch("/api/crafting/mix", {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify({ pot: this.pot }),
@@ -197,7 +197,7 @@ const CRAFTING = new Vue({
 });
 
 fetch(
-  "https://beta.pollux.gg/api/user/" + userdata.id + "/inventory"
+  "/api/user/" + userdata.id + "/inventory"
 ).then((r) => r.json().then((res) => (CRAFTING.inventory = res)));
 
 function notify(N) {

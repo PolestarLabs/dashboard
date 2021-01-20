@@ -1,5 +1,7 @@
 const ECO = require("../../../pipelines/economy.js");
 const express = require("express");
+const { check } = require("@polestar/database_schema/schemas/users");
+const { checkAuth } = require("../../../pipelines/globalFunctions.js");
 const router = express.Router();
 const { bgPrices, medalPrices,sapphireModifier, jadeModifier, tokenModifier } = require( process.env.BOT_PATH + "/resources/lists/GlobalNumbers.js" );
 const defaultPrices = {
@@ -30,7 +32,7 @@ router.get("/", cache(60), async (req,res)=>{
 
  
 
-router.post("/:type/buy/:finder", async (req,res)=>{
+router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
 
     const {type,finder} = req.params;
     const {currency} = req.body;

@@ -28,7 +28,7 @@
                 -rings = [0,0,0,0,0,0,0,0,0,0,0]
                 each ring in rings.slice(0,6)
                     .ring
-                        img(  :src="`https://beta.pollux.gg/build/items/ring_${wifeData.ring}.png`" width=24 )
+                        img(  :src="`/build/items/ring_${wifeData.ring}.png`" width=24 )
                 .plus
                     span= rings.length>6 ? rings.length - 6 :""
 
@@ -38,4 +38,4 @@
             .tier-name Tier Name Here
             .lvp {{wifeData.lovepoints}} LVP
         .ring
-            img(  :src="`https://beta.pollux.gg/build/items/ring_${wifeData.ring}.png`" width=64 )
+            img(  :src="`/build/items/ring_${wifeData.ring}.png`" width=64 )

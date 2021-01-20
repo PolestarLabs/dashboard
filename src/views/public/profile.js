@@ -34,12 +34,12 @@ function since(x){
       },
     methods:{
        bgInfo(bgID){
-          fetch("https://beta.pollux.gg/api/cosmetics/search?code="+bgID+"&.png").then(r =>
+          fetch("/api/cosmetics/search?code="+bgID+"&.png").then(r =>
             r.json().then(res => {
                 console.log(res)
                 this.bgData = res[0] || {name: "UNKNOWN", rarity: "C" };
                 if(!res[0]) return;
-                fetch("https://beta.pollux.gg/api/marketplace?item_id="+this.bgData._id+"&.png").then(r =>
+                fetch("/api/marketplace?item_id="+this.bgData._id+"&.png").then(r =>
                     r.json().then(res => {
                       const payload = {}
                       payload.entries = res.length

@@ -1221,27 +1221,27 @@ div:not(.plx-open) .faders {
  margin: 2px 4px;
 }
 .plx-rarity-icon.UR {
- background-image:url(https://beta.pollux.gg/images/tiers/UR.png);
+ background-image:url(/images/tiers/UR.png);
  background-size:contain
 }
 .plx-rarity-icon.SR {
- background-image:url(https://beta.pollux.gg/images/tiers/SR.png);
+ background-image:url(/images/tiers/SR.png);
  background-size:contain
 }
 .plx-rarity-icon.R {
- background-image:url(https://beta.pollux.gg/images/tiers/R.png);
+ background-image:url(/images/tiers/R.png);
  background-size:contain
 }
 .plx-rarity-icon.U {
- background-image:url(https://beta.pollux.gg/images/tiers/U.png);
+ background-image:url(/images/tiers/U.png);
  background-size:contain
 }
 .plx-rarity-icon.C {
- background-image:url(https://beta.pollux.gg/images/tiers/C.png);
+ background-image:url(/images/tiers/C.png);
  background-size:contain
 }
 .plx-rarity-icon.XR {
- background-image:url(https://beta.pollux.gg/images/tiers/XR.png);
+ background-image:url(/images/tiers/XR.png);
  background-size:contain
 }
 .nullify {
