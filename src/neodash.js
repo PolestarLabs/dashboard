@@ -1,4 +1,3 @@
-global.HOST = "https://beta.pollux.gg" 
 global.appRoot = "/home/pollux/polaris"
 global.Promise = require('bluebird')
 Promise.config({
@@ -27,7 +26,7 @@ global.cacheFunction = (duration) => {
 global.userCache = new Map();
 
 const config = require('../config.js');
-
+global.HOST = config.host //"https://beta.pollux.gg" 
 
 global.hasPolluxRole = function hasPolluxRole(req,roleID){
   return new Promise(async resolve=>{     
