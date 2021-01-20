@@ -430,7 +430,7 @@ fetch("/api/items/search?type=boosterpack").then((r) =>
     });
     DASH.boostersAvailable = res;
     console.log({bav:DASH.boostersAvailable})
-    fetch("https://beta.pollux.gg/api/user/" + userinfo.id + "/stickers").then(
+    fetch("/api/user/" + userinfo.id + "/stickers").then(
       (r) =>
         r.json().then((res2) => {
           console.log({res2})
@@ -451,7 +451,7 @@ fetch("/api/items/search?type=boosterpack").then((r) =>
 );
 
 
-fetch("https://beta.pollux.gg/api/user/"+userinfo.id+"/bgs").then(r =>
+fetch("/api/user/"+userinfo.id+"/bgs").then(r =>
   r.json().then(res =>  {
     console.log({res})
     DASH.selectBackground = res.find((bg) => bg.code == userdata.modules.bgID) || "none";
@@ -473,7 +473,7 @@ fetch("https://beta.pollux.gg/api/user/"+userinfo.id+"/bgs").then(r =>
     });
   } )
 );
-fetch("https://beta.pollux.gg/api/user/"+userinfo.id+"/medals").then(r =>
+fetch("/api/user/"+userinfo.id+"/medals").then(r =>
   r.json().then(res => {
     DASH.medals = res;
     DASH.medalsEquipped = res.filter((m,i,a)=> userdata.modules.medals.includes(m.icon) && a.map(x=>x.icon).indexOf(m.icon)===i)

@@ -36,7 +36,7 @@ block content
 
  
   style :root{--favcolor-not-so-dim: #{FAVCOLOR}77; --favcolor-dim: #{FAVCOLOR}15; --favcolor: #{FAVCOLOR}} .favc-color{color: #{FAVCOLOR}}
-  style .has-user-bg{ background-image:url('https://beta.pollux.gg/backdrops/#{userprofile.modules.bgID}.png')}
+  style .has-user-bg{ background-image:url('/backdrops/#{userprofile.modules.bgID}.png')}
  
   .plx-animation-kenburns.background-container.has-user-bg
 
@@ -72,7 +72,7 @@ block content
             img.hexagon(src=userprofile.meta.avatar width="150px")
             .avatar-frame 
               if(userprofile.switches && userprofile.donator)
-                //img(src=`https://beta.pollux.gg/build/profile/frames/${userprofile.donator}.png` class=userprofile.switches.profileFrame?'':'disengaged' alt="FRAME")
+                //img(src=`/build/profile/frames/${userprofile.donator}.png` class=userprofile.switches.profileFrame?'':'disengaged' alt="FRAME")
               
               img(src="/build/web-profile/plain_hex.svg" plx-svg).back-svg-frame
               img(src="/build/web-profile/plain_hex.svg" plx-svg).svg-shine

@@ -14,7 +14,7 @@ block content
   script(  src="https://unpkg.com/animated-number-vue@1.0.0/dist/AnimatedNumber.umd.min.js")  
   
  
-  .plx-animation-kenburns.background-container(style=`background-image:url('https://beta.pollux.gg/backdrops/${userprofile.modules.bgID}.png')`)
+  .plx-animation-kenburns.background-container(style=`background-image:url('/backdrops/${userprofile.modules.bgID}.png')`)
 
   style :root{--favcolor-not-so-dim: #{userprofile.modules.favcolor}AA; --favcolor-dim: #{userprofile.modules.favcolor}15; --favcolor: #{userprofile.modules.favcolor}} .favc-color{color: #{userprofile.modules.favcolor}}
   style
@@ -51,7 +51,7 @@ block content
             span.discrim # {{wifeData.discriminator}}
           .since.moment {{ wifeData.since[0] }} ({{ wifeData.since[1] }})
         .ring
-          img(  :src="`https://beta.pollux.gg/build/items/ring_${wifeData.ring}.png`" width=48 )
+          img(  :src="`/build/items/ring_${wifeData.ring}.png`" width=48 )
            
     
  
@@ -70,7 +70,7 @@ block content
           img(src=userprofile.meta.avatar width='512px' )
       #frame 
         if(userprofile.switches && userprofile.donator)
-          img(src=`https://beta.pollux.gg/build/profile/frames/${userprofile.donator}.png` class=userprofile.switches.profileFrame?'':'disengaged' alt="FRAME")
+          img(src=`/build/profile/frames/${userprofile.donator}.png` class=userprofile.switches.profileFrame?'':'disengaged' alt="FRAME")
 
     .col.center(data-tilt data-tilt-reverse="true"): .plx-animation-slide-bottom-medium
       .userinfo

@@ -42,7 +42,7 @@ block content
             hooper( style="height: 380px; max-height:30vh ; padding: 0"  :settings="hooperSettings" ref="paks" @slide="onslidePacks")
                 hooper-pagination( slot="hooper-addons")
                 slide(v-for="(pak,idx) in STKPAK" :key="idx" :index="idx"  ) 
-                    img(:src="`https://beta.pollux.gg/build/boosters/showcase/${pak.icon}.png`" @mouseup="selectPack(idx,pak)")
+                    img(:src="`/build/boosters/showcase/${pak.icon}.png`" @mouseup="selectPack(idx,pak)")
 
                     
                 
@@ -51,7 +51,7 @@ block content
 
             .stk-metadata.plx-padding.plx-position-top-left 
               h1.title
-                img.icon64(:src="`https://beta.pollux.gg/images/tiers/new/${selectedPakComplete.rarity}.png`")
+                img.icon64(:src="`/images/tiers/new/${selectedPakComplete.rarity}.png`")
                 | \#{{currentIndex+1}} {{selectedPakComplete.name}}
               h3.subtitle
                 span(v-for="rar in ['C','U','R','SR','UR']" style="width:2rem")
@@ -80,7 +80,7 @@ block content
                 transition(name='fade')
                   .stickercollection.plx-flex.plx-flex-center.plx-flex-wrap(v-if="selectedPak == '"+pack.icon+"'")
                     .sticker(v-for="(sticker,index) in STIKS.filter(x=>x.series_id == '"+pack.icon+"')" v-bind:style=userinfo?"{opacity: 0.125+hasSticker(sticker)}":'')
-                      img( :src="'https://beta.pollux.gg/stickers/'+sticker.id+'.png'" )
+                      img( :src="'/stickers/'+sticker.id+'.png'" )
                       .textcont 
                         .stkname {{sticker.name}}
                         .stkpak {{sticker.series}}
