@@ -370,11 +370,8 @@ let fields = []
  
  
   
-
-  
   
 }else if (p.object_kind == 'merge_request'){
-  console.log(p)
   
    xxx=`**${p.user.name}** (\`@${p.user.username}\`) [Merge Request](${p.object_attributes.url}) at **[${p.project.name}](${p.project.web_url})**`;
 
