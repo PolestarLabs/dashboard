@@ -96,7 +96,6 @@ router.get("/", cache(60), async (req, res) => {
 
 // RATES
 router.get("/rates", async (req, res) => {
-  // TODO[epic=anyone] Find a solution for this train of ../../../../../s
   // TODO[epic=flicky] Move Global Numbers & Rates to Database ?
   const { bgPrices, medalPrices,sapphireModifier, jadeModifier } = require( process.env.BOT_PATH + "/resources/lists/GlobalNumbers.js");
   return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier });
