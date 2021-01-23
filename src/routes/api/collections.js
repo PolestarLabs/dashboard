@@ -339,18 +339,21 @@ router.post('/create', checkAuth, async (req,res)=> {
     });
     
     console.log(pay,payGem)
-    await Promise.all( pay.map(material=> userData.removeItem(...material)) );
-    await Promise.all( payGem.map(gems=> ECO.pay(...gems)) );
+    console.log(PLX)
     
-    await userData.addItem(item,1);
-    await DB.users.set(req.user.id, {$inc: {'progression.craftingExp':baselineBonus[itemToCraft.rarity] * 1} });
-    await DB.users.set({id:req.user.id, "modules.inventory.id":item }, {$inc: {"modules.inventory.$.crafted": 1} });
-
-    
+    await Promise.all( pay.map(material=> userData.removeItem(...material)) ).catch(err=> res.status(500).json("Error processing materials"));
+    await Promise.all( payGem.map(gems=> ECO.pay(...gems)) ).catch(err=> res.status(500).json("Error processing gems"));    
+    await Promise.all([
+        userData.addItem(item, 1,true),
+        DB.users.set(req.user.id, {
+            $inc: { "progression.craftingExp": baselineBonus[itemToCraft.rarity] * 1 },
+        })
+    ]);
     return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
+
 }catch(err){
     console.error(err)
-    res.status(400).json({status:"ERROR",message: err});
+    res.status(400).json({status:"ERROR",message: err.message});
 }
 
 
