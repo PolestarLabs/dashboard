@@ -39,14 +39,17 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
 
     const userData = await DB.users.findOne({id: req.user.id});
 
+    
     let item = await DB.cosmetics.findOne({ 
         type,
         $or: [{id: finder},{icon: finder},{code: finder}]        
     }).lean();
+    
+    if(!item) return res.status(404).json(ERRORS.item404);
+    
 
     const price = ~~(itemPrice(item,currency));
     
-    if(!item) return res.status(404).json(ERRORS.item404);
     if(!userData) return res.status(404).json(ERRORS.user404);
     
     if (type === 'bundle'){
