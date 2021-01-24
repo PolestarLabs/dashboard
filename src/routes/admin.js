@@ -154,7 +154,8 @@ router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
     let userData = (await DB.users.get(serverInfo.ownerID));
 
     if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
-        PLX.deleteMessage(payload.channel,payload.message).catch(err=>"No message to delete");
+        //TODO Receive a switch to delete or not the message where the reaction role is
+        //PLX.deleteMessage(payload.channel,payload.message).catch(err=>"No message to delete");
         PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
           embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 
