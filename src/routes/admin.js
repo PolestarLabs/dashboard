@@ -150,11 +150,10 @@ router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
 
     let SVID = payload.serverid.toString();    
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
+    let userData = (await DB.users.get(serverInfo.ownerID));
 
-    
     if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
         let serverInfo= (await PLX.getRESTGuild(SVID));
-        let userData = (await DB.users.get(serverInfo.ownerID));
         PLX.deleteMessage(payload.channel,payload.message)
         PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
           embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
