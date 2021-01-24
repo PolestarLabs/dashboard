@@ -64,7 +64,7 @@ router.get('/:endpoint', cache(0.1),  (req,res) => {
         .sort(sort).lean()
         .then(async result=>{
             if(result){
-                let x = await Promise.all(result.map(res=> res.type == 'boosterpack' ? stickerCount(res) : null ));
+                //let x = await Promise.all(result.map(res=> res.type == 'boosterpack' ? stickerCount(res) : null ));
             }
             result.forEach(x=>{               
                 let timestamp = x._id.toString().substring(0,8)
