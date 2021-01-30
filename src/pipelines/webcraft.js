@@ -87,9 +87,9 @@ exports.run = async function(ITEM_IN,checking,req,res){
     }else{   
       if(checking==="true") return res.send({title:"SUCCESS!"});
       
-            await ECO.pay(req.user.id,GC.RBN,"crafting_site","RBN");
-            await ECO.pay(req.user.id,GC.JDE,"crafting_site","JDE");
-            await ECO.pay(req.user.id,GC.SPH,"crafting_site","SPH");
+            await ECO.pay(req.user.id,GC.RBN,"crafting_dash","RBN");
+            await ECO.pay(req.user.id,GC.JDE,"crafting_dash","JDE");
+            await ECO.pay(req.user.id,GC.SPH,"crafting_dash","SPH");
             
             MAT.forEach(async itm=>{
               await breakit(itm,req.user.id);
