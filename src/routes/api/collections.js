@@ -335,11 +335,11 @@ router.post('/create', checkAuth, async (req,res)=> {
             //res.status(403).json({status:"ERROR",message:"You dont have enough "+itm+"."});
             throw new Error("Invalid Balance");
         };
-        return [userData.id,itm, "Crafting ["+itemToCraft.id+"]" , it === 'rubines' ? "RBN" : it === 'sapphires' ? "SPH" : "JDE" ];
+        return [userData.id,itm, "crafting_discovery", it === 'rubines' ? "RBN" : it === 'sapphires' ? "SPH" : "JDE" ,{details:{item_id:itemToCraft.id}}];
     });
     
-    console.log(pay,payGem)
-    console.log(PLX)
+    //console.log(pay,payGem)
+    //console.log(PLX)
     
     await Promise.all( pay.map(material=> userData.removeItem(...material)) ).catch(err=> res.status(500).json("Error processing materials"));
     await Promise.all( payGem.map(gems=> ECO.pay(...gems)) ).catch(err=> res.status(500).json("Error processing gems"));    
