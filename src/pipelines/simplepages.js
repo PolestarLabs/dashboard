@@ -1294,7 +1294,7 @@ res.render('stata3')
   DB.userDB.set(USERDATA.id, {$set:{'modules.daily':now}}).then(async userData=>{
   
     await Promise.all([
-      ECO.receive(USERDATA.id,myDaily,"daily_website","RBN","+"),
+      ECO.receive(USERDATA.id,myDaily,"webdaily","RBN","+"),
     
     ]);
 response += "\nRegular Daily: "+myDaily
