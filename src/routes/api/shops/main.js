@@ -65,7 +65,7 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
     if ( !(await ECO.checkFunds(userData.id,price,currency)) )  
         return res.status(403).json(ERRORS.noFunds);
 
-    let trans = await ECO.pay(userData.id,price,`Webshop - ${type}`,currency).catch(err=>{
+    let trans = await ECO.pay(userData.id,price,`${type}_shop_dash`,currency).catch(err=>{
         res.status(500).json(ERRORS.ecoFail);
     });
     let respons;
@@ -93,7 +93,7 @@ async function buyBundle({req,res,userData,bundle,price,currency}){
  
     if ( !(await ECO.checkFunds(userData.id,bundleStats.finalPrice,currency)) )
       return res.status(403).json(ERRORS.noFunds);
-    let trans = await ECO.pay(userData.id,bundleStats.finalPrice,`Webshop - bundle`,currency).catch(err=>{
+    let trans = await ECO.pay(userData.id,bundleStats.finalPrice,`storefront_bundle`,currency).catch(err=>{
         res.status(500).json(ERRORS.ecoFail);
     });
     return DB.users.updateOne({id:userData.id}, bundleStats.query ).exec().then(ok=>{
