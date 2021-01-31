@@ -356,9 +356,11 @@ let fields = []
   
 
   if(p.ref.includes("live")){
-    (require('child_process')).exec(`git reset --hard origin/live`, {cwd:  process.cwd() });
+    console.log("LIVE".blue);
+    (require('child_process')).exec(`git reset --hard origin/live`, {cwd:  "/home/pollux/polaris/LIVE/dashboard" });
   }
   if(p.ref.includes("master") && p.project.name === 'Pollux'){
+    console.log("MASTER".blue);
     (require('child_process')).exec(`git reset --hard origin/master`, {cwd: "/home/pollux/polaris/LIVE/beta" });
   }
  

@@ -18,6 +18,7 @@
     line-height:20px;
     margin:10px
    }
+
    
    .levelrole_item .plx-flex-around {
     justify-content:flex-end;
@@ -31,6 +32,20 @@
     margin:-10px;
     max-width:300px
    }
+
+.levelrole_item .level{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  font-family: Panton;
+  font-weight: 900;
+  font-size: 1.5rem;
+  font-style: italic; 
+  text-align: center;
+}
+
+
    input.level {
     background:0 0;
     border:none;

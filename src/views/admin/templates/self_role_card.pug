@@ -5,7 +5,7 @@ form.selfrole_item.levelrole_item(id="selfrole-"+i data-index=i)
  
         .level(class=`sfrl-${i}-view`  ).noinput= sfrl[1]
         input.level(hidden   class=`sfrl-${i}-view` value=sfrl[1] name="short" style="font-size:smaller")
-        span &#x2003
+        //span.s &#x2003
     
         .rolename(class=`sfrl-${i}-view`).noinput= thisRole.name || "<DELETED ROLE>"
         .rolename(hidden class=`sfrl-${i}-view`).withinput

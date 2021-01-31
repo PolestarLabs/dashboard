@@ -1,4 +1,3 @@
-global.HOST = "https://beta.pollux.gg" 
 global.appRoot = "/home/pollux/polaris"
 global.Promise = require('bluebird')
 Promise.config({
@@ -27,7 +26,7 @@ global.cacheFunction = (duration) => {
 global.userCache = new Map();
 
 const config = require('../config.js');
-
+global.HOST = config.host //"https://beta.pollux.gg" 
 
 global.hasPolluxRole = function hasPolluxRole(req,roleID){
   return new Promise(async resolve=>{     
@@ -201,7 +200,7 @@ let discordStrategy = new Strategy({
   clientID: config.clientID,
   clientSecret: config.secret,
   authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
-  callbackURL: (process.env.NODE_ENV === 'production' ? HOST : 'https://136.243.78.7:4728/')+"/callback",
+  callbackURL: (process.env.NODE_ENV === 'production' ? HOST : 'http://136.243.78.7:4728')+"/callback",
   scope: scopes,
   passReqToCallback: true
 }, function (req, accessToken, refreshToken, profile, done) {

@@ -1,3 +1,4 @@
+style .SOON{pointer-events:none;opacity:.4} //.SOON:after{content:'SOON';font-size:smaller;}
 nav.plx-navbar.plx-nav-container.topbar(plx-navbar class=index?"home":"" plx-sticky=index?"animation: plx-animation-slide-top-medium;top: 90vh; bottom: true":"")
     .plx-navbar-left
         div(style="top: 0;position: absolute;")
@@ -30,7 +31,7 @@ nav.plx-navbar.plx-nav-container.topbar(plx-navbar class=index?"home":"" plx-sti
                             .plx-grid.fancylist
                                 ul.plx-list.sideA.plx-width-1-2.market_top
                                          
-                                        //li(): a(href="/shop/backgrounds"): span
+                                        li.SOON(): a(href="/shop/backgrounds"): span
                                             i.fas.fa-images
                                             |&#x2000  Background Shop
                                          
@@ -38,13 +39,13 @@ nav.plx-navbar.plx-nav-container.topbar(plx-navbar class=index?"home":"" plx-sti
                                             i.fas.fa-flask
                                             |&#x2000  Crafting Workshop
                                          
-                                        //li(): a(href="/shop/partners"): span
+                                        li.SOON(): a(href="/shop/partners"): span
                                             i.fas.fa-store
                                             |&#x2000 Partner Shops
 
                                 ul.plx-list.sideB.plx-width-1-2
                                          
-                                        //li(): a(href="/shop/medals"): span
+                                        li.SOON(): a(href="/shop/medals"): span
                                             i.fas.fa-bullseye
                                             |&#x2000  Medal Shop
                                         
@@ -52,20 +53,20 @@ nav.plx-navbar.plx-nav-container.topbar(plx-navbar class=index?"home":"" plx-sti
                                             i.fas.fa-splotch
                                             |&#x2000 Profile Stickers
                                         
-                                        li(): a(href="/shop/marketplace"): span
+                                        li.SOON(): a(href="/shop/marketplace"): span
                                             i.fas.fa-store
                                             |&#x2000  User Marketplace
 
                             .market_bottom
                                 div
                                     .mkmenu_title Premium Market
-                                    //.plx-grid.fancylist
+                                    .plx-grid.fancylist
                                         ul.plx-list.sideA.plx-width-1-2
-                                            li(): a(href="/shop/premium"): span
+                                            li.SOON(): a(href="/shop/premium"): span
                                                 i.fab.fa-cc-paypal
                                                 |&#x2000 Cash Shop 
                                         ul.plx-list.sideB.plx-width-1-2
-                                            li(): a(href="/shop/donators"): span                                    
+                                            li.SOON(): a(href="/shop/donators"): span                                    
                                                 i.fas.fa-cube
                                                 |&#x2000 Exclusive Cosmetics    
 
@@ -107,11 +108,11 @@ nav.plx-navbar.plx-nav-container.topbar(plx-navbar class=index?"home":"" plx-sti
             //  POLLUX
         .plx-navbar-center-right
             ul.plx-navbar-nav
-                //li.lv1-nav(class=currentPage==="donate"?"is-current":"")
+                li.SOON.lv1-nav(class=currentPage==="donate"?"is-current":"")
                     i.fas.fa-gift(class="plx-hidden@m")
                     a(href="/donate") Donate
                     i.rtg.fas.fa-gift(class="plx-visible@m")
-                //li.lv1-nav(class="plx-visible@s " + (currentPage==="partners"?"is-current":"") ) 
+                li.SOON.lv1-nav(class="plx-visible@s " + (currentPage==="partners"?"is-current":"") ) 
                     i.fas.fa-heart(class="plx-hidden@m")
                     a(href="/partners") Partners
                     i.rtg.fas.fa-heart(class="plx-visible@m")

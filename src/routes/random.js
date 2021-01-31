@@ -65,7 +65,7 @@ router.get('/:gallery/size', async function (req, res) {
 
 router.get('/:gallery/:index', async function (req, res) {
       let GAL = req.params.gallery;
-      const GalleryPath = path.resolve(_process.env.ASSETS_PATH,"./build/galleries/"+GAL)
+      const GalleryPath = path.resolve(process.env.ASSETS_PATH,"./build/galleries/"+GAL)
       let IND = Number(req.params.index.split('.')[0]) || 0;      
       fs.readdir(GalleryPath, function (err, files) {
             IND =  Math.abs(IND) >= files.length  ? files.length - 1 : Math.abs(IND) ;   

@@ -508,8 +508,8 @@ mixin feedItem(item)
         .plx-flex.plx-flex-column
             h4.title= item.name || "Unknown Feed" 
             .plx-flex.plx-flex-column
-                
-                code.mistyblue(style='background-color:white; border: none;')= "#"+channelInfo.find(c=>c.id == item.channel).name
+                //- TODO implement proper deleted channel handling
+                code.mistyblue(style='background-color:white; border: none;')= "#"+(channelInfo.find(c=>c.id == item.channel) || { name: 'deleted-channel' }).name
                 p
                     b Last: 
                     if item.last.link

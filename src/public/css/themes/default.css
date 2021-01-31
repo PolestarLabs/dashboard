@@ -72,7 +72,7 @@
     --bg-darkest: var(--darkest);
     --bg-opaque: #2A2A3B44;
     --bg-inverse: var(--lightest, #EEF);
-    --bg-card: var(--lightest);
+    --bg-card: white;
     --links: #87f;
     --links-hover: #8Af;
     --link-head: inherit;

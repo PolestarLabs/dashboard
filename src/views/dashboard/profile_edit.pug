@@ -219,8 +219,8 @@ div#dash( ).plx-position-relative
                 .search
                   input(type='text', v-model='search' @keyup="filterMeds()")
                 .tier
-                  a(plx-filter-control="" style="height: 32px; width: 32px; background: url('https://beta.pollux.gg/images/tiers/all.png') ; background-size: contain;" plx-tooltip="ALL").plx-rarity-icon.plx-hover-glow
-                  a(plx-filter-control="filter:[data-cat='achievements']; group:cat" style="height: 32px; width: 32px; background: url('https://beta.pollux.gg/images/tiers/achiev.png') ; background-size: contain;" plx-tooltip="Achievements").plx-rarity-icon.plx-hover-glow
+                  a(plx-filter-control="" style="height: 32px; width: 32px; background: url('/images/tiers/all.png') ; background-size: contain;" plx-tooltip="ALL").plx-rarity-icon.plx-hover-glow
+                  a(plx-filter-control="filter:[data-cat='achievements']; group:cat" style="height: 32px; width: 32px; background: url('/images/tiers/achiev.png') ; background-size: contain;" plx-tooltip="Achievements").plx-rarity-icon.plx-hover-glow
                   span |
                   each rar in ['C','U','R','SR','UR','XR']
                     a(plx-filter-control="filter:[data-rarity='"+rar+"']; group:rarity" class=rar style="height: 32px; width: 32px").plx-rarity-icon.plx-hover-glow

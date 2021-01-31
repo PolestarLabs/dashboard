@@ -305,7 +305,7 @@ isDusk,
     ///////////////////////////////////////////////
     ///////////////////////////////////////////////
 
-    if( payload.region === " RS" && payload.country.name === "Brazil" ){
+    if( payload.region.includes("RS") && payload.country.name === "Brazil" ){
         easterEgg.flag = "/build/guessing/guessflags/riograndense-republic.png"
         payload.country.name = "Riograndense Republic"
         easterEgg.map = "/build/weather/eggs/provincia.png"

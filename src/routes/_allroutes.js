@@ -178,7 +178,7 @@ router.use('/admin',checkAuth, (...args)=>{
   
   router.get('/invite', function (req, res) {
     //req.logout();
-    res.redirect('https://discordapp.com/api/oauth2/authorize?client_id=354285599588483082&redirect_uri=https%3A%2F%2Fbeta.pollux.gg%2Fcallback&response_type=code&scope=applications.commands%20bot%20identify%20guilds%20connections%20email&permissions=268492816&guild_id='+req.query.sv);
+    res.redirect('https://discordapp.com/api/oauth2/authorize?client_id='+ (PLX.user.id||"354285599588483082")+'&redirect_uri='+encodeURIComponent(HOST+"/callback")+'&response_type=code&scope=applications.commands%20bot%20identify%20guilds%20connections%20email&permissions=268492816&guild_id='+req.query.sv);
   });
 
   

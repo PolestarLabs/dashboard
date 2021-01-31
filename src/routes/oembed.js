@@ -16,13 +16,13 @@ route.get(['/'], (req,res)=>{
          "type" : "rich",
          "title" : "Title",
          "author_name": "Author Name"
-         ,"author_url":"https://beta.pollux.gg"
-         ,"thumbnail_url":"https://beta.pollux.gg/backdrops/bowsette3.png"
-         ,"url":"https://beta.pollux.gg/backdrops/bowsette3.png"
+         ,"author_url":HOST
+         ,"thumbnail_url":HOST + "/backdrops/bowsette3.png"
+         ,"url":HOST + "/backdrops/bowsette3.png"
          ,"width":200
          ,"height":200
          ,"provider_name":"Pollux"
-         ,"provider_url":"https://pollux.gg"
+         ,"provider_url":HOST
          ,"field_0_name": "test"
          ,"field_0_value": "test"
          
