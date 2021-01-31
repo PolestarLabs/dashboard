@@ -197,8 +197,8 @@ Passport.use(new CookieStrategy(
 ));
 
 let discordStrategy = new Strategy({
-  clientID: config.clientID_laris,
-  clientSecret: config.secret_laris,
+  clientID: config.clientID,
+  clientSecret: config.secret,
   authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
   callbackURL: (process.env.NODE_ENV === 'production' ? HOST : 'http://136.243.78.7:4728')+"/callback",
   scope: scopes,
@@ -590,8 +590,8 @@ app.use(async function (err, req, res, next) {
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   const md5= require('md5')
-  errdesc= err.message.split(/[\n\r]/g).slice(-1).pop()+""
-  errline= err.message.split(/[\n\r]/g)[0].split('/').slice(5).join(' > ');
+  errdesc= (err.message||err.stack)?.split(/[\n\r]/g).slice(-1).pop()+"" 
+  errline= (err.message||err.stack)?.split(/[\n\r]/g)[0].split('/').slice(5).join(' > '); 
   errorCode = md5(errdesc);
   console.log(" ERROR ".bgRed, (err.name+"").red, errdesc.yellow, errline,(`[${errorCode}]`.blue))
   await DB.globals.updateOne({'data.errors.id':{$ne:errorCode}},{$addToSet:{'data.errors': {id:errorCode }    }})
