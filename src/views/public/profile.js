@@ -14,7 +14,7 @@ function since(x){
         stickersSize: 0,
         backgroundsSize: 0,
         medalsSize: 0,
-        achievementsSize: 0,0
+        achievementsSize: 1000,
         boorucollection: {loading:true},
         commendInfo: {loading:true},
         commendRank:{
