@@ -12,7 +12,7 @@ mixin progressBar(val,max,label,format)
         .label= label
         .completion  
           animated-number(  :value=val :duration="1800"   :round="true" :delay='00' :format-value="n=> "+format+"?miliarize(n,1,' '):n")
-          | / #{ miliarize(max,true,' ') }
+          | / {{#{max}}}
     .percentile
       animated-number(  :value=`${val} / ${max} * 100` :duration="1200"   :round="true" :delay='00' )
       | %
@@ -179,7 +179,7 @@ block content
 block scripts
     
     script const userprofile = !{JSON.stringify( userprofile )}
-    script const {stickersSize, backgroundsSize, medalsSize,} = !{JSON.stringify({stickersSize, backgroundsSize, medalsSize,})}
+
     script(src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.17.0/TweenMax.min.js")
     script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js")
