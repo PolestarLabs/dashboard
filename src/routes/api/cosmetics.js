@@ -4,10 +4,6 @@ const express = require('express');
 const router = express.Router();
 
 
-router.get('/:endpoint', cache(2660), async (req,res) => {
- 
-})
-
 router.get("/search", cache(2600), async (req,res) =>{
     let queries = {}
     Object.keys(req.query)
