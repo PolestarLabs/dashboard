@@ -24,12 +24,7 @@ router.get('/:endpoint', async (req, res)=> {
     if(!userprofile) return res.send(404);
  
  
-    const [stickersSize,backgroundsSize,medalsSize,userDiscord]  =  await Promise.all([
-         DB.cosmetics.find({type:'sticker',  event: {$exists: false}}).countDocuments()
-        , DB.cosmetics.find({type:'background', public: true, event: {$exists: false}, rarity: {$ne:'XR'} }).countDocuments()
-        , DB.cosmetics.find({type:'medal', public: true, event: {$exists: false}, rarity: {$ne:'XR'} }).countDocuments()
-        ,(userCache.get( userprofile.id ) || (await PLX.getRESTUser( userprofile.id )))
-    ])
+    const userDiscord = await (userCache.get( userprofile.id ) || (await PLX.getRESTUser( userprofile.id )));
 
     let donoranks;
     if(userprofile.donator){
@@ -59,7 +54,7 @@ router.get('/:endpoint', async (req, res)=> {
     userprofile.meta.avatar = `https://cdn.discordapp.com/avatars/${userprofile.id}/${userDiscord.avatar}.png`;
     userprofile.meta.username = userDiscord.username
 
-    res.render('public/profile',{userprofile,stickersSize,backgroundsSize,medalsSize,donoranks})
+    res.render('public/profile',{userprofile,donoranks})
 
 })
 

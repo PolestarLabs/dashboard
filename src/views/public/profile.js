@@ -11,6 +11,10 @@ function since(x){
         AS1:'',
         AS2:'',
         AS3:'',
+        stickersSize: 0,
+        backgroundsSize: 0,
+        medalsSize: 0,
+        achievementsSize: 0,
         boorucollection: {loading:true},
         commendInfo: {loading:true},
         commendRank:{
@@ -24,9 +28,9 @@ function since(x){
         background: {loading:true},
         medals: [null,null,null,null,null,null,null,null,null],
         completionist:[
-         {label: 'Stickers', val: userprofile.modules.stickerInventory.length ||0 , max: stickersSize},
-         {label: 'Backgrounds', val: userprofile.modules.bgInventory.length ||0 , max: backgroundsSize},
-         {label: 'Medals', val: userprofile.modules.medalInventory.length ||0 , max: medalsSize}
+         {label: 'Stickers', val: userprofile.modules.stickerInventory.length ||0 , max: this.stickersSize},
+         {label: 'Backgrounds', val: userprofile.modules.bgInventory.length ||0 , max: this.backgroundsSize},
+         {label: 'Medals', val: userprofile.modules.medalInventory.length ||0 , max: this.medalsSize}
         ]
     }, 
       components:{
@@ -34,12 +38,12 @@ function since(x){
       },
     methods:{
        bgInfo(bgID){
-          fetch("/api/cosmetics/search?code="+bgID+"&.png").then(r =>
+          fetch("/api/cosmetics/search?code="+bgID).then(r =>
             r.json().then(res => {
                 console.log(res)
                 this.bgData = res[0] || {name: "UNKNOWN", rarity: "C" };
                 if(!res[0]) return;
-                fetch("/api/marketplace?item_id="+this.bgData._id+"&.png").then(r =>
+                fetch("/api/marketplace?item_id="+this.bgData._id).then(r =>
                     r.json().then(res => {
                       const payload = {}
                       payload.entries = res.length
@@ -136,8 +140,19 @@ function since(x){
     this.AS3 = $('#ads .sidebar').html()
   }
   })
- 
-  
+
+
+fetch("/api/cosmetics/count/background").then(r =>
+  r.json().then(res =>  PROFILE.backgroundsSize = res  )
+);
+fetch("/api/cosmetics/count/sticker").then(r =>
+  r.json().then(res =>  PROFILE.stickersSize = res  )
+);
+fetch("/api/cosmetics/count/medal").then(r =>
+  r.json().then(res =>  PROFILE.medalsSize = res  )
+);
+
+
 fetch("/api/relationships?uid="+userprofile.id+"&plxdata=1").then(r =>
     r.json().then(res =>  PROFILE.relationships = res  )
 );
@@ -153,23 +168,23 @@ fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );  
 
-fetch("/api/cosmetics/search?type=sticker&id="+userprofile.modules.sticker+"&.png").then(r =>
+fetch("/api/cosmetics/search?type=sticker&id="+userprofile.modules.sticker).then(r =>
     r.json().then(res =>  PROFILE.sticker = res[0]  )
 );
 
-fetch("/api/cosmetics/search?type=background&code="+userprofile.modules.bgID+"&.png").then(r =>
+fetch("/api/cosmetics/search?type=background&code="+userprofile.modules.bgID).then(r =>
     r.json().then(res =>  PROFILE.background = res[0]  )
 );
 
 
 userprofile.modules.medals.forEach(async (medal,i)=>{
   
-  fetch("/api/cosmetics/search?type=medal&icon="+userprofile.modules.medals[i]+"&.png").then(r =>{
+  fetch("/api/cosmetics/search?type=medal&icon="+userprofile.modules.medals[i]).then(r =>{
   
     r.json().then(res => {
       PROFILE.medals[i] = res[0]
       if(!res[0]){
-        fetch("/api/achievements/"+userprofile.modules.medals[i]+"&.png").then(rr =>
+        fetch("/api/achievements/"+userprofile.modules.medals[i]).then(rr =>
           rr.json().then(res2 =>  {
             if(!res2) return PROFILE.medals[i] = {name:"Unknown ",type:'achievement'};
             PROFILE.medals[i] = res2[0];

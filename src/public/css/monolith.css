@@ -1041,19 +1041,38 @@ div:not(.plx-open) .faders {
 /*background-image:url('/images/tiers//XR.png')*/
 }
 .plx-rubine, .plx-RBN {
- background-image:url(/images/gems/rubine_full.png);
+ /*background-image:url(/images/gems/rubine_full.png);*/
+ background-image:url(/images/gems/RBN.png);
  background-size:contain
 }
 .plx-jade, .plx-JDE {
- background-image:url(/images/gems/jade_full.png);
+ /*background-image:url(/images/gems/jade_full.png);*/
+ background-image:url(/images/gems/JDE.png);
  background-size:contain
 }
 .plx-sapphire, .plx-SPH {
- background-image:url(/images/gems/sapphire_full.png);
+ /*background-image:url(/images/gems/sapphire_full.png);*/
+ background-image:url(/images/gems/SPH.png);
  background-size:contain
 }
 .plx-event,.plx-token, .plx-EVT {
- background-image:url(/images/gems/token_full.png);
+ /*background-image:url(/images/gems/token_full.png);*/
+ background-image:url(/images/gems/EVT.png);
+ background-size:contain
+}
+.plx-cosmo, .plx-COS {
+ /*background-image:url(/images/gems/token_full.png);*/
+ background-image:url(/images/gems/COS.png);
+ background-size:contain
+}
+.plx-prism, .plx-PSM {
+ /*background-image:url(/images/gems/token_full.png);*/
+ background-image:url(/images/gems/PSM.png);
+ background-size:contain
+}
+.plx-experience, .plx-EXP {
+ /*background-image:url(/images/gems/token_full.png);*/
+ background-image:url(/images/gems/EXP.png);
  background-size:contain
 }
 .ding {
@@ -1221,27 +1240,27 @@ div:not(.plx-open) .faders {
  margin: 2px 4px;
 }
 .plx-rarity-icon.UR {
- background-image:url(/images/tiers/UR.png);
+ background-image:url(/build/tiers/mobage/UR.png);
  background-size:contain
 }
 .plx-rarity-icon.SR {
- background-image:url(/images/tiers/SR.png);
+ background-image:url(/build/tiers/mobage/SR.png);
  background-size:contain
 }
 .plx-rarity-icon.R {
- background-image:url(/images/tiers/R.png);
+ background-image:url(/build/tiers/mobage/R.png);
  background-size:contain
 }
 .plx-rarity-icon.U {
- background-image:url(/images/tiers/U.png);
+ background-image:url(/build/tiers/mobage/U.png);
  background-size:contain
 }
 .plx-rarity-icon.C {
- background-image:url(/images/tiers/C.png);
+ background-image:url(/build/tiers/mobage/C.png);
  background-size:contain
 }
 .plx-rarity-icon.XR {
- background-image:url(/images/tiers/XR.png);
+ background-image:url(/build/tiers/mobage/XR.png);
  background-size:contain
 }
 .nullify {

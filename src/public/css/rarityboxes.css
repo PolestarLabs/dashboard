@@ -201,7 +201,7 @@ margin-left: 10px;
   }
 .raritybox .button .icon24,
 .shopbox .button .icon24{
-transform: scale(.8)
+ /*transform: scale(.8)*/
 }
   
   .raritybox .button.limitless{

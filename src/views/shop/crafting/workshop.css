@@ -363,13 +363,13 @@ height: 99% !important;
   margin-bottom: 10px;
 }
 .rubines .icon {
-  background-image: url(/images/gems/rubine_full.png);
+  background-image: url(/images/gems/RBN.png);
 }
 .sapphires .icon {
-  background-image: url(/images/gems/sapphire_full.png);
+  background-image: url(/images/gems/SPH.png);
 }
 .jades .icon {
-  background-image: url(/images/gems/jade_full.png);
+  background-image: url(/images/gems/JDE.png);
 }
 
 @keyframes aniRBN {
