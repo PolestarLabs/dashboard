@@ -14,6 +14,8 @@
 }
 .profile-sidebar {
   padding-bottom: 100px;
+  margin-bottom: -100px;
+  min-height: 120vh;
 }
 @keyframes lite {
   0% {
@@ -507,6 +509,7 @@ flex: 1 0 auto
   /*! background: #131320; */
   justify-content: space-around;
   padding: 0 4%;
+  min-height: 110vh;
 }
 .profile-container .comp-bar {
   border: solid 1px var(--favcolor-not-so-dim);
