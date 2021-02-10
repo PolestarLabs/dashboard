@@ -91,8 +91,6 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header('Access-Control-Allow-Origin', 'https://dev.pagseguro.uol.com.br');
     res.header('Access-Control-Allow-Origin', 'https://pagseguro.uol.com.br');
-    res.header('Access-Control-Allow-Origin', 'https://api.pollux.fun');
-    res.header('Access-Control-Allow-Origin', 'https://pollux.fun');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.header('Access-Control-Allow-Credentials', true);
@@ -200,7 +198,8 @@ let discordStrategy = new Strategy({
   clientID: config.clientID,
   clientSecret: config.secret,
   authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
-  callbackURL: (process.env.NODE_ENV === 'production' ? HOST : 'http://136.243.78.7:4728')+"/callback",
+  //callbackURL: (process.env.NODE_ENV === 'production' ? HOST : 'http://136.243.78.7:4728')+"/callback",
+  callbackURL: "http://136.243.78.7:4728/callback", //TEST
   scope: scopes,
   passReqToCallback: true
 }, function (req, accessToken, refreshToken, profile, done) {
@@ -586,7 +585,7 @@ app.use(function (req, res, next) {
 app.use(async function (err, req, res, next) {
   console.log("xxx",err)
   // set locals, only providing error in development
-  res.locals.message = err.message;
+  res.locals.message = err.message || err.stack;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   const md5= require('md5')
