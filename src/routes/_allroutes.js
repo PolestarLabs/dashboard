@@ -6,6 +6,13 @@ const fx = require('../pipelines/globalFunctions.js');
 
 
 // TECHNICAL  
+
+
+  router.get("/video/:gallery/:video", (req,res)=>{
+    const {ogname,ogtitle,ogcolor} = req.query;
+    return res.render("tools/video",{video: req.params.gallery+"/"+req.params.video})
+  })
+
   router.get('/redir', (q,r)=>r.render("callback"));
   router.get('/setup/:serverid' , checkAuth, (...args)=> simplepages('serverSetup').run(...args) );  
 
