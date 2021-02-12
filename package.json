@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@polestar/database_schema": "gitlab:PolestarLabs/database_schema",
+    "@polestar/timed-usage": "gitlab:PolestarLabs/timed-usage",
     "assert": "^1.4.1",
     "axios": "^0.19.0",
     "bluebird": "^3.5.5",
