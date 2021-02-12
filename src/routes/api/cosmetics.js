@@ -2,15 +2,19 @@
 
 const express = require('express');
 const router = express.Router();
+const {Types: MonTypes} = require("mongoose");
 
 function CLEANUP(item) {
+    if (!item) return null;
     if(item.event == 'none' ) item.event = false;
+    //TODO whether the item is in current rotation or not
     return {
-        id: item._id,
+        unified_id: item._id,
         legacy_id: item.id,
         legacy_code: item.code,
         legacy_icon: item.icon,
         rarity: item.rarity,
+        tags: item.tags?.split(' '),
         credit:{
             artist_name: item.artistName,
             artist_url: item.artistLink,
@@ -19,6 +23,9 @@ function CLEANUP(item) {
         type: item.type,
         catalog: item.GROUP,
         bundle_info: item.BUNDLE,
+        can_trade: item.tradeable || item.droppable || false,
+        can_destroy: item.destroyable || item.droppable || false,
+        drops: item.droppable || false,
         is_event: !!item.event,
         event_id: item.event ? item.event : undefined,
         release: new Date(parseInt( item._id.toString().substring(0,8), 16) * 1000)
@@ -60,28 +67,28 @@ router.get("/search", cache(2600), async (req,res) =>{
     })
 })
 
+
+
 router.get("/backgrounds/:id", cache(0.01), async (req,res) =>{
-
-    DB.cosmetics.find({type:"background",id:req.params.id},{public:0,meta:0})
-        .skip(parseInt(req.query.skip)||0)
-        .limit( parseInt(req.query.lim)||50)
+    const {id: query} = req.params
+    DB.cosmetics.findOne({type:"background",$or:[( MonTypes.ObjectId.isValid(query) ? {_id:query} :{id:query}) ,{code:query}]},{public:0,meta:0})
         .lean()
-        .then(async result=>{            
-            res.json( result.map(CLEANUP) );
-        })
+        .then(result=> res.json( CLEANUP(result) ) )
 })
 
-router.get("/medals/:id", cache(2600), async (req,res) =>{   
-    DB.cosmetics.find({type:"medal",id:req.params.id},{public:0,meta:0})
-        .skip(parseInt(req.query.skip)||0)
-        .limit( parseInt(req.query.lim)||50)
+router.get("/medals/:id", cache(2600), async (req,res) =>{
+    const {id: query} = req.params
+    DB.cosmetics.findOne({type:"medal",$or:[( MonTypes.ObjectId.isValid(query) ? {_id:query} :{id:query}) ,{icon:query}]},{public:0,meta:0})
         .lean()
-        .then(async result=>{
-            res.json( result.map(CLEANUP) );
-        })
+        .then(result=> res.json( CLEANUP(result) ) )
 })
 
-
+router.get("/:other/:id", cache(9999), async (req,res) =>{
+    const {id: query, other} = req.params;
+    DB.cosmetics.findOne({type: other.slice(0,-1) ,$or:[( MonTypes.ObjectId.isValid(query) ? {_id:query} :{id:query})]},{public:0,meta:0})
+        .lean()
+        .then(result=> res.json( CLEANUP(result) ) )
+})
 
 
 router.get("/count/:type", cache(360000), async (req,res) =>{
