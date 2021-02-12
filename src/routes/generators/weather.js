@@ -296,6 +296,10 @@ isDusk,
             W_POLLUX = 'cold';
             if (isDusk) SHADE = 4;
         }
+        if (TEMPERATURE > 30){
+            W_POLLUX = 'hell';
+            SHADE = 0;
+        }
     
     const canvas = Picto.new(800,600);
     const ctx = canvas.getContext('2d');
