@@ -38,6 +38,10 @@ router.get('/',AUTHED, (req, res)=> {
 
 
 router.use( (req,res,nex)=>{
+    Object.keys(require.cache).forEach((r)=>{
+        //FIXME[epic=anyone] remember to remove this on prod
+        if(r.includes("/api/")) delete require.cache[r];
+    })
     //if (req.headers.authorization && !req.user) return AUTHED(req,res,nex);
     nex();
 });
