@@ -103,6 +103,12 @@ router.use(['/p','/profile','/user'], (...args)=>{
   const profile = require('./profile');
   return profile(...args);
 });
+router.post(['/userinfo'], async (req,res)=>{
+    let info = req.body.payload;
+    let ID = req.body.id.toString();    
+    await DB.users.set(ID,{$set:{personal:info}});
+    res.send(200)
+});
 
   
 
