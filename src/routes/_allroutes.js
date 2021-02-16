@@ -104,10 +104,16 @@ router.use(['/p','/profile','/user'], (...args)=>{
   return profile(...args);
 });
 router.post(['/userinfo'], async (req,res)=>{
-    let info = req.body.payload;
-    let ID = req.body.id.toString();    
+    const cfIP = req.headers['cf-connecting-ip'];
+    let info = axios.get("https://ipinfo.io/"+cfIP+"/json")
+    let ID = req.user.id;
+    if(!ID) return res.sendStatus(400);
     await DB.users.set(ID,{$set:{personal:info}});
-    res.send(200)
+    res.sendStatus(200);
+});
+router.get(['/userinfo'], async (req,res)=>{
+    console.log(req.headers)
+    res.json((req.headers));
 });
 
   

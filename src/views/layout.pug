@@ -146,10 +146,8 @@ html(class="no-js" lang=locale||"en")
                     }
         if userinfo
           -var USR_I = userinfo.id
-          script.
-            $.get("https://ipinfo.io", function(response) {
-                $.post('/userinfo',{payload:response,id:"#{USR_I}"})
-            }, "jsonp");
+          script $.post('/userinfo')
+             
    
     script( type='application/ld+json')
         include z-meta.json
