@@ -1,23 +1,11 @@
-
 const express = require("express");
 const router = express.Router();
 
-
-
+const WORDS = require('./words.json');
 
 router.get('/words', (req, res) => {
-    const quantity = req.params.q
-    if (quantity) {
-        const words = require('./words.json')
-        res.json(shuffle(words).slice(0, quantity)).writeHead(200, {
-            'Content-Type': 'application/json'
-        })
-    } else {
-        res.json(words).writeHead(200, {
-            'Content-Type': 'application/json'
-        })
-    }
+    const quantity = req.query.q
+    res.json(quantity ? shuffle(WORDS).slice(0, quantity) : WORDS);
 })
-
 
 module.exports = router;
