@@ -121,13 +121,7 @@ router.get('/words', (req, res) => {
     const quantity = req.params.q
     if (quantity) {
         const words = require('../api/words.json')
-        const returnWords = []
-
-        for (let i = 0; i < quantity; i++) {
-            returnWords.push(words[Math.floor(Math.random * words.length)])
-            i++
-        }
-        res.json(returnWords).writeHead(200, {
+        res.json(shuffle(words).slice(0, quantity)).writeHead(200, {
             'Content-Type': 'application/json'
         })
     } else {
