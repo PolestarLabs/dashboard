@@ -76,6 +76,16 @@ router.use(["/shop/","/store/"], async (...args) => {
     return (require('./shops/main.js'))( ...args);
 });
 
+router.use(["/games/:game","/minigames/:game"], async (req,res) => {
+    const {game} = req.params;
+    try {
+        delete require.cache[(require.resolve('./games/'+game+'.js'))];
+        return (require('./games/'+game+'.js'))( req,res );
+    } catch (err) {
+        return res.sendStatus(404);
+    }
+});
+
 router.use(["/crafting/","/items/"], async (...args) => {
     delete require.cache[(require.resolve('./collections.js'))];
     return (require('./collections.js'))( ...args);
