@@ -28,15 +28,15 @@ let PARTS = Promise.all([
 });
 
 router.get('/', async (req,res)=>{
-    
+
     if(!PARTS.loaded) await PARTS;
 
     const userID = req.query.uid
-    
+
 
     const canvas = Picto.new(795,415);
     const ctx = canvas.getContext('2d');
-    
+
     const polly = Picto.new(500,666);
     const _ply = polly.getContext('2d');
 
@@ -45,11 +45,11 @@ router.get('/', async (req,res)=>{
     ctx.translate(-75, -55);
 
     let {a:attempts,g:guesses,e:ended,h:hint} = req.query;
-    
-    attempts = attempts || "";
-    guesses = guesses?.split('') || ['_','_','_','_','_']; 
 
-    
+    attempts = attempts || "";
+    guesses = guesses?.split('') || ['_','_','_','_','_'];
+
+
     if(attempts.length >= 3 ) _ply.drawImage(PARTS.legR,0,0);
     if(attempts.length >= 5 ) _ply.drawImage(PARTS.legL,0,0);
     if(attempts.length >= 4 ) _ply.drawImage(PARTS.armR,0,0);
@@ -57,8 +57,8 @@ router.get('/', async (req,res)=>{
     if(attempts.length >= 1 ) _ply.drawImage(PARTS.body,0,0);
     _ply.drawImage(PARTS.noose,0,0);
     if(attempts.length >= 6 ) _ply.drawImage(PARTS.head,0,0);
- 
-    
+
+
     ctx.drawImage(PARTS.base,0,0);
     ctx.globalAlpha = 0.45
     ctx.globalCompositeOperation = 'multiply';
@@ -69,22 +69,22 @@ router.get('/', async (req,res)=>{
 
     const gx = 450,
           gy = 395,
-          ax = 795, 
+          ax = 795,
           ay = 260;
 
     ctx.save();
     ctx.translate( -(-50+(guesses.length||1) * 42)/2 ,0);
 
     ctx.globalAlpha = 0.9
-    
+
     guesses.forEach((letter,i)=>{
         let underscore = Picto.tag(ctx,'_','50pt "Coming Home", Pangolin','#1b52c3' ).item;
         let glyph = Picto.tag(ctx,letter == '_' ? ' ': letter,'48pt "Coming Home", Pangolin','#1b52c3' ).item;
-        
+
         ctx.drawImage(
             underscore,
             gx + (i*42)  - underscore.width / 2,
-            gy 
+            gy
             );
             ctx.drawImage(
                 glyph,
@@ -92,15 +92,15 @@ router.get('/', async (req,res)=>{
                 gy - 10
             );
     });
-            
+
     ctx.restore();
-    
+
     let attempts_text = Picto.tag(ctx,attempts.split('').join('-'),'40pt "Coming Home", Pangolin','#c40e0e' ).item;
     let hint_text = Picto.tag(ctx,`(${hint})`,'20pt "Coming Home", Pangolin','#1b52c3' ).item;
-    
+
     ctx.drawImage(attempts_text,ax-attempts_text.width,ay);
     ctx.drawImage(hint_text,ax-hint_text.width,ay-50);
-    
+
 
     //ctx.globalCompositeOperation = 'multiply';
     ctx.globalAlpha = .85;
@@ -115,6 +115,20 @@ router.get('/', async (req,res)=>{
         'Content-Length': result.length
     });
     canvas.pngStream().pipe(res);
+})
+
+router.get('/words', (req, res) => {
+    const quantity = req.params.q
+    if (quantity) {
+        const words = require('../api/words.json')
+        res.json(shuffle(words).slice(0, quantity)).writeHead(200, {
+            'Content-Type': 'application/json'
+        })
+    } else {
+        res.json(words).writeHead(200, {
+            'Content-Type': 'application/json'
+        })
+    }
 })
 
 module.exports = router
