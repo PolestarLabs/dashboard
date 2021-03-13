@@ -67,7 +67,7 @@ script.
         if(informationFill.page === 5){
              payload.serverid = serverID
              payload.validator = validator
-             $.post('/admin/save?serverID='+serverID ,payload)
+             $.post('/admin/'+serverID+'/save',payload)
                 .done(function(data){
                     window.STATUS = "OK"
                     informationFill.update()
