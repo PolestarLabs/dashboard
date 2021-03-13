@@ -16,7 +16,6 @@ router.get('/', function (req, res) {
 });
 
 router.get('/:serverID', async function (req,res) {
-
     const SVID =  req.params.serverID
 
     if(  (req.user.id !== "88120564400553984" && req.query.admpass ) && !(await isAdmin(req,SVID))) return res.status(401).json("NoADM");
@@ -69,13 +68,12 @@ router.get('/:serverID', async function (req,res) {
 //SECTION POST
 
 router.post('/:serverID/save',ADMCHECKS, async function(req,res){
+    
     let payload = req.body.data || req.body;
     
-    const SVID = req.params.serverID || req.query.serverID || req.body.serverid;
-
-    let serverInfo= (await PLX.getRESTGuild(SVID));
-    let svData= (await  DB.servers.get(SVID));
-    let userData = (await DB.users.get(serverInfo.ownerID));
+    const SVID = req.params.serverID;
+    const serverInfo = await PLX.getRESTGuild(SVID);
+    const [svData,userData]= await Promise.all([(await  DB.servers.get(SVID)), (await DB.users.get(serverInfo.ownerID))]);
 
 if(!payload.first && svData && payload && (!req.body.noDM && userData?.switches?.notifications?.ownerNotif === true)){
 
@@ -130,8 +128,9 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
     if(payload.language){
         setPayload['modules.LANGUAGE']= payload.language || 'en'
     }    
-    updateGlobalInstances({id:SVID})
     await DB.servers.set(SVID,{        $set:  setPayload      });
+    await updateGlobalInstances({id:SVID});
+
     try{
         console.log(req.handled,"handled")
         return res.sendStatus(200);
@@ -141,6 +140,7 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
     
 });
 
+/*
 router.post('/:serverID/progression/upfactor', ADMCHECKS, async function(req,res){
     
 }
@@ -148,7 +148,7 @@ router.post('/:serverID/progression/upfactor', ADMCHECKS, async function(req,res
 router.post('/:serverID/progression/:userID', ADMCHECKS, async function(req,res){
     
 }
-
+*/
 
 //SECTION DELETE
 
@@ -482,7 +482,7 @@ router.put("/:serverID/savechannelist",ADMCHECKS,async (req,res)=>{
 
 async function ADMCHECKS(req,res,nex){
     req.handled = true;
-    if(req.user.id ==='88120564400553984')  nex(); 
+    if(req.user.id ==='88120564400553984') return nex(); 
     let payload = req.body;
     let validator = payload.validator || payload.data?.validator
     if(req.user.validator != validator) return res.send({status:401,data:"Validator Mismatch "+`${validator} / ${req.user.validator}`});
