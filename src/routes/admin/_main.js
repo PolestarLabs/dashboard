@@ -17,8 +17,7 @@ router.get('/', function (req, res) {
 
 router.get('/:serverID', async function (req,res) {
 
-    const serverID = req.params.serverID
-    SVID = serverID
+    const SVID =  req.params.serverID
 
     if(  (req.user.id !== "88120564400553984" && req.query.admpass ) && !(await isAdmin(req,SVID))) return res.status(401).json("NoADM");
 
@@ -42,7 +41,7 @@ router.get('/:serverID', async function (req,res) {
 
     
    
-    const serverData = await DB.servers.get(serverID);
+    const serverData = await DB.servers.get(SVID);
     let payload = {
         reactRoles,
         serverData,
@@ -69,10 +68,10 @@ router.get('/:serverID', async function (req,res) {
 
 //SECTION POST
 
-router.post('/save',ADMCHECKS, async function(req,res){
+router.post('/:serverID/save',ADMCHECKS, async function(req,res){
     let payload = req.body.data || req.body;
     
-    const SVID = req.query.serverID || req.body.serverid;
+    const SVID = req.params.serverID || req.query.serverID || req.body.serverid;
 
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let svData= (await  DB.servers.get(SVID));
@@ -153,14 +152,15 @@ router.post('/:serverID/progression/:userID', ADMCHECKS, async function(req,res)
 
 //SECTION DELETE
 
-router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
+router.delete("/:serverID/reactionrole",ADMCHECKS, async (req,res) =>{
 
     let payload = req.body;
     let validator = payload.validator || payload.data?.validator
  
     if(req.user.validator != validator) return res.status(401).json("Validator Mismatch "+`${validator} / ${req.user.validator}`);
 
-    let SVID = payload.serverid.toString();    
+    let SVID = req.params.serverID;
+    
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
@@ -191,8 +191,9 @@ router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
 
 })
 
-router.delete("/levelrole",ADMCHECKS,async (req,res)=>{
+router.delete("/:serverID/levelrole",ADMCHECKS,async (req,res)=>{
     let payload = req.body;
+    const SVID = req.params.serverID;
 
     DB.servers.updateOne({id:SVID},{
         $pull:{
@@ -220,8 +221,9 @@ router.delete("/levelrole",ADMCHECKS,async (req,res)=>{
     })
 })
 
-router.delete("/selfrole",ADMCHECKS,async (req,res)=>{
+router.delete("/:serverID/selfrole",ADMCHECKS,async (req,res)=>{
     let payload = req.body;
+    const SVID = req.params.serverID;
 
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
@@ -254,8 +256,9 @@ router.delete("/selfrole",ADMCHECKS,async (req,res)=>{
 
 //SECTION PATCH
 
-router.patch("/levelrole",ADMCHECKS,async (req,res)=>{
+router.patch("/:serverID/levelrole",ADMCHECKS,async (req,res)=>{
     let payload = req.body;
+    const SVID = req.params.serverID;
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
 
@@ -280,8 +283,9 @@ router.patch("/levelrole",ADMCHECKS,async (req,res)=>{
     })
 })
 
-router.patch("/selfrole",ADMCHECKS,async (req,res)=>{
+router.patch("/:serverID/selfrole",ADMCHECKS,async (req,res)=>{
     let payload = req.body;
+    const SVID = req.params.serverID;
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
     
@@ -310,8 +314,9 @@ router.patch("/selfrole",ADMCHECKS,async (req,res)=>{
 
 //SECTION PUT
 
-router.put("/language",ADMCHECKS,async (req,res)=>{
+router.put("/:serverID/language",ADMCHECKS,async (req,res)=>{
     let payload = req.body;
+    const SVID = req.params.serverID;
     DB.servers.findOneAndUpdate({id:SVID},{
         $set: {'modules.LANGUAGE': payload.data}         
     }).then(async doc=>{
@@ -343,8 +348,9 @@ router.put("/language",ADMCHECKS,async (req,res)=>{
     })
 })
 
-router.put("/commandswitch",ADMCHECKS,async (req,res)=>{
+router.put("/:serverID/commandswitch",ADMCHECKS,async (req,res)=>{
     let payload = req.body;
+    const SVID = req.params.serverID;
     console.log('cmswitch')
     DB.servers.findOneAndUpdate({id:SVID},{
         $set: {'modules.DISABLED': payload.disabled, 'respondDisabled': payload.respond}         
@@ -361,8 +367,9 @@ router.put("/commandswitch",ADMCHECKS,async (req,res)=>{
     })
 })
 
-router.put("/selfrole",ADMCHECKS,async (req,res)=>{
+router.put("/:serverID/selfrole",ADMCHECKS,async (req,res)=>{
     let payload = req.body;
+    const SVID = req.params.serverID;
 
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
@@ -395,8 +402,9 @@ router.put("/selfrole",ADMCHECKS,async (req,res)=>{
     })
 })
 
-router.put("/levelrole",ADMCHECKS,async (req,res)=>{
+router.put("/:serverID/levelrole",ADMCHECKS,async (req,res)=>{
     let payload = req.body;
+    const SVID = req.params.serverID;
 
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
@@ -429,9 +437,10 @@ router.put("/levelrole",ADMCHECKS,async (req,res)=>{
     })
 })
 
-router.put("/savechannelist",ADMCHECKS,async (req,res)=>{
+router.put("/:serverID/savechannelist",ADMCHECKS,async (req,res)=>{
  
     let payload = req.body.data;
+    const SVID = req.params.serverID;
 
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
@@ -477,7 +486,8 @@ async function ADMCHECKS(req,res,nex){
     let payload = req.body;
     let validator = payload.validator || payload.data?.validator
     if(req.user.validator != validator) return res.send({status:401,data:"Validator Mismatch "+`${validator} / ${req.user.validator}`});
-    let SVID = payload.serverid.toString();    
+    //let SVID = payload.serverid.toString();    
+    const SVID = req.params.serverID
     if(!(await isAdmin(req,SVID))) return res.send({status:401,data:"User is not Admin"});
     else nex();
 }
