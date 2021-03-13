@@ -26,7 +26,7 @@ function getDailyMeta(daily, req) {
 
 router.get('/webdaily', async (req, res) => {
     if (!req.user) return res.status(401).json({ message: 'Log in' });
-    // @ts-ignore
+    // @ts-ignore req.user is the wrong type
     const timedU = await new TimedUsage('daily', { day: DAILY_COOLDOWN, expiration: EXPIRE_COOLDOWN, streak: true }).loadUser(req.user);
     const { userDaily: { streak, insured, last, highest }, available, keepStreak, availableAt, streakExpiresAt,  } = timedU;
     const availableIn = Math.max(0, availableAt - Date.now());
