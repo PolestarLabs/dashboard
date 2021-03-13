@@ -228,7 +228,7 @@ $("#new-self-role").submit(function(e) {
   let short = this.short.value;
   let payload = { role, short, validator, serverid };
 
-  fetch("/admin/selfrole", {
+  fetch("/admin/"+serverid+"/selfrole", {
     method: "PUT",
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify(payload)
