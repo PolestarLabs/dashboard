@@ -2,15 +2,18 @@ const md5 = require('md5')
 const fetch = require('node-fetch')
 const express = require('express')
 const router = express.Router()
-const fx = require('../pipelines/globalFunctions.js');
-const operations = require('../pipelines/operations.js');
+const fx = require('../../pipelines/globalFunctions.js');
+const operations = require('../../pipelines/operations.js');
 
-request = require('request')
+request = require('request');
+
+
+
+//SECTION GET
 
 router.get('/', function (req, res) {
-  res.sendStatus(401)
-})
-
+  res.redirect("/dash/servers")
+});
 
 router.get('/:serverID', async function (req,res) {
 
@@ -64,6 +67,7 @@ router.get('/:serverID', async function (req,res) {
 
 
 
+//SECTION POST
 
 router.post('/save',ADMCHECKS, async function(req,res){
     let payload = req.body.data || req.body;
@@ -136,10 +140,18 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
         console.error(err)
     }
     
-})
+});
+
+router.post('/:serverID/progression/upfactor', ADMCHECKS, async function(req,res){
+    
+}
+
+router.post('/:serverID/progression/:userID', ADMCHECKS, async function(req,res){
+    
+}
 
 
-
+//SECTION DELETE
 
 router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
 
@@ -239,6 +251,9 @@ router.delete("/selfrole",ADMCHECKS,async (req,res)=>{
 })
 
 
+
+//SECTION PATCH
+
 router.patch("/levelrole",ADMCHECKS,async (req,res)=>{
     let payload = req.body;
     let serverInfo= (await PLX.getRESTGuild(SVID));
@@ -289,8 +304,11 @@ router.patch("/selfrole",ADMCHECKS,async (req,res)=>{
     }).catch(err=>{
         return res.status(510).json(err);
     })
-}) 
+});
 
+
+
+//SECTION PUT
 
 router.put("/language",ADMCHECKS,async (req,res)=>{
     let payload = req.body;
@@ -448,6 +466,10 @@ router.put("/savechannelist",ADMCHECKS,async (req,res)=>{
     });  
     res.send('OK')
 })
+
+
+
+//SECTION JUNK
 
 async function ADMCHECKS(req,res,nex){
     req.handled = true;
