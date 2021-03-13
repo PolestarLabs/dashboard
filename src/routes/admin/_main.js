@@ -1,10 +1,24 @@
-const md5 = require('md5')
-const fetch = require('node-fetch')
-const express = require('express')
-const router = express.Router()
+const md5 = require('md5');
+const fetch = require('node-fetch');
+const express = require('express');
+const router = express.Router();
 const fx = require('../../pipelines/globalFunctions.js');
 const operations = require('../../pipelines/operations.js');
-const app = require('../../neodash.js');
+
+
+router.use("/:serverID",ADMCHECKS);
+
+
+router.use("/:serverID/levelrole",function (req,res) {
+    delete require.cache[require.resolve('./levelrole.js')];
+    res.locals.serverID = req.params.serverID;
+    return (require('./levelrole.js'))(req,res);
+});
+
+router.use("/:serverID/selfrole", function (req,res) {
+    res.locals.serverID = req.params.serverID;
+    return (require('./selfrole.js'))(req,res);
+});
 
 
 //SECTION GET
@@ -65,8 +79,8 @@ router.get('/:serverID', async function (req,res) {
 
 //SECTION POST
 
-router.post('/:serverID/save',ADMCHECKS, async function(req,res){
-    
+router.post('/:serverID/save', async function(req,res){
+    console.log({req})
     let payload = req.body.data || req.body;
     
     const SVID = req.params.serverID;
@@ -140,7 +154,7 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
 
 //SECTION DELETE
 
-router.delete("/:serverID/reactionrole",ADMCHECKS, async (req,res) =>{
+router.delete("/:serverID/reactionrole", async (req,res) =>{
 
     let payload = req.body;
     let validator = payload.validator || payload.data?.validator
@@ -181,7 +195,7 @@ router.delete("/:serverID/reactionrole",ADMCHECKS, async (req,res) =>{
 
 //SECTION PUT
 
-router.put("/:serverID/language",ADMCHECKS,async (req,res)=>{
+router.put("/:serverID/language",async (req,res)=>{
     let payload = req.body;
     const SVID = req.params.serverID;
     DB.servers.findOneAndUpdate({id:SVID},{
@@ -215,7 +229,7 @@ router.put("/:serverID/language",ADMCHECKS,async (req,res)=>{
     })
 })
 
-router.put("/:serverID/commandswitch",ADMCHECKS,async (req,res)=>{
+router.put("/:serverID/commandswitch",async (req,res)=>{
     let payload = req.body;
     const SVID = req.params.serverID;
     console.log('cmswitch')
@@ -234,7 +248,7 @@ router.put("/:serverID/commandswitch",ADMCHECKS,async (req,res)=>{
     })
 })
 
-router.put("/:serverID/savechannelist",ADMCHECKS,async (req,res)=>{
+router.put("/:serverID/savechannelist",async (req,res)=>{
  
     let payload = req.body.data;
     const SVID = req.params.serverID;
@@ -275,13 +289,6 @@ router.put("/:serverID/savechannelist",ADMCHECKS,async (req,res)=>{
 
 //SECTION Subs
 
-app.use("/:serverID/levelrole", function (req,res) {
-    return (require('./levelrole.js'))(req,res);
-});
-
-app.use("/:serverID/selfrole", function (req,res) {
-    return (require('./selfrole.js'))(req,res);
-});
 
 
 
@@ -335,4 +342,4 @@ function updateGlobalInstances(payload){
 
 
 
-module.exports = router
+module.exports = router;
