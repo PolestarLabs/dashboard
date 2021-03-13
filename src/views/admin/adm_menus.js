@@ -129,7 +129,7 @@ $("#new-lev-role").submit(function(e) {
   let level = this.level.value;
   let payload = { role, level, validator, serverid };
 
-  fetch("/admin/levelrole", {
+  fetch("/admin/"+serverid+"/levelrole", {
     method: "PUT",
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify(payload)
