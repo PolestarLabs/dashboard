@@ -127,6 +127,34 @@ router.get('/achievements/:id',cache(2360), async (req,res) => {
 
 })
 
+router.get('/leaderboards/user/:userID', cache(1260), async (req, res)=> {
+    const {userID} = req.params;
+    if(!req.user || req.user.id !== userID) return res.sendStatus(403);
+    let userData = await DB.localranks.find({user:userID},{_id:0,__v:0}).lean();
+    return res.json(userData);
+});
+
+router.get('/leaderboards/:serverID', cache(600), async (req, res)=> {
+    const {serverID} = req.params;
+    const page = Math.abs(parseInt(req.query.page ||0) - 1);
+    let serverData = await DB.localranks.find({server:serverID},{_id:0,__v:0}).limit(50).skip(50*(page)).lean();
+    const total =  (await DB.localranks.find({server:serverID}).count());
+
+    res.json({
+        currentPage: page+1,
+        totalItems: total,
+        totalPages: ~~(total / 50),
+        data: serverData,
+        lastUpdated: new Date()
+    });
+});
+
+router.get('/leaderboards/:serverID/:userID', cache(1260), async (req, res)=> {
+    const {serverID,userID} = req.params;
+    let userData = await DB.localranks.get({user:userID,server:serverID},{_id:0,__v:0});
+    res.json(userData);
+});
+
 router.get('/relationships', cache(1260), async (req, res)=> {
 
     console.log('start')
