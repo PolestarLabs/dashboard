@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 
 
-router.delete("/:serverID/levelrole",ADMCHECKS,async (req,res)=>{
+router.delete("/",async ( req,res)=>{
     let payload = req.body;
-    const SVID = req.params.serverID;
+    const SVID = res.locals.serverID;
 
     DB.servers.updateOne({id:SVID},{
         $pull:{
@@ -30,12 +30,12 @@ router.delete("/:serverID/levelrole",ADMCHECKS,async (req,res)=>{
     }).catch(err=>{
         return res.status(510).json(err);
     })
-})
+});
 
-
-router.patch("/:serverID/levelrole",ADMCHECKS,async (req,res)=>{
+router.patch("/",async (req,res)=>{
     let payload = req.body;
-    const SVID = req.params.serverID;
+    const SVID = res.locals.serverID;
+
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
 
@@ -58,13 +58,12 @@ router.patch("/:serverID/levelrole",ADMCHECKS,async (req,res)=>{
     }).catch(err=>{
         return res.status(510).json(err);
     })
-})
+});
 
+router.put("/",async (req,res)=>{
 
-
-router.put("/:serverID/levelrole",ADMCHECKS,async (req,res)=>{
+    const SVID = res.locals.serverID
     let payload = req.body;
-    const SVID = req.params.serverID;
 
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
@@ -95,7 +94,6 @@ router.put("/:serverID/levelrole",ADMCHECKS,async (req,res)=>{
         console.error(err)
         return res.status(510).json(err);
     })
-})
-
+});
 
 module.exports = router;
