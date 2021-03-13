@@ -20,6 +20,11 @@ router.use("/:serverID/selfrole", function (req,res) {
     return (require('./selfrole.js'))(req,res);
 });
 
+router.use("/:serverID/progression", function (req,res) {
+    res.locals.serverID = req.params.serverID;
+    return (require('./progression.js'))(req,res);
+});
+
 
 //SECTION GET
 
