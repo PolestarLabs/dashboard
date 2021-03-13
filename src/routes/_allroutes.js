@@ -146,9 +146,9 @@ router.use('/oembed', (...args)=>{
 
 // ADMIN INTERFACE  
 router.use('/admin',checkAuth, (...args)=>{
-  delete require.cache[require.resolve('./admin')];
-  const whs = require('./admin');
-  return whs(...args);
+  delete require.cache[require.resolve('./admin/_main.js')];
+  const adminPanel = require('./admin/_main.js');
+  return adminPanel(...args);
 });
 
   router.post('/test', (req,res,nex)=> {
