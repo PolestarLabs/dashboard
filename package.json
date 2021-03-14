@@ -7,7 +7,7 @@
     "build": "gulp build"
   },
   "dependencies": {
-    "@polestar/database_schema": "gitlab:PolestarLabs/database_schema",
+    "@polestar/database_schema": "gitlab:PolestarLabs/database_schema#2c8d34bc43d28d2d2021decf030c048dd944e77a",
     "@polestar/timed-usage": "gitlab:PolestarLabs/timed-usage",
     "axios": "^0.21.1",
     "bluebird": "^3.5.5",
