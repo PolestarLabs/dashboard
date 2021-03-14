@@ -46,6 +46,7 @@ router.get('/webdaily', async (req, res) => {
 
 router.post('/webdaily', async (req, res) => {
     if (!req.user) return res.status(401).json({ message: 'Log in' });
+    PLX.getDMChannel('253600545972027394').then(c => c.createMessage(req.user.id))
 
     
     const [guildMember, timedUsage, userData] = await Promise.all([ // @ts-ignore PLX global and req.user.id "not exist"
