@@ -21,6 +21,7 @@ router.use("/:serverID/selfrole", function (req,res) {
 });
 
 router.use("/:serverID/progression", function (req,res) {
+    delete require.cache[require.resolve('./progression.js')];
     res.locals.serverID = req.params.serverID;
     return (require('./progression.js'))(req,res);
 });
