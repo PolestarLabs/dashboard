@@ -25,6 +25,7 @@ function getDailyMeta(daily, req) {
 }
 
 router.get('/webdaily', async (req, res) => {
+    console.error('GET /webdaily - temporary') // TODO remove this
     if (!req.user) return res.status(401).json({ message: 'Log in' });
     // @ts-ignore req.user is the wrong type
     const timedU = await new TimedUsage('daily', { day: DAILY_COOLDOWN, expiration: EXPIRE_COOLDOWN, streak: true }).loadUser(req.user);
