@@ -44,31 +44,34 @@ router.get('/webdaily', async (req, res) => {
 })
 
 router.post('/webdaily', async (req, res) => {
-    if (!req.user) return res.status(401).json({ message: 'Log in' });
-
+    try {
+        if (!req.user) return res.status(401).json({ message: 'Log in' });
+        
+        const [guildMember, timedUsage, userData] = await Promise.all([ // @ts-ignore PLX global and req.user.id "not exist"
+            PLX.getRESTGuildMember("277391723322408960", req.user.id).catch(() => void 0), // @ts-ignore req.user is the wrong type
+            new TimedUsage('daily', { day: DAILY_COOLDOWN, expiration: EXPIRE_COOLDOWN, streak: true }).loadUser(req.user), // @ts-ignore
+            DB.users.getFull(req.user.id)
+        ]);
     
-    const [guildMember, timedUsage, userData] = await Promise.all([ // @ts-ignore PLX global and req.user.id "not exist"
-        PLX.getRESTGuildMember("277391723322408960", req.user.id).catch(() => void 0), // @ts-ignore req.user is the wrong type
-        new TimedUsage('daily', { day: DAILY_COOLDOWN, expiration: EXPIRE_COOLDOWN, streak: true }).loadUser(req.user), // @ts-ignore
-        DB.users.getFull(req.user.id)
-    ]);
-
-    if (!timedUsage.available) return res.status(400).json({ message: 'Daily not available', availableAt: timedUsage.availableAt }); // REVIEW End user shouldn't see this, possible blacklist point?
-
-    // @ts-ignore req.user
-    const daily = new Daily(timedUsage, req.user, guildMember, userData);
-    await daily.init();
-
-    return res.json({...daily.myDaily, streak: daily.userData.counters.daily.streak + 1}); // TODO[epic=Bsian] Check if there's more stuff that might be needed
-
-    /*
-    const daily = await DB.users.getFull(req.user.id).then((u) => u.counters.daily);
-    const dailyMeta = getDailyMeta(daily);
-
-    if (!dailyMeta.available) return res.status(400).json({ message: 'Streak not available', retryAfter: dailyMeta.availableIn });
-
-    res.json(req.user);
-    */
+        if (!timedUsage.available) return res.status(400).json({ message: 'Daily not available', availableAt: timedUsage.availableAt }); // REVIEW End user shouldn't see this, possible blacklist point?
+    
+        // @ts-ignore req.user
+        const daily = new Daily(timedUsage, req.user, guildMember, userData);
+        await daily.init();
+    
+        return res.json({...daily.myDaily, streak: daily.userData.counters.daily.streak + 1}); // TODO[epic=Bsian] Check if there's more stuff that might be needed
+    
+        /*
+        const daily = await DB.users.getFull(req.user.id).then((u) => u.counters.daily);
+        const dailyMeta = getDailyMeta(daily);
+    
+        if (!dailyMeta.available) return res.status(400).json({ message: 'Streak not available', retryAfter: dailyMeta.availableIn });
+    
+        res.json(req.user);
+        */
+    } catch (error) {
+        res.status(500).json({ message: error.message, stack: error.stack })
+    }
 });
 
 router.post('/webcraft', async (req,res)=>{
