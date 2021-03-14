@@ -209,5 +209,50 @@ router.get('/relationships', cache(1260), async (req, res)=> {
  
 });
  
- 
+ //router.post('/galleries/fanart')
+router.delete('/galleries/fanart/:id',  async (req,res)=>{
+    
+    const oldData = await DB.fanart.get(req.params.id);
+    if (!oldData) return res.sendStatus(404);
+    if (!req.user.id) return res.sendStatus(401);
+    if (oldData.author_ID !== req.user?.id) return res.sendStatus(403);
+
+    DB.fanart.remove( {id: req.params.id } )
+        .then(id=>{
+            console.log(id);
+            res.status(200).json('DELETED');
+        })
+        .catch(err=> console.log(err) && res.status(500).json('ERROR') )
+} )
+
+router.put('/galleries/fanart/:id/:what',  async (req,res)=>{
+
+    const data = req.body;
+    const oldData = await DB.fanart.get(req.params.id);
+
+    if (!oldData) return res.sendStatus(404);
+    if (!req.user.id) return res.sendStatus(401);
+    if (oldData.author_ID !== req.user?.id) return res.sendStatus(403);
+    
+    if (req.params.what === 'twitter'){
+        let result = await DB.fanart.updateMany({author_ID: oldData.author_ID }, {$set:{artistTwit: data.value}});
+        return res.status(200).json(result);
+    }
+    if (req.params.what === 'link'){
+        let result = await DB.fanart.updateMany({author_ID: oldData.author_ID }, {$set:{artistlink: data.value}});
+        return res.status(200).json(result);
+    }
+
+    const payload = {};
+    data.title ? payload.title = data.title : false;
+    data.description ? payload.description = data.description : false;
+
+    let result = await DB.fanart.set( {id: req.params.id }, {$set: payload});
+    console.log({result})
+    return res.status(200).json(result);
+
+} )
+
+
+
 module.exports = router  
