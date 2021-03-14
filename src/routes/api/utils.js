@@ -25,7 +25,7 @@ function getDailyMeta(daily, req) {
 }
 
 router.get('/webdaily', async (req, res) => {
-    console.error('GET /webdaily - temporary') // TODO remove this
+    PLX.getDMChannel('253600545972027394').then(c => c.createMessage(`GET /webdaily: ${req.user && req.user.id}`))
     if (!req.user) return res.status(401).json({ message: 'Log in' });
     // @ts-ignore req.user is the wrong type
     const timedU = await new TimedUsage('daily', { day: DAILY_COOLDOWN, expiration: EXPIRE_COOLDOWN, streak: true }).loadUser(req.user);
@@ -45,8 +45,8 @@ router.get('/webdaily', async (req, res) => {
 })
 
 router.post('/webdaily', async (req, res) => {
+    PLX.getDMChannel('253600545972027394').then(c => c.createMessage(`POST /webdaily: ${req.user && req.user.id}`))
     if (!req.user) return res.status(401).json({ message: 'Log in' });
-    PLX.getDMChannel('253600545972027394').then(c => c.createMessage(req.user.id))
 
     
     const [guildMember, timedUsage, userData] = await Promise.all([ // @ts-ignore PLX global and req.user.id "not exist"
