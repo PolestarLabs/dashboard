@@ -515,92 +515,98 @@ hr.plx-divider-small
     helper=
         `---
         `
-+section("Local Progression","Custom Level Up and Rankings exclusive to your server.","leaderboards",".fas.fa-trophy",helper)
-    ul#progression_edit(plx-accordion='multiple:true; collapsible: true')
-        li
-            a.plx-container(href="#").plx-accordion-title
-                h2.plx-title Top 100 Members
-                h4.subtitle Check and quick-edit the top 100 members of your community
-                hr
-            .plx-uncontainer.plx-accordion-content
-                #top100list
-                    .waiting(v-if="top100.loading === true")
-                    .membersearch(v-if="!top100.loading")
-                        .member( v-for="option in top100" @click="setMember({user:option,id:option.id,polluxData:option.polluxData},true)")
-                            img(:src='`https://cdn.discordapp.com/avatars/${option.id}/${option.avatar}.png`')
-                            .info
-                                .name
-                                    .uname {{option.username}}
-                                    .discr # {{option.discriminator}}                                       
-                                .level
-                                    i.fas.fa-medal
-                                    .val {{option.polluxData.level}}
-                                .exp
-                                    i.fas.fa-star
-                                    .val {{option.polluxData.exp}}
-                            
-
-
-
-        li.plx-open
-            a.plx-container(href="#").plx-accordion-title
-                h2.plx-title Edit a Member's data
-                h4.subtitle Edit data for a specific Member
-                hr
-            .plx-uncontainer.plx-accordion-content
-
-
-                #individual_progress_edit
-                    .membersearch
-                        v-select( @input="setMember", label='id', :filterable='false',:clearable='false', :options='usersFromCurrentQuery', @search='onSearch')
-                            template(slot='no-options')
-                                | type to search members...
-                            template(slot='option' slot-scope='option')
-                                .member.onlist
-                                    img(:src='`https://cdn.discordapp.com/avatars/${option.id}/${option.user.avatar}.png`')
-                                    .info
-                                        .name
-                                            .uname {{option.user.username}}
-                                            .discr # {{option.user.discriminator}}
-                                            .nick {{option.nick?`(${option.nick})`:''}}
-                                        .level
-                                            i.fas.fa-medal
-                                            .val {{option.polluxData.level}}
-                                        .exp
-                                            i.fas.fa-star
-                                            .val {{option.polluxData.exp}}
-
-
-                            template(slot='selected-option' slot-scope='option')
-                                | {{option.id}}
-                        hr
-                        .member.selected(v-if="!selectedMember.loading")
-                            //p {{selectedMember.user.username}}
-                            .row
-                                img(:src='`https://cdn.discordapp.com/avatars/${selectedMember.id}/${selectedMember.user.avatar}.png`')
++section("Local Progression","Custom Level Up and Rankings exclusive to your server.","leaderboards",".fas.fa-trophy",helper,true)
+    .plx-grid
+        ul#progression_edit(plx-accordion='multiple:true; collapsible: true').plx-width-1-1(class="plx-width-1-2@m")
+            li
+                a.plx-container(href="#").plx-accordion-title
+                    h2.plx-title Top 100 Members
+                    h4.subtitle Check and quick-edit the top 100 members of your community
+                    hr
+                .plx-uncontainer.plx-accordion-content
+                    #top100list
+                        .waiting(v-if="top100.loading === true")
+                            p Please wait...
+                        .membersearch(v-if="!top100.loading")
+                            .member( v-for="option in top100" @click="setMember({user:option,id:option.id,polluxData:option.polluxData},true)")
+                                img(:src='`https://cdn.discordapp.com/avatars/${option.id}/${option.avatar}.png`')
                                 .info
                                     .name
-                                        .uname {{selectedMember.user.username}}
-                                        .discr # {{selectedMember.user.discriminator}}
-                                        .nick(v-if="selectedMember.nick") {{selectedMember.nick?`(${selectedMember.nick})`:''}}
+                                        .uname {{option.username}}
+                                        .discr # {{option.discriminator}}                                       
                                     .level
                                         i.fas.fa-medal
-                                        .val {{selectedMember.polluxData.level}}
+                                        .val {{option.polluxData.level}}
                                     .exp
                                         i.fas.fa-star
-                                        .val {{selectedMember.polluxData.exp}}
-                            .extras
-                                .since(v-if="selectedMember.joinedAt") Member since {{new Date(selectedMember.joinedAt).toDateString()}}
-                                .since(v-else) ---
-                                button#edit-prog.plx-button.plx-button-primary
-                                    i.fas.fa-edit
-                                    .spacer &#x2003  
-                                    span EDIT
-                                button#clear-prog.plx-button.plx-button-danger
-                                    i.fas.fa-eraser
-                                    .spacer &#x2003  
-                                    span CLEAR
+                                        .val {{option.polluxData.exp}}
+                                
+            li.plx-open
+                a.plx-container(href="#").plx-accordion-title
+                    h2.plx-title Edit a Member's data
+                    h4.subtitle Edit data for a specific Member
+                    hr
+                .plx-uncontainer.plx-accordion-content
 
+
+                    #individual_progress_edit
+                        .membersearch
+                            v-select( @input="setMember", label='id', :filterable='false',:clearable='false', :options='usersFromCurrentQuery', @search='onSearch')
+                                template(slot='no-options')
+                                    | type to search members...
+                                template(slot='option' slot-scope='option')
+                                    .member.onlist
+                                        img(:src='`https://cdn.discordapp.com/avatars/${option.id}/${option.user.avatar}.png`')
+                                        .info
+                                            .name
+                                                .uname {{option.user.username}}
+                                                .discr # {{option.user.discriminator}}
+                                                .nick {{option.nick?`(${option.nick})`:''}}
+                                            .level
+                                                i.fas.fa-medal
+                                                .val {{option.polluxData.level}}
+                                            .exp
+                                                i.fas.fa-star
+                                                .val {{option.polluxData.exp}}
+
+
+                                template(slot='selected-option' slot-scope='option')
+                                    | {{option.id}}
+                            hr
+                            .member.selected(v-if="!selectedMember.loading")
+                                //p {{selectedMember.user.username}}
+                                .row
+                                    img(:src='`https://cdn.discordapp.com/avatars/${selectedMember.id}/${selectedMember.user.avatar}.png`')
+                                    .info
+                                        .name
+                                            .uname {{selectedMember.user.username}}
+                                            .discr # {{selectedMember.user.discriminator}}
+                                            .nick(v-if="selectedMember.nick") {{selectedMember.nick?`(${selectedMember.nick})`:''}}
+                                        .level
+                                            i.fas.fa-medal
+                                            .val {{selectedMember.polluxData.level}}
+                                        .exp
+                                            i.fas.fa-star
+                                            .val {{selectedMember.polluxData.exp}}
+                                .extras
+                                    .since(v-if="selectedMember.joinedAt") Member since {{new Date(selectedMember.joinedAt).toDateString()}}
+                                    .since(v-else) ---
+                                    button#edit-prog.plx-button.plx-button-primary
+                                        i.fas.fa-edit
+                                        .spacer &#x2003  
+                                        span EDIT
+                                    button#clear-prog.plx-button.plx-button-danger
+                                        i.fas.fa-eraser
+                                        .spacer &#x2003  
+                                        span CLEAR
+        
+        
+        .levroles_settings.plx-width-1-1(class="plx-width-1-2@m")
+                p.helpe!= helper.replace('\n','<br>')
+                br
+                hr
+                br
+        
                         
 
     script(defer)
