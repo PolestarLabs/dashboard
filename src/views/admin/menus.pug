@@ -537,9 +537,13 @@ hr.plx-divider-small
                                     .level
                                         i.fas.fa-medal
                                         .val {{option.polluxData.level}}
+                                    .level
+                                        i.fas.fa-medal
+                                        .val {{levelFromXP(option.polluxData.exp)}}
                                     .exp
                                         i.fas.fa-star
                                         .val {{option.polluxData.exp}}
+                                        
                                 
             li.plx-open
                 a.plx-container(href="#").plx-accordion-title
@@ -565,6 +569,9 @@ hr.plx-divider-small
                                             .level
                                                 i.fas.fa-medal
                                                 .val {{option.polluxData.level}}
+                                            .level
+                                                i.fas.fa-medal
+                                                .val {{levelFromXP(option.polluxData.exp)}}
                                             .exp
                                                 i.fas.fa-star
                                                 .val {{option.polluxData.exp}}
@@ -599,13 +606,72 @@ hr.plx-divider-small
                                         i.fas.fa-eraser
                                         .spacer &#x2003  
                                         span CLEAR
+            li
+                a.plx-container(href="#").plx-accordion-title
+                    h2.plx-title.plx-text-denger Danger Zone
+                    h4.subtitle Be extra careful while fiddling around here
+                    hr
+                .plx-uncontainer.plx-accordion-content
+                    button#clear-prog-all.plx-button.plx-button-danger
+                        i.fas.fa-eraser
+                        .spacer &#x2003  
+                        span CLEAR ALL
         
-        
-        .levroles_settings.plx-width-1-1(class="plx-width-1-2@m")
+        .levroles_settings.plx-width-1-1(class="plx-width-1-2@m" style="--current-bg: #FFF")
                 p.helpe!= helper.replace('\n','<br>')
                 br
                 hr
                 br
+                script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.1/Chart.min.js")
+                
+                .plx-flex.plx-flex-wrap
+                    div
+                        canvas( height="320px" width="320px")#upchart
+                    #progchart
+                        div
+                            h4: b Estimated Time
+                            ul
+                                li(v-for="item in updateChart()") {{item}}
+                            .help Based on a 500 msg/day average
+                        .plx-slider
+                            hr
+                            label(for="v1")
+                                b Factor A: 
+                                | ({{A}}) points
+                            br
+                            input#v1(@change="updateChart()" v-model='A' type='range' min=10 max=2500 style="width: 320px")
+                            
+                            br
+                            label(for="v2")
+                                b Factor B: 
+                                | ({{B}}) points
+                            br
+                            input#v2(@change="updateChart()" v-model='B' type='range' min=1 max=25 style="width: 320px")
+                 
+          
+                            hr
+                        div.plx-flex.plx-flex-around
+                            button#curve-default.plx-button.plx-button-danger(@click="setTemplate('defaults',1)")
+                                i.fas.fa-repeat
+                                .spacer &#x2003  
+                                span DEFAULT
+                            button#curve-default.plx-button.plx-button-primary(@click="setTemplate('fast',1)")
+                                i.fas.fa-repeat
+                                .spacer &#x2003  
+                                span FAST
+                            button#curve-default.plx-button.plx-button-primary(@click="setTemplate('slow',1)")
+                                i.fas.fa-repeat
+                                .spacer &#x2003  
+                                span SLOW
+
+                            button#curve-default.plx-button.plx-button-info
+                                i.fas.fa-repeat
+                                .spacer &#x2003  
+                                span RESET
+
+                    
+                
+                
         
                         
 
