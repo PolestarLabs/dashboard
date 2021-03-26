@@ -5,6 +5,8 @@ dev-cooking:
   stage: build
   script:
     - cd /home/pollux/polaris/DEV/dashboard/
+    - git fetch
+    - git branch
     - git reset --hard origin/master
     - git pull
     - npm install
@@ -14,6 +16,8 @@ cooking:
   stage: build
   script:
     - cd /home/pollux/polaris/LIVE/dashboard/
+    - git fetch
+    - git branch
     - git reset --hard origin/live
     - git pull
     - npm install
