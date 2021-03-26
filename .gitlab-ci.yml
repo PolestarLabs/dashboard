@@ -29,4 +29,5 @@ catapulting:
   stage: deploy
   script:
     - echo "Did this work idk"
+    - plx-reload dash
     
