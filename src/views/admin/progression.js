@@ -92,7 +92,7 @@ const SECOND_COLOR = getComputedStyle(document.documentElement).getPropertyValue
 Chart.defaults.global.defaultFontColor = "#AAC";
 Chart.defaults.global.defaultFontSize = 12;
 
-function estimateTime(label,volume=500){
+function estimateTime(label,volume=200){
 
     let estimate = ~~(label / volume)+1;
     let parsed = estimate === 1 ? estimate+" day"
