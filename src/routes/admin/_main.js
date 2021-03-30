@@ -92,8 +92,8 @@ if(!payload.first && svData && payload && (!req.body.noDM && userData?.switches?
 
     let diff=""
     if( svData.modules.MODROLE !== payload.modrole) diff +=      `\nModeration Role   : ${payload.modrole }`;
-if( svData.progression?.upfactorA !== payload.upfactorA) diff += `\Progression Fact-A : ${payload.upfactorA }`;
-if( svData.progression?.upfactorB !== payload.upfactorB) diff += `\Progression Fact-B : ${payload.upfactorB }`;
+if( svData.progression?.upfactorA !== payload.upfactorA) diff += `\nProgression Fact-A : ${payload.upfactorA }`;
+if( svData.progression?.upfactorB !== payload.upfactorB) diff += `\nProgression Fact-B : ${payload.upfactorB }`;
     if( svData.modules.MUTEROLE !== payload.muterole) diff +=    `\nMute Role         : ${payload.muterole }`;
     if( svData.modules.DROPS !== payload.drops) diff +=          `\nBox Drops         : ${payload.drops ? "✅" : "❌️"  }`;
     if( svData.modules.LVUP !== payload.lvup_glb) diff +=        `\nLevel Up Messages : ${payload.lvup_glb ? "✅" : "❌️"  }`;
