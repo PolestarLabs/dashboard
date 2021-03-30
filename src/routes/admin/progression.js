@@ -59,9 +59,12 @@ router.get('/:userID', async (req,res)=>{
 
 router.post('/factor', async (req,res)=>{
     const serverID = res.locals.serverID;
-    const newUpfactor = req.body.value;
+    const factorA = ~~(Number(req.body.A)) || 180;
+    const factorB = ~~(Number(req.body.B)) || 8;
 
-    DB.servers.set(serverID,{$set:{"modules.UPFACTOR": newUpfactor }})
+    if(!factorA < 0 || factorB < 0) return res.status(400).json("Invalid upFactors"); 
+
+    DB.servers.set(serverID,{$set:{"progression.upfactorA": factorA, "progression.upfactorB": factorB }})
         .then(_=> res.status(200).json(newUpfactor))
         .catch(err=> console.log(err) && res.status(500).json("Error"));
 
@@ -70,10 +73,10 @@ router.post('/factor', async (req,res)=>{
 router.post('/:userID/edit', async (req,res)=>{
     const serverID = res.locals.serverID;
     const {userID} = req.params;
-    const amount   = req.body.amount; 
+    const amount   = Math.max( ~~Number(req.body.amount) || 0 , 0 ); 
 
     DB.localranks.set({user:userID,server:serverID},{$set:{exp:amount}})
-        .then(_=> res.status(200).json(newUpfactor));
+        .then(_=> res.status(200).json(amount));
 })
 
 router.post('/:userID/increment', async (req,res)=>{
