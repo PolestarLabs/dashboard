@@ -534,12 +534,11 @@ hr.plx-divider-small
                                     .name
                                         .uname {{option.username}}
                                         .discr # {{option.discriminator}}                                       
+                                    .alt-level(v-if=" levelFromXP(option.polluxData.exp,0,option.polluxData) != option.polluxData.level")
+                                        .val {{levelFromXP(option.polluxData.exp,0,option.polluxData)}}
                                     .level
                                         i.fas.fa-medal
                                         .val {{option.polluxData.level}}
-                                    .level
-                                        i.fas.fa-medal
-                                        .val {{levelFromXP(option.polluxData.exp)}}
                                     .exp
                                         i.fas.fa-star
                                         .val {{option.polluxData.exp}}
@@ -651,21 +650,30 @@ hr.plx-divider-small
           
                             hr
                         div.plx-flex.plx-flex-around
-                            button#curve-default.plx-button.plx-button-danger(@click="setTemplate('defaults',1)")
-                                i.fas.fa-repeat
+                            button#curve-default.plx-button.plx-button-small.plx-button-primary(@click="setTemplate('defaults',1)")
+
+                                svg.svg-inline--fa.fa-tachometer.fa-w-18(aria-hidden='true' focusable='false' data-prefix='fas' data-icon='tachometer' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512')
+                                    path(fill='currentColor' d='M288 32C128.94 32 0 160.94 0 320c0 52.8 14.25 102.26 39.06 144.8 5.61 9.62 16.3 15.2 27.44 15.2h443c11.14 0 21.83-5.58 27.44-15.2C561.75 422.26 576 372.8 576 320c0-159.06-128.94-288-288-288zm102.77 119.59l-61.33 184C343.13 347.33 352 364.54 352 384c0 11.72-3.38 22.55-8.88 32H232.88c-5.5-9.45-8.88-20.28-8.88-32 0-33.94 26.5-61.43 59.9-63.59l61.34-184.01c4.17-12.56 17.73-19.45 30.36-15.17 12.57 4.19 19.35 17.79 15.17 30.36z')
                                 .spacer &#x2003  
                                 span DEFAULT
-                            button#curve-default.plx-button.plx-button-primary(@click="setTemplate('fast',1)")
-                                i.fas.fa-repeat
+
+                            .spacer &#x2003  
+                            button#curve-default.plx-button.plx-button-small.plx-button-secondary(@click="setTemplate('fast',1)")
+                                svg.svg-inline--fa.fa-tachometer-fastest.fa-w-18(aria-hidden='true' focusable='false' data-prefix='fas' data-icon='tachometer-fastest' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512')
+                                    path(fill='currentColor' d='M288 32C128.94 32 0 160.94 0 320c0 52.8 14.25 102.26 39.06 144.8 5.61 9.62 16.3 15.2 27.44 15.2h443c11.14 0 21.83-5.58 27.44-15.2C561.75 422.26 576 372.8 576 320c0-159.06-128.94-288-288-288zm195.95 343.67l-133.93 22.32c-1.51 6.37-3.69 12.48-6.9 18.01H232.88c-5.5-9.45-8.88-20.28-8.88-32 0-35.35 28.65-64 64-64 23.06 0 43.1 12.31 54.37 30.61l133.68-22.28c13.09-2.17 25.45 6.64 27.62 19.72 2.19 13.07-6.65 25.45-19.72 27.62z')
                                 .spacer &#x2003  
                                 span FAST
-                            button#curve-default.plx-button.plx-button-primary(@click="setTemplate('slow',1)")
-                                i.fas.fa-repeat
+                            .spacer &#x2003  
+                            button#curve-default.plx-button.plx-button-small.plx-button-secondary(@click="setTemplate('slow',1)")
+                                svg.svg-inline--fa.fa-tachometer-slowest.fa-w-18(aria-hidden='true' focusable='false' data-prefix='fas' data-icon='tachometer-slowest' role='img' xmlns='http://www.w3.org/2000/svg' viewBox='0 0 576 512')
+                                    path(fill='currentColor' d='M288 32C128.94 32 0 160.94 0 320c0 52.8 14.25 102.26 39.06 144.8 5.61 9.62 16.3 15.2 27.44 15.2h443c11.14 0 21.83-5.58 27.44-15.2C561.75 422.26 576 372.8 576 320c0-159.06-128.94-288-288-288zm55.12 384H232.88c-3.21-5.52-5.39-11.63-6.9-18.01L92.05 375.67c-13.06-2.17-21.91-14.55-19.72-27.62 2.17-13.08 14.53-21.89 27.62-19.72l133.68 22.28C244.9 332.31 264.94 320 288 320c35.35 0 64 28.65 64 64 0 11.72-3.38 22.55-8.88 32z')
                                 .spacer &#x2003  
                                 span SLOW
 
-                            button#curve-default.plx-button.plx-button-info
-                                i.fas.fa-repeat
+                            .spacer &#x2003  
+                            
+                            button#curve-default.plx-button.plx-button-small.plx-button-danger(@click="setTemplate('reset',1)")
+                                i.fas.fa-undo-alt
                                 .spacer &#x2003  
                                 span RESET
 

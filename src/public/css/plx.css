@@ -11639,7 +11639,7 @@ iframe.plx-cover {
 .a-comand input:not(:checked) + span {
    text-decoration: line-through;
 }
-
+.spacer{margin:6px}
 .plx-accordion-title i{color: #f58} .plx-accordion-title{color: var(--text-extra-bold)}
                 .plx-accordion>li{
                         border: solid 1px #AAA3;
