@@ -6,9 +6,14 @@ router.get('/', async (req,res)=>{
     
 })
 
-router.get('/top100', cacheFunction(600), async (req,res)=>{
+const TOP100CACHE = new Map();
+router.get('/top100', async (req,res)=>{
     const serverID = res.locals.serverID;
-    const top100 = await DB.localranks.find({server:serverID},{_id:0,__v:0}).sort({exp:-1}).limit(100).lean();
+
+    const top100wait = DB.localranks.find({server:serverID},{_id:0,__v:0}).sort({exp:-1}).limit(100).lean().then(x=>TOP100CACHE.set(serverID,x) && x);
+    await Promise.race([top100wait,wait(1)]);
+    const top100 = TOP100CACHE.get(serverID) || await top100wait;
+
     const discordUsers = await Promise.all(top100.map(async RNK=>{
         let discordUser =   userCache.get( RNK.user ) || (await PLX.getRESTUser( RNK.user ).catch(e=>{ id: "error" }));
         if (!discordUser) return null;
@@ -21,13 +26,13 @@ router.get('/top100', cacheFunction(600), async (req,res)=>{
         } : null;
        
         return response;
-    }));
+    })).catch(err=> console.log(err) && res.status(500).json("ERROR") );
 
-    return res.json(discordUsers);    
+    return res.json(discordUsers||[]);    
 
 })
 
-router.get('/search', cacheFunction(60), async (req,res)=>{
+router.get('/search', async (req,res)=>{
     const serverID = res.locals.serverID;
     const query = req.query.q;
     const results = await PLX.searchGuildMembers(serverID, query, 20).catch((err) => []);
@@ -35,7 +40,7 @@ router.get('/search', cacheFunction(60), async (req,res)=>{
     
     const final = results.map(r=> {
         const newDoc = {};
-        const polluxData = dbResults.find(d=>d.user===r.id) || null;
+        const polluxData = dbResults.find(d=>d.user===r.id) || {exp:0,level:0};
         newDoc.polluxData = polluxData ? {
             exp: polluxData.exp, 
             level: polluxData.level 
@@ -74,9 +79,13 @@ router.post('/:userID/edit', async (req,res)=>{
     const serverID = res.locals.serverID;
     const {userID} = req.params;
     const amount   = Math.max( ~~Number(req.body.amount) || 0 , 0 ); 
+    const {upfactorA:A,upfactorB:B} = (await DB.servers.get(serverID)).progression;
 
-    DB.localranks.set({user:userID,server:serverID},{$set:{exp:amount}})
-        .then(_=> res.status(200).json(amount));
+    DB.localranks.set({user:userID,server:serverID},{$set:{
+        exp:amount,
+        level: ~~( Math.sqrt( (amount * B) / A ) )
+    }})
+        .then(_=> res.status(200).json( _ ));
 })
 
 router.post('/:userID/increment', async (req,res)=>{
@@ -85,7 +94,18 @@ router.post('/:userID/increment', async (req,res)=>{
     const amount   = req.body.amount; 
 
     DB.localranks.set({user:userID,server:serverID},{$inc:{exp:amount}})
-        .then(_=> res.status(200).json(newUpfactor));
+        .then(_=> res.status(200).json(amount));
 })
+
+
+
+router.delete('/nuke', async (req,res)=>{
+    const serverID = res.locals.serverID;
+    const userID = req.user.id;
+    await DB.servers.set(serverID, {$set: {"progression.lastNuke": new Date(), "progression.lastNukeUser": userID }});
+    DB.localranks.deleteMany({server:serverID})
+        .then(_=> res.status(200).json(_));
+})
+
 
 module.exports = router
