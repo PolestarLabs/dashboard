@@ -41,7 +41,8 @@ router.get('/:serverID', async function (req,res) {
     req.user.validator = md5(Date.now());
 
     
-    let [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
+    let [serverData, memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
+        DB.servers.get(SVID).lean(),
         PLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
         PLX.getRESTGuildRoles(SVID),
         PLX.getRESTGuild(SVID),
@@ -51,14 +52,8 @@ router.get('/:serverID', async function (req,res) {
         DB.localranks.find({server:SVID}).lean().exec(),
         DB.temproles.find({server:SVID}).lean().exec(),
         DB.paidroles.find({server:SVID}).lean().exec(),
-
     ]);
 
-    //fx.
-
-    
-   
-    const serverData = await DB.servers.get(SVID);
     let payload = {
         reactRoles,
         serverData,
