@@ -11,17 +11,24 @@
 const xp_to_level = (xp, A,B) => ~~( Math.sqrt( (xp * B) / A ) );
 const level_to_xp = (lv, A,B) => ( A*Math.pow(lv,2)/B );
 
+const fetchRanks = () => {
+    fetch( `/admin/${serverid}/progression/top100` ).then(res => {
+        res.json().then(json => (PROGEDIT.top100 = json));
+    });
+}
+
 const PROGEDIT = new Vue({
     el:"#progression_edit",
     data:{
         top100:  {loading:true},
         selectedMember:{loading:true},
         usersFromCurrentQuery: [],
-        A: 280,
-        B: 9,
+        A: upfactorA,
+        B: upfactorB,
         C: 1000,
         limit: 250000,        
-        defaults: [280,9]
+        defaults: [280,9],
+        reset: [upfactorA,upfactorB],
     },
     components:{
         "v-select": VueSelect.VueSelect
@@ -30,7 +37,20 @@ const PROGEDIT = new Vue({
         edit(){
 
         },
-         
+        resetOverride(){
+            this.A = this.reset[0];
+            this.B = this.reset[1];
+        },
+        updateEverything(){
+            fetch("/dashboard/profile/color", {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json; charset=utf-8" },
+                body: JSON.stringify({ data: relevantData.color }),
+            })
+            this.reset[0] = this.A;
+            this.reset[1] = this.B;
+            fetchRanks();
+        },
         clear(){
             fetch( `/admin/${serverid}/progression/top100` ).then(res => {
                 res.json().then(json => (PROGEDIT.top100 = json));
@@ -63,9 +83,7 @@ const PROGEDIT = new Vue({
     }
 });
 
-fetch( `/admin/${serverid}/progression/top100` ).then(res => {
-    res.json().then(json => (PROGEDIT.top100 = json));
-});
+fetchRanks();
 
 
 function debounce(func, wait, immediate) {
@@ -159,14 +177,14 @@ const PROGRESSION_GRAPH = new Chart(ctx, {
 const GRAPH = new Vue({
     el: "#progchart",
     data: {
-        A: 180,
-        B: 7,
+        A: upfactorA,
+        B: upfactorB,
         C: 0,
         limit: 150000,
         defaults: [280,9],
         fast: [145,20],
         slow: [350,3],
-        reset: [this.A,this.B],
+        reset: [upfactorA,upfactorB],
     },
     methods: {
         setTemplate(template,animate=0){
