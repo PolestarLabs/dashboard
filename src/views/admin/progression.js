@@ -37,16 +37,91 @@ const PROGEDIT = new Vue({
         edit(){
 
         },
+        confirmEXPEdit(){
+            Swal.fire({
+                title: "Enter this member's new EXP amount!",
+                input: 'number',
+                showCancelButton: true,
+                confirmButtonText: 'Do it!',
+                showLoaderOnConfirm: true,
+                preConfirm: (exp) => {
+                    return new Promise((resolve) => {
+                        fetch(`/admin/${serverid}/progression/${this.selectedMember.id}/edit`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json; charset=utf-8" },
+                            body: JSON.stringify({ amount: Number(exp) })
+                        }).then( data =>{
+                            if(data.ok){
+                                this.selectedMember.polluxData.exp = Number(exp);
+                                this.selectedMember.polluxData.level = xp_to_level(Number(exp),upfactorA, upfactorB );
+                                this.updateEverything();
+                                return Swal.fire("Success!",'Level will update when the member interacts in your server again','success')
+                            }else{
+                                resolve(Swal.showValidationMessage("Error!","AAAAAAAAAAAAAAAAAAAAA","error"))
+                            }
+                        })
+                    })
+                },
+            allowOutsideClick: () => !swal.isLoading()         
+            }) 
+        } ,
+        confirmEXPNuke(){
+            Swal.fire({
+                title: "Are you sure you want to nuke this member's EXP?",
+                showCancelButton: true,
+                confirmButtonText: 'Yes baby!',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return new Promise((resolve) => {
+                        fetch(`/admin/${serverid}/progression/${this.selectedMember.id}/edit`, {
+                            method: "POST",
+                            headers: { "Content-Type": "application/json; charset=utf-8" },
+                            body: JSON.stringify({ amount: 0, level: 0 })
+                        }).then( data =>{
+                            if(data.ok){                               
+                                this.selectedMember.polluxData.exp = 0;
+                                this.selectedMember.polluxData.level = 0;
+                                this.updateEverything();
+                                return Swal.fire("Nukes sent!",'This member is gonna start from scratch now. Oof!','success')
+                            }else{
+                                resolve(Swal.showValidationMessage("Error!","AAAAAAAAAAAAAAAAAAAAA","error"))
+                            }
+                        })
+                    })
+                },
+            allowOutsideClick: () => !swal.isLoading()         
+            }) 
+        } ,
+        confirmTotalMayhem(){
+            Swal.fire({
+                title: "Are you sure you want to nuke this entire server's progression data? This cannot be undone!",
+                showCancelButton: true,
+                confirmButtonText: 'Burn it!',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return new Promise((resolve) => {
+                        fetch(`/admin/${serverid}/progression/nuke`, {
+                            method: "DELETE",
+                            headers: { "Content-Type": "application/json; charset=utf-8" },
+                        }).then( data =>{
+                            if(data.ok){                               
+                                this.updateEverything();
+                                return Swal.fire("Nukes sent!",'Total mayhem has ensued! Your server will start anew.','success')
+                            }else{
+                                resolve(Swal.showValidationMessage("Error!","AAAAAAAAAAAAAAAAAAAAA","error"))
+                            }
+                        })
+                    })
+                },
+            allowOutsideClick: () => !swal.isLoading()         
+            }) 
+        } ,
         resetOverride(){
             this.A = this.reset[0];
             this.B = this.reset[1];
         },
         updateEverything(){
-            fetch("/dashboard/profile/color", {
-                method: "PATCH",
-                headers: { "Content-Type": "application/json; charset=utf-8" },
-                body: JSON.stringify({ data: relevantData.color }),
-            })
+
             this.reset[0] = this.A;
             this.reset[1] = this.B;
             fetchRanks();
@@ -210,3 +285,5 @@ const GRAPH = new Vue({
         },
     },
 });
+
+
