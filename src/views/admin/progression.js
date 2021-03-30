@@ -17,11 +17,11 @@ const PROGEDIT = new Vue({
         top100:  {loading:true},
         selectedMember:{loading:true},
         usersFromCurrentQuery: [],
-        A: 600,
+        A: 280,
         B: 9,
         C: 1000,
-        limit: 250000,
-        defaults: [600,9]
+        limit: 250000,        
+        defaults: [280,9]
     },
     components:{
         "v-select": VueSelect.VueSelect
@@ -30,6 +30,7 @@ const PROGEDIT = new Vue({
         edit(){
 
         },
+         
         clear(){
             fetch( `/admin/${serverid}/progression/top100` ).then(res => {
                 res.json().then(json => (PROGEDIT.top100 = json));
@@ -48,7 +49,7 @@ const PROGEDIT = new Vue({
             }
         },
         levelFromXP(xp,curve){
-            return xp_to_level(xp,this.A,this.B,this.C,this.limit)
+            return  xp_to_level(xp,this.A,this.B,this.C,this.limit);
         },
         search: debounce((loading, search, vm) => {
             fetch(
@@ -158,13 +159,14 @@ const PROGRESSION_GRAPH = new Chart(ctx, {
 const GRAPH = new Vue({
     el: "#progchart",
     data: {
-        A: 200,
-        B: 1000,
-        C: 1000,
+        A: 180,
+        B: 7,
+        C: 0,
         limit: 150000,
-        defaults: [600,9],
+        defaults: [280,9],
         fast: [145,20],
         slow: [350,3],
+        reset: [this.A,this.B],
     },
     methods: {
         setTemplate(template,animate=0){
