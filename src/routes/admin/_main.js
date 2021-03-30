@@ -6,21 +6,21 @@ const fx = require('../../pipelines/globalFunctions.js');
 const operations = require('../../pipelines/operations.js');
 
 
-router.use("/:serverID",ADMCHECKS);
+router.use("/:serverID", ADMCHECKS);
 
 
-router.use("/:serverID/levelrole",function (req,res) {
+router.use("/:serverID/levelrole", ADMCHECKS, function (req,res) {
     delete require.cache[require.resolve('./levelrole.js')];
     res.locals.serverID = req.params.serverID;
     return (require('./levelrole.js'))(req,res);
 });
 
-router.use("/:serverID/selfrole", function (req,res) {
+router.use("/:serverID/selfrole", ADMCHECKS, function (req,res) {
     res.locals.serverID = req.params.serverID;
     return (require('./selfrole.js'))(req,res);
 });
 
-router.use("/:serverID/progression", function (req,res) {
+router.use("/:serverID/progression", ADMCHECKS, function (req,res) {
     delete require.cache[require.resolve('./progression.js')];
     res.locals.serverID = req.params.serverID;
     return (require('./progression.js'))(req,res);
@@ -97,6 +97,8 @@ if(!payload.first && svData && payload && (!req.body.noDM && userData?.switches?
 
     let diff=""
     if( svData.modules.MODROLE !== payload.modrole) diff +=      `\nModeration Role   : ${payload.modrole }`;
+if( svData.progression?.upfactorA !== payload.upfactorA) diff += `\Progression Fact-A : ${payload.upfactorA }`;
+if( svData.progression?.upfactorB !== payload.upfactorB) diff += `\Progression Fact-B : ${payload.upfactorB }`;
     if( svData.modules.MUTEROLE !== payload.muterole) diff +=    `\nMute Role         : ${payload.muterole }`;
     if( svData.modules.DROPS !== payload.drops) diff +=          `\nBox Drops         : ${payload.drops ? "✅" : "❌️"  }`;
     if( svData.modules.LVUP !== payload.lvup_glb) diff +=        `\nLevel Up Messages : ${payload.lvup_glb ? "✅" : "❌️"  }`;
@@ -126,6 +128,8 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
     const setPayload = {
         'respondDisabled': payload.res_disa,
         'modules.MUTEROLE': payload.muterole,
+        'progression.upfactorA': payload.upfactorA,
+        'progression.upfactorB': payload.upfactorB,
         'modules.MODROLE': payload.modrole,
         'modules.DROPS': JSON.parse(payload.drops||false), 
         'modules.LVUP': JSON.parse(payload.lvup_glb||false),
