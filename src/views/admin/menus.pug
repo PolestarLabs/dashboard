@@ -568,9 +568,7 @@ hr.plx-divider-small
                                             .level
                                                 i.fas.fa-medal
                                                 .val {{option.polluxData.level}}
-                                            .level
-                                                i.fas.fa-medal
-                                                .val {{levelFromXP(option.polluxData.exp)}}
+                                            
                                             .exp
                                                 i.fas.fa-star
                                                 .val {{option.polluxData.exp}}
@@ -597,11 +595,11 @@ hr.plx-divider-small
                                 .extras
                                     .since(v-if="selectedMember.joinedAt") Member since {{new Date(selectedMember.joinedAt).toDateString()}}
                                     .since(v-else) ---
-                                    button#edit-prog.plx-button.plx-button-primary
+                                    button#edit-prog.plx-button.plx-button-primary(@click="confirmEXPEdit()")
                                         i.fas.fa-edit
                                         .spacer &#x2003  
                                         span EDIT
-                                    button#clear-prog.plx-button.plx-button-danger
+                                    button#clear-prog.plx-button.plx-button-danger(@click="confirmEXPNuke()")
                                         i.fas.fa-eraser
                                         .spacer &#x2003  
                                         span CLEAR
@@ -611,8 +609,8 @@ hr.plx-divider-small
                     h4.subtitle Be extra careful while fiddling around here
                     hr
                 .plx-uncontainer.plx-accordion-content
-                    button#clear-prog-all.plx-button.plx-button-danger
-                        i.fas.fa-eraser
+                    button#clear-prog-all.plx-button.plx-button-danger(@click="confirmTotalMayhem()")
+                        i.fas.fa-radiation-alt
                         .spacer &#x2003  
                         span CLEAR ALL
         
