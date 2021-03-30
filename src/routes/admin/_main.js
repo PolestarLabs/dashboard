@@ -42,7 +42,7 @@ router.get('/:serverID', async function (req,res) {
 
     
     let [serverData, memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
-        DB.servers.get(SVID).lean(),
+        DB.servers.get(SVID),
         PLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
         PLX.getRESTGuildRoles(SVID),
         PLX.getRESTGuild(SVID),
