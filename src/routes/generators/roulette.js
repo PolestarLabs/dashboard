@@ -219,7 +219,8 @@ router.get('/', async (req,res)=>{
         
     }        
 
-    canvas.pngStream().pipe(res);
+    res.writeHead(200, {'Content-Type': 'image/png'});
+    canvas.pngStream({ compressionLevel: 2, filters: 0 }).pipe(res);
 })
 
 module.exports = router

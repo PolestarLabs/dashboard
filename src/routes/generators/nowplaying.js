@@ -4,7 +4,8 @@ const router = express.Router();
 const moment = require('moment');
 
 router.get('/', async (req,res)=>{
-    
+
+
     let Picto = require(process.env.BOT_PATH+"/core/utilities/Picto")
 
    
@@ -12,11 +13,11 @@ router.get('/', async (req,res)=>{
     if(!key) return res.status(401).json("UNAUTHORIZED");
     let authedUser = await DB.globals.findOne({ generatorsKey : key});
     if(!authedUser && key != "geminis444") return res.status(401).json("UNAUTHORIZED");
-    await DB.globals.updateOne({ generatorsKey : key},{$inc:{'data.counters.generatorsAPI.nowPlaying' : 1}});
-
+    DB.globals.updateOne({ generatorsKey : key},{$inc:{'data.counters.generatorsAPI.nowPlaying' : 1}});
 
     const userID = req.query.uid
-    const user = await PLX.getRESTUser(userID);
+    const user = (userCache.get( userID ) || (await PLX.getRESTUser( userID )));
+    userCache.set(userID,user);
 
     let totalTime = moment.duration( dur.padStart(8,"00:") ).asSeconds();
     let elapsedTime = moment.duration( time.padStart(8,"00:") ).asSeconds();
@@ -138,13 +139,9 @@ let lnOptions = {
     //ctx.drawImage(tag2.item ,254+tag.width+5,55+8);
     //ctx.drawImage(tag3.item ,280 ,100);
 
-    let result = canvas.toBuffer();
+    res.writeHead(200, {'Content-Type': 'image/png'});
+    canvas.pngStream({ compressionLevel: 5, filters: 0 }).pipe(res);
 
-    res.writeHead(200, {
-        'Content-Type': 'image/png',
-        'Content-Length': result.length
-    });
-    canvas.pngStream().pipe(res);
 })
 
 module.exports = router
