@@ -326,6 +326,7 @@ app.use(logger(function(tokens,req,res){
 
 /* --------------- */
 const i18n = require("./locales.js");
+/*
 app.use(i18n({
   translationsPath:   process.env.LOCALES_PATH,
   defaultLang: "en",
@@ -334,7 +335,7 @@ app.use(i18n({
   textsVarName: 'translation',
   paramLangName: "locale"
 }));
-
+*/
 
 const i18next = require('i18next');
 const i18n_backend = require('i18next-node-fs-backend');
@@ -382,7 +383,7 @@ const AcquireDiscordPayload = (TOKEN,req) => {
 const VARS = require("./pipelines/vars.js");
 const authCacheExpiration = new Map();
 
-app.use(async function(req,res,next){
+app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
   res.locals.EVENT=VARS.EVENT
   let preDataProcess = result=>{
     let USR = req.user;
@@ -556,7 +557,7 @@ app.get('/callback',
 
   
 app.use('/', auth, (...args)=>{
-  delete require.cache[require.resolve('./routes/_allroutes')];
+  //delete require.cache[require.resolve('./routes/_allroutes')];
   const router = require('./routes/_allroutes');
   return router(...args);    
 });
