@@ -14,8 +14,8 @@ passport.use(new Strategy(
                 id: user.id,
                 apiKey: user.apiKey,
                 apiPermission: user.apiPerms || 'basic',
-                ip: user.personal.ip,
-                location: `${user.personal.city}, ${user.personal.country}`,
+                ip: user.personal?.ip || "Unknown",
+                location: user.personal?`${user.personal.city}, ${user.personal.country}`:"Unknown",
             };
 
             return cb(null,resUser)
@@ -27,6 +27,7 @@ router.use(cors());
 router.use(helmet());
 
 const AUTHED = passport.authenticate('bearer', { session: false })
+const FIRST_PARTY = (rq,rs,nx) => ['master','admin','first_party'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
 const MASTER = (rq,rs,nx) => rq.user.apiPermission === "master" ? nx() : rs.sendStatus(403);
 const ADMIN  = (rq,rs,nx) => ['master','admin'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
 const TRUSTED= (rq,rs,nx) => ['master','admin','trusted'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
@@ -74,6 +75,12 @@ router.use(["/market/","/marketplace/"], async (...args) => {
 router.use(["/shop/","/store/"], async (...args) => {
     delete require.cache[(require.resolve('./shops/main.js'))];
     return (require('./shops/main.js'))( ...args);
+});
+
+router.use(["/playlists/"],AUTHED,FIRST_PARTY, async (...args) => {
+    console.log('test')
+    delete require.cache[(require.resolve('./playlists.js'))];
+    return (require('./playlists.js'))( ...args);
 });
 
 router.use(["/games/:game","/minigames/:game"], async (req,res) => {
