@@ -36,7 +36,7 @@ const fx = require('../pipelines/globalFunctions.js');
 
 // GENERATORS  
   router.use('/generators', (...args)=>{
-    delete require.cache[require.resolve('./generators')];
+    //delete require.cache[require.resolve('./generators')];
     const gens = require('./generators');
     return gens(...args);
   });
