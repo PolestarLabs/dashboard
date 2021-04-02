@@ -1,0 +1,97 @@
+@import /css/rarityboxes.css
+
+#items-craft {
+    height: 100vh;
+  }
+  
+  .item-card {
+    padding: 14px;
+    margin: 18px;
+    box-sizing: border-box;
+    background: var(--bg-dark);
+    width: 380px;
+    height: auto;
+    border-radius: 10px;
+    box-shadow: 0 0 25px -5px #112;
+  }
+  .item-card .card-footer {
+    margin: 0;
+    font-style: italic;
+    opacity: 0.7;
+  }
+  .item-card .top-line {
+    margin-bottom: 12px;
+  }
+  .item-card .top-line .title-container {
+    width: 100%;
+  }
+  .item-card .top-line .title-container .item-title {
+    align-items: center;
+    font-family: Panton;
+    font-weight: 600;
+    font-size: 16pt;
+  }
+  .item-card .top-line .title-container .item-title .rarity {
+    transform: translateY(0);
+    margin-right: 10px;
+  }
+  .item-card .top-line .title-container .item-id {
+    line-height: 0.8;
+    font-family: "Share Tech Mono";
+    margin-left: 36px;
+    opacity: 0.5;
+  }
+  .item-card .top-line .craft-button {
+    width: 100px;
+    transform-origin: right top;
+    justify-content: space-between;
+    padding: 0 12px;
+    height: 30px;
+    margin: 0 0 0 auto;
+  }
+  .item-card .top-line .craft-button .price {
+    font-size: 12pt;
+    width: 100%;
+    text-align: center;
+  }
+  .item-card .content-center .item-image {
+    width: 100px;
+  }
+  .item-card .content-center .item-info {
+    padding: 24px;
+    flex: 1 1 auto;
+    justify-content: space-around;
+  }
+  .item-card .content-center .item-info .item-price-jde {
+    margin-bottom: 8px;
+    font-family: Panton;
+  }
+  .item-card .content-center .item-info .item-material-container {
+    width: 100%;
+    background: var(--bg-darker);
+    padding: 4px;
+    border-radius: 8px;
+    overflow: visible;
+  }
+  .item-card .content-center .item-info .item-material-container .material {
+    margin-right: 4px;
+    padding: 0;
+    border-radius: 6px;
+    height: 24px;
+    width: 48px;
+    overflow: hidden;
+    background: var(--bg-darkest);
+    cursor: pointer;
+  }
+  .item-card .content-center .item-info .item-material-container .material > * {
+    pointer-events: none;
+  }
+  .item-card .content-center .item-info .item-material-container .material .mat-icon {
+    width: 24px;
+    margin: -2px 0;
+    flex: 0 0 auto;
+  }
+  .item-card .content-center .item-info .item-material-container .material .mat-count {
+    text-align: center;
+    flex: 1 0 auto;
+  }

@@ -1,0 +1,43 @@
+mixin itemCard(itm,nested)
+  .item-card.plus.plx-position-relative
+    
+    .top-line.plx-flex
+      .item-icon
+      .title-container.plx-flex.plx-flex-column
+        .item-title
+          .rarity.plx-rarity-icon(:class= itm+".rarity")
+          span {{#{itm}.name}}
+        .item-id {{#{itm}.id}}
+      .craft-button.shopbox-button
+        i.fas.fa-flask
+        .price CRAFT
+    .content-center.plx-flex
+      .item-image
+        img(:src=itm+".icon")
+      .item-info.plx-flex.plx-flex-column
+        .item-price-jde
+          .plx-icon.icon32.plx-jade 
+          | × {{#{itm}.gemcraft.JDE}}
+        .item-material-container.plx-flex
+          a.material.plx-flex(v-for="mat in "+itm+".materials", @mouseover=nested?false:"loadTooltip(mat)", :plx-tooltip= nested?(itm+".materials.length + ' more...'"):false )
+            .mat-icon
+              img(:src=itm+".icon")
+            .mat-count {{mat.count}}            
+          if !nested
+            .tooltip(plx-drop="pos:right;boundary: .material")
+              block
+    .card-footer
+      span item description goes here
+style
+    include basic_items.css 
+    
+#items-craft
+  .item-container(v-for="item in items.filter(x=>x.rarity=='UR')")
+    +itemCard("item")
+      .t-con(v-if="!tooltip.loading")
+        +itemCard("tooltip",true)
+      .t-con(v-else)
+        p LOADING...
+
+script
+    include basic_items.js
