@@ -326,7 +326,7 @@ app.use(logger(function(tokens,req,res){
 
 /* --------------- */
 const i18n = require("./locales.js");
-/*
+
 app.use(i18n({
   translationsPath:   process.env.LOCALES_PATH,
   defaultLang: "en",
@@ -335,7 +335,7 @@ app.use(i18n({
   textsVarName: 'translation',
   paramLangName: "locale"
 }));
-*/
+
 
 const i18next = require('i18next');
 const i18n_backend = require('i18next-node-fs-backend');

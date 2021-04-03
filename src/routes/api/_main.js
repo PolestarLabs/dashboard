@@ -113,6 +113,11 @@ router.use(["/utils/"], async (...args) => {
     return (require('./utils.js'))( ...args);
 });
 
+router.use(["/internal/"], async (...args) => {
+    delete require.cache[(require.resolve('./internal.js'))];
+    return (require('./internal.js'))( ...args);
+});
+
 //############################################
 
 router.get('/discoin/currencies', async (req,res)=>{
