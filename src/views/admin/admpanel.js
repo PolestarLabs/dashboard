@@ -12,7 +12,9 @@ $(document).ready(function(){
 function gatherData(){
 
     const payload = {
-    prefixToggle: $('#global-prefix-toggle').prop('checked')
+     upfactorA: PROGEDIT.A
+    ,upfactorB: PROGEDIT.B
+    ,prefixToggle: $('#global-prefix-toggle').prop('checked')
     ,rolestack: $('#rolestack-toggle').prop('checked')
     ,prefix: $('#server-prefix').val() ||"+"
  

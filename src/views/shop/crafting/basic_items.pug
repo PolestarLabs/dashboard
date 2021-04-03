@@ -1,0 +1,78 @@
+mixin itemCard(itm,nested,mini)
+  .item-card.plus.plx-position-relative(:id=itm+".id")    
+    .top-line.plx-flex
+      .item-icon
+      .title-container.plx-flex.plx-flex-column
+        .item-title
+          .rarity.plx-rarity-icon(:class= itm+".rarity")
+          span.truncate {{#{itm}.name}}
+        .item-id {{#{itm}.code}}
+      .craft-button.shopbox-button.disabled(v-if=itm+".crafted")
+        i.fas.fa-flask
+        .price CRAFT
+    .content-center.plx-flex
+      .item-image
+        img(:src="`/build/items/${(" + itm + "||{}).id}.png`" alt="")
+      .item-info.plx-flex.plx-flex-column
+        .plx-inline.plx-flex
+          .item-price.price-rbn(v-if=itm+".gemcraft && "+itm+".gemcraft.SPH")
+            .plx-icon.icon32.plx-sapphire
+            | × {{ miliarize( #{itm}.gemcraft.SPH ) }}
+          .item-price.price-rbn(v-if=itm+".gemcraft && "+itm+".gemcraft.RBN")
+            .plx-icon.icon32.plx-rubine
+            | × {{ miliarize( #{itm}.gemcraft.RBN ) }}
+          .item-price.price-jde(v-if=itm+".crafted")
+            .plx-icon.icon32.plx-jade
+            | × {{ miliarize( #{itm}.gemcraft.JDE ) }}
+          .item-price-jde(v-else)
+              | This item cannot be crafted
+        if !mini
+          .item-material-container.plx-flex
+            div(
+                v-for="mat in "+itm+".materials",
+                //href="items.find(x=>x.id==mat.id) ? '#'+mat.id : false ",
+               
+                :plx-tooltip= "mat.id" ,
+                x:plx-scroll=" items.find(x=>x.id==mat.id) ? 'offset:150' : false"
+            )
+                .material.plx-flex( @click=  "loadTooltip(mat)" )
+                    .mat-icon
+                        img(:src="`/build/items/${mat.id}.png`" alt="")
+                    .mat-count {{mat.count}}            
+                if !nested
+                    .tooltip(plx-drop="pos:auto;boundary: .material; mode: click " )
+                        block
+        else
+          .card-footer
+            span {{#{itm}.description}}
+    if !mini
+      .card-footer
+        span {{#{itm}.description}}
+style
+    include basic_items.css 
+
+#items-craft.disabled
+
+  .plx-flex.plx-flex-wrap.plx-flex-center
+    .basic-item-container(v-for="item in items.filter(x=>!x.materials || !x.materials.length)")
+        +itemCard("item",0,1)
+            .t-con(v-if="!tooltip.loading")
+                +itemCard("tooltip",true,1)
+        
+            .t-con(v-else)
+                .item-card
+                    p LOADING...
+  .plx-container
+    hr.plx-divider-icon
+  .plx-flex.plx-flex-wrap.plx-flex-center
+    .extra-item-container(v-for="item in items.filter(x=>x.materials && x.materials.length)")
+        +itemCard("item")
+            .t-con(v-if="!tooltip.loading")
+                +itemCard("tooltip",true)
+        
+            .t-con(v-else)
+                .item-card
+                    p LOADING...
+
+script
+    include basic_item.js

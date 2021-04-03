@@ -4,24 +4,25 @@ const router = express.Router();
 const moment = require('moment');
 
 router.get('/', async (req,res)=>{
-    
+
+
     let Picto = require(process.env.BOT_PATH+"/core/utilities/Picto")
 
    
-    const { name, artist, time, dur,thumb,embed,embed_thumb,key,color} = req.query;
+    const {  name, artist, time, dur,thumb,embed,embed_thumb,key,color,live,source} = req.query;
     if(!key) return res.status(401).json("UNAUTHORIZED");
     let authedUser = await DB.globals.findOne({ generatorsKey : key});
     if(!authedUser && key != "geminis444") return res.status(401).json("UNAUTHORIZED");
-    await DB.globals.updateOne({ generatorsKey : key},{$inc:{'data.counters.generatorsAPI.nowPlaying' : 1}});
-
+    DB.globals.updateOne({ generatorsKey : key},{$inc:{'data.counters.generatorsAPI.nowPlaying' : 1}});
 
     const userID = req.query.uid
-    const user = await PLX.getRESTUser(userID);
+    const user = (userCache.get( userID ) || (await PLX.getRESTUser( userID )));
+    userCache.set(userID,user);
 
     let totalTime = moment.duration( dur.padStart(8,"00:") ).asSeconds();
     let elapsedTime = moment.duration( time.padStart(8,"00:") ).asSeconds();
 
-    const canvas = Picto.new(800 + (embed?50:embed_thumb?100:0),200);
+    const canvas = Picto.new( 800 + (embed?50:embed_thumb?100:0),200);
     const ctx = canvas.getContext('2d')
     let [avatar,thumbnail] = await Promise.all([        
         Picto.makeRound(94,user.avatarURL),
@@ -77,17 +78,33 @@ let lnOptions = {
         40,
     );
     lnOptions.lineHeight= 1
-    ctx.drawImage(
-        Picto.block(ctx,artist,"600 20px 'Panton'","#888",400,20,lnOptions).item,
-        210,        
-        15,
-    );
+    if(source=="radio"){
+        ctx.drawImage(
+            (await Picto.tagMoji(ctx, "🎙 RADIO    " ,"600 20px 'Panton'","#AADA")).item,
+            210,        
+            15,
+        );
+    }else{
+        ctx.drawImage(
+            Picto.block(ctx,artist,"600 20px 'Panton'","#888",400,20,lnOptions).item,
+            210,        
+            15,
+        );
+    }
     
-    ctx.drawImage(
-        Picto.block(ctx,time+" / "+dur,"100 20px 'Panton'","#AAA",400,20,lnOptions).item,
-        210,        
-        200 - 10 - 35,
-    );
+    if(live){
+        ctx.drawImage(
+            (await Picto.tagMoji(ctx, "🔴  LIVE " ,"600 16px 'Panton'","#AAD")).item,
+            210,        
+            200 - 10 - 35,
+        );
+    }else{
+        ctx.drawImage(
+            Picto.block(ctx,time+" / "+dur,"100 20px 'Panton'","#AAA",400,20,lnOptions).item,
+            210,        
+            200 - 10 - 35,
+        );
+    }
     lnOptions.textAlign = 'right'
     lnOptions.sizeToFill= false
     ctx.drawImage(
@@ -101,6 +118,15 @@ let lnOptions = {
         200 - 10 - 35-20,
     );
     /*
+    if(source=="radio"){
+        ctx.drawImage(
+            (await Picto.tagMoji(ctx, "🎙 RADIO    " ,"400 16px 'Quicksand'","#AAD8")).item,
+            790-70,        
+            10,
+        );
+    }
+    */
+    /*
     ctx.drawImage(
         Picto.block(ctx, "GFX Powered by Polestar Labs" ,"400 16px 'Quicksand'","#6688",500,20,lnOptions).item,
         790-500,        
@@ -113,13 +139,9 @@ let lnOptions = {
     //ctx.drawImage(tag2.item ,254+tag.width+5,55+8);
     //ctx.drawImage(tag3.item ,280 ,100);
 
-    let result = canvas.toBuffer();
+    res.writeHead(200, {'Content-Type': 'image/png'});
+    canvas.pngStream({ compressionLevel: 5, filters: 0 }).pipe(res);
 
-    res.writeHead(200, {
-        'Content-Type': 'image/png',
-        'Content-Length': result.length
-    });
-    canvas.pngStream().pipe(res);
 })
 
 module.exports = router

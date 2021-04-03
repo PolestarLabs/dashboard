@@ -142,7 +142,7 @@ ${message}
             if(hasAnyItem === true) price -= Math.round(price * .20);
           
           if(!DATA.modules[$] || DATA.modules[$] < price)return resolve("UNAFFORD");
-          await ECO.pay(U.id,price,T+"shop_site_bundle",$index||"RBN");              
+          await ECO.pay(U.id,price,T+"shop_dash_bundle",$index||"RBN");              
           //console.log(bndl)
           
  
@@ -177,7 +177,7 @@ ${message}
         console.error({test:"2"})
           
           console.log({line:"post non ev check y price check",$index,$,price})
-          await ECO.pay(U.id,price,T+"shop_site",$index||"RBN");
+          await ECO.pay(U.id,price,T+"shop_dash",$index||"RBN");
           
              DB.userDB.set(USER.id, {$push: {["modules."+T+"Inventory"]: ITM}}).then(ok => resolve("OK"));
         })
@@ -193,7 +193,7 @@ ${message}
         
         DB.userDB.findOne({id: U.id}).then(async USER => {
           
-         await ECO.pay(U.id,price,T+"shop_site","EVT");
+         await ECO.pay(U.id,price,T+"shop_dash","EVT");
             DB.userDB.set(USER.id, {$push: {["modules."+T+"Inventory"]: ITM}}).then(ok => resolve("OK"))
         })
       }

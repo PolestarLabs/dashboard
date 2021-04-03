@@ -91,8 +91,6 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     res.header('Access-Control-Allow-Origin', 'https://dev.pagseguro.uol.com.br');
     res.header('Access-Control-Allow-Origin', 'https://pagseguro.uol.com.br');
-    res.header('Access-Control-Allow-Origin', 'https://api.pollux.fun');
-    res.header('Access-Control-Allow-Origin', 'https://pollux.fun');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.header('Access-Control-Allow-Credentials', true);
@@ -200,7 +198,8 @@ let discordStrategy = new Strategy({
   clientID: config.clientID,
   clientSecret: config.secret,
   authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
-  callbackURL: (process.env.NODE_ENV === 'production' ? HOST : 'http://136.243.78.7:4728')+"/callback",
+  //callbackURL: (process.env.NODE_ENV === 'production' ? HOST : 'http://136.243.78.7:4728')+"/callback",
+  callbackURL: "http://136.243.78.7:4728/callback", //TEST
   scope: scopes,
   passReqToCallback: true
 }, function (req, accessToken, refreshToken, profile, done) {
@@ -327,6 +326,7 @@ app.use(logger(function(tokens,req,res){
 
 /* --------------- */
 const i18n = require("./locales.js");
+
 app.use(i18n({
   translationsPath:   process.env.LOCALES_PATH,
   defaultLang: "en",
@@ -383,7 +383,7 @@ const AcquireDiscordPayload = (TOKEN,req) => {
 const VARS = require("./pipelines/vars.js");
 const authCacheExpiration = new Map();
 
-app.use(async function(req,res,next){
+app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
   res.locals.EVENT=VARS.EVENT
   let preDataProcess = result=>{
     let USR = req.user;
@@ -557,7 +557,7 @@ app.get('/callback',
 
   
 app.use('/', auth, (...args)=>{
-  delete require.cache[require.resolve('./routes/_allroutes')];
+  //delete require.cache[require.resolve('./routes/_allroutes')];
   const router = require('./routes/_allroutes');
   return router(...args);    
 });
@@ -586,12 +586,12 @@ app.use(function (req, res, next) {
 app.use(async function (err, req, res, next) {
   console.log("xxx",err)
   // set locals, only providing error in development
-  res.locals.message = err.message;
+  res.locals.message = err.message || err.stack;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
 
   const md5= require('md5')
-  errdesc= err.message.split(/[\n\r]/g).slice(-1).pop()+""
-  errline= err.message.split(/[\n\r]/g)[0].split('/').slice(5).join(' > ');
+  errdesc= (err.message||err.stack)?.split(/[\n\r]/g).slice(-1).pop()+"" 
+  errline= (err.message||err.stack)?.split(/[\n\r]/g)[0].split('/').slice(5).join(' > '); 
   errorCode = md5(errdesc);
   console.log(" ERROR ".bgRed, (err.name+"").red, errdesc.yellow, errline,(`[${errorCode}]`.blue))
   await DB.globals.updateOne({'data.errors.id':{$ne:errorCode}},{$addToSet:{'data.errors': {id:errorCode }    }})

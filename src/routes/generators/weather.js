@@ -3,7 +3,6 @@ const express = require('express');
 const router = express.Router();
 
 
-
 const GFX_TABLE =[
     {   "code": 0,   "condition": "tornado",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "heavy_rain",   "shade_day": 3,   "shade_night": 2,   "icon": 9 },
     {   "code": 1,   "condition": "tropical storm",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "heavy_rain",   "shade_day": 3,   "shade_night": 2,   "icon": 9 },
@@ -14,46 +13,46 @@ const GFX_TABLE =[
     {   "code": 6,   "condition": "mixed rain and sleet",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 3,   "shade_night": 2,   "icon": 22 },
     {   "code": 7,   "condition": "mixed snow and sleet",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 3,   "shade_night": 2,   "icon": 22 },
     {   "code": 8,   "condition": "freezing drizzle",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "light_rain",   "shade_day": 3,   "shade_night": 2,   "icon": 12 },
-    {   "code": 9,   "condition": "drizzle",   "sky": "blue_rain",   "sky_night": "night_rain",   "sky6": "twilight_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 1,   "shade6": 4,   "icon": 3 },
+    {   "code": 9,   "condition": "drizzle",   "sky": "blue_rain",   "sky_night": "night_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 1,   "icon": 3,   "sky6": "twilight_rain",   "shade6": 4 },
     {   "code": 10,   "condition": "freezing rain",   "sky": "lilac_rain",   "sky_night": "night_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 13 },
-    {   "code": 11,   "condition": "showers",   "sky": "blue_rain",   "sky_night": "night_rain",   "sky6": "twilight_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "shade6": 4,   "icon": 16 },
-    {   "code": 12,   "condition": "rain",   "sky": "overcast_rain",   "sky_night": "night_rain",   "sky6": "twilight_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "shade6": 4,   "icon": 14 },
+    {   "code": 11,   "condition": "showers",   "sky": "blue_rain",   "sky_night": "night_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 16,   "sky6": "twilight_rain",   "shade6": 4 },
+    {   "code": 12,   "condition": "rain",   "sky": "overcast_rain",   "sky_night": "night_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 14,   "sky6": "twilight_rain",   "shade6": 4 },
     {   "code": 13,   "condition": "snow flurries",   "sky": "blue_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 11 },
     {   "code": 14,   "condition": "light snow showers",   "sky": "blue_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 12 },
     {   "code": 15,   "condition": "blowing snow",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 5 },
     {   "code": 16,   "condition": "snow",   "sky": "blue_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 11 },
     {   "code": 17,   "condition": "hail",   "sky": "overcast_snow",   "sky_night": "night_snow",   "pollux": "heavy_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 7 },
     {   "code": 18,   "condition": "sleet",   "sky": "blue_snow",   "sky_night": "night_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 4 },
-    {   "code": 19,   "condition": "dust",   "sky": "dusk",   "sky_night": "night",   "sky6": "dusk",   "pollux": "heavy_rain",   "shade_day": 1,   "shade_night": 2,   "icon": 10 },
+    {   "code": 19,   "condition": "dust",   "sky": "dusk",   "sky_night": "night",   "pollux": "heavy_rain",   "shade_day": 1,   "shade_night": 2,   "icon": 10,   "sky6": "dusk" },
     {   "code": 20,   "condition": "foggy",   "sky": "lilac_foggy",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 17 },
     {   "code": 21,   "condition": "haze",   "sky": "lilac_foggy",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 17 },
     {   "code": 22,   "condition": "smoky",   "sky": "lilac_foggy",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 17 },
     {   "code": 23,   "condition": "blustery",   "sky": "lilac_foggy",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 17 },
-    {   "code": 24,   "condition": "windy",   "sky": "overcast_clouds",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 10 },
+    {   "code": 24,   "condition": "windy",   "sky": "overcast_clouds",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 0,   "icon": 10,   "shade6": 1 },
     {   "code": 25,   "condition": "cold",   "sky": "blue",   "sky_night": "night",   "pollux": "cold",   "shade_day": 0,   "shade_night": 2,   "icon": 4 },
-    {   "code": 26,   "condition": "cloudy",   "sky": "overcast_clouds",   "sky_night": "night_clouds",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15 },
-    {   "code": 27,   "condition": "mostly cloudy (night)",   "sky": "lilac_foggy",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 21 },
-    {   "code": 28,   "condition": "mostly cloudy (day)",   "sky": "overcast_clouds",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15 },
-    {   "code": 29,   "condition": "partly cloudy (night)",   "sky": "night_clouds",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 21 },
-    {   "code": 30,   "condition": "partly cloudy (day)",   "sky": "cyan_clouds",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15 },
-    {   "code": 31,   "condition": "clear (night)",   "sky": "night",   "sky6": "dusk_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 2 },
-    {   "code": 32,   "condition": "sunny",   "sky": "cyan",   "sky_night": "night",   "sky6": "dusk",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "shade6": 1,   "icon": 6 },
-    {   "code": 33,   "condition": "fair (night)",   "sky": "lilac",   "sky_night": "night",   "sky6": "dusk",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "shade6": 1,   "icon": 21 },
-    {   "code": 34,   "condition": "fair (day)",   "sky": "blue",   "sky_night": "night",   "sky6": "dusk",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15 },
-    {   "code": 35,   "condition": "mixed rain and hail",   "sky": "overcast_rain",   "sky_night": "night_rain",   "sky6": "twilight_rain",   "pollux": "rain",   "shade_day": 0,   "shade_night": 2,   "shade6": 4,   "icon": 7 },
-    {   "code": 36,   "condition": "hot",   "sky": "cyan",   "sky_night": "night",   "sky6": "dusk_sun",   "pollux": "hot",   "shade_day": 0,   "shade_night": 2,   "shade6": 4,   "icon": 6 },
+    {   "code": 26,   "condition": "cloudy",   "sky": "overcast_clouds",   "sky_night": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15,   "sky6": "dusk_clouds" },
+    {   "code": 27,   "condition": "mostly cloudy (night)",   "sky": "lilac_foggy",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 21,   "sky6": "dusk_clouds",   "shade6": 4 },
+    {   "code": 28,   "condition": "mostly cloudy (day)",   "sky": "overcast_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15,   "sky6": "dusk_clouds",   "shade6": 4 },
+    {   "code": 29,   "condition": "partly cloudy (night)",   "sky": "night_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 21,   "sky6": "dusk_clouds",   "shade6": 1 },
+    {   "code": 30,   "condition": "partly cloudy (day)",   "sky": "cyan_clouds",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15,   "sky6": "dusk_clouds",   "shade6": 1 },
+    {   "code": 31,   "condition": "clear (night)",   "sky": "night",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 2,   "sky6": "dusk_clouds" },
+    {   "code": 32,   "condition": "sunny",   "sky": "cyan",   "sky_night": "night",   "pollux": "kinda_hot",   "shade_day": 0,   "shade_night": 2,   "icon": 6,   "sky6": "dusk",   "shade6": 1 },
+    {   "code": 33,   "condition": "fair (night)",   "sky": "lilac",   "sky_night": "night",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 21,   "sky6": "dusk",   "shade6": 1 },
+    {   "code": 34,   "condition": "fair (day)",   "sky": "blue",   "sky_night": "night",   "pollux": "default",   "shade_day": 0,   "shade_night": 2,   "icon": 15,   "sky6": "dusk" },
+    {   "code": 35,   "condition": "mixed rain and hail",   "sky": "overcast_rain",   "sky_night": "night_rain",   "pollux": "rain",   "shade_day": 0,   "shade_night": 2,   "icon": 7,   "sky6": "twilight_rain",   "shade6": 4 },
+    {   "code": 36,   "condition": "hot",   "sky": "cyan",   "sky_night": "night",   "pollux": "sunstroke",   "shade_day": 0,   "shade_night": 2,   "icon": 6,   "sky6": "dusk_sun",   "shade6": 4 },
     {   "code": 37,   "condition": "isolated thunderstorms",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "rain",   "shade_day": 0,   "shade_night": 2,   "icon": 8 },
     {   "code": 38,   "condition": "scattered thunderstorms",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "heavy_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 8 },
     {   "code": 39,   "condition": "scattered showers (day)",   "sky": "blue_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 16 },
-    {   "code": 40,   "condition": "heavy rain",   "sky": "overcast_rain",   "sky_night": "night_rain",   "sky6": "twilight_rain",   "pollux": "rain",   "shade_day": 0,   "shade_night": 2,   "shade6": 4,   "icon": 14 },
-    {   "code": 41,   "condition": "scattered snow showers (day)",   "sky": "blue_rain",   "sky6": "twilight_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 22 },
-    {   "code": 42,   "condition": "heavy snow",   "sky": "overcast_snow",   "pollux": "snow",   "shade_day": 0,   "shade_night": 2,   "icon": 22 },
+    {   "code": 40,   "condition": "heavy rain",   "sky": "overcast_rain",   "sky_night": "night_rain",   "pollux": "rain",   "shade_day": 0,   "shade_night": 2,   "icon": 14,   "sky6": "twilight_rain",   "shade6": 4 },
+    {   "code": 41,   "condition": "scattered snow showers (day)",   "sky": "blue_rain",   "pollux": "light_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 22,   "sky6": "twilight_rain" },
+    {   "code": 42,   "condition": "heavy snow",   "sky": "overcast_snow",   "pollux": "freezing",   "shade_day": 0,   "shade_night": 2,   "icon": 22,   "shade6": 1 },
     {   "code": 43,   "condition": "blizzard",   "sky": "overcast_snow",   "pollux": "heavy_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 5 },
     {   "code": 44,   "condition": "not available",   "sky": "night_thunder",   "pollux": "heavy_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 5 },
     {   "code": 45,   "condition": "scattered showers (night)",   "sky": "night_rain",   "pollux": "heavy_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 20 },
     {   "code": 46,   "condition": "scattered snow showers (night)",   "sky": "night_snow",   "pollux": "heavy_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 12 },
     {   "code": 47,   "condition": "scattered thundershowers",   "sky": "overcast_thunder",   "sky_night": "night_thunder",   "pollux": "heavy_rain",   "shade_day": 0,   "shade_night": 2,   "icon": 8 }
-   ];
+   ]
 
 
 
@@ -116,7 +115,7 @@ const YAHOO_CODES = [
 ]
   
 const STROKE_COLOR = "#1b1c25";
-const DEFAULT_POLLUX = "kinda_hot";
+const DEFAULT_POLLUX = "default";
 const DEFAULT_SKY = "blue";
 
 function inoffensivePolygon(stroke,fill,round){
@@ -275,7 +274,7 @@ isNight,
 isDusk,
  
     })
-    
+    console.log(CONDITION)
     const SKY = isDusk 
         ? CONDITION.sky6 || CONDITION.sky
         : isNight
@@ -292,9 +291,29 @@ isDusk,
     // TODO: Add temperature variation;
 
     // CONDITION OVERRIDES
-        if (TEMPERATURE < 5 && W_POLLUX != "snow"){
+        if (TEMPERATURE < 8 && W_POLLUX != "snow"){
             W_POLLUX = 'cold';
             if (isDusk) SHADE = 4;
+        }
+        if(TEMPERATURE <= -10 ){
+            W_POLLUX = "freezing";
+            SHADE = isDusk?1:0;
+        }
+        if(TEMPERATURE >= 25 && !CONDITION.pollux.includes('rain')  ){
+            W_POLLUX = "sunstroke";
+            SHADE = isDusk?4:0;
+        }
+        if (TEMPERATURE >= 32){
+            W_POLLUX = 'hell';
+            SHADE = 0;
+        }
+        console.log('test ok')
+        if(TEMPERATURE > 25 && TEMPERATURE < 35 && (CONDITION.condition.includes('sunny') || (CONDITION.condition.includes('clear') && !isNight)) ){
+            W_POLLUX = "sunbeach";
+            SHADE = 0
+        }
+        if(TEMPERATURE >= 20 && TEMPERATURE <= 25 && (CONDITION.condition.includes('sunny') || CONDITION.condition.includes('clear') || CONDITION.condition.includes('fair')) ){
+            W_POLLUX = "kinda_hot";
         }
     
     const canvas = Picto.new(800,600);
@@ -379,13 +398,8 @@ isDusk,
 
     
 
-    let result = canvas.toBuffer();
-
-    res.writeHead(200, {
-        'Content-Type': 'image/png',
-        'Content-Length': result.length
-    });
-    canvas.pngStream().pipe(res);
+    res.writeHead(200, {'Content-Type': 'image/png'});
+    canvas.pngStream({ compressionLevel: 2, filters: 0 }).pipe(res);
 })
 
 module.exports = router

@@ -14,8 +14,8 @@ passport.use(new Strategy(
                 id: user.id,
                 apiKey: user.apiKey,
                 apiPermission: user.apiPerms || 'basic',
-                ip: user.personal.ip,
-                location: `${user.personal.city}, ${user.personal.country}`,
+                ip: user.personal?.ip || "Unknown",
+                location: user.personal?`${user.personal.city}, ${user.personal.country}`:"Unknown",
             };
 
             return cb(null,resUser)
@@ -27,6 +27,7 @@ router.use(cors());
 router.use(helmet());
 
 const AUTHED = passport.authenticate('bearer', { session: false })
+const FIRST_PARTY = (rq,rs,nx) => ['master','admin','first_party'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
 const MASTER = (rq,rs,nx) => rq.user.apiPermission === "master" ? nx() : rs.sendStatus(403);
 const ADMIN  = (rq,rs,nx) => ['master','admin'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
 const TRUSTED= (rq,rs,nx) => ['master','admin','trusted'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
@@ -38,6 +39,10 @@ router.get('/',AUTHED, (req, res)=> {
 
 
 router.use( (req,res,nex)=>{
+    Object.keys(require.cache).forEach((r)=>{
+        //FIXME[epic=anyone] remember to remove this on prod
+        if(r.includes("/api/")) delete require.cache[r];
+    })
     //if (req.headers.authorization && !req.user) return AUTHED(req,res,nex);
     nex();
 });
@@ -72,6 +77,22 @@ router.use(["/shop/","/store/"], async (...args) => {
     return (require('./shops/main.js'))( ...args);
 });
 
+router.use(["/playlists/"],AUTHED,FIRST_PARTY, async (...args) => {
+    console.log('test')
+    delete require.cache[(require.resolve('./playlists.js'))];
+    return (require('./playlists.js'))( ...args);
+});
+
+router.use(["/games/:game","/minigames/:game"], async (req,res) => {
+    const {game} = req.params;
+    try {
+        delete require.cache[(require.resolve('./games/'+game+'.js'))];
+        return (require('./games/'+game+'.js'))( req,res );
+    } catch (err) {
+        return res.sendStatus(404);
+    }
+});
+
 router.use(["/crafting/","/items/"], async (...args) => {
     delete require.cache[(require.resolve('./collections.js'))];
     return (require('./collections.js'))( ...args);
@@ -90,6 +111,11 @@ router.use(["/interactions/"], async (...args) => {
 router.use(["/utils/"], async (...args) => {
     delete require.cache[(require.resolve('./utils.js'))];
     return (require('./utils.js'))( ...args);
+});
+
+router.use(["/internal/"], async (...args) => {
+    delete require.cache[(require.resolve('./internal.js'))];
+    return (require('./internal.js'))( ...args);
 });
 
 //############################################
@@ -112,6 +138,34 @@ router.get('/achievements/:id',cache(2360), async (req,res) => {
     }
 
 })
+
+router.get('/leaderboards/user/:userID', cache(1260), async (req, res)=> {
+    const {userID} = req.params;
+    if(!req.user || req.user.id !== userID) return res.sendStatus(403);
+    let userData = await DB.localranks.find({user:userID},{_id:0,__v:0}).lean();
+    return res.json(userData);
+});
+
+router.get('/leaderboards/:serverID', cache(600), async (req, res)=> {
+    const {serverID} = req.params;
+    const page = Math.abs(parseInt(req.query.page ||0) - 1);
+    let serverData = await DB.localranks.find({server:serverID},{_id:0,__v:0}).limit(50).skip(50*(page)).lean();
+    const total =  (await DB.localranks.find({server:serverID}).count());
+
+    res.json({
+        currentPage: page+1,
+        totalItems: total,
+        totalPages: ~~(total / 50),
+        data: serverData,
+        lastUpdated: new Date()
+    });
+});
+
+router.get('/leaderboards/:serverID/:userID', cache(1260), async (req, res)=> {
+    const {serverID,userID} = req.params;
+    let userData = await DB.localranks.get({user:userID,server:serverID},{_id:0,__v:0});
+    res.json(userData);
+});
 
 router.get('/relationships', cache(1260), async (req, res)=> {
 
@@ -167,5 +221,50 @@ router.get('/relationships', cache(1260), async (req, res)=> {
  
 });
  
- 
+ //router.post('/galleries/fanart')
+router.delete('/galleries/fanart/:id',  async (req,res)=>{
+    
+    const oldData = await DB.fanart.get(req.params.id);
+    if (!oldData) return res.sendStatus(404);
+    if (!req.user.id) return res.sendStatus(401);
+    if (oldData.author_ID !== req.user?.id) return res.sendStatus(403);
+
+    DB.fanart.remove( {id: req.params.id } )
+        .then(id=>{
+            console.log(id);
+            res.status(200).json('DELETED');
+        })
+        .catch(err=> console.log(err) && res.status(500).json('ERROR') )
+} )
+
+router.put('/galleries/fanart/:id/:what',  async (req,res)=>{
+
+    const data = req.body;
+    const oldData = await DB.fanart.get(req.params.id);
+
+    if (!oldData) return res.sendStatus(404);
+    if (!req.user.id) return res.sendStatus(401);
+    if (oldData.author_ID !== req.user?.id) return res.sendStatus(403);
+    
+    if (req.params.what === 'twitter'){
+        let result = await DB.fanart.updateMany({author_ID: oldData.author_ID }, {$set:{artistTwit: data.value}});
+        return res.status(200).json(result);
+    }
+    if (req.params.what === 'link'){
+        let result = await DB.fanart.updateMany({author_ID: oldData.author_ID }, {$set:{artistlink: data.value}});
+        return res.status(200).json(result);
+    }
+
+    const payload = {};
+    data.title ? payload.title = data.title : false;
+    data.description ? payload.description = data.description : false;
+
+    let result = await DB.fanart.set( {id: req.params.id }, {$set: payload});
+    console.log({result})
+    return res.status(200).json(result);
+
+} )
+
+
+
 module.exports = router  

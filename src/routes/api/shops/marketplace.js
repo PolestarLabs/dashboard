@@ -166,7 +166,7 @@ router.post("/", async (req, res) => {
       await ECO.pay(
         PAYLOAD.author,
         Math.abs(PAYLOAD.price),
-        "Marketplace Buy Listing",
+        "marketplace_buy",
         PAYLOAD.currency
       );
     } else {

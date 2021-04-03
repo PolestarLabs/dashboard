@@ -1,9 +1,11 @@
+// @ts-check
 const { is } = require('bluebird');
 const express = require('express');
 const router = express.Router();
+const { Daily, TimedUsage } = require('@polestar/timed-usage');
 
 const DAILY_COOLDOWN = 22 * 60 * 60e3;
-const EXPIRE_COOLDOWN = DAILY_COOLDOWN * 2.1;
+const EXPIRE_COOLDOWN = DAILY_COOLDOWN * 2.5;
 
 function getDailyMeta(daily, req) {
     const now = Date.now();
@@ -24,111 +26,53 @@ function getDailyMeta(daily, req) {
 
 router.get('/webdaily', async (req, res) => {
     if (!req.user) return res.status(401).json({ message: 'Log in' });
+    // @ts-ignore req.user is the wrong type
+    const timedU = await new TimedUsage('daily', { day: DAILY_COOLDOWN, expiration: EXPIRE_COOLDOWN, streak: true }).loadUser(req.user);
+    const { userDaily: { streak, insured, last, highest }, available, keepStreak, availableAt, streakExpiresAt,  } = timedU;
+    const availableIn = Math.max(0, availableAt - Date.now());
+    const streakExpiresIn = Math.max(0, streakExpiresAt - Date.now());
 
+    // @ts-ignore
+    return res.json({ availableIn, available, highest, currentStreak: streak - 1, streak, streakExpiresIn, streakExpired: !keepStreak, insured, id: req.user.id, discordUser: req.user });
+
+    /*
     const daily = await DB.users.getFull(req.user.id).then((u) => u.counters.daily);
     const dailyMeta = getDailyMeta(daily, req);
     dailyMeta.discordUser = req.user;
     res.json(dailyMeta);
+    */
 })
 
 router.post('/webdaily', async (req, res) => {
-    if (!req.user) return res.status(401).json({ message: 'Log in' });
-
-    const daily = await DB.users.getFull(req.user.id).then((u) => u.counters.daily);
-    const dailyMeta = getDailyMeta(daily);
-
-    if (!dailyMeta.available) return res.status(400).json({ message: 'Streak not available', retryAfter: dailyMeta.availableIn });
-    const shouldDeleteStreak = dailyMeta.streakExpired && !dailyMeta.insured;
-
-    const is = (x) => !(dailyMeta.streak % x);
-
-    const myDaily = {
-        RBN: 0,
-        JDE: 0,
-        SPH: 0,
-  
-        PSM: 0,
-        comToken: 0,
-        cosmo_fragment: 0,
-  
-        boosterpack: 0,
-        EXP: Math.max(~~(dailyMeta.streak / 2), 10),
-  
-        stickers: 0,
-        evToken: 0,
-  
-        lootbox_C: 0,
-        lootbox_U: 0,
-        lootbox_R: 0,
-        lootbox_SR: 0,
-        lootbox_UR: 0,
-    };
-
-    const softStreak = dailyMeta.streak % 10 || 10;
-    switch (softStreak) {
-        case 1:
-        case 2:
-            myDaily.RBN += 150; break;
-        case 3:
-            myDaily.JDE += 1000; break;
-        case 4:
-        case 8:
-            myDaily.cosmo_fragment += 25; break;
-        case 5:
-            myDaily.JDE += 1500; break;
-        case 6:
-            myDaily.lootbox_C += 1; break;
-        case 7:
-            myDaily.RBN += 350; break;
-        case 9:
-            myDaily.comToken += 5; break;
-    }
-
-    switch(true) {
-        case is(10):
-            myDaily.RBN += 500;
-            myDaily.JDE += 2500;
-            myDaily.cosmo_fragment += 35;
-            myDaily.boosterpack += 1;
-            myDaily.EXP += 10;
-            if (!is(50) && !is(100) && !is(30)) myDaily.lootbox_U += 1; break;
-        case is(30):
-            myDaily.EXP += 10;
-            myDaily.lootbox_R += 1; break;
-        case is(50):
-            myDaily.EXP += 10;
-            myDaily.SPH += 1;
-            if (!is(100)) myDaily.lootbox_SR += 1;
-        case is(100):
-            myDaily.EXP += 25;
-            myDaily.SPH += 5;
-            myDaily.lootbox_UR += 1;
-    }
+    try {
+        if (!req.user) return res.status(401).json({ message: 'Log in' });
+        
+        const [guildMember, timedUsage, userData] = await Promise.all([ // @ts-ignore PLX global and req.user.id "not exist"
+            PLX.getRESTGuildMember("277391723322408960", req.user.id).catch(() => void 0), // @ts-ignore req.user is the wrong type
+            new TimedUsage('daily', { day: DAILY_COOLDOWN, expiration: EXPIRE_COOLDOWN, streak: true }).loadUser(req.user), // @ts-ignore
+            DB.users.getFull(req.user.id)
+        ]);
     
-    /*
-
-        > get userdata!
-        > check last daily!
-        > determine grace period!
-        > define if keep OR delete streak!
-        > checks for insurance!
-        > clone to bkp then destroy streak OR reverse decision?
-        > checks if donator/has bonuses
-        > applies bonus
-        > check if milestone
-        > applies bonus
-        >
-        > increment streak
-        > award rubines
-        > award items (sapphs/jades/boxes/etc)
-        > burn new daily epoch
-        >
-        > return payload with next daily and counter to expiration and whether insurance is in place
-
-     */
-
-    res.json(req.user);
-})
+        if (!timedUsage.available) return res.status(400).json({ message: 'Daily not available', availableAt: timedUsage.availableAt }); // REVIEW End user shouldn't see this, possible blacklist point?
+    
+        // @ts-ignore req.user
+        const daily = new Daily(timedUsage, req.user, guildMember, userData);
+        await daily.init();
+    
+        return res.json({...daily.myDaily, streak: daily.userData.counters.daily.streak + 1}); // TODO[epic=Bsian] Check if there's more stuff that might be needed
+    
+        /*
+        const daily = await DB.users.getFull(req.user.id).then((u) => u.counters.daily);
+        const dailyMeta = getDailyMeta(daily);
+    
+        if (!dailyMeta.available) return res.status(400).json({ message: 'Streak not available', retryAfter: dailyMeta.availableIn });
+    
+        res.json(req.user);
+        */
+    } catch (error) {
+        res.status(500).json({ message: error.message, stack: error.stack })
+    }
+});
 
 router.post('/webcraft', async (req,res)=>{
 

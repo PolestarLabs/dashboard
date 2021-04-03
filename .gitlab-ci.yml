@@ -1,0 +1,39 @@
+before_script:
+  - echo "Knock knock, lemme in!"
+
+dev-cooking:
+  stage: build
+  script:
+    - echo "Cooking Dev"
+    - cd /home/pollux/polaris/DEV/dashboard/
+    - git fetch
+    - git branch
+    - git reset --hard origin/master
+    - git pull
+    - npm install
+  only:
+    - master
+cooking:
+  stage: build
+  script:
+    - echo "Cooking Live"
+    - cd /home/pollux/polaris/LIVE/dashboard/
+    - git fetch
+    - git branch
+    - git reset --hard origin/live
+    - git pull
+    - npm install
+  only:
+    - live
+
+baking:
+  stage: test
+  script:
+    - echo "Pls send help"
+
+catapulting:
+  stage: deploy
+  script:
+    - echo "Did this work idk"
+    - plx-reload dash
+    

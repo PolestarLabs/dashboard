@@ -4,7 +4,6 @@
 /public/images/
 *.png
 *.bak.*
-package-lock.json
 dist
 *.webm
 *.woff2

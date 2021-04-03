@@ -22,7 +22,7 @@ $("#levelroleslist").on("submit",".levelrole_item", function(e) {
   $("#autorole-" + index + " .rolename.noinput").html(face);
   $("#autorole-" + index + " .level.noinput").html(level);
 
-  fetch("/admin/levelrole", {
+  fetch("/admin/"+serverid+"/levelrole", {
     method: "PATCH",
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify(payload)
@@ -52,7 +52,7 @@ $("#levelroleslist").on("click",".lvlrole-del", function() {
     confirmButtonText: "Yes",
     showLoaderOnConfirm: true,
     preConfirm: login => {
-      return fetch("/admin/levelrole", {
+      return fetch("/admin/"+serverid+"/levelrole", {
         method: "DELETE",
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify({ role, level, validator, serverid })
@@ -94,7 +94,7 @@ $(".del-rea-rol").click(function() {
     confirmButtonText: "Yes",
     showLoaderOnConfirm: true,
     preConfirm: login => {
-      return fetch("/admin/reactionrole", {
+      return fetch("/admin/"+serverid+"/reactionrole", {
         method: "DELETE",
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify({ channel, message, validator, serverid })
@@ -129,7 +129,7 @@ $("#new-lev-role").submit(function(e) {
   let level = this.level.value;
   let payload = { role, level, validator, serverid };
 
-  fetch("/admin/levelrole", {
+  fetch("/admin/"+serverid+"/levelrole", {
     method: "PUT",
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify(payload)
@@ -160,7 +160,7 @@ $("#selfroleslist").on("submit",".selfrole_item", function(e) {
     $("#selfrole-" + index + " .rolename.noinput").html(face);
     $("#selfrole-" + index + " .level.noinput").html(short);
   
-    fetch("/admin/selfrole", {
+    fetch("/admin/"+serverid+"/selfrole", {
       method: "PATCH",
       headers: { "Content-Type": "application/json; charset=utf-8" },
       body: JSON.stringify(payload)
@@ -190,7 +190,7 @@ $("#selfroleslist").on("submit",".selfrole_item", function(e) {
       confirmButtonText: "Yes",
       showLoaderOnConfirm: true,
       preConfirm: login => {
-        return fetch("/admin/selfrole", {
+        return fetch("/admin/"+serverid+"/selfrole", {
           method: "DELETE",
           headers: { "Content-Type": "application/json; charset=utf-8" },
           body: JSON.stringify({ role, short, validator, serverid })
@@ -228,7 +228,7 @@ $("#new-self-role").submit(function(e) {
   let short = this.short.value;
   let payload = { role, short, validator, serverid };
 
-  fetch("/admin/selfrole", {
+  fetch("/admin/"+serverid+"/selfrole", {
     method: "PUT",
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify(payload)
@@ -268,7 +268,7 @@ $('.plx-pink-check input').change(function(){
 
   if(!opt.f_name) return;
 
-  return fetch("/admin/save", {
+  return fetch("/admin/"+serverid+"/save", {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify({ data: data_payload, serverid, noDM: true })
@@ -284,7 +284,7 @@ $('.plx-pink-check input').change(function(){
 
 $("#save-all").click(function() {
   const data_payload = gatherData(); 
-  return fetch("/admin/save", {
+  return fetch("/admin/"+serverid+"/save", {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify({ data: data_payload, serverid })
@@ -301,7 +301,7 @@ $("#save-command-switch").click(function() {
   let respond = $('#respond-disabled')[0].checked;
   let disabled = Object.values($('.command-toggle')).filter(e=> !e.checked).map(e=> e.name).filter(e=>!!e);
   let payload = { respond, disabled,validator, serverid };
-  fetch("/admin/commandswitch", {
+  fetch("/admin/"+serverid+"/commandswitch", {
     method: "PUT",
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify(payload)
@@ -326,7 +326,7 @@ $('#lang').ddslick({
 
 
         langsel = (s.selectedData.value);
-        return fetch("/admin/language", {
+        return fetch("/admin/"+serverid+"language", {
             method: "PUT",
             headers: { "Content-Type": "application/json; charset=utf-8" },
             body: JSON.stringify({ data: s.selectedData.value, serverid })

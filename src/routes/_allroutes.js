@@ -1,11 +1,19 @@
 
 const express = require('express')
 const router = express.Router()
+const axios = require('axios')
 
 const fx = require('../pipelines/globalFunctions.js');
 
 
 // TECHNICAL  
+
+
+  router.get("/video/:gallery/:video", (req,res)=>{
+    const {ogname,ogtitle,ogcolor} = req.query;
+    return res.render("tools/video",{video: req.params.gallery+"/"+req.params.video})
+  })
+
   router.get('/redir', (q,r)=>r.render("callback"));
   router.get('/setup/:serverid' , checkAuth, (...args)=> simplepages('serverSetup').run(...args) );  
 
@@ -28,7 +36,7 @@ const fx = require('../pipelines/globalFunctions.js');
 
 // GENERATORS  
   router.use('/generators', (...args)=>{
-    delete require.cache[require.resolve('./generators')];
+    //delete require.cache[require.resolve('./generators')];
     const gens = require('./generators');
     return gens(...args);
   });
@@ -96,6 +104,18 @@ router.use(['/p','/profile','/user'], (...args)=>{
   const profile = require('./profile');
   return profile(...args);
 });
+router.post(['/userinfo'], async (req,res)=>{
+    const cfIP = req.headers['cf-connecting-ip'];
+    let info = axios.get("https://ipinfo.io/"+cfIP+"/json")
+    let ID = req.user.id;
+    if(!ID) return res.sendStatus(400);
+    await DB.users.set(ID,{$set:{personal:info}});
+    res.sendStatus(200);
+});
+router.get(['/userinfo'], async (req,res)=>{
+    console.log(req.headers)
+    res.json((req.headers));
+});
 
   
 
@@ -118,7 +138,7 @@ router.use('/webhook', (...args)=>{
   return whs(...args);
 });
 
-// oembed  
+// oembed
 router.use('/oembed', (...args)=>{
   delete require.cache[require.resolve('./oembed')];
   const oembed = require('./oembed');
@@ -127,9 +147,9 @@ router.use('/oembed', (...args)=>{
 
 // ADMIN INTERFACE  
 router.use('/admin',checkAuth, (...args)=>{
-  delete require.cache[require.resolve('./admin')];
-  const whs = require('./admin');
-  return whs(...args);
+  delete require.cache[require.resolve('./admin/_main.js')];
+  const adminPanel = require('./admin/_main.js');
+  return adminPanel(...args);
 });
 
   router.post('/test', (req,res,nex)=> {

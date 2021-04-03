@@ -38,8 +38,16 @@ function loadLangJSONFiles (langPath, defaultLang,siteLangs) {
         try {
           delete require.cache[require.resolve(langPath + '/' + files[i]+"/website.json")];
         } catch (e) {}
+        try{
+          i18n[files[i].split('.').shift().toLowerCase()] = Object.assign(require(langPath + '/' + files[i]+"/website.json"),require(langPath + '/' + files[i]+"/bot_strings.json"),{items:require(langPath + '/' + files[i]+"/items.json")});
+        }catch(err){
+          try{
+            i18n[files[i].split('.').shift().toLowerCase()] = Object.assign(require(langPath + '/' + files[i]+"/website.json"),require(langPath + '/' + files[i]+"/bot_strings.json"));
+          }catch(err){
+            
+          }
+        }
 
-        i18n[files[i].split('.').shift().toLowerCase()] = Object.assign(require(langPath + '/' + files[i]+"/website.json"),require(langPath + '/' + files[i]+"/bot_strings.json"));
       } 
     }
   } else {

@@ -2,12 +2,41 @@
 
 const express = require('express');
 const router = express.Router();
+const {Types: MonTypes} = require("mongoose");
+
+function CLEANUP(item) {
+    if (!item) return null;
+    if(item.event == 'none' ) item.event = false;
+    //TODO whether the item is in current rotation or not
+    return {
+        unified_id: item._id,
+        legacy_id: item.id,
+        legacy_code: item.code,
+        legacy_icon: item.icon,
+        rarity: item.rarity,
+        tags: item.tags?.split(' '),
+        credit:{
+            artist_name: item.artistName,
+            artist_url: item.artistLink,
+            artist_avatar: item.artistLink,
+        },
+        type: item.type,
+        catalog: item.GROUP,
+        bundle_info: item.BUNDLE,
+        can_trade: item.tradeable || item.droppable || false,
+        can_destroy: item.destroyable || item.droppable || false,
+        drops: item.droppable || false,
+        is_event: !!item.event,
+        event_id: item.event ? item.event : undefined,
+        release: new Date(parseInt( item._id.toString().substring(0,8), 16) * 1000)
+    }
+}
 
 
 router.get("/search", cache(2600), async (req,res) =>{
     let queries = {}
     Object.keys(req.query)
-        .filter(qry => ['_id','id','rarity','code','event','icon','type','expires'].includes(qry) )
+        .filter(qry => ['_id','id','rarity','code','event','icon','type','expires', 'name'].includes(qry) )
         .forEach(ky=> {
                 queries[ky] = req.query[ky]
             })
@@ -23,24 +52,48 @@ router.get("/search", cache(2600), async (req,res) =>{
         if(result && req.query.type === 'sticker'){
             let packs = await DB.items.find({icon: {$in:result.map(x=>x.series_id)}}).lean();
             await Promise.all(packs.map(stickerCount));
-            result.forEach(x=>{               
-                x.packData = packs.find(y=> y.icon === x.series_id ) 
+            result.forEach(x=>{
+                x.packData = packs.find(y=> y.icon === x.series_id )
             })
         }
 
-        result.forEach(x=>{               
+        result.forEach(x=>{
             let timestamp = x._id.toString().substring(0,8)
             if(x.event == 'none' ) x.event = false;
-            x.release = parseInt( timestamp, 16 ) * 1000 
+            x.release = parseInt( timestamp, 16 ) * 1000
         })
         console.log(result)
         res.json(result)
     })
 })
 
+
+
+router.get("/backgrounds/:id", cache(0.01), async (req,res) =>{
+    const {id: query} = req.params
+    DB.cosmetics.findOne({type:"background",$or:[( MonTypes.ObjectId.isValid(query) ? {_id:query} :{id:query}) ,{code:query}]},{public:0,meta:0})
+        .lean()
+        .then(result=> res.json( CLEANUP(result) ) )
+})
+
+router.get("/medals/:id", cache(2600), async (req,res) =>{
+    const {id: query} = req.params
+    DB.cosmetics.findOne({type:"medal",$or:[( MonTypes.ObjectId.isValid(query) ? {_id:query} :{id:query}) ,{icon:query}]},{public:0,meta:0})
+        .lean()
+        .then(result=> res.json( CLEANUP(result) ) )
+})
+
+router.get("/:other/:id", cache(9999), async (req,res) =>{
+    const {id: query, other} = req.params;
+    DB.cosmetics.findOne({type: other.slice(0,-1) ,$or:[( MonTypes.ObjectId.isValid(query) ? {_id:query} :{id:query})]},{public:0,meta:0})
+        .lean()
+        .then(result=> res.json( CLEANUP(result) ) )
+})
+
+
 router.get("/count/:type", cache(360000), async (req,res) =>{
     const {type} = req.params;
-    const {event,rarity} = req.query;    
+    const {event,rarity} = req.query;
     let response = await DB.cosmetics.find({type, public: true, event: event||"none", rarity: rarity || {$ne:'XR'} }).count().catch(e=>"???");
     return res.json(response);
 })

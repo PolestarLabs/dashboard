@@ -52,7 +52,7 @@ router.post('/imgbookmarks/expand', async (req,res)=>{
         if(!userdata.switches || userdata.switches.booruSlots === undefined ){
             await DB.users.set(req.user.id,{$set: {"switches.booruSlots":25} });
         }        
-        await ECO.pay(req.user.id,3,'dash-expand-slots','SPH');
+        await ECO.pay(req.user.id,3,'expand_gallery_slots','SPH');
         return DB.users.set(req.user.id,{$inc: {"switches.booruSlots":10} })
             .then(x=> res.sendStatus(200) )
             .catch(x=> res.sendStatus(504) );
@@ -71,7 +71,7 @@ router.post('/imgbookmarks/shrink', async (req,res)=>{
         if (userdata.switches.booruSlots+userdata.modules.level <= 3) return res.status(403).send("No more slots!");
         let reduce = (userdata.switches.booruSlots+userdata.modules.level) < 10 ? (userdata.switches.booruSlots+userdata.modules.level) : 10; 
 
-        await ECO.receive(req.user.id,2,'dash-sell-slots','SPH');
+        await ECO.receive(req.user.id,2,'sell_gallery_slots','SPH');
         return DB.users.set(req.user.id,{$inc: {"switches.booruSlots":-reduce} })
             .then(x=> res.sendStatus(200) )
             .catch(x=> res.sendStatus(504) );

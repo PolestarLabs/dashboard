@@ -165,8 +165,6 @@ router.get('/:id/commends/:endpoint',cache(360), async (req,res)=>{
         return res.json({rank,count});
 })
 
-
-
 router.post(['/fanart-hearts/:operation/:id'], async (req,res)=>{
 
     const uID = req.user.id;
@@ -190,8 +188,24 @@ router.post(['/fanart-hearts/:operation/:id'], async (req,res)=>{
 
 
 
+router.get('/:id/galleries/fanart', async (req,res)=>{
+    const query = {author_ID:req.params.id};
+    req.user?.id === req.params.id ? false : query.publish = true;
 
-
+    DB.fanart.find(query).lean().then(gal=>{
+        res.status(200).json(gal.map(item=>{
+            return {
+                title: item.title,
+                description: item.description,
+                author: item.author_ID,
+                author_url: item.artistlink,
+                likes: item.hearts || 0,
+                url: HOST + item.src,
+                status: item.publish ? "published" : item.publish === false ? "denied" : "pending"
+            }
+        }))
+    })
+})
 
 
 

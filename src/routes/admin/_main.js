@@ -1,28 +1,48 @@
-const md5 = require('md5')
-const fetch = require('node-fetch')
-const express = require('express')
-const router = express.Router()
-const fx = require('../pipelines/globalFunctions.js');
-const operations = require('../pipelines/operations.js');
+const md5 = require('md5');
+const fetch = require('node-fetch');
+const express = require('express');
+const router = express.Router();
+const fx = require('../../pipelines/globalFunctions.js');
+const operations = require('../../pipelines/operations.js');
 
-request = require('request')
+
+router.use("/:serverID", ADMCHECKS);
+
+
+router.use("/:serverID/levelrole", ADMCHECKS, function (req,res) {
+    delete require.cache[require.resolve('./levelrole.js')];
+    res.locals.serverID = req.params.serverID;
+    return (require('./levelrole.js'))(req,res);
+});
+
+router.use("/:serverID/selfrole", ADMCHECKS, function (req,res) {
+    res.locals.serverID = req.params.serverID;
+    return (require('./selfrole.js'))(req,res);
+});
+
+router.use("/:serverID/progression", ADMCHECKS, function (req,res) {
+    delete require.cache[require.resolve('./progression.js')];
+    res.locals.serverID = req.params.serverID;
+    return (require('./progression.js'))(req,res);
+});
+
+
+//SECTION GET
 
 router.get('/', function (req, res) {
-  res.sendStatus(401)
-})
-
+  res.redirect("/dash/servers")
+});
 
 router.get('/:serverID', async function (req,res) {
-
-    const serverID = req.params.serverID
-    SVID = serverID
+    const SVID =  req.params.serverID
 
     if(  (req.user.id !== "88120564400553984" && req.query.admpass ) && !(await isAdmin(req,SVID))) return res.status(401).json("NoADM");
 
     req.user.validator = md5(Date.now());
 
     
-    let [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
+    let [serverData, memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
+        DB.servers.get(SVID),
         PLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
         PLX.getRESTGuildRoles(SVID),
         PLX.getRESTGuild(SVID),
@@ -32,14 +52,8 @@ router.get('/:serverID', async function (req,res) {
         DB.localranks.find({server:SVID}).lean().exec(),
         DB.temproles.find({server:SVID}).lean().exec(),
         DB.paidroles.find({server:SVID}).lean().exec(),
-
     ]);
 
-    //fx.
-
-    
-   
-    const serverData = await DB.servers.get(serverID);
     let payload = {
         reactRoles,
         serverData,
@@ -64,20 +78,22 @@ router.get('/:serverID', async function (req,res) {
 
 
 
+//SECTION POST
 
-router.post('/save',ADMCHECKS, async function(req,res){
+router.post('/:serverID/save', async function(req,res){
+    console.log({req})
     let payload = req.body.data || req.body;
     
-    const SVID = req.query.serverID || req.body.serverid;
-
-    let serverInfo= (await PLX.getRESTGuild(SVID));
-    let svData= (await  DB.servers.get(SVID));
-    let userData = (await DB.users.get(serverInfo.ownerID));
+    const SVID = req.params.serverID;
+    const serverInfo = await PLX.getRESTGuild(SVID);
+    const [svData,userData]= await Promise.all([(await  DB.servers.get(SVID)), (await DB.users.get(serverInfo.ownerID))]);
 
 if(!payload.first && svData && payload && (!req.body.noDM && userData?.switches?.notifications?.ownerNotif === true)){
 
     let diff=""
     if( svData.modules.MODROLE !== payload.modrole) diff +=      `\nModeration Role   : ${payload.modrole }`;
+if( svData.progression?.upfactorA !== payload.upfactorA) diff += `\nProgression Fact-A : ${payload.upfactorA }`;
+if( svData.progression?.upfactorB !== payload.upfactorB) diff += `\nProgression Fact-B : ${payload.upfactorB }`;
     if( svData.modules.MUTEROLE !== payload.muterole) diff +=    `\nMute Role         : ${payload.muterole }`;
     if( svData.modules.DROPS !== payload.drops) diff +=          `\nBox Drops         : ${payload.drops ? "✅" : "❌️"  }`;
     if( svData.modules.LVUP !== payload.lvup_glb) diff +=        `\nLevel Up Messages : ${payload.lvup_glb ? "✅" : "❌️"  }`;
@@ -107,6 +123,8 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
     const setPayload = {
         'respondDisabled': payload.res_disa,
         'modules.MUTEROLE': payload.muterole,
+        'progression.upfactorA': payload.upfactorA,
+        'progression.upfactorB': payload.upfactorB,
         'modules.MODROLE': payload.modrole,
         'modules.DROPS': JSON.parse(payload.drops||false), 
         'modules.LVUP': JSON.parse(payload.lvup_glb||false),
@@ -127,8 +145,9 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
     if(payload.language){
         setPayload['modules.LANGUAGE']= payload.language || 'en'
     }    
-    updateGlobalInstances({id:SVID})
     await DB.servers.set(SVID,{        $set:  setPayload      });
+    await updateGlobalInstances({id:SVID});
+
     try{
         console.log(req.handled,"handled")
         return res.sendStatus(200);
@@ -136,19 +155,19 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
         console.error(err)
     }
     
-})
+});
 
+//SECTION DELETE
 
-
-
-router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
+router.delete("/:serverID/reactionrole", async (req,res) =>{
 
     let payload = req.body;
     let validator = payload.validator || payload.data?.validator
  
     if(req.user.validator != validator) return res.status(401).json("Validator Mismatch "+`${validator} / ${req.user.validator}`);
 
-    let SVID = payload.serverid.toString();    
+    let SVID = req.params.serverID;
+    
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
@@ -179,121 +198,11 @@ router.delete("/reactionrole",ADMCHECKS, async (req,res) =>{
 
 })
 
-router.delete("/levelrole",ADMCHECKS,async (req,res)=>{
+//SECTION PUT
+
+router.put("/:serverID/language",async (req,res)=>{
     let payload = req.body;
-
-    DB.servers.updateOne({id:SVID},{
-        $pull:{
-          ['modules.AUTOROLES']: [payload.role, Number(payload.level)||0 ]
-        }         
-    }).then(async done=>{
-
-        let serverInfo= (await PLX.getRESTGuild(SVID));
-        let userData = (await DB.users.get(serverInfo.ownerID));
-
-        if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
-        PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
-            embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
-    
-            **Deleted Level Role ${payload.role}**
-    
-            Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
-            `}
-        }).catch(e=>null) )}
-
-        await DB.servers.set(SVID,{$pull:{'modules.AUTOROLES':null}});
-        return res.status(200).json("Level Role Created!");
-    }).catch(err=>{
-        return res.status(510).json(err);
-    })
-})
-
-router.delete("/selfrole",ADMCHECKS,async (req,res)=>{
-    let payload = req.body;
-
-    let serverInfo= (await PLX.getRESTGuild(SVID));
-    let userData = (await DB.users.get(serverInfo.ownerID));
-
-    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
-
-    PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
-        embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
-
-        **Deleted Self Role ${payload.role}**
-
-        Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
-        `}
-    }).catch(e=>null) )}
-
-
-    DB.servers.updateOne({id:SVID},{
-        $pull:{
-          ['modules.SELFROLES']: [payload.role, payload.short  ]
-        }         
-    }).then(async done=>{
-        await DB.servers.set(SVID,{$pull:{'modules.SELFROLES':null}});
-        return res.status(200).json("Self Role Deleted!");
-    }).catch(err=>{
-        return res.status(510).json(err);
-    })
-})
-
-
-router.patch("/levelrole",ADMCHECKS,async (req,res)=>{
-    let payload = req.body;
-    let serverInfo= (await PLX.getRESTGuild(SVID));
-    let userData = (await DB.users.get(serverInfo.ownerID));
-
-    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
-    PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
-        embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
-
-        **Changed Self Role [${payload.index}]: ${payload.role} - Level ${payload.level} **
-
-        Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
-        `}
-    }).catch(e=>null) )}
-    
-    DB.servers.updateOne({id:SVID},{
-        $set: {
-            ['modules.AUTOROLES.'+payload.index]: [payload.role, Number(payload.level)||0 ]
-        }         
-    }).then(done=>{
-        return res.status(200).json("Level Role Created!");
-    }).catch(err=>{
-        return res.status(510).json(err);
-    })
-})
-
-router.patch("/selfrole",ADMCHECKS,async (req,res)=>{
-    let payload = req.body;
-    let serverInfo= (await PLX.getRESTGuild(SVID));
-    let userData = (await DB.users.get(serverInfo.ownerID));
-    
-    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
-    PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
-        embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
-
-        **Changed Self Role [${payload.index}]: ${payload.role} - Shortcut ${payload.short} **
-
-        Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
-        `}
-    }).catch(e=>null) )}
-    
-    DB.servers.updateOne({id:SVID},{
-        $set: {
-            ['modules.SELFROLES.'+payload.index]: [payload.role, payload.short ]
-        }         
-    }).then(done=>{
-        return res.status(200).json("SELF Role Created!");
-    }).catch(err=>{
-        return res.status(510).json(err);
-    })
-}) 
-
-
-router.put("/language",ADMCHECKS,async (req,res)=>{
-    let payload = req.body;
+    const SVID = req.params.serverID;
     DB.servers.findOneAndUpdate({id:SVID},{
         $set: {'modules.LANGUAGE': payload.data}         
     }).then(async doc=>{
@@ -325,8 +234,9 @@ router.put("/language",ADMCHECKS,async (req,res)=>{
     })
 })
 
-router.put("/commandswitch",ADMCHECKS,async (req,res)=>{
+router.put("/:serverID/commandswitch",async (req,res)=>{
     let payload = req.body;
+    const SVID = req.params.serverID;
     console.log('cmswitch')
     DB.servers.findOneAndUpdate({id:SVID},{
         $set: {'modules.DISABLED': payload.disabled, 'respondDisabled': payload.respond}         
@@ -343,77 +253,10 @@ router.put("/commandswitch",ADMCHECKS,async (req,res)=>{
     })
 })
 
-router.put("/selfrole",ADMCHECKS,async (req,res)=>{
-    let payload = req.body;
-
-    let serverInfo= (await PLX.getRESTGuild(SVID));
-    let userData = (await DB.users.get(serverInfo.ownerID));
-
-    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
-    PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
-        embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
-
-        **Created Self Role ${payload.role}**
-
-        Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
-        `}
-    }).catch(e=>null) )}
-    
-    DB.servers.findOneAndUpdate({id:SVID},{
-        $push: {
-            'modules.SELFROLES': [[payload.role, payload.short ]]
-        }         
-    }).then(async doc=>{
-        let roleInfo = await PLX.getRESTGuildRoles(SVID);
-        return res.status(200).render("admin/templates/self_role_card",{
-            i: doc.modules.SELFROLES.length,
-            thisRole: roleInfo.find(r=>r.id==payload.role),
-            sfrl: [payload.role, payload.short ],
-            roleInfo
-        });
-    }).catch(err=>{
-        console.error(err)
-        return res.status(510).json(err);
-    })
-})
-
-router.put("/levelrole",ADMCHECKS,async (req,res)=>{
-    let payload = req.body;
-
-    let serverInfo= (await PLX.getRESTGuild(SVID));
-    let userData = (await DB.users.get(serverInfo.ownerID));
-
-    if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
-    PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
-        embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
-
-        **Created Level Role ${payload.role}**
-
-        Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
-        `}
-    }).catch(e=>null) )}
-
-    DB.servers.findOneAndUpdate({id:SVID},{
-        $push: {
-            'modules.AUTOROLES': [[payload.role, Number(payload.level)||0 ]]
-        }         
-    }).then(async doc=>{
-        let roleInfo = await PLX.getRESTGuildRoles(SVID);
-        return res.status(200).render("admin/templates/level_role_card",{
-            i: doc.modules.AUTOROLES.length,
-            thisRole: roleInfo.find(r=>r.id==payload.role),
-            lvrl: [payload.role, Number(payload.level)||0 ],
-            roleInfo
-        });
-    }).catch(err=>{
-        console.error(err)
-        return res.status(510).json(err);
-    })
-})
-
-router.put("/savechannelist",ADMCHECKS,async (req,res)=>{
+router.put("/:serverID/savechannelist",async (req,res)=>{
  
     let payload = req.body.data;
+    const SVID = req.params.serverID;
 
     let serverInfo= (await PLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
@@ -449,20 +292,14 @@ router.put("/savechannelist",ADMCHECKS,async (req,res)=>{
     res.send('OK')
 })
 
-async function ADMCHECKS(req,res,nex){
-    req.handled = true;
-    if(req.user.id ==='88120564400553984')  nex(); 
-    let payload = req.body;
-    let validator = payload.validator || payload.data?.validator
-    if(req.user.validator != validator) return res.send({status:401,data:"Validator Mismatch "+`${validator} / ${req.user.validator}`});
-    let SVID = payload.serverid.toString();    
-    if(!(await isAdmin(req,SVID))) return res.send({status:401,data:"User is not Admin"});
-    else nex();
-}
+//SECTION Subs
 
 
-module.exports = router
 
+
+//SECTION JUNK
+
+//TODO Move this elsewhere
 global.GLOBALINSTANCES = [
     {
         ip: "136.243.78.7",
@@ -473,6 +310,18 @@ global.GLOBALINSTANCES = [
         }
     }
 ]
+
+async function ADMCHECKS(req,res,nex){
+    req.handled = true;
+    if(req.user.id ==='88120564400553984') return nex(); 
+    let payload = req.body;
+    let validator = payload.validator || payload.data?.validator
+    if(req.user.validator != validator) return res.send({status:401,data:"Validator Mismatch "+`${validator} / ${req.user.validator}`});
+    //let SVID = payload.serverid.toString();    
+    const SVID = req.params.serverID
+    if(!(await isAdmin(req,SVID))) return res.send({status:401,data:"User is not Admin"});
+    else nex();
+}
 
 function updateGlobalInstances(payload){
     return new Promise(async resolve=>{
@@ -496,3 +345,6 @@ function updateGlobalInstances(payload){
     })
 }
 
+
+
+module.exports = router;

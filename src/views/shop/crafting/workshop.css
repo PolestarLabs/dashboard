@@ -63,27 +63,27 @@ button {
   font-size: 12px;
 }
 
-.C {
+.C.bgcolor {
   background: #88a;
 }
 
-.U {
+.U.bgcolor {
   background: #3a5;
 }
 
-.R {
+.R.bgcolor {
   background: #35f;
 }
 
-.SR {
+.SR.bgcolor {
   background: #85f;
 }
 
-.UR {
+.UR.bgcolor {
   background: #f85;
 }
 
-.XR {
+.XR.bgcolor {
   background: #f35;
 }
 

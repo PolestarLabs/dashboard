@@ -144,7 +144,10 @@ html(class="no-js" lang=locale||"en")
                             avatar_url: userinfo.pix                 
                         });
                     }
-        
+        if userinfo
+          -var USR_I = userinfo.id
+          script $.post('/userinfo')
+             
    
     script( type='application/ld+json')
         include z-meta.json

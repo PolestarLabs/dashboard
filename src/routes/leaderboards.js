@@ -1,7 +1,6 @@
-const DB = require("../database");
 const express = require("express");
 const router = express.Router();
-const fx = require("../pipelines/globalFunctions.js");
+//const fx = require("../pipelines/globalFunctions.js");
 
 router.get("/", async (req, res) => {
     let LEAD= await compileLeaderboard(req.query.sv);
