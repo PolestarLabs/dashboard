@@ -57,7 +57,8 @@ router.get('/:endpoint', cache(0.1),  (req,res) => {
                 })
         
         let sort = {_id:-1}
-
+        queries.display = true;
+        queries.crafted = !!req.query.craftables;
         DB.items.find(queries,{emoji:0,usefile:0,altEmoji:0})
         .skip(parseInt(req.query.skip)||0)
         .limit( parseInt(req.query.lim)||50)
@@ -69,13 +70,13 @@ router.get('/:endpoint', cache(0.1),  (req,res) => {
             result.forEach(x=>{               
                 let timestamp = x._id.toString().substring(0,8)
                 x.release = parseInt( timestamp, 16 ) * 1000 
-                
+                x.description = ( $t(["items:"+x.id+".description", ""]) )
             })
             res.json(result)
         })
     }else{
-        DB.items.find({id:req.params.endpoint, crafted: !0, display: !0},
-            {name:1, rarity:1, event:1, icon:1, id:1, type:1, gemcraft: 1, materials: 1, code: 1}).then(result=>{
+        DB.items.findOne({id:req.params.endpoint,}, // crafted: !0, display: !0},
+            { _id: 0, __v:0,emoji:0,}).lean().then(result=>{
             res.json(result)
         })
     }
