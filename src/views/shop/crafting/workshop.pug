@@ -1,7 +1,7 @@
 extends ../../layout 
 
 mixin craftSlot(item)
-  .item-container.filled(v-if=item @click="removeFromPot("+item+")", :class=item+".rarity", @contextmenu.prevent="removeFromPot("+item+",true)") 
+  .item-container.filled.bgcolor(v-if=item @click="removeFromPot("+item+")", :class=item+".rarity", @contextmenu.prevent="removeFromPot("+item+",true)") 
     .item-img(:style="`background:url(/build/items/${("+item+"||{}).icon||("+item+"||{}).id}.png)`")
     .item-name {{#{item}.id}}
     .count-badge {{#{item}.count}}
@@ -93,7 +93,10 @@ block content
       h2 Basic items catalog is coming soon!
       h3 This section is unavailable during beta. Check back later!
 
+    .plx-uncontainer
+      include basic_items
       br
+
   br
   hr
   br
@@ -164,7 +167,7 @@ block content
 
             p(v-if="discovery.possible === 0") No items can be made out of this, try removing some items or try different items.
             .discovery-item(v-if="discovery.discovery")
-              .item-container(:class="discovery.discovery.rarity")
+              .item-container.bgcolor(:class="discovery.discovery.rarity")
                 .item-img(
                   :style="`background:url(/build/items/${discovery.discovery.icon}.png)`",
                   :class="discovery.isDiscovery ? '' : 'revealed'"
@@ -185,7 +188,7 @@ block content
           p Items: {{ inventory.length }}
           ul.items
             li.inv-item(v-for="item in inventory")
-              .item-container(
+              .item-container.bgcolor(
                 @click="addToPot(item)",
                 @contextmenu.prevent="addToPot(item, true)",
                 :class="[(item.meta||{}).rarity, item.count === 0 ? 'nomore' : '', item.new ? 'isnew' : '']"
