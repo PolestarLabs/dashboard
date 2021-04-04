@@ -302,7 +302,7 @@ router.put("/:serverID/savechannelist",async (req,res)=>{
 //TODO Move this elsewhere
 global.GLOBALINSTANCES = [
     {
-        ip: "136.243.78.7",
+        ip: "10.0.1.2",
         prefix: process.env.MICRO_PORT_PREFIX || 90,
         clusters: 5,
         get ports(){

@@ -136,7 +136,7 @@ app.post('/webhook/bsian-stripe', async (req, res) => {
 */
 // =======================================================================================
 
-const dbURL = 'mongodb://polaris:geminisbeta@138.201.158.163:27472/polaris';
+const dbURL = config.mongodb;
 const dbOptions = { 
   useNewUrlParser: true,
   reconnectTries: Number.MAX_VALUE,
