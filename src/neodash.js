@@ -23,7 +23,6 @@ global.cacheFunction = (duration) => {
     }
   }
 }
-global.userCache = new Map();
 
 const config = require('../config.js');
 global.HOST = config.host //"https://beta.pollux.gg" 
@@ -162,6 +161,28 @@ redis:{
     console.log('Listening at http://localhost:'+((process.env.DASHPORT||4728) +"").blue )
   })
   
+  const userCacheMap = new Map();
+  global.userCache = {
+    set(k,val){
+      userCacheMap.set(k,val);
+      return PLX.redis.hset("discord.users",k,JSON.stringify(val))
+    },
+    get(k){
+      if (userCacheMap.get(k)) return console.log("Supercached".blue, k) && userCacheMap.get(k);
+      return new Promise((resolve) => {
+        PLX.redis.hget("discord.users",k, (_,d) => {
+          if(d){
+            console.log("Cached".green, k)
+            userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
+          }else{
+            console.log("Not Cached".red, k);
+          }
+          return resolve(userCacheMap.get(k))
+        });        
+      })
+    }
+  }
+
 })
 
 //-- SESSION STORAGE
@@ -419,7 +440,7 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
 
     preUserData.then(async data=>{
       if(!data) {
-        let dscUser = userCache.get(req.user.id) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
+        let dscUser = await userCache.get(req.user.id) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
         data = await DB.users.new(dscUser); 
       }
       authCacheExpiration.set(req.user.id,{data,exp: Date.now() + 10e3  })
