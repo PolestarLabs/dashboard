@@ -151,7 +151,11 @@ Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Clie
 (require('@polestar/database_schema'))({
   url: dbURL,
   options: dbOptions,
-}).then(Connection => {
+},{
+redis:{
+  host: "127.0.0.1",
+  port: 6379
+}}).then(Connection => {
   global.DB  = Connection;
   app.listen( process.env.DASHPORT || 4728, function (err) {
     if (err) return console.log(err)
