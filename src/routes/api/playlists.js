@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/user/:userID', async (req,res)=>{
     const {userID} = req.params;
     const userCollection = await DB.usercols.get(userID);
-    if (!userCollection) return res.status(404).json( "USER NOT FOUND");
+    if (!userCollection) return res.status(404).json( "USER NOT FOUND" );
     const {collections} = userCollection;
     return res.status(200).json( collections.playlist || [] );    
 })
