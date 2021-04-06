@@ -10,6 +10,7 @@ router.get('/', async (req,res)=>{
 
    
     const {  name, artist, time, dur,thumb,embed,embed_thumb,key,color,live,source} = req.query;
+
     if(!key) return res.status(401).json("UNAUTHORIZED");
     let authedUser = await DB.globals.findOne({ generatorsKey : key});
     if(!authedUser && key != "geminis444") return res.status(401).json("UNAUTHORIZED");
@@ -46,18 +47,39 @@ let lnOptions = {
     let grd2 = ctx.createLinearGradient(270, 270, 270, 0);
     grd2.addColorStop(0, "#2b2b3b");
     grd2.addColorStop(.6, "#0000");
+
     c2.fillStyle = grd2
     c2.fillRect(0,0,270,270)
     
 
-   // ctx.drawImage(base,0,0);
+    Picto.roundRect(ctx,0,0,800,200,10,"#151520");
+    ctx.save();
+    ctx.globalCompositeOperation = 'source-in';
+    ctx.translate(-thumbnail.width,-thumbnail.height / 8);
+    ctx.scale(2,2);
+    ctx.drawImage(thumbnail,270, 135 - (thumbnail.height / 2));
+    ctx.blur(50)
+    ctx.restore();
 
-   
-    Picto.roundRect(ctx,0,0,800,200,10,"#151520")
+    let grd3 = ctx.createLinearGradient(0, 0, 800, 0);
+    grd3.addColorStop(.3, "#112A");
+    grd3.addColorStop(1, "#1120");
+    ctx.fillStyle = grd3;
+
+    ctx.fillRect(0,0,800,200);
+    ctx.globalCompositeOperation = 'destination-in';
+    Picto.roundRect(ctx,0,0,800,200,10,"#FFF");
+    
+    ctx.globalCompositeOperation = 'source-over';
+    Picto.roundRect(ctx,0,0,800,200,10,"#151520A5");
+ 
+
+        
+    
     ctx.drawImage(avatar ,740,130,50,50);
     Picto.roundRect(ctx,2,2,196,196,{ tl: 10, tr: 0, br: 0, bl: 10},AlbumArt)
     
-    ctx.fillStyle = "#5555"
+    ctx.fillStyle = "#1125"
     ctx.fillRect(205,188,585,6)
     let grd = ctx.createLinearGradient(199, 0, 600, 0);
     grd.addColorStop(0, "#"+ (color || "e23"));
@@ -71,7 +93,7 @@ let lnOptions = {
     ctx.fillRect(205,188,(585 * (elapsedTime/totalTime)),6)
    
     lnOptions.lineHeight= 1.2
-    let titleGfx = Picto.block(ctx,name,"italic 900 30px  'Panton Black'","#CCD",550,75,lnOptions).item;
+    let titleGfx = Picto.block(ctx,name,"italic 900 30px  'Panton Black'","#DDF",550,75,lnOptions).item;
     ctx.drawImage(
         titleGfx,
         210,        
@@ -86,7 +108,7 @@ let lnOptions = {
         );
     }else{
         ctx.drawImage(
-            Picto.block(ctx,artist,"600 20px 'Panton'","#888",400,20,lnOptions).item,
+            Picto.block(ctx,artist,"600 20px 'Panton'","#88A",400,20,lnOptions).item,
             210,        
             15,
         );
@@ -100,7 +122,7 @@ let lnOptions = {
         );
     }else{
         ctx.drawImage(
-            Picto.block(ctx,time+" / "+dur,"100 20px 'Panton'","#AAA",400,20,lnOptions).item,
+            Picto.block(ctx,time+" / "+dur,"100 20px 'Panton'","#AAD",400,20,lnOptions).item,
             210,        
             200 - 10 - 35,
         );
@@ -108,12 +130,12 @@ let lnOptions = {
     lnOptions.textAlign = 'right'
     lnOptions.sizeToFill= false
     ctx.drawImage(
-        Picto.block(ctx, user.username + "#"+ user.discriminator ,"500 24px 'Panton'","#AAA",200,30,lnOptions).item,
+        Picto.block(ctx, user.username + "#"+ user.discriminator ,"500 24px 'Panton'","#DDF",200,30,lnOptions).item,
         530,        
         200 - 10 - 35,
     );
     ctx.drawImage(
-        Picto.block(ctx, "Requested by" ,"400 18px 'Panton'","#777",200,20,lnOptions).item,
+        Picto.block(ctx, "Requested by" ,"400 18px 'Panton'","#AAD",200,20,lnOptions).item,
         530,        
         200 - 10 - 35-20,
     );
@@ -138,6 +160,9 @@ let lnOptions = {
     //ctx.drawImage(tag.item ,254,55);
     //ctx.drawImage(tag2.item ,254+tag.width+5,55+8);
     //ctx.drawImage(tag3.item ,280 ,100);
+
+  
+    
 
     res.writeHead(200, {'Content-Type': 'image/png'});
     canvas.pngStream({ compressionLevel: 5, filters: 0 }).pipe(res);
