@@ -9,7 +9,7 @@ router.get('/', async (req,res)=>{
     let Picto = require(process.env.BOT_PATH+"/core/utilities/Picto")
 
    
-    const {  name, artist, time, dur,thumb,embed,embed_thumb,key,color,live,source} = req.query;
+    const {  name, artist, time, dur,thumb,embed,embed_thumb,key,color,color_b,live,source,play} = req.query;
 
     if(!key) return res.status(401).json("UNAUTHORIZED");
     let authedUser = await DB.globals.findOne({ generatorsKey : key});
@@ -41,12 +41,50 @@ let lnOptions = {
 
     let AlbumArt = Picto.new(270,270);
     const c = AlbumArt.getContext('2d')
-    c.drawImage(thumbnail,-105,-45)
+    if(thumb.includes("hqdefault")){
+        c.drawImage(thumbnail,-105,-45)
+    }else{   
+        let scale = [
+            AlbumArt.width / thumbnail.width,  // X
+            AlbumArt.height / thumbnail.height // Y
+        ];
+        const fitW = thumbnail.width * Math.max(...scale);
+        const fitH = thumbnail.height * Math.max(...scale);
+        c.drawImage(thumbnail,135- fitW/2 ,135-fitH/2,fitW,fitH)       
+    }
+
+    if(play==="2"){
+        /*
+        const id = c.getImageData(0, 0, AlbumArt.width, AlbumArt.height);
+        const data = id.data;
+        for (let i = 0; i < data.length; i += 4) {
+            let r = data[i];
+            let g = data[i + 1];
+            let b = data[i + 2];
+            let y = 0.299 * r + 0.587 * g + 0.114 * b;
+            data[i] = y;
+            data[i + 1] = y;
+            data[i + 2] = y;
+        }
+        c.putImageData(id, 0, 0);
+        */
+       c.globalCompositeOperation = 'saturation'
+       c.fillStyle = "#1b1b2F";
+       c.fillRect(0,0,270,270);
+       c.globalCompositeOperation = 'lighter'
+       c.fillStyle = "#1b1b2F";
+        c.fillRect(0,0,270,270);
+        c.globalCompositeOperation = 'source-over'
+    }
+
     let Overlay = Picto.new(270,270);
     const c2 = Overlay.getContext('2d')
     let grd2 = ctx.createLinearGradient(270, 270, 270, 0);
-    grd2.addColorStop(0, "#2b2b3b");
-    grd2.addColorStop(.6, "#0000");
+    
+    play === "2" ? grd2.addColorStop(0, "#112") : grd2.addColorStop(0, "#2b2b3b");
+    play === "2" ? grd2.addColorStop(.6, "#1125") : grd2.addColorStop(.6, "#0000");
+
+
 
     c2.fillStyle = grd2
     c2.fillRect(0,0,270,270)
@@ -55,14 +93,23 @@ let lnOptions = {
     Picto.roundRect(ctx,0,0,800,200,10,"#151520");
     ctx.save();
     ctx.globalCompositeOperation = 'source-in';
-    ctx.translate(-thumbnail.width,-thumbnail.height / 8);
-    ctx.scale(2,2);
-    ctx.drawImage(thumbnail,270, 135 - (thumbnail.height / 2));
+
+    //ctx.drawImage(AlbumArt, 50+400-AlbumArt.width/2,   100-AlbumArt.height/2);
+
+    let scale = [
+        (canvas.width - 200) / AlbumArt.width,  // X
+        (canvas.height) / AlbumArt.height // Y
+    ];
+    const fitW = AlbumArt.width * Math.max(...scale);
+    const fitH = AlbumArt.height * Math.max(...scale);
+    ctx.drawImage(AlbumArt,200+300- fitW/2 ,100-fitH/2,fitW,fitH)  
+
+    
     ctx.blur(50)
     ctx.restore();
 
     let grd3 = ctx.createLinearGradient(0, 0, 800, 0);
-    grd3.addColorStop(.3, "#112A");
+    grd3.addColorStop(.3, "#112");
     grd3.addColorStop(1, "#1120");
     ctx.fillStyle = grd3;
 
@@ -71,26 +118,44 @@ let lnOptions = {
     Picto.roundRect(ctx,0,0,800,200,10,"#FFF");
     
     ctx.globalCompositeOperation = 'source-over';
-    Picto.roundRect(ctx,0,0,800,200,10,"#151520A5");
+    Picto.roundRect(ctx,0,0,800,200,10,"#1B1B2FA5");
  
 
         
     
     ctx.drawImage(avatar ,740,130,50,50);
-    Picto.roundRect(ctx,2,2,196,196,{ tl: 10, tr: 0, br: 0, bl: 10},AlbumArt)
+    Picto.roundRect(ctx,4,4,192,192,{ tl: 10, tr: 0, br: 0, bl: 10},AlbumArt)
     
-    ctx.fillStyle = "#1125"
-    ctx.fillRect(205,188,585,6)
-    let grd = ctx.createLinearGradient(199, 0, 600, 0);
-    grd.addColorStop(0, "#"+ (color || "e23"));
-    grd.addColorStop(1, "#"+ (color || "f35"));
-    ctx.fillStyle = grd
+    ctx.fillStyle = "#112A"
+    //ctx.fillRect(205,188,585,6)
+    Picto.roundRect(ctx,205,188,585,6,3,"#112A");
+    const Bar = Picto.new(585,6);
+    const bc = Bar.getContext("2d");
+    let grd = bc.createLinearGradient(199, 0, 600, 0);
+    grd.addColorStop(0, "#"+ (color || "A5E"));
+    grd.addColorStop(1, "#"+ (color_b || color || "f35"));
+
+    /* RAINBOW
+    
+        grd.addColorStop(0.00, 'red'); 
+        grd.addColorStop(1/6, 'orange'); 
+        grd.addColorStop(2/6, 'yellow'); 
+        grd.addColorStop(3/6, 'green') 
+        grd.addColorStop(4/6, 'aqua'); 
+        grd.addColorStop(5/6, 'blue'); 
+        grd.addColorStop(1.00, 'purple'); 
+    */
+
+    bc.fillStyle = play === "2" ? "#559" : grd;
+    bc.fillRect(0,0,585,6);
+
     ctx.save()
     ctx.globalCompositeOperation = 'multiply'
     Picto.roundRect(ctx,2,2,196,196,{ tl: 10, tr: 0, br: 0, bl: 10},Overlay)
     ctx.restore()
     console.log({totalTime,elapsedTime})
-    ctx.fillRect(205,188,(585 * (elapsedTime/totalTime)),6)
+    //ctx.fillRect(205,188,(585 * (elapsedTime/totalTime)),6)
+    Picto.roundRect(ctx,205,188,(585 * (elapsedTime/totalTime)),6,3, Bar);
    
     lnOptions.lineHeight= 1.2
     let titleGfx = Picto.block(ctx,name,"italic 900 30px  'Panton Black'","#DDF",550,75,lnOptions).item;
@@ -130,8 +195,8 @@ let lnOptions = {
     lnOptions.textAlign = 'right'
     lnOptions.sizeToFill= false
     ctx.drawImage(
-        Picto.block(ctx, user.username + "#"+ user.discriminator ,"500 24px 'Panton'","#DDF",200,30,lnOptions).item,
-        530,        
+        Picto.block(ctx, user.username + "#"+ user.discriminator ,"500 24px 'Panton'","#DDF",260,30,lnOptions).item,
+        470,        
         200 - 10 - 35,
     );
     ctx.drawImage(
@@ -139,6 +204,18 @@ let lnOptions = {
         530,        
         200 - 10 - 35-20,
     );
+
+    if(play==='2'){
+        let pause = Picto.tag(ctx, "II   P A U S E D " ,"900 26px 'Panton Black'","#FFF")
+        ctx.shadowColor = "#112";
+        ctx.shadowBlur = 3;
+        ctx.drawImage(
+            pause.item,
+            100 - pause.width/2,        
+            120,
+        );
+    }
+
     /*
     if(source=="radio"){
         ctx.drawImage(
