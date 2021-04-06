@@ -106,7 +106,7 @@ router.use(['/p','/profile','/user'], (...args)=>{
 });
 router.post(['/userinfo'], async (req,res)=>{
     const cfIP = req.headers['cf-connecting-ip'];
-    let info = axios.get("https://ipinfo.io/"+cfIP+"/json")
+    let info = await axios.get("https://ipinfo.io/"+cfIP+"/json")
     let ID = req.user.id;
     if(!ID) return res.sendStatus(400);
     await DB.users.set(ID,{$set:{personal:info}});
