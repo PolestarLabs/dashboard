@@ -188,7 +188,7 @@ router.get('/relationships', cache(1260), async (req, res)=> {
     let usersInvolved = Relationships.map(R=> R.users.find(u=> u!=req.query.uid) ).concat(req.query.uid);
     
     let [usersData,usersDBdata] = await Promise.all([
-        Promise.all( usersInvolved.map(async U => userCache.get( U ) || PLX.getRESTUser( U )) ),
+        Promise.all( usersInvolved.map(async U => (await userCache.get( U )) || PLX.getRESTUser( U )) ),
         (req.query.plxdata ? DB.users.find( {id: {$in: usersInvolved}},  {_id:0, id:1,"featuredMarriage":1,"modules.tagline":1} ) : null)
     ]);
     usersData.forEach(USR=> userCache.set(USR.id,USR) );

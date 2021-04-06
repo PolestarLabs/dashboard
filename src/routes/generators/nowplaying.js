@@ -17,7 +17,7 @@ router.get('/', async (req,res)=>{
     DB.globals.updateOne({ generatorsKey : key},{$inc:{'data.counters.generatorsAPI.nowPlaying' : 1}});
 
     const userID = req.query.uid
-    const user = (userCache.get( userID ) || (await PLX.getRESTUser( userID )));
+    const user = (await userCache.get( userID ) || (await PLX.getRESTUser( userID )));
     userCache.set(userID,user);
 
     let totalTime = moment.duration( dur.padStart(8,"00:") ).asSeconds();
