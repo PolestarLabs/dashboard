@@ -53,9 +53,8 @@ router.get((rq,rs,nx)=> {
     else (cache(60))(rq,rs,nx);
 });
 
-router.use( (req,res,nex)=>{
-    console.log(req.body)
-    console.log( MARKET_TOKEN )
+router.use( (req,res,nex)=>{    
+    //console.log( {MARKET_TOKEN} )
     return nex();
     if(req.method !== 'GET' && (!req.user && req.body.pollux != MARKET_TOKEN) ) return res.status(401).send("Nope");
     else nex();
@@ -173,8 +172,6 @@ router.get('/leaderboards/:serverID/:userID', cache(1260), async (req, res)=> {
 
 router.get('/relationships', cache(1260), async (req, res)=> {
 
-    console.log('start')
-
     let {page: skip} = req.query;
 
     let Relationships;
@@ -187,8 +184,6 @@ router.get('/relationships', cache(1260), async (req, res)=> {
         if(!Relationships) return res.status(404).json("USER NOT FOUND");
     }
 
-    console.log('p1')
-
     let usersInvolved = Relationships.map(R=> R.users.find(u=> u!=req.query.uid) ).concat(req.query.uid);
     
     let [usersData,usersDBdata] = await Promise.all([
@@ -197,11 +192,9 @@ router.get('/relationships', cache(1260), async (req, res)=> {
     ]);
     usersData.forEach(USR=> userCache.set(USR.id,USR) );
 
-    console.log('p2')
 
     let parsedRelationships = []
     Relationships.forEach(rel=>{
-        console.log(0)
         let item = {
             type: rel.type,
             initiative: rel.initiative, 
@@ -220,7 +213,6 @@ router.get('/relationships', cache(1260), async (req, res)=> {
         parsedRelationships.push(item)
     });
     
-    console.log('end')
     return res.json( parsedRelationships);
  
 });
@@ -235,7 +227,6 @@ router.delete('/galleries/fanart/:id',  async (req,res)=>{
 
     DB.fanart.remove( {id: req.params.id } )
         .then(id=>{
-            console.log(id);
             res.status(200).json('DELETED');
         })
         .catch(err=> console.log(err) && res.status(500).json('ERROR') )
@@ -264,7 +255,7 @@ router.put('/galleries/fanart/:id/:what',  async (req,res)=>{
     data.description ? payload.description = data.description : false;
 
     let result = await DB.fanart.set( {id: req.params.id }, {$set: payload});
-    console.log({result})
+    
     return res.status(200).json(result);
 
 } )

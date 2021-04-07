@@ -12,16 +12,16 @@ router.get('/', async (req,res)=>{
     const {name, artist, time, dur, thumb, embed, embed_thumb, key, color, color_b, live, source, play, loop} = req.query;
 
     if(!key) return res.status(401).json("UNAUTHORIZED");
-    console.log(1)
+    
     let authedUser = await DB.globals.findOne({ generatorsKey : key});
-    console.log(2)
+    
     if(!authedUser && key != "geminis444") return res.status(401).json("UNAUTHORIZED");
     DB.globals.updateOne({ generatorsKey : key},{$inc:{'data.counters.generatorsAPI.nowPlaying' : 1}});
-    console.log(3)
+    
     
     const userID = req.query.uid
     const user = (await userCache.get( userID )) || (await PLX.getRESTUser( userID ));
-    console.log(33)
+    
     userCache.set(userID,user);
     let totalTime = moment.duration( dur.padStart(8,"00:") ).asSeconds();
     let elapsedTime = moment.duration( time.padStart(8,"00:") ).asSeconds();
@@ -32,7 +32,7 @@ router.get('/', async (req,res)=>{
         Picto.makeRound(94,user.avatarURL),
         Picto.getCanvas(thumb)
     ]);
-    console.log(4)
+    
 
 let lnOptions = {
    // font: "600 18px 'Panton'",
@@ -45,7 +45,7 @@ let lnOptions = {
 
     let AlbumArt = Picto.new(270,270);
     const c = AlbumArt.getContext('2d')
-    console.log(6)
+    
     if(thumb.includes("hqdefault")){
         c.drawImage(thumbnail,-105,-45)
     }else{   
@@ -57,7 +57,7 @@ let lnOptions = {
         const fitH = thumbnail.height * Math.max(...scale);
         c.drawImage(thumbnail,135- fitW/2 ,135-fitH/2,fitW,fitH)       
     }
-    console.log(5)
+    
 
     if(play==="2"){
         /*
@@ -159,7 +159,6 @@ let lnOptions = {
     ctx.globalCompositeOperation = 'multiply'
     Picto.roundRect(ctx,2,2,196,196,{ tl: 10, tr: 0, br: 0, bl: 10},Overlay)
     ctx.restore()
-    console.log({totalTime,elapsedTime})
     //ctx.fillRect(205,188,(585 * (elapsedTime/totalTime)),6)
     Picto.roundRect(ctx,205,188,(585 * (elapsedTime/totalTime)),6,3, Bar);
    

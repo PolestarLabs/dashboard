@@ -156,8 +156,11 @@ redis:{
 }}).then(Connection => {
   global.DB  = Connection;
   app.listen( process.env.DASHPORT || 4728, function (err) {
-    if (err) return console.log(err)
-    console.log('Listening at http://localhost:'+((process.env.DASHPORT||4728) +"").blue )
+    if (err) return console.log(err);
+    console.log( HOST.yellow )
+    console.log( ""+"=================================================================".gray)
+    console.log("=========== ".gray +'🌐 • Listening at '+'http://localhost:'.blue+(" "+(process.env.DASHPORT||4728) +" ").bgBlue + " ===========".gray)
+    console.log( "=================================================================".gray+"\n ")
   })
   
   const userCacheMap = new Map();
@@ -167,14 +170,14 @@ redis:{
       return PLX.redis.hset("discord.users",k,JSON.stringify(val))
     },
     get(k){
-      if (userCacheMap.get(k)) return console.log("Supercached".blue, k) && userCacheMap.get(k);
+      if (userCacheMap.get(k)) return console.log("✅ Supercached".blue, k) && userCacheMap.get(k);
       return new Promise((resolve) => {
         PLX.redis.hget("discord.users",k, (_,d) => {
           if(d){
-            console.log("Cached".green, k)
+            console.log("✔️ Cached".green, k)
             userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
           }else{
-            console.log("Not Cached".red, k);
+            console.log("❌ Not Cached".red, k);
           }
           return resolve(userCacheMap.get(k))
         });        
@@ -324,9 +327,10 @@ global.complexpages  = function complexpages(location=false){
 };
 
 /* FANCY LOGGING */
+
 colors = require('colors')
-logger.token('userID', function (req, res) { return req.user? req.user.id.blue : "-ANONYMOUS-".magenta })
-logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator : "" })
+logger.token('userID', function (req, res) { return  (` ${req.headers['cf-ipcountry']} `).bgMagenta.yellow +" "+ (req.user? req.user.id.blue : (req.headers['cf-connecting-ip']).magenta) })
+logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator.gray : "" })
 logger.token('date', function(){  return new Date().toUTCString(); });
 app.use(logger(function(tokens,req,res){
   let status = tokens.status(req,res);
@@ -338,7 +342,7 @@ app.use(logger(function(tokens,req,res){
     (tokens.url(req,res)+"").padEnd(40)[tokens.method(req,res)=='POST'?'yellow':'reset'],
     STATUS+"",
     ("<< "+tokens.referrer(req,res)+"").replace(HOST,'').padEnd(20).grey.italic, "",
-    ("("+tokens['response-time'](req, res)+ 'ms | '+tokens.res(req, res, 'content-length')+')').padEnd(24),
+    ("("+tokens['response-time'](req, res)+ 'ms'+')').padEnd(12),
     (tokens.userID(req,res)+"").padEnd(20),
     (" "+tokens.userTag(req,res)+" ").inverse,
     "\n\n"
@@ -407,7 +411,6 @@ const VARS = require("./pipelines/vars.js");
 const authCacheExpiration = new Map();
 
 app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
-  console.log('ent')
   res.locals.EVENT=VARS.EVENT
   let preDataProcess = result=>{
     let USR = req.user;
@@ -504,10 +507,8 @@ const auth = async function(req, res, next) {
   //if(!req.isAuthenticated() && !req.url.includes('/auth') && !req.url.includes('callback')) return res.status(302).redirect('/auth');
   //else if(req.url.includes('/auth')) return next();
   if(req.isAuthenticated()){
-    console.log('g-check')
     if( !req.user.guilds.find(g=>g.id==='363476237118734349'))  return res.status(401).send("User not eligible for beta access");
   }else{
-    console.log('inc-call')
     if(!req.url.includes("call")) return res.redirect('/auth');
     else return next();
   }
@@ -517,7 +518,6 @@ const auth = async function(req, res, next) {
 }
 
 global.isAdmin = function isAdmin(req,svID){
-  console.log('is-adm')
   return new Promise(async resolve=>{
      
       try{
@@ -539,7 +539,6 @@ global.isAdmin = function isAdmin(req,svID){
 }
 
 global.checkAuth = function checkAuth(req, res, next) {
-  console.log('checkAuth'.blue)
   if (req.isAuthenticated()) return next();
   if(req.method === 'GET') return res.render('needlogin');
   else res.status(401).send("Nope")
@@ -612,8 +611,7 @@ app.use(function (req, res, next) {
 
 
 // ERROR HANDLER
-app.use(async function (err, req, res, next) {
-  console.log("xxx",err)
+app.use(async function (err, req, res, next) {  
   // set locals, only providing error in development
   res.locals.message = err.message || err.stack;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
