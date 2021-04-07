@@ -77,10 +77,14 @@ router.use(["/shop/","/store/"], async (...args) => {
     return (require('./shops/main.js'))( ...args);
 });
 
-router.use(["/playlists/"],AUTHED,FIRST_PARTY, async (...args) => {
-    console.log('test')
+router.use(["/playlists/","/music/playlists/"],AUTHED,FIRST_PARTY, async (...args) => {
     delete require.cache[(require.resolve('./playlists.js'))];
     return (require('./playlists.js'))( ...args);
+});
+
+router.use(["/music/"],AUTHED,FIRST_PARTY, async (...args) => {
+    delete require.cache[(require.resolve('./music.js'))];
+    return (require('./music.js'))( ...args);
 });
 
 router.use(["/games/:game","/minigames/:game"], async (req,res) => {
