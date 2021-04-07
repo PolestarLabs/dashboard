@@ -14,7 +14,8 @@ router.post('/user/:userID', async (req,res)=>{
     const {userID} = req.params;
     const track = req.body;
     if (!track) return res.status(400).json( "BAD REQUEST: NO BODY");
-    await DB.usercols.set(userID, {$addToSet: {"collections.playlist": track} });
+    let response = await DB.usercols.set(userID, {$addToSet: {"collections.playlist": track} });
+    if ( !response.upserted && !response.nModified ) return res.status(409).json( "DUPLICATE TRACK" );    
     return res.status(200).json( "OK" );    
 })
 
