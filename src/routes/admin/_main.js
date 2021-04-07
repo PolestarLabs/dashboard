@@ -312,11 +312,17 @@ global.GLOBALINSTANCES = [
 ]
 
 async function ADMCHECKS(req,res,nex){
+    //if(req.user) return console.log("boop") && res.render("needlogin");
     req.handled = true;
     if(req.user.id ==='88120564400553984') return nex(); 
     let payload = req.body;
     let validator = payload.validator || payload.data?.validator
-    if(req.user.validator != validator) return res.send({status:401,data:"Validator Mismatch "+`${validator} / ${req.user.validator}`});
+    if(req.user.validator != validator) {
+        req.user?.valFail ? req.user.valFail += 1 : req.user.valFail = 1;
+        console.log(req.user.valFail,"Validation Failure".red)
+        if(req.user.valFail > 3) req.logout() && res.redirect('/');
+        return res.send({status:401,data:"Validator Mismatch "+`${validator} / ${req.user.validator}`})
+    };
     //let SVID = payload.serverid.toString();    
     const SVID = req.params.serverID
     if(!(await isAdmin(req,SVID))) return res.send({status:401,data:"User is not Admin"});
