@@ -52,6 +52,8 @@ block content
  
 
         .plx-grid
+            script  var validator = '#{validator}'
+            script  var serverid = '#{serverInfo.id}'
             .plx-width-1-5(class="plx-visible@m" style=" background: #1b1b2B; xmin-width:280px; max-width: 360px" )
                 div(plx-sticky="bottom: true; offset: 50"  style="overflow-y:scroll; max-height:100vh; z-index: 0; xmin-width:280px; max-width: 350px")
                     include pane
