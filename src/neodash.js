@@ -223,8 +223,7 @@ let discordStrategy = new Strategy({
   clientID: config.clientID,
   clientSecret: config.secret,
   authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
-  //callbackURL: (process.env.NODE_ENV === 'production' ? HOST : 'http://136.243.78.7:4728')+"/callback",
-  callbackURL: "http://136.243.78.7:4728/callback", //TEST
+  callbackURL:   HOST + "/callback",
   scope: scopes,
   passReqToCallback: true
 }, function (req, accessToken, refreshToken, profile, done) {
