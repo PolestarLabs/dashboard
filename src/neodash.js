@@ -138,10 +138,9 @@ app.post('/webhook/bsian-stripe', async (req, res) => {
 const dbURL = config.mongodb;
 const dbOptions = { 
   useNewUrlParser: true,
-  reconnectTries: Number.MAX_VALUE,
-  reconnectInterval: 1000,
   keepAlive: 1,
   connectTimeoutMS: 30000,
+  useUnifiedTopology: true
 }
 
 global.PLX = new Eris.Client(config.token,{restMode:true});
@@ -408,6 +407,7 @@ const VARS = require("./pipelines/vars.js");
 const authCacheExpiration = new Map();
 
 app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
+  console.log('ent')
   res.locals.EVENT=VARS.EVENT
   let preDataProcess = result=>{
     let USR = req.user;
@@ -424,22 +424,23 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
   }
 
   if(req.isAuthenticated() && req.method == 'GET' && !req.url.includes('/api/') && !req.url.includes('/generators/')){
-    
     let userCacheReload = authCacheExpiration.get(req.user.id);
     if( userCacheReload && userCacheReload.exp > Date.now() ) {
       preDataProcess(userCacheReload.data)
       return next();
     }
 
-
     AcquireDiscordPayload(req.user.accessToken,req)
+
     PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
 
+    
     let preUserData = DB.users.get({id:req.user.id});
-
+    
     preUserData.then(async data=>{
+
       if(!data) {
-        let dscUser = await userCache.get(req.user.id) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
+        let dscUser = (await userCache.get(req.user.id)) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
         data = await DB.users.new(dscUser); 
       }
       authCacheExpiration.set(req.user.id,{data,exp: Date.now() + 10e3  })
@@ -503,8 +504,10 @@ const auth = async function(req, res, next) {
   //if(!req.isAuthenticated() && !req.url.includes('/auth') && !req.url.includes('callback')) return res.status(302).redirect('/auth');
   //else if(req.url.includes('/auth')) return next();
   if(req.isAuthenticated()){
+    console.log('g-check')
     if( !req.user.guilds.find(g=>g.id==='363476237118734349'))  return res.status(401).send("User not eligible for beta access");
   }else{
+    console.log('inc-call')
     if(!req.url.includes("call")) return res.redirect('/auth');
     else return next();
   }
@@ -514,6 +517,7 @@ const auth = async function(req, res, next) {
 }
 
 global.isAdmin = function isAdmin(req,svID){
+  console.log('is-adm')
   return new Promise(async resolve=>{
      
       try{
@@ -535,6 +539,7 @@ global.isAdmin = function isAdmin(req,svID){
 }
 
 global.checkAuth = function checkAuth(req, res, next) {
+  console.log('checkAuth'.blue)
   if (req.isAuthenticated()) return next();
   if(req.method === 'GET') return res.render('needlogin');
   else res.status(401).send("Nope")
@@ -635,8 +640,6 @@ app.use(async function (err, req, res, next) {
 process.on('unhandledRejection', function (reason, p) {
 
   console.log("Possibly Unhandled Rejection at: Promise \n".red, p, "\n\n reason: ".red, reason);
-  process.exit(1)
-
 
 });
 
