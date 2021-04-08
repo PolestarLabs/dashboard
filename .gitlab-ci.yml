@@ -3,6 +3,8 @@ before_script:
 
 dev-cooking:
   stage: build
+  tags:
+    - polestar
   script:
     - echo "Cooking Dev"
     - cd /home/pollux/polaris/DEV/dashboard/
@@ -15,6 +17,8 @@ dev-cooking:
     - master
 cooking:
   stage: build
+  tags:
+    - polestar
   script:
     - echo "Cooking Live"
     - cd /home/pollux/polaris/LIVE/dashboard/
@@ -33,7 +37,11 @@ baking:
 
 catapulting:
   stage: deploy
+  tags:
+    - polestar
   script:
     - echo "Did this work idk"
     - plx-reload dash
+  #only:
+  #- live
     
