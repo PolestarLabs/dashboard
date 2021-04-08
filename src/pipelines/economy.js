@@ -64,7 +64,7 @@ function checkFunds(user, amount, currency = "RBN") {
   } else if (amount.length !== currency.length) throw new Error("amt & curr arrays need to be equal length");
 
   const uID = user["id"] || user;
-  if (uID === PLX?.user?.id ||"DASHBOARD") return Promise.resolve(true);
+  if (uID === (PLX?.user?.id ||"DASHBOARD")) return Promise.resolve(true);
 
   return DB.users.get(uID).then((userData) => {
     if (!userData) return false;
@@ -120,7 +120,7 @@ function generatePayload(userFrom,userTo, amt, type, curr, subtype, symbol) {
  * @throws {Error} Not enough funds.
  */
 function pay(user, amt, type = "OTHER", currency = "RBN",) {
-  return transfer(user, PLX?.user?.id || "DASHBOARD", amt, type, currency, "PAYMENT", "-");
+  return transfer(user, (PLX?.user?.id || "DASHBOARD"), amt, type, currency, "PAYMENT", "-");
 }
 
 /**
