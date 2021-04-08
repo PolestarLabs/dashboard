@@ -16,9 +16,9 @@ bridge.post(['/:entrypoint/:endpoint','/:entrypoint'], (req,res)=>{
                 ports = [9000,9001,9002,9003,9004]
             }
             console.log(ports)
-            if(ports.length===1) return res.redirect(307,`136.243.78.7:${ports[0]}${url}`);
+            if(ports.length===1) return res.redirect(307,`10.0.1.2:${ports[0]}${url}`);
             let result = ports.map(port => {
-                return axios.post(`136.243.78.7:${port}${url}`, req.body ).catch(e=>e.message);
+                return axios.post(`10.0.1.2:${port}${url}`, req.body ).catch(e=>e.message);
             });
             Promise.all(result).then(_=> res.json(_.map(__=>(__||{}).data)) );
             

@@ -48,20 +48,19 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
     if(!item) return res.status(404).json(ERRORS.item404);
     
 
-    const price = ~~(itemPrice(item,currency));
+    const price = (itemPrice(item,currency));
     
     if(!userData) return res.status(404).json(ERRORS.user404);
     
     if (type === 'bundle'){
         return buyBundle({req,res,userData,bundle:item,price,currency});
     }
-
+    
     if(
         (type == 'medal' && userData.modules.medalInventory.includes(item.icon)) ||
         (type == 'background' && userData.modules.bgInventory.includes(item.code))
     )  return res.status(403).json(ERRORS.itemOwned);
      
-
     if ( !(await ECO.checkFunds(userData.id,price,currency)) )  
         return res.status(403).json(ERRORS.noFunds);
 
@@ -189,11 +188,11 @@ function itemPrice (item,currency="RBN"){
     let basePrice = item.price || defaultPrices[item.type]?.[item.rarity]
     switch (currency){
         case "SPH":
-            return basePrice * sapphireModifier;
+            return  Math.ceil(basePrice * sapphireModifier);
         case "JDE":
-            return basePrice * jadeModifier;
+            return  Math.ceil(basePrice * jadeModifier);
         case "EVT":
-            return basePrice * tokenModifier;
+            return  Math.ceil(basePrice * tokenModifier);
         case "RBN":
         default:
             return basePrice;

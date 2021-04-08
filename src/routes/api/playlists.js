@@ -5,7 +5,7 @@ const router = express.Router();
 router.get('/user/:userID', async (req,res)=>{
     const {userID} = req.params;
     const userCollection = await DB.usercols.get(userID);
-    if (!userCollection) return res.status(404).json( "USER NOT FOUND");
+    if (!userCollection) return res.status(404).json( "USER NOT FOUND" );
     const {collections} = userCollection;
     return res.status(200).json( collections.playlist || [] );    
 })
@@ -14,7 +14,8 @@ router.post('/user/:userID', async (req,res)=>{
     const {userID} = req.params;
     const track = req.body;
     if (!track) return res.status(400).json( "BAD REQUEST: NO BODY");
-    await DB.usercols.set(userID, {$addToSet: {"collections.playlist": track} });
+    let response = await DB.usercols.set(userID, {$addToSet: {"collections.playlist": track} });
+    if ( !response.upserted && !response.nModified ) return res.status(409).json( "DUPLICATE TRACK" );    
     return res.status(200).json( "OK" );    
 })
 

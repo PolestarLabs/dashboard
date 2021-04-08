@@ -193,7 +193,6 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
      {}
   ]);
 
-  console.log(marketplace)
   let listings = marketplace.filter(it=>it.item_id == entry.item_id);
   let morefrom = marketplace.filter(it=>it.author == entry.author);
   entry = listings.find(x=>x.id==entry.id)
@@ -224,10 +223,13 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
 
     }else{
 
-      console.log('noitemu')
+      console.log('noitemu');
+      return _404();
     }
   }else{
-    console.log('noentry')
+    
+    console.log('noentry');
+    return _404();
   }
 })
 

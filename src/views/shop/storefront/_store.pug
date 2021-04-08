@@ -163,7 +163,7 @@ block content
 
             .store-sidebar
               ul.store-nav.plx-subnav(plx-sticky="offset:50; bottom: #endof",  plx-switcher="connect:.store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small; active: 0")
-                  li.megastroke.menuitem(plx-filter-control="filter: *" ).plx-active
+                  li.megastroke.menuitem(plx-filter-control="filter: *" )
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-star
                           label  Arrivals
@@ -210,9 +210,9 @@ block content
                           label  Supplier
                   div(style="margin-bottom:10rem")
               
-            ul.store-main.plx-width-1-1.store-tab-content.plx-switcher
+            ul.store-main.plx-width-1-1.store-tab-content.plx-switcher(plx-switcher='active:0')
                 
-                    li#arrivals
+                    li#arrivals.plx-active
                         include pages/arrivals
                     //li#timed
                         include pages/timed

@@ -23,7 +23,6 @@ global.cacheFunction = (duration) => {
     }
   }
 }
-global.userCache = new Map();
 
 const config = require('../config.js');
 global.HOST = config.host //"https://beta.pollux.gg" 
@@ -136,13 +135,12 @@ app.post('/webhook/bsian-stripe', async (req, res) => {
 */
 // =======================================================================================
 
-const dbURL = 'mongodb://polaris:geminisbeta@138.201.158.163:27472/polaris';
+const dbURL = config.mongodb;
 const dbOptions = { 
   useNewUrlParser: true,
-  reconnectTries: Number.MAX_VALUE,
-  reconnectInterval: 1000,
   keepAlive: 1,
   connectTimeoutMS: 30000,
+  useUnifiedTopology: true
 }
 
 global.PLX = new Eris.Client(config.token,{restMode:true});
@@ -151,13 +149,42 @@ Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Clie
 (require('@polestar/database_schema'))({
   url: dbURL,
   options: dbOptions,
-}).then(Connection => {
+},{
+redis:{
+  host: "127.0.0.1",
+  port: 6379
+}}).then(Connection => {
   global.DB  = Connection;
   app.listen( process.env.DASHPORT || 4728, function (err) {
-    if (err) return console.log(err)
-    console.log('Listening at http://localhost:'+((process.env.DASHPORT||4728) +"").blue )
+    if (err) return console.log(err);
+    console.log( HOST.yellow )
+    console.log( ""+"=================================================================".gray)
+    console.log("=========== ".gray +'🌐 • Listening at '+'http://localhost:'.blue+(" "+(process.env.DASHPORT||4728) +" ").bgBlue + " ===========".gray)
+    console.log( "=================================================================".gray+"\n ")
   })
   
+  const userCacheMap = new Map();
+  global.userCache = {
+    set(k,val){
+      userCacheMap.set(k,val);
+      return PLX.redis.hset("discord.users",k,JSON.stringify(val))
+    },
+    get(k){
+      if (userCacheMap.get(k)) return console.log("✅ Supercached".cyan, k) && userCacheMap.get(k);
+      return new Promise((resolve) => {
+        PLX.redis.hget("discord.users",k, (_,d) => {
+          if(d){
+            console.log("✔️ Cached".green, k)
+            userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
+          }else{
+            console.log("❌ Not Cached".red, k);
+          }
+          return resolve(userCacheMap.get(k))
+        });        
+      })
+    }
+  }
+
 })
 
 //-- SESSION STORAGE
@@ -198,8 +225,7 @@ let discordStrategy = new Strategy({
   clientID: config.clientID,
   clientSecret: config.secret,
   authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
-  //callbackURL: (process.env.NODE_ENV === 'production' ? HOST : 'http://136.243.78.7:4728')+"/callback",
-  callbackURL: "http://136.243.78.7:4728/callback", //TEST
+  callbackURL:   HOST + "/callback",
   scope: scopes,
   passReqToCallback: true
 }, function (req, accessToken, refreshToken, profile, done) {
@@ -301,21 +327,22 @@ global.complexpages  = function complexpages(location=false){
 };
 
 /* FANCY LOGGING */
+
 colors = require('colors')
-logger.token('userID', function (req, res) { return req.user? req.user.id.blue : "-ANONYMOUS-".magenta })
-logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator : "" })
+logger.token('userID', function (req, res) { return  (` ${req.headers['cf-ipcountry']} `).bgMagenta.yellow +" "+ (req.user? req.user.id.blue : (req.headers['cf-connecting-ip']).magenta) })
+logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator.bgGray : "" })
 logger.token('date', function(){  return new Date().toUTCString(); });
 app.use(logger(function(tokens,req,res){
   let status = tokens.status(req,res);
   let STATUS = status >= 500 ? status.red : status >= 400 ? status.yellow : status >= 300 ? status.cyan : status >= 200 ? status.green : status;
-  let METHOD = (M) => M=='POST'? " POST ".bgYellow : M=='GET' ? " GET  ".bgBlue : M.bgRed;
+  let METHOD = (M) => M=='POST'? " POST ".bgYellow : M=='GET' ? " GET  ".bgCyan : M.padEnd(6).bgRed;
   return[
     //("["+tokens.date(req,res)+"]").grey.bgBlack.dim,"\n",
     METHOD(tokens.method(req,res)),
-    (tokens.url(req,res)+"").padEnd(40)[tokens.method(req,res)=='POST'?'yellow':'reset'],
+    (tokens.url(req,res)+"").slice(0,40).padEnd(40).split("?").map((v,i)=> i ? v.gray : v[tokens.method(req,res)=='POST'?'yellow':'reset'] ).join('?'.gray),
     STATUS+"",
-    ("<< "+tokens.referrer(req,res)+"").replace(HOST,'').padEnd(20).grey.italic, "",
-    ("("+tokens['response-time'](req, res)+ 'ms | '+tokens.res(req, res, 'content-length')+')').padEnd(24),
+    ("<< "+tokens.referrer(req,res)+"").replace(HOST,'').padEnd(20).slice(0,20).grey.italic, "",
+    ("("+tokens['response-time'](req, res)+ 'ms'+')').padEnd(12),
     (tokens.userID(req,res)+"").padEnd(20),
     (" "+tokens.userTag(req,res)+" ").inverse,
     "\n\n"
@@ -400,22 +427,23 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
   }
 
   if(req.isAuthenticated() && req.method == 'GET' && !req.url.includes('/api/') && !req.url.includes('/generators/')){
-    
     let userCacheReload = authCacheExpiration.get(req.user.id);
     if( userCacheReload && userCacheReload.exp > Date.now() ) {
       preDataProcess(userCacheReload.data)
       return next();
     }
 
-
     AcquireDiscordPayload(req.user.accessToken,req)
+
     PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
 
+    
     let preUserData = DB.users.get({id:req.user.id});
-
+    
     preUserData.then(async data=>{
+
       if(!data) {
-        let dscUser = userCache.get(req.user.id) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
+        let dscUser = (await userCache.get(req.user.id)) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
         data = await DB.users.new(dscUser); 
       }
       authCacheExpiration.set(req.user.id,{data,exp: Date.now() + 10e3  })
@@ -439,6 +467,7 @@ const admins = { polaris: { password: 'geminis472899' } }
 const auth = async function(req, res, next) {
   //return next();
   if(req.url.includes('api'))      return next();
+  if(req.url.includes('entry'))      return next();
   if(req.url.includes('.png'))      return next();
   if(req.url.includes('discoin'))      return next();
   if(req.url.includes('/discord'))      return next();
@@ -583,8 +612,7 @@ app.use(function (req, res, next) {
 
 
 // ERROR HANDLER
-app.use(async function (err, req, res, next) {
-  console.log("xxx",err)
+app.use(async function (err, req, res, next) {  
   // set locals, only providing error in development
   res.locals.message = err.message || err.stack;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -611,8 +639,6 @@ app.use(async function (err, req, res, next) {
 process.on('unhandledRejection', function (reason, p) {
 
   console.log("Possibly Unhandled Rejection at: Promise \n".red, p, "\n\n reason: ".red, reason);
-  process.exit(1)
-
 
 });
 

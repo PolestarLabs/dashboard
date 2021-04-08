@@ -15,7 +15,7 @@ router.get('/top100', async (req,res)=>{
     const top100 = TOP100CACHE.get(serverID) || await top100wait;
 
     const discordUsers = await Promise.all(top100.map(async RNK=>{
-        let discordUser =   userCache.get( RNK.user ) || (await PLX.getRESTUser( RNK.user ).catch(e=>{ id: "error" }));
+        let discordUser =   await userCache.get( RNK.user ) || (await PLX.getRESTUser( RNK.user ).catch(e=>{ id: "error" }));
         if (!discordUser) return null;
         userCache.set(discordUser.id,discordUser);
         let {id,avatar,bot,discriminator,username} = discordUser;

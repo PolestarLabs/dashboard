@@ -66,7 +66,7 @@ function since(x){
           );       
       },
       udata(commend){
-        return this.commendInfo.userdata.find(x=> x.id == commend.id) || {}
+        return this.commendInfo.userdata.find(x=> x.id == commend?.id) || {}
       },
       miliarize(numstring,strict,symbol){
         let sym = symbol||"." 
