@@ -467,6 +467,7 @@ const admins = { polaris: { password: 'geminis472899' } }
 const auth = async function(req, res, next) {
   //return next();
   if(req.url.includes('api'))      return next();
+  if(req.url.includes('entry'))      return next();
   if(req.url.includes('.png'))      return next();
   if(req.url.includes('discoin'))      return next();
   if(req.url.includes('/discord'))      return next();
