@@ -170,7 +170,7 @@ redis:{
       return PLX.redis.hset("discord.users",k,JSON.stringify(val))
     },
     get(k){
-      if (userCacheMap.get(k)) return console.log("✅ Supercached".blue, k) && userCacheMap.get(k);
+      if (userCacheMap.get(k)) return console.log("✅ Supercached".cyan, k) && userCacheMap.get(k);
       return new Promise((resolve) => {
         PLX.redis.hget("discord.users",k, (_,d) => {
           if(d){
@@ -330,18 +330,18 @@ global.complexpages  = function complexpages(location=false){
 
 colors = require('colors')
 logger.token('userID', function (req, res) { return  (` ${req.headers['cf-ipcountry']} `).bgMagenta.yellow +" "+ (req.user? req.user.id.blue : (req.headers['cf-connecting-ip']).magenta) })
-logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator.gray : "" })
+logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator.bgGray : "" })
 logger.token('date', function(){  return new Date().toUTCString(); });
 app.use(logger(function(tokens,req,res){
   let status = tokens.status(req,res);
   let STATUS = status >= 500 ? status.red : status >= 400 ? status.yellow : status >= 300 ? status.cyan : status >= 200 ? status.green : status;
-  let METHOD = (M) => M=='POST'? " POST ".bgYellow : M=='GET' ? " GET  ".bgBlue : M.bgRed;
+  let METHOD = (M) => M=='POST'? " POST ".bgYellow : M=='GET' ? " GET  ".bgCyan : M.padEnd(6).bgRed;
   return[
     //("["+tokens.date(req,res)+"]").grey.bgBlack.dim,"\n",
     METHOD(tokens.method(req,res)),
-    (tokens.url(req,res)+"").padEnd(40)[tokens.method(req,res)=='POST'?'yellow':'reset'],
+    (tokens.url(req,res)+"").slice(0,40).padEnd(40).split("?").map((v,i)=> i ? v.gray : v[tokens.method(req,res)=='POST'?'yellow':'reset'] ).join('?'.gray),
     STATUS+"",
-    ("<< "+tokens.referrer(req,res)+"").replace(HOST,'').padEnd(20).grey.italic, "",
+    ("<< "+tokens.referrer(req,res)+"").replace(HOST,'').padEnd(20).slice(0,20).grey.italic, "",
     ("("+tokens['response-time'](req, res)+ 'ms'+')').padEnd(12),
     (tokens.userID(req,res)+"").padEnd(20),
     (" "+tokens.userTag(req,res)+" ").inverse,
