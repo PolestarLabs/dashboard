@@ -24,7 +24,7 @@ router.get('/:endpoint', async (req, res)=> {
     if(!userprofile) return res.send(404);
  
  
-    const userDiscord = await (userCache.get( userprofile.id ) || (await PLX.getRESTUser( userprofile.id )));
+    const userDiscord = (await userCache.get( userprofile.id )) || (await PLX.getRESTUser( userprofile.id ));
 
     let donoranks;
     if(userprofile.donator){

@@ -40,7 +40,7 @@ router.get('/:serverID', async function (req,res) {
 
     req.user.validator = md5(Date.now());
 
-    
+
     let [serverData, memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
         DB.servers.get(SVID),
         PLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
@@ -302,7 +302,7 @@ router.put("/:serverID/savechannelist",async (req,res)=>{
 //TODO Move this elsewhere
 global.GLOBALINSTANCES = [
     {
-        ip: "136.243.78.7",
+        ip: "10.0.1.2",
         prefix: process.env.MICRO_PORT_PREFIX || 90,
         clusters: 5,
         get ports(){
@@ -312,11 +312,23 @@ global.GLOBALINSTANCES = [
 ]
 
 async function ADMCHECKS(req,res,nex){
+    if(!req.user) console.log("no-user".red);
     req.handled = true;
     if(req.user.id ==='88120564400553984') return nex(); 
     let payload = req.body;
-    let validator = payload.validator || payload.data?.validator
-    if(req.user.validator != validator) return res.send({status:401,data:"Validator Mismatch "+`${validator} / ${req.user.validator}`});
+    if(req.method !== "GET"){
+        console.log(req.method)
+        let validator = payload.validator || payload.data?.validator
+        if(req.user.validator != validator) {
+            req.user?.valFail ? req.user.valFail += 1 : req.user.valFail = 1;
+            console.log(req.user.valFail,"Validation Failure".red)
+            if(req.user.valFail > 3) {
+                req.logout();
+                return  res.render("needlogin");
+            }
+            return res.send({status:401,data:"Validator Mismatch "+`${validator} / ${req.user.validator}`})
+        };
+    }
     //let SVID = payload.serverid.toString();    
     const SVID = req.params.serverID
     if(!(await isAdmin(req,SVID))) return res.send({status:401,data:"User is not Admin"});

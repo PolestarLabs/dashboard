@@ -20,7 +20,7 @@ router.get('/search',  cache(600), async(req,res)=>{
         .sort(sort).lean()
         .then(async result=>{
             let result_2 = await Promise.all(result.map(async USR=>{
-                let discordUser =   userCache.get( USR.id ) || (await PLX.getRESTUser( USR.id ).catch(e=>{ id: "error" }));
+                let discordUser =   (await userCache.get( USR.id )) || (await PLX.getRESTUser( USR.id ).catch(e=>{ id: "error" }));
                 if (!discordUser) return null;
                 userCache.set(discordUser.id,discordUser);
                 let { response } = parse_userdata(discordUser, USR, 0);
@@ -102,7 +102,7 @@ router.get('/:id/commends', cache(360), async (req,res)=>{
 
             const payload = {};
             payload.whoOut = userCommends.whoOut;
-            payload.userdata = await Promise.all(users.map(usr=> (userCache.get(usr)) || PLX.getRESTUser(usr)));
+            payload.userdata = await Promise.all(users.map(async usr=> (await userCache.get(usr)) || PLX.getRESTUser(usr)));
             payload.whoIn = userCommends.whoIn.sort((a,b)=> b.count - a.count )
         return res.json(payload);
     }
@@ -214,7 +214,7 @@ module.exports = router
 
 async function parseUserAndReturn(uID, res) {
     let STATUS = 200
-    let discordUser =   userCache.get( uID ) || (await PLX.getRESTUser( uID ).catch(e=>{ error: "error" }));
+    let discordUser =   (await userCache.get( uID )) || (await PLX.getRESTUser( uID ).catch(e=>{ error: "error" }));
     userCache.set(discordUser.id,discordUser);
 
     return DB.users.get(uID).then(USR => {

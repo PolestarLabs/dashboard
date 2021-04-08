@@ -271,7 +271,7 @@ $('.plx-pink-check input').change(function(){
   return fetch("/admin/"+serverid+"/save", {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=utf-8" },
-    body: JSON.stringify({ data: data_payload, serverid, noDM: true })
+    body: JSON.stringify({ data: data_payload, serverid,validator, noDM: true })
   }).then(async res => {
     if(res.ok)
         PLX.notification('<div class="plx-flex plx-flex-between"> <span style="align-text:left; flex-shrink: 0"> Updated: '+ opt.f_name+ '</span><span style="align-text:right">'+ (opt.param === false ? '❌' : opt.param === true ? '✔' : opt.param) +"</span>" );
@@ -287,7 +287,7 @@ $("#save-all").click(function() {
   return fetch("/admin/"+serverid+"/save", {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=utf-8" },
-    body: JSON.stringify({ data: data_payload, serverid })
+    body: JSON.stringify({ data: data_payload, serverid,validator })
   }).then(async res => {
     if(res.ok)
         PLX.notification("Settings Saved!");
