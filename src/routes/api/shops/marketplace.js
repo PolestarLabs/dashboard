@@ -185,7 +185,7 @@ router.post("/", async (req, res) => {
 
 
 async function awardMarketplaceItem(item,userID,remove){
-  const query = {};
+  let query = {};
   let finder = {id: userID}
   let operation = remove ? "$pull" : "$addToSet";
 
@@ -204,10 +204,11 @@ async function awardMarketplaceItem(item,userID,remove){
       break;
     default:       
       finder['modules.inventory.id'] = item.id;
-      query = {$inc: {'modules.items.count': (remove ? -1 : 1) } };
+      query = {$inc: {'modules.inventory.$.count': (remove ? 1 : -1) } };
   }
-
   let res = await DB.users.set( finder, query ).catch(err=>null);
+  console.log({finder, query})
+  console.log(res)
   if (res) return true;
   else return false;
 }
@@ -218,7 +219,10 @@ router.post("/buy/:entry_id", async (req,res)=>{
 
   if(!req.user) return res.send(403);
 
-  let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
+  let entry = await DB.marketplace.findOne({ id: entry_id }).noCache().lean();
+
+  console.log(entry)
+
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
   if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
   if(entry.type !== 'sell') return res.status(403).json({status: "ITEM FOR SALE-ONLY"});
@@ -228,17 +232,20 @@ router.post("/buy/:entry_id", async (req,res)=>{
   
   if(!canBuy.res) return res.status(canBuy.status).json({canBuy,item});
 
+  await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: true}});
   let sale = await awardMarketplaceItem(item,req.user.id,false);
   
   if(sale) {
     ECO.transfer(req.user.id,entry.author,entry.price,'MARKETPLACE [BUY/SOLD]',entry.currency)
     .then(receipt=>{
      return res.status(200).json({status:'OK',receipt})
-    }).catch(err=>{
-     return res.status(500).json({status:'ERROR DURING PAYMENT PHASE'})
+    }).catch(async err=>{
+      await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
+      return res.status(500).json({status:'ERROR DURING PAYMENT PHASE'})
     });
   }else{
-   return res.status(500).json({status:'ERROR:SALE_INVALID'})
+    await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
+    return res.status(500).json({status:'ERROR:SALE_INVALID'})
   }
 
 })
@@ -247,27 +254,49 @@ router.post("/buy/:entry_id", async (req,res)=>{
 router.post("/sell/:entry_id", async (req,res)=>{
   const {entry_id} = req.params;
 
-  let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
+  let entry = await DB.marketplace.findOne({ id: entry_id }).noCache().lean();
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
+  
+  if(entry.completed) return res.status(410).json({status: "LISTING HAS BEEN TERMINATED"});
+  if(entry.lock) return res.status(409).json({status: "ENTRY IS LOCKED"});
+  
   if(entry.type )
   if(entry.author === req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
   if(entry.type !== 'buy') return res.status(403).json({status: "ITEM FOR PURCHASE-ONLY"});
 
+
   let {item} = (await getItemMarketDetails(entry.item_id)); 
+  
+  // User can sell TO marketplace? 
+  // conditions:
+  //  • must have item
+  //  • must have 10 RBN
+
   let canSell = await userCanSell(req.user.id,entry.currency,item,true);
   
-  if(!canSell.res) return res.status(canSell.status).json({canSell,item});
+  
 
+  if(!canSell.res) return res.status(canSell.status).json({canSell,item});
+  await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: true}});
+  
   let sale = await awardMarketplaceItem(item,req.user.id,true);
 
   if(sale) {
-    ECO.transfer(entry.author, req.user.id, entry.price, 'MARKETPLACE [SELL/BOUGHT]', entry.currency)
-    .then(receipt=>{
-     return res.status(200).json({status:'OK',receipt})
-    }).catch(err=>{
+    ECO.arbitraryAudit(entry.author, req.user.id, entry.price, 'MARKETPLACE [SELL/BOUGHT]', entry.currency)
+    .then(async receipt=>{
+      await DB.users.set(req.user.id, {$inc: {["modules." + entry.currency]:entry.price} });
+      await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
+      
+      //TODO[epic=anyone] Emit notification to the seller;
+
+      return res.status(200).json({status:'OK',receipt,sale})
+    }).catch(async err=>{
+      console.error(err)
+      await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
      return res.status(500).json({status:'ERROR DURING PAYMENT PHASE'})
     });
   }else{
+    await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
    return res.status(500).json({status:'ERROR:SALE_INVALID'})
   }
 
@@ -348,6 +377,7 @@ function getItemMarketDetails(item) {
     if (!result) return reject(404, "item not found");
     const marketplace = await DB.marketplace
       .find({ item_id: result._id })
+      .noCache()
       .lean()
       .exec();
     const marketplacePriceMap = marketplace.map(
@@ -374,16 +404,20 @@ function itemInInventory(item, userData) {
   let query = {};
   let prequery = {};
 
+
   if (item.type === "boosterpack")
     item_shallow_id = item_shallow_id + "_booster";
 
-  if (userData.amtItem(item.id) == 0 &&
-    ["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)) {
-    res = false;
-    reason = "ITEM NOT IN INVENTORY";
-    status = 404;
-    prequery = { id: userData.id, "modules.inventory.id": item.id };
-    query = { $inc: { "modules.inventory.$.count": -1 } };
+  if (["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)){
+    if (userData.amtItem(item.id) == 0 ) {
+      res = false;
+      reason = "ITEM NOT IN INVENTORY";
+      status = 404;
+    }else{
+      res = true;
+      prequery = { id: userData.id, "modules.inventory.id": item.id };
+      query = { $inc: { "modules.inventory.$.count": -1 } };
+    }
   }
   if (item.type === "background") {
     if (!userData.modules.bgInventory.includes(item.code)) {
@@ -436,9 +470,13 @@ async function userCanSell(id, currency, item, softCheck=false) {
   if (!(await DB.users.get(id)))
     return { res: false, reason: "USER NOT FOUND", status: 401 };
   if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 300, currency)))
-    return { res: false, reason: "NO FUNDS", status: 422 };
+    return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
 
-  const userData = await DB.users.findOne({id});
+  const userData = await DB.users.findOne({id}).noCache();
+
+  // Check item in inventory.
+  // Positive if
+  //  • item is in inventory
 
   let { res, reason, status, prequery, query } = itemInInventory(item, userData);
  
@@ -462,7 +500,7 @@ async function userCanBuy(userId, currency, price, item) {
     reason = "UNKNOWN",
     status = 200;
 
-  const userData = await DB.users.findOne({id:userId});
+  const userData = await DB.users.findOne({id:userId}).noCache();
   let itemInInv = itemInInventory(item, userData);
 
   if( itemInInv.res ){
