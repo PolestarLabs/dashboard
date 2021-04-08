@@ -32,6 +32,8 @@ cooking:
 
 baking:
   stage: test
+  tags:
+    - polestar
   script:
     - echo "Pls send help"
 
