@@ -130,7 +130,7 @@ router.post("/", async (req, res) => {
   
   const DATA = req.body;
   const PAYLOAD = req.body.pollux ? req.body.LISTING : req.body;
-  console.log(PLX.id,'plx ID');
+  
 
   // VALIDATION
   if (!PAYLOAD) return res.status(400).json("No Listing Supplied");
@@ -144,12 +144,11 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
   PAYLOAD.timestamp = Date.now();
   
   //let {item} = (await getItemMarketDetails(PAYLOAD.item_id)); 
-  let {item: ITEM,status,info} = await getItemMarketDetails(PAYLOAD.item_id).catch(e=>e); 
+  const itemMarketDetails = await getItemMarketDetails(PAYLOAD.item_id).catch(e=>e); 
+  let {item: ITEM,status,info} = itemMarketDetails;
+  
   PAYLOAD.item_type = ITEM.type;
-
-  console.table({item: ITEM,status,info});
   if (!ITEM) return res.status(status).json(info);
-
 
   if (PAYLOAD.type == "sell") {
     let result = await userCanSell(
@@ -206,9 +205,10 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
 
   PAYLOAD.img = `/${pathAssociations(ITEM)[0]}/${pathAssociations(ITEM)[1]}.png`;
 
-  //await DB.marketplace.new(PAYLOAD);
+  await DB.marketplace.new(PAYLOAD);
 
   PAYLOAD.url = `${HOST}/shop/marketplace/entry/${PAYLOAD.id}`
+
 
   PLX.executeWebhook(marketHook.id,marketHook.token,{
     auth: true,
@@ -216,25 +216,45 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
     embeds: [
       {
         
-          "description": `Posted ${_emoji(ITEM.rarity)}**${ITEM.name}**`,
-          "author": {
-            "name": userDiscordData.username,
-            "icon_url": userDiscordData.avatarURL
+          description: `Posted ${_emoji(ITEM.rarity)}**${ITEM.name}**`,
+          author: {
+            name: userDiscordData.username,
+            icon_url: userDiscordData.avatarURL
           },
           title: PAYLOAD.type == "sell" ? "SALE" : "WTB",
-          "color": 16724821,
-          "thumbnail": {
-            "url": HOST + PAYLOAD.img
+          color: PAYLOAD.type == "sell" ?  0xFF3355 : 0xA853FA,
+          thumbnail: {
+            url: HOST + PAYLOAD.img
           },
-          "fields": [
+          fields: [
             {
-              "name": "Price",
-              "value": `${_emoji(PAYLOAD.currency)}**${PAYLOAD.price}**`,
-              "inline": true
+              name: "Price",
+              value: `${_emoji(PAYLOAD.currency)}**${PAYLOAD.price}**`,
+              inline: false
+            },
+            {
+              name: "Min",
+              value: `${ itemMarketDetails.min ||0 }`,
+              inline: true
+            },
+            {
+              name: "Max",
+              value: `${ itemMarketDetails.max ||0 }`,
+              inline: true
+            },
+            {
+              name: "Market Average",
+              value: `${ ~~(itemMarketDetails.average) || "??" }`,
+              inline: true
+            },
+            {
+              name: "Entries",
+              value: `${ itemMarketDetails.entries?.length || 0}`,
+              inline: false
             }
           ],
-          "image": {
-            "url": ""
+          image: {
+            url: ""
           }
         
       },
