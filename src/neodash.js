@@ -144,6 +144,9 @@ const dbOptions = {
 }
 
 global.PLX = new Eris.Client(config.token,{restMode:true});
+PLX.id = config.clientID;
+require('@polestar/emoji-grimoire').initialize(PLX);
+
 Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client);
 
 (require('@polestar/database_schema'))({
@@ -170,17 +173,21 @@ redis:{
       return PLX.redis.hset("discord.users",k,JSON.stringify(val))
     },
     get(k){
-      if (userCacheMap.get(k)) return console.log("✅ Supercached".cyan, k) && userCacheMap.get(k);
+      if (userCacheMap.get(k)) {
+         console.log("✅ Supercached".cyan, k);
+         return userCacheMap.get(k);
+      }
       return new Promise((resolve) => {
         PLX.redis.hget("discord.users",k, (_,d) => {
           if(d){
             console.log("✔️ Cached".green, k)
             userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
+            return resolve(userCacheMap.get(k))
           }else{
             console.log("❌ Not Cached".red, k);
           }
-          return resolve(userCacheMap.get(k))
-        });        
+        });     
+        PLX.getRESTUser(k).then(u=> this.set(u.id,u) && resolve(u) );
       })
     }
   }
