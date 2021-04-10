@@ -56,23 +56,16 @@ router.get("/", cache(60), async (req, res) => {
           .find(
             { id: { $in: result.map((i) => i.author) } },
             { meta: 1, id: 1 }
-          )
-          .lean()
-          .exec()
+          ).lean()
           .catch((e) => []),
         DB.cosmetics
-          .find({ _id: { $in: result.map((i) => i.item_id) } })
-          .lean()
-          .exec()
+          .find({ _id: { $in: result.map((i) => i.item_id) } }).lean()
           .catch((e) => []),
         DB.items
-          .find({ _id: { $in: result.map((i) => i.item_id) } })
-          .lean()
-          .exec()
+          .find({ _id: { $in: result.map((i) => i.item_id) } }).lean()
           .catch((e) => []),
       ]).catch((err) => {
         console.error(result.map((i) => i.item_id));
-
         res.status(500).send("ERROR");
       });
 
@@ -107,7 +100,6 @@ router.get("/rates", async (req, res) => {
 // - takes an ObjectID
 router.get("/:item", async (req, res) => {
   const { item } = req.params;
-
   getItemMarketDetails(item)
     .catch((code, reason) => {
       res.status(code).json({ reason });
@@ -278,33 +270,7 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
 });
 
 
-async function awardMarketplaceItem(item,userID,remove){
-  let query = {};
-  let finder = {id: userID}
-  let operation = remove ? "$pull" : "$addToSet";
 
-  switch(item.type){
-    case "background":
-      query[operation]= {'modules.bgInventory': item.code};
-      break;
-    case "medal":
-      query[operation]= {'modules.medalInventory': item.icon};
-      break;
-    case "sticker":
-      query[operation]= {'modules.stickerInventory': item.id};
-      break;
-    case "flair":
-      query[operation]= {'modules.stickerInventory': item.id};
-      break;
-    default:       
-      finder['modules.inventory.id'] = item.id;
-      query = {$inc: {'modules.inventory.$.count': (remove ? -1 : 1) } };
-  }
-  let res = await DB.users.set( finder, query ).catch(err=>null);
-  
-  if (res) return true;
-  else return false;
-}
 
 // BUY FROM ENTRY
 router.post("/buy/:entry_id", async (req,res)=>{
@@ -444,18 +410,52 @@ router.patch("/:entry", async (req,res)=>{
   const {price} = req.body;
   if(!entry || !price) return res.status(404).json({status: "ENTRY/PRICE NOT SPECIFIED"});
 
-  let item = await DB.marketplace.findOne({ id: entry }).lean();
-  if(!item) res.status(404).json({status: "ENTRY NOT FOUND"});
-  if(item.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  let originalEntry = await DB.marketplace.findOne({ id: entry }).lean();
+  if(!originalEntry) res.status(404).json({status: "ENTRY NOT FOUND"});
+  if(originalEntry.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
-  DB.marketplace.updateOne({ id: entry } , {$set: {price} }).lean().then((r) => {
-    if(r.nModified) res.status(200).json({updated: r.nModified, status: "OK"});
+  DB.marketplace.updateOne({ id: entry } , {$set: {price} }).lean().then(async (r) => {
+    if(r.nModified) {
+      
+      await updateFeedMessage(originalEntry,price);
+      
+      return res.status(200).json({updated: r.nModified, status: "OK"})
+    }
     else res.status(410).json({status: "Nothing to update"});
   }).catch(err=>{
     console.error(err);
     res.status(500).json({status: "ERROR"});
   })
 })
+
+
+async function awardMarketplaceItem(item,userID,remove){
+  let query = {};
+  let finder = {id: userID}
+  let operation = remove ? "$pull" : "$addToSet";
+
+  switch(item.type){
+    case "background":
+      query[operation]= {'modules.bgInventory': item.code};
+      break;
+    case "medal":
+      query[operation]= {'modules.medalInventory': item.icon};
+      break;
+    case "sticker":
+      query[operation]= {'modules.stickerInventory': item.id};
+      break;
+    case "flair":
+      query[operation]= {'modules.stickerInventory': item.id};
+      break;
+    default:       
+      finder['modules.inventory.id'] = item.id;
+      query = {$inc: {'modules.inventory.$.count': (remove ? -1 : 1) } };
+  }
+  let res = await DB.users.set( finder, query ).catch(err=>null);
+  
+  if (res) return true;
+  else return false;
+}
 
 async function processFeedMessage(entry, item, CURRENT_USER) {
   let entryOwner = await userCache.get(entry.author);
@@ -465,6 +465,16 @@ async function processFeedMessage(entry, item, CURRENT_USER) {
       description: `${_emoji(item.rarity)} **${item.name}** has been ${entry.type == 'sell' ? "sold to" : "bought by"} [${CURRENT_USER.username}#${CURRENT_USER.discriminator}](${HOST}/profile/${CURRENT_USER.id}) for ${_emoji(entry.currency)}**${entry.price}**`
     }
   });
+}
+async function updateFeedMessage(oldEntry, newPrice) {
+  if (!oldEntry.feedMessage) return;
+  const message = await PLX.getMessage(...oldEntry.feedMessage);
+  let   embed   = message.embeds[0];
+  embed.description = embed.description.replace(`**${oldEntry.price}**`,`**${newPrice}**`);
+  embed.timestamp = new Date();
+  PLX.editMessage(...oldEntry.feedMessage, { content: message.content, embed });
+  let channelInfo = await PLX.getRESTChannel(oldEntry.feedMessage[0]);
+  PLX.createMessage(channelInfo.id, {embed:{color: embed.color, description: `⬆️ **[\`${oldEntry.id}\`](https://discord.com/channels/${channelInfo.guild.id}/${channelInfo.id}/${message.id})** has been **edited**. New price: ${_emoji(oldEntry.currency)}**${newPrice}** *(was ${oldEntry.price})*` }} )
 }
 
 function destroyEntry(entry) {
