@@ -1,6 +1,8 @@
 const ECO = require("../../../pipelines/economy.js");
 const express = require("express");
 const router = express.Router();
+const marketHook = require("../../../../config.js").webhooks.marketplace;
+const axios = require('axios');
 
 /*
 
@@ -126,32 +128,42 @@ router.get("/:item", async (req, res) => {
     pollux = Bot Request Validator 
 */
 router.post("/", async (req, res) => {
+  
   const DATA = req.body;
   const PAYLOAD = req.body.pollux ? req.body.LISTING : req.body;
+  
 
   // VALIDATION
   if (!PAYLOAD) return res.status(400).json("No Listing Supplied");
   if (PAYLOAD.pollux && !PAYLOAD.author && !req.user)
     return res.status(401).json("No Author Supplied");
   if (req.user) PAYLOAD.author = req.user.id;
-
+  const userDiscordData = await userCache.get(PAYLOAD.author);
+console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
+  
   PAYLOAD.id = (Date.now()).toString(16).toUpperCase()+process.pid;
   PAYLOAD.timestamp = Date.now();
-
-  let {item} = (await getItemMarketDetails(PAYLOAD.item_id)); 
+  
+  //let {item} = (await getItemMarketDetails(PAYLOAD.item_id)); 
+  const itemMarketDetails = await getItemMarketDetails(PAYLOAD.item_id).catch(e=>e); 
+  let {item: ITEM,status,info} = itemMarketDetails;
+  
+  PAYLOAD.item_type = ITEM.type;
+  if (!ITEM) return res.status(status).json(info);
 
   if (PAYLOAD.type == "sell") {
     let result = await userCanSell(
       PAYLOAD.author,
       PAYLOAD.currency,    
-      item
+      ITEM
     );
     if (result.res === true) {
-      await DB.users.updateOne(
-        (DATA.itemStatus || {}).prequery ||
-          result.prequery || { id: PAYLOAD.author },
-        (DATA.itemStatus || {}).query || result.query
-      );
+      const finder = (DATA.itemStatus || {}).prequery || result.prequery || { id: PAYLOAD.author };
+      const action = (DATA.itemStatus || {}).query || result.query;
+
+      if (finder === {}) return res.status(400).json("Dangerous Query Result");
+      await DB.users.updateOne(finder,action);
+
     } else {
       return res.status(result.status).json(result.reason);
     }
@@ -160,7 +172,7 @@ router.post("/", async (req, res) => {
       PAYLOAD.author,
       PAYLOAD.currency,
       PAYLOAD.price,
-      item,
+      ITEM,
     );
     if (result.res === true) {
       await ECO.pay(
@@ -176,9 +188,91 @@ router.post("/", async (req, res) => {
     return res.status(400).json("Listing Type Not Set");
   }
 
+  const pathAssociations = (itm) => {
+    switch (itm.type) {
+      case "background":
+        return ['backgrounds',itm.code];
+      case "medal":
+        return ['medals',itm.icon];
+      case "sticker":
+        return ['stickers',itm.id];
+      case "boosterpack":
+        return ['items',itm.icon];
+
+      default:
+        return ['items',itm.id];
+    }
+  }
+
+  PAYLOAD.img = `/${pathAssociations(ITEM)[0]}/${pathAssociations(ITEM)[1]}.png`;
+
   await DB.marketplace.new(PAYLOAD);
 
-  return res.status(200).json({ status: "OK", payload: PAYLOAD });
+  PAYLOAD.url = `${HOST}/shop/marketplace/entry/${PAYLOAD.id}`
+
+  const reputation = (await axios.get(`${HOST}/api/user/${PAYLOAD.author}/commends`).catch(e=>null))?.data || {};
+
+  //PLX.executeWebhook(marketHook.id,marketHook.token,{
+  PLX.createMessage( marketHook.channel, {
+    //auth: true,
+    content: "<:onlinestore:446901835715051531> • **New marketplace post!** Check it out before it is gone!",
+    embed: 
+      {
+        
+          description: ` \`${PAYLOAD.type.toUpperCase() + "ING"}\`  ${_emoji(ITEM.rarity)}**[${ITEM.name}](${PAYLOAD.url})** for ${_emoji(PAYLOAD.currency)}**${PAYLOAD.price}**\n`+
+          `\n${_emoji('CTK')} **Player Reputation:** ${reputation.totalIn||0}`,
+          author: {
+            name: `${userDiscordData.username} posted a new Marketplace listing`,
+            icon_url: userDiscordData.avatarURL,
+            url: PAYLOAD.url
+          },
+          
+          color: PAYLOAD.type == "sell" ?  0xFF3355 : 0xA853FA,
+          thumbnail: {
+            url: HOST + PAYLOAD.img
+          },
+          fields: [
+            {
+              name: "Min",
+              value: `${ itemMarketDetails.min ||0 }`,
+              inline: true
+            },
+            {
+              name: "Max",
+              value: `${ itemMarketDetails.max ||0 }`,
+              inline: true
+            },
+            {
+              name: "Market Average",
+              value: `${ ~~(itemMarketDetails.average) || "??" }`,
+              inline: true
+            },/*
+            {
+              name: "\u200b",
+              value: `ID: \`${PAYLOAD.id}\``,
+              inline: false
+            }*/
+          ],
+          footer: {
+            text: `${(itemMarketDetails.entries?.length || 0)} previous entries of this item. [ 📦 ${ 
+              itemMarketDetails.entries?.filter(x=>x.type=='sell')?.length ||0
+            } Selling | 🛒 ${ 
+              itemMarketDetails.entries?.filter(x=>x.type=='buy')?.length ||0
+            } Buying ]`
+          },
+          timestamp: new Date(PAYLOAD.timestamp)
+        
+      }
+    ,
+    //wait: true
+  }).then(async msg=>{
+      const messageChannel = await PLX.getRESTChannel('792176688070918194');
+      await DB.marketplace.updateOne({id: PAYLOAD.id},{$set:{feedMessage: [msg.channel.id,msg.id] }});
+      if (messageChannel.type !== 5 ) return;
+      await PLX.crosspostMessage(msg.channel.id,msg.id).then(console.log).catch(e=>null);
+  })
+
+  return res.status(200).json({ status: "OK", payload: {PAYLOAD,itemMarketDetails} });
 
   //res.redirect('/shop/marketplace')
 });
@@ -207,8 +301,7 @@ async function awardMarketplaceItem(item,userID,remove){
       query = {$inc: {'modules.inventory.$.count': (remove ? -1 : 1) } };
   }
   let res = await DB.users.set( finder, query ).catch(err=>null);
-  console.log({finder, query})
-  console.log(res)
+  
   if (res) return true;
   else return false;
 }
@@ -228,12 +321,12 @@ router.post("/buy/:entry_id", async (req,res)=>{
 
   let entry = await DB.marketplace.findOne({ id: entry_id }).noCache().lean();
 
+  if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
     
   if(entry.completed) return res.status(410).json({status: "LISTING HAS BEEN TERMINATED"});
   if(entry.lock) return res.status(409).json({status: "ENTRY IS LOCKED"});
 
-  if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
-  if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  //if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
   if(entry.type !== 'sell') return res.status(403).json({status: "ITEM FOR SALE-ONLY"});
 
   let {item} = (await getItemMarketDetails(entry.item_id)); 
@@ -248,6 +341,9 @@ router.post("/buy/:entry_id", async (req,res)=>{
     ECO.transfer(CURRENT_USER.id,entry.author,entry.price,'MARKETPLACE [BUY/SOLD]',entry.currency)
     .then(async receipt=>{
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
+      if(entry.feedMessage){
+        await processFeedMessage(entry, item, CURRENT_USER);
+      }
       return res.status(200).json({status:'OK',receipt})
     }).catch(async err=>{
       await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
@@ -280,7 +376,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
   if(entry.lock) return res.status(409).json({status: "ENTRY IS LOCKED"});
   
   if(entry.type )
-  if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  //if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
   if(entry.type !== 'buy') return res.status(403).json({status: "ITEM FOR PURCHASE-ONLY"});
 
 
@@ -307,6 +403,10 @@ router.post("/sell/:entry_id", async (req,res)=>{
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       
       //TODO[epic=anyone] Emit notification to the seller;
+
+      if(entry.feedMessage){
+        await processFeedMessage(entry, item, CURRENT_USER);
+      }
 
       return res.status(200).json({status:'OK',receipt,sale})
     }).catch(async err=>{
@@ -357,6 +457,16 @@ router.patch("/:entry", async (req,res)=>{
   })
 })
 
+async function processFeedMessage(entry, item, CURRENT_USER) {
+  let entryOwner = await userCache.get(entry.author);
+  PLX.editMessage(...entry.feedMessage, {
+    content: `${_emoji('nope')} • This listing is gone!`,
+    embed: {
+      description: `${_emoji(item.rarity)} **${item.name}** has been ${entry.type == 'sell' ? "sold to" : "bought by"} [${CURRENT_USER.username}#${CURRENT_USER.discriminator}](${HOST}/profile/${CURRENT_USER.id}) for ${_emoji(entry.currency)}**${entry.price}**`
+    }
+  });
+}
+
 function destroyEntry(entry) {
   let status, json;
   return DB.marketplace.remove({ id: entry }).lean().then((r) => {
@@ -389,11 +499,12 @@ function getItemMarketDetails(item) {
           .exec(),
         DB.items.find({ id: item }).lean().exec(),
       ]).catch((e) => {
-        return reject(400, "Bad Request");
+        return reject({status:400, info: "Bad Request"});
       });
     });
+
     const result = cos.concat(itm)[0];
-    if (!result) return reject(404, "item not found");
+    if (!result) return reject({status:404, info: "item not found"});
     const marketplace = await DB.marketplace
       .find({ item_id: result._id })
       .noCache()
@@ -406,7 +517,7 @@ function getItemMarketDetails(item) {
     const response = {
       item: result,
       max: Math.max(...marketplacePriceMap),
-      min: Math.max(...marketplacePriceMap),
+      min: Math.min(...marketplacePriceMap),
       average:
         marketplacePriceMap.reduce((a, b) => a + b, 0) / marketplace.length,
       entries: marketplace,
@@ -421,7 +532,7 @@ function itemInInventory(item, userData) {
   let reason = "UNKNOWN";
   let status = 400;
   let query = {};
-  let prequery = {};
+  let prequery;
 
 
   if (item.type === "boosterpack")

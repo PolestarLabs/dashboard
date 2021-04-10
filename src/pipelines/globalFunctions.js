@@ -168,7 +168,6 @@ module.exports = {
 
       global.appRoot = Path.resolve(BOT_PATH);
       global.paths = require(Path.resolve(BOT_PATH, "./utils/paths"));
-      global._emoji = () => ({});
 
       for (let y = 0; y < command_files.length; y++) {
         if (!["imgreactor.js", "unstructured"].includes(command_files[y])) {

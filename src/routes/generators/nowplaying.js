@@ -189,14 +189,7 @@ let lnOptions = {
             (await Picto.tagMoji(ctx, "🔴  LIVE " ,"600 18px 'Panton'","#AAD")).item,
             210,        
             200 - 10 - 35,
-        );
-    }
-    if(loop){
-        ctx.drawImage(
-            (await Picto.tagMoji(ctx, "🔁  LOOP " ,"600 18px 'Panton'","#AAD")).item,
-            710,
-            15,        
-        );
+        );    
     }else{
         ctx.drawImage(
             Picto.block(ctx,time+" / "+dur,"100 20px 'Panton'","#AAD",400,20,lnOptions).item,
@@ -204,6 +197,15 @@ let lnOptions = {
             200 - 10 - 35,
         );
     }
+
+    if(loop){
+        ctx.drawImage(
+            (await Picto.tagMoji(ctx, "🔁  LOOP " ,"600 18px 'Panton'","#AAD")).item,
+            710,
+            15,        
+        );
+    }
+
     lnOptions.textAlign = 'right'
     lnOptions.sizeToFill= false
     ctx.drawImage(
