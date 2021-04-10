@@ -2,6 +2,7 @@ const ECO = require("../../../pipelines/economy.js");
 const express = require("express");
 const router = express.Router();
 const marketHook = require("../../../../config.js").webhooks.marketplace;
+const axios = require('axios');
 
 /*
 
@@ -209,29 +210,28 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
 
   PAYLOAD.url = `${HOST}/shop/marketplace/entry/${PAYLOAD.id}`
 
+  const reputation = (await axios.get(`${HOST}/api/user/${PAYLOAD.author}/commends`).catch(e=>null))?.data || {};
 
-  PLX.executeWebhook(marketHook.id,marketHook.token,{
-    auth: true,
-    content: "[New marketplace post]("+PAYLOAD.url+")",
-    embeds: [
+  //PLX.executeWebhook(marketHook.id,marketHook.token,{
+  PLX.createMessage( marketHook.channel, {
+    //auth: true,
+    content: "<:onlinestore:446901835715051531> • **New marketplace post!** Check it out before it is gone!",
+    embed: 
       {
         
-          description: `Posted ${_emoji(ITEM.rarity)}**${ITEM.name}**`,
+          description: ` \`${PAYLOAD.type.toUpperCase() + "ING"}\`  ${_emoji(ITEM.rarity)}**[${ITEM.name}](${PAYLOAD.url})** for ${_emoji(PAYLOAD.currency)}**${PAYLOAD.price}**\n`+
+          `\n${_emoji('CTK')} **Player Reputation:** ${reputation.totalIn||0}`,
           author: {
-            name: userDiscordData.username,
-            icon_url: userDiscordData.avatarURL
+            name: `${userDiscordData.username} posted a new Marketplace listing`,
+            icon_url: userDiscordData.avatarURL,
+            url: PAYLOAD.url
           },
-          title: PAYLOAD.type == "sell" ? "SALE" : "WTB",
+          
           color: PAYLOAD.type == "sell" ?  0xFF3355 : 0xA853FA,
           thumbnail: {
             url: HOST + PAYLOAD.img
           },
           fields: [
-            {
-              name: "Price",
-              value: `${_emoji(PAYLOAD.currency)}**${PAYLOAD.price}**`,
-              inline: false
-            },
             {
               name: "Min",
               value: `${ itemMarketDetails.min ||0 }`,
@@ -246,30 +246,33 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
               name: "Market Average",
               value: `${ ~~(itemMarketDetails.average) || "??" }`,
               inline: true
-            },
+            },/*
             {
-              name: "Entries",
-              value: `${ itemMarketDetails.entries?.length || 0}`,
+              name: "\u200b",
+              value: `ID: \`${PAYLOAD.id}\``,
               inline: false
-            }
+            }*/
           ],
-          image: {
-            url: ""
-          }
+          footer: {
+            text: `${(itemMarketDetails.entries?.length || 0)} previous entries of this item. [ 📦 ${ 
+              itemMarketDetails.entries?.filter(x=>x.type=='sell')?.length ||0
+            } Selling | 🛒 ${ 
+              itemMarketDetails.entries?.filter(x=>x.type=='buy')?.length ||0
+            } Buying ]`
+          },
+          timestamp: new Date(PAYLOAD.timestamp)
         
-      },
-      {
-        description: ".```json\n" + JSON.stringify(PAYLOAD,0,2) + "```",
       }
-    ],
-    wait: true
+    ,
+    //wait: true
   }).then(async msg=>{
       const messageChannel = await PLX.getRESTChannel('792176688070918194');
+      await DB.marketplace.updateOne({id: PAYLOAD.id},{$set:{feedMessage: [msg.channel.id,msg.id] }});
       if (messageChannel.type !== 5 ) return;
       await PLX.crosspostMessage(msg.channel.id,msg.id).then(console.log).catch(e=>null);
   })
 
-  return res.status(200).json({ status: "OK", payload: PAYLOAD });
+  return res.status(200).json({ status: "OK", payload: {PAYLOAD,itemMarketDetails} });
 
   //res.redirect('/shop/marketplace')
 });
@@ -338,6 +341,9 @@ router.post("/buy/:entry_id", async (req,res)=>{
     ECO.transfer(CURRENT_USER.id,entry.author,entry.price,'MARKETPLACE [BUY/SOLD]',entry.currency)
     .then(async receipt=>{
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
+      if(entry.feedMessage){
+        await processFeedMessage(entry, item, CURRENT_USER);
+      }
       return res.status(200).json({status:'OK',receipt})
     }).catch(async err=>{
       await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
@@ -370,7 +376,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
   if(entry.lock) return res.status(409).json({status: "ENTRY IS LOCKED"});
   
   if(entry.type )
-  if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
+  //if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
   if(entry.type !== 'buy') return res.status(403).json({status: "ITEM FOR PURCHASE-ONLY"});
 
 
@@ -397,6 +403,10 @@ router.post("/sell/:entry_id", async (req,res)=>{
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       
       //TODO[epic=anyone] Emit notification to the seller;
+
+      if(entry.feedMessage){
+        await processFeedMessage(entry, item, CURRENT_USER);
+      }
 
       return res.status(200).json({status:'OK',receipt,sale})
     }).catch(async err=>{
@@ -446,6 +456,16 @@ router.patch("/:entry", async (req,res)=>{
     res.status(500).json({status: "ERROR"});
   })
 })
+
+async function processFeedMessage(entry, item, CURRENT_USER) {
+  let entryOwner = await userCache.get(entry.author);
+  PLX.editMessage(...entry.feedMessage, {
+    content: `${_emoji('nope')} • This listing is gone!`,
+    embed: {
+      description: `${_emoji(item.rarity)} **${item.name}** has been ${entry.type == 'sell' ? "sold to" : "bought by"} [${CURRENT_USER.username}#${CURRENT_USER.discriminator}](${HOST}/profile/${CURRENT_USER.id}) for ${_emoji(entry.currency)}**${entry.price}**`
+    }
+  });
+}
 
 function destroyEntry(entry) {
   let status, json;
