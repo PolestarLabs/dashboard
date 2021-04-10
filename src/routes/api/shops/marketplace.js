@@ -1,6 +1,7 @@
 const ECO = require("../../../pipelines/economy.js");
 const express = require("express");
 const router = express.Router();
+const marketHook = require("../../../../config.js").webhooks.marketplace;
 
 /*
 
@@ -129,6 +130,8 @@ router.post("/", async (req, res) => {
   const DATA = req.body;
   const PAYLOAD = req.body.pollux ? req.body.LISTING : req.body;
 
+  console.log({PAYLOAD})
+
   // VALIDATION
   if (!PAYLOAD) return res.status(400).json("No Listing Supplied");
   if (PAYLOAD.pollux && !PAYLOAD.author && !req.user)
@@ -137,8 +140,14 @@ router.post("/", async (req, res) => {
 
   PAYLOAD.id = (Date.now()).toString(16).toUpperCase()+process.pid;
   PAYLOAD.timestamp = Date.now();
+  
+  //let {item} = (await getItemMarketDetails(PAYLOAD.item_id)); 
+  let {item,status,info} = await getItemMarketDetails(PAYLOAD.item_id).catch(e=>e); 
+  PAYLOAD.item_type = item.type;
 
-  let {item} = (await getItemMarketDetails(PAYLOAD.item_id)); 
+  console.table({item,status,info});
+  if (!item) return res.status(status).json(info);
+
 
   if (PAYLOAD.type == "sell") {
     let result = await userCanSell(
@@ -177,6 +186,21 @@ router.post("/", async (req, res) => {
   }
 
   await DB.marketplace.new(PAYLOAD);
+
+  PAYLOAD.url = `${HOST}/shop/marketplace/entry/${PAYLOAD.id}`
+
+  PLX.executeWebhook(marketHook.id,marketHook.token,{
+    auth: true,
+    content: "[New marketplace post]("+PAYLOAD.url+")",
+    embeds: [
+      {
+        description: "```json\n" + JSON.stringify(PAYLOAD,0,2) + "```",
+      }
+    ],
+    wait: true
+  }).then(async msg=>{
+    await PLX.crosspostMessage(msg.channel.id,msg.id).then(console.log).catch(console.err);
+  })
 
   return res.status(200).json({ status: "OK", payload: PAYLOAD });
 
@@ -280,7 +304,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
   if(entry.lock) return res.status(409).json({status: "ENTRY IS LOCKED"});
   
   if(entry.type )
-  if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
   if(entry.type !== 'buy') return res.status(403).json({status: "ITEM FOR PURCHASE-ONLY"});
 
 
@@ -389,11 +413,13 @@ function getItemMarketDetails(item) {
           .exec(),
         DB.items.find({ id: item }).lean().exec(),
       ]).catch((e) => {
-        return reject(400, "Bad Request");
+        return reject({status:400, info: "Bad Request"});
       });
     });
+
+    console.log({cos,itm,item})
     const result = cos.concat(itm)[0];
-    if (!result) return reject(404, "item not found");
+    if (!result) return reject({status:404, info: "item not found"});
     const marketplace = await DB.marketplace
       .find({ item_id: result._id })
       .noCache()
