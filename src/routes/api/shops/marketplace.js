@@ -467,14 +467,23 @@ async function processFeedMessage(entry, item, CURRENT_USER) {
   });
 }
 async function updateFeedMessage(oldEntry, newPrice) {
+  //FIXME this looks like some eris shit
+  console.log(1)
   if (!oldEntry.feedMessage) return;
-  const message = await PLX.getMessage(...oldEntry.feedMessage);
+  console.log(2)
+  console.log(oldEntry.feedMessage)
+  console.log(PLX.requestHandler.ratelimits['/channels/792176688070918194/messages/:id'])
+  console.log( require('eris').VERSION )
+  let message = await PLX.getMessage(...oldEntry.feedMessage).timeout(5000);
+  console.log(3)
   let   embed   = message.embeds[0];
   embed.description = embed.description.replace(`**${oldEntry.price}**`,`**${newPrice}**`);
   embed.timestamp = new Date();
-  PLX.editMessage(...oldEntry.feedMessage, { content: message.content, embed });
-  let channelInfo = await PLX.getRESTChannel(oldEntry.feedMessage[0]);
-  PLX.createMessage(channelInfo.id, {embed:{color: embed.color, description: `⬆️ **[\`${oldEntry.id}\`](https://discord.com/channels/${channelInfo.guild.id}/${channelInfo.id}/${message.id})** has been **edited**. New price: ${_emoji(oldEntry.currency)}**${newPrice}** *(was ${oldEntry.price})*` }} )
+  console.log(4)
+  await PLX.editMessage(...oldEntry.feedMessage, { content: message.content, embed });
+  console.log(45)
+  //let channelInfo = await PLX.getRESTChannel(oldEntry.feedMessage[0]);
+  PLX.createMessage(marketHook.channel, {embed:{color: embed.color, description: `⬆️ **[\`${oldEntry.id}\`](https://discord.com/channels/${marketHook.guild}/${marketHook.channel}/${message.id})** has been **edited**. New price: ${_emoji(oldEntry.currency)}**${newPrice}** *(was ${oldEntry.price})*` }} )
 }
 
 function destroyEntry(entry) {
