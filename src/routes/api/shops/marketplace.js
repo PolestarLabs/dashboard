@@ -497,7 +497,7 @@ function getItemMarketDetails(item) {
     const response = {
       item: result,
       max: Math.max(...marketplacePriceMap),
-      min: Math.max(...marketplacePriceMap),
+      min: Math.min(...marketplacePriceMap),
       average:
         marketplacePriceMap.reduce((a, b) => a + b, 0) / marketplace.length,
       entries: marketplace,
