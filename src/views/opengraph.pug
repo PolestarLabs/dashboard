@@ -9,11 +9,12 @@ if opengraph
   meta(property='og:site_name', content= opengraph.sitename || 'Pollux - A Fancy Maid for Fancy Communities')
   meta(property='og:title', content=(opengraph.title||"Pollux Web Dashboard "))
   meta(property='og:description', content=(opengraph.description||'Pollux is your personal Discord Artificial Maid ready to make your days in Discord much more fun and more pretty. '))
-  meta(property='og:image', content=(opengraph.image||'https://cdn.discordapp.com/attachments/435196699259043851/438874840657690635/unknown.png'))
+  if opengraph.image !== false
+    meta(property='og:image', content=(opengraph.image||'https://cdn.discordapp.com/attachments/435196699259043851/438874840657690635/unknown.png'))
   if opengraph.large
     meta(name='twitter:card', content='summary_large_image')
-    meta(name='twitter:site', content='@dasflicksie')
-    meta(name='twitter:creator', content='@dasflicksie')
+  meta(name='twitter:site', content='@maidPollux')
+  meta(name='twitter:creator', content='@dasflicksie')
 
 else  
   block opengraph
