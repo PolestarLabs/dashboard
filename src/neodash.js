@@ -278,6 +278,7 @@ app.use("/images", Express.static(path.join( ASSETS_PATH, './website')));
 app.use("/flairs",    Express.static(path.join( ASSETS_PATH, './cosmetics/flairs')));
 app.use("/medals",    Express.static(path.join( ASSETS_PATH, './cosmetics/medals')));
 app.use("/stickers",  Express.static(path.join( ASSETS_PATH, './cosmetics/stickers')));
+app.use("/items",  Express.static(path.join( ASSETS_PATH, './build/items')));
 app.use("/boosters",  Express.static(path.join( ASSETS_PATH, './build/boosters')));
 app.use("/backdrops", Express.static(path.join( ASSETS_PATH, './cosmetics/backdrops')));
 app.use("/build",     Express.static(path.join( ASSETS_PATH, './build')));
