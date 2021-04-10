@@ -212,14 +212,33 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
         UR : "⭐⭐⭐⭐⭐",
         XR : "⭐⭐⭐⭐⭐⭐⭐"
       }[item.rarity];
-      opengraph.title = `[${entry.item_type.toUpperCase()}] ${item.name} ${defrarity}`
+      opengraph.title = `[${entry.type.toUpperCase()}ING] ${item.name} ${" "}`
       //opengraph.sitename = ((entry.userdata||{}).meta||{}).tag||"-no author-"
       opengraph.sitename = "POLLUX MARKETPLACE"
-      opengraph.description = `📬 ${entry.userdata.meta.tag} | <b>🏷️ ${entry.price} ${entry.currency}</b>`
-      opengraph.image = HOST+item.img
+      opengraph.description = `${defrarity} • ${entry?.item_type?.toUpperCase()||"HM"} • Pollux Marketplace`
+      opengraph.image = false
+      opengraph.color = entry.type == 'sell' ? "#FF3355" : '#A853FA'
       opengraph.type = "arcticle"
+      if (entry?.item_type == 'background') opengraph.large = true;
+      opengraph.sitename = defrarity
+     
+      const oembedObj = {
+        version: "1.0"
+        ,type: "rich"
+        ,provider_name: `📬 ${entry.userdata?.meta?.tag}`
+        ,provider_url: HOST + "/shop/marketplace"
+        ,author_name: `🏷️ ${entry.price} ${entry.currency}`
+        ,author_url: HOST
+        ,thumbnail_url: HOST+item.img
+        ,url: HOST+item.img
+        ,thumbnail_height:200
+        ,thumbnail_width: opengraph.large ? 800 : 200
+        ,maxheight:200
+        ,maxwidth: opengraph.large ? 800 : 200        
+      }
+      const oembed = encodeURIComponent(JSON.stringify(oembedObj));
 
-      res.render('shop/marketplace/entry', {listings,item,entry,fullbase,morefrom,opengraph})
+      res.render('shop/marketplace/entry', {listings,item,entry,fullbase,morefrom,opengraph,oembed})
 
     }else{
 
