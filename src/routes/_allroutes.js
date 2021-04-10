@@ -153,9 +153,18 @@ router.use('/admin',checkAuth, (...args)=>{
 });
 
   router.post('/test', (req,res,nex)=> {
-    console.log(req.body)
+    console.log(req.body);
     res.sendStatus(200)
+
   } );
+  router.get('/testone', (req,res,nex)=> {
+    console.log(req.body);
+    //res.sendStatus(200)
+    res.render('standalone-pages/oembed-test')
+
+  } );
+
+
 
   // STATUSPAGE  
   router.use('/status', (...args)=>{    
