@@ -12,6 +12,8 @@ html(class="no-js" lang=locale||"en")
 
         block prehead
         title= (title?title+" - ":"") + "Pollux: A Fancy Maid for Fancy Communities"
+        if oembed
+            link(rel='alternate' type='application/json+oembed' href ='https://hijola.pollux.gg/oembed?payload='+oembed )
         include opengraph
 
         link(rel="manifest" href="/manifest.webmanifest")
