@@ -475,6 +475,8 @@ const auth = async function(req, res, next) {
   if(req.url.includes('embedarchitect')) return next();
   if(req.url.includes('botbridge')) return next();
   if(req.url.includes('webhook'))   return next();
+  if(req.url.includes('oembed'))   return next();
+  if(req.url.includes('testone'))   return next();
   if(req.url.includes('.jpg'))      return next();
   if(req.url.includes('piece'))     return next();
   if(req.url.includes('status'))    return next();
