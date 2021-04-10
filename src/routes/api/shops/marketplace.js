@@ -127,40 +127,43 @@ router.get("/:item", async (req, res) => {
     pollux = Bot Request Validator 
 */
 router.post("/", async (req, res) => {
+  
   const DATA = req.body;
   const PAYLOAD = req.body.pollux ? req.body.LISTING : req.body;
-
-  console.log({PAYLOAD})
+  console.log(PLX.id,'plx ID');
 
   // VALIDATION
   if (!PAYLOAD) return res.status(400).json("No Listing Supplied");
   if (PAYLOAD.pollux && !PAYLOAD.author && !req.user)
     return res.status(401).json("No Author Supplied");
   if (req.user) PAYLOAD.author = req.user.id;
-
+  const userDiscordData = await userCache.get(PAYLOAD.author);
+console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
+  
   PAYLOAD.id = (Date.now()).toString(16).toUpperCase()+process.pid;
   PAYLOAD.timestamp = Date.now();
   
   //let {item} = (await getItemMarketDetails(PAYLOAD.item_id)); 
-  let {item,status,info} = await getItemMarketDetails(PAYLOAD.item_id).catch(e=>e); 
-  PAYLOAD.item_type = item.type;
+  let {item: ITEM,status,info} = await getItemMarketDetails(PAYLOAD.item_id).catch(e=>e); 
+  PAYLOAD.item_type = ITEM.type;
 
-  console.table({item,status,info});
-  if (!item) return res.status(status).json(info);
+  console.table({item: ITEM,status,info});
+  if (!ITEM) return res.status(status).json(info);
 
 
   if (PAYLOAD.type == "sell") {
     let result = await userCanSell(
       PAYLOAD.author,
       PAYLOAD.currency,    
-      item
+      ITEM
     );
     if (result.res === true) {
-      await DB.users.updateOne(
-        (DATA.itemStatus || {}).prequery ||
-          result.prequery || { id: PAYLOAD.author },
-        (DATA.itemStatus || {}).query || result.query
-      );
+      const finder = (DATA.itemStatus || {}).prequery || result.prequery || { id: PAYLOAD.author };
+      const action = (DATA.itemStatus || {}).query || result.query;
+
+      if (finder === {}) return res.status(400).json("Dangerous Query Result");
+      await DB.users.updateOne(finder,action);
+
     } else {
       return res.status(result.status).json(result.reason);
     }
@@ -169,7 +172,7 @@ router.post("/", async (req, res) => {
       PAYLOAD.author,
       PAYLOAD.currency,
       PAYLOAD.price,
-      item,
+      ITEM,
     );
     if (result.res === true) {
       await ECO.pay(
@@ -185,7 +188,25 @@ router.post("/", async (req, res) => {
     return res.status(400).json("Listing Type Not Set");
   }
 
-  await DB.marketplace.new(PAYLOAD);
+  const pathAssociations = (itm) => {
+    switch (itm.type) {
+      case "background":
+        return ['backgrounds',itm.code];
+      case "medal":
+        return ['medals',itm.icon];
+      case "sticker":
+        return ['stickers',itm.id];
+      case "boosterpack":
+        return ['items',itm.icon];
+
+      default:
+        return ['items',itm.id];
+    }
+  }
+
+  PAYLOAD.img = `/${pathAssociations(ITEM)[0]}/${pathAssociations(ITEM)[1]}.png`;
+
+  //await DB.marketplace.new(PAYLOAD);
 
   PAYLOAD.url = `${HOST}/shop/marketplace/entry/${PAYLOAD.id}`
 
@@ -194,12 +215,38 @@ router.post("/", async (req, res) => {
     content: "[New marketplace post]("+PAYLOAD.url+")",
     embeds: [
       {
-        description: "```json\n" + JSON.stringify(PAYLOAD,0,2) + "```",
+        
+          "description": `Posted ${_emoji(ITEM.rarity)}**${ITEM.name}**`,
+          "author": {
+            "name": userDiscordData.username,
+            "icon_url": userDiscordData.avatarURL
+          },
+          title: PAYLOAD.type == "sell" ? "SALE" : "WTB",
+          "color": 16724821,
+          "thumbnail": {
+            "url": HOST + PAYLOAD.img
+          },
+          "fields": [
+            {
+              "name": "Price",
+              "value": `${_emoji(PAYLOAD.currency)}**${PAYLOAD.price}**`,
+              "inline": true
+            }
+          ],
+          "image": {
+            "url": ""
+          }
+        
+      },
+      {
+        description: ".```json\n" + JSON.stringify(PAYLOAD,0,2) + "```",
       }
     ],
     wait: true
   }).then(async msg=>{
-    await PLX.crosspostMessage(msg.channel.id,msg.id).then(console.log).catch(console.err);
+      const messageChannel = await PLX.getRESTChannel('792176688070918194');
+      if (messageChannel.type !== 5 ) return;
+      await PLX.crosspostMessage(msg.channel.id,msg.id).then(console.log).catch(e=>null);
   })
 
   return res.status(200).json({ status: "OK", payload: PAYLOAD });
@@ -231,8 +278,7 @@ async function awardMarketplaceItem(item,userID,remove){
       query = {$inc: {'modules.inventory.$.count': (remove ? -1 : 1) } };
   }
   let res = await DB.users.set( finder, query ).catch(err=>null);
-  console.log({finder, query})
-  console.log(res)
+  
   if (res) return true;
   else return false;
 }
@@ -252,12 +298,12 @@ router.post("/buy/:entry_id", async (req,res)=>{
 
   let entry = await DB.marketplace.findOne({ id: entry_id }).noCache().lean();
 
+  if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
     
   if(entry.completed) return res.status(410).json({status: "LISTING HAS BEEN TERMINATED"});
   if(entry.lock) return res.status(409).json({status: "ENTRY IS LOCKED"});
 
-  if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
-  if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  //if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
   if(entry.type !== 'sell') return res.status(403).json({status: "ITEM FOR SALE-ONLY"});
 
   let {item} = (await getItemMarketDetails(entry.item_id)); 
@@ -417,7 +463,6 @@ function getItemMarketDetails(item) {
       });
     });
 
-    console.log({cos,itm,item})
     const result = cos.concat(itm)[0];
     if (!result) return reject({status:404, info: "item not found"});
     const marketplace = await DB.marketplace
@@ -447,7 +492,7 @@ function itemInInventory(item, userData) {
   let reason = "UNKNOWN";
   let status = 400;
   let query = {};
-  let prequery = {};
+  let prequery;
 
 
   if (item.type === "boosterpack")
