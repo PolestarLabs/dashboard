@@ -137,7 +137,7 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
     }
 
     res.render('dashboard/main',{ALLITEMS,MDINFO,DCKINFO,
-        boorucollection: BCOL?BCOL.collections.boorusave:[],
+        boorucollection: BCOL?.collections?.boorusave || [],
         endpoint: req.params.endpoint 
     })
 
