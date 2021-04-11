@@ -1,7 +1,8 @@
 const ECO = require("../../../pipelines/economy.js");
 const express = require("express");
 const router = express.Router();
-const marketHook = require("../../../../config.js").webhooks.marketplace;
+const config = require("../../../../config.js");
+const marketHook = config.webhooks.marketplace;
 const axios = require('axios');
 
 /*
@@ -22,8 +23,17 @@ const axios = require('axios');
 */
 
 // ROOT
-router.get("/", cache(60), async (req, res) => {
+
+// RATES
+router.get("/rates", async (req, res) => {
+  // TODO[epic=flicky] Move Global Numbers & Rates to Database ?
+  const { bgPrices, medalPrices,sapphireModifier, jadeModifier } = require( process.env.BOT_PATH + "/resources/lists/GlobalNumbers.js");
+  return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier });
+});
+
+router.get(["/","/:entry"], cache(60), async (req, res) => {
   let queries = {};
+  if (req.params.entry) req.query.id = req.params.entry;
   Object.keys(req.query)
     .filter((qry) =>
       ["id", "item_id", "item_type", "author", "type", "price"].includes(qry)
@@ -42,7 +52,7 @@ router.get("/", cache(60), async (req, res) => {
   }
 
   let lim = Math.min(Number(req.query.limit) || 25, 100);
-  let skip = Number(req.query.skip) || 0;
+  let skip = Number(req.query.skip) || (Number(req.query.page) * 25) || 0;
   let sort = req.query.sort == "oldest" ? 1 : -1;
 
   DB.marketplace
@@ -52,12 +62,13 @@ router.get("/", cache(60), async (req, res) => {
     .skip(skip)
     .then(async (result) => {
       let [marketeers, cosmetics, goods] = await Promise.all([
-        DB.users
+        /*DB.users
           .find(
             { id: { $in: result.map((i) => i.author) } },
             { meta: 1, id: 1 }
           ).lean()
-          .catch((e) => []),
+          .catch((e) => []),*/
+        Promise.all(result.map(async (i) => await userCache.get(i.author))),
         DB.cosmetics
           .find({ _id: { $in: result.map((i) => i.item_id) } }).lean()
           .catch((e) => []),
@@ -76,7 +87,7 @@ router.get("/", cache(60), async (req, res) => {
               .concat(goods)
               .find((i) => i._id == entry.item_id),
           },
-          { userdata: marketeers.find((u) => u.id === entry.author).meta },
+          { userdata: marketeers.find((u) => u.id === entry.author) },
           entry._doc
         );
       });
@@ -89,20 +100,13 @@ router.get("/", cache(60), async (req, res) => {
     });
 });
 
-// RATES
-router.get("/rates", async (req, res) => {
-  // TODO[epic=flicky] Move Global Numbers & Rates to Database ?
-  const { bgPrices, medalPrices,sapphireModifier, jadeModifier } = require( process.env.BOT_PATH + "/resources/lists/GlobalNumbers.js");
-  return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier });
-});
-
 // ITEM INFO
 // - takes an ObjectID
-router.get("/:item", async (req, res) => {
+router.get("/item/:item", async (req, res) => {
   const { item } = req.params;
   getItemMarketDetails(item)
-    .catch((code, reason) => {
-      res.status(code).json({ reason });
+    .catch(({status,info}) => {
+      res.status(status).json({ status,info });
     })
     .then((response) => {
       res.json(response);
@@ -246,11 +250,11 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
             }*/
           ],
           footer: {
-            text: `${(itemMarketDetails.entries?.length || 0)} previous entries of this item. [ 📦 ${ 
+            text: `[ 📦 ${ 
               itemMarketDetails.entries?.filter(x=>x.type=='sell')?.length ||0
             } Selling | 🛒 ${ 
               itemMarketDetails.entries?.filter(x=>x.type=='buy')?.length ||0
-            } Buying ]`
+            } Buying ] ${(itemMarketDetails.entries?.length || 0)} previous entries of this item`
           },
           timestamp: new Date(PAYLOAD.timestamp)
         
@@ -260,8 +264,8 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
   }).then(async msg=>{
       const messageChannel = await PLX.getRESTChannel('792176688070918194');
       await DB.marketplace.updateOne({id: PAYLOAD.id},{$set:{feedMessage: [msg.channel.id,msg.id] }});
-      if (messageChannel.type !== 5 ) return;
-      await PLX.crosspostMessage(msg.channel.id,msg.id).then(console.log).catch(e=>null);
+      //if (messageChannel.type !== 5 ) return;
+      //await PLX.crosspostMessage(msg.channel.id,msg.id).then(console.log).catch(e=>null);
   })
 
   return res.status(200).json({ status: "OK", payload: {PAYLOAD,itemMarketDetails} });
@@ -474,14 +478,19 @@ async function updateFeedMessage(oldEntry, newPrice) {
   console.log(oldEntry.feedMessage)
   console.log(PLX.requestHandler.ratelimits['/channels/792176688070918194/messages/:id'])
   console.log( require('eris').VERSION )
-  let message = await PLX.getMessage(...oldEntry.feedMessage).timeout(5000);
+  
+  let message = (await axios.get("https://discord.com/api/v8/channels/"+oldEntry.feedMessage[0]+"/messages/"+oldEntry.feedMessage[1],{headers:{"Authorization": config.token}})).data
+  //let message = await PLX.getMessage(...oldEntry.feedMessage).timeout(5000);
   console.log(3)
   let   embed   = message.embeds[0];
   embed.description = embed.description.replace(`**${oldEntry.price}**`,`**${newPrice}**`);
   embed.timestamp = new Date();
   console.log(4)
-  await PLX.editMessage(...oldEntry.feedMessage, { content: message.content, embed });
+  await wait(4);
+  //await PLX.editMessage(...oldEntry.feedMessage, { content: message.content, embed });
+  (await axios.patch("https://discord.com/api/v8/channels/"+oldEntry.feedMessage[0]+"/messages/"+oldEntry.feedMessage[1],{ content: message.content, embed },{headers:{"Authorization": config.token} } )).data
   console.log(45)
+  await wait(4);
   //let channelInfo = await PLX.getRESTChannel(oldEntry.feedMessage[0]);
   PLX.createMessage(marketHook.channel, {embed:{color: embed.color, description: `⬆️ **[\`${oldEntry.id}\`](https://discord.com/channels/${marketHook.guild}/${marketHook.channel}/${message.id})** has been **edited**. New price: ${_emoji(oldEntry.currency)}**${newPrice}** *(was ${oldEntry.price})*` }} )
 }
