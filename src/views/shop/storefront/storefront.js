@@ -74,6 +74,18 @@ const STORE = new Vue({
   computed: {
   },
   methods: {
+    buttonBuy(entry){
+      console.log({entry},1)
+      this.currentModalItem = entry.itemdata;
+      console.log(1)
+
+    },
+    buttonSell(entry){
+      console.log({entry},1)
+      this.currentModalItem = entry.itemdata;
+      console.log(12)
+
+    },
     firstOfWeek(d) {
       d = new Date(d); 
       let diff = d.getDate() - d.getDay() + (d.getDay() == 0 ? -6:1);
@@ -115,7 +127,7 @@ const STORE = new Vue({
       makeImage('/images/demo/profile_dummy.png')
     ]).then(items=>{
         const [bg,base] = items;
-        ctx.drawImage(bg, 60, 14);
+        ctx.drawImage(bg, 60, 14,720,360);
         ctx.drawImage(base, 0, 0);
       })
     },0)
@@ -222,7 +234,7 @@ fetch("/api/items/search?type=boosterpack").then((r) =>
   r.json().then(async (res) => (STORE.boosters = res.slice(0, 24)))
 );
 
-fetch("/api/marketplace?limit=10").then((r) =>
+fetch("/api/marketplace?limit=100").then((r) =>
   r.json().then(async (res) => (STORE.market = res))
 );
 
