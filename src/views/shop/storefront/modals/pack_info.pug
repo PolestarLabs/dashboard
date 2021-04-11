@@ -1,6 +1,6 @@
 
 .plx-modal-dialog(:class="currentModalItem.rarity + ' ' + (currentModalItem.type === 'background'?'plx-width-2-3@m '+currentModalItem.type:'') ").plx-margin-auto-vertical.raritybox 
-    div(v-for="pack in [currentModalItem.packData || currentModalItem]" v-if="pack.gemcraft")
+    div(v-for="pack in [currentModalItem.packData || currentModalItem]" v-if="pack.gemcraft && pack.type=='boosterpack'")
         button.plx-modal-close-default(type='button', plx-close).modal-close
         .plx-modal-header
             h2.plx-modal-title {{pack.name}}
