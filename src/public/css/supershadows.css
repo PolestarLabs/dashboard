@@ -1,5 +1,5 @@
 .supershadow-tools, .supershadow-tools *{
-  --text-shadow: var(--line-col,#223);
+  --text-shadow: var(--line-col,#112);
   --outline-1: 1px 1px 1px var(--line-col), -1px -1px 1px var(--line-col),
     -1px 1px 1px var(--line-col), 1px 0px 1px var(--line-col),
     -1px 0px 1px var(--line-col), 0px 1px 1px var(--line-col),
