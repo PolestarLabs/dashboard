@@ -1,3 +1,5 @@
+//FIXME inconsistency between "reason" and "status"
+
 const ECO = require("../../../pipelines/economy.js");
 const express = require("express");
 const router = express.Router();
@@ -160,6 +162,7 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
 
       if (finder === {}) return res.status(400).json("Dangerous Query Result");
       await DB.users.updateOne(finder,action);
+      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? 50 : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
 
     } else {
       return res.status(result.status).json(result.reason);
@@ -175,9 +178,11 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
       await ECO.pay(
         PAYLOAD.author,
         Math.abs(PAYLOAD.price),
-        "marketplace_buy",
+        "Marketplace Listing Deposit",
         PAYLOAD.currency
       );
+      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? 50 : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
+
     } else {
       return res.status(result.status).json(result.reason);
     }
@@ -297,7 +302,7 @@ router.post("/buy/:entry_id", async (req,res)=>{
   if(entry.completed) return res.status(410).json({status: "LISTING HAS BEEN TERMINATED"});
   if(entry.lock) return res.status(409).json({status: "ENTRY IS LOCKED"});
 
-  //if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
+  if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
   if(entry.type !== 'sell') return res.status(403).json({status: "ITEM FOR SALE-ONLY"});
 
   let {item} = (await getItemMarketDetails(entry.item_id)); 
@@ -312,8 +317,9 @@ router.post("/buy/:entry_id", async (req,res)=>{
   let sale = await awardMarketplaceItem(item,CURRENT_USER.id,false);
   
   if(sale) {
-    ECO.transfer(CURRENT_USER.id,entry.author,entry.price,'MARKETPLACE [BUY/SOLD]',entry.currency)
+    ECO.transfer(CURRENT_USER.id,entry.author,entry.price,'MARKETPLACE [PURCHASE]',entry.currency)
     .then(async receipt=>{
+      await ECO.pay(entry.author, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", PAYLOAD.currency);
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       if(entry.feedMessage){
         await processFeedMessage(entry, item, CURRENT_USER);
@@ -351,7 +357,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
   if(entry.lock) return res.status(409).json({status: "ENTRY IS LOCKED"});
   
   if(entry.type )
-  //if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
+  if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
   if(entry.type !== 'buy') return res.status(403).json({status: "ITEM FOR PURCHASE-ONLY"});
 
 
@@ -372,8 +378,9 @@ router.post("/sell/:entry_id", async (req,res)=>{
   let sale = await awardMarketplaceItem(item,CURRENT_USER.id,true);
 
   if(sale) {
-    ECO.arbitraryAudit(entry.author, CURRENT_USER.id, entry.price, 'MARKETPLACE [SELL/BOUGHT]', entry.currency)
+    ECO.arbitraryAudit(entry.author, CURRENT_USER.id, entry.price, 'MARKETPLACE [SALE]', entry.currency)
     .then(async receipt=>{
+      await ECO.pay(CURRENT_USER.id, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", PAYLOAD.currency);
       await DB.users.set(CURRENT_USER.id, {$inc: {["modules." + entry.currency]:entry.price} });
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       
@@ -651,7 +658,7 @@ async function userCanSell(id, currency, item, softCheck=false) {
     if (!(await DB.users.get(id)))
       return { res: false, reason: "USER NOT FOUND", status: 401 };
 
-    if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 100, currency)))
+    if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 50, currency)))
       return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
     if (userData.amtItem("sph-license") < 1 && currency === "SPH") {
       res = false;
