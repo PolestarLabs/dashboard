@@ -128,6 +128,7 @@ router.post("/", async (req, res) => {
   const DATA = req.body;
   const PAYLOAD = req.body.pollux ? req.body.LISTING : req.body;
   
+  console.log({DATA,PAYLOAD});
 
   // VALIDATION
   if (!PAYLOAD) return res.status(400).json("No Listing Supplied");
@@ -143,9 +144,9 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
   //let {item} = (await getItemMarketDetails(PAYLOAD.item_id)); 
   const itemMarketDetails = await getItemMarketDetails(PAYLOAD.item_id).catch(e=>e); 
   let {item: ITEM,status,info} = itemMarketDetails;
-  
-  PAYLOAD.item_type = ITEM.type;
+  console.log({ITEM})
   if (!ITEM) return res.status(status).json(info);
+  PAYLOAD.item_type = ITEM.type;
 
   if (PAYLOAD.type == "sell") {
     let result = await userCanSell(
@@ -280,14 +281,14 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
 router.post("/buy/:entry_id", async (req,res)=>{
   const {entry_id} = req.params;
     
-  
   let CURRENT_USER;
   if(!req.user) {    
     if ( "Bot " + req.body?.token === PLX.token) CURRENT_USER = req.body.user;
     else return res.status(403).json({status: "LARIS TOKEN MISMATCH"});
   }else{CURRENT_USER = req.user}
   if (!CURRENT_USER)  return res.status(401).json({status: "CURRENT_USER MISSING"});
-
+  
+  console.log({CURRENT_USER})
 
   let entry = await DB.marketplace.findOne({ id: entry_id }).noCache().lean();
 
@@ -302,7 +303,10 @@ router.post("/buy/:entry_id", async (req,res)=>{
   let {item} = (await getItemMarketDetails(entry.item_id)); 
   let canBuy = await userCanBuy(CURRENT_USER.id,entry.currency,entry.price,item);
   
-  if(!canBuy.res) return res.status(canBuy.status).json(canBuy);
+  if(!canBuy.res) {
+    await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
+    return res.status(canBuy.status).json(canBuy);
+  }
 
   await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: true}});
   let sale = await awardMarketplaceItem(item,CURRENT_USER.id,false);
@@ -317,7 +321,8 @@ router.post("/buy/:entry_id", async (req,res)=>{
       return res.status(200).json({status:'OK',receipt})
     }).catch(async err=>{
       await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
-      return res.status(500).json({status:'ERROR DURING PAYMENT PHASE'})
+      console.error(err)
+      return res.status(500).json({status: err.message })
     });
   }else{
     await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
@@ -359,9 +364,9 @@ router.post("/sell/:entry_id", async (req,res)=>{
 
   let canSell = await userCanSell(CURRENT_USER.id,entry.currency,item,true);
   
-  
+  console.log({canSell})
 
-  if(!canSell.res) return res.status(canSell.status).json({canSell,item});
+  if(!canSell.res) return res.status(canSell.status).json(canSell);
   await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: true}});
   
   let sale = await awardMarketplaceItem(item,CURRENT_USER.id,true);
@@ -382,7 +387,8 @@ router.post("/sell/:entry_id", async (req,res)=>{
     }).catch(async err=>{
       console.error(err)
       await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
-     return res.status(500).json({status:'ERROR DURING PAYMENT PHASE'})
+      console.error(err)
+     return res.status(500).json({status: err.message})
     });
   }else{
     await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
@@ -435,6 +441,7 @@ router.patch("/:entry", async (req,res)=>{
 
 async function awardMarketplaceItem(item,userID,remove){
   let query = {};
+  let errorQuery = {};
   let finder = {id: userID}
   let operation = remove ? "$pull" : "$addToSet";
 
@@ -454,8 +461,17 @@ async function awardMarketplaceItem(item,userID,remove){
     default:       
       finder['modules.inventory.id'] = item.id;
       query = {$inc: {'modules.inventory.$.count': (remove ? -1 : 1) } };
+      errorQuery = {$push: {'modules.inventory': {id: item.id, count: 1} } };
   }
-  let res = await DB.users.set( finder, query ).catch(err=>null);
+  
+  let res = await DB.users.set( finder, query ).catch(err=> {      
+      if (errorQuery) {
+        delete finder['modules.inventory.id'];
+        console.log({finder,errorQuery})
+        return DB.users.set( finder, errorQuery ).catch(err2=>console.error(err2) && null);
+      }
+      console.error(err) && null;
+  });
   
   if (res) return true;
   else return false;
@@ -515,6 +531,7 @@ function destroyEntry(entry) {
 }
 
 function getItemMarketDetails(item) {
+
   return new Promise(async (resolve, reject) => {
     const [cos, itm] = await Promise.all([
       DB.cosmetics.find({ _id: item }).lean().exec(),
@@ -530,7 +547,7 @@ function getItemMarketDetails(item) {
         return reject({status:400, info: "Bad Request"});
       });
     });
-
+    console.log({cos,itm})
     const result = cos.concat(itm)[0];
     if (!result) return reject({status:404, info: "item not found"});
     const marketplace = await DB.marketplace
@@ -542,6 +559,7 @@ function getItemMarketDetails(item) {
       (x) => (x.currency === "SPH" ? 1000 : 1) * x.price
     );
 
+
     const response = {
       item: result,
       max: Math.max(...marketplacePriceMap),
@@ -550,6 +568,7 @@ function getItemMarketDetails(item) {
         marketplacePriceMap.reduce((a, b) => a + b, 0) / marketplace.length,
       entries: marketplace,
     };
+
     return resolve(response);
   });
 }
@@ -567,7 +586,7 @@ function itemInInventory(item, userData) {
     item_shallow_id = item_shallow_id + "_booster";
 
   if (["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)){
-    if (userData.amtItem(item.id) == 0 ) {
+    if ( userData.modules.inventory.find(it=>it.id === item.id)?.count < 1 ) {
       res = false;
       reason = "ITEM NOT IN INVENTORY";
       status = 404;
@@ -625,10 +644,14 @@ function itemInInventory(item, userData) {
 }
 // might need refactor
 async function userCanSell(id, currency, item, softCheck=false) {
+
+  const userData = await DB.users.findOne({id}).noCache();
+
   if (!softCheck){
     if (!(await DB.users.get(id)))
       return { res: false, reason: "USER NOT FOUND", status: 401 };
-    if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 300, currency)))
+
+    if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 100, currency)))
       return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
     if (userData.amtItem("sph-license") < 1 && currency === "SPH") {
       res = false;
@@ -637,9 +660,9 @@ async function userCanSell(id, currency, item, softCheck=false) {
     }
   }
 
-  const userData = await DB.users.findOne({id}).noCache();
+ 
 
-  let { res, reason, status, prequery, query } = itemInInventory(item, userData);
+  let { res, reason, status, prequery, query } = await itemInInventory(item, userData);
 
   if( !isTradeable(item) ){
     res = false;

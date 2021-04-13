@@ -50,7 +50,7 @@
                 i: .plx-sapphire.icon24.curr_icon_3
                 .plx-margin-auto
                 .price
-                    span.face() {{ miliarize( Math.ceil((currentModalItem.price || (defaultPrices[currentModalItem.type]||{})[currentModalItem.rarity]||0) * defaultPrices.sapphireModifier +2) || "N/A" ,2,' ') }}
+                    span.face() {{ miliarize( Math.ceil((currentModalItem.price || (defaultPrices[currentModalItem.type]||{})[currentModalItem.rarity]||0) * ( 1||defaultPrices.sapphireModifier +2)) || "N/A" ,2,' ') }}
                 .plx-margin-auto
  
                     

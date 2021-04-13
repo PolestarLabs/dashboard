@@ -1,6 +1,6 @@
 ul.plx-flex.plx-flex-center 
-    li( v-for="(entry,i) in market" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}" v-if="!entry.completed").plx-animation-slide-bottom-small
-        .market-entry.raritybox(  v-for="item in [entry.itemdata]",  v-if="(!!item)", :class="[item.type,'raritybox',item.rarity,(entry.lock ? 'plx-disabled' : '')].join(' ')")
+    li( v-for="(entry,i) in market" :data-index='i' v-bind:style="{'animation-delay': timeFun(i) + 'ms'}" v-if="!entry.completed && entry.itemdata").plx-animation-slide-bottom-small
+        .market-entry.raritybox(  v-for="item in [entry.itemdata]", :class="[item.type,'raritybox',item.rarity,(entry.lock ? 'plx-disabled' : '')].join(' ')")
            div(v-if='item && entry') 
             
 

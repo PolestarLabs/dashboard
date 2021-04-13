@@ -329,7 +329,7 @@ function shuffle(array) {
               }else if(STORE && type === 'marketplace'){
                 let itemToChange = STORE.market.find(e=>e.id == marketOps.id);
                 if (itemToChange){
-                  itemToChange.locked = true;                  
+                  itemToChange.lock = true;                  
                 }
               }
 
