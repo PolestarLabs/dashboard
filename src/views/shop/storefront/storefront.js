@@ -317,7 +317,7 @@ function shuffle(array) {
               }
               
               Swal.update( newSwalOptions );
-              return Swal.showValidationMessage(val.status);
+              return Swal.showValidationMessage(val.reason || val.status);
             }else{
               if(STORE && type!="marketplace"){
                 STORE.userdata.modules[
