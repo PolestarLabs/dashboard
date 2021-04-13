@@ -33,7 +33,7 @@ router.get("/rates", async (req, res) => {
   return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier });
 });
 
-router.get(["/","/:entry"], cache(60), async (req, res) => {
+router.get(["/","/:entry"],  async (req, res) => {
   let queries = {};
   if (req.params.entry) req.query.id = req.params.entry;
   Object.keys(req.query)
@@ -63,6 +63,7 @@ router.get(["/","/:entry"], cache(60), async (req, res) => {
     .limit(lim)
     .skip(skip)
     .then(async (result) => {
+      console.log({result})
       let [marketeers, cosmetics, goods] = await Promise.all([
         /*DB.users
           .find(
@@ -72,11 +73,11 @@ router.get(["/","/:entry"], cache(60), async (req, res) => {
           .catch((e) => []),*/
         Promise.all(result.map(async (i) => await userCache.get(i.author))),
         DB.cosmetics
-          .find({ _id: { $in: result.map((i) => i.item_id) } }).lean()
+          .find({ _id: { $in: result.map((i) => i.item_id).filter(x=> parseInt(x) && x.length == 24) } }).lean()
           .catch((e) => []),
         DB.items
-          .find({ _id: { $in: result.map((i) => i.item_id) } }).lean()
-          .catch((e) => []),
+          .find({ _id: { $in: result.map((i) => i.item_id).filter(x=> parseInt(x) && x.length == 24) } }).lean()
+          .catch((e) =>  console.error(e) ),
       ]).catch((err) => {
         console.error(result.map((i) => i.item_id));
         res.status(500).send("ERROR");
@@ -324,7 +325,7 @@ router.post("/buy/:entry_id", async (req,res)=>{
       if(entry.feedMessage){
         await processFeedMessage(entry, item, CURRENT_USER);
       }
-      return res.status(200).json({status:'OK',receipt})
+      return res.status(200).json({status:'OK',receipt});
     }).catch(async err=>{
       await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
       console.error(err)
