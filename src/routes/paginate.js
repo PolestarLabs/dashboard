@@ -48,6 +48,10 @@ exports.run = async function (req, res, next, options={}) {
             endpointBase = "userDB"
             queryString  = {id:userID||req.query.user}
             break;
+        //case "marketplace":
+        //    endpointBase = "marketplace"
+        //    queryString  = {lock:{$exists:false}}
+        //    break;
         case "usersrank":
             endpointBase = "userDB"
             queryString  = {"modules.level":{$gte:5}}
@@ -107,7 +111,7 @@ exports.run = async function (req, res, next, options={}) {
                 
                 {$project: {			
                     item_id: {$convert: {input: "$item_id",to:"objectId", onError:null} }
-                    ,id:0,type:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1
+                    ,id:0,type:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1,lock: 1, completed: 1,
                 }},
                 {$lookup: {from:"userdb",localField:"author",foreignField:"id",as:"userdata"}},	
                 {$lookup: {from:"cosmetics",localField:"item_id",foreignField:"_id",as:"cosdata"}},
@@ -123,7 +127,7 @@ exports.run = async function (req, res, next, options={}) {
                     {'cosdata.series': { $regex: _filter  } },
                     {'userdata.meta.username': { $regex: _filter  } },
                 ]
-                } }:{$match:{}}),
+                } }:{$match:{lock: {$exists:false}}}),
 
                 
                 {$sort: _sorting },        
@@ -135,11 +139,11 @@ exports.run = async function (req, res, next, options={}) {
                     itemdata:{
                         $setUnion: ["$cosdata","$junkdata"]
                     },
-                    junkdata:1,cosdata:1, userdata:{meta:1}}
+                    junkdata:1,cosdata:1, userdata:{meta:1},lock: 1, completed: 1}
                 },
                 {$unwind: "$itemdata"},{
                     $project: {
-                        type:1,item_id:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1, 
+                        type:1,item_id:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1, lock: 1, completed: 1,
                         userdata:1,
                         itemdata: {
                             id:1,code:1,icon:1,rarity:1,name:1,event:1,series:1,BUNDLE:1,
