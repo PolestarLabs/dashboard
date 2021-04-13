@@ -48,6 +48,10 @@ exports.run = async function (req, res, next, options={}) {
             endpointBase = "userDB"
             queryString  = {id:userID||req.query.user}
             break;
+        case "marketplace":
+            endpointBase = "marketplace"
+            queryString  = {locked:{$exists:false}}
+            break;
         case "usersrank":
             endpointBase = "userDB"
             queryString  = {"modules.level":{$gte:5}}
