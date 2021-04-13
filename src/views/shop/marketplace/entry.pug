@@ -60,14 +60,14 @@ block content
                         .plx-width-1-2
                             p More people <b>selling</b> this item.
                                     
-                            each entry,i in listings.filter(lis=>lis.type==='sell')
+                            each entry,i in listings.filter(lis=>lis.type==='sell' && !lis.lock)
                                     if i <10
                                         include market_entry_sell
                                         
                         .plx-width-1-2
                             p More people <b>buying</b> this item.
                                     
-                            each entry,i in listings.filter(lis=>lis.type==='buy')
+                            each entry,i in listings.filter(lis=>lis.type==='buy' && !lis.lock)
                                     if i <10
                                         include market_entry_sell
                                         

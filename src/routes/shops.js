@@ -140,7 +140,7 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
 
   let [marketplace,prefbase] = await Promise.all([
      DB.marketplace.aggregate([
-       {$match: {$or: [{author: entry.author}, {item_id: entry.item_id }] } },
+       {$match: {$or: [{author: entry.author}, {item_id: entry.item_id }] , lock:{$exists:false}} },
    {$project: {			
        item_id: {$convert: {input: "$item_id",to:"objectId", onError:null} }
        ,type:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1
@@ -193,8 +193,8 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
      {}
   ]);
 
-  let listings = marketplace.filter(it=>it.item_id == entry.item_id);
-  let morefrom = marketplace.filter(it=>it.author == entry.author);
+  let listings = marketplace.filter(it=>it.item_id == entry.item_id && !it.lock);
+  let morefrom = marketplace.filter(it=>it.author == entry.author && !it.lock);
   entry = listings.find(x=>x.id==entry.id)
 
   if (entry) {

@@ -16,7 +16,7 @@ if entry.userdata
     -item_pic = ""+item.img
 
 
-    .market-entry(class=item.rarity, style=(entry.lock ? "display:none;" : '.'), data-itype=entry.item_type, data-rarity=item.rarity,  id=entry.id )
+    .market-entry(class=item.rarity+(" "+(entry.lock?"plx-hidden":"")), style=(entry.lock ? "display:none;" : '.'), data-itype=entry.item_type, data-rarity=item.rarity,  id=entry.id )
         //pre= JSON.stringify(entry)
         a.piece-one(href=`/shop/marketplace/entry/${entry.id}`) 
             .picture: div(plx-img style="background-image:url("+item_pic+")" )
