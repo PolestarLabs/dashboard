@@ -272,7 +272,8 @@ function shuffle(array) {
 
 // MODALS
  
-  function buyStoreItem(type,item,currency="RBN"){
+  function buyStoreItem(type,item,currency="RBN",marketOps = {}){
+    
     Swal.fire({
       title: `Making an excellent acquisition...`,
       allowEscapeKey: () => !Swal.isLoading(),
@@ -282,7 +283,7 @@ function shuffle(array) {
       onOpen: Swal.clickConfirm,    
       preConfirm: () =>
         fetch(
-          `/api/shop/${type}/buy/${item}`,
+          `/api/shop/${type}/${(marketOps.type=='buy'?'sell':'buy') || 'buy'}/${item}`,
           {
             method:"POST",
             headers: {'Content-Type': 'application/json'},
@@ -316,12 +317,15 @@ function shuffle(array) {
               Swal.update( newSwalOptions );
               return Swal.showValidationMessage(val.status);
             }else{
-              STORE.userdata.modules[
-                (type=="background"?"bg"
-                :type=="flair"?"flairs"
-                :type)
-                + "Inventory"
-              ].push(item)
+              if(STORE){
+                STORE.userdata.modules[
+                  (type=="background"?"bg"
+                  :type=="flair"?"flairs"
+                  :type)
+                  + "Inventory"
+                ].push(item)
+              }
+
               return Swal.fire({
                 title: "Yay!",
                 text: `Your ${type} is in your inventory. What's next?`,
