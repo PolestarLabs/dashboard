@@ -1,3 +1,4 @@
+
 if entry.userdata.meta
     -item = (fullbase||[]).find(itm=>itm.type == entry.item_type && itm.id == entry.itemid)
     -item = entry.itemdata
@@ -16,7 +17,7 @@ if entry.userdata.meta
 
 
     .market-entry(class=item.rarity data-itype=entry.item_type data-rarity=item.rarity  id=entry.id )
-        a.piece-one(href=`http://beta.pollux.gg/shop/marketplace/entry/${entry.id}`) 
+        a.piece-one(href=`/shop/marketplace/entry/${entry.id}`) 
             .picture: div(plx-img style="background-image:url("+item_pic+")" )
             .name
                 .feat-text: span= item.name
@@ -39,10 +40,11 @@ if entry.userdata.meta
                 div.d-time ---
             .trade
                 if entry.type == "sell"
-                    button.plx-button.plx-button-small.plx-button-primary
+                    
+                    button.plx-button.plx-button-small.plx-button-primary(onclick="buyStoreItem('marketplace','"+entry.id+"','"+entry.currency+"', {type:'sell'} )")
                         | BUY
                 if entry.type == "buy"
-                    button.plx-button.plx-button-small.plx-button-secondary
+                    button.plx-button.plx-button-small.plx-button-secondary(onclick="buyStoreItem('marketplace','"+entry.id+"','"+entry.currency+"', {type:'buy'} )")
                         | SELL
 
                 | &#x2002

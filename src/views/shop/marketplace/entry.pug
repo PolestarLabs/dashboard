@@ -1,6 +1,9 @@
 extends ../../layout 
 block head          
     script window.paceOptions = {document:false,ghostTime: 800, restartOnRequestAfter: 300, }
+    script
+        include buystoreitem.js
+    script(src='/js/sweetalert.js')
 block content
     .wrapper
         include ../../navbar
