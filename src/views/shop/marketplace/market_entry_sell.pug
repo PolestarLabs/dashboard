@@ -1,5 +1,5 @@
 
-if entry.userdata.meta
+if entry.userdata
     -item = (fullbase||[]).find(itm=>itm.type == entry.item_type && itm.id == entry.itemid)
     -item = entry.itemdata
     -
@@ -16,7 +16,8 @@ if entry.userdata.meta
     -item_pic = ""+item.img
 
 
-    .market-entry(class=item.rarity data-itype=entry.item_type data-rarity=item.rarity  id=entry.id )
+    .market-entry(class=item.rarity, style=(entry.lock ? "display:none;" : '.'), data-itype=entry.item_type, data-rarity=item.rarity,  id=entry.id )
+        //pre= JSON.stringify(entry)
         a.piece-one(href=`/shop/marketplace/entry/${entry.id}`) 
             .picture: div(plx-img style="background-image:url("+item_pic+")" )
             .name
