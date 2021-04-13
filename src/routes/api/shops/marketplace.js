@@ -625,24 +625,21 @@ function itemInInventory(item, userData) {
 }
 // might need refactor
 async function userCanSell(id, currency, item, softCheck=false) {
-  if (!(await DB.users.get(id)))
-    return { res: false, reason: "USER NOT FOUND", status: 401 };
-  if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 300, currency)))
-    return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
+  if (!softCheck){
+    if (!(await DB.users.get(id)))
+      return { res: false, reason: "USER NOT FOUND", status: 401 };
+    if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 300, currency)))
+      return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
+    if (userData.amtItem("sph-license") < 1 && currency === "SPH") {
+      res = false;
+      reason = "NO SAPPHIRE LICENSE";
+      status = 401;
+    }
+  }
 
   const userData = await DB.users.findOne({id}).noCache();
 
-  // Check item in inventory.
-  // Positive if
-  //  • item is in inventory
-
   let { res, reason, status, prequery, query } = itemInInventory(item, userData);
- 
-  if (!softCheck && userData.amtItem("sph-license") < 1 && currency === "SPH") {
-    res = false;
-    reason = "NO SAPPHIRE LICENSE";
-    status = 401;
-  }
 
   if( !isTradeable(item) ){
     res = false;
