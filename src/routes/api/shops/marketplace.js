@@ -302,7 +302,7 @@ router.post("/buy/:entry_id", async (req,res)=>{
   let {item} = (await getItemMarketDetails(entry.item_id)); 
   let canBuy = await userCanBuy(CURRENT_USER.id,entry.currency,entry.price,item);
   
-  if(!canBuy.res) return res.status(canBuy.status).json({canBuy,item});
+  if(!canBuy.res) return res.status(canBuy.status).json(canBuy);
 
   await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: true}});
   let sale = await awardMarketplaceItem(item,CURRENT_USER.id,false);
