@@ -57,8 +57,10 @@ router.get('/:endpoint', cache(0.1),  (req,res) => {
                 })
         
         let sort = {_id:-1}
-        queries.display = true;
-        queries.crafted = !!req.query.craftables;
+        if(!req.query.all){
+            queries.display = true;
+            queries.crafted = !!req.query.craftables;
+        }
         DB.items.find(queries,{emoji:0,usefile:0,altEmoji:0})
         .skip(parseInt(req.query.skip)||0)
         .limit( parseInt(req.query.lim)||50)

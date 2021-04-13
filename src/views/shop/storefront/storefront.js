@@ -74,6 +74,18 @@ const STORE = new Vue({
   computed: {
   },
   methods: {
+    buttonBuy(entry){
+      console.log({entry},1)
+      this.currentModalItem = entry.itemdata;
+      console.log(1)
+
+    },
+    buttonSell(entry){
+      console.log({entry},1)
+      this.currentModalItem = entry.itemdata;
+      console.log(12)
+
+    },
     firstOfWeek(d) {
       d = new Date(d); 
       let diff = d.getDate() - d.getDay() + (d.getDay() == 0 ? -6:1);
@@ -115,7 +127,7 @@ const STORE = new Vue({
       makeImage('/images/demo/profile_dummy.png')
     ]).then(items=>{
         const [bg,base] = items;
-        ctx.drawImage(bg, 60, 14);
+        ctx.drawImage(bg, 60, 14,720,360);
         ctx.drawImage(base, 0, 0);
       })
     },0)
@@ -222,7 +234,7 @@ fetch("/api/items/search?type=boosterpack").then((r) =>
   r.json().then(async (res) => (STORE.boosters = res.slice(0, 24)))
 );
 
-fetch("/api/marketplace?limit=10").then((r) =>
+fetch("/api/marketplace?limit=100").then((r) =>
   r.json().then(async (res) => (STORE.market = res))
 );
 
@@ -260,7 +272,8 @@ function shuffle(array) {
 
 // MODALS
  
-  function buyStoreItem(type,item,currency="RBN"){
+  function buyStoreItem(type,item,currency="RBN",marketOps = {}){
+    
     Swal.fire({
       title: `Making an excellent acquisition...`,
       allowEscapeKey: () => !Swal.isLoading(),
@@ -270,7 +283,7 @@ function shuffle(array) {
       onOpen: Swal.clickConfirm,    
       preConfirm: () =>
         fetch(
-          `/api/shop/${type}/buy/${item}`,
+          `/api/shop/${type}/${(marketOps.type=='buy'?'sell':'buy') || 'buy'}/${item}`,
           {
             method:"POST",
             headers: {'Content-Type': 'application/json'},
@@ -278,13 +291,15 @@ function shuffle(array) {
           }
         ).then((r) =>
           r.json().then( val=> {
+           console.log({val,rOk:r.ok,r})
             if(!r.ok){
               const newSwalOptions = {
                 title : "Making an excellent acquisition... or not.",
                 showCancelButton : true,
                 showCloseButton : true,
               }
-              if(val.code == 0xC1){
+              
+              if(val.code == 0xC1 || val.status == "OK"){
                 currency = currency == 'RBN' ? 'SPH' : 'RBN';
                 newSwalOptions.confirmButtonText = `Try with ${currency}`
                 newSwalOptions.confirmButtonColor = currency == 'SPH' ? '#5599F0' : '#F03355';                    
@@ -302,14 +317,22 @@ function shuffle(array) {
               }
               
               Swal.update( newSwalOptions );
-              return Swal.showValidationMessage(val.status);
+              return Swal.showValidationMessage(val.reason || val.status);
             }else{
-              STORE.userdata.modules[
-                (type=="background"?"bg"
-                :type=="flair"?"flairs"
-                :type)
-                + "Inventory"
-              ].push(item)
+              if(STORE && type!="marketplace"){
+                STORE.userdata.modules[
+                  (type=="background"?"bg"
+                  :type=="flair"?"flairs"
+                  :type)
+                  + "Inventory"
+                ].push(item)
+              }else if(STORE && type === 'marketplace'){
+                let itemToChange = STORE.market.find(e=>e.id == marketOps.id);
+                if (itemToChange){
+                  itemToChange.lock = true;                  
+                }
+              }
+
               return Swal.fire({
                 title: "Yay!",
                 text: `Your ${type} is in your inventory. What's next?`,
@@ -326,7 +349,7 @@ function shuffle(array) {
               
             }
 
-          }).catch(err=> Swal.fire("Error!","Something went fucky wucky","error") )
+          }).catch(err=> Swal.fire("Error!","Something went fucky wucky","error") && console.error(err) )
         )
     });
 }

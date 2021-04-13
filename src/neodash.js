@@ -418,8 +418,13 @@ const AcquireDiscordPayload = (TOKEN,req) => {
 const VARS = require("./pipelines/vars.js");
 const authCacheExpiration = new Map();
 
+app.use(function(req,res,next){
+  res.locals.EVENT= VARS.EVENT;
+  res.locals.HOST = HOST;
+  next();
+})
+
 app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
-  res.locals.EVENT=VARS.EVENT
   let preDataProcess = result=>{
     let USR = req.user;
     if(result.blacklisted) return res.redirect('/logout?r=blacklisted');

@@ -1,4 +1,5 @@
 var TIMER = null;
+var DASH;
 
 VueSelect.VueSelect.methods.maybeAdjustScroll = () => false;
 
@@ -10,8 +11,7 @@ if (!userdata.modules.flairsInventory.includes("default"))
   userdata.modules.flairsInventory.push("default");
 const flairsAvailable = userdata.modules.flairsInventory;
 
-
-const DASH = new Vue({
+ DASH = new Vue({
   el: "#dash",
   data: () => {
     return {
@@ -288,6 +288,7 @@ function seeEquips() {
 $("document").ready(() => setTimeout(() => DASH.$refs.flairs.update(), 1000));
 
 async function AUTOSAVE(what,silent) {
+  if(!DASH) return;
 //if (!TIMER && what == "FLAIR") return (TIMER = setTimeout(() => {}, 500));
 ////  if (!TIMER && what == "COLOR") return (TIMER = setTimeout(() => {}, 500));
  // if (TIMER) {
@@ -304,7 +305,7 @@ async function AUTOSAVE(what,silent) {
       tgln: DASH.tagline,
       color: DASH.favcolor.hex,
       bkg: DASH.selectBackground.code,
-      medals: DASH.medalsEquipped,
+      medals: DASH.medalsEquipped.map(x=>x.id||x.icon||0),
       sticker: DASH.selectSticker.id,
       frame: DASH.frame,
       wife: DASH.featuredMarriage || "",
@@ -422,7 +423,7 @@ fetch("/api/relationships?uid="+userinfo.id).then(r =>
   r.json().then(res =>  DASH.RSHP = res.map(rel=> {rel.wife = rel.usersData.find(w=>w.id!=userdata.id); delete rel.usersData; return rel} )||[]  )
 );
 
-fetch("/api/items/search?type=boosterpack").then((r) =>
+fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
   r.json().then((res) => {
     DASH.boostersAvailable = res.map((pack) => {
       pack.size = res.filter((s) => s.series_id == pack.icon).length;

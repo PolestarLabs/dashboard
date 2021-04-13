@@ -39,14 +39,14 @@ if entry.userdata.meta
                 div.d-time ---
             .trade
                 if entry.type == "sell"
-                    button.plx-button.plx-button-small.plx-button-secondary
+                    button.plx-button.plx-button-small.plx-button-primary
                         | BUY
                 if entry.type == "buy"
-                    button.plx-button.plx-button-small.plx-button-danger
+                    button.plx-button.plx-button-small.plx-button-secondary
                         | SELL
 
                 | &#x2002
-                button.plx-button.plx-button-small.plx-button-primary.generateLink(type='button')
+                button.plx-button.plx-button-small.plx-button-default.generateLink(type='button')
                     i.fas.fa-link
                     span &#x200b
                 div(plx-drop="mode: click" ).plx-width-large.dropshare
@@ -54,7 +54,7 @@ if entry.userdata.meta
                         p
                             b Share this Listing
                             br
-                            -let link=`http://beta.pollux.gg/shop/marketplace/entry/${entry.id}`
+                            -let link=`${HOST}/shop/marketplace/entry/${entry.id}`
                             -let title= 'Pollux Marketplace Listing: '+item.name
                             include ../../tools/mixins
                             +share(link,title,{copy:true,id:entry.id})

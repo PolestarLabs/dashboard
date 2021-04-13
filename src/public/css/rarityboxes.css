@@ -148,6 +148,14 @@
 
   font-size: 26pt;
 }
+.raritybox .button.custom,
+.shopbox-button.custom {
+  --maincolor: var(--this-color);
+  --maincolor-dim: var(--this-dim,var(--this-color));
+  --fadecolor: var(--this-color-dark,var(--this-color));
+
+  font-size: 26pt;
+}
 
 .raritybox .button.alt i {
   color: inherit;
