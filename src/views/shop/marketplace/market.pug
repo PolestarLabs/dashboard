@@ -18,6 +18,10 @@ block content
                 p The Marketplace can be also accessed from within Discord using <code class="mistyblue">+marketplace</code>
 
         hr.plx-divider-icon-fill
+        script
+            include buystoreitem.js
+        script(src='/js/sweetalert.js')
+        
         .plx-container
             .section#buy(plx-filter="target: #trade-dock")
                 h2.title Recent Listings 
