@@ -36,7 +36,7 @@
             
         .plx-modal-footer.plx-text-right.plx-flex.plx-flex-right
             button.plx-button.plx-button-default.plx-modal-close(type='button') Cancel
-            .button.custom.RBN(:class="'store-'+currentModalItem.type" @click="buyStoreItem(currentModalItem.type,  currentModalItem.id || currentModalItem.code || currentModalItem.icon   )" v-if="currentModalItem.currency === 'RBN' ")
+            .button.custom.RBN(:class="'store-'+currentModalItem.type" @click="buyStoreItem('marketplace',  currentModalItem.id,  currentModalItem.currency, currentModalItem)" v-if="currentModalItem.currency === 'RBN' ")
                 .plx-margin-auto
                 i: .plx-rubine.icon24.curr_icon_3
                 .plx-margin-auto
@@ -45,7 +45,7 @@
                 .plx-margin-auto
  
 
-            .button.custom.sapphires(:class="'store-'+currentModalItem.type" @click="buyStoreItem(currentModalItem.type,  currentModalItem.id || currentModalItem.code || currentModalItem.icon   ,'SPH')"  v-if="currentModalItem.currency === 'SPH' ")
+            .button.custom.sapphires(:class="'store-'+currentModalItem.type" @click="buyStoreItem('marketplace',  currentModalItem.id,  currentModalItem.currency, currentModalItem)"  v-if="currentModalItem.currency === 'SPH' ")
                 .plx-margin-auto
                 i: .plx-sapphire.icon24.curr_icon_3
                 .plx-margin-auto
