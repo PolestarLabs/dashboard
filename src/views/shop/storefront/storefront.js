@@ -291,13 +291,15 @@ function shuffle(array) {
           }
         ).then((r) =>
           r.json().then( val=> {
+           console.log({val,rOk:r.ok,r})
             if(!r.ok){
               const newSwalOptions = {
                 title : "Making an excellent acquisition... or not.",
                 showCancelButton : true,
                 showCloseButton : true,
               }
-              if(val.code == 0xC1){
+              
+              if(val.code == 0xC1 || val.status == "OK"){
                 currency = currency == 'RBN' ? 'SPH' : 'RBN';
                 newSwalOptions.confirmButtonText = `Try with ${currency}`
                 newSwalOptions.confirmButtonColor = currency == 'SPH' ? '#5599F0' : '#F03355';                    
@@ -317,13 +319,18 @@ function shuffle(array) {
               Swal.update( newSwalOptions );
               return Swal.showValidationMessage(val.status);
             }else{
-              if(STORE){
+              if(STORE && type!="marketplace"){
                 STORE.userdata.modules[
                   (type=="background"?"bg"
                   :type=="flair"?"flairs"
                   :type)
                   + "Inventory"
                 ].push(item)
+              }else if(STORE && type === 'marketplace'){
+                let itemToChange = STORE.market.find(e=>e.id == marketOps.id);
+                if (itemToChange){
+                  itemToChange.locked = true;                  
+                }
               }
 
               return Swal.fire({
@@ -342,7 +349,7 @@ function shuffle(array) {
               
             }
 
-          }).catch(err=> Swal.fire("Error!","Something went fucky wucky","error") )
+          }).catch(err=> Swal.fire("Error!","Something went fucky wucky","error") && console.error(err) )
         )
     });
 }
