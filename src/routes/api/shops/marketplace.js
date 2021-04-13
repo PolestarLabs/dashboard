@@ -320,7 +320,7 @@ router.post("/buy/:entry_id", async (req,res)=>{
   if(sale) {
     ECO.transfer(CURRENT_USER.id,entry.author,entry.price,'MARKETPLACE [PURCHASE]',entry.currency)
     .then(async receipt=>{
-      await ECO.pay(entry.author, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", PAYLOAD.currency);
+      await ECO.pay(entry.author, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", entry.currency);
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       if(entry.feedMessage){
         await processFeedMessage(entry, item, CURRENT_USER);
@@ -381,7 +381,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
   if(sale) {
     ECO.arbitraryAudit(entry.author, CURRENT_USER.id, entry.price, 'MARKETPLACE [SALE]', entry.currency)
     .then(async receipt=>{
-      await ECO.pay(CURRENT_USER.id, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", PAYLOAD.currency);
+      await ECO.pay(CURRENT_USER.id, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", entry.currency);
       await DB.users.set(CURRENT_USER.id, {$inc: {["modules." + entry.currency]:entry.price} });
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       
