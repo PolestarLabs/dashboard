@@ -410,6 +410,7 @@ router.delete("/:entry_id", async (req,res)=>{
   const {entry_id} = req.params;
 
   let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
+  console.log({entry_id})
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
   if(entry.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
