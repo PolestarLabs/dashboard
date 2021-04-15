@@ -176,7 +176,7 @@ router.use('/admin',checkAuth, (...args)=>{
   
   const request = require('request')
   router.get("/proxy/:url" , async (req,res) => {
-      request(decodeURIComponent(req.params.url)).pipe(res)
+      request( `https://proxy.pollux.workers.dev?pollux_url=${decodeURIComponent(req.params.url)}`).pipe(res)
   })
   
   // PARTNERS
