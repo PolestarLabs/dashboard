@@ -83,19 +83,23 @@ router.get("/medals/:id", cache(2600), async (req,res) =>{
         .then(result=> res.json( CLEANUP(result) ) )
 })
 
+router.get("/count/:type", cache(3600),  async (req,res) =>{
+    const {type} = req.params;
+    const {event,rarity} = req.query;
+    const searchQuery = {type, public: true, rarity: rarity || {$ne:'XR'} };
+    searchQuery.event = event || 'none';
+    console.log({searchQuery})
+    let response = await DB.cosmetics.find(searchQuery).count().catch(e=>"???");
+    return res.status(200).json(response);
+})
+
+
+
 router.get("/:other/:id", cache(9999), async (req,res) =>{
     const {id: query, other} = req.params;
     DB.cosmetics.findOne({type: other.slice(0,-1) ,$or:[( MonTypes.ObjectId.isValid(query) ? {_id:query} :{id:query})]},{public:0,meta:0})
         .lean()
         .then(result=> res.json( CLEANUP(result) ) )
-})
-
-
-router.get("/count/:type", cache(360000), async (req,res) =>{
-    const {type} = req.params;
-    const {event,rarity} = req.query;
-    let response = await DB.cosmetics.find({type, public: true, event: event||"none", rarity: rarity || {$ne:'XR'} }).count().catch(e=>"???");
-    return res.json(response);
 })
 
 
