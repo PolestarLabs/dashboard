@@ -55,7 +55,8 @@ if(req.query.type=='fanart'){
             author = authorTag,
             ts = new Date().getTime();
             file_name = md5(ts+ident);
-            new_path =  appRoot+"/dashboard/public/images/artwork/"+ident+"/"+ file_name + '.' + file_ext; let thumb_path =   appRoot+"/dashboard/public/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext;
+            new_path =  appRoot+"/dashboard/src/public/images/artwork/"+ident+"/"+ file_name + '.' + file_ext; 
+            let thumb_path =   appRoot+"/dashboard/src/public/images/artwork/thumbs/"+ident+"/"+ file_name + '.' + file_ext;
 
 
       
