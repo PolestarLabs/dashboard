@@ -273,6 +273,7 @@ const ASSETS_PATH = process.env.ASSETS_PATH || "/home/pollux/polaris/ASSETS/";
 app.use(Express.static(path.join(__dirname, './public')));
 app.use(Express.static(path.join( ASSETS_PATH, './imgres')));
 app.use(Express.static(path.join( ASSETS_PATH, './cosmetics')));
+app.use(["/images/artwork","/artwork"], Express.static(path.join( ASSETS_PATH, './artwork')));
 app.use("/images", Express.static(path.join(__dirname, './public/images')));
 app.use("/images", Express.static(path.join( ASSETS_PATH, './website')));
 app.use("/flairs",    Express.static(path.join( ASSETS_PATH, './cosmetics/flairs')));
