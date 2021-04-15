@@ -187,6 +187,17 @@ router.post(['/fanart-hearts/:operation/:id'], async (req,res)=>{
 })
 
 
+router.get('/:id/galleries/saves', async (req,res)=>{
+    const [gallery,user] = await Promise.all([
+        DB.usercols.get(req.params.id),
+        DB.users.get(req.params.id,{switches:1})
+    ]);
+    if (user.switches?.booruPublic === false){
+        res.json( {loading: true, status: "PRIVATE"} );
+    }else{
+        res.json( gallery?.collections.boorusave||[])
+    }
+});
 
 router.get('/:id/galleries/fanart', async (req,res)=>{
     const query = {author_ID:req.params.id};
@@ -200,7 +211,8 @@ router.get('/:id/galleries/fanart', async (req,res)=>{
                 author: item.author_ID,
                 author_url: item.artistlink,
                 likes: item.hearts || 0,
-                url: HOST + item.src,
+                url: item.src,
+                thumb: item.src.replace('artwork/','artwork/thumbs/'),
                 status: item.publish ? "published" : item.publish === false ? "denied" : "pending"
             }
         }))
