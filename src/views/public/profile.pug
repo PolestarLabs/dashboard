@@ -147,10 +147,11 @@ block content
           li#overview
             include pages/overview
           li#commends
-            include profile_pieces/commend
+            include pages/commend
           li#achievements
+            h2 Coming Soon
           li#collections
-          
+            include pages/collections          
           li#gallery
             include pages/gallery
             
@@ -185,3 +186,4 @@ block scripts
     script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js")
     script
         include profile.js
+        include pages/cols.js
