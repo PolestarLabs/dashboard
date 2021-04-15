@@ -63,7 +63,14 @@ router.get('/:id/stickers', async (req,res)=>{
         
         let USR = await DB.users.get(uID);
         let userInventory = USR.modules.stickerInventory;
-        let userMetaInventory = await DB.cosmetics.find({id: {$in: userInventory } });
+        let userMetaInventory = await DB.cosmetics.find({id: {$in: userInventory } }).lean();
+
+        let packs = await DB.items.find({icon: {$in: userMetaInventory.map(x=>x.series_id)}}).lean();
+        
+        userMetaInventory.forEach(x=>{
+            x.packData = packs.find(y=> y.icon === x.series_id )
+        })
+        
         
         res.json(userMetaInventory)
 
@@ -73,7 +80,7 @@ router.get('/:id/medals', async (req,res)=>{
         
         let USR = await DB.users.get(uID);
         let userInventory = USR.modules.medalInventory;
-        let userMetaInventory = await DB.cosmetics.find({icon: {$in: userInventory } });
+        let userMetaInventory = await DB.cosmetics.find({icon: {$in: userInventory } }).lean();
         
         res.json(userMetaInventory)
 
@@ -83,7 +90,7 @@ router.get(['/:id/bgs','/:id/backgrounds'], async (req,res)=>{
         
         let USR = await DB.users.get(uID);
         let userInventory = USR.modules.bgInventory;
-        let userMetaInventory = await DB.cosmetics.find({code: {$in: userInventory } });
+        let userMetaInventory = await DB.cosmetics.find({code: {$in: userInventory } }).lean();
         
         res.json(userMetaInventory)
 
