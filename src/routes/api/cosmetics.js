@@ -70,6 +70,11 @@ router.get("/search", cache(2600), async (req,res) =>{
     })
 })
 
+router.post("/custombg", (req,res) =>{ 
+    delete require.cache[require.resolve("../forms/customBackground")];
+    return (require("../forms/customBackground")).process(req,res);
+ })
+
 router.get("/backgrounds/:id/:endpoint", async (req,res) =>{    
     const canvas = await Picto.getFullCanvas(`${HOST}/backdrops/${req.params.id}.png`);   
     let result = (await Promise.all( (await getColors(canvas.toBuffer('image/png',{ compressionLevel: 0, filters: 8 }),{count:11, type:"image/png"})).map(color => getColorData(color.hex()) ))).filter((v,i,a)=> a.map(x=>x.hex).indexOf(v.hex) ==i );
