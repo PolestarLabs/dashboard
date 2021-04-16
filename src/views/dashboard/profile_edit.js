@@ -22,6 +22,7 @@ const flairsAvailable = userdata.modules.flairsInventory;
         hex: userdata.modules.favcolor,
         source: "hex",
       },
+      window:{width:0,height:0},
       isColorpickerOpen: false,
       isFlairOpen: false,
       rars: ["C", "U", "R", "SR", "UR"],
@@ -40,6 +41,7 @@ const flairsAvailable = userdata.modules.flairsInventory;
       persotext: userdata.modules.persotext,
       frame: (userdata.switches || {}).profileFrame,
       medals: [],
+      favcolorOptions: [],
       medalsEquipped: [],
       hooperSettings: {
         itemsToShow: 5,
@@ -52,6 +54,13 @@ const flairsAvailable = userdata.modules.flairsInventory;
       sortWife: "ring",
     };
   },
+  created() {
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+},
+destroyed() {
+    window.removeEventListener('resize', this.handleResize);
+},
   components: {
     "chrome-picker": Chrome,
     "v-select": VueSelect.VueSelect,
@@ -63,6 +72,10 @@ const flairsAvailable = userdata.modules.flairsInventory;
   },
 
   methods: {
+    handleResize() {
+      this.window.width = window.innerWidth;
+      this.window.height = window.innerHeight;
+  },
     saveAll(){
       AUTOSAVE("all");
     },
@@ -125,6 +138,14 @@ const flairsAvailable = userdata.modules.flairsInventory;
       console.log(filtered);
       return filtered;
     },
+    setFavColor(color){
+      this.favcolor.hex = color;
+    },
+    calculateSuggestionColors(bgID){
+      fetch(`/api/cosmetics/backgrounds/${bgID}/colors`).then(r =>
+        r.json().then(res =>  this.favcolorOptions = res )
+      );
+    },
     fuckThis() {
       $("nav.topbar ").css({ background: this.favcolor.hex });
       updateColorName(this.favcolor.hex);
@@ -159,6 +180,7 @@ const flairsAvailable = userdata.modules.flairsInventory;
       AUTOSAVE("STICKER");
     },
     onChange(item) {
+      this.calculateSuggestionColors(item.code);
       $("#background-bar .name.sel").html(item.name);
       $("#background-bar .bgcode code").html(item.code);
       $(".sidebg").attr("src", "/backdrops/" + item.code + ".png");
@@ -435,6 +457,7 @@ fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
       (r) =>
         r.json().then((res2) => {
           console.log({res2})
+          DASH.calculateSuggestionColors(userdata.modules.bgID)
           DASH.stickerAvailable = res2;
           DASH.selectSticker =
             res2.find((x) => x.id == userdata.modules.sticker) || "none";
