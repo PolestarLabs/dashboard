@@ -63,7 +63,14 @@ router.get('/:id/stickers', async (req,res)=>{
         
         let USR = await DB.users.get(uID);
         let userInventory = USR.modules.stickerInventory;
-        let userMetaInventory = await DB.cosmetics.find({id: {$in: userInventory } });
+        let userMetaInventory = await DB.cosmetics.find({id: {$in: userInventory } }).lean();
+
+        let packs = await DB.items.find({icon: {$in: userMetaInventory.map(x=>x.series_id)}}).lean();
+        
+        userMetaInventory.forEach(x=>{
+            x.packData = packs.find(y=> y.icon === x.series_id )
+        })
+        
         
         res.json(userMetaInventory)
 
@@ -73,7 +80,7 @@ router.get('/:id/medals', async (req,res)=>{
         
         let USR = await DB.users.get(uID);
         let userInventory = USR.modules.medalInventory;
-        let userMetaInventory = await DB.cosmetics.find({icon: {$in: userInventory } });
+        let userMetaInventory = await DB.cosmetics.find({icon: {$in: userInventory } }).lean();
         
         res.json(userMetaInventory)
 
@@ -83,7 +90,7 @@ router.get(['/:id/bgs','/:id/backgrounds'], async (req,res)=>{
         
         let USR = await DB.users.get(uID);
         let userInventory = USR.modules.bgInventory;
-        let userMetaInventory = await DB.cosmetics.find({code: {$in: userInventory } });
+        let userMetaInventory = await DB.cosmetics.find({code: {$in: userInventory } }).lean();
         
         res.json(userMetaInventory)
 
@@ -187,6 +194,17 @@ router.post(['/fanart-hearts/:operation/:id'], async (req,res)=>{
 })
 
 
+router.get('/:id/galleries/saves', async (req,res)=>{
+    const [gallery,user] = await Promise.all([
+        DB.usercols.get(req.params.id),
+        DB.users.get(req.params.id,{switches:1})
+    ]);
+    if (user.switches?.booruPublic === false){
+        res.json( {loading: true, status: "PRIVATE"} );
+    }else{
+        res.json( gallery?.collections.boorusave||[])
+    }
+});
 
 router.get('/:id/galleries/fanart', async (req,res)=>{
     const query = {author_ID:req.params.id};
@@ -200,7 +218,8 @@ router.get('/:id/galleries/fanart', async (req,res)=>{
                 author: item.author_ID,
                 author_url: item.artistlink,
                 likes: item.hearts || 0,
-                url: HOST + item.src,
+                url: item.src,
+                thumb: item.src.replace('artwork/','artwork/thumbs/'),
                 status: item.publish ? "published" : item.publish === false ? "denied" : "pending"
             }
         }))

@@ -50,7 +50,7 @@
                 span.itm-pack(v-if='sticker') {{sticker.series}}
                 span.itm-pack(v-else) No Sticker Equipped
                 
-                a(v-if='sticker').market-button(:href="`/marketplace?search=wawa`" plx-tooltip="animation: plx-animation-slide-right-small;pos: left; title: Search Marketplace").plx-button.plx-button-secondary: i.fas.fa-search-dollar
+                a(v-if='sticker').market-button(:href="`/marketplace?search=${sticker.id}`" plx-tooltip="animation: plx-animation-slide-right-small;pos: left; title: Search Marketplace").plx-button.plx-button-secondary: i.fas.fa-search-dollar
                 
 
         .plx-width-1(class="plx-width-1-3@m").plx-flex.plx-flex-column.plx-padding-small
@@ -66,7 +66,7 @@
                 span.itm-pack(v-else-if='background && background.BUNDLE') Bundle Background ({{background.BUNDLE}})
                 span.itm-pack(v-else-if='background && background.legacy') Legacy Background
                 span.itm-pack(v-else) Regular Background
-                a.market-button(:href="`/marketplace?search=wawa`" plx-tooltip="animation: plx-animation-slide-right-small;pos: left; title: Search Marketplace").plx-button.plx-button-secondary: i.fas.fa-search-dollar
+                a.market-button(:href="`/marketplace?search=${background.code}`" plx-tooltip="animation: plx-animation-slide-right-small;pos: left; title: Search Marketplace").plx-button.plx-button-secondary: i.fas.fa-search-dollar
 
                  
 

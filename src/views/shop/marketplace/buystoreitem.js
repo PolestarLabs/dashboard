@@ -69,7 +69,7 @@ function buyStoreItem(type,item,currency="RBN",marketOps = {}){
                 cancelButtonText: 'Continue browsing',               
                 showCancelButton : true,
                 showCloseButton : true,
-                preConfirm: () => location.assign("/profile/me"),
+                preConfirm: () => location.assign("/dash"),
                 onClose: ()=> $('.modal-close').click()
                 //cancelButtonColor: ,
 

@@ -102,6 +102,7 @@ router.use(["/crafting/","/items/"], async (...args) => {
 });
 
 router.use(["/cosmetics/"], async (...args) => {
+    delete require.cache[(require.resolve('./cosmetics.js'))];
     return (require('./cosmetics.js'))( ...args);
 });
 
