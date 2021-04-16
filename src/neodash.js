@@ -77,7 +77,6 @@ const logger = require('morgan');
 
 const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const xmlparser = require('express-xml-bodyparser');
 
 
@@ -88,8 +87,8 @@ const app = Express();
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Origin', 'https://dev.pagseguro.uol.com.br');
-    res.header('Access-Control-Allow-Origin', 'https://pagseguro.uol.com.br');
+    //res.header('Access-Control-Allow-Origin', 'https://dev.pagseguro.uol.com.br');
+    //res.header('Access-Control-Allow-Origin', 'https://pagseguro.uol.com.br');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.header('Access-Control-Allow-Credentials', true);
@@ -97,7 +96,8 @@ app.use(function (req, res, next) {
     
     next();
 });
-app.use(bodyParser.json({
+app.use(Express.json({
+  limit: '50mb',
   verify: (req, res, buffer) => { req.rawBody = buffer }
 }));
 
@@ -246,13 +246,14 @@ PassportRefresh.use(discordStrategy);
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 app.use(cookieParser());
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({
+app.use(xmlparser());
+app.use(Express.urlencoded({
   extended: true,
-   parameterLimit:50000,
+  parameterLimit:50000,
   limit: '50mb'
 }));
-app.use(xmlparser());
+app.use(Express.json({limit: '50mb', extended: true}));
+
 /*
 app.use(sassMiddleware({
   src: path.join(__dirname, 'public/sass'),
