@@ -339,7 +339,7 @@ global.complexpages  = function complexpages(location=false){
 
 colors = require('colors')
 logger.token('userID', function (req, res) { return  (` ${req.headers['cf-ipcountry']} `).bgMagenta.yellow +" "+ (req.user? req.user.id.blue : (req.headers['cf-connecting-ip']).magenta) })
-logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator.bgGray : "" })
+logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator?.bgGray : "" })
 logger.token('date', function(){  return new Date().toUTCString(); });
 app.use(logger(function(tokens,req,res){
   let status = tokens.status(req,res);

@@ -195,6 +195,11 @@ a.heart-this {
  transform: scale(1.5)
  
 }
+.heart-this i:hover{
+ color: #F35A;
+ transform: scale(2)
+ 
+}
 .heart-this.hearted i{
  color: red;
 }

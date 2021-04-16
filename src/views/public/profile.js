@@ -31,7 +31,13 @@ function since(x){
          {label: 'Stickers', val: userprofile.modules.stickerInventory.length ||0 , max: this.stickersSize},
          {label: 'Backgrounds', val: userprofile.modules.bgInventory.length ||0 , max: this.backgroundsSize},
          {label: 'Medals', val: userprofile.modules.medalInventory.length ||0 , max: this.medalsSize}
-        ]
+        ],
+
+        // COLLECTIONS TAB
+        backgrounds: {loading: true},
+        medals: {loading: true},
+        stickers: {loading: true},
+        inventory: {loading: true},
     }, 
       components:{
       "animated-number": window.AnimatedNumber,
@@ -97,7 +103,7 @@ function since(x){
                   if(stash[3]!="000") break;
                   return stash[0]+sym+stash[1][0]+stash[1][1]+"Bi";
                }
-  
+
               return stashe;
           }        
   
@@ -143,13 +149,13 @@ function since(x){
 
 
 fetch("/api/cosmetics/count/background").then(r =>
-  r.json().then(res =>  PROFILE.backgroundsSize = res  )
+  r.json().then(res => (PROFILE.backgroundsSize = res) )
 );
 fetch("/api/cosmetics/count/sticker").then(r =>
-  r.json().then(res =>  PROFILE.stickersSize = res  )
+  r.json().then(res => (PROFILE.stickersSize = res) )
 );
 fetch("/api/cosmetics/count/medal").then(r =>
-  r.json().then(res =>  PROFILE.medalsSize = res  )
+  r.json().then(res => (PROFILE.medalsSize = res) )
 );
 
 
