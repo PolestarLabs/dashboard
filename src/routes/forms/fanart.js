@@ -40,7 +40,7 @@ async function processForm(form,req,res,{sendWebhook,embed}){
 		const thumb_path =    `${ASSETS_PATH}/artwork/thumbs/${senderID}/${file_name}.${file_ext}`;            
 		const prev = await DB.fanart.findOne({hash:file_name});
 		
-		//if (prev) return res.status(409).json("YOU'VE ALREADY SENT THIS FILE!");
+		if (prev) return res.status(409).json("YOU'VE ALREADY SENT THIS FILE!");
 
 		fs.readFile(old_path, function(err, data) {
 			if (err) return console.error(err);	
@@ -89,47 +89,55 @@ async function processForm(form,req,res,{sendWebhook,embed}){
 							}
 						},{upsert:true}).then(x=>{
 							console.log('•'.green + " Fanart: DB OK!" );
+							submitWebhook(embed, fields, file_name, senderID, file_ext, sendWebhook);
 							return res.status(200).json("SUBMISSION RECEIVED! It is now pending approval of a moderator...");
 						}).catch(err=>{
 							console.error('•'.red + " Fanart: DB NOT OK!" );
 							console.error(err);
+							submitWebhook(embed, fields, file_name, senderID, file_ext, sendWebhook);
 							return res.status(500).json("SUBMISSION NOT RECEIVED! Something went wrong when saving your submission.");
 						});			
 					}catch(e){
 						console.error('•'.red + " Fanart: General error." );
 						console.error(e)
-						res.status(500).json("SUBMISSION NOT RECEIVED! Something went wrong when processing the image as such.");
+						submitWebhook(embed, fields, file_name, senderID, file_ext, sendWebhook);
+						return res.status(500).json("SUBMISSION NOT RECEIVED! Something went wrong when processing the image as such.");
 					}			
 				});
 			});
 		});
-
-		embed.fields.push({name:"Title:",value:fields.title||'-none-',inline:false});
-		embed.color = 0x5257d1;
-		embed.fields.push({name:"Description:", value: (fields.description||"-none-"), inline: false});
-		embed.fields.push({name:"Twitter:", value: fields.twitter||'-none-', inline: false});
-		embed.fields.push({name:"Artist Page:", value: fields.page||'-none-', inline: false});
-		embed.fields.push({name:"HASH:", value: "`"+file_name+"`", inline: false});
-		embed.image = {url: HOST + "/images/artwork/thumbs/"+senderID+"/"+ file_name + '.' + file_ext};
-
-
-		let embed2 = {}
-		embed.color = 0x5257d1
-		embed2.fields = embed.fields
-		embed2.author = embed.author
-		//embed2.description = embed.description
-		embed2.color = embed.color
-		embed2.title = "🖌 New Fanart Submission"
-		embed2.footer = embed.footer
-		//embed2.timestamp = embed.timestamp
-		embed2.image={url:HOST+"/images/artwork/thumbs/"+senderID+"/"+ file_name + '.' + file_ext}
-		sendWebhook({embeds:[embed2]}, "https://discord.com/api/webhooks/789738553037946932/2dn-1c_EzaABoCufkZ-CHMoK7TqHtCm5UGkhGSq6F3p-h0CQ_4je_YPMiyaSUWRjlWQV?wait=true");
+		
 		//res.redirect("/artwork");
 		//return res.status(200).json("SUBMISSION RECEIVED! It is now pending approval of a moderator... (2)"); 
 	});
 
 }
 
+
+function submitWebhook(embed, fields, file_name, senderID, file_ext, sendWebhook) {
+	embed.color = 0x5257d1;
+	embed.fields.push({ name: "Title:", 		value: "\u200b" + fields.title || '-none-', inline: false });
+	embed.fields.push({ name: "Description:", 	value: "\u200b" + (fields.description || "-none-"), inline: false });
+	embed.fields.push({ name: "Twitter:", 		value: "\u200b" + fields.twitter || '-none-', inline: false });
+	embed.fields.push({ name: "Artist Page:", 	value: "\u200b" + fields.page || '-none-', inline: false });
+	embed.fields.push({ name: "HASH:", 			value: "\u200b" + "`" + file_name + "`", inline: false });
+	embed.image = { url: HOST + "/images/artwork/thumbs/" + senderID + "/" + file_name + '.' + file_ext };
+
+
+	let embed2 = {};
+	embed.color = 0x5257d1;
+	embed2.fields = embed.fields;
+	embed2.author = embed.author;
+	//embed2.description = embed.description
+	embed2.color = embed.color;
+	embed2.title = "🖌 New Fanart Submission";
+	embed2.footer = embed.footer;
+	//embed2.timestamp = embed.timestamp
+	console.log(embed2.fields)
+	embed2.image = { url: HOST + "/images/artwork/thumbs/" + senderID + "/" + file_name + '.' + file_ext };
+	PLX.executeWebhook("789738553037946932","2dn-1c_EzaABoCufkZ-CHMoK7TqHtCm5UGkhGSq6F3p-h0CQ_4je_YPMiyaSUWRjlWQV",{wait:true,embeds:[embed2]}).then(console.log).catch(console.err);
+	//sendWebhook({ embeds: [embed2] }, "https://discord.com/api/webhooks/789738553037946932/2dn-1c_EzaABoCufkZ-CHMoK7TqHtCm5UGkhGSq6F3p-h0CQ_4je_YPMiyaSUWRjlWQV?wait=true");
+}
 
 function ensureDirectoryExistence(filePath,recursion=0) {
 	if (recursion > 3) return false;
