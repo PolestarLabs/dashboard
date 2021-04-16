@@ -3,8 +3,6 @@ const express = require('express');
 const { response } = require('express');
 const router = express.Router();
 
-
-
 router.get('/search',  cache(600), async(req,res)=>{
     let queries = {}
     Object.keys(req.query)
