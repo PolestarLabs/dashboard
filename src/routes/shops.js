@@ -135,68 +135,122 @@ router.get("/marketplace", async function (req, res) {
 
 router.get("/marketplace/entry/:id", async function (req, res, _404) {
   let ff = req.params.id  
-  let entry = await DB.marketplace.findOne({id:ff}); 
+  let entry = await DB.marketplace.findOne({id:ff});
+  console.log({entry},'db pure')
   if(!entry) return _404();
 
   let [marketplace,prefbase] = await Promise.all([
-     DB.marketplace.aggregate([
-       {$match: {$or: [{author: entry.author}, {item_id: entry.item_id }] , lock:{$exists:false}} },
-   {$project: {			
-       item_id: {$convert: {input: "$item_id",to:"objectId", onError:null} }
-       ,type:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1
-   }},
-   {$lookup: {from:"userdb",localField:"author",foreignField:"id",as:"userdata"}},	
-   {$lookup: {from:"cosmetics",localField:"item_id",foreignField:"_id",as:"cosdata"}},
-   {$lookup: {from:"items",localField:"item_id",foreignField:"_id",as:"junkdata"}},
-
-   {$unwind: "$userdata"},
-   {$project: {id:0,type:1,item_id:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1, 
-       itemdata:{
-           $setUnion: ["$cosdata","$junkdata"]
-       },
-       junkdata:1,cosdata:1, userdata:{meta:1}}
-   },
-   {$unwind: "$itemdata"},{
-       $project: {
-           type:1,item_id:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1, 
-           userdata:1,
-           itemdata: {
-               id:1,code:1,icon:1,rarity:1,name:1,event:1,series:1,BUNDLE:1,
-               img :{
-                   $switch:{
-                       branches: [
-                           {
-                               case: { $eq: ['$item_type' , 'background'] },
-                               then: { $concat: [ "/backdrops/","$itemdata.code",".png" ] }
-                           },                                        
-                           {
-                               case: { $eq: ['$item_type' , 'medal'] },
-                               then: { $concat: [ "/medals/","$itemdata.icon",".png" ] }
-                           },                                        
-                           {
-                               case: { $eq: ['$item_type' , 'sticker'] },
-                               then: { $concat: [ "/build/stickers/","$itemdata.id",".png" ] }
-                           },                                                                            
-                           {
-                               case: { $eq: ['$item_type' , 'boosterpack'] },
-                               then: { $concat: [ "/boosters/showcase/","$itemdata.icon",".png" ] }
-                           },                                        
-                       ],
-                       default: { $concat: [ "/build/items/","$itemdata.icon",".png" ] }
-                   }
-               }
-           },
-       }
-   },
-   { $project: {_id:0,junkdata:0,cosdata:0,} },
-  ]),
+     DB.marketplace.aggregate(
+      // Pipeline
+      [
+        // Stage 1
+        {
+          $match: {$or: [{author: entry.author}, {item_id:  entry.item_id }] , lock:{$ne:true}}
+        },
+    
+        // Stage 2
+        {
+          $project: {            
+              item_id: {$convert: {input: "$item_id",to:"objectId", onError:null} }
+              ,type:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1
+          }
+        },
+    
+        // Stage 3
+        {
+          $lookup: {from:"userdb",localField:"author",foreignField:"id",as:"userdata"}
+        },
+    
+        // Stage 4
+        {
+          $lookup: {from:"cosmetics",localField:"item_id",foreignField:"_id",as:"cosdata"}
+        },
+    
+        // Stage 5
+        {
+          $lookup: {from:"items",localField:"item_id",foreignField:"_id",as:"junkdata"}
+        },
+    
+        // Stage 6
+        {
+          $unwind: "$userdata"
+        },
+    
+        // Stage 7
+        {
+          $project: {type:1,item_id:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1, 
+          itemdata:{
+              $setUnion: ["$cosdata","$junkdata"]
+          },
+          junkdata:1,cosdata:1, userdata:{meta:1}}
+        },
+    
+        // Stage 8
+        {
+          $unwind: "$itemdata"
+        },
+    
+        // Stage 9
+        {
+          $project: {
+              type:1,item_id:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1, 
+              userdata:1,
+              itemdata: {
+                  id:1,code:1,icon:1,rarity:1,name:1,event:1,series:1,BUNDLE:1,
+                  img :{
+                      $switch:{
+                          branches: [
+                              {
+                                  case: { $eq: ['$item_type' , 'background'] },
+                                  then: { $concat: [ "/backdrops/","$itemdata.code",".png" ] }
+                              },                                        
+                              {
+                                  case: { $eq: ['$item_type' , 'medal'] },
+                                  then: { $concat: [ "/medals/","$itemdata.icon",".png" ] }
+                              },                                        
+                              {
+                                  case: { $eq: ['$item_type' , 'sticker'] },
+                                  then: { $concat: [ "/build/stickers/","$itemdata.id",".png" ] }
+                              },                                                                            
+                              {
+                                  case: { $eq: ['$item_type' , 'boosterpack'] },
+                                  then: { $concat: [ "/boosters/showcase/","$itemdata.icon",".png" ] }
+                              },                                        
+                          ],
+                          default: { $concat: [ "/build/items/","$itemdata.icon",".png" ] }
+                      }
+                  }
+              },
+          }
+        },
+    
+        // Stage 10
+        {
+          $project: {
+            _id:0,junkdata:0,cosdata:0,            
+          }
+        },
+        
+        // Stage 11
+        {
+          $project: {
+            item_id: {$convert: {input: "$item_id",to:"string", onError:null} }
+            ,type:1,item_type:1,price:1,currency:1,author:1,id:1,timestamp:1,itemdata:1,userdata:{meta:1}
+          }
+        }
+      ]),
      {}
   ]);
 
-  let listings = marketplace.filter(it=>it.item_id == entry.item_id && !it.lock);
-  let morefrom = marketplace.filter(it=>it.author == entry.author && !it.lock);
-  entry = listings.find(x=>x.id==entry.id)
+  
 
+  let listings = marketplace.filter(it=>it.item_id.toString() == entry.item_id && !it.lock);
+  let morefrom = marketplace.filter(it=>it.author == entry.author && !it.lock);
+  console.log({listings})
+  console.log({entry},'from payload')
+  entry = listings.find(x=>x.id==entry.id)
+  console.log({entry},'from db')
+  
   if (entry) {
     let item = entry.itemdata // fullbase.find(it=> it.id == entry.item_id && it.type == entry.item_type);
     if (item) {
