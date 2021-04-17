@@ -75,8 +75,8 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 
 	// NOTE Sidebar
 	.profile-editor-sidebar.plx-width-1-1(class="plx-width-1-3@m" v-bind:style="{'--favcolor-dim':favcolor.hex+'56','--favcolor':favcolor.hex}"  )
-		.c(style="position: fixed; bottom: 20px; left: 20px; z-index: 10")
-			a(@click='saveAll()').magic-outline.plx-button.plx-margin-left.plx-margin-bottom(type='button'  style="margin-top:100px")
+		.c(style="position: fixed; bottom: 20px; right: 20px; z-index: 10")
+			a(@click='saveAll()').plx-button.plx-margin-right.plx-margin-bottom(type='button'  style="margin-top:100px")
 				i.fas.fa-save              
 				span &#x2002 Save All
 
@@ -111,38 +111,47 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 			.level.numeric-large(class='plx-visible@m')
 				.num= userdata.modules.level
 				.name LEVEL 
-		br 
-		br
-		br 
+
 
 		// NOTE --Custom BG Loader
 		#custom-bg-loader
-			.bg-insertion(style="transform:scale(.8)").plx-position-relative
-				.slider
-					.plx-slider
-						hr
-						label(for="op")
-							b Frame Opacity: 
-							| {{ ~~(frameOpacity*100) }}%
-						br
-						input#op(v-model='frameOpacity' type='range' min=.1 max=1 step=.01 style="width: 200px")
+			
+			.bg-load-container(v-if=`backgroundsAvailable.find(x=>x.code=='${userdata.id}')`)
+				.bg-insertion(style="transform:scale(.8)").plx-position-relative
+					.slider
+						.plx-slider
+							hr
+							label(for="op")
+								b Frame Opacity: 
+								| {{ ~~(frameOpacity*100) }}%
+							br
+							input#op(v-model='frameOpacity' type='range' min=.1 max=1 step=.01 style="width: 200px")
 
 
-				.canvas-container
-					canvas#bg-canvas(width="720" height="380" )
-				img.bg-frame(src="/images/demo/profile_dummy.png" :style="{'pointer-events':'none', 'opacity': frameOpacity}" )
+					.canvas-container
+						canvas#bg-canvas(width="720" height="380" )
+					img.bg-frame(src="/images/demo/profile_dummy.png" :style="{'pointer-events':'none', 'opacity': frameOpacity}" )
+				.load-button
+					input#file-upload(type="file", accept="image/*", hidden, ref="custombgHolder", @change="setFile()")
+					a(@click='chooseFiles()').magic-outline.plx-button.plx-margin-bottom(type='button' )
+						i.fas.fa-upload
+						span &#x2002 Select Custom Background
+					div &#x2003
+					a(@click='sendFile()').magic-outline.plx-button.plx-margin-bottom(type='button' )
+						i.fas.fa-plane
+						span &#x2002 UPLOAD!
 
-				.padlock
-			.load-button
-				input#file-upload(type="file", accept="image/*", hidden, ref="custombgHolder", @change="setFile()")
-				a(@click='chooseFiles()').magic-outline.plx-button.plx-margin-bottom(type='button' )
-					i.fas.fa-upload
-					span &#x2002 Select Custom Background
-				div &#x2003
-				a(@click='sendFile()').magic-outline.plx-button.plx-margin-bottom(type='button' )
-					i.fas.fa-plane
-					span &#x2002 UPLOAD!
+			.padlock(v-else)
+							
+				.can-enable(v-if="userIsPremium", @click="createNewCustomBg()")
+					i.fas.fa-unlock
+					span &#x2000 Create Custom BG now!
+						
+				.cannot-enable(v-else)
+					i.fas.fa-lock
+					span &#x2000 Reserved for Prime Users
 
+			
 
 
 		// NOTE --Wifebox I (1400+)
