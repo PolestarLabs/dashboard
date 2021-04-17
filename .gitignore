@@ -10,3 +10,9 @@ dist
 *.woff
 *.ttf
 *.jpg
+*.psd
+*.gif
+*.avi
+*.mp4
+*.mp3
+.env
