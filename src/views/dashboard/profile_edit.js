@@ -201,9 +201,6 @@ destroyed() {
     fuckThis() {
       $("nav.topbar ").css({ background: this.favcolor.hex });
       updateColorName(this.favcolor.hex);
-      AUTOSAVE("COLOR",true)
-      AUTOSAVE("TAGLINE",true)
-      AUTOSAVE("PTXT",true)
     },
     saveFlair(payload) {
       setTimeout(() => {
@@ -280,12 +277,11 @@ destroyed() {
 });
 
 function updateColorName(hex) {
-  AUTOSAVE("COLOR")
   fetch(
     "https://www.thecolorapi.com/id?hex=" + hex.replace("#", "")
   ).then((r) => r.json().then(async (res) => {
     $("#colorname").html(res.name.value)
-    await   AUTOSAVE("COLOR");
+     A//UTOSAVE("COLOR");
   }));
 }
 
