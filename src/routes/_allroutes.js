@@ -19,6 +19,7 @@ const fx = require('../pipelines/globalFunctions.js');
 
 
 // MARKET  
+router.use('/marketplace', (...args)=>{ res.redirect('/shop/marketplace') });
   router.use('/shop', (...args)=>{
     delete require.cache[require.resolve('./shops')];
     const shop = require('./shops');
