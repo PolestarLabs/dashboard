@@ -134,7 +134,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 
 				.padlock
 			.load-button
-				input#file-upload(type="file", accept="image/png", hidden, ref="custombgHolder", @change="setFile()")
+				input#file-upload(type="file", accept="image/*", hidden, ref="custombgHolder", @change="setFile()")
 				a(@click='chooseFiles()').magic-outline.plx-button.plx-margin-bottom(type='button' )
 					i.fas.fa-upload
 					span &#x2002 Select Custom Background
