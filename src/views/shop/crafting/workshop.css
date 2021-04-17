@@ -29,7 +29,7 @@ button {
   flex-direction: column;
   height: 100px;
   width: 100px;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   padding: 4px;
   margin: 4px;
   position: relative;
@@ -248,7 +248,7 @@ height: 99% !important;
   font-weight: 800;
   font-family: Panton;
   user-select: none;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   margin: 8px;
   display: flex;
   align-items: center;
@@ -273,7 +273,7 @@ height: 99% !important;
   background-image: radial-gradient(#ffba3b, rgba(36, 36, 83, 0.7) 70%);
   background-position: center 10px;
   transition: all 10ms ease;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .craft-me:disabled{
     filter: grayscale(100%);

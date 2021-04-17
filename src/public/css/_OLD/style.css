@@ -685,7 +685,7 @@ padding: 1.25rem;
 .bgpick:hover {
   filter: drop-shadow(0px 0px 6px #292225b3);
   transform: scale(1.4);
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   transition: transform 100ms ease-in-out;
 }
 #area{
@@ -996,7 +996,7 @@ stuff {
 .slider {
   transform: rotate(-35deg) scale(.8);
   position: absolute;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   top: 0;
   left: 0;
   right: 0;
@@ -1324,13 +1324,13 @@ input:hover+.slider:before {
   overflow: hidden;
 }
 .colorpik:hover {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   box-shadow: 0 0 10px #2b2b2b;
 }
 .editable:hover {
   border: dashed 1px #2b2b2be6;
   background: #2b2b2b4d;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .editable:hover:after {
   content: "\f044 \2000 EDIT";
