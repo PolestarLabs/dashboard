@@ -4,6 +4,8 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "run-src": "node ./src/neodash.js",
+    "run-dist": "node ./dist/neodash.js",
     "build": "gulp build"
   },
   "dependencies": {
