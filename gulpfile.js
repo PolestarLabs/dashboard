@@ -3,6 +3,7 @@ const cleanCSS = require("gulp-clean-css");
 const image = require("gulp-image");
 const debug = require("gulp-debug");
 const minify = require("gulp-minify");
+const uglify = require("gulp-uglify");
 const clean = require("gulp-clean");
 const font = require("gulp-font");
 
@@ -27,7 +28,7 @@ function css() {
 function js() {
     return src(["./src/+(views|public)/**/*.js", ...ignore])
         .pipe(debug())
-        .pipe(minify())
+        .pipe(uglify())
         .pipe(dest(out));
 }
 
@@ -54,6 +55,7 @@ function others() {
 exports.build = series(css, js, assets, fonts, others);
 exports.buildClean = series(clear, css, js, assets, fonts, others);
 exports.buildNoAssets = series( css, js, fonts, others);
+exports.buildJS = series(js);
 
 const imgExt = [
 	"ase",
