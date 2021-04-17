@@ -114,8 +114,22 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 
 
 		// NOTE --Custom BG Loader
+		br
+		hr
 		#custom-bg-loader
-			
+			.plx-container
+				h3.title Custom Background
+				h5.subtitle(v-if="userIsPremium")
+					| Your 
+					b Prime subscription
+					| allows a custom background to be uploaded!*
+					
+				h5.subtitle(v-else)
+					a(href="https://patreon.com/join/pollux" target="blank") Upgrade to Prime 
+					span and upload custom background!
+				small.help(v-if="userIsPremium" style="opacity:.5")
+					| (*) Images must be SFW. If the image is deemed inappropriate we reserve the right to reset it. Abusing this perk may result in a ban or suspension
+
 			.bg-load-container(v-if=`backgroundsAvailable.find(x=>x.code=='${userdata.id}')`)
 				.bg-insertion(style="transform:scale(.8)").plx-position-relative
 					.slider
@@ -141,21 +155,26 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 						i.fas.fa-plane
 						span &#x2002 UPLOAD!
 
-			.padlock(v-else)
-							
-				.can-enable(v-if="userIsPremium", @click="createNewCustomBg()")
+			.padlock(v-else).plx-position-relative
+				img.fake-frame(src="/images/demo/profile_dummy.png")
+				a.can-enable(v-if="userIsPremium", @click="createNewCustomBg()")
 					i.fas.fa-unlock
 					span &#x2000 Create Custom BG now!
 						
 				.cannot-enable(v-else)
 					i.fas.fa-lock
 					span &#x2000 Reserved for Prime Users
-
+			
+			hr
 			
 
 
 		// NOTE --Wifebox I (1400+)
 		div(v-if="window.width > 1400")
+			.plx-container
+				h3.title Marriage Manager
+				h5.subtitle(v-if="userIsPremium")
+					|  In case of divorce disputes call 1-800-NUKE-MY-WIFE 
 			+wifeBox
 
 

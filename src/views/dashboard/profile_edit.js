@@ -84,8 +84,7 @@ destroyed() {
       document.getElementById("file-upload").click()
     },
     setFile(){
-      vueDoesntFuckingWork()
-     
+      vueDoesntFuckingWork()     
     },
     createNewCustomBg(){
       if(isPremium()){
