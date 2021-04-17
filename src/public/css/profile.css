@@ -859,7 +859,7 @@ color: white ;
   
 
 .profile-editor-sidebar{
- background: linear-gradient( var(--favcolor), #0000);
+ background: linear-gradient( var(--favcolor-dim), #0000);
   margin-top: -49px;
 }
 
@@ -937,3 +937,40 @@ width: 160px;
   display: block;
   margin: 0px 10px 10px 50px   
 }
+
+
+
+.bg-insertion .plx-slider{
+  --current-bg: var(--favcolor);
+  display: none;
+}
+.bg-insertion{ 
+  max-width: 800px;
+  max-height: 600px;
+  position: relative;
+  margin: 0 auto -10px auto;
+
+}
+.bg-insertion .bg-frame{
+  position: relative;
+  pointer-events: none;
+  top: 0;
+  left:0;
+  width: 100%;
+}
+.bg-insertion .canvas-container{
+  width: 100%;  
+  background: red;
+  position: relative;
+}
+.canvas-container canvas{
+  right: 2.895%;
+  margin-top: 2%; 
+  width: 89%;  
+  position: absolute;
+}
+
+.load-button{
+ text-align: center;  
+}
+ 

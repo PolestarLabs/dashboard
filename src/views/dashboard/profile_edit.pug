@@ -33,9 +33,9 @@ mixin wifeBox
 
 
 					div(v-if="RSHP.loading !== true"): div(v-for="rel in RSHP" )
-						
+
 						.wife-block.plx-flex( v-bind:class="rel.id == featuredMarriage?'is-featured':''" v-if='rel.wife')
-								
+
 							.avatar: img(:src="`https://cdn.discordapp.com/avatars/${rel.wife.id}/${rel.wife.avatar}.${rel.wife.avatar.startsWith('a_')?'gif':'png'}?size=64`")
 							.detail
 								.feats
@@ -53,28 +53,28 @@ mixin wifeBox
 								span.discrimin(class="-plx-visible@m") # {{rel.wife.discriminator}} 
 							.since.mome(class="-plx-visible@m") {{since(rel.since)}}
 							.ring: img(:src="`/build/items/ring_${rel.ring}.png`")
-					
+
 						div(plx-drop='mode:click; animation:plx-animation-slide-top-small' style="width:auto"): .wife-actions(:id="rel.id")
 							.plx-button.plx-button-secondary(@click="changeFeatMarriage(rel.id)", :data-for="rel.id") 
-									i.fas.fa-star
-									| FEATURE
+								i.fas.fa-star
+								| FEATURE
 							.plx-button.plx-button-warn(:data-for="rel.id" @click="Swal.fire('','To upgrade your ring, craft a higher-quality ring and re-propose to your current spouse.','info' )") 
-									i.fas.fa-ring
-									| UPGRADE
+								i.fas.fa-ring
+								| UPGRADE
 							.plx-button.plx-button-danger(:data-for="rel.id" @click="Swal.fire('','To divorce someone, use <code>p!divorce [USER ID]</code>.','info' )") 
-									i.fas.fa-heart-broken
-									| DIVORCE
+								i.fas.fa-heart-broken
+								| DIVORCE
 
 					.wife-block.empty
-							i.fas.fa-unlock
-							span &#x2000 UNLOCK SLOTS
-				
+						i.fas.fa-unlock
+						span &#x2000 UNLOCK SLOTS
+
 
 
 div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 
 	// NOTE Sidebar
-	.profile-editor-sidebar.plx-width-1-1(class="plx-width-1-3@m" v-bind:style="{'--favcolor':favcolor.hex+'56'}"  )
+	.profile-editor-sidebar.plx-width-1-1(class="plx-width-1-3@m" v-bind:style="{'--favcolor-dim':favcolor.hex+'56','--favcolor':favcolor.hex}"  )
 		.c(style="position: fixed; bottom: 20px; left: 20px; z-index: 10")
 			a(@click='saveAll()').magic-outline.plx-button.plx-margin-left.plx-margin-bottom(type='button'  style="margin-top:100px")
 				i.fas.fa-save              
@@ -89,7 +89,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 					if(userdata.switches && userdata.donator)
 						img(src=`/build/profile/frames/${userdata.donator}.png` class=userdata.switches.profileFrame?'':'disengaged' @click="frame=!frame; AUTOSAVE('FRAME')")
 			.info.plx-width-1-1
-			
+
 				.name.title
 					.flair-container
 						#flairSelect
@@ -101,7 +101,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 						img(src=userdata.meta.avatar ).hexagon
 					span= userdata.meta.username
 					span.discrimin="#"+ userdata.meta.discriminator
-				
+
 				input.tagline(v-model="tagline" @change="AUTOSAVE('TGL')" placeholder="Write something sorta cool here...")
 				.help Tagline: 
 					small(style="opacity:.8;font-style: italic") A one-liner that best describe you
@@ -117,21 +117,33 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 
 		// NOTE --Custom BG Loader
 		#custom-bg-loader
-			.bg-insertion(style="height: 380px; transform:scale(.8)").plx-position-relative
-				canvas#bg-canvas(width="720" height="380" style="top: 11px; left: -17px; transform: scale(.89);transform-origin: right top;").plx-position-absolute
-				img.bg-frame(src="/images/demo/profile_dummy.png" style="pointer-events:none").plx-position-absolute
-				
+			.bg-insertion(style="transform:scale(.8)").plx-position-relative
+				.slider
+					.plx-slider
+						hr
+						label(for="op")
+							b Frame Opacity: 
+							| {{ ~~(frameOpacity*100) }}%
+						br
+						input#op(v-model='frameOpacity' type='range' min=.1 max=1 step=.01 style="width: 200px")
+
+
+				.canvas-container
+					canvas#bg-canvas(width="720" height="380" )
+				img.bg-frame(src="/images/demo/profile_dummy.png" :style="{'pointer-events':'none', 'opacity': frameOpacity}" )
+
 				.padlock
 			.load-button
 				input#file-upload(type="file", accept="image/png", hidden, ref="custombgHolder", @change="setFile()")
-				a(@click='chooseFiles()').magic-outline.plx-button.plx-margin-left.plx-margin-bottom(type='button'  style="margin-top:100px")
+				a(@click='chooseFiles()').magic-outline.plx-button.plx-margin-bottom(type='button' )
 					i.fas.fa-upload
 					span &#x2002 Select Custom Background
-				a(@click='sendFile()').magic-outline.plx-button.plx-margin-left.plx-margin-bottom(type='button'  style="margin-top:100px")
+				div &#x2003
+				a(@click='sendFile()').magic-outline.plx-button.plx-margin-bottom(type='button' )
 					i.fas.fa-plane
 					span &#x2002 UPLOAD!
-				
-		
+
+
 
 		// NOTE --Wifebox I (1400+)
 		div(v-if="window.width > 1400")
@@ -139,8 +151,8 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 
 
 	// NOTE Main Container
-	.plx-container.plx-flex.plx-flex-wrap.plx-width-1-1(class="plx-width-2-3@m")
-		
+	#main-content.plx-container.plx-flex.plx-flex-wrap.plx-width-1-1(class="plx-width-2-3@m")
+
 		// NOTE --COLORPICKER
 		#colorpicker.dash-pill(v-bind:style="{'border-color':favcolor.hex}").plx-width-1-1
 			.background-slot( v-bind:style='{ "background": favcolor.hex , opacity: 0.1}')
@@ -161,7 +173,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 								.title Color Suggestions
 						a.colorPick(v-for="color in favcolorOptions" :plx-tooltip="color.name" @click="setFavColor(color.hex)" :style="`background-color: ${color.hex}`")
 
-				
+
 		// NOTE --BG PICKER
 		.plx-width-1-1(class="plx-width-3-5@m")
 			.dash-pill#background-bar(v-bind:style="{'border-color':favcolor.hex}")
@@ -189,14 +201,14 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 							label='name'
 						)    
 							template(slot='selected-option', slot-scope='option')
-									span(style='transform:translateY(-5px)')
-										.plx-rarity-icon(:class='option.rarity') 
-										| {{option.name}}
+								span(style='transform:translateY(-5px)')
+									.plx-rarity-icon(:class='option.rarity') 
+									| {{option.name}}
 							template(slot='option', slot-scope='option')
-									.bg-sel-opt(:plx-tooltip='option.name')
-										.bgface(:style='`background-image:url("${option.img}");`')
-										div(:class='`plx-rarity ${option.rarity}`')
-		
+								.bg-sel-opt(:plx-tooltip='option.name')
+									.bgface(:style='`background-image:url("${option.img}");`')
+									div(:class='`plx-rarity ${option.rarity}`')
+
 		// NOTE --STICKER PICKER
 		.plx-width-1-1(class="plx-width-2-5@m")
 			.dash-pill#sticker-bar(v-bind:style="{'border-color':favcolor.hex}")
@@ -220,16 +232,16 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 								label='name'
 							)    
 								template(slot='selected-option', slot-scope='option')
-										span(style='transform:translateY(-5px)')
-											.plx-rarity-icon(:class='option.rarity') 
-											span.sticker-sel-span &#x2000 {{option.name}}
-											
+									span(style='transform:translateY(-5px)')
+										.plx-rarity-icon(:class='option.rarity') 
+										span.sticker-sel-span &#x2000 {{option.name}}
+
 								template(slot='option', slot-scope='option')
-										.stick-sel-opt
-											.stickerpack-icon(:style="`background-image:url('/build/boosters/showcase/${option.icon}.png')`"  class="plx-visible@m")
-											span(style='transform:translateY(-5px)')
-												.plx-rarity-icon(:class='option.rarity')
-												| {{option.name}} 
+									.stick-sel-opt
+										.stickerpack-icon(:style="`background-image:url('/build/boosters/showcase/${option.icon}.png')`"  class="plx-visible@m")
+										span(style='transform:translateY(-5px)')
+											.plx-rarity-icon(:class='option.rarity')
+											| {{option.name}} 
 
 
 							div(v-show="selectBooster && selectBooster != 'none'")
@@ -245,29 +257,29 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 									label='name'
 								)    
 									template(slot='selected-option', slot-scope='option')
-											span(style='transform:translateY(-5px)')
-												.plx-rarity-icon(:class='option.rarity') 
-												span.sticker-sel-span &#x2000 {{option.name}}
-												
+										span(style='transform:translateY(-5px)')
+											.plx-rarity-icon(:class='option.rarity') 
+											span.sticker-sel-span &#x2000 {{option.name}}
+
 
 									template(slot='option', slot-scope='option')
-											.stick-sel-opt
-												.sticker-icon(:style="`background-image:url('/stickers/${option.id}.png')`"  class="plx-visible@m")
-												span(style='transform:translateY(-5px)')
-													.plx-rarity-icon(:class='option.rarity')
-													| {{option.name}} 
+										.stick-sel-opt
+											.sticker-icon(:style="`background-image:url('/stickers/${option.id}.png')`"  class="plx-visible@m")
+											span(style='transform:translateY(-5px)')
+												.plx-rarity-icon(:class='option.rarity')
+												| {{option.name}} 
 
 					.c2.plx-width-1-3
 
-							.sticker-pack(v-show="selectBooster && selectBooster != 'none'" :style="`background-image:url('/build/boosters/showcase/${selectBooster.icon}.png')`" )
-							.pakInfo(plx-drop="offset: -80").plx-card
-								.title 
-									.plx-rarity-icon(:class='selectBooster.rarity')
-									span &#x2000  {{selectBooster.name}}
-								.size Pack Size: {{selectBooster.size}} 
-								.droppable Found on Lootboxes? {{selectBooster.droppable}} 
+						.sticker-pack(v-show="selectBooster && selectBooster != 'none'" :style="`background-image:url('/build/boosters/showcase/${selectBooster.icon}.png')`" )
+						.pakInfo(plx-drop="offset: -80").plx-card
+							.title 
+								.plx-rarity-icon(:class='selectBooster.rarity')
+								span &#x2000  {{selectBooster.name}}
+							.size Pack Size: {{selectBooster.size}} 
+							.droppable Found on Lootboxes? {{selectBooster.droppable}} 
 
-							.sticker-thumb(v-show="selectSticker && selectSticker != 'none'" :style="`background-image:url('/stickers/${selectSticker.id}.png')`" )
+						.sticker-thumb(v-show="selectSticker && selectSticker != 'none'" :style="`background-image:url('/stickers/${selectSticker.id}.png')`" )
 
 				.bottom.test
 
@@ -285,16 +297,16 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 						.drop.ui-droppable.medalSlot(data-pos = it)
 							if medal
 								+Medal(medal)
-			
+
 			br
 			#plx-filter.plx-width-1-1(class="plx-width-3-5@m")
 				//.selector
-						input(type='text', v-model='search' @keyup="filterMeds()")
+					input(type='text', v-model='search' @keyup="filterMeds()")
 				div(plx-filter='target: #inventory')
 					#inventory.ui-sortable.ui-droppable
-								-const INVENTORY = MDINFO.filter(md=> userdata.modules.medalInventory.includes(md.icon || md.id) )
-								each medal in INVENTORY.filter(md=> !userdata.modules.medals.includes(md.icon))
-										+Medal(medal)
+						-const INVENTORY = MDINFO.filter(md=> userdata.modules.medalInventory.includes(md.icon || md.id) )
+						each medal in INVENTORY.filter(md=> !userdata.modules.medals.includes(md.icon))
+							+Medal(medal)
 					.controls
 						.equipped-panel
 							a.random(@click="medalrandom")
@@ -322,10 +334,10 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 		// NOTE --Wifebox II 
 		div(v-if="window.width < 1400").plx-width-1-1
 			+wifeBox            
-			
+
 
 hr.plx-divider-icon
-							 
+
 
 script(defer)
-		include profile_edit.js
+	include profile_edit.js
