@@ -31,6 +31,11 @@ function js() {
         .pipe(uglify())
         .pipe(dest(out));
 }
+function jsOnly() {
+    return src(["./src/+(views|public)/**/*.js", ...ignore])
+        .pipe(uglify())
+        .pipe(dest(out));
+}
 
 function assets() {
     return src([`./src/**/*.{${imgExt}}`,`../../DEV/dashboard/src/**/*.{${imgExt}}`, ...ignore])
@@ -55,7 +60,7 @@ function others() {
 exports.build = series(css, js, assets, fonts, others);
 exports.buildClean = series(clear, css, js, assets, fonts, others);
 exports.buildNoAssets = series( css, js, fonts, others);
-exports.buildJS = series(js);
+exports.buildJS = series(clear,jsOnly);
 
 const imgExt = [
 	"ase",
