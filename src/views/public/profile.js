@@ -74,22 +74,22 @@ function since(x){
       udata(commend){
         return this.commendInfo.userdata.find(x=> x.id == commend?.id) || {}
       },
-      miliarize(numstring,strict,symbol){
-        let sym = symbol||"." 
+      miliarize(numstring="0", strict, separator="."){
+
         if (!numstring)return 0 ;
           if (typeof numstring == "number"){
               numstring = numstring.toString()
           }
           if(numstring.length < 4) return numstring;
-  
-          var stashe = numstring.replace(/\B(?=(\d{3})+(?!\d))/g, sym).toString();
+
+          var stashe = numstring.replace(/\B(?=(\d{3})+(?!\d))/g, separator).toString();
   
           if(strict==="ultra"){
               return stashe;
           }
           
           if(strict){
-              var stash = stashe.split(sym)
+              var stash = stashe.split(separator)
           switch(stash.length){
               case 1:
                   return stash;
@@ -98,16 +98,16 @@ function since(x){
                   return stash[0]+"K";
               case 3:
                   if(stash[2]!="000") break;
-                  return stash[0]+sym+stash[1][0]+stash[1][1]+"Mi";
+                  return stash[0]+separator+stash[1][0]+stash[1][1]+"Mi";
               case 4:
                   if(stash[3]!="000") break;
-                  return stash[0]+sym+stash[1][0]+stash[1][1]+"Bi";
+                  return stash[0]+separator+stash[1][0]+stash[1][1]+"Bi";
                }
 
               return stashe;
           }        
   
-          stash = stashe.split(sym)
+          stash = stashe.split(separator)
           switch(stash.length){
               case 1:
                   return stash.join(" ");
