@@ -703,6 +703,8 @@ background-repeat: no-repeat;
   }
   .medal-chip .rarity {
     position: absolute;
+    top: -10px;
+    left: -10px;
   }
   .medal-chip .face{
     min-block-size: 60px;
