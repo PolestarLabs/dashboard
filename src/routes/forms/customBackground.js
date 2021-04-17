@@ -25,6 +25,7 @@ module.exports = {
                 
         stream.pipe(outFile);
         stream.pipe(res);
+        
 
         outFile.on('finish', () =>  {
             console.log("• ".green + 'Custom BG Saved!');
@@ -42,5 +43,36 @@ module.exports = {
                 }
             })
         })
+
+        await DB.cosmetics.updateOne({type:'background', code: req.user.id }, {$inc: {version: 1}, $set: { name: `${req.user.username}'s Custom Background`, tags:"CUSTOM", rarity: "XR", type:"background", id: req.user.id, tradeable: false, droppable: false, destroyable: false, event: 'none' } }, {upsert: true} );
+    },
+    createNew: async (req,res) => {
+
+        if(!req.user) return res.status(401).json("NOPE");
+        const userData = await DB.users.get(req.user.id);
+        
+        if (!userData.donator) return res.status(402).json("NOPE");
+
+        const canvas = Canvas.createCanvas(720,380);
+        const ctx = canvas.getContext('2d');
+        ctx.fillStyle = "#121235";
+        ctx.fillRect(0,0,720,380);
+
+        const stream = canvas.createPNGStream();
+        const outFile = fs.createWriteStream( `${ASSETS_PATH}/cosmetics/backdrops/${req.user.id}.png` );
+        stream.pipe(outFile);
+
+        
+
+        await Promise.all([
+            DB.cosmetics.updateOne({type:'background', code: req.user.id }, {$set: {version: 0, name: `${req.user.username}'s Custom Background`, tags:"CUSTOM", rarity: "XR", type:"background", id: req.user.id, tradeable: false, droppable: false, destroyable: false, event: 'none' } }, {upsert: true} ),
+            DB.users.set({id: req.user.id }, {$addToSet: {"modules.bgInventory": req.user.id } })
+        ]).then(resp=>{
+            res.status(200).json(resp)
+        }).catch(err=>{
+            console.error(err);
+            res.status(500).json("ERROR")
+        });
+
     }
 }
