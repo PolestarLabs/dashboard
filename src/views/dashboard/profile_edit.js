@@ -47,6 +47,7 @@ var CANVAS;
       frame: (userdata.switches || {}).profileFrame,
       medals: [],
       favcolorOptions: [],
+      frameOpacity:1,
       medalsEquipped: [],
       customBgUpload: null,
       hooperSettings: {
@@ -761,7 +762,7 @@ function update(){
     ctx.clearRect(0,0,CANVAS.width,CANVAS.height);
     if(img.complete){
         displayTransform.setTransform();
-        ctx.fillStyle = "#1b1b35"
+        ctx.fillStyle = "#0b0b25"
         ctx.fillRect(-2000,-2000,5000,5000)
         ctx.drawImage(img,0,0);
         ctx.fillStyle = "white";

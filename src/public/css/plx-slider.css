@@ -3,6 +3,7 @@
     -webkit-appearance: none;
     margin: 10px 0;
     width: 100%;
+    background: none;
 }
 .plx-slider input[type=range]:focus {
     outline: none;
