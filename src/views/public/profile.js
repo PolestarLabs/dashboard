@@ -72,7 +72,7 @@ function since(x){
           );       
       },
       udata(commend){
-        return this.commendInfo.userdata.find(x=> x.id == commend?.id) || {}
+        return this.commendInfo.userdata.find(x=> x.id == (commend||{}).id) || {}
       },
       miliarize(numstring="0", strict, separator="."){
 
@@ -227,6 +227,6 @@ window.onload = (event) => {
 };
 
 
-fetch("/dash/imgbookmarks/"+userprofile.id+"?.png").then(r =>
+fetch("/dash/imgbookmarks/"+userprofile.id).then(r =>
   r.json().then(res =>  PROFILE.boorucollection = res  )
 );
