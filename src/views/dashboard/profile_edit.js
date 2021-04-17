@@ -14,12 +14,13 @@ if (!userdata.modules.flairsInventory.includes("default"))
   userdata.modules.flairsInventory.push("default");
 const flairsAvailable = userdata.modules.flairsInventory;
 
-var CANVAS;
+var CANVAS, ctx;
 
 
  DASH = new Vue({
   el: "#dash",
   data:  {
+      userIsPremium: isPremium(),
       RSHP: {loading:true},
       featuredMarriage: userdata.featuredMarriage,
       message: "hello",
@@ -59,7 +60,7 @@ var CANVAS;
         initialSlide: flairsAvailable.indexOf(userdata.modules.flairTop),
       },
       sortWife: "ring",
-      loadedBGimage: "/backdrops/bowsette2.png"
+      loadedBGimage: "/backdrops/"+userdata.id+".png"
   },
   created() {
     window.addEventListener('resize', this.handleResize);
@@ -86,6 +87,24 @@ destroyed() {
       vueDoesntFuckingWork()
      
     },
+    createNewCustomBg(){
+      if(isPremium()){
+        fetch(`/api/cosmetics/backgrounds/custom`, {
+          method: 'POST',
+          headers: {'Content-Type':"application/json;charset=UTF-8"}
+        }).then(res=>{
+          try{
+            res.json().then(x=>{
+              console.log(res);
+            })
+          }catch(e){};
+          
+          updateUserBGs(1);
+        });
+      }else{
+        console.log("no premium dawg")
+      }
+    },
     async sendFile() {
       if (!CANVAS) return;
       let userBG = this.backgroundsAvailable.find(b=>b.code === userdata.id);
@@ -93,8 +112,8 @@ destroyed() {
       //let dataForm = new FormData();
       //dataForm.append(`file`, this.$refs.custombgHolder.files[0]);
       
-      let res = await fetch(`/api/cosmetics/custombg`, {
-        method: 'POST',
+      await fetch(`/api/cosmetics/backgrounds/custom`, {
+        method: 'PATCH',
         headers: {'Content-Type':"application/json;charset=UTF-8"},
         body: JSON.stringify({data: CANVAS.toDataURL() }),
       });
@@ -426,10 +445,7 @@ async function AUTOSAVE(what,silent) {
           method: "PATCH",
           headers: { "Content-Type": "application/json; charset=utf-8" },
           body: JSON.stringify({
-            data: 
-              userdata.donator && userdata.id === relevantData.bkg
-                ? -2
-                : userdata.modules.bgInventory.indexOf(relevantData.bkg),
+            data: DASH.backgroundsAvailable.map(x=>x.code).indexOf(relevantData.bkg),
           }),
         })
       );
@@ -511,37 +527,45 @@ fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
   })
 );
 
+function updateUserBGs(){
+  fetch("/api/user/"+userinfo.id+"/bgs").then(r =>
+    r.json().then(res =>  {
+      console.log({res})
+      DASH.selectBackground = res.find((bg) => bg.code == userdata.modules.bgID) || "none";
+      
+      console.log()
+      DASH.backgroundsAvailable = res.map(thisBgData=>{
+        return {
+          name: thisBgData.name,
+          rarity: thisBgData.rarity,
+          tags: thisBgData.tags,
+          code: thisBgData.code,
+          img: "/backdrops/" + thisBgData.code + ".png",
+        };
+      });
+      userdata.modules.bgInventory.map((bg) => {
+        let thisBgData = res.find((x) => x.code == bg) || {
+          name: "Unknown",
+          rarity: "C",
+          tags: "unknown test",
+        };
+        return {
+          name: thisBgData.name,
+          rarity: thisBgData.rarity,
+          tags: thisBgData.tags,
+          code: thisBgData.code,
+          img: "/backdrops/" + thisBgData.code + ".png",
+        };
+      }); 
+      setTimeout(_=>{
+        createCBGCanvas();
+      },1000)
+    } )
+  );
+}
 
-fetch("/api/user/"+userinfo.id+"/bgs").then(r =>
-  r.json().then(res =>  {
-    console.log({res})
-    DASH.selectBackground = res.find((bg) => bg.code == userdata.modules.bgID) || "none";
-    
-    userdata.modules.bgInventory.map((bg) => {
-      let thisBgData = res.find((x) => x.code == bg) || {
-        name: "Unknown",
-        rarity: "C",
-        tags: "unknown test",
-      };
-      return {
-        name: thisBgData.name,
-        rarity: thisBgData.rarity,
-        tags: thisBgData.tags,
-        code: thisBgData.code,
-        img: "/backdrops/" + thisBgData.code + ".png",
-      };
-    });
-    if(userdata && userdata.donator && !['plastic','aluminium','iron'].includes(userdata.donator) ){
-      DASH.backgroundsAvailable.unshift({
-        name: `${userdata.name}'s Custom Background`,
-        rarity: "XR",
-        tags: "CUSTOM",
-        code:  userdata.id,
-        img: "/backdrops/" + userdata.id + ".png?v="+Date.now(),
-      })
-    }
-  } )
-);
+updateUserBGs()
+
 fetch("/api/user/"+userinfo.id+"/medals").then(r =>
   r.json().then(res => {
     DASH.medals = res;
@@ -562,75 +586,85 @@ function vueDoesntFuckingWork(){
   reader.readAsDataURL( DASH.$refs.custombgHolder.files[0] );
 }
 
-CANVAS =  document.getElementById("bg-canvas");
-var ctx = CANVAS.getContext("2d");
-img.src = DASH.loadedBGimage;
 
-
+var timer =0;
 var mouse = {
-    x : 0,
-    y : 0,
-    w : 0,
-    alt : false,
-    shift : false,
-    ctrl : false,
-    buttonLastRaw : 0, 
-    buttonRaw : 0,
-    over : false,
-    buttons : [1, 2, 4, 6, 5, 3],  
+  x : 0,
+  y : 0,
+  w : 0,
+  alt : false,
+  shift : false,
+  ctrl : false,
+  buttonLastRaw : 0, 
+  buttonRaw : 0,
+  over : false,
+  buttons : [1, 2, 4, 6, 5, 3],  
 };
+
 function mouseMove(event) {
-   
-    mouse.x = event.offsetX;
-    mouse.y = event.offsetY;
-    if (mouse.x === undefined) {
-        mouse.x = event.clientX;
-        mouse.y = event.clientY;
-    }
-    mouse.alt = event.altKey;
-    mouse.shift = event.shiftKey;
-    mouse.ctrl = event.ctrlKey;
-    if (event.type === "mousedown") {
-        if(mouse.buttonRaw === 4){
-          mouse.buttonRaw |= mouse.buttons[event.which-1];
-        }else{
-          event.preventDefault()
-          mouse.buttonRaw |= mouse.buttons[event.which-1];
-        }
-    } else if (event.type === "mouseup") {
-        mouse.buttonRaw &= mouse.buttons[event.which + 2];
-    } else if (event.type === "mouseout") {
-        mouse.buttonRaw = 0;
-        mouse.over = false;
-    } else if (event.type === "mouseover") {
-        mouse.over = true;
-    } else if (event.type === "wheel") {
+    
+  mouse.x = event.offsetX;
+  mouse.y = event.offsetY;
+  if (mouse.x === undefined) {
+      mouse.x = event.clientX;
+      mouse.y = event.clientY;
+  }
+  mouse.alt = event.altKey;
+  mouse.shift = event.shiftKey;
+  mouse.ctrl = event.ctrlKey;
+  if (event.type === "mousedown") {
+      if(mouse.buttonRaw === 4){
+        mouse.buttonRaw |= mouse.buttons[event.which-1];
+      }else{
         event.preventDefault()
-        mouse.w = -event.deltaY;
-        console.log(mouse.w)
-    } else if (event.type === "DOMMouseScroll") {  
-       mouse.w = -event.detail;
-    }
-  
+        mouse.buttonRaw |= mouse.buttons[event.which-1];
+      }
+  } else if (event.type === "mouseup") {
+      mouse.buttonRaw &= mouse.buttons[event.which + 2];
+  } else if (event.type === "mouseout") {
+      mouse.buttonRaw = 0;
+      mouse.over = false;
+  } else if (event.type === "mouseover") {
+      mouse.over = true;
+  } else if (event.type === "wheel") {
+      event.preventDefault()
+      mouse.w = -event.deltaY;
+      console.log(mouse.w)
+  } else if (event.type === "DOMMouseScroll") {  
+    mouse.w = -event.detail;
+  }
+
 
 }
 
 function setupMouse(e) {
-    e.addEventListener('mousemove', mouseMove);
-    e.addEventListener('mousedown', mouseMove);
-    e.addEventListener('mouseup', mouseMove);
-    e.addEventListener('mouseout', mouseMove);
-    e.addEventListener('mouseover', mouseMove);
-    e.addEventListener('wheel', mouseMove);
-    e.addEventListener('DOMMouseScroll', mouseMove); // fire fox
-    
-    e.addEventListener("contextmenu", function (e) {
-        e.preventDefault();
-    }, false);
+  e.addEventListener('mousemove', mouseMove);
+  e.addEventListener('mousedown', mouseMove);
+  e.addEventListener('mouseup', mouseMove);
+  e.addEventListener('mouseout', mouseMove);
+  e.addEventListener('mouseover', mouseMove);
+  e.addEventListener('wheel', mouseMove);
+  e.addEventListener('DOMMouseScroll', mouseMove); // fire fox
+  
+  e.addEventListener("contextmenu", function (e) {
+      e.preventDefault();
+  }, false);
 }
-setupMouse(CANVAS);
 
-var displayTransform = {
+function createCBGCanvas(){
+
+  if( !DASH.userIsPremium || !DASH.backgroundsAvailable.find(x=>x.code==userdata.id)){
+    return;
+  }
+
+  CANVAS =  document.getElementById("bg-canvas");
+  ctx = CANVAS.getContext("2d");
+  img.src = DASH.loadedBGimage;
+
+  
+  setupMouse(CANVAS);
+
+  var displayTransform = {
     x:0,
     y:0,
     ox:0,
@@ -666,7 +700,7 @@ var displayTransform = {
         
     },
     update:function(){
-
+  
         // accel
         this.dx += (this.x-this.cx)*this.accel;
         this.dy += (this.y-this.cy)*this.accel;
@@ -674,7 +708,7 @@ var displayTransform = {
         this.doy += (this.oy-this.coy)*this.accel;
         this.dscale += (this.scale-this.cscale)*this.accel;
         this.drotate += (this.rotate-this.crotate)*this.accel;
-
+  
         // drag
         this.dx *= this.drag;
         this.dy *= this.drag;
@@ -682,7 +716,7 @@ var displayTransform = {
         this.doy *= this.drag;
         this.dscale *= this.drag;
         this.drotate *= this.drag;
-
+  
         this.cx += this.dx;
         this.cy += this.dy;
         this.cox += this.dox;
@@ -694,10 +728,10 @@ var displayTransform = {
         this.matrix[1] = Math.sin(this.crotate)*this.cscale;
         this.matrix[2] =  - this.matrix[1];
         this.matrix[3] = this.matrix[0];
-
+  
         this.matrix[4] = -(this.cx * this.matrix[0] + this.cy * this.matrix[2])+this.cox;
         this.matrix[5] = -(this.cx * this.matrix[1] + this.cy * this.matrix[3])+this.coy;        
-
+  
         var det = (this.matrix[0] * this.matrix[3] - this.matrix[1] * this.matrix[2]);
         this.invMatrix[0] = this.matrix[3] / det;
         this.invMatrix[1] =  - this.matrix[1] / det;
@@ -718,7 +752,7 @@ var displayTransform = {
                 this.oy = mouse.y;
                 this.x = this.mouseX;
                 this.y = this.mouseY;
-
+  
                 if(mouse.w > 0){ // zoom in
                     this.scale *= 1.1;
                     mouse.w -= 20;
@@ -733,29 +767,29 @@ var displayTransform = {
                         mouse.w = 0;
                     }
                 }
-
+  
             }
-
+  
             var screenX = (mouse.x - this.cox);
             var screenY = (mouse.y - this.coy);
             this.mouseX = this.cx + (screenX * this.invMatrix[0] + screenY * this.invMatrix[2]);
             this.mouseY = this.cy + (screenX * this.invMatrix[1] + screenY * this.invMatrix[3]);            
             mouse.rx = this.mouseX; 
             mouse.ry = this.mouseY;
-
+  
             mouse.oldX = mouse.x;
             mouse.oldY = mouse.y;
         }
         
     }
-}
+  }  
 
-ctx.font = "14px Panton";
-ctx.textAlign = "center";
-ctx.textBaseline = "middle";
-
-var timer =0;
-function update(){
+  ctx.font = "14px Panton";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+    
+  function update(){
+    if(!ctx) return;
     timer += 1; 
     displayTransform.update();
     displayTransform.setHome();
@@ -776,5 +810,24 @@ function update(){
     }
 
     requestAnimationFrame(update);
+  }
+  
+  update();
 }
-update();
+
+function isPremium(){
+  return userdata && userdata.donator && !['plastic','aluminium','iron'].includes(userdata.donator)
+}
+
+function createCustomBG(){
+  return {
+    name: `${userdata.name}'s Custom Background`,
+    rarity: "XR",
+    tags: "CUSTOM",
+    code:  userdata.id,
+    img: "/backdrops/" + userdata.id + ".png?v="+Date.now(),
+  }
+}
+
+createCBGCanvas()
+
