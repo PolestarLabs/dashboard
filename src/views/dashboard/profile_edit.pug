@@ -76,7 +76,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 	// NOTE Sidebar
 	.profile-editor-sidebar.plx-width-1-1(class="plx-width-1-3@m" v-bind:style="{'--favcolor-dim':favcolor.hex+'56','--favcolor':favcolor.hex}"  )
 		.c(style="position: fixed; bottom: 20px; right: 20px; z-index: 10")
-			a(@click='saveAll()').plx-button.plx-margin-right.plx-margin-bottom(type='button'  style="margin-top:100px")
+			a(@click='saveAll()').plx-button.plx-button-secondary.plx-margin-right.plx-margin-bottom(type='button'  style="margin-top:100px")
 				i.fas.fa-save              
 				span &#x2002 Save All
 
@@ -115,7 +115,9 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 
 		// NOTE --Custom BG Loader
 		br
-		hr
+		br
+		br
+		
 		#custom-bg-loader
 			.plx-container
 				h3.title Custom Background
@@ -165,7 +167,8 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 					i.fas.fa-lock
 					span &#x2000 Reserved for Prime Users
 			
-			hr
+			br
+			br
 			
 
 
@@ -314,8 +317,8 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 		// NOTE --MEDAL PICKER
 		mixin Medal (medal)
 			.medal-chip.ui-draggable.drag(plx-tooltip=medal.name, data-medal = medal.id || medal.icon data-cat=medal.category.toLowerCase() data-search=medal.name+' '+medal.category data-rarity=medal.rarity)
-				.rarity: .plx-rarity-icon(class= medal.rarity, style="z-index:5")
 				.face(style="background-image: url('/medals/"+medal.icon+".png');")
+				.rarity: .plx-rarity-icon(class= medal.rarity, style="z-index:5")
 		#medals.plx-width-1-1
 			#equipped.plx-flex-wrap.plx-flex.plx-flex-column.plx-width-1-1(class="plx-width-2-5@m")
 				//(class="plx-width-1-3@m")
