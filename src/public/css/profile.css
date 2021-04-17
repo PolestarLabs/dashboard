@@ -942,7 +942,6 @@ width: 160px;
 
 .bg-insertion .plx-slider{
   --current-bg: var(--favcolor);
-  display: none;
 }
 .bg-insertion{ 
   max-width: 800px;
