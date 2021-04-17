@@ -70,9 +70,14 @@ router.get("/search", cache(2600), async (req,res) =>{
     })
 })
 
-router.post("/custombg", (req,res) =>{ 
+router.patch("/backgrounds/custom", (req,res) =>{ 
     delete require.cache[require.resolve("../forms/customBackground")];
     return (require("../forms/customBackground")).process(req,res);
+ })
+ 
+router.post("/backgrounds/custom", (req,res) =>{ 
+    delete require.cache[require.resolve("../forms/customBackground")];
+    return (require("../forms/customBackground")).createNew(req,res);
  })
 
 router.get("/backgrounds/:id/:endpoint", async (req,res) =>{    
