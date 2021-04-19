@@ -106,11 +106,12 @@ router.get('/:id/commends', cache(360), async (req,res)=>{
             )]
 
             const payload = {};
-            payload.whoOut = userCommends.whoOut;
             payload.userdata = await Promise.all(users.map(async usr=> (await userCache.get(usr)) || PLX.getRESTUser(usr)));
             payload.whoIn = userCommends.whoIn.sort((a,b)=> b.count - a.count )
+            payload.whoOut = userCommends.whoOut.sort((a,b)=> b.count - a.count )
         return res.json(payload);
     }
+    /*
     const commendDataIn = DB.commends.aggregate(
         [
             { $match: { id: uID || req.user.id  } }, 
@@ -134,7 +135,7 @@ router.get('/:id/commends', cache(360), async (req,res)=>{
         res.json(result[0])
     });
 
-    
+    */
 
    
 })
