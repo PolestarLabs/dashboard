@@ -281,7 +281,7 @@ function updateColorName(hex) {
     "https://www.thecolorapi.com/id?hex=" + hex.replace("#", "")
   ).then((r) => r.json().then(async (res) => {
     $("#colorname").html(res.name.value)
-     A//UTOSAVE("COLOR");
+     //UTOSAVE("COLOR");
   }));
 }
 
