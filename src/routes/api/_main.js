@@ -177,21 +177,18 @@ router.get('/relationships', cache(1260), async (req, res)=> {
 
     let Relationships;
     if (req.query.id){
-        Relationships = await DB.relationships.find({_id: req.query.id }).lean().exec();
+        Relationships = await DB.relationships.find({_id: req.query.id }).populate({path: 'usersData', select:'featuredMarriage id modules.tagline'}).lean();
         if(!Relationships) return res.status(404).json("RELATIONSHIP ID NOT FOUND");
     }
     if (req.query.uid){
-        Relationships = await DB.relationships.find({users: req.query.uid }).limit(10).skip(10*(skip||0)).lean().exec();
+        Relationships = await DB.relationships.find({users: req.query.uid }).limit(10).skip(10*(skip||0)).populate('usersData').lean();
         if(!Relationships) return res.status(404).json("USER NOT FOUND");
     }
 
     let usersInvolved = Relationships.map(R=> R.users.find(u=> u!=req.query.uid) ).concat(req.query.uid);
     
-    let [usersData,usersDBdata] = await Promise.all([
-        Promise.all( usersInvolved.map(async U => (await userCache.get( U )) || PLX.getRESTUser( U )) ),
-        (req.query.plxdata ? DB.users.find( {id: {$in: usersInvolved}},  {_id:0, id:1,"featuredMarriage":1,"modules.tagline":1} ) : null)
-    ]);
-    usersData.forEach(USR=> userCache.set(USR.id,USR) );
+    let usersDiscordData = await Promise.all( usersInvolved.map(async U => (await userCache.get( U )) || PLX.getRESTUser( U )) );
+    usersDiscordData.forEach(USR=> userCache.set(USR.id,USR) );
 
 
     let parsedRelationships = []
@@ -205,8 +202,8 @@ router.get('/relationships', cache(1260), async (req, res)=> {
             users: rel.users,
             usersData: rel.users.map(u=> {
                 let udbData = {};
-                let {avatar,bot,discriminator,username} = usersData.find(usr=> usr.id === u);
-                if(usersDBdata) udbData = usersDBdata.find(usr=> usr.id === u);           
+                let {avatar,bot,discriminator,username} = usersDiscordData.find(usr=> usr.id === u);
+                if(rel.usersData) udbData = rel.usersData.find(usr=> usr.id === u);           
                 
                 return  Object.assign( {id:u, avatar, bot, discriminator, username} , {tagline:udbData?.modules?.tagline,featuredMarriage:udbData?.featuredMarriage} )
             })
