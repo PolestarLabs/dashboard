@@ -25,6 +25,9 @@ global.cacheFunction = (duration) => {
 }
 
 const config = require('../config.js');
+global.Sentry = require("@sentry/node");
+Sentry.init({ dsn: config.sentry });
+
 global.HOST = config.host //"https://beta.pollux.gg" 
 
 global.hasPolluxRole = function hasPolluxRole(req,roleID){

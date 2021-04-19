@@ -9,9 +9,10 @@
     "build": "gulp build"
   },
   "dependencies": {
-    "@polestar/database_schema": "gitlab:PolestarLabs/database_schema",
+    "@polestar/database_schema": "gitlab:PolestarLabs/database_schema#populate",
     "@polestar/emoji-grimoire": "github:PolestarLabs/emoji-grimoire",
     "@polestar/timed-usage": "gitlab:PolestarLabs/timed-usage",
+    "@sentry/node": "^6.2.5",
     "axios": "^0.21.1",
     "bluebird": "^3.5.5",
     "body-parser": "^1.19.0",
