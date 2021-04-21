@@ -25,6 +25,9 @@ global.cacheFunction = (duration) => {
 }
 
 const config = require('../config.js');
+global.Sentry = require("@sentry/node");
+Sentry.init({ dsn: config.sentry });
+
 global.HOST = config.host //"https://beta.pollux.gg" 
 
 global.hasPolluxRole = function hasPolluxRole(req,roleID){
@@ -77,7 +80,6 @@ const logger = require('morgan');
 
 const favicon = require('serve-favicon');
 const cookieParser = require('cookie-parser');
-const bodyParser = require('body-parser');
 const xmlparser = require('express-xml-bodyparser');
 
 
@@ -88,8 +90,8 @@ const app = Express();
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    res.header('Access-Control-Allow-Origin', 'https://dev.pagseguro.uol.com.br');
-    res.header('Access-Control-Allow-Origin', 'https://pagseguro.uol.com.br');
+    //res.header('Access-Control-Allow-Origin', 'https://dev.pagseguro.uol.com.br');
+    //res.header('Access-Control-Allow-Origin', 'https://pagseguro.uol.com.br');
     res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
     res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
     res.header('Access-Control-Allow-Credentials', true);
@@ -97,7 +99,8 @@ app.use(function (req, res, next) {
     
     next();
 });
-app.use(bodyParser.json({
+app.use(Express.json({
+  limit: '50mb',
   verify: (req, res, buffer) => { req.rawBody = buffer }
 }));
 
@@ -170,7 +173,8 @@ redis:{
   global.userCache = {
     set(k,val){
       userCacheMap.set(k,val);
-      return PLX.redis.hset("discord.users",k,JSON.stringify(val))
+      PLX.redis.set("discord.users."+k,JSON.stringify(val))
+      PLX.redis.expire("discord.users."+k, 60 * 1);
     },
     get(k){
       if (userCacheMap.get(k)) {
@@ -178,7 +182,7 @@ redis:{
          return userCacheMap.get(k);
       }
       return new Promise((resolve) => {
-        PLX.redis.hget("discord.users",k, (_,d) => {
+        PLX.redis.get("discord.users+"+k, (_,d) => {
           if(d){
             console.log("✔️ Cached".green, k)
             userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
@@ -246,13 +250,14 @@ PassportRefresh.use(discordStrategy);
 
 app.use(favicon(path.join(__dirname, 'public', 'favicon.png')));
 app.use(cookieParser());
-app.use(bodyParser.json({limit: '50mb'}));
-app.use(bodyParser.urlencoded({
+app.use(xmlparser());
+app.use(Express.urlencoded({
   extended: true,
-   parameterLimit:50000,
+  parameterLimit:50000,
   limit: '50mb'
 }));
-app.use(xmlparser());
+app.use(Express.json({limit: '50mb', extended: true}));
+
 /*
 app.use(sassMiddleware({
   src: path.join(__dirname, 'public/sass'),

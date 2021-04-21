@@ -703,6 +703,8 @@ background-repeat: no-repeat;
   }
   .medal-chip .rarity {
     position: absolute;
+    top: -10px;
+    left: -10px;
   }
   .medal-chip .face{
     min-block-size: 60px;
@@ -859,7 +861,7 @@ color: white ;
   
 
 .profile-editor-sidebar{
- background: linear-gradient( var(--favcolor), #0000);
+ background: linear-gradient( var(--favcolor-dim), #0000);
   margin-top: -49px;
 }
 
@@ -936,4 +938,102 @@ width: 160px;
   font-style: italic;
   display: block;
   margin: 0px 10px 10px 50px   
+}
+
+
+
+.bg-insertion .plx-slider{
+  --current-bg: var(--favcolor);
+}
+.bg-insertion{ 
+  max-width: 800px;
+  max-height: 600px;
+  position: relative;
+  margin: 0 auto -10px auto;
+
+}
+.bg-insertion .bg-frame{
+  position: relative;
+  pointer-events: none;
+  top: 0;
+  left:0;
+  width: 100%;
+}
+.bg-insertion .canvas-container{
+  width: 100%;  
+  background: red;
+  position: relative;
+}
+.canvas-container canvas{
+  right: 2.895%;
+  margin-top: 2%; 
+  width: 89%;  
+  position: absolute;
+}
+
+.load-button{
+ text-align: center;  
+}
+ 
+#main-content{
+  align-items: flex-start;
+  align-content: flex-start;
+}
+
+
+
+.padlock{
+  max-width: 400px;
+  height: 300px;
+  margin: 40px auto 20px;
+  border-radius: 20px; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: dashed  2px var(--text-faint);
+
+  transition:  opacity .5s ease;
+}
+
+.padlock:hover{
+  background: #AAD1;
+  cursor: url(/cur/pointer.png), pointer;  
+}
+
+.padlock:hover span{
+  width: 100%;
+  opacity: 1;
+  transition-delay: 0s, .3s;  
+}
+
+.can-enable{
+  color: var(--text-extra-bold);
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+}
+
+.padlock span{
+  opacity: 0;
+  width: 0;  
+  white-space: nowrap;
+  overflow: hidden;
+  transition: width .3s ease-out, opacity .3s ease;
+  transition-delay: .1s, .0s;
+}
+
+.padlock .can-enable:hover{
+  opacity: 1;
+}
+
+
+.fake-frame{
+  position: absolute;
+  opacity: .2;
+  filter: blur(5px)
+}
+.padlock i{
+  
 }

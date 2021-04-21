@@ -4,12 +4,15 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "run-src": "node ./src/neodash.js",
+    "run-dist": "node ./dist/neodash.js",
     "build": "gulp build"
   },
   "dependencies": {
-    "@polestar/database_schema": "gitlab:PolestarLabs/database_schema",
+    "@polestar/database_schema": "gitlab:PolestarLabs/database_schema#populate",
     "@polestar/emoji-grimoire": "github:PolestarLabs/emoji-grimoire",
     "@polestar/timed-usage": "gitlab:PolestarLabs/timed-usage",
+    "@sentry/node": "^6.2.5",
     "axios": "^0.21.1",
     "bluebird": "^3.5.5",
     "body-parser": "^1.19.0",
@@ -56,8 +59,10 @@
     "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^4.3.0",
     "gulp-debug": "^4.0.0",
-    "gulp-font": "^1.0.4",
+    "gulp-font": "^1.0.2",
     "gulp-image": "^6.2.1",
-    "gulp-minify": "^3.1.0"
+    "gulp-minify": "^3.1.0",
+    "gulp-uglify": "^3.0.2",
+    "node-pre-gyp": "github:mapbox/node-pre-gyp"
   }
 }

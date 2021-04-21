@@ -1204,7 +1204,7 @@ body[data-aos-easing="ease-in-out-quart"] [data-aos] {
   outline: none;
 }
 .slick-list.dragging {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   cursor: hand;
 }
 
@@ -1503,7 +1503,7 @@ body[data-aos-easing="ease-in-out-quart"] [data-aos] {
   line-height: 1;
   position: relative;
   background: none;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   overflow: visible;
   -webkit-appearance: none;
   display: block;
