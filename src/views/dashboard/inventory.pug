@@ -16,9 +16,9 @@ mixin ITEM(ITEM, META)
             p= ITEM.type
                 
         .plx-card-footer.plx-flex.plx-flex-between
-            button.plx-button.plx-button-text(href='#' disabled=!ITEM.crafted) CRAFT
-            button.plx-button.plx-button-text(href='#' disabled=!ITEM.tradeable) POST IN MARKETPLACE
-            button.plx-button.plx-button-text(href='#' disabled=!ITEM.destroyable class=ITEM.destroyable?"plx-text-danger":"") DESTROY
+            button#inv-craft.plx-button.plx-button-text(href='#' disabled=!ITEM.crafted) CRAFT
+            button#inv-marketpost.plx-button.plx-button-text(href='#' disabled=!ITEM.tradeable) POST IN MARKETPLACE
+            button#inv-destroy.plx-button.plx-button-text(href='#' disabled=!ITEM.destroyable class=ITEM.destroyable?"plx-text-danger":"") DESTROY
 
 
 

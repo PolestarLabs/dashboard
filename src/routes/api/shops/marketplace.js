@@ -237,17 +237,17 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
           fields: [
             {
               name: "Min",
-              value: `${ itemMarketDetails.min ||0 }`,
+              value: `${ itemMarketDetails.min || " --- "  }`,
               inline: true
             },
             {
               name: "Max",
-              value: `${ itemMarketDetails.max ||0 }`,
+              value: `${ itemMarketDetails.max || " --- "  }`,
               inline: true
             },
             {
               name: "Market Average",
-              value: `${ ~~(itemMarketDetails.average) || "??" }`,
+              value: `${ ~~(itemMarketDetails.average) || " Unique Listing " }`,
               inline: true
             },/*
             {
@@ -571,8 +571,8 @@ function getItemMarketDetails(item) {
 
     const response = {
       item: result,
-      max: Math.max(...marketplacePriceMap),
-      min: Math.min(...marketplacePriceMap),
+      max: Math.max(...marketplacePriceMap,0),
+      min: Math.min(...marketplacePriceMap,0),
       average:
         marketplacePriceMap.reduce((a, b) => a + b, 0) / marketplace.length,
       entries: marketplace,

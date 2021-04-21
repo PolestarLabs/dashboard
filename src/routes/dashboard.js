@@ -198,6 +198,9 @@ router.patch("/profile/:endpoint", async (req,res)=>{
     }
     //positional
     if (_endpt == "background"){
+        if (payload === -2 && USERDATA.donator){
+            return DB.users.set(UID, {$set: {"modules.bgID" : UID} } ).then(()=> res.status(200).send("Saved! "+payload) );    
+        }
         if (!Number(payload+1) || USERDATA.modules.bgInventory.length <= Number(payload) ) return invalidPayload("Index out of Range");
         return DB.users.set(UID, {$set: {"modules.bgID" : USERDATA.modules.bgInventory[payload]} } ).then(()=> res.status(200).send("Saved! "+payload) );
     }

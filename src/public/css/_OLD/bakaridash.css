@@ -221,7 +221,7 @@ body .mainview .title{color:#334}
   margin:-4px -4px -4px 0;
   border-radius: 100%;
   position: relative;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .chk{
   position: absolute;

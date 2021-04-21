@@ -16,20 +16,21 @@ router.get('/lyrics', async (req,res)=>{
 
     const song = resp.data?.response?.hits?.[0]?.result;
     
-    if (!song) return res.status(401).json("No Lyrics Found");
+    if (!song) return res.status(412).json("Song not Found");
     const songSlim = {
-        id: song.id,
-        img: song.header_image_url,
+        id: song?.id,
+        img: song?.header_image_url,
         title: song?.title,
-        artist: song.primary_artist?.name,
+        artist: song?.primary_artist?.name,
         url: song?.url,        
     }
  
     //let lyrics = await geniusLyricsApi.getLyrics(options);//.catch(e=>null);
-    let lyrics = await lyricsFinder(req.query.a||songSlim.artist, songSlim.title);
+    let lyrics = await lyricsFinder(req.query.a||songSlim.artist||"", songSlim.title||req.query.q||"");
    
     songSlim.lyrics = lyrics
-
+    
+    if (!lyrics) return res.status(404).json("No Lyrics Found");
 
     return res.status(200).json(songSlim)
 })

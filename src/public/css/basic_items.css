@@ -1,4 +1,4 @@
-@import "/css/rarityboxes.css";
+@import "rarityboxes.css";
 
 
 @media screen and (max-width:500px){
@@ -102,7 +102,7 @@
     min-width: 48px;
     overflow: hidden;
     background: var(--bg-darkest);
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
   }
   .item-card .content-center .item-info .item-material-container .material > * {
     //pointer-events: none;

@@ -152,7 +152,7 @@ body {
 
 a {
   color: #d22c59 /*#00d1b2*/;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   text-decoration: none;
 }
 
@@ -1302,7 +1302,7 @@ a.box:active {
   background-color: white;
   border-color: #dbdbdb;
   color: #363636;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   -webkit-box-pack: center;
       -ms-flex-pack: center;
           justify-content: center;
@@ -2734,7 +2734,7 @@ a.box:active {
 
 .checkbox,
 .radio {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: inline-block;
   line-height: 1.25;
   position: relative;
@@ -2742,7 +2742,7 @@ a.box:active {
 
 .checkbox input,
 .radio input {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 
 .checkbox:hover,
@@ -2817,7 +2817,7 @@ a.box:active {
   background-color: white;
   border-color: #dbdbdb;
   color: #363636;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: block;
   font-size: 1em;
   max-width: 100%;
@@ -3355,7 +3355,7 @@ a.box:active {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   -webkit-box-pack: start;
       -ms-flex-pack: start;
           justify-content: flex-start;
@@ -4667,7 +4667,7 @@ a.tag:hover {
   background-color: rgba(10, 10, 10, 0.2);
   border: none;
   border-radius: 290486px;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: inline-block;
   -webkit-box-flex: 0;
       -ms-flex-positive: 0;
@@ -4973,7 +4973,7 @@ a.tag:hover {
   -webkit-box-align: center;
       -ms-flex-align: center;
           align-items: center;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -5664,7 +5664,7 @@ a.dropdown-item.is-active {
   background-color: rgba(10, 10, 10, 0.2);
   border: none;
   border-radius: 290486px;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: inline-block;
   -webkit-box-flex: 0;
       -ms-flex-positive: 0;
@@ -5817,7 +5817,7 @@ a.dropdown-item.is-active {
 }
 
 .nav-toggle {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: block;
   height: 3.25rem;
   position: relative;
@@ -6127,7 +6127,7 @@ a.nav-item:not(.button).is-tab.is-active {
 }
 
 .navbar-burger {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: block;
   height: 3.25rem;
   position: relative;
@@ -6819,7 +6819,7 @@ a.navbar-item:hover, a.navbar-item.is-active,
 
 a.panel-block,
 label.panel-block {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 
 a.panel-block:hover,
