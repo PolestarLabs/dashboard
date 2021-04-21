@@ -590,10 +590,6 @@ function itemInInventory(item, userData) {
   let query = {};
   let prequery;
 
-
-  if (item.type === "boosterpack")
-    item_shallow_id = item_shallow_id + "_booster";
-
   if (["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)){
     if ( userData.modules.inventory.find(it=>it.id === item.id)?.count < 1 ) {
       res = false;
