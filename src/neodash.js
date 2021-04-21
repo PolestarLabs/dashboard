@@ -173,7 +173,8 @@ redis:{
   global.userCache = {
     set(k,val){
       userCacheMap.set(k,val);
-      return PLX.redis.hset("discord.users",k,JSON.stringify(val))
+      PLX.redis.set("discord.users."+k,JSON.stringify(val))
+      PLX.redis.expire("discord.users."+k, 60 * 1);
     },
     get(k){
       if (userCacheMap.get(k)) {
@@ -181,7 +182,7 @@ redis:{
          return userCacheMap.get(k);
       }
       return new Promise((resolve) => {
-        PLX.redis.hget("discord.users",k, (_,d) => {
+        PLX.redis.get("discord.users+"+k, (_,d) => {
           if(d){
             console.log("✔️ Cached".green, k)
             userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
