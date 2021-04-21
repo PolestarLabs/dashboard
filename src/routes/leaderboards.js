@@ -51,16 +51,15 @@ async function compileLeaderboard(TYPE){
       });
     }
   
-    LEAD = LEAD.map(U => userRankify(U));
+    LEAD = await Promise.all( LEAD.map(async U => await userRankify(U)) );
   
     return LEAD;
 }
-function userRankify(plxUser = {}, discordUser, member) {
+async function userRankify(plxUser = {}, discordUser, member) {
   let userRank = {};
 
-  
-  discordUser= discordUser || userCache.get(plxUser.id) 
-  PLX.getRESTUser(plxUser.id ).then(u=> userCache.set(u.id,u));
+  console.log(plxUser.id)
+  discordUser = await userCache.get(plxUser.id);
  
 
   if (discordUser) {

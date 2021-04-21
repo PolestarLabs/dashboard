@@ -189,8 +189,9 @@ redis:{
             return resolve(userCacheMap.get(k))
           }else{
             console.log("❌ Not Cached".red, k);
+            return PLX.getRESTUser(k).then(u=> this.set(u.id,u) && resolve(u) );
           }
-        });     
+        });
         PLX.getRESTUser(k).then(u=> this.set(u.id,u) && resolve(u) );
       })
     }
