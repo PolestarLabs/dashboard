@@ -31,7 +31,7 @@ router.post(["/test","/test2"],(rq,rs) => {
 
 
 router.post("/", async (req, res) => {
-  RegisterAllCommands()
+  //RegisterAllCommands()
 
   const signature = req.get("X-Signature-Ed25519");
   const timestamp = req.get("X-Signature-Timestamp");
@@ -43,6 +43,17 @@ router.post("/", async (req, res) => {
 
   if (!isVerified) {
     return res.status(401).end("invalid request signature");
+  }
+
+  if(req.body.data.component_type == 2 ){
+    console.log(req.body.data)
+    if(req.body.data.custom_id == 'test'){
+      PLX.createMessage("834570253253869599","Pls stop")
+    }
+    if(req.body.data.custom_id == 'test2'){
+      PLX.createMessage("834570253253869599","uwu")
+    }
+    return
   }
 
   if (req.body.type === 1) {
@@ -95,4 +106,4 @@ function RegisterCommand(cmd){
 
 
 module.exports = router;
-RegisterAllCommands();
+//RegisterAllCommands();
