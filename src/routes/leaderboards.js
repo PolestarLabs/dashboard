@@ -58,11 +58,12 @@ async function compileLeaderboard(TYPE){
 async function userRankify(plxUser = {}, discordUser, member) {
   let userRank = {};
 
-  console.log(plxUser.id)
-  discordUser = await userCache.get(plxUser.id);
- 
+  discordUser = userCache.get(plxUser.id);
+  discordUser = discordUser instanceof Promise ? await discordUser.timeout(50).catch(e=>null) : discordUser;
+  
+  console.log(plxUser.id, discordUser?.id?"✅":"❌")
 
-  if (discordUser) {
+  if (discordUser?.id) {
     userRank.name = member
       ? discordUser.nick || discordUser.user.username
       : discordUser.username;
