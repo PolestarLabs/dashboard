@@ -105,6 +105,7 @@ router.get("/backgrounds/:id/:endpoint", async (req,res) =>{
 
 
 router.get("/backgrounds/:id", cache(0.01), async (req,res) =>{
+    PLX.redis.verbose = true;
     const {id: query} = req.params
     DB.cosmetics.findOne({type:"background",$or:[( MonTypes.ObjectId.isValid(query) ? {_id:query} :{id:query}) ,{code:query}]},{public:0,meta:0})
         .lean()
