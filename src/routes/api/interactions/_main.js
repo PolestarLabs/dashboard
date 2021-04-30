@@ -10,6 +10,8 @@ const readdirAsync = Promise.promisify(require("fs").readdir);
 
 
 router.get("/test", (rq,rs) => {
+  
+  RegisterAllCommands();
     console.log("test OK")
     return rs.json("OK");
 } )
@@ -93,7 +95,8 @@ function RegisterAllCommands(){
 
 function RegisterCommand(cmd){
   if ( !cmd.name && !cmd.description) return null;
-  return axios.post(`https://discord.com/api/v8/applications/${cfg.clientID_laris + ( (cmd.beta??true) ?'/guilds/789382326680551455':'') }/commands` ,
+  console.log(cmd.beta)
+  return axios.post(`https://discord.com/api/v9/applications/${cfg.clientID + ( (cmd.beta ?? true) ? '/guilds/277391723322408960':'') }/commands` ,
   {
     name:    cmd.name,
     //type: cmd.type || 4,
@@ -106,4 +109,5 @@ function RegisterCommand(cmd){
 
 
 module.exports = router;
+
 //RegisterAllCommands();
