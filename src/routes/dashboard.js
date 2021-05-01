@@ -191,6 +191,12 @@ router.patch("/profile/:endpoint", async (req,res)=>{
 
     const invalidPayload = (pld) => res.status(403).send("INVALID PAYLOAD: "+payload)
 
+
+    if (global.Progression){
+        Progression.emit("action.profile.edit",{userID: UID, value: 1});
+        console.log("Global Progression Emit: Edit Profile")
+    }
+    
     //traditional
     if (_endpt == "background-legacy"){
         if (!USERDATA.modules.bgInventory.includes(payload)) return invalidPayload(payload);
@@ -228,6 +234,8 @@ router.patch("/profile/:endpoint", async (req,res)=>{
     if (_endpt == "wife"){
         return DB.users.set(UID, {$set: {"featuredMarriage" : payload} } ).then(()=> res.sendStatus(200) );
     }
+
+
 
 })
 
