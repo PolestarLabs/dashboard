@@ -1,3 +1,10 @@
+//const WebhookDigester = require("@polestar/pollux/utils/WebhookDigester.js")
+//global.hook = new WebhookDigester(PLX);
+const ProgMgr = require('@polestar/pollux/core/archetypes/Progression');
+ProgMgr.init();
+
+console.log(global.Progression);
+
 const ECO = require('../pipelines/economy.js')
 const express = require('express');
 const router = express.Router();
@@ -195,6 +202,8 @@ router.patch("/profile/:endpoint", async (req,res)=>{
     if (global.Progression){
         Progression.emit("action.profile.edit",{userID: UID, value: 1});
         console.log("Global Progression Emit: Edit Profile")
+    }else{
+        console.log("noprog")
     }
     
     //traditional
