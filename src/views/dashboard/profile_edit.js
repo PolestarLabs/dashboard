@@ -436,11 +436,11 @@ async function AUTOSAVE(what,silent) {
     }
     if (ALL || what === "BACKGROUND") {
       queue.push(
-        fetch("/dashboard/profile/background", {
+        fetch("/dashboard/profile/background-legacy", {
           method: "PATCH",
           headers: { "Content-Type": "application/json; charset=utf-8" },
           body: JSON.stringify({
-            data: DASH.backgroundsAvailable.map(x=>x.code).indexOf(relevantData.bkg),
+            data: relevantData.bkg,
           }),
         })
       );
