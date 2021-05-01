@@ -375,7 +375,7 @@ async function AUTOSAVE(what,silent) {
       tgln: DASH.tagline,
       color: DASH.favcolor.hex,
       bkg: DASH.selectBackground.code,
-      medals: DASH.medalsEquipped.map(x=>x.id||x.icon||0),
+      medals: DASH.medalsEquipped.map(x=>x.id||x.icon||x||0),
       sticker: DASH.selectSticker.id,
       frame: DASH.frame,
       wife: DASH.featuredMarriage || "",
