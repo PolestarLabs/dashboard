@@ -423,7 +423,7 @@ template {
 :root {
     --plx-breakpoint-s: 640px;
     --plx-breakpoint-m: 960px;
-    --plx-breakpoint-l: 1200px;
+    --plx-breakpoint-l: 1400px;
     --plx-breakpoint-xl: 1600px
 }
 
@@ -477,7 +477,7 @@ a.plx-link-reset:hover {
     }
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-heading-primary {
         font-size: 3.75rem;
         line-height: 1.1
@@ -496,7 +496,7 @@ a.plx-link-reset:hover {
     }
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-heading-hero {
         font-size: 8rem;
         line-height: 1
@@ -1950,7 +1950,7 @@ box-shadow: 0 5px 10px
 }
 
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-grid {
         margin-left: -40px
     }
@@ -2008,7 +2008,7 @@ box-shadow: 0 5px 10px
     margin-top: 40px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-grid-large {
         margin-left: -70px
     }
@@ -2078,7 +2078,7 @@ box-shadow: 0 5px 10px
     left: 60px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-grid-divider {
         margin-left: -80px
     }
@@ -2164,7 +2164,7 @@ box-shadow: 0 5px 10px
     left: 80px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-grid-divider.plx-grid-large {
         margin-left: -140px
     }
@@ -2307,7 +2307,7 @@ box-shadow: 0 5px 10px
     padding: 15px 30px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-card-body {
         padding: 40px 40px
     }
@@ -2430,7 +2430,7 @@ box-shadow: 0 5px 10px
     padding: 13px 20px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
 
     .plx-card-large .plx-card-body,
     .plx-card-large.plx-card-body {
@@ -2467,7 +2467,7 @@ box-shadow: 0 5px 10px
     padding-left: 45px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-card-body>.plx-nav-default {
         margin-left: -40px;
         margin-right: -40px
@@ -2511,7 +2511,7 @@ box-shadow: 0 5px 10px
     padding-left: 35px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-card-large>.plx-nav-default {
         margin: 0
     }
@@ -5228,7 +5228,7 @@ ul.plx-nav-sub {
     }
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-child-width-1-1\@l>* {
         width: 100%
     }
@@ -5546,7 +5546,7 @@ ul.plx-nav-sub {
     }
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-width-1-1\@l {
         width: 100%
     }
@@ -5868,7 +5868,7 @@ ul.plx-nav-sub {
     }
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-text-left\@l {
         text-align: left !important
     }
@@ -5942,7 +5942,7 @@ th.plx-text-break {
     column-gap: 30px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     [class*=plx-column-] {
         column-gap: 40px
     }
@@ -5957,7 +5957,7 @@ th.plx-text-break {
     column-gap: 60px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-column-divider {
         column-gap: 80px
     }
@@ -6027,7 +6027,7 @@ th.plx-text-break {
     }
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-column-1-2\@l {
         column-count: 2
     }
@@ -6312,7 +6312,7 @@ iframe.plx-cover {
     }
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-align-left\@l {
         margin-top: 0;
         float: left
@@ -6796,7 +6796,7 @@ iframe.plx-cover {
     }
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-flex-left\@l {
         justify-content: flex-start
     }
@@ -6936,7 +6936,7 @@ iframe.plx-cover {
     }
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-flex-first\@l {
         order: -1
     }
@@ -7064,7 +7064,7 @@ iframe.plx-cover {
     margin-right: 40px !important
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-margin-large {
         margin-bottom: 70px
     }
@@ -7114,7 +7114,7 @@ iframe.plx-cover {
     margin-right: 70px !important
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-margin-xlarge {
         margin-bottom: 140px
     }
@@ -7199,7 +7199,7 @@ iframe.plx-cover {
     padding: 30px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-padding {
         padding: 40px
     }
@@ -7213,7 +7213,7 @@ iframe.plx-cover {
     padding: 30px
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-padding-large {
         padding: 70px
     }
@@ -7436,7 +7436,7 @@ iframe.plx-cover {
     transform: translateX(-50%) translateX(-30px)
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-position-large {
         max-width: calc(100% - (50px * 2));
         margin: 50px
@@ -7593,7 +7593,7 @@ iframe.plx-cover {
     }
 }
 
-@media (min-width:1200px) {
+@media (min-width:1400px) {
     .plx-hidden\@l {
         display: none !important
     }
