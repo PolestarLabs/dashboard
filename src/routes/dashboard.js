@@ -213,7 +213,7 @@ router.patch("/profile/:endpoint", async (req,res)=>{
     if (_endpt == "medal"){
         let [medal,index] = payload.split(',');
         if (medal!="0" && !USERDATA.modules.medalInventory.includes(medal)) return invalidPayload(payload);
-        return DB.users.set(UID, {$set: {[`modules.flairTop.${index}`] : medal} } ).then(()=> res.sendStatus(200) );
+        return DB.users.set(UID, {$set: {[`modules.medal.${index}`] : medal} } ).then(()=> res.sendStatus(200) );
     }
 
     if (_endpt == "sticker"){
@@ -233,8 +233,9 @@ router.patch("/profile/:endpoint", async (req,res)=>{
 
 
 router.put('/profile/medals', async (req,res)=>{
-    console.log(req.body,typeof req.body);
+    console.log(req.body,typeof req.body,"MEDALS BODY");
     try{
+        
 
         const UID = req.user.id;
         const USERDATA = await DB.users.get(UID);
