@@ -155,12 +155,14 @@ router.use('/admin',checkAuth, (...args)=>{
 
   router.post('/test', (req,res,nex)=> {
     console.log(req.body);
+   
     res.sendStatus(200)
 
   } );
   router.get('/testone', (req,res,nex)=> {
     console.log(req.body);
     //res.sendStatus(200)
+    console.log( require('../structures/ProgressionManager.js') );
     res.render('standalone-pages/oembed-test')
 
   } );
