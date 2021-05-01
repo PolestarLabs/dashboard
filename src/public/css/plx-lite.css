@@ -373,7 +373,7 @@ template {
 :root {
     --plx-breakpoint-s: 640px;
     --plx-breakpoint-m: 960px;
-    --plx-breakpoint-l: 1200px;
+    --plx-breakpoint-l: 1400px;
     --plx-breakpoint-xl: 1600px
 }
 

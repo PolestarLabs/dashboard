@@ -34,6 +34,14 @@ router.use("/nowplaying.png", async (...args) => {
     return (require('./nowplaying.js'))( ...args,ImageCache);
    
 });
+router.use("/levelup.gif", async (...args) => {
+    delete require.cache[require.resolve('./levelup')];
+    return (require('./levelup.js'))( ...args);   
+});
+router.use("/levelupframe.png", async (...args) => {
+    delete require.cache[require.resolve('./levelupframe')];
+    return (require('./levelupframe.js'))( ...args);   
+});
 
 router.use("/discoin", async (...args) => {
     return (require('./discoin.js'))( ...args);

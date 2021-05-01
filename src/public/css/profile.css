@@ -1032,7 +1032,8 @@ width: 160px;
 .fake-frame{
   position: absolute;
   opacity: .2;
-  filter: blur(5px)
+  filter: blur(5px);
+  pointer-events: none;
 }
 .padlock i{
   

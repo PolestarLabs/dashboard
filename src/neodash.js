@@ -172,27 +172,31 @@ redis:{
   const userCacheMap = new Map();
   global.userCache = {
     set(k,val){
+      if (!val) return;
       userCacheMap.set(k,val);
-      PLX.redis.set("discord.users."+k,JSON.stringify(val))
-      PLX.redis.expire("discord.users."+k, 60 * 1);
+      PLX.redis.set("discord.users."+k,JSON.stringify(val));
+      PLX.redis.expire("discord.users."+k, 60 * 60 * 1);
     },
     get(k){
       if (userCacheMap.get(k)) {
          console.log("✅ Supercached".cyan, k);
          return userCacheMap.get(k);
       }
-      return new Promise((resolve) => {
-        PLX.redis.get("discord.users+"+k, (_,d) => {
+      return new Promise((resolve,reject) => {
+        PLX.redis.get("discord.users."+k, (_,d) => {
           if(d){
             console.log("✔️ Cached".green, k)
-            userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
+            userCacheMap.set("discord.users."+k, new Eris.User(JSON.parse(d),PLX) );
             return resolve(userCacheMap.get(k))
           }else{
-            console.log("❌ Not Cached".red, k);
-            return PLX.getRESTUser(k).then(u=> this.set(u.id,u) && resolve(u) );
+            console.log("❌ Not Cached".red, k);            
           }
         });
-        PLX.getRESTUser(k).then(u=> this.set(u.id,u) && resolve(u) );
+        PLX.getRESTUser(k).then(u=> {
+          if(!u) return reject("NO USER")
+          this.set(u.id,u);
+          return resolve(u)
+        }).catch(reject);
       })
     }
   }
@@ -480,7 +484,8 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
 })  
 
 //###################################################################################
-const simpleauth = require('basic-auth')
+const simpleauth = require('basic-auth');
+const { reject } = require('bluebird');
 const admins = { polaris: { password: 'geminis472899' } }
  
 // remove all this shit later
