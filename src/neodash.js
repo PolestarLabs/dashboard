@@ -149,6 +149,8 @@ const dbOptions = {
 global.PLX = new Eris.Client(config.token,{restMode:true});
 PLX.id = config.clientID;
 require('@polestar/emoji-grimoire').initialize(PLX);
+require('@polestar/pollux/core/archetypes/Progression').init();
+
 
 Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client);
 
