@@ -195,8 +195,6 @@ router.patch("/profile/:endpoint", async (req,res)=>{
     if (global.Progression){
         Progression.emit("action.profile.edit",{userID: UID, value: 1});
         console.log("Global Progression Emit: Edit Profile")
-    }else{
-        console.log("noprog")
     }
     
     //traditional
