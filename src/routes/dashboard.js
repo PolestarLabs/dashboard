@@ -1,10 +1,3 @@
-//const WebhookDigester = require("@polestar/pollux/utils/WebhookDigester.js")
-//global.hook = new WebhookDigester(PLX);
-const ProgMgr = require('@polestar/pollux/core/archetypes/Progression');
-ProgMgr.init();
-
-console.log(global.Progression);
-
 const ECO = require('../pipelines/economy.js')
 const express = require('express');
 const router = express.Router();
