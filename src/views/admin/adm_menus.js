@@ -251,7 +251,7 @@ $('.plx-pink-check input').change(function(){
   if (this.id == "server-prefix" )        opt= { f_name: "Server Prefix",param: data_payload.prefix  };
   if (this.id == "levelup-local" )        opt= { f_name: "Level Up Message [LOCAL]",param: data_payload.lvup_loc  };
   if (this.id == "levelup-global" )       opt= { f_name: "Level Up Message [GLOBAL]",param: data_payload.lvup_glb  };
-  if (this.id == "level-message" )        opt= { f_name: "Level Up Message",param: data_payload.l_mess  };
+  if (this.id == "levelup-message" )      opt= { f_name: "Level Up Message",param: data_payload.l_mess  };
   if (this.id == "update-alerts" )        opt= { f_name: "Update Hooks",param: data_payload.updates };
   if (this.id == "modrole-select" )       opt= { f_name: "Administrative Role",param: data_payload.modrole };
   if (this.id == "muterole-select" )      opt= { f_name: "MUTE Role",param: data_payload.muterole  };
