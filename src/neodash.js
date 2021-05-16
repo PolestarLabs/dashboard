@@ -149,7 +149,6 @@ const dbOptions = {
 global.PLX = new Eris.Client(config.token,{restMode:true});
 PLX.id = config.clientID;
 require('@polestar/emoji-grimoire').initialize(PLX);
-require('@polestar/pollux/core/archetypes/Progression').init();
 
 
 Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client);
@@ -163,6 +162,9 @@ redis:{
   port: 6379
 }}).then(Connection => {
   global.DB  = Connection;
+
+  require('@polestar/pollux/core/archetypes/Progression').init();
+
   app.listen( process.env.DASHPORT || 4728, function (err) {
     if (err) return console.log(err);
     console.log( HOST.yellow )
