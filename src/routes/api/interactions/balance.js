@@ -106,7 +106,7 @@ console.log('hare')
           )}**` +
           `\n\u2003${_emoji("PSM")} ${$t("keywords.PSM_plural", {
             lngs: P.lngs,
-          })}: **${miliarize(TARGETDATA.modules.prisms ?? 0, true)}**` +
+          })}: **${miliarize(TARGETDATA.modules.PSM ?? 0, true)}**` +
           `\n\u2003${_emoji("EVT")} ${"Event Tokens"}: **${miliarize(
             TARGETDATA.eventGoodie || 0,
             true
