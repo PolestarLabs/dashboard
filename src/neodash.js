@@ -492,6 +492,7 @@ const simpleauth = require('basic-auth');
 const { reject } = require('bluebird');
 const admins = { polaris: { password: 'geminis472899' } }
  
+/*
 // remove all this shit later
 const auth = async function(req, res, next) {
   //return next();
@@ -548,6 +549,7 @@ const auth = async function(req, res, next) {
 
   return next()
 }
+*/
 
 global.isAdmin = function isAdmin(req,svID){
   return new Promise(async resolve=>{
@@ -582,7 +584,7 @@ global.checkAuth = function checkAuth(req, res, next) {
 
 //app.use(auth);
 
-app.get('/', auth, (req,res,rex)=>  {
+app.get('/', (req,res,rex)=>  {
   if (req.query.ref) {
     let ref = req.query.ref;
     DB.serverDB.set(ref, {
@@ -616,7 +618,7 @@ app.get('/callback',
           (...args)=> simplepages().callback(...args));
 
   
-app.use('/', auth, (...args)=>{
+app.use('/', (...args)=>{
   //delete require.cache[require.resolve('./routes/_allroutes')];
   const router = require('./routes/_allroutes');
   return router(...args);    
