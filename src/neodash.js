@@ -162,8 +162,10 @@ redis:{
   port: 6379
 }}).then(Connection => {
   global.DB  = Connection;
+  setTimeout(()=>{
+    require('@polestar/pollux/core/archetypes/Progression').init();
+  },2500)
 
-  require('@polestar/pollux/core/archetypes/Progression').init();
 
   app.listen( process.env.DASHPORT || 4728, function (err) {
     if (err) return console.log(err);
