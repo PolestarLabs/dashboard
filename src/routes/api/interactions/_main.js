@@ -47,25 +47,28 @@ router.post("/", async (req, res) => {
     return res.status(401).end("invalid request signature");
   }
 
-  if(req.body.data.component_type == 2 ){
-    console.log(req.body.data)
+  if(req.body?.data?.component_type == 2 ){
+    console.log(req.body.data,'body-data')
     if(req.body.data.custom_id == 'test'){
       PLX.createMessage("834570253253869599","Pls stop")
     }
     if(req.body.data.custom_id == 'test2'){
       PLX.createMessage("834570253253869599","uwu")
     }
-    return
+    console.log('will return 200')
+    return res.status(200).json({type: 6 });
   }
 
   if (req.body.type === 1) {
     return res.json({ type: 1 });
   } else {
 
-    console.log((require('util')).inspect(req.body.data,{colors:true,depth:8}))
+    console.log((require('util')).inspect(req.body.data,{colors:true,depth:8}),'inspect'.yellow)
+
 
     let command = require( `./${req.body.data.name}.js` );
-    if(!command) return res.status(400).json("Nope");
+
+    if(!command) return res.status(200).json("Nope");
     else res.json( await command.exec(req, req.body) );
   }
 });
@@ -104,7 +107,7 @@ function RegisterCommand(cmd){
     options: cmd.options,
     choices: cmd.choices,
   },
-  {headers: { Authorization: PLX.token }})
+  {headers: { Authorization: PLX._token }})
 } 
 
 
