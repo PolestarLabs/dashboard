@@ -1050,6 +1050,11 @@ div:not(.plx-open) .faders {
  background-image:url(/images/gems/JDE.png);
  background-size:contain
 }
+.plx-prism, .plx-PSM {
+ /*background-image:url(/images/gems/jade_full.png);*/
+ background-image:url(/images/gems/PSM.png);
+ background-size:contain
+}
 .plx-sapphire, .plx-SPH {
  /*background-image:url(/images/gems/sapphire_full.png);*/
  background-image:url(/images/gems/SPH.png);
