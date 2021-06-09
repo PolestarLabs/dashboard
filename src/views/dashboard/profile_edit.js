@@ -811,7 +811,7 @@ function createCBGCanvas(){
 }
 
 function isPremium(){
-  return userdata && userdata.donator && !['plastic','aluminium','iron'].includes(userdata.donator)
+  return userdata && userdata.prime?.custom_background
 }
 
 function createCustomBG(){
