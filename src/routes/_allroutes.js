@@ -19,7 +19,8 @@ const fx = require('../pipelines/globalFunctions.js');
 
 
 // MARKET  
-router.use('/marketplace', (...args)=>{ res.redirect('/shop/marketplace') });
+  router.use('/marketplace', ( r,res)=>{ res.redirect('/shop/marketplace') });
+  
   router.use('/shop', (...args)=>{
     delete require.cache[require.resolve('./shops')];
     const shop = require('./shops');
@@ -161,6 +162,8 @@ router.use('/admin',checkAuth, (...args)=>{
   } );
   router.get('/testone', (req,res,nex)=> {
     console.log(req.body);
+    //res.sendStatus(200)
+    console.log( require('../structures/ProgressionManager.js') );
     res.render('standalone-pages/oembed-test')
 
   } );
@@ -208,7 +211,7 @@ router.use('/admin',checkAuth, (...args)=>{
   
   router.get('/invite', function (req, res) {
     //req.logout();
-    res.redirect('https://discordapp.com/api/oauth2/authorize?client_id='+ (PLX.user.id||"354285599588483082")+'&redirect_uri='+encodeURIComponent(HOST+"/callback")+'&response_type=code&scope=applications.commands%20bot%20identify%20guilds%20connections%20email&permissions=268492816&guild_id='+req.query.sv);
+    res.redirect('https://discordapp.com/api/oauth2/authorize?client_id='+ (PLX.user?.id||"578913818961248256")+'&redirect_uri='+encodeURIComponent(HOST+"/callback")+'&response_type=code&scope=applications.commands%20bot%20identify%20guilds%20connections%20email&permissions=268492816&guild_id='+req.query.sv);
   });
 
   
