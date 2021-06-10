@@ -125,7 +125,7 @@ if(!logged_in) return login();
     }
 
     paypal.Button.render({
-    env: "sandbox"//'production', // Or 'sandbox',
+    env: "production"//'production', // Or 'sandbox',
     //,commit: true // Show a 'Pay Now' button
 
         ,client: {
