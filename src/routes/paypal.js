@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const beta = true; 
+const beta = false; 
 
 const request = require('request');
 const cfg = require('../../config.js');
