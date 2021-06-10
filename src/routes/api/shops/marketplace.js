@@ -71,7 +71,7 @@ router.get(["/","/:entry"],  async (req, res) => {
             { meta: 1, id: 1 }
           ).lean()
           .catch((e) => []),*/
-        Promise.all(result.map(async (i) => await userCache.get(i.author))),
+        Promise.all(result.map(async (i) => await userCache.get(i.author)  ) ),
         DB.cosmetics
           .find({ _id: { $in: result.map((i) => i.item_id).filter(x=> parseInt(x) && x.length == 24) } }).lean()
           .catch((e) => []),
@@ -135,12 +135,16 @@ router.post("/", async (req, res) => {
 
   // VALIDATION
   if (!PAYLOAD) return res.status(400).json("No Listing Supplied");
+
   if (PAYLOAD.pollux && !PAYLOAD.author && !req.user)
     return res.status(401).json("No Author Supplied");
+    
   if (req.user) PAYLOAD.author = req.user.id;
   const userDiscordData = await userCache.get(PAYLOAD.author);
 console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
-  
+
+if (!userDiscordData) return res.status(500).json("NO DISCORD USER DATA");
+
   PAYLOAD.id = (Date.now()).toString(16).toUpperCase()+process.pid;
   PAYLOAD.timestamp = Date.now();
   
@@ -213,8 +217,11 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
 
   PAYLOAD.url = `${HOST}/shop/marketplace/entry/${PAYLOAD.id}`
 
+  console.log({PAYLOAD})
   const reputation = (await axios.get(`${HOST}/api/user/${PAYLOAD.author}/commends`).catch(e=>null))?.data || {};
+  console.log({reputation});
 
+  console.log({marketHook})
   //PLX.executeWebhook(marketHook.id,marketHook.token,{
   PLX.createMessage( marketHook.channel, {
     //auth: true,
@@ -273,6 +280,9 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
       await DB.marketplace.updateOne({id: PAYLOAD.id},{$set:{feedMessage: [msg.channel.id,msg.id] }});
       //if (messageChannel.type !== 5 ) return;
       //await PLX.crosspostMessage(msg.channel.id,msg.id).then(console.log).catch(e=>null);
+  }).catch(err=>{
+    console.error(err);
+    return res.status(500).json({ status: "NOT OK", payload: {PAYLOAD,itemMarketDetails} });
   })
 
   return res.status(200).json({ status: "OK", payload: {PAYLOAD,itemMarketDetails} });
