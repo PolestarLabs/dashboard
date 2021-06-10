@@ -22,7 +22,7 @@
                 h4.subtitle {{medals.length || 0}}/{{medalsSize}}
                 
             .plx-uncontainer.plx-accordion-content
-                ul: li.md-info(v-for="medal in medals" v-if="medal")
+                ul: li.md-info(v-for="medal in medals" v-if="medal && medal.name!='Unknown'")
                     .preview
                         img(:src="`/medals/${medal.icon}.png`")
                     .plx-rarity-icon(:class="medal.rarity")
