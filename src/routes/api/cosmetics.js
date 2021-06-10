@@ -44,7 +44,7 @@ router.get("/search", cache(2600), async (req,res) =>{
                 queries[ky] = req.query[ky]
             })
     let sort = {_id:-1}
-    if (!queries.event) queries.event = 'none';
+    //if (!queries.event) queries.event = 'none';
     queries.public = req.query.public !== 0;
     console.log(queries)
     DB.cosmetics.find(queries,{public:0,meta:0})
