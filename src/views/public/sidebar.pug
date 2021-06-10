@@ -1,14 +1,14 @@
 .sidebar.plx-flex.plx-flex-wrap.plx-flex-center
-    if userprofile.donator && userprofile.switches.donateStreak
+    if userprofile.prime && userprofile.counters.prime_streak
         .donoblock
-            h3 #{userprofile.donator} Supporter
+            h3 #{userprofile.prime.tier} Supporter
             img(src=`/images/donate/${userprofile.donator}.png`)
-            -let donRank = donoranks.filter((v,i,a)=> v.donoScore > a.find(u=>u.id ===userprofile.id).donoScore )
-            h4 #{userprofile.switches.donateStreak[userprofile.donator]} MONTHS
-            -let others = userprofile.switches.donateStreak.total - userprofile.switches.donateStreak[userprofile.donator]
+            //-let donRank = donoranks.filter((v,i,a)=> v.donoScore > a.find(u=>u.id ===userprofile.id).donoScore )
+            h4 #{userprofile.counters.prime_streak[userprofile.prime.tier]} MONTHS
+            -let others = (userprofile.counters.prime_streak.total||0) - (userprofile.counters.prime_streak[userprofile.donator]||0)
             if others
                 p #{others} months in other tiers
-                p ##{donRank.length||0} Top All-Time 
+                //p ##{donRank.length||0} Top All-Time 
     else
         .ad-space(v-html="AS2")
         
@@ -27,5 +27,5 @@
         +progressBar(userprofile.modules.medalInventory.length   , "medalsSize"      ,"Medals",0)
         +progressBar(userprofile.modules.achievements.length     , "achievementsSize"      ,"Achievements",0)
 
-    if userprofile.donator && userprofile.switches.donateStreak
+    if userprofile.prime && userprofile.counters.prime_streak
         .ad-space(v-html="AS2")
