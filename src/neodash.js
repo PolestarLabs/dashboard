@@ -148,7 +148,10 @@ const dbOptions = {
 
 global.PLX = new Eris.Client(config.token,{restMode:true});
 PLX.id = config.clientID;
-require('@polestar/emoji-grimoire').initialize(PLX);
+setTimeout(()=>{
+
+  require('@polestar/emoji-grimoire').initialize(PLX);
+},5000)
 
 
 Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client);
@@ -181,7 +184,7 @@ redis:{
       if (!val) return;
       userCacheMap.set(k,val);
       PLX.redis.set("discord.users."+k,JSON.stringify(val));
-      PLX.redis.expire("discord.users."+k, 60 * 60 * 1);
+      PLX.redis.expire("discord.users."+k, 30 * 60 * 1);
     },
     get(k){
       if (userCacheMap.get(k)) {
@@ -192,7 +195,7 @@ redis:{
         PLX.redis.get("discord.users."+k, (_,d) => {
           if(d){
             console.log("✔️ Cached".green, k)
-            userCacheMap.set("discord.users."+k, new Eris.User(JSON.parse(d),PLX) );
+            userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
             return resolve(userCacheMap.get(k))
           }else{
             console.log("❌ Not Cached".red, k);            
@@ -297,6 +300,7 @@ app.use("/medals",    Express.static(path.join( ASSETS_PATH, './cosmetics/medals
 app.use("/stickers",  Express.static(path.join( ASSETS_PATH, './cosmetics/stickers')));
 app.use("/items",  Express.static(path.join( ASSETS_PATH, './build/items')));
 app.use("/boosters",  Express.static(path.join( ASSETS_PATH, './build/boosters')));
+app.use("/backgrounds", Express.static(path.join( ASSETS_PATH, './cosmetics/backdrops')));
 app.use("/backdrops", Express.static(path.join( ASSETS_PATH, './cosmetics/backdrops')));
 app.use("/build",     Express.static(path.join( ASSETS_PATH, './build')));
 //backwards compat
