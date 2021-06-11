@@ -147,6 +147,8 @@ const dbOptions = {
 }
 
 global.PLX = new Eris.Client(config.token,{restMode:true});
+global.PLX_prime = new Eris.Client(config.token_prime,{restMode:true});
+
 PLX.id = config.clientID;
 setTimeout(()=>{
 
@@ -196,7 +198,8 @@ redis:{
           if(d){
             console.log("✔️ Cached".green, k)
             userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
-            return resolve(userCacheMap.get(k))
+            let resuser = userCacheMap.get(k);
+            if (resuser) return resolve(resuser);
           }else{
             console.log("❌ Not Cached".red, k);            
           }
