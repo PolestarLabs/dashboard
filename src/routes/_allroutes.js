@@ -210,8 +210,11 @@ router.use('/admin',checkAuth, (...args)=>{
   
   
   router.get('/invite', function (req, res) {
-    //req.logout();
-    res.redirect('https://discordapp.com/api/oauth2/authorize?client_id='+ (PLX.user?.id||"578913818961248256")+'&redirect_uri='+encodeURIComponent(HOST+"/callback")+'&response_type=code&scope=applications.commands%20bot%20identify%20guilds%20connections%20email&permissions=268492816&guild_id='+req.query.sv);
+
+    //FIXME[epoc=anyone] Fix prime ID
+    
+    res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${ "578913818961248256" }&permissions=2147532800&redirect_uri=${encodeURIComponent(HOST+"/newserver")}&response_type=code&scope=applications.commands%20bot%20identify%20guilds%20connections%20email&permissions=268492816&guild_id=`+req.query.sv)
+
   });
 
   
