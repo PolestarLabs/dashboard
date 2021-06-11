@@ -4,6 +4,7 @@ const md5 = require('md5')
 const operations = require('../pipelines/operations.js');
 
 exports.run = async (req,res)=>{
+    console.log('hi')
 
     let SVID = req.params.serverid.toString();
 
@@ -13,7 +14,8 @@ exports.run = async (req,res)=>{
             PLX.getRESTGuild(SVID),
             PLX.getRESTGuildChannels(SVID)
         ]).catch(err=>{
-            res.render('404');
+            console.error(err)
+            res.redirect("/dash")
             return [0]
         });
         if(!memberInfo) return;
