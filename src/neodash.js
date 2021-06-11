@@ -384,8 +384,8 @@ app.use(logger(function(tokens,req,res){
 
 
 /* -------i18n-------- */
-const {translationEngineStart,translationsPath} = require("@polestar/i18n");
-translationEngineStart();
+const {translateEngineStart,translationsPath} = require("@polestar/i18n");
+translateEngineStart();
 const i18n = require("./locales.js");
 app.use(i18n({
   translationsPath,
