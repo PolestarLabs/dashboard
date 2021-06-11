@@ -383,55 +383,18 @@ app.use(logger(function(tokens,req,res){
 
 
 
-/* --------------- */
+/* -------i18n-------- */
+const {translationEngineStart,translationsPath} = require("@polestar/i18n");
+translationEngineStart();
 const i18n = require("./locales.js");
-
 app.use(i18n({
-  translationsPath:   process.env.LOCALES_PATH,
+  translationsPath,
   defaultLang: "en",
-  //  browserEnable :false,
   siteLangs: ["en", "cz", "es", "fr", "pt-br", "pt", "ru","jp","tr","ko","de","pl"],
   textsVarName: 'translation',
   paramLangName: "locale"
-}));
-
-
-const i18next = require('i18next');
-const i18n_backend = require('i18next-node-fs-backend');
-const backendOptions = {
-    loadPath:  process.env.LOCALES_PATH+'/{{lng}}/{{ns}}.json',
-    jsonIndent: 2
-};
- 
-fs.readdir( process.env.LOCALES_PATH , (err,list) => {
-  //console.log(list)
-    i18next.use(i18n_backend).init({
-        backend: backendOptions,
-        lng: 'dev',
-        fallbackLng: ["en", "dev"],
-        fallbackToDefaultNS: true,
-        fallbackOnNull: true,
-        returnEmptyString: false,
-        preload: list,
-        load: 'currentOnly',
-        ns: ['bot_strings', 'events', 'commands', 'website', 'items', 'translation'],
-        defaultNS: 'bot_strings',
-        fallbackNS: 'translation',
-        interpolation: {
-            escapeValue: false
-        }
-    }, (err, t) => {
-        if (err) {
-            //console.warn("• ".yellow, "Failed to Load Some Translations".yellow, "\n"+err.map(e=>e.path.gray).join('\n'))
-        }
-        //console.log("• ".green, "Translation Engine Loaded")
-
-        global.i18n = i18next;
-        global.$t = t     
-    });
-});
-
-
+})); 
+/* ------------------ */
 
 const AcquireDiscordPayload = (TOKEN,req) => {
   TOKEN = (TOKEN||{}).access_token||TOKEN
