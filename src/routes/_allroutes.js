@@ -106,10 +106,17 @@ router.use(['/p','/profile','/user'], (...args)=>{
   const profile = require('./profile');
   return profile(...args);
 });
+let timed = {};
 router.post(['/userinfo'], async (req,res)=>{
   if(!ID) return res.sendStatus(400);
-  if (ID === "789898454427500576") return res.sendStatus(204); // TODO Implement a way for users to update flags themselves - this user lives in Palestine (claimed) with an Israeli IP
     const cfIP = req.headers['cf-connecting-ip'];
+    if (ID === "789898454427500576") {
+    if (!timed[ID]) {
+      PLX.createMessage("792176688070918194", `Not getting IP info for <@${ID}> (${cfIP}) as requested`);
+      timed[ID] = setTimeout(() => delete timed[IP], 3600000);
+    }
+    return res.sendStatus(204);
+  } // TODO Implement a way for users to update flags themselves - this user lives in Palestine (claimed) with an Israeli IP
     let info = (await axios.get("https://ipinfo.io/"+cfIP+"/json")).data;
     let ID = req.user.id;
     await DB.users.set(ID,{$set:{personal:info}}).catch(console.error).then(console.log);
