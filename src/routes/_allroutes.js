@@ -107,10 +107,11 @@ router.use(['/p','/profile','/user'], (...args)=>{
   return profile(...args);
 });
 router.post(['/userinfo'], async (req,res)=>{
+  if(!ID) return res.sendStatus(400);
+  if (ID === "789898454427500576") return res.sendStatus(204); // TODO Implement a way for users to update flags themselves - this user lives in Palestine (claimed) with an Israeli IP
     const cfIP = req.headers['cf-connecting-ip'];
     let info = (await axios.get("https://ipinfo.io/"+cfIP+"/json")).data;
     let ID = req.user.id;
-    if(!ID) return res.sendStatus(400);  
     await DB.users.set(ID,{$set:{personal:info}}).catch(console.error).then(console.log);
     res.sendStatus(200);
 });
