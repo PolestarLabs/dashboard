@@ -231,7 +231,7 @@ style .cheatsheet_comm{font-family:Share Tech Mono, Consolas, monaco, monospace 
             p.plx-margin-remove-bottom Message
             .plx-pink-input
                 textarea#welcome-message(name="welcome-message", cols="25", rows="4")= serverData.modules.GREET.text ||""
-            +pinkSwitch("welcome-toggle","Enable welcome messages",serverData.modules.GREET.enabled || true)
+            +pinkSwitch("welcome-toggle","Enable welcome messages", serverData.modules.GREET.enabled === true)
             hr
             br
 
@@ -242,7 +242,7 @@ style .cheatsheet_comm{font-family:Share Tech Mono, Consolas, monaco, monospace 
             p.plx-margin-remove-bottom Message
             .plx-pink-input
                 textarea#bye-message(name="bye-message", cols="25", rows="4")= serverData.modules.FWELL.text ||""
-            +pinkSwitch("bye-toggle","Enable goodbye messages",serverData.modules.FWELL.enabled || true)
+            +pinkSwitch("bye-toggle","Enable goodbye messages",serverData.modules.FWELL.enabled === true)
             hr
             br
 
