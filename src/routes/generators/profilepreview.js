@@ -30,20 +30,31 @@ router.get('/', async (req,res)=>{
 
     let hexAvatar = await Picto.makeHex(160, (await userCache.get(UID)).avatarURL  )
     let hexFrame  = await Picto.makeHex(200, null, color )
+    let hexFrame2  = await Picto.makeHex(200, null, "#A0A0C505" )
 
     //let tag = Picto.block(ctx, req.query.t || "I get nervous around cute furries", "12pt 'Segoe UI'", color = "#b4b4b8", W = 230, H = 36, {});
     //tag(ctx, req.query.t || "I get nervous around cute furries" ,"900 32px 'Whitney HTF'","#2b2b3b");
     
    
-    ctx.drawImage(waves ,0 ,0);
     
     ctx.fillStyle = color;
     
-    ctx.globalCompositeOperation = "multiply"
     ctx.fillRect(0,0,700,300);
+    ctx.globalCompositeOperation = "screen"
+    ctx.fillStyle = "#A0A0CF25";
+    ctx.fillRect(0,0,700,300);
+    ctx.globalAlpha = 1
+    
+    ctx.globalCompositeOperation = "multiply"
+    ctx.drawImage(waves ,0 ,0);
+
 
     ctx.globalCompositeOperation = "destination-atop"
     ctx.drawImage(waves ,0 ,0,700,300);
+
+    ctx.globalCompositeOperation = "source-over";
+
+  
 
     ctx.globalCompositeOperation = "destination-over";
     let gradient = ctx.createLinearGradient(0, 300, 0, 0);
@@ -51,12 +62,14 @@ router.get('/', async (req,res)=>{
     gradient.addColorStop(1, "#1122");
     ctx.fillStyle = gradient;
     ctx.fillRect(0,0,700,300);
-    ctx.drawImage(background ,0 ,0);
+    ctx.drawImage(background ,-10 ,-40,720,380);
 
     ctx.globalCompositeOperation = "source-over";
+    
 
-    ctx.drawImage(hexFrame,28 ,78);
-    ctx.drawImage(hexAvatar,28+20 ,78+20);
+    ctx.drawImage(hexFrame,28 ,70); 
+    ctx.drawImage(hexFrame2,28 ,70);
+    ctx.drawImage(hexAvatar,28+20 ,70+20);
 
     //ctx.drawImage(tag.item ,110 ,102);
 
