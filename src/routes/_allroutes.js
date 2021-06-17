@@ -136,7 +136,14 @@ router.get(['/userinfo'], async (req,res)=>{
   });
   router.get(['/craft','/crafting','/workshop'], async  (req,res)=> {
     let cm = fx.cmsSetup(req); 
-    res.render('shop/crafting/workshop')
+
+    const opengraph = {};
+    opengraph.image =    `${HOST}/build/opengraph/crafting.png`
+    opengraph.title =    "Crafting Workshop"
+    opengraph.description =    `⚗ Mix and match items together to create new ones! 🧪`,
+    opengraph.large = true
+
+    res.render('shop/crafting/workshop',{opengraph});
   });
   router.post('/cmlist', (...args)=> simplepages().cmlist(...args));
 
