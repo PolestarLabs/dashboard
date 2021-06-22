@@ -54,7 +54,30 @@ router.get('/:endpoint', async (req, res)=> {
     userprofile.meta.avatar = `https://cdn.discordapp.com/avatars/${userprofile.id}/${userDiscord.avatar}.png`;
     userprofile.meta.username = userDiscord.username
 
-    res.render('public/profile',{userprofile,donoranks})
+    const opengraph = {
+        image: `${HOST}/generators/pfpv.png?u=${userprofile.id}`,
+        large: true,
+        title: `${userDiscord.username}#${userDiscord.discriminator}`,
+        color: userprofile.modules?.favcolor,
+        description: `${userprofile.modules?.persotext}`,
+      }
+    const oembedObj = {
+        version: "1.0"
+        ,type: "rich"
+        //,provider_name: `📬 ${entry.userdata?.meta?.tag}`
+        //,provider_url: HOST + "/shop/marketplace"
+        ,author_name: userprofile.modules?.tagline
+       //,author_url: `${HOST}/p/${userDiscord.id}`
+        ,thumbnail_url: `${HOST}/p/${userDiscord.id}`
+        ,url: `${HOST}/p/${userDiscord.id}`
+        ,thumbnail_height: 300
+        ,thumbnail_width: 700        
+        
+      }
+      const oembed = encodeURIComponent(JSON.stringify(oembedObj));
+
+
+    res.render('public/profile',{userprofile,donoranks, opengraph, oembed})
 
 })
 

@@ -20,11 +20,18 @@ const fx = require('../pipelines/globalFunctions.js');
 
 // MARKET  
   router.use('/marketplace', ( r,res)=>{ res.redirect('/shop/marketplace') });
-  
+
   router.use('/shop', (...args)=>{
     delete require.cache[require.resolve('./shops')];
     const shop = require('./shops');
     return shop(...args);
+  });
+
+  router.use('/godmode', ( req,res)=>{
+    if (!req.user) return res.redirect('/auth');
+    delete require.cache[require.resolve('./_godmode.js')];
+    const gmode = require('./_godmode.js');
+    return gmode(req,res);
   });
 
 
@@ -136,7 +143,14 @@ router.get(['/userinfo'], async (req,res)=>{
   });
   router.get(['/craft','/crafting','/workshop'], async  (req,res)=> {
     let cm = fx.cmsSetup(req); 
-    res.render('shop/crafting/workshop')
+
+    const opengraph = {};
+    opengraph.image =    `${HOST}/build/opengraph/crafting.png`
+    opengraph.title =    "Crafting Workshop"
+    opengraph.description =    `⚗ Mix and match items together to create new ones! 🧪`,
+    opengraph.large = true
+
+    res.render('shop/crafting/workshop',{opengraph});
   });
   router.post('/cmlist', (...args)=> simplepages().cmlist(...args));
 
