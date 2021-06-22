@@ -406,6 +406,7 @@ const VARS = require("./pipelines/vars.js");
 const authCacheExpiration = new Map();
 
 app.use(function(req,res,next){
+  res.locals.HOST = HOST;
   res.locals.EVENT= VARS.EVENT;
   res.locals.HOST = HOST;
   next();

@@ -60,7 +60,13 @@ refreshBases();
 
 
 router.get('/', function (req, res) {
-  res.render('shop/storefront/_store')
+
+  const opengraph = {};
+  opengraph.image =    `${HOST}/build/opengraph/storefront.png`
+  opengraph.title =    "Pollux Decor Storefront"
+  opengraph.description =    `⭐ New arrivals, Backgrounds, Stickers, Medals, everything in one place! ⭐`,
+  opengraph.large = true
+  res.render('shop/storefront/_store', {opengraph})
 })
 
 router.get(["/backgrounds","/bgs","bgshop"], async function (req, res) {
@@ -121,6 +127,11 @@ router.get("/marketplace", async function (req, res) {
           }
         }
       }
+    opengraph.image =    `${HOST}/build/opengraph/marketplace.png`
+    opengraph.title =    "Player Marketplace"
+    opengraph.description =    `🛍️ Buy and sell items from/to other players! 🛒 Over ${marketplace.length} items have been traded here. 🏪`,
+    opengraph.large = true
+    
       // await refreshBases();
    
     res.render('shop/marketplace/market',{
@@ -128,7 +139,7 @@ router.get("/marketplace", async function (req, res) {
     sellPages: await require('./paginate').run(req,res,null,{
       page: req.query.p||0,
       endpoint:'marketplace',
-      rpp: 25,
+      rpp: 25,      
     })
   })
 })
@@ -246,6 +257,7 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
 
   let listings = marketplace.filter(it=>it.item_id.toString() == entry.item_id && !it.lock);
   let morefrom = marketplace.filter(it=>it.author == entry.author && !it.lock);
+  console.log({marketplace})
   console.log({listings})
   console.log({entry},'from payload')
   entry = listings.find(x=>x.id==entry.id)
@@ -267,14 +279,14 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
         XR : "⭐⭐⭐⭐⭐⭐⭐"
       }[item.rarity];
       opengraph.title = `[${entry.type.toUpperCase()}ING] ${item.name} ${" "}`
-      //opengraph.sitename = ((entry.userdata||{}).meta||{}).tag||"-no author-"
-      opengraph.sitename = "POLLUX MARKETPLACE"
+      opengraph.sitename = ((entry.userdata||{}).meta||{}).tag||"-no author-"
+      //opengraph.sitename = "POLLUX MARKETPLACE"
       opengraph.description = `${defrarity} • ${entry?.item_type?.toUpperCase()||"HM"} • Pollux Marketplace`
       opengraph.image = false
       opengraph.color = entry.type == 'sell' ? "#FF3355" : '#A853FA'
       opengraph.type = "arcticle"
       if (entry?.item_type == 'background') opengraph.large = true;
-      opengraph.sitename = defrarity
+      //opengraph.sitename = defrarity
      
       const oembedObj = {
         version: "1.0"
@@ -291,7 +303,7 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
         ,maxwidth: opengraph.large ? 800 : 200        
       }
       const oembed = encodeURIComponent(JSON.stringify(oembedObj));
-
+      
       res.render('shop/marketplace/entry', {listings,item,entry,fullbase,morefrom,opengraph,oembed})
 
     }else{

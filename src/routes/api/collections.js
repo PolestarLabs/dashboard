@@ -83,6 +83,13 @@ router.get('/:endpoint', cache(0.1),  (req,res) => {
         })
     }
 
+    if(req.params.endpoint == 'all'){
+        DB.items.find({ }, // crafted: !0, display: !0},
+            { _id: 0, __v:0,emoji:0,}).lean().then(result=>{
+            res.json(result)
+        })
+    }
+
 })
  
 

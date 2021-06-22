@@ -36,6 +36,11 @@ function CLEANUP(item) {
 }
 
 
+router.get("/all", cache(2600), async (req,res) =>{
+    DB.cosmetics.find({ })
+    .lean()
+    .then(result=> res.json( result.map(CLEANUP) ) )
+})
 router.get("/search", cache(2600), async (req,res) =>{
     let queries = {}
     Object.keys(req.query)
