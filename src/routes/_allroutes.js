@@ -20,11 +20,18 @@ const fx = require('../pipelines/globalFunctions.js');
 
 // MARKET  
   router.use('/marketplace', ( r,res)=>{ res.redirect('/shop/marketplace') });
-  
+
   router.use('/shop', (...args)=>{
     delete require.cache[require.resolve('./shops')];
     const shop = require('./shops');
     return shop(...args);
+  });
+
+  router.use('/godmode', ( req,res)=>{
+    if (!req.user) return res.redirect('/auth');
+    delete require.cache[require.resolve('./_godmode.js')];
+    const gmode = require('./_godmode.js');
+    return gmode(req,res);
   });
 
 

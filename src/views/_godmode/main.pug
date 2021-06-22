@@ -1,0 +1,36 @@
+script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
+
+#main
+    table: tr
+        
+        td: div#items
+            p Items
+            select(v-model="selectedItem")
+                option(v-for="item in items") {{item.name}}
+            div(v-if="selectedItem")
+                p 
+                    b Item Id: 
+                    code {{items.find(x=>x.name===selectedItem).id}}
+
+                pre {{JSON.stringify(items.find(x=>x.name===selectedItem),0,2)}}
+        td: div#awd
+            b User ID
+            input(v-model="seluid" @keyup="selectUser()")
+            div(v-if="selectedUser.id")
+                b awardItem
+                select(v-model="itemToAward")
+                    option(v-for="item in items"  v-bind:value="item.id") {{item.name}}
+               
+                button(@click="giveItem(itemToAward)", :disabled="!itemToAward.length") Award {{itemToAward}} to {{selectedUser.id}}
+                //-------------
+                br
+                b awardGems
+                input(type="number" v-model="gemsaward")
+                select(v-model="gemToAward")
+                    option(v-for="i in ['RBN','JDE','SPH']") {{i}}
+
+                button(@click="giveGems(gemsaward,gemToAward)", :disabled="!gemsaward") Award {{gemsaward}} {{gemToAward}}s to {{selectedUser.tag}}
+                pre {{JSON.stringify( selectedUser,0,2)}}
+
+script
+    include main.js
