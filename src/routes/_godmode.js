@@ -19,7 +19,7 @@ router.post("/giveitem/:userID/:item",async(req,res)=>{
     let l = await userdata.addItem(item);
     console.log({l},"godmode".bgRed);
 
-    PLX.createMessage("792176688070918194",{
+    PLX.createMessage("856782805987885096",{
         embed: {
             description: `<@${req.user.id}> > \`giveitem\` **${item}** to <@${userID}>`
         }
