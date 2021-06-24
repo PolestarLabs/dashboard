@@ -33,7 +33,7 @@ module.exports = {
         headers: {
           "Content-Type": "application/json",
           "cache-control": "no-cache",
-          authorization: "Bot " + cfg.token,
+          authorization: PLX._token,
         },
       };
       console.log("request");
