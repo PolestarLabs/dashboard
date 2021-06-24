@@ -29,8 +29,8 @@ const axios = require('axios');
 // RATES
 router.get("/rates", async (req, res) => {
   // TODO[epic=flicky] Move Global Numbers & Rates to Database ?
-  const { bgPrices, medalPrices,sapphireModifier, jadeModifier } = require( process.env.BOT_PATH + "/resources/lists/GlobalNumbers.js");
-  return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier });
+  const { BackgroundPrices: bgPrices, MedalPrices: medalPrices, SAPPHIRE_MODIFIER: sapphireModifier, JADE_MODIFIER: jadeModifier, TOKEN_MODIFIER : tokenModifier} = require("@polestar/constants/shop")
+  return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier, tokenModifier });
 });
 
 router.get(["/","/:entry"],  async (req, res) => {
