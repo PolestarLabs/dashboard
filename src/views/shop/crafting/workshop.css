@@ -442,7 +442,7 @@ height: 99% !important;
   /*! pointer-events: none; */
 }
 
-@media screen and (max-width: 1400px){
+@media screen and (max-width: 1400px) and  (min-width: 1000px){
   .crafting-zone{
 transform: scale(.8) translate(-100px,-100px);
  
@@ -581,7 +581,7 @@ circle.craft5 {
 
   .inventory {
     //margin-bottom: 2rem;
-
+  transform: translateY(-50px) scale(.9);
     width: 100vw;
     box-sizing: border-box;
     display: flex;
@@ -593,6 +593,7 @@ circle.craft5 {
   .items-list {
     overflow: hidden;
     margin-bottom: -2rem;
+    
   }
   .inventory .items {
     mask: linear-gradient(#0000 0%, #ffff 10%, #ffff 80%, #0000 90%);
@@ -643,6 +644,7 @@ circle.craft5 {
     transform: translate(calc(50vw + -400px), -25px);
   }
   .inventory .items {
-    max-height: 210px;
+    margin-top:-16px;
+    /*max-height: 210px;*/
   }
 }
