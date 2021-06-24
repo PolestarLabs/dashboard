@@ -853,7 +853,9 @@ a.plx-link-reset:hover {
 }
 
 @media (max-width:959px) {
-
+    .plx-sticky-placeholder{
+        height: 0 !important;
+    }
     .plx-table-responsive,
     .plx-table-responsive tbody,
     .plx-table-responsive td,
