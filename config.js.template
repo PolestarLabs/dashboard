@@ -1,7 +1,49 @@
-module.exports={
-    secret: "5******************************u",
-    token: "Bot MzU*********************.*********************************c",
-    clientID: "",
-    clientSecret: ""
+module.exports = {
+  sentry: "https://????@glitch.pollux.gg/1",
+  
+  asana: " ",
+  pubKey: " ",
+  
+  paypalClientID: " ",
+  paypalSecret: " ",
+  paypalClientID_sandbox: " ",
+  paypalSecret_sandbox: " ",
+  
+  genius: {client,secret,token},
+  
+  "pollux-api-token": " ",
+  mongodb: "mongodb://",
+  host: "https://????.pollux.gg",
+  webhooks: {
+    marketplace: {
+      id: " ",
+      token: " ",
+      channel:  " ",
+      guild:    " ",
+    },
+  },
 
-}
+  clients: [
+    {
+      name: "polaris",
+      category: "alpha",
+      token: " ",
+      id: "354285599588483082",
+      secret: " "  
+    },
+    {
+      name: "prime",
+      category: "premium",
+      token: " ",
+      id: "578913818961248256",
+      secret: " "  
+    },
+    {
+      name: "main",
+      category: "main",
+      token: " ",
+      id: "271394014358405121",
+      secret: " "  
+    },
+  ]
+};
