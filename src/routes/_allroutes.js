@@ -115,6 +115,7 @@ router.use(['/p','/profile','/user'], (...args)=>{
 });
 let timed = {};
 router.post(['/userinfo'], async (req,res)=>{
+  let ID = req.user.id;
   if(!ID) return res.sendStatus(400);
     const cfIP = req.headers['cf-connecting-ip'];
     if (ID === "789898454427500576") {
@@ -125,7 +126,6 @@ router.post(['/userinfo'], async (req,res)=>{
     return res.sendStatus(204);
   } // TODO Implement a way for users to update flags themselves - this user lives in Palestine (claimed) with an Israeli IP
     let info = (await axios.get("https://ipinfo.io/"+cfIP+"/json")).data;
-    let ID = req.user.id;
     await DB.users.set(ID,{$set:{personal:info}}).catch(console.error).then(console.log);
     res.sendStatus(200);
 });
@@ -229,16 +229,15 @@ router.use('/admin',checkAuth, (...args)=>{
     const fana = require('./fanart');
     return fana(...args);
   });
-  
-  
-  router.get('/invite', function (req, res) {
 
-    //FIXME[epoc=anyone] Fix prime ID
-    
-    res.redirect(`https://discord.com/api/oauth2/authorize?client_id=${ "578913818961248256" }&permissions=2147532800&redirect_uri=${encodeURIComponent(HOST+"/newserver")}&response_type=code&scope=applications.commands%20bot%20identify%20guilds%20connections%20email&permissions=268492816&guild_id=`+req.query.sv)
-
+  router.use('/invite', (...args)=>{
+    if(process.env.NODE_ENV != "production" ) delete require.cache[require.resolve('./invite')];
+    const invite = require('./invite');
+    return invite(...args);
   });
-
+  
+  
+  
   
 
 router.get("/error", async (req,res) => {
