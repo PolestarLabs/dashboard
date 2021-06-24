@@ -324,14 +324,12 @@ text-align: center;
 border-radius: 10px;
 margin-bottom: 20px;
 }
-.packrewards.flair,.packrewards.medal{
+.packrewards>.flair, .packrewards>.medal{
 width: 45%;
 justify-content: center;
 display: inline-flex;
 }
-.packrewards .reward:not(.background) img{
 
-}
 .packrewards .flairreward .img-container {
 height: 120px;
 transform: scale(.8);
