@@ -9,7 +9,8 @@
     "build": "gulp build"
   },
   "dependencies": {
-    "@polestar/database_schema": "gitlab:PolestarLabs/database_schema#populate",
+    "@polestar/constants": "github:PolestarLabs/constants",
+    "@polestar/database_schema": "gitlab:PolestarLabs/database_schema",
     "@polestar/emoji-grimoire": "github:PolestarLabs/emoji-grimoire",
     "@polestar/timed-usage": "gitlab:PolestarLabs/timed-usage",
     "@polestar/pollux": "gitlab:PolestarLabs/pollux#dev",
