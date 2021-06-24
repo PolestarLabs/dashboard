@@ -3227,7 +3227,18 @@ ul.plx-nav-sub {
 [class*=plx-navbar-center-] .plx-navbar-toggle {
     white-space: nowrap
 }
+.topbar.home .plx-logo{
+    visibility: hidden;
+    width: 0;
+    margin: 0 -20px;
 
+}
+.topbar.plx-active .plx-logo{
+    display: inherit;
+    visibility: visible;
+    width: unset;
+    margin: 0 10px;
+}
 .plx-navbar-nav {
     display: flex;
     margin: 0;
