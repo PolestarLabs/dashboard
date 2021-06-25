@@ -4,7 +4,8 @@ const md5 = require('md5')
 const operations = require('../pipelines/operations.js');
 
 exports.run = async (req,res)=>{
-    console.log('hi')
+
+    await wait(1);
 
     let SVID = req.params.serverid.toString();
 
@@ -15,7 +16,7 @@ exports.run = async (req,res)=>{
             PLX.getRESTGuildChannels(SVID)
         ]).catch(err=>{
             console.error(err)
-            res.redirect("/dash")
+            res.redirect("/dash/admin/"+SVID)
             return [0]
         });
         if(!memberInfo) return;
@@ -27,10 +28,10 @@ exports.run = async (req,res)=>{
 
     if (!serverInfo) return res.sendStatus(401);
     req.user.validator = md5(Date.now());
-    DB.serverDB.findOne({ id:SVID }).then(async serverData =>{
+    DB.serverDB.findOne({ id:SVID }).noCache().then(async serverData =>{
         if (!serverData){            
            await DB.serverDB.new(serverInfo);
-           serverData = await DB.serverDB.findOne({id:SVID});
+           serverData = await DB.serverDB.findOne({id:SVID}).noCache();
         }        
 
         if(req.query.pg){

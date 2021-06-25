@@ -166,6 +166,7 @@ section#splash {
     #15153500 70%
   );
   /*! margin-top: -50px; */
+  /*! max-width: 70vw; */
 }
 
 section {
@@ -177,14 +178,30 @@ section {
   top: -200px;
   text-align: center;
   width: 100%;
+  /*! max-width: 70vw; */
+  /*! height: auto; */
 }
 .pollux-img img {
-  height: 2000px;
+  /*! height: 2000px; */
   margin: auto;
   transform: translate(150px, 500px) scale(1.5) !important;
   filter: drop-shadow(0 0 20px #0055);
+  max-width: 70vw;
+  max-height: 180vh;
+ 
 }
-
+@media screen and (max-width:1400px){
+  .pollux-img {
+    top: -320px !important; 
+    right: -180px;
+  }
+  .pollux-img img{
+       //max-height: 1000px !important;
+  }
+  #splash p{
+    font-size: 1.1rem;
+  }
+}
 section#splash h1 {
   margin-left: 100px;
 }

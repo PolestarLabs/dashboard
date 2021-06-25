@@ -51,7 +51,7 @@ router.get('/:endpoint', cache(0.1),  (req,res) => {
 
     if(req.params.endpoint == 'search'){
         Object.keys(req.query)
-            .filter(qry => ['_id','id','rarity','code','type'].includes(qry) )
+            .filter(qry => ['_id','id','rarity','code','type','crafted','open'].includes(qry) )
             .forEach(ky=> {
                     queries[ky] = req.query[ky]
                 })

@@ -11,9 +11,8 @@ module.exports = {
         let ServerAdd = req.query.guild_id
 //É ESSE QUE VALE
         if (ServerAdd) {
-           
-            
             res.redirect("/setup/" + ServerAdd);
+            
         }else{
             try {
                 res.render("callback", {redire: backURL});

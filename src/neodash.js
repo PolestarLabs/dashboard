@@ -146,10 +146,18 @@ const dbOptions = {
   useUnifiedTopology: true
 }
 
-global.PLX = new Eris.Client(config.token,{restMode:true});
-global.PLX_prime = new Eris.Client(config.token_prime,{restMode:true});
+const central_pollux = config.clients.find(c=>{
+  if(process.env.NODE_ENV === "production"){
+    return c.name==='main';
+  }else{
+    return c.name==='polaris';
+  }
+});
 
-PLX.id = config.clientID;
+global.PLX = new Eris.Client(central_pollux.token,{restMode:true});
+PLX.id = central_pollux.id;
+
+
 setTimeout(()=>{
 
   require('@polestar/emoji-grimoire').initialize(PLX);
@@ -249,9 +257,9 @@ Passport.use(new CookieStrategy(
   }
 ));
 
-let discordStrategy = new Strategy({
-  clientID: config.clientID,
-  clientSecret: config.secret,
+const discordStrategy = new Strategy({
+  clientID: central_pollux.id,
+  clientSecret: central_pollux.secret,
   authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
   callbackURL:   HOST + "/callback",
   scope: scopes,
@@ -262,6 +270,7 @@ let discordStrategy = new Strategy({
     return done(null, profile);
   });
 });
+
 Passport.use(discordStrategy);
 PassportRefresh.use(discordStrategy);
 
@@ -331,10 +340,6 @@ app.use(Passport.session());
 
 
 app.get('/auth', Passport.authenticate('discord', {scope: scopes}), (req, res,nex)=> nex() )
-
-
-app.get('/newserver', (...args) => simplepages().callback(...args));
-
 
 app.get('/logout', function (req, res) {
   req.logout();
@@ -584,11 +589,12 @@ app.post('/sendform', async function (req, res) {
 app.get('/test', (...args)=> simplepages().test(...args));
  
 app.get('/callback', 
-          Passport.authenticate('discord', {
-            permissions: 268492822,
-            failureRedirect: '/'
-          }),
-          (...args)=> simplepages().callback(...args));
+  Passport.authenticate('discord', {
+    //permissions: 268492822,
+    failureRedirect: '/'
+  }),
+  (...args)=> simplepages().callback(...args)
+);
 
   
 app.use('/', (...args)=>{
