@@ -2,7 +2,7 @@ const logged_in = !!userinfo;
 const factor ={
   EUR: 0.937,
   BRL: 5.538,
-  GBP: 0.812,
+  //GBP: 0.812,
   USD: 1
 }
 function updateCurrency(){
@@ -129,7 +129,7 @@ if(!logged_in) return login();
     //,commit: true // Show a 'Pay Now' button
 
         ,client: {
-        sandbox:    'AZjn2PyQsJ_wppkBVOiirPytTrwJ66rFUH0Vv96L_Qn_kr2cM7HpzSg4us03Ipl7JHnO56W20cyuV-Gw',
+        //sandbox:    'AZjn2PyQsJ_wppkBVOiirPytTrwJ66rFUH0Vv96L_Qn_kr2cM7HpzSg4us03Ipl7JHnO56W20cyuV-Gw',
         production: 'AZb1lyrBGHUBQ-k-ucNnclxTOhxCQ7OWNMqhydTnhyApnPA2m9HyXOY9qKrPnFPo4w6rEHXCUHH8l2w9'
     },
 
@@ -139,7 +139,7 @@ if(!logged_in) return login();
   },
 
   payment: function(data, actions) {       
-      return $.post("/paypal/place?beta=1&paypal=payment",cart).then(function(res) {          
+      return $.post("/paypal/place&paypal=payment",cart).then(function(res) {          
             return res;
         });         
   },      
@@ -162,7 +162,7 @@ if(!logged_in) return login();
           })
         }
 
-        paypal.request.post("/paypal/authorized?beta=1", 
+        paypal.request.post("/paypal/authorized", 
         {paymentID: data.paymentID,payerID:   data.payerID})
         .then(()=> {
           PLX.toggle("#modal-buy").toggle();
