@@ -28,7 +28,7 @@ router.get('/', function (req, res) {
     },
     data: new URLSearchParams({
             client_id: '354285599588483082',
-            client_secret: 'YHOQUdac8RmWplf9jS6jYLYzj73206RH',
+            client_secret: '',
             grant_type: 'authorization_code',
             code: req.query.code,
             redirect_uri: 'https://hijola.pollux.gg/invite/newserver'
