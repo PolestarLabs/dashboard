@@ -44,25 +44,25 @@ function since(x){
       },
     methods:{
        bgInfo(bgID){
-          fetch("/api/cosmetics/search?code="+bgID).then(r =>
-            r.json().then(res => {
-                console.log(res)
-                this.bgData = res[0] || {name: "UNKNOWN", rarity: "C" };
-                if(!res[0]) return;
+          fetch("/api/cosmetics/backgrounds/"+bgID).then(r =>
+            r.json().then(res_1 => {
+                console.log(res_1)
+                this.bgData = res_1 || {name: "UNKNOWN", rarity: "C" };
+                if(!res_1) return;
                 fetch("/api/marketplace?item_id="+this.bgData._id).then(r =>
-                    r.json().then(res => {
+                    r.json().then(res_2 => {
                       const payload = {}
-                      payload.entries = res.length
+                      payload.entries = res_2.length
                      
                       if (payload.entries > 1){
-                        payload.cheapest =   res.sort((a,b)=> {
+                        payload.cheapest =   res_2.sort((a,b)=> {
                           let dfcA = a.price , dfcB = b.price;
                           if(a.currency == 'SPH') dfcA = a.price * 5000; 
                           if(b.currency == 'SPH') dfcB = b.price * 5000;
                           return b.price - a.price;
                         })[0]
                       }else if (payload.entries == 1){
-                        payload.cheapest = res[0]
+                        payload.cheapest = res_2[0]
                       }
                       
                       this.bgDataMarket = payload;      
@@ -174,12 +174,12 @@ fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );  
 
-fetch("/api/cosmetics/search?type=sticker&id="+userprofile.modules.sticker).then(r =>
+fetch("/api/cosmetics/stickers?type=sticker&id="+userprofile.modules.sticker).then(r =>
     r.json().then(res =>  PROFILE.sticker = res[0]  )
 );
 
-fetch("/api/cosmetics/search?type=background&code="+userprofile.modules.bgID).then(r =>
-    r.json().then(res =>  PROFILE.background = res[0]  )
+fetch("/api/cosmetics/backgrounds/"+userprofile.modules.bgID).then(r =>
+    r.json().then(res =>  PROFILE.background = res  )
 );
 
 
