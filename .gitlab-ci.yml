@@ -31,7 +31,7 @@ cooking:
     - live
 
 baking:
-  stage: adv.build
+  stage: build
   tags:
     - polestar
   only:
