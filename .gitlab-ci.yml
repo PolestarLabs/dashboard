@@ -31,11 +31,16 @@ cooking:
     - live
 
 baking:
-  stage: test
+  stage: adv.build
   tags:
     - polestar
+  only:
+    - live
   script:
-    - echo "Pls send help"
+    - echo "Building Live"
+    - cd /home/pollux/polaris/DEV/dashboard/
+    - npm build
+
 
 catapulting:
   stage: deploy
