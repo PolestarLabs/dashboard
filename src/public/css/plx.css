@@ -39,7 +39,7 @@ body {
 }
  
 .plx-grid {
-    margin-left: -30px
+    /*! margin-left: -30px */
 }
 
 .plx-grid>* { 
@@ -853,7 +853,9 @@ a.plx-link-reset:hover {
 }
 
 @media (max-width:959px) {
-
+    .plx-sticky-placeholder{
+        height: 0 !important;
+    }
     .plx-table-responsive,
     .plx-table-responsive tbody,
     .plx-table-responsive td,
@@ -3227,7 +3229,18 @@ ul.plx-nav-sub {
 [class*=plx-navbar-center-] .plx-navbar-toggle {
     white-space: nowrap
 }
+.topbar.home .plx-logo{
+    visibility: hidden;
+    width: 0;
+    margin: 0 -20px;
 
+}
+.topbar.plx-active .plx-logo{
+    display: inherit;
+    visibility: visible;
+    width: unset;
+    margin: 0 10px;
+}
 .plx-navbar-nav {
     display: flex;
     margin: 0;

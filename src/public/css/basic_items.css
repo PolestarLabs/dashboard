@@ -4,7 +4,7 @@
 @media screen and (max-width:500px){
   .item-card{
     transform: scale(.82);
-    transform-origin: left;
+    /*! transform-origin: left; */
     margin: -12px 0 !important;
   }
 }

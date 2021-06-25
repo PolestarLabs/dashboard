@@ -207,15 +207,15 @@ Promise.all([
     r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
   fetch("/api/cosmetics/search?type=sticker&lim=20").then((r) =>
-    r.json().then(async (res) => STORE.arrivals.push(...res))
+    0//r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
   fetch("/api/cosmetics/search?type=skin&lim=20").then((r) =>
     r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
   fetch("/api/cosmetics/search?type=flair&lim=20").then((r) =>
-    r.json().then(async (res) => STORE.arrivals.push(...res))
+    0//r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
-  fetch("/api/items/search?lim=10").then((r) =>
+  fetch("/api/items/search?lim=10&open=true").then((r) =>
     r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
 ]).then(res=>{

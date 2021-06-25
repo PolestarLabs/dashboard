@@ -29,8 +29,8 @@ const axios = require('axios');
 // RATES
 router.get("/rates", async (req, res) => {
   // TODO[epic=flicky] Move Global Numbers & Rates to Database ?
-  const { bgPrices, medalPrices,sapphireModifier, jadeModifier } = require( process.env.BOT_PATH + "/resources/lists/GlobalNumbers.js");
-  return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier });
+  const { BackgroundPrices: bgPrices, MedalPrices: medalPrices, SAPPHIRE_MODIFIER: sapphireModifier, JADE_MODIFIER: jadeModifier, TOKEN_MODIFIER : tokenModifier} = require("@polestar/constants/shop")
+  return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier, tokenModifier });
 });
 
 router.get(["/","/:entry"],  async (req, res) => {
@@ -506,15 +506,13 @@ async function processFeedMessage(entry, item, CURRENT_USER) {
   });
 }
 async function updateFeedMessage(oldEntry, newPrice) {
-  //FIXME this looks like some eris shit
-  console.log(1)
+
   if (!oldEntry.feedMessage) return;
-  console.log(2)
   console.log(oldEntry.feedMessage)
   console.log(PLX.requestHandler.ratelimits['/channels/792176688070918194/messages/:id'])
   console.log( require('eris').VERSION )
-  
-  let message = (await axios.get("https://discord.com/api/v8/channels/"+oldEntry.feedMessage[0]+"/messages/"+oldEntry.feedMessage[1],{headers:{"Authorization": config.token}})).data
+  //FIXME replace with eris handler
+  let message = (await axios.get("https://discord.com/api/v8/channels/"+oldEntry.feedMessage[0]+"/messages/"+oldEntry.feedMessage[1],{headers:{"Authorization": PLX._token}})).data
   //let message = await PLX.getMessage(...oldEntry.feedMessage).timeout(5000);
   console.log(3)
   let   embed   = message.embeds[0];
@@ -523,7 +521,7 @@ async function updateFeedMessage(oldEntry, newPrice) {
   console.log(4)
   await wait(4);
   //await PLX.editMessage(...oldEntry.feedMessage, { content: message.content, embed });
-  (await axios.patch("https://discord.com/api/v8/channels/"+oldEntry.feedMessage[0]+"/messages/"+oldEntry.feedMessage[1],{ content: message.content, embed },{headers:{"Authorization": config.token} } )).data
+  (await axios.patch("https://discord.com/api/v8/channels/"+oldEntry.feedMessage[0]+"/messages/"+oldEntry.feedMessage[1],{ content: message.content, embed },{headers:{"Authorization": PLX._token} } )).data
   console.log(45)
   await wait(4);
   //let channelInfo = await PLX.getRESTChannel(oldEntry.feedMessage[0]);
