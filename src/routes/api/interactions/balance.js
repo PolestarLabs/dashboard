@@ -40,7 +40,7 @@ console.log('hare')
     async function lastTransBuild(x) {
       if (!x) return "";
 
-      const POLid = config.clientID;
+      const POLid = PLX.id;
 
       const ts = moment(x.timestamp)
         .format("hh:mma | DD/MMM")

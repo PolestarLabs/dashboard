@@ -99,7 +99,7 @@ function RegisterAllCommands(){
 function RegisterCommand(cmd){
   if ( !cmd.name && !cmd.description) return null;
   console.log(cmd.beta)
-  return axios.post(`https://discord.com/api/v9/applications/${cfg.clientID + ( (cmd.beta ?? true) ? '/guilds/277391723322408960':'') }/commands` ,
+  return axios.post(`https://discord.com/api/v9/applications/${PLX.id + ( (cmd.beta ?? true) ? '/guilds/277391723322408960':'') }/commands` ,
   {
     name:    cmd.name,
     //type: cmd.type || 4,
