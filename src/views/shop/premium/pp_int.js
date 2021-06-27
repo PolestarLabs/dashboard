@@ -139,7 +139,7 @@ if(!logged_in) return login();
   },
 
   payment: function(data, actions) {       
-      return $.post("/paypal/place&paypal=payment",cart).then(function(res) {          
+      return $.post("/paypal/place?paypal=payment",cart).then(function(res) {          
             return res;
         });         
   },      

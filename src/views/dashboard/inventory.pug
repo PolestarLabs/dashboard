@@ -16,18 +16,29 @@ mixin ITEM(ITEM, META)
             p= ITEM.type
                 
         .plx-card-footer.plx-flex.plx-flex-between
-            button#inv-craft.plx-button.plx-button-text(href='#' disabled=!ITEM.crafted) CRAFT
-            button#inv-marketpost.plx-button.plx-button-text(href='#' disabled=!ITEM.tradeable) POST IN MARKETPLACE
-            button#inv-destroy.plx-button.plx-button-text(href='#' disabled=!ITEM.destroyable class=ITEM.destroyable?"plx-text-danger":"") DESTROY
+            //button#inv-craft.plx-button.plx-button-text(href='#' disabled=!ITEM.crafted) CRAFT
+            button#inv-marketpost.plx-button.plx-button-text(
+                href='#',
+                disabled=(!ITEM.tradeable),
+                @click="marketplacePopup( ("+ JSON.stringify(ITEM||{}) +") )"
+            )
+                | POST IN MARKETPLACE
+            
+            // FIXME[epic=flicky] Remove !0 when destroy action is implemented
+            button#inv-destroy.plx-button.plx-button-text(href='#' disabled=(!0, !ITEM.destroyable) class=ITEM.destroyable?"plx-text-danger":"") DESTROY
 
 
 
 .plx-container
-    .plx-grid-medium(plx-grid)
-        each ITEM in userdata.modules.inventory        
-            -let thisItem = ALLITEMS.find(x=>x.id == ITEM.id || x.id == ITEM )
-            if thisItem
-                +ITEM(thisItem,ITEM)
+    #invdash
+        .plx-grid-medium(plx-grid)
+            each ITEM in userdata.modules.inventory        
+                -let thisItem = ALLITEMS.find(x=>x.id == ITEM.id || x.id == ITEM )
+                
+                if thisItem && ITEM.count > 0
+                    +ITEM(thisItem,ITEM)
+    script
+        include inventory.js
              
                 
 

@@ -174,8 +174,8 @@ fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );  
 
-fetch("/api/cosmetics/stickers?type=sticker&id="+userprofile.modules.sticker).then(r =>
-    r.json().then(res =>  PROFILE.sticker = res[0]  )
+fetch("/api/cosmetics/stickers/"+userprofile.modules.sticker).then(r =>
+    r.json().then(res =>  PROFILE.sticker = res  )
 );
 
 fetch("/api/cosmetics/backgrounds/"+userprofile.modules.bgID).then(r =>

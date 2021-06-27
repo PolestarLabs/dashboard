@@ -36,7 +36,7 @@ block content
 
  
   style :root{--favcolor-not-so-dim: #{FAVCOLOR}77; --favcolor-dim: #{FAVCOLOR}15; --favcolor: #{FAVCOLOR}} .favc-color{color: #{FAVCOLOR}}
-  style .has-user-bg{ background-image:url('/backdrops/#{userprofile.modules.bgID}.png')}
+  style .has-user-bg{ background-image:url('/backdrops/#{ userprofile.modules.bgID }.png')}
  
   .plx-animation-kenburns.background-container.has-user-bg
 
@@ -95,7 +95,8 @@ block content
 
         .numbersblock.plx-flex
           .rep(plx-parallax="y:200")
-            .number= miliarize(userprofile.modules.rep)
+            //= miliarize(userprofile.modules.rep)
+            .number {{commendInfo.totalIn}} 
             .sub Reputation
           .level(plx-parallax="y:150")
             .number= miliarize(userprofile.modules.level)

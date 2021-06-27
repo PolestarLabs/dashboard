@@ -124,13 +124,13 @@ router.get("/medals/:id", cache(2600), async (req,res) =>{
         .then(result=> res.json( CLEANUP(result) ) )
 })
 
-router.get("/count/:type", cache(3600),  async (req,res) =>{
+router.get("/count/:type", cache(3600), async (req,res) =>{
     const {type} = req.params;
     const {event,rarity} = req.query;
     const searchQuery = {type, public: true, rarity: rarity || {$ne:'XR'} };
     searchQuery.event = event || 'none';
     console.log({searchQuery})
-    let response = await DB.cosmetics.find(searchQuery).count().catch(e=>"???");
+    let response = await DB.cosmetics.find(searchQuery).noCache().count().catch(e=>"???");
     return res.status(200).json(response);
 })
 
