@@ -16,7 +16,7 @@ exports.run = async (req,res)=>{
             PLX.getRESTGuildChannels(SVID)
         ]).catch(err=>{
             console.error(err)
-            res.redirect("/dash/admin/"+SVID)
+            res.redirect("/admin/"+SVID)
             return [0]
         });
         if(!memberInfo) return;
