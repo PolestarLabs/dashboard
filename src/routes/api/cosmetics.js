@@ -42,20 +42,38 @@ router.get("/all", cache(2600), async (req,res) =>{
     .then(result=> res.json( result.map(CLEANUP) ) )
 })
 router.get("/search", cache(2600), async (req,res) =>{
-    let queries = {}
+    let queries = {};
+    console.log('one')
     Object.keys(req.query)
-        .filter(qry => ['_id','id','rarity','code','event','icon','type','expires', 'name'].includes(qry) )
+        .filter(qry => ['_id','id','rarity','code','event','icon','type','expires','filter','name'].includes(qry) )
         .forEach(ky=> {
                 queries[ky] = req.query[ky]
             })
     let sort = {_id:-1}
     //if (!queries.event) queries.event = 'none';
     queries.public = req.query.public !== 0;
+    if (req.query.searchq){
+        const qRegex = new RegExp(`.*${req.query.searchq}.*`,'i');
+        const new_queries = {
+            $and: [
+                {$or: [
+                    {name:qRegex},
+                    {id:qRegex},
+                    {tags:qRegex},
+                    {artistName:qRegex},
+                ]},
+                queries
+            ]
+        };
+
+        queries = Object.assign({},new_queries);
+
+    }
     console.log(queries)
     DB.cosmetics.find(queries,{public:0,meta:0})
     .skip(parseInt(req.query.skip)||0)
     .limit( parseInt(req.query.lim)||50)
-    .sort(sort).lean()
+    .sort(sort).noCache().lean()
     .then(async result=>{
         if(result && req.query.type === 'sticker'){
             let packs = await DB.items.find({icon: {$in:result.map(x=>x.series_id)}}).lean();
