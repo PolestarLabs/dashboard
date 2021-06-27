@@ -6,9 +6,9 @@
                 h4.subtitle {{backgrounds.length || 1}}/{{backgroundsSize}}
                 
             .plx-uncontainer.plx-accordion-content
-                ul: li.bg-info(v-for="bg in backgrounds")
+                ul: li.bg-info(v-for="bg in backgrounds", v-if="!!bg.code")
                     .preview
-                        img(:src="`/backdrops/${bg.code}.png`")
+                        img(:src="`/backdrops/${bg.code}.png`")                        
                     .plx-rarity-icon(:class="bg.rarity")
                     b {{bg.name}}
                     span.plx-margin-left.id ID 

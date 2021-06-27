@@ -29,7 +29,7 @@
       | %
 
 .bg(plx-toggle=' target:.toggle-lateral; cls: expanded; delay: 500; mode: hover')
-  img(src="/backdrops/"+userprofile.modules.bgID+".png")    
+  img(src="/backdrops/#{userprofile.modules.bgID}.png")    
   .bginfo.toggle-lateral 
     span(v-if='bgData.loading')
       span {{bgInfo(userprofile.modules.bgID)}}

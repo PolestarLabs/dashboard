@@ -66,7 +66,7 @@ module.exports={
           {"payment_options": {
         "allowed_payment_method": "INSTANT_FUNDING_SOURCE"
       },
-            "note_to_payee": "testing",
+            "note_to_payee": konoItem.name||konoItem.id,
             "amount": {
               "total": TOTAL,
               "currency": USR_CURR
