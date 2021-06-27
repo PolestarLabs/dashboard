@@ -25,9 +25,10 @@ router.get("/verify/:flavor", (req, res) => {
   const selected_client = config.clients.find((c) => c.id === flavor);
 
   if (selected_client.category === "premium"){
-    const UID = req.user.id;
+    const UID = req.user?.id;
     if (!UID) return res.status(403).redirect("/auth");
-    const userData = DB.users.get(UID);
+    const userData = DB.users.findOne(UID).noCache().lean();
+
 
     if (!userData.prime?.servers?.includes(guild_id)){
       return res.status(403).send("PRIME NOT ENABLED FOR THIS SERVER");
