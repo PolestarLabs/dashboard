@@ -108,8 +108,13 @@ router.get('/:id/commends', cache(360), async (req,res)=>{
 
             const payload = {};
             payload.userdata = await Promise.all(users.map(async usr=> (await userCache.get(usr)) || PLX.getRESTUser(usr)));
-            payload.whoIn = userCommends.whoIn.sort((a,b)=> b.count - a.count )
-            payload.whoOut = userCommends.whoOut.sort((a,b)=> b.count - a.count )
+            payload.whoIn = userCommends.whoIn.sort((a,b)=> b.count - a.count )||[];
+            payload.whoOut = userCommends.whoOut.sort((a,b)=> b.count - a.count )||[];
+            payload.totalIn = userCommends.totalIn || 0;
+            payload.totalOut = userCommends.totalOut || 0;
+            payload.average = ~~( payload.totalIn / payload.whoIn.length) || 0;
+            payload.normalized = ~~( (payload.totalIn * payload.whoIn.length) / (payload.totalIn / payload.average) ) || 0;
+
         return res.json(payload);
     }
     /*
