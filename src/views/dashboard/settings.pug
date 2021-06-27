@@ -69,10 +69,10 @@ section.plx-container#settings-options
 -const myDeckCasino = SKINS.blackjack || "default"
 -const myDeckTarot  = SKINS.tarot || "default"
 
--const myDecks  = DCKINFO//.filter(t=>userdata.modules.skinInventory.includes(t.id))
+-const myDecks  = DCKINFO.filter(t=>userdata.modules.skinInventory.includes(t.id))
 
 -const DEFAULT_DECK_C = {for:'casino', id:'casino_default',name: 'Standard Casino Deck', rarity: 'C', localizer:'default'}
--const DEFAULT_DECK_T = {for:'tarot', id:'tarot_default',name: 'Standard Tarot Deck', rarity: 'C', localizer:'default'}
+-const DEFAULT_DECK_T = {for:'tarot', id:'tarot_persona3',name: 'Persona 3', rarity: 'C', localizer:'persona3'}
 
 -myDecks.unshift(DEFAULT_DECK_C)
 -myDecks.unshift(DEFAULT_DECK_T)
