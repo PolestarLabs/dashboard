@@ -3,11 +3,16 @@
         h1.title Profile Medals
         h3.subtitle A picture is worth a thousand words, nine of them is over 9000
         p Tell a bit about yourself in a more visual way or just try matching an interesting theme combining different medals with the other stuff in your profile.
+        .searchmedals 
+            b Search Medals:
+            input(@keyup="searchMedals(medalSearch)" v-model="medalSearch") 
+            .plx-loading.is-loading(v-if="timer2")
+                | Loading...
         
     ul.plx-flex.plx-flex-wrap.plx-flex-center 
         li.shopbox(v-for="(item,i) in medals", :class="[hasItem(item)?'obtained':'',item.type,'raritybox',item.rarity].join(' ')"  v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small
             +shopcard()
-    button.plx-button.plx-button-default(@click="storepage('medal','medals',24,--currentPage.medals||0)")
+    button.plx-button.plx-button-default(@click="storepage('medal','medals',24,--currentPage.medals||0)", v-if="currentPage.medals != 0")
         | < PREVIOUS 
-    button.plx-button.plx-button-default(@click="storepage('medal','medals',24,++currentPage.medals||0)")
+    button.plx-button.plx-button-default(@click="storepage('medal','medals',24,++currentPage.medals||0)", v-if="currentPage.medals && medals.length === 24")
         | NEXT >

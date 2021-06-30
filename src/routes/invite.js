@@ -19,16 +19,16 @@ const inviteString = (selected_client,server) =>
 
   
 
-router.get("/verify/:flavor", (req, res) => {
+router.get("/verify/:flavor", async  (req, res) => {
   const { flavor } = req.params;
   const { guild_id } = req.query;
   const selected_client = config.clients.find((c) => c.id === flavor);
 
   if (selected_client.category === "premium"){
-    const UID = req.user.id;
+    const UID = req.user?.id;
     if (!UID) return res.status(403).redirect("/auth");
-    const userData = DB.users.get(UID);
-
+    const userData = await DB.users.findOne({id:UID}).noCache().lean();
+    
     if (!userData.prime?.servers?.includes(guild_id)){
       return res.status(403).send("PRIME NOT ENABLED FOR THIS SERVER");
     }
