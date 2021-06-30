@@ -53,6 +53,7 @@ const STORE = new Vue({
   el: "#storefront",
   components: {},
   data: {
+    timer2: false,
     userdata,
     backgrounds: { loading: true },
     medals: { loading: true },
@@ -61,6 +62,7 @@ const STORE = new Vue({
     market: { loading: true },
     defaultPrices: { loading: true },
     search: "",
+    medalSearch: "",
     arrivals: [],
     currentModalItem: 0,
     hideOwnedArrivals: false,
@@ -169,6 +171,17 @@ const STORE = new Vue({
         this.$refs[ref].slideTo(i),
           (this.currentIndex = this.$refs[ref].currentSlide);
     },
+    searchMedals(q){
+      if (this.timer2) {
+        clearTimeout(this.timer2);
+        this.timer2 = null;
+      }
+      this.timer2 = setTimeout(() => {
+        fetch("/api/cosmetics/search?type=medal&lim=20&searchq="+q+(q.length<3?"&event=none":"")).then((r) =>
+          r.json().then( (res) => {STORE.medals = res; this.timer2 = null} )
+        );
+      }, 800);
+    },    
     filterMeds() {
       if (this.timer) {
         clearTimeout(this.timer);
@@ -189,7 +202,7 @@ const STORE = new Vue({
     },
     storepage(type,store,max,jump){
       this[store] = [];
-      fetch(`/api/cosmetics/search?type=${type}&lim=${max||20}&skip=${jump*(max||20)}`).then((r) =>
+      fetch(`/api/cosmetics/search?type=${type}&lim=${max||20}&skip=${jump*(max||20)}&event=none`).then((r) =>
         r.json().then(async (res) => this[store] = res )
       )
     }
@@ -200,13 +213,13 @@ console.log(STORE);
  
 
 Promise.all([
-  fetch("/api/cosmetics/search?type=background&lim=20").then((r) =>
+  fetch("/api/cosmetics/search?type=background&lim=20&event=none").then((r) =>
     r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
-  fetch("/api/cosmetics/search?type=medal&lim=20").then((r) =>
+  fetch("/api/cosmetics/search?type=medal&lim=20&event=none").then((r) =>
     r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
-  fetch("/api/cosmetics/search?type=sticker&lim=20").then((r) =>
+  fetch("/api/cosmetics/search?type=sticker&lim=20&event=none").then((r) =>
     0//r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
   fetch("/api/cosmetics/search?type=skin&lim=20").then((r) =>
@@ -222,11 +235,11 @@ Promise.all([
   STORE.arrivals.sort((a,b)=> b.release - a.release)
 });
 
-  fetch("/api/cosmetics/search?type=background").then((r) =>
+  fetch("/api/cosmetics/search?type=background&event=none").then((r) =>
     r.json().then(async (res) => (STORE.backgrounds = res.slice(0, 24)))
   ),
 
-  fetch("/api/cosmetics/search?type=medal").then((r) =>
+  fetch("/api/cosmetics/search?type=medal&event=none").then((r) =>
     r.json().then(async (res) => (STORE.medals = res.slice(0, 24)))
   ),
 
