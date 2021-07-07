@@ -93,6 +93,18 @@ const CRAFTING = new Vue({
       });
       this.commitCraft(this.discovery.discovery.id, payPot).then( async (res) => {
 
+        if (res.status === "ERROR"){
+          this.craftingNow = false;
+          this.discovery = { loading: false };
+          this.fetchDiscovery();
+          return   notify(
+            ` ` +
+              this.discovery.discovery.name +
+              " FAILED to be crafted ("+res.message+")."
+          );
+          
+        }
+
         let i = 0;
         await wait;
         console.log(res);
@@ -171,7 +183,11 @@ const CRAFTING = new Vue({
           method: "POST",
           headers: { "Content-Type": "application/json; charset=utf-8" },
           body: JSON.stringify({ pot, item }),
-        }).then((r) => r.json().then(resolve));
+        }).then((r) => 
+          {            
+            r.json().then(resolve)
+          }
+        );
       });
     },
     fetchDiscovery() {
