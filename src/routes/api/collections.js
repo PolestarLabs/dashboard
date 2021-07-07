@@ -175,7 +175,7 @@ router.post('/mix', async (req,res) => {
     console.log("\n--------------------------Check 2", pItemcol(possible))
     if (!possible.length){
         
-        const refinedPot = pot //.map(item=> { item.count *= ((rars.indexOf(item.rarity)+1)/2); return item})
+        const refinedPot = pot.map(item=> { item.count *= ((rars.indexOf(item.rarity)+1)/2); return item})
         let querySameType = {
             $and: pot.map(itm=>{
                 let craftType = itm.type;
@@ -189,7 +189,7 @@ router.post('/mix', async (req,res) => {
                 }
             })
             .concat({'typeCraft.type': {$all: potTypeMap ,}}),
-            crafted: !0, //display: !0
+            crafted: !0, //open: !0
         };
         console.log({refinedPot})
         possible = await DB.items.find(querySameType).lean().exec();
@@ -340,25 +340,36 @@ router.post('/create', checkAuth, async (req,res)=> {
     const payGem = Object.keys(itemToCraft.gemcraft)?.map(it=>{
         let userBal = userData.modules[it];
         let itm = itemToCraft.gemcraft[it];
-
+        console.log({it,itm,userBal})
         if (userBal < itm) {
             //res.status(403).json({status:"ERROR",message:"You dont have enough "+itm+"."});
             throw new Error("Invalid Balance");
         };
-        return [userData.id,itm, "crafting_discovery", it === 'rubines' ? "RBN" : it === 'sapphires' ? "SPH" : "JDE" ,{details:{item_id:itemToCraft.id}}];
+        return [userData.id,itm, "crafting_discovery", it ,{details:{item_id:itemToCraft.id}}];
     });
     
     //console.log(pay,payGem)
     //console.log(PLX)
-    
-    await Promise.all( pay.map(material=> userData.removeItem(...material)) ).catch(err=> res.status(500).json("Error processing materials"));
-    await Promise.all( payGem.map(gems=> ECO.pay(...gems)) ).catch(err=> res.status(500).json("Error processing gems"));    
+    let errors = 0;
+    await Promise.all( pay.map(material=> userData.removeItem(...material)) ).catch(err=> {
+            console.error(err);
+            res.status(500).json("Error processing materials");
+            errors+=1;
+        });
+    if (errors) return;
+    await Promise.all( payGem.map(gems=> ECO.pay(...gems)) ).catch(err=> {
+            console.error(err);
+            res.status(500).json("Error processing gems");
+            errors+=1;
+        }); 
+    if (errors) return;        
     await Promise.all([
         userData.addItem(item, 1,true),
         DB.users.set(req.user.id, {
             $inc: { "progression.craftingExp": baselineBonus[itemToCraft.rarity] * 1 },
         })
     ]);
+    if (errors) return;   
     return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
 
 }catch(err){
