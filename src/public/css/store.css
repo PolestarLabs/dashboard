@@ -691,8 +691,13 @@
    list-style:none;
    min-width:135px;
    max-width:300px;
+   height: 250px;
    flex:1 1 0
   }
+   .store-main li .body{
+     height: 120px;
+     margin-top: 18px;
+   }
  }
  #backgrounds>ul,
  #medals>ul,
@@ -948,4 +953,11 @@
 .searchmedals .is-loading{
   width: 10%;
   margin-left: 20px;
+}
+
+.medal.img{
+  width: 100px;
+  
+  
+  
 }
