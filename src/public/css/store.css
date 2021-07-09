@@ -690,13 +690,29 @@
   #arrivals1::after {
    list-style:none;
    min-width:135px;
-   max-width:300px;
-   height: 250px;
+   max-width:400px;
    flex:1 1 0
   }
-   .store-main li .body{
+    .store-main li.background{
+        min-width: 85% !important;
+       max-width: 400px !important;
+       height: 240px;
+   }
+   .store-main li.background .footer{
+     justify-content: right !important;
+     margin-right: 10px;
+     transform: translateY(8px);
+   }
+     .store-main li.background .body{
      height: 120px;
-     margin-top: 18px;
+    
+   }
+   .store-main li.medal{
+       height: 250px;
+   }
+   .store-main li.medal .body{
+     height: 120px;
+     margin-top: 20px;
    }
  }
  #backgrounds>ul,
