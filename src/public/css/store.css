@@ -299,7 +299,7 @@
  }
  @-moz-document url-prefix() {
   .img.background .bg-image {
-   animation:bg-anim 50s infinite
+  /*! animation:bg-anim 50s infinite; */
   }
  }
  @keyframes bg-anim {
@@ -377,8 +377,10 @@
  }
  @-moz-document url-prefix() {
   .img.sticker img {
-   transform:rotate(-5deg) scale(1.2);
-   animation:stickerRotate 12s ease-in-out alternate infinite
+    /*! 
+    transform:rotate(-5deg) scale(1.2);
+    animation:stickerRotate 12s ease-in-out alternate infinite
+    */
   }
  }
  @keyframes stickerRotate {
