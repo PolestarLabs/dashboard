@@ -444,7 +444,7 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
     PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
 
     
-    let preUserData = DB.users.get({id:req.user.id});
+    let preUserData = DB.users.findOne({id:req.user.id}).noCache();
     
     preUserData.then(async data=>{
 

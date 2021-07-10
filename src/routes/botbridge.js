@@ -13,7 +13,7 @@ bridge.post(['/:entrypoint/:endpoint','/:entrypoint'], (req,res)=>{
             if(sData && sData.cluster){
                 ports =  ["90"+(sData.cluster||"0").toString().padStart(2,"0")] 
             }else{
-                ports = [9000,9001,9002,9003,9004]
+                ports = [9000,9001,9002,9003,9004,10000]
             }
             console.log(ports)
             if(ports.length===1) return res.redirect(307,`10.0.1.2:${ports[0]}${url}`);
