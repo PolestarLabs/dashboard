@@ -633,7 +633,8 @@ app.use(async function (err, req, res, next) {
   errdesc= (err.message||err.stack)?.split(/[\n\r]/g).slice(-1).pop()+"" 
   errline= (err.message||err.stack)?.split(/[\n\r]/g)[0].split('/').slice(5).join(' > '); 
   errorCode = md5(errdesc);
-  console.log(" ERROR ".bgRed, (err.name+"").red, errdesc.yellow, errline,(`[${errorCode}]`.blue))
+  console.error(" ERROR ".bgRed, (err.name+"").red, errdesc.yellow, errline,(`[${errorCode}]`.blue))
+  console.error(err)
   await DB.globals.updateOne({'data.errors.id':{$ne:errorCode}},{$addToSet:{'data.errors': {id:errorCode }    }})
   let errorData = (await DB.globals.findOneAndUpdate({'data.errors.id':errorCode},
     {
