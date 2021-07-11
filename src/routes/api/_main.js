@@ -7,6 +7,8 @@ const helmet = require('helmet');
 const passport = require('passport');
 const Strategy = require('passport-http-bearer').Strategy;
 
+global.cache= cacheFunction
+
 
 passport.use(new Strategy(
     (token,cb) =>{
@@ -51,7 +53,7 @@ router.use( (req,res,nex)=>{
     //if (req.headers.authorization && !req.user) return AUTHED(req,res,nex);
     nex();
 });
-global.cache= cacheFunction
+
 
 router.get((rq,rs,nx)=> {
     if(rq.query.nocache) nx();
@@ -186,13 +188,13 @@ router.get('/leaderboards/:serverID', cache(600), async (req, res)=> {
     });
 });
 
-router.get('/leaderboards/:serverID/:userID', cache(1260), async (req, res)=> {
+router.get('/leaderboards/:serverID/:userID', cache(60), async (req, res)=> {
     const {serverID,userID} = req.params;
     let userData = await DB.localranks.get({user:userID,server:serverID},{_id:0,__v:0});
     res.json(userData);
 });
 
-router.get('/relationships', cache(1260), async (req, res)=> {
+router.get('/relationships', async (req, res)=> {
 
     let {page: skip} = req.query;
 
@@ -211,13 +213,13 @@ router.get('/relationships', cache(1260), async (req, res)=> {
     let usersDiscordData = await Promise.all( usersInvolved.map(async U => (await userCache.get( U )) || PLX.getRESTUser( U )) );
     usersDiscordData.forEach(USR=> userCache.set(USR.id,USR) );
 
-
     let parsedRelationships = []
     Relationships.forEach(rel=>{
         let item = {
             type: rel.type,
             initiative: rel.initiative, 
             ring: rel.ring,
+            ringCollection: rel._doc?.ringCollection,
             since: rel.since,
             id: rel._id,
             users: rel.users,
