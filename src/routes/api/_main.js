@@ -73,6 +73,11 @@ router.use("/user/", async (...args) => {
     return (require('./users.js'))( ...args);
 });
 
+router.use("/server/", async (...args) => {
+    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./servers.js'))];
+    return (require('./servers.js'))( ...args);
+});
+
 router.use(["/market/","/marketplace/","/shop/marketplace"], async (...args) => {
     (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./shops/marketplace.js'))];
     return (require('./shops/marketplace.js'))( ...args);
