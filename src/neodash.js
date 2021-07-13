@@ -270,6 +270,7 @@ const discordStrategy = new Strategy({
 }, function (req, accessToken, refreshToken, profile, done) {
     profile.refreshToken = refreshToken;
     process.nextTick(function () {
+    DB.users.updateOne({id: profile.id},{discordData: profile});
     return done(null, profile);
   });
 });
