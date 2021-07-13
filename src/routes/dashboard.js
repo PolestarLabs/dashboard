@@ -6,9 +6,10 @@ const fx = require('../pipelines/globalFunctions.js');
 const serversWithPollux = global.serversWithPollux ? serversWithPollux : new Map();
 const serverHasPollux = async (id) => {
 
-    const svData = await DB.servers.get(id,{id:1,active:1});
+    const svData = await DB.servers.get(id,{id:1,activeClients:1});
     if (!svData) return false;
-    return svData.active ?? true;
+    if (!svData.activeClients?.length) return false;
+    return svData.activeClients;
 
     /*
     let hasP = serversWithPollux.get(id);
@@ -125,7 +126,9 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
          DB.usercols.get(req.user.id),
          Promise.all(req.user.guilds.map(async g=>{
             g.rank= g.owner ? "Owner" : (g.permissions & 0x8) > 0 ? "Admin" : (g.permissions & 0x20) > 0 ? "Manager" : /*(await isAdmin(req,g.id)) ? "Moderator" :*/ 'Commoner';
-            g.hasPollux = !!(await serverHasPollux(g.id));
+            const hasPollux = await serverHasPollux(g.id);
+            g.hasPollux = !!(hasPollux);
+            g.hasPolluxDetail = hasPollux;
             g.rankSort = g.rank == "Owner" ? 0 : g.rank == "Admin" ? 1 : g.rank == "Manager" ? 2 : "Moderator" ? 3 : 4;
             return g;
         }))
