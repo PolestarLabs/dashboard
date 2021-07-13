@@ -1147,6 +1147,7 @@ div:not(.plx-open) .faders {
  border-radius:8px;
  display:block
 }
+
 .magic-outline {
  display:inline-flex;
  border:solid 2px var(--secondary-color);
@@ -1187,6 +1188,12 @@ div:not(.plx-open) .faders {
  background:var(--accent-color-strong)5;
  border-color:var(--text-accent)
 }
+.magic-outline.disabled {
+  opacity: .5;
+  cursor:not-allowed;
+  pointer-events: none;
+}
+
 .sidewinder {
  position:fixed;
  z-index:990;
