@@ -1,0 +1,75 @@
+-let PRIME_DATA = JSON.parse(JSON.stringify(userdata||{})).prime;
+
+style 
+    include prime.css
+
+.plx-container#primedata
+    if PRIME_DATA && PRIME_DATA.active 
+        h2.title You are a Prime user! 
+        h2.title #{PRIME_DATA.tier}
+
+        section#prime_servers
+            h2.title Prime Servers;
+
+            p
+                | Total Tokens: #{PRIME_DATA.maxServers}
+                | Tokens Used: #{(PRIME_DATA.servers||{}).length || 0}
+
+            .prime-select-container
+                b Enable Prime for a new Server:
+                .prime-select-row
+                    button(:class='((!( (userPrimeStatus.servers||{}).length || 0 )||!serverToPrime.id)?"disabled red":"")' @click="").magic-outline.plx-button.plx-margin-left.plx-margin-bottom#assignPrime Activate!
+                    div 
+                    v-select(                
+                        v-model="serverToPrime"
+                        :options= "primable_servers",
+                        :filterable= "false",
+                        :clearable= "false",
+                        :searchable= "false",
+                        :select-on-tab = "false",
+                        :value= `serverToPrime.id`,
+                        label='sv',      
+                        :selectable="option => !servers.find(x=>x.id===option.id)"
+                    ) 
+                        template(slot='selected-option', slot-scope='option')
+                            .selected-item
+                                .sv-icon.plx-rounded: img(:alt="option.name[0]" :src="`https://cdn.discordapp.com/icons/${option.id}/${option.icon}.png?size=32`" ) 
+                                .texts
+                                    span.label &#x2000 {{option.name}}
+                                    span.description {{option.id}}          
+                        template(slot='option', slot-scope='option')
+                            .sel-opt( )
+                                .sv-icon.plx-rounded: img(:alt="option.name[0]" :src="`https://cdn.discordapp.com/icons/${option.id}/${option.icon}.png?size=32`") 
+                                .texts
+                                    span.label &#x2000 {{option.name}}
+                                    span(v-if="servers.find(x=>x.id===option.id)").description Prime already in this server
+                                    span(v-else).description {{option.id}}
+                
+                    
+                .tip.plx-text-danger(v-if="!( (userPrimeStatus.servers||{}).length || 0 )") Max Servers Reached!
+                .tip.plx-text-danger(v-else-if="!serverToPrime.id") Select a Server first!
+
+
+            
+
+            h3.title Current Prime Servers;
+                
+            div
+                div(v-for="server in servers" :data-svid="server.id" v-if="servers.length")
+                    .name {{server.meta.name||server.name||"Unknown"}}
+                    .icon: img(:src="server.meta.icon")
+                    .clients 
+                        .client(v-for="client in users")
+                            .avatar: img(:src="client.avatar")
+                            p {{client.tag}}
+                            p {{client.id}}
+
+
+    else
+        h2.title You are not a Prime user! 
+        link(rel="stylesheet" href="/css/tierboxes.css")
+        include ../../index/parts/prime
+
+script 
+    include prime.js 
+    
