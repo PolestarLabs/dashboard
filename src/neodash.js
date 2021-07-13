@@ -197,17 +197,20 @@ redis:{
       PLX.redis.expire("discord.users."+k, 10 * 60 * 1);
     },
     get(k){
+      /*
       if (userCacheMap.get(k)) {
          console.log("✅ Supercached".cyan, k);
          return userCacheMap.get(k);
       }
+      */
       return new Promise((resolve,reject) => {
         PLX.redis.get("discord.users."+k, (_,d) => {
           if(d){
             console.log("✔️ Cached".green, k)
-            userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
-            let resuser = userCacheMap.get(k);
-            if (resuser) return resolve(resuser);
+            //userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
+            //let resuser = userCacheMap.get(k);
+            //if (resuser) return resolve(resuser);
+            return resolve(new Eris.User(JSON.parse(d),PLX));
           }else{
             console.log("❌ Not Cached".red, k);            
           }
