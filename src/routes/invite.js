@@ -28,6 +28,13 @@ router.get("/verify/:flavor", async  (req, res) => {
     const UID = req.user?.id;
     if (!UID) return res.status(403).redirect("/auth");
     const userData = await DB.users.findOne({id:UID}).noCache().lean();
+    const serverAlreadyRegistered = await DB.servers.get(guild_id).noCache().lean();
+
+    if (serverAlreadyRegistered){
+      if (serverAlreadyRegistered.activeClients?.filter(x=>x!==PLX.id)?.length){
+        return res.status(403).send("THERE'S ALREADY ONE PRIME CLIENT IN THIS SERVER");
+      };
+    }
     
     if (!userData.prime?.servers?.includes(guild_id)){
       return res.status(403).send("PRIME NOT ENABLED FOR THIS SERVER");
