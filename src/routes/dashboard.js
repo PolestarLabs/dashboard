@@ -3,9 +3,14 @@ const express = require('express');
 const router = express.Router();
 const fx = require('../pipelines/globalFunctions.js');
 
-global.serversWithPollux = global.serversWithPollux ? serversWithPollux : new Map();
+const serversWithPollux = global.serversWithPollux ? serversWithPollux : new Map();
 const serverHasPollux = async (id) => {
-    
+
+    const svData = await DB.servers.get(id,{id:1,active:1});
+    if (!svData) return false;
+    return svData.active ?? true;
+
+    /*
     let hasP = serversWithPollux.get(id);
     let hasPCheck = PLX.getRESTGuild(id)
         .catch(()=>{
@@ -21,6 +26,7 @@ const serverHasPollux = async (id) => {
     if (hasP) res = hasP.res;
     else res = await hasPCheck;
     return res === true;
+    */
 }
 
 
