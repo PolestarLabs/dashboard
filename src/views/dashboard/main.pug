@@ -2,7 +2,7 @@ extends ../layout
 block head
     script window.paceOptions = {document:false,ghostTime: 800, restartOnRequestAfter: 300, }
     script(src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.common.dev.min.js")
-    script(  src='https://unpkg.com/vue-select@3.0.2')
+    script(  src='https://unpkg.com/vue-select@3.11.0')
     script(  src="https://unpkg.com/animated-number-vue@1.0.0/dist/AnimatedNumber.umd.min.js")    
     
 block content
@@ -14,10 +14,11 @@ block content
     -
         let PG = 
                 endpoint == 'profile'   ? 0 :
-                endpoint == 'servers'   ? 1 :
-                endpoint == 'inventory' ? 2 :
-                endpoint == 'boorusave' ? 3 :
-                endpoint == 'settings'  ? 4 : 0
+                endpoint == 'prime'     ? 1 :
+                endpoint == 'servers'   ? 2 :
+                endpoint == 'inventory' ? 3 :
+                endpoint == 'boorusave' ? 4 : 
+                endpoint == 'settings'  ? 5 : 0
     style.
         .plx-dash-cover{
             width: 100%;
@@ -62,15 +63,17 @@ block content
         - const isCurrent = (x) => (endpoint === x) || !endpoint ? 'plx-active' : ''
         ul.plx-switcher.plx-margin#pages
             li(class=isCurrent('profile'))   
-                include profile_edit
+                include pages/profile_edit
+            li(class=isCurrent('prime'))   
+                include pages/prime
             li(class=isCurrent('servers'))
-                include servers
+                include pages/servers
             li(class=isCurrent('inventory'))
-                include inventory
+                include pages/inventory
             li(class=isCurrent('boorusave'))
                 include ../private/boorusave  
             li(class=isCurrent('settings'))
-                include settings
+                include pages/settings
                 p nobody here but us chickens
 
 block scripts
