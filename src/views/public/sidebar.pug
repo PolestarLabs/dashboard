@@ -1,7 +1,7 @@
 .sidebar.plx-flex.plx-flex-wrap.plx-flex-center
     if userprofile.prime && userprofile.counters.prime_streak
         .donoblock
-            h3 #{userprofile.prime.tier} Supporter
+            h3 #{ capitalize(userprofile.prime.tier) } Supporter
             img(src=`/images/donate/${userprofile.prime.tier}.png`)
             //-let donRank = donoranks.filter((v,i,a)=> v.donoScore > a.find(u=>u.id ===userprofile.id).donoScore )
             h4 #{userprofile.counters.prime_streak[userprofile.prime.tier]} MONTHS
@@ -27,5 +27,5 @@
         +progressBar(userprofile.modules.medalInventory.length   , "medalsSize"      ,"Medals",0)
         +progressBar(userprofile.modules.achievements.length     , "achievementsSize"      ,"Achievements",0)
 
-    if userprofile.prime && userprofile.counters.prime_streak
+    if !userprofile.prime && !userprofile.counters.prime_streak
         .ad-space(v-html="AS2")
