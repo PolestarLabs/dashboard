@@ -157,6 +157,20 @@ const central_pollux = config.clients.find(c=>{
 global.PLX = new Eris.Client(central_pollux.token,{restMode:true});
 PLX.id = central_pollux.id;
 
+global.polluxClients = new Map();
+
+config.clients.forEach(async cli=>{
+	const newClient = new Eris.Client(cli.token,{restMode:true});
+	newClient.id = cli.id;
+	newClient.category = cli.category;
+	newClient.friendly_name = cli.fname;
+	newClient.internal_name = cli.name;
+	newClient.user = await newClient.getRESTUser(cli.id);
+	
+	polluxClients.set(cli.id,newClient)
+})
+
+
 
 setTimeout(()=>{
 
@@ -420,7 +434,6 @@ const authCacheExpiration = new Map();
 app.use(function(req,res,next){
 	res.locals.HOST = HOST;
 	res.locals.EVENT= VARS.EVENT;
-	res.locals.HOST = HOST;
 	next();
 })
 
@@ -452,7 +465,7 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
 		PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
 
 		
-		let preUserData = DB.users.findOne({id:req.user.id}).noCache();
+		let preUserData = DB.users.findOne({id:req.user.id}).noCache().lean();
 		
 		preUserData.then(async data=>{
 
@@ -678,3 +691,7 @@ process.on('unhandledRejection', function (reason, p) {
 
 
 module.exports = app
+
+
+
+
