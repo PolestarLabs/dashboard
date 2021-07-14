@@ -1,151 +1,191 @@
--let PRIME_DATA = JSON.parse(JSON.stringify(userdata||{})).prime;
 
-script var availablePolluxUsers = !{ JSON.stringify( (POLLUX_USERS).filter(x=>x.category!="alpha").map(x=>x.user) ) }
-style 
+-
+	const DummyPrimeOptions = {
+		"active" : false,
+		"canReallocate" : 1,
+		"custom_background" : 1,
+		"custom_handle" : 1,
+		"custom_shop" : 0,
+		"maxServers" : 0,
+		"tier" : false,
+		"servers" : []
+	};
+	const SERVER_PRIME_INFO = Object.assign(DummyPrimeOptions, (userdata||{}).prime );
+	const AVATARS_ENDPOINT = "https://cdn.discordapp.com/avatars";
+
+
+
+script
+	| var availablePolluxUsers = !{ JSON.stringify( (POLLUX_USERS).filter(x=>x.category!="alpha").map(x=> { let res = x.user; res.internal_name = x.internal_name; return res; } ) ) }
+
+style
 	include prime.css
 
-.plx-container#primedata
-	if PRIME_DATA && PRIME_DATA.active 
+.plx-container#prime-section
+	if SERVER_PRIME_INFO && SERVER_PRIME_INFO.active
 		h2.title You are a Prime user!
-		.plx-grid(plx-grid).prime-stuff
-			.plx-width-1-1(class="plx-width-2-5@m")
-				section#details.plx-flex.plx-flex-wrap
-					.titles
-						h3.title #{ capitalize(PRIME_DATA.tier) } Supporter
-						img(src=`/images/donate/${PRIME_DATA.tier}.png`)
-					.perks
-						mixin unlock(tier,tracker)
-							.tick( class=(tracker ? "yep" : "nope") )
-							.unlock(class=(tracker?'unlocked':'locked'))
-								if !tracker
-									i: .fas.fa-padlock
-									| Unlocks at 
-									a(href="/#")=tier
-									| !
-
-								
-						li 
-							.perk Custom Handle: 
-							+unlock("Aluminum",PRIME_DATA.custom_handle )
-
-						li 
-							.perk Custom Background:  
-							+unlock("Carbon",PRIME_DATA.custom_background)
-								
-						li 
-							.perk Custom Shop: 
-							+unlock("Astatine",PRIME_DATA.custom_shop )        
-								
-						li 
-							.perk Boosted Dailies: 
-							+unlock("Aluminum",PRIME_DATA.tier!='plastic' )
-								
-						li 
-							.perk Treehouse Access:  
-							.tick.yep
-								
-						li 
-							.perk Priority Support:  
-							.tick.yep
-								
-						li 
-							.perk Tracker:  
-							span.track.tick= userdata.counters.prime_streak[PRIME_DATA.tier]
-							.unlock
-
-				hr.plx-divider-icon
-				section#prime_servers
-					h3.title Current Prime Servers
-						span.small [{{(PRIMEDATA.servers||{}).length || 0}}/{{PRIMEDATA.maxServers}}]
-						
-					.primes-parent
-						div(v-for="server in servers" :data-svid="server.id" v-if="servers.length").prime-server
-							.icon: img(
-								:alt="server.id[0]",
-								:src="server.avi || server.ava || server.meta.icon || `https://cdn.discordapp.com/icons/${server.id}/${server.icon}.png?size=32`"
-							)
-							.info 
-								.name {{server.meta.name||server.name||"Unknown"}}
-								.clients 
-									.client(v-for="client in users.filter(u=> (server.activeClients||['578913818961248256','271394014358405121']).includes(u.id))")
-										.avatar: img(:plx-tooltip=" client.fname+' | '+client.id", :src="`https://cdn.discordapp.com/avatars/${client.id}/${client.avatar}.png?size=64`")
-						
-						a.prime-server.empty(href='#addprime' v-for="slot in [...new Array( Math.min(30,PRIMEDATA.maxServers) - ((PRIMEDATA.servers||{}).length || 0))]")
-							p
-								i: .fas.fa-star
-								| Unused Slot
-
-
-			section#addprime.plx-width-1-1(class="plx-width-3-5@m")
-				p
-					| Total Tokens: {{PRIMEDATA.maxServers}}
-					| Tokens Used: {{(PRIMEDATA.servers||{}).length || 0}}
-
-				h3.title Enable Prime for a new Server:
-				.prime-select-container
-					.prime-select-row
-						button(
-							:class='((!( (PRIMEDATA.servers||{}).length || 0 )||!serverToPrime.id)?"disabled red":"")',
-							@click="setPrime()"
-						).magic-outline.plx-button.plx-margin-left.plx-margin-bottom#assignPrime Activate!
-						div 
-						v-select(                
-							v-model="serverToPrime"
-							:options= "primable_servers",
-							:filterable= "false",
-							:clearable= "false",
-							:searchable= "false",
-							:select-on-tab = "false",
-							:value= `serverToPrime.id`,
-							label='sv',      
-							:selectable="option => !servers.find(x=>x.id===option.id)"
-						) 
-							template(slot='selected-option', slot-scope='option')
-								.selected-item
-									.sv-icon.plx-rounded: img(
-										:alt="option.name[0]",
-										:src="`https://cdn.discordapp.com/icons/${option.id}/${option.icon}.png?size=32`" 
-									) 
-									.texts
-										span.label &#x2000 {{option.name}}
-										span.description {{option.id}}          
-							template(slot='option', slot-scope='option')
-								.sel-opt( )
-									.sv-icon.plx-rounded: img(:alt="option.name[0]" :src="`https://cdn.discordapp.com/icons/${option.id}/${option.icon}.png?size=32`") 
-									.texts
-										span.label &#x2000 {{option.name}}
-										span(v-if="servers.find(x=>x.id===option.id)").description Prime already in this server
-										span(v-else).description {{option.id}}
-					
-						
-					.tip.plx-text-danger(v-if="!( (PRIMEDATA.servers||{}).length || 0 )") Max Servers Reached!
-					.tip.plx-text-danger(v-else-if="!serverToPrime.id") Select a Server first!
-					hr
-					b Select the appropriate attire:
-					.select-flavor
-						each polly in POLLUX_USERS.filter(x=>x.category=="premium")
-							.polluxSelect(@click=`selectedFlavor = '${polly.internal_name}'`, :class=`selectedFlavor == '${polly.internal_name}' ? 'selected' : '' `)
-								.avatar
-									img(src=`https://cdn.discordapp.com/avatars/${polly.id}/${polly.user.avatar}.png?size=128`)
-								.name= polly.friendly_name
-					
-							
-
-			
-
-			
-
-
+	if SERVER_PRIME_INFO && SERVER_PRIME_INFO.tier && !SERVER_PRIME_INFO.active
+		h2.title Your Prime sub has expired...
 	else
-		h2.title You are not a Prime user! 
-		link(rel="stylesheet" href="/css/tierboxes.css")
-		include ../../index/parts/prime
+		h2.title You are not a Prime user!
+
+	.plx-grid(plx-grid class=( !SERVER_PRIME_INFO || !SERVER_PRIME_INFO.active ? "blur" : "")).prime-stuff
+		.plx-width-1-1(class="plx-width-2-5@m")
+			section#details.plx-flex.plx-flex-wrap
+				.titles
+					h3.title #{ capitalize(SERVER_PRIME_INFO.tier||"F2P") }
+					if SERVER_PRIME_INFO.tier
+						img(src=`/images/donate/${SERVER_PRIME_INFO.tier}.png`)
+				.perks
+					mixin unlock(tier,tracker)
+						.tick( class=(tracker ? "yep" : "nope") )
+						.unlock(class=(tracker?'unlocked':'locked'))
+							if !tracker
+								i: .fas.fa-padlock
+								| Unlocks at
+								a(href="/#")=tier
+								| !
+
+
+					li
+						.perk Custom Handle:
+						+unlock("Aluminum",SERVER_PRIME_INFO.active && SERVER_PRIME_INFO.custom_handle )
+
+					li
+						.perk Custom Background:
+						+unlock("Carbon",SERVER_PRIME_INFO.active && SERVER_PRIME_INFO.custom_background)
+
+					li
+						.perk Custom Shop:
+						+unlock("Astatine",SERVER_PRIME_INFO.active && SERVER_PRIME_INFO.custom_shop )
+
+					li
+						.perk Boosted Dailies:
+						+unlock("Aluminum",SERVER_PRIME_INFO.active )
+
+					li
+						.perk Treehouse Access:
+						+unlock("Plastic",SERVER_PRIME_INFO.active )
+
+					li
+						.perk Priority Support:
+						+unlock("Plastic",SERVER_PRIME_INFO.active )
+
+					li
+						.perk Tracker:
+						span.track.tick= ((userdata.counters||{}).prime_streak||{})[SERVER_PRIME_INFO.tier]
+						.unlock
+
+			hr.plx-divider-icon
+			section#prime_servers
+				h3.title Current Prime Servers
+					span.small [{{(CLIENT_PRIME_INFO.servers||[]).length || 0}}/{{CLIENT_PRIME_INFO.maxServers||0}}]
+
+				.primes-parent
+					div(
+						v-for="server in currentPrimeServers",
+						v-if="currentPrimeServers.length",
+						:data-svid="server.id",
+						:style=" { opacity: server.pending ? .5 : 1 } "
+					).prime-server
+						.icon: img(
+							:alt="server.id[0]",
+							:src="getServerIcon(server)"
+						)
+						.info
+							.name {{server.name||"Unknown"}}
+							.clients()
+								.pending(v-show="server.pending") PENDING...
+								.client(v-for="client in availableClients(server)")
+									.avatar: img(
+										:plx-tooltip= " client.fname+' | '+client.id",
+										:src= "getAvatar(client)"
+									)
+
+					a.prime-server.empty(href='#addprime' v-for="slot in [...new Array( Math.min(30,CLIENT_PRIME_INFO.maxServers) - ((CLIENT_PRIME_INFO.servers||[]).length || 0))]")
+						p
+							i: .fas.fa-star
+							| Unused Slot
+
+
+		section#addprime.plx-width-1-1(class="plx-width-3-5@m")
+			p
+				| Total Tokens: {{CLIENT_PRIME_INFO.maxServers||0}}
+				| Tokens Used: {{(CLIENT_PRIME_INFO.servers||[]).length || 0}}
+
+			h3.title Enable Prime for a new Server:
+			.prime-select-container
+				// SERVER SELECT DROPDOWN
+				.prime-select-row
+					button(
+						:class='((!( (CLIENT_PRIME_INFO.servers||[]).length || 0 )||!serverToPrime.id)?"disabled red":"")',
+						@click="setPrime()"
+					).magic-outline.plx-button.plx-margin-left.plx-margin-bottom#assignPrime Activate!
+					div
+					v-select(
+						v-model="serverToPrime"
+						:options= "primeEligibleServers",
+						:filterable= "false",
+						:clearable= "false",
+						:select-on-tab = "false",
+						:value= `serverToPrime.id`,
+						label='sv',
+						:selectable="option => !currentPrimeServers.find(x=>x.id===option.id)"
+					)
+
+						// CURRENT SELECTION
+						template(slot='selected-option', slot-scope='option')
+							.selected-item
+								.sv-icon.plx-rounded: img(:alt="option.name[0]", :src="getServerIcon(option,32)" )
+								.texts
+									span.label &#x2000 {{option.name}}
+									span.description {{option.id}}
+
+						// OPTIONS
+						template(slot='option', slot-scope='option')
+							.sel-opt
+								.sv-icon.plx-rounded: img(:alt="option.name[0]", :src="getServerIcon(option,32)")
+								.texts
+									span.label &#x2000 {{option.name}}
+									span(v-if="currentPrimeServers.find(x=>x.id===option.id)").description Prime already in this server
+									span(v-else).description {{option.id}}
+					//------------------------------
+
+				.tip.plx-text-danger(v-if="!( (CLIENT_PRIME_INFO.servers||[]).length || 0 )") Max Servers Reached!
+				.tip.plx-text-danger(v-else-if="!serverToPrime.id") Select a Server first!
+
+				br
+
+				b Select the appropriate attire:
+				.select-flavor
+					.polluxSelect(
+						v-for= "polly in availablePolluxUsers.filter(x=>x.category=='premium')",
+						@click= `selectedFlavor = polly.internal_name`,
+						:class= `checkEligibility( polly.internal_name )`
+					)
+						b.name {{polly.fname}}
+						.hidden-requirement(:plx-tooltip="polly.internal_name")
+							|  {{
+							|	   Object.keys(levels).find(lv=>
+							|     	eligibleFlavors[polly.internal_name] == levels[lv]
+							|		)
+							|	}}+
+
+						.avatar
+							img(:src="getAvatar(polly,128)")
+
+
+	br
+	hr.plx-divider-icon
+	br
+
+	link(rel="stylesheet" href="/css/tierboxes.css")
+	include ../../index/parts/prime
 
 	br
 	br
 	br
 	br
-			
-script 
-	include prime.js 
-	
+
+script
+	include prime.js
