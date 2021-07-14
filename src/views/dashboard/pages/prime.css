@@ -80,6 +80,7 @@
 }
 .select-flavor .polluxSelect.selected {
   color: var(--accent-color);
+  background-image: linear-gradient( #0000 00%, var(--accent-color-light) 500%);
   border-width: 2px;
 }
 .select-flavor .polluxSelect .sub {
@@ -225,3 +226,49 @@
   font-size: smaller;
   font-weight: 400;
 }
+
+
+.prime-stuff.blur{
+
+}
+.blur section#addprime{
+   filter: blur(2px);
+  pointer-events: none;
+    opacity: .5;
+} 
+.blur section#prime_servers{
+  filter: blur(3px);
+  pointer-events: none;
+    opacity: .5;
+}
+.not_eligible{
+  cursor: not-allowed;
+  pointer-events: none;
+  color: #AAA8;
+  position: relative;
+  overflow: hidden;
+}
+.not_eligible > *{
+  opacity: .6
+}
+.not_eligible img{
+  opacity: .7
+}
+.hidden-requirement{
+  display: none;
+}
+.not_eligible .hidden-requirement{
+  display: block;
+  position: absolute;
+  width: 100%;
+  left: -30px;
+  bottom: 25px;  
+  z-index: 2;
+  background: #aaa;
+  color: #2b2b3b;
+  text-transform: uppercase;
+  font-weight: 900;
+  opacity: 1;
+  transform:rotate(45deg)
+}
+
