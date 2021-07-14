@@ -1,7 +1,9 @@
+const Eris = require('eris')
 const ECO = require('../pipelines/economy.js')
 const express = require('express');
 const router = express.Router();
 const fx = require('../pipelines/globalFunctions.js');
+const config = require('../../config.js');
 
 const serversWithPollux = global.serversWithPollux ? serversWithPollux : new Map();
 const serverHasPollux = async (id) => {
@@ -118,7 +120,25 @@ router.delete('/imgbookmarks/:id', async (req,res)=>{
 
 })
 
+const LOAD_ALL_SUBCLIENTS = Promise.all(
+    config.clients.map(async cli=>{
+        const newClient = new Eris.Client(cli.token,{restMode:true});
+        newClient.id = cli.id;
+        newClient.category = cli.category;
+        newClient.friendly_name = cli.fname;
+        newClient.internal_name = cli.name;
+        const user = JSON.parse(JSON.stringify(await newClient.getRESTUser(cli.id)));
+        user.fname = cli.fname;
+        user.category = cli.category;        
+        polluxClients.set(cli.id,{client:newClient,user});
+
+        return user;
+    })
+);
 router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
+    
+    
+    
  
     const [ALLCOSM,ALLITEMS,BCOL,SERVEROWNERSHIP] = await Promise.all([
          DB.cosmetics.find({}).lean().exec(),
@@ -131,23 +151,25 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
             g.hasPolluxDetail = hasPollux;
             g.rankSort = g.rank == "Owner" ? 0 : g.rank == "Admin" ? 1 : g.rank == "Manager" ? 2 : "Moderator" ? 3 : 4;
             return g;
-        }))
+        })),
+        LOAD_ALL_SUBCLIENTS
     ]);
-
-
 
     const MDINFO = ALLCOSM.filter(x=>x.type== "medal"      )
 
     const DCKINFO= ALLCOSM.filter(x=>x.type== "skin")
 
     if(res.locals?.userinfo){
-
         res.locals.userinfo.servers = SERVEROWNERSHIP; 
     }
 
     res.render('dashboard/main',{ALLITEMS,MDINFO,DCKINFO,
         boorucollection: BCOL?.collections?.boorusave || [],
-        endpoint: req.params.endpoint 
+        endpoint: req.params.endpoint,
+        POLLUX_USERS: Array.from(polluxClients, ([,{client,user}]) => {
+            client.user = user;
+            return client;
+        })
     })
 
 })
