@@ -433,6 +433,10 @@ const authCacheExpiration = new Map();
 
 app.use(function(req,res,next){
 	res.locals.HOST = HOST;
+	res.locals.INSTANCE_VUE_PATH = process.env.NODE_ENV === "production" 
+		? "https://cdn.jsdelivr.net/npm/vue@2.6.14"
+		: "https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.common.dev.min.js";
+		
 	res.locals.EVENT= VARS.EVENT;
 	next();
 })
@@ -661,7 +665,8 @@ app.use(function (req, res, next) {
 app.use(async function (err, req, res, next) {  
 	// set locals, only providing error in development
 	res.locals.message = err.message || err.stack;
-	res.locals.error = req.app.get('env') === 'development' ? err : {};
+	//res.locals.error = req.app.get('env') === 'development' ? err : {};
+	res.locals.error = process.env.NODE_ENV === "production" ? {} : err;
 
 	const md5= require('md5')
 	errdesc= (err.message||err.stack)?.split(/[\n\r]/g).slice(-1).pop()+"" 
