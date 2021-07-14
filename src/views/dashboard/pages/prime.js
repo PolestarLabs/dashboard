@@ -2,7 +2,8 @@ const PRIME = new Vue({
     el: "#primedata",
     data:{
         servers: [],
-        users: [],
+        users: availablePolluxUsers,
+        selectedFlavor: 'prime',
         userPrimeStatus: (userdata||{}).prime,
         serverToPrime: {name:"Select a server..."},
         primable_servers: userinfo.servers.filter(g=> g.owner || (g.permissions & 0x8) > 0 || (g.permissions & 0x20) > 0 ),
@@ -16,25 +17,12 @@ const PRIME = new Vue({
                 if (res.status !== 200) return;
                 res.json().then(res=>{
                     this.servers.push(res);
-                    PRIME.getUser(res.clientID);
-                    (res.activeClients||[]).forEach(cli=> PRIME.getUser(cli));
+                    //PRIME.getUser(res.clientID);
+                    //(res.activeClients||[]).forEach(cli=> PRIME.getUser(cli));
                     this.servers.loading = false;
                 })
             })
         },
-        getUser(uid){
-            fetch("/api/user/"+uid).then(res=>{
-                if (res.status !== 200) return;
-                res.json().then(res=>{
-                    if (this.users.find(u => u.id === res.id)){
-
-                    }else{
-                        this.users.push(res);
-                    }                    
-                    this.users.loading = false;
-                })
-            })
-        }
     }
 });
 if(userdata && userdata.prime && userdata.prime.servers){

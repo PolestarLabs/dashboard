@@ -1,5 +1,6 @@
 -let PRIME_DATA = JSON.parse(JSON.stringify(userdata||{})).prime;
 
+script var availablePolluxUsers = !{ JSON.stringify( (POLLUX_USERS).filter(x=>x.category!="alpha").map(x=>x.user) ) }
 style 
     include prime.css
 
@@ -9,14 +10,25 @@ style
         h2.title #{PRIME_DATA.tier}
 
         section#prime_servers
-            h2.title Prime Servers;
+            h3.title Current Prime Servers
+                
+            .primes-parent
+                div(v-for="server in servers" :data-svid="server.id" v-if="servers.length").prime-server
+                    .icon: img(:alt="server.id[0]" :src="server.meta.icon")
+                    .info 
+                        .name {{server.meta.name||server.name||"Unknown"}}
+                        .clients 
+                            .client(v-for="client in users.filter(u=> (server.activeClients||['578913818961248256','271394014358405121']).includes(u.id))")
+                                .avatar: img(:plx-tooltip=" client.fname+' | '+client.id", :src="`https://cdn.discordapp.com/avatars/${client.id}/${client.avatar}.png?size=64`")
+                            
+
 
             p
                 | Total Tokens: #{PRIME_DATA.maxServers}
                 | Tokens Used: #{(PRIME_DATA.servers||{}).length || 0}
 
+            h3.title Enable Prime for a new Server:
             .prime-select-container
-                b Enable Prime for a new Server:
                 .prime-select-row
                     button(:class='((!( (userPrimeStatus.servers||{}).length || 0 )||!serverToPrime.id)?"disabled red":"")' @click="").magic-outline.plx-button.plx-margin-left.plx-margin-bottom#assignPrime Activate!
                     div 
@@ -48,21 +60,25 @@ style
                     
                 .tip.plx-text-danger(v-if="!( (userPrimeStatus.servers||{}).length || 0 )") Max Servers Reached!
                 .tip.plx-text-danger(v-else-if="!serverToPrime.id") Select a Server first!
-
+                hr
+                b Select the appropriate attire:
+                .select-flavor
+                    each polly in POLLUX_USERS.filter(x=>x.category=="premium")
+                        .polluxSelect(@click=`selectedFlavor = '${polly.internal_name}'`, :class=`selectedFlavor == '${polly.internal_name}' ? 'selected' : '' `)
+                            .avatar
+                                img(src=`https://cdn.discordapp.com/avatars/${polly.id}/${polly.user.avatar}.png?size=128`)
+                            .name= polly.friendly_name
+                
+                br
+                br
+                br
+                br
+                      
+                        
 
             
 
-            h3.title Current Prime Servers;
-                
-            div
-                div(v-for="server in servers" :data-svid="server.id" v-if="servers.length")
-                    .name {{server.meta.name||server.name||"Unknown"}}
-                    .icon: img(:src="server.meta.icon")
-                    .clients 
-                        .client(v-for="client in users")
-                            .avatar: img(:src="client.avatar")
-                            p {{client.tag}}
-                            p {{client.id}}
+            
 
 
     else
