@@ -97,21 +97,22 @@
 
 .prime-server {
   flex-basis: 0 0 30%;
-  width: 340px;
+  width: 100%;
   border: solid 1px;
   padding: 10px;
   border-radius: 10px;
-  margin: 20px 0;
+  margin: 8px 0;
   display: flex;
 }
 
 .prime-server .name {
-  font-size: 1.2rem;
+  font-size: 1rem;
+  font-weight: 900;
 }
 .prime-server .icon {
   border-radius: 100px;
-  height: 80px;
-  width: 80px;
+  height: 64px;
+  width: 64px;
   overflow: hidden;
   background: #0b0b1b;
   margin-right: 10px;
@@ -120,8 +121,8 @@
 
 .prime-server .client .avatar {
   border-radius: 100px;
-  height: 40px;
-  width: 40px;
+  height: 32px;
+  width: 32px;
   overflow: hidden;
   background: #0b0b1b;
   margin: 4px;
@@ -133,4 +134,94 @@
   display: flex;
   width: 100%;
   justify-content: right;
+}
+
+#details {
+  border: solid 1px;
+  padding: 12px;
+  border-radius: 10px;
+  background: var(--lightest);
+  color: var(--dark);
+}
+
+#details .titles {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  flex-direction: column;
+  margin-right: 15px;
+}
+#details .titles .title {
+  margin: 0;
+  color: var(--dark);
+}
+#details .titles > img {
+  width: 150px;
+}
+#details .perks {
+  margin-top: 10px;
+}
+#details .perks li {
+  display: flex;
+  justify-content: space-between;
+}
+#details .perks li .perk {
+  margin-right: 0;
+  flex: 0 0 180px;
+}
+#details .tick {
+  margin: 0 auto 0 0;
+  flex: 0 0 auto;
+}
+#details .unlock {
+  display: none;
+  position: absolute;
+}
+#details > .perks > :hover .unlock {
+  display: block;
+}
+.unlock.locked {
+  flex: 0 0 auto;
+  display: inline;
+  background: var(--bg-darkest);
+  padding: 2px 8px;
+  border-radius: 5px;
+  margin: 0 10px;
+  color: var(--light);
+}
+
+.primes-parent::-webkit-scrollbar {
+  width: 10px;
+}
+.primes-parent {
+  max-height: 400px;
+  overflow-y: scroll;
+  margin-bottom: 0px;
+  scrollbar-width: thin;
+  padding: 20px 10px 30px 0;
+  box-sizing: border-box;
+  mask-image: linear-gradient(#0000 0%, #ffff 10%, #ffff 90%, #0000 100%);
+}
+
+.prime-server.empty {
+  color: unset;
+  border-style: dashed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 0.5;
+  text-decoration: none;
+}
+.prime-server.empty:hover {
+  opacity: 0.8;
+}
+.prime-server.empty .fas {
+  margin-right: 10px;
+  opacity: 0.5;
+}
+
+#prime_servers .title .small {
+  padding: 8px;
+  font-size: smaller;
+  font-weight: 400;
 }
