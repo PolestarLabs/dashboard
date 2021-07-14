@@ -129,6 +129,7 @@ const LOAD_ALL_SUBCLIENTS = Promise.all(
         newClient.internal_name = cli.name;
         const user = JSON.parse(JSON.stringify(await newClient.getRESTUser(cli.id)));
         user.fname = cli.fname;
+        user.flavor = cli.name;
         user.category = cli.category;        
         polluxClients.set(cli.id,{client:newClient,user});
 
