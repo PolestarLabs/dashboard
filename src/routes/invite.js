@@ -28,7 +28,7 @@ router.get("/verify/:flavor", async  (req, res) => {
     const UID = req.user?.id;
     if (!UID) return res.status(403).redirect("/auth");
     const userData = await DB.users.findOne({id:UID}).noCache().lean();
-    const serverAlreadyRegistered = await DB.servers.get(guild_id).noCache().lean();
+    const serverAlreadyRegistered = await DB.servers.findOne({id:guild_id}).noCache().lean();
 
     if (serverAlreadyRegistered){
       if (serverAlreadyRegistered.activeClients?.filter(x=>x!==PLX.id)?.length){
