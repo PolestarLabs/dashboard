@@ -1382,3 +1382,6 @@ background-image: url('/build/icons/yep.png');
 .tick.nope{
 background-image: url('/build/icons/nope.png');
 }
+.tick.maybe{
+background-image: url('/build/icons/maybe.png');
+}
