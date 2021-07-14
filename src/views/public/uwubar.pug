@@ -26,11 +26,11 @@
             .tagline {{wifeData.tagline}}
             .ringsbar.plx-flex.plx-flex-between
                 //-rings = [0,0,0,0,0,0,0,0,0,0,0]
-                .ring(v-for="ring in wifeData.ringCollection")
+                .ring(v-for="ring in wifeData.ringCollection||[]")
                     img(  :src="`/build/items/ring_${ring}.png`"  width=24 )
                 .plus
                     span
-                        | {{wifeData.ringCollection.length>6 ? wifeData.ringCollection.length - 6 :""}}
+                        | {{(wifeData.ringCollection||[1]).length>6 ? (wifeData.ringCollection||[1]).length - 6 :""}}
 
     .uwu-status.plx-flex.plx-flex-between(v-if="!relationships.loading && wifeData.id")
         .info
