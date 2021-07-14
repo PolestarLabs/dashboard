@@ -56,32 +56,38 @@ style
 				hr.plx-divider-icon
 				section#prime_servers
 					h3.title Current Prime Servers
-						span.small [#{(PRIME_DATA.servers||{}).length || 0}/#{PRIME_DATA.maxServers}]
+						span.small [{{(PRIMEDATA.servers||{}).length || 0}}/{{PRIMEDATA.maxServers}}]
 						
 					.primes-parent
 						div(v-for="server in servers" :data-svid="server.id" v-if="servers.length").prime-server
-							.icon: img(:alt="server.id[0]" :src="server.meta.icon")
+							.icon: img(
+								:alt="server.id[0]",
+								:src="server.avi || server.ava || server.meta.icon || `https://cdn.discordapp.com/icons/${server.id}/${server.icon}.png?size=32`"
+							)
 							.info 
 								.name {{server.meta.name||server.name||"Unknown"}}
 								.clients 
 									.client(v-for="client in users.filter(u=> (server.activeClients||['578913818961248256','271394014358405121']).includes(u.id))")
 										.avatar: img(:plx-tooltip=" client.fname+' | '+client.id", :src="`https://cdn.discordapp.com/avatars/${client.id}/${client.avatar}.png?size=64`")
-						each slot in [...new Array( Math.min(30,PRIME_DATA.maxServers) - ((PRIME_DATA.servers||{}).length || 0))]
-							a.prime-server.empty(href='#addprime')
-								p
-									i: .fas.fa-star
-									| Unused Slot
+						
+						a.prime-server.empty(href='#addprime' v-for="slot in [...new Array( Math.min(30,PRIMEDATA.maxServers) - ((PRIMEDATA.servers||{}).length || 0))]")
+							p
+								i: .fas.fa-star
+								| Unused Slot
 
 
 			section#addprime.plx-width-1-1(class="plx-width-3-5@m")
 				p
-					| Total Tokens: #{PRIME_DATA.maxServers}
-					| Tokens Used: #{(PRIME_DATA.servers||{}).length || 0}
+					| Total Tokens: {{PRIMEDATA.maxServers}}
+					| Tokens Used: {{(PRIMEDATA.servers||{}).length || 0}}
 
 				h3.title Enable Prime for a new Server:
 				.prime-select-container
 					.prime-select-row
-						button(:class='((!( (userPrimeStatus.servers||{}).length || 0 )||!serverToPrime.id)?"disabled red":"")' @click="").magic-outline.plx-button.plx-margin-left.plx-margin-bottom#assignPrime Activate!
+						button(
+							:class='((!( (PRIMEDATA.servers||{}).length || 0 )||!serverToPrime.id)?"disabled red":"")',
+							@click="setPrime()"
+						).magic-outline.plx-button.plx-margin-left.plx-margin-bottom#assignPrime Activate!
 						div 
 						v-select(                
 							v-model="serverToPrime"
@@ -96,7 +102,10 @@ style
 						) 
 							template(slot='selected-option', slot-scope='option')
 								.selected-item
-									.sv-icon.plx-rounded: img(:alt="option.name[0]" :src="`https://cdn.discordapp.com/icons/${option.id}/${option.icon}.png?size=32`" ) 
+									.sv-icon.plx-rounded: img(
+										:alt="option.name[0]",
+										:src="`https://cdn.discordapp.com/icons/${option.id}/${option.icon}.png?size=32`" 
+									) 
 									.texts
 										span.label &#x2000 {{option.name}}
 										span.description {{option.id}}          
@@ -109,7 +118,7 @@ style
 										span(v-else).description {{option.id}}
 					
 						
-					.tip.plx-text-danger(v-if="!( (userPrimeStatus.servers||{}).length || 0 )") Max Servers Reached!
+					.tip.plx-text-danger(v-if="!( (PRIMEDATA.servers||{}).length || 0 )") Max Servers Reached!
 					.tip.plx-text-danger(v-else-if="!serverToPrime.id") Select a Server first!
 					hr
 					b Select the appropriate attire:
