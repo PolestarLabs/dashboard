@@ -7,7 +7,36 @@ style
 .plx-container#primedata
     if PRIME_DATA && PRIME_DATA.active 
         h2.title You are a Prime user! 
-        h2.title #{PRIME_DATA.tier}
+       
+
+        section#details.plx-flex.plx-flex-wrap
+            .titles
+                h3.title #{ capitalize(PRIME_DATA.tier) } Supporter
+                img(src=`/images/donate/${PRIME_DATA.tier}.png`)
+            .perks
+                li Custom Background:  
+                    .tick( class=(PRIME_DATA.custom_background ? "yep" : "nope") )
+                        
+                li Custom Handle: 
+                    .tick( class=(PRIME_DATA.custom_handle ? "yep" : "nope") )
+                        
+                li Custom Shop: 
+                    .tick( class=(PRIME_DATA.custom_shop ? "yep" : "nope") )
+                        
+                li Boosted Dailies: 
+                    .tick( class=(true ? "yep" : "nope") )
+                        
+                li Treehouse Access:  
+                    .tick( class=(true ? "yep" : "nope") )
+                        
+                li Priority Support:  
+                    .tick( class=(true ? "yep" : "nope") )
+                        
+                li Tracker:  
+                    span= userdata.counters.prime_streak[PRIME_DATA.tier]
+                    
+
+            
 
         section#prime_servers
             h3.title Current Prime Servers
@@ -69,11 +98,6 @@ style
                                 img(src=`https://cdn.discordapp.com/avatars/${polly.id}/${polly.user.avatar}.png?size=128`)
                             .name= polly.friendly_name
                 
-                br
-                br
-                br
-                br
-                      
                         
 
             
@@ -86,6 +110,11 @@ style
         link(rel="stylesheet" href="/css/tierboxes.css")
         include ../../index/parts/prime
 
+    br
+    br
+    br
+    br
+            
 script 
     include prime.js 
     
