@@ -1366,3 +1366,19 @@ button span,.ti-tag span{
 .color-secondary{ color: var(--secondary-color) !important }
 .color-accent{ color: var(--accent-color) !important }
 .color-contrast{ color: var(--text-contrast) !important }
+
+
+
+.tick{
+  display: inline-block;
+  height: 1.5rem;
+  width: 1.5rem;
+  vertical-align:middle;
+  background-size: contain;
+}
+.tick.yep{
+background-image: url('/build/icons/yep.png');
+}
+.tick.nope{
+background-image: url('/build/icons/nope.png');
+}
