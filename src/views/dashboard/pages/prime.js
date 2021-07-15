@@ -34,7 +34,7 @@ const PRIME = new Vue({
         },
         currentPrimeServers: [],
         eligibleFlavors: {
-            neko: 4,
+            neko: 3,
             prime: 2,
             rockstar: 3,
         },
@@ -70,6 +70,7 @@ const PRIME = new Vue({
             return this.availablePolluxUsers.filter(u=>
                 (
                     (server.dbData||{}).activeClients ||
+                    // TODO Remove this when proper activeClients are in place
                     ['578913818961248256','271394014358405121'] // DEFAULT
                 ).includes(u.id)
             )
