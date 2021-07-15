@@ -8,7 +8,7 @@ module.exports = {
 
         if(!req.user) return res.status(401).json("NOPE");
         const userData = await DB.users.get(req.user.id);
-        if (!userData.donator) return res.status(402).json("NOPE"); //or if last rewards was NOW - 3024e9
+        if (!userData.prime?.active) return res.status(402).json("Prime Not Active"); //or if last rewards was NOW - 3024e9
         
         const canvas = Canvas.createCanvas(720,380);
         const ctx = canvas.getContext('2d');
@@ -51,7 +51,7 @@ module.exports = {
         if(!req.user) return res.status(401).json("NOPE");
         const userData = await DB.users.get(req.user.id);
         
-        if (!userData.donator) return res.status(402).json("NOPE");
+        if (!userData.prime?.active) return res.status(402).json("Prime not active!");
 
         const canvas = Canvas.createCanvas(720,380);
         const ctx = canvas.getContext('2d');
