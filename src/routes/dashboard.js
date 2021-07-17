@@ -138,9 +138,11 @@ const LOAD_ALL_SUBCLIENTS = Promise.all(
 );
 router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
     
-    
-    
- 
+    const [MANSION_SERVER_DATA,MANSION_MEMBER] = await Promise.all([
+         PLX.getRESTGuild(config.official_guild),
+         PLX.resolveMember(config.official_guild,req.user.id)
+    ]);
+
     const [ALLCOSM,ALLITEMS,BCOL,SERVEROWNERSHIP] = await Promise.all([
          DB.cosmetics.find({}).lean().exec(),
          DB.items.find({}).lean().exec(),
@@ -167,6 +169,7 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
     res.render('dashboard/main',{ALLITEMS,MDINFO,DCKINFO,
         boorucollection: BCOL?.collections?.boorusave || [],
         endpoint: req.params.endpoint,
+        MANSION_SERVER_DATA,MANSION_MEMBER,
         POLLUX_USERS: Array.from(polluxClients, ([,{client,user}]) => {
             client.user = user;
             return client;
