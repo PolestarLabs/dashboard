@@ -24,7 +24,7 @@ style
 .plx-container#prime-section
 	if SERVER_PRIME_INFO && SERVER_PRIME_INFO.active
 		h2.title You are a Prime user!
-	if SERVER_PRIME_INFO && SERVER_PRIME_INFO.tier && !SERVER_PRIME_INFO.active
+	else if SERVER_PRIME_INFO && SERVER_PRIME_INFO.tier && !SERVER_PRIME_INFO.active
 		h2.title Your Prime sub has expired...
 	else
 		h2.title You are not a Prime user!
