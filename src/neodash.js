@@ -362,6 +362,7 @@ app.use(Passport.session());
 
 app.get('/auth', Passport.authenticate('discord', {scope: scopes}), (req, res,nex)=> nex() )
 
+
 app.get('/logout', function (req, res) {
 	req.logout();
 	if(req.query.r=='blacklisted') {
@@ -459,18 +460,7 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
 
 	if(req.isAuthenticated() && req.method == 'GET' && !req.url.includes('/api/') && !req.url.includes('/generators/')){
 		let userCacheReload = authCacheExpiration.get(req.user.id);
-		if( userCacheReload && userCacheReload.exp > Date.now() ) {
-			preDataProcess(userCacheReload.data)
-			return next();
-		}
-
-		AcquireDiscordPayload(req.user.accessToken,req)
-
-		PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
-
-		
 		let preUserData = DB.users.findOne({id:req.user.id}).noCache().lean();
-		
 		preUserData.then(async data=>{
 
 			if(!data) {
@@ -480,8 +470,17 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
 			authCacheExpiration.set(req.user.id,{data,exp: Date.now() + 10e3  })
 			preDataProcess(data)
 		});
+		
+		if (!req.url.includes('dash')) await preUserData;
+		
+		if( userCacheReload && userCacheReload.exp > Date.now() ) {
+			preDataProcess(userCacheReload.data)
+			return next();
+		}
 
-		await preUserData;    
+		AcquireDiscordPayload(req.user.accessToken,req);
+		PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
+		  
 		return next();
 	}else{
 		res.locals.userdata=null;
