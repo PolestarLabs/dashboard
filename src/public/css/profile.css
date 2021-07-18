@@ -371,6 +371,9 @@ section:focus {
 .stick-sel-opt span {
   width: 100%;
   text-overflow: ellipsis;
+ 
+}
+.sticker-select .stick-sel-opt {
   display: none;
 }
 .sticker-select ul {
