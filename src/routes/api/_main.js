@@ -41,7 +41,8 @@ router.get('/',AUTHED, (req, res)=> {
 	res.json(req.user)
 });
 router.get('/master',MASTER, (req, res)=> {
-	res.json(req.user)
+	console.log(polluxClients)
+    res.json(req.user)
 });
 
 
