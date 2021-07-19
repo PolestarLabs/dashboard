@@ -373,7 +373,7 @@ section:focus {
   text-overflow: ellipsis;
  
 }
-.sticker-select .stick-sel-opt {
+.sticker-select .stick-sel-opt span{
   display: none;
 }
 .sticker-select ul {

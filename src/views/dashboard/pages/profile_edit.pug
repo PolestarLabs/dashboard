@@ -268,12 +268,11 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 								template(slot='selected-option', slot-scope='option')
 									span(style='transform:translateY(-5px)')
 										.plx-rarity-icon(:class='option.rarity')
-										//span.sticker-sel-span
 										| &#x2000 {{option.name}}
 
 								template(slot='option', slot-scope='option')
 									.stick-sel-opt
-										.stickerpack-icon(:style="`background-image:url('/build/boosters/showcase/${option.icon}.png')`"  class="plx-visible@m")
+										.stickerpack-icon(:style="`background-image:url('/build/boosters/showcase/${option.icon}.png')`"  )
 										span(style='transform:translateY(-5px)')
 											.plx-rarity-icon(:class='option.rarity')
 											| {{option.name}}
@@ -294,7 +293,6 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 									template(slot='selected-option', slot-scope='option').test-templateclass
 										span(style='transform:translateY(-5px)')
 											.plx-rarity-icon(:class='option.rarity')
-											//span.sticker-sel-span
 											| &#x2000 {{option.name}}
 
 
