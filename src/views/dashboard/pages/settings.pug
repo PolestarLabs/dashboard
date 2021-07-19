@@ -14,9 +14,9 @@ section.plx-container#connections
                     img(src="https://icons-for-free.com/iconfiles/png/24/fm+last+last+fm+round+icon+icon-1320190504486109080.png" width="24px" )
                     | Last.fm 
                 h5.subtitle 
-                    if userdata.switches.lastfm
+                    if userdata.connections.lastfm
                         span Connected as 
-                            a(href="https://www.last.fm/user/"+userdata.switches.lastfm.name)= userdata.switches.lastfm.name
+                            a(href="https://www.last.fm/user/"+userdata.connections.lastfm.name)= userdata.connections.lastfm.name
                     else
                         a(onclick="authwindow('/lastfm/auth','Last.fm Login')") Connect
 
@@ -27,9 +27,9 @@ section.plx-container#connections
                     h3.title 
                         img(src="/build/logos/patreon.png" width="24px")
                         | Patreon
-                    if userdata.switches && userdata.switches.patreon
+                    if userdata.switches && userdata.connections.patreon
                         h5.subtitle 
-                            -let pdata = userdata.switches.patreon
+                            -let pdata = userdata.connections.patreon
                             span Connected as 
                                 a( href=pdata.identity.url )
                                     img(src=pdata.identity.thumb_url width=24)
@@ -37,10 +37,10 @@ section.plx-container#connections
                     else
                         h5.subtitle 
                             a(onclick="authwindow('/patreon/auth?state=popup','Last.fm Login')") Connect
-                if userdata.switches && userdata.switches.patreon
+                if userdata.switches && userdata.connections.patreon
                     a.small.help.wa.subtitle  More Info
                     .plx-accordion-content
-                        -let pdata = userdata.switches.patreon
+                        -let pdata = userdata.connections.patreon
                         span
                             b Discord Connected: 
                             .tick( class=(pdata.identity.discord_user_id ? "yep" : "nope") )

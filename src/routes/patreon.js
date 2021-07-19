@@ -52,7 +52,7 @@ router.get("/redir", checkAuth, async (req, res) => {
         if (identity_payload.status != 200) return res.status(identity_payload.status).json(identity_payload);
 
         data.identity = identity_payload.data;
-        await DB.users.set(req.user.id,{'switches.patreon':data});
+        await DB.users.set(req.user.id,{'connections.patreon':data});
 
         if (queryInfo == "popup"){
             return res.render("callback",{target:dashsets});

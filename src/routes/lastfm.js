@@ -21,7 +21,7 @@ router.get("/callback", async (req, res) => {
     axios.get(uri).then(async response=>{
         const restoken = response.data?.session;
         if (!restoken) return res.status(500).json({data:response.data});
-        await DB.users.set(req.user.id,{'switches.lastfm':restoken});
+        await DB.users.set(req.user.id,{'connections.lastfm':restoken});
         axios.get("https://pollux.gg");
         return res.status(200).render("callback",{timer:5});
     }).catch(err=>{
