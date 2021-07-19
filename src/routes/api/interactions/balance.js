@@ -108,7 +108,7 @@ console.log('hare')
             lngs: P.lngs,
           })}: **${miliarize(TARGETDATA.modules.PSM ?? 0, true)}**` +
           `\n\u2003${_emoji("EVT")} ${"Event Tokens"}: **${miliarize(
-            TARGETDATA.eventGoodie || 0,
+            TARGETDATA.modules.EVT || 0,
             true
           )}**` +
           `\n${invisibar}`,
