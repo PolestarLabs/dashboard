@@ -272,3 +272,16 @@
   transform:rotate(45deg)
 }
 
+
+.unprime{
+  max-height: 32px;
+  max-width: 90px;
+  margin-right:   auto;
+  transform: scale(.9) translateY(5px);
+  transform-origin: bottom;
+}
+.unprime.disabled{
+  opacity: .5;
+  pointer-events:  none;
+  cursor: not-allowed;
+}

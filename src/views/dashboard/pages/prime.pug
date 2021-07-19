@@ -95,6 +95,7 @@ style
 						.info
 							.name {{server.name||"Unknown"}}
 							.clients()
+								a.unprime.plx-button-small.plx-button.plx-button-danger(@click="unprime(server.id)" :class="primeEligibleServers.find(x=>x.id==server.id)?'':'disabled'") REMOVE
 								.pending(v-show="server.pending") PENDING...
 								.client(v-for="client in availableClients(server)")
 									.avatar: img(

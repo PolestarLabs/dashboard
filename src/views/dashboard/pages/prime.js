@@ -82,7 +82,7 @@ const PRIME = new Vue({
             currentServer.dbData = {};
             currentServer.dbData.activeClients = ["354285599588483082","271394014358405121"]
             currentServer.dbData.activeClients.push(flavor.id);
-            installFlavored(this.selectedFlavor,currentServer.id);
+            installFlavored(this.selectedFlavor,currentServer.id,1);
             currentServer.pending = true;
             this.currentPrimeServers.push(currentServer);
             this.CLIENT_PRIME_INFO.servers.push(currentServer.id);
@@ -106,6 +106,31 @@ const PRIME = new Vue({
                     this.currentPrimeServers.push(aServer);
                 })
             })
+        },
+        unprime(svid){
+
+            Swal.fire({
+                title: "This will remove Pollux from this server.",
+                showCancelButton: true,
+                confirmButtonText: 'Aight!',
+                showLoaderOnConfirm: true,
+                preConfirm: () => {
+                    return new Promise((resolve,reject) => {
+                        fetch("/api/prime/"+svid,{method: "DELETE"})
+                        .then(res=>{
+                            if (res.status === 200){
+                                this.currentPrimeServers = this.currentPrimeServers.filter(s=>s.id !== svid);
+                                return Swal.fire("Off she goes!",'Pollux has successfuly ejected from your server','success');
+                            }
+                            else
+                                return resolve(Swal.showValidationMessage("Error!","AAAAAAAAAAAAAAAAAAAAA","error"));
+                        }).catch(err=>{reject("Internal Error")});
+                    })
+                },
+                allowOutsideClick: () => !swal.isLoading()         
+            }) 
+
+            
         },
     }
 });
