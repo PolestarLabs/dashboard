@@ -3,6 +3,7 @@ include ../../tools/mixins
 
 style
     include settings.css
+-const connections = userdata.connections || {}
 section.plx-container#connections 
     h1.title Connections
     .plx-width-1-1.plx-flex-wrap.plx-flex(class=' plx-child-width-1-3@m' )
@@ -14,9 +15,9 @@ section.plx-container#connections
                     img(src="https://icons-for-free.com/iconfiles/png/24/fm+last+last+fm+round+icon+icon-1320190504486109080.png" width="24px" )
                     | Last.fm 
                 h5.subtitle 
-                    if userdata.connections.lastfm
+                    if connections.lastfm
                         span Connected as 
-                            a(href="https://www.last.fm/user/"+userdata.connections.lastfm.name)= userdata.connections.lastfm.name
+                            a(href="https://www.last.fm/user/"+connections.lastfm.name)= connections.lastfm.name
                     else
                         a(onclick="authwindow('/lastfm/auth','Last.fm Login')") Connect
 
@@ -27,9 +28,9 @@ section.plx-container#connections
                     h3.title 
                         img(src="/build/logos/patreon.png" width="24px")
                         | Patreon
-                    if userdata.switches && userdata.connections.patreon
+                    if userdata.switches && connections.patreon
                         h5.subtitle 
-                            -let pdata = userdata.connections.patreon
+                            -let pdata = connections.patreon
                             span Connected as 
                                 a( href=pdata.identity.url )
                                     img(src=pdata.identity.thumb_url width=24)
@@ -37,10 +38,10 @@ section.plx-container#connections
                     else
                         h5.subtitle 
                             a(onclick="authwindow('/patreon/auth?state=popup','Last.fm Login')") Connect
-                if userdata.switches && userdata.connections.patreon
+                if userdata.switches && connections.patreon
                     a.small.help.wa.subtitle  More Info
                     .plx-accordion-content
-                        -let pdata = userdata.connections.patreon
+                        -let pdata = connections.patreon
                         span
                             b Discord Connected: 
                             .tick( class=(pdata.identity.discord_user_id ? "yep" : "nope") )
@@ -90,14 +91,14 @@ section.plx-container#connections
                                     .help.small.plx-text-success All Good!
                                 else
                                     .help.small.plx-text-danger There are missing roles! Contact support.
-                
-                    
-
-            
 br
 br
 hr
 br
+                
+                        
+
+            
 section.plx-container#settings-options
     h1.title Notifications
     h3.subtitle Configure what to be notified via DMs to you
