@@ -49,7 +49,7 @@ style
 
 					li
 						.perk Custom Handle:
-						+unlock("Aluminum",SERVER_PRIME_INFO.active && SERVER_PRIME_INFO.custom_handle )
+						+unlock("Iridium",SERVER_PRIME_INFO.active && SERVER_PRIME_INFO.custom_handle )
 
 					li
 						.perk Custom Background:
@@ -119,38 +119,40 @@ style
 				// SERVER SELECT DROPDOWN
 				.prime-select-row
 					button(
+						class="plx-width-1-1 plx-width-1-3@m"
 						:class='((!( (CLIENT_PRIME_INFO.servers||[]).length || 0 )||!serverToPrime.id)?"disabled red":"")',
 						@click="setPrime()"
 					).magic-outline.plx-button.plx-margin-left.plx-margin-bottom#assignPrime Activate!
 					div
-					v-select(
-						v-model="serverToPrime"
-						:options= "primeEligibleServers",
-						:filterable= "false",
-						:clearable= "false",
-						:select-on-tab = "false",
-						:value= `serverToPrime.id`,
-						label='sv',
-						:selectable="option => !currentPrimeServers.find(x=>x.id===option.id)"
-					)
+					.plx-width-1-1
+						v-select(
+							v-model="serverToPrime"
+							:options= "primeEligibleServers",
+							:filterable= "false",
+							:clearable= "false",
+							:select-on-tab = "false",
+							:value= `serverToPrime.id`,
+							label='sv',
+							:selectable="option => !currentPrimeServers.find(x=>x.id===option.id)"
+						)
 
-						// CURRENT SELECTION
-						template(slot='selected-option', slot-scope='option')
-							.selected-item
-								.sv-icon.plx-rounded: img(:alt="option.name[0]", :src="getServerIcon(option,32)" )
-								.texts
-									span.label &#x2000 {{option.name}}
-									span.description {{option.id}}
+							// CURRENT SELECTION
+							template(slot='selected-option', slot-scope='option')
+								.selected-item
+									.sv-icon.plx-rounded: img(:alt="option.name[0]", :src="getServerIcon(option,32)" )
+									.texts
+										span.label &#x2000 {{option.name}}
+										span.description {{option.id}}
 
-						// OPTIONS
-						template(slot='option', slot-scope='option')
-							.sel-opt
-								.sv-icon.plx-rounded: img(:alt="option.name[0]", :src="getServerIcon(option,32)")
-								.texts
-									span.label &#x2000 {{option.name}}
-									span(v-if="currentPrimeServers.find(x=>x.id===option.id)").description Prime already in this server
-									span(v-else).description {{option.id}}
-					//------------------------------
+							// OPTIONS
+							template(slot='option', slot-scope='option')
+								.sel-opt
+									.sv-icon.plx-rounded: img(:alt="option.name[0]", :src="getServerIcon(option,32)")
+									.texts
+										span.label &#x2000 {{option.name}}
+										span(v-if="currentPrimeServers.find(x=>x.id===option.id)").description Prime already in this server
+										span(v-else).description {{option.id}}
+						//------------------------------
 
 				.tip.plx-text-danger(v-if="!( (CLIENT_PRIME_INFO.servers||[]).length || 0 )") Max Servers Reached!
 				.tip.plx-text-danger(v-else-if="!serverToPrime.id") Select a Server first!

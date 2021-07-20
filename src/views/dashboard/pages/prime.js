@@ -52,7 +52,7 @@ const PRIME = new Vue({
             console.log({flavorName})
             return ([
                 this.selectedFlavor == flavorName  ? 'selected' : '',
-                this.eligibleFlavors[flavorName] <= this.levels[this.CLIENT_PRIME_INFO.tier] ? 'eligible' :'not_eligible'
+                !this.eligibleFlavors[flavorName] || (this.eligibleFlavors[flavorName] <= this.levels[this.CLIENT_PRIME_INFO.tier]) ? 'eligible' :'not_eligible'
             ].join(" "))
         },
         getServerIcon(server,size=64){
