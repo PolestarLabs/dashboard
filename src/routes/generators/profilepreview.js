@@ -73,13 +73,8 @@ router.get('/', async (req,res)=>{
 
     //ctx.drawImage(tag.item ,110 ,102);
 
-    let result = canvas.toBuffer();
-
-    res.writeHead(200, {
-        'Content-Type': 'image/png',
-        'Content-Length': result.length
-    });
-    canvas.pngStream().pipe(res);
+    res.status(200).header('Content-Type','image/png').send( await canvas.png );
+ 
 })
 
 module.exports = router
