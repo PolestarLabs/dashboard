@@ -398,8 +398,8 @@ isDusk,
 
     
 
-    res.writeHead(200, {'Content-Type': 'image/png'});
-    canvas.pngStream({ compressionLevel: 2, filters: 0 }).pipe(res);
+    
+ res.status(200).header('Content-Type','image/png').send( await canvas.png );
 })
 
 module.exports = router
