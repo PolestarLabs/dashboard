@@ -85,6 +85,16 @@ destroyed() {
     updateCustomBg(){
       this.customBGzoom;
     },
+    debounce(func, delay=300) {
+      let debounceTimer;
+      return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(context, args), delay);
+      };
+    },
+    
 
     chooseFiles(){
       document.getElementById("file-upload").click()
@@ -830,4 +840,3 @@ function createCustomBG(){
 }
 
 createCBGCanvas()
-
