@@ -152,7 +152,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 										b Zoom:
 										| {{ ~~(displayTransform.scale*100) }}%
 									br
-									input#zm(v-model='displayTransform.scale' type='range' min=.1 max=2 step=.01 style="width: 200px")
+									input#zm(v-model='displayTransform.scale' type='range' min=.1 max=3 step=.1 style="width: 200px")
 								br
 								div(style="margin:4px")
 									label(for="xxxx")
@@ -222,7 +222,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 					.picker-container: .picker
 						transition(name="pop" )
 							chrome-picker(v-show='isColorpickerOpen', v-model='favcolor' )
-								.plx-invisible  {{fuckThis()}}
+								//.plx-invisible  {{fuckThis()}}
 						.swatch(v-on:click='', v-bind:style='{ background: favcolor.hex }')
 					.suggestions
 						.info.plx-flex.plx-flex-between.plx-width-1-1
