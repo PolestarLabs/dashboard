@@ -89,8 +89,10 @@ const fx = require('../pipelines/globalFunctions.js');
 
 // API
 router.use('/api', (...args)=>{
+  let [,res] = args;
   delete require.cache[require.resolve('./api/_main.js')];
   const api = require('./api/_main.js');
+  if (process.env.NODE_ENV!=="production") res.endTime('route');
   return api(...args);
 });
 

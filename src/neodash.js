@@ -73,6 +73,7 @@ const CookieStrategy = require("passport-cookie");
 const {Strategy} = require("passport-discord");
 const exSession = require("express-session");
 const Eris = require ('eris')
+const serverTiming = require ('server-timing')
 
 const fs = require("fs");
 const path = require('path');
@@ -87,7 +88,9 @@ const formidable = require('formidable');
 
 
 const app = Express();
-app.use(function (req, res, next) {
+app.use(serverTiming());
+app.use(function (req, res, next) {		
+
 		res.header("Access-Control-Allow-Origin", "*");
 		res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 		//res.header('Access-Control-Allow-Origin', 'https://dev.pagseguro.uol.com.br');
@@ -392,9 +395,11 @@ logger.token('userID', function (req, res) { return  (` ${req.headers['cf-ipcoun
 logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator?.bgGray : "" })
 logger.token('date', function(){  return new Date().toUTCString(); });
 app.use(logger(function(tokens,req,res){
+	if (process.env.NODE_ENV!=="production") res.startTime('logger', 'Config Logger');
 	let status = tokens.status(req,res);
 	let STATUS = status >= 500 ? status.red : status >= 400 ? status.yellow : status >= 300 ? status.cyan : status >= 200 ? status.green : status;
 	let METHOD = (M) => M=='POST'? " POST ".bgYellow : M=='GET' ? " GET  ".bgCyan : M.padEnd(6).bgRed;
+	if (process.env.NODE_ENV!=="production") res.endTime('setheaders', 'Set Headers');
 	return[
 		//("["+tokens.date(req,res)+"]").grey.bgBlack.dim,"\n",
 		METHOD(tokens.method(req,res)),
@@ -443,6 +448,7 @@ app.use(function(req,res,next){
 })
 
 app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
+	if (process.env.NODE_ENV!=="production") res.startTime('preudata', 'Pre userdata fetching');
 	let preDataProcess = result=>{
 		let USR = req.user;
 		if(result.blacklisted) return res.redirect('/logout?r=blacklisted');
@@ -474,15 +480,19 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
 		if (!req.url.includes('dash')) await preUserData;
 		
 		if( userCacheReload && userCacheReload.exp > Date.now() ) {
-			preDataProcess(userCacheReload.data)
+			preDataProcess(userCacheReload.data);
+			
+			if (process.env.NODE_ENV!=="production") res.endTime('preudata');
 			return next();
 		}
 
 		AcquireDiscordPayload(req.user.accessToken,req);
 		PassportRefresh.requestNewAccessToken('discord',req.user.refreshToken, r => AcquireDiscordPayload(r,req) );
-		  
+		
+		if (process.env.NODE_ENV!=="production") res.endTime('preudata');
 		return next();
 	}else{
+		if (process.env.NODE_ENV!=="production") res.endTime('preudata');
 		res.locals.userdata=null;
 		res.locals.userinfo=null;
 		next();
@@ -635,7 +645,9 @@ app.get('/callback',
 
 	
 app.use('/', (...args)=>{
+	let [,res] = args;
 	//delete require.cache[require.resolve('./routes/_allroutes')];
+	if (process.env.NODE_ENV!=="production") res.startTime('route',"Enter routing");
 	const router = require('./routes/_allroutes');
 	return router(...args);    
 });

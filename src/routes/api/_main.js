@@ -27,6 +27,11 @@ passport.use(new Strategy(
     }
 ));
 
+router.use((r,res,n)=>{
+    if (process.env.NODE_ENV!=="production") res.startTime('api',"API Routing");
+    n();
+})
+
 router.use(cors());
 router.use(helmet());
 
