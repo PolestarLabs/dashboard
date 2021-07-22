@@ -71,8 +71,6 @@ module.exports = async function(req,res){
     
     commitFrame(Number(req.query.f));
     
-    let result = await canvas.png;
-    res.writeHead(200, {'Content-Type': 'image/png','Content-Length': result.length});
-    res.end(result);
+    res.status(200).header('Content-Type','image/png').send( await canvas.png );
 
 }

@@ -105,11 +105,7 @@ router.use("/repipe/:url", async (req,res) => {
 
     ctx.drawImage(base, 0, 0, newWidth, newHeight);
 
-    res.writeHead(200, {
-        'Content-Type': 'image/jpg',
-        'Cache-Control': 'public, max-age=31557600'
-    });
-    canvas.createJPEGStream().pipe(res);
+    res.status(200).header('Content-Type','image/png').send( await canvas.png );
 
 
 
