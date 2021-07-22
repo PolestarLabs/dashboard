@@ -37,7 +37,7 @@ let lnOptions = {
 
     res.writeHead(200, {
         'Content-Type': 'image/png',
- 
+        'Content-Length': result.length
     });
     canvas.pngStream().pipe(res);
 })

@@ -108,8 +108,8 @@ router.get('/', async (req,res)=>{
     if(ended === 'lose') ctx.drawImage(PARTS.red,0,-10);
 
 
-    
- res.status(200).header('Content-Type','image/png').send( await canvas.png );
+    res.writeHead(200, {'Content-Type': 'image/png'});
+    canvas.pngStream({ compressionLevel: 2, filters: 0 }).pipe(res);
 })
 
 

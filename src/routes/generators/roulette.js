@@ -14,6 +14,7 @@ staticAssets.load = Promise.all([
 })
  
 router.get('/', async (req,res)=>{
+    console.log('2343')
     const canvas = Picto.new(800, 600);
     const ctx = canvas.getContext('2d');
 
@@ -28,13 +29,12 @@ router.get('/', async (req,res)=>{
     let USERS = payload ? await Promise.all(payload.split(',').map(async U => {
         let avatar
         try {
-            console.log(`https://cdn.discordapp.com/avatars/${U.split('|')[0]}/${U.split('|')[1]}.png?size=64`  )
-            avatar = await Picto.getCanvas(`https://cdn.discordapp.com/avatars/${U.split('|')[0]}/${U.split('|')[1]}.png?size=64`);
+            avatar = await Picto.getCanvas(`https://cdn.discordapp.com/avatars/${U.split('_')[0]}/${U.split('_')[1]}.png?size=64`);
         } catch (err) {
             avatar = await Picto.getCanvas(`https://cdn.discordapp.com/embed/avatars/4.png`);
         }
         return {
-            id: U.split('|')[0]
+            id: U.split('_')[0]
             , avatar
             , bets: U.slice(U.indexOf(' ') + 1).split(' ').map(b => {
                 let meta = b.split('-')[0];
@@ -219,8 +219,8 @@ router.get('/', async (req,res)=>{
         
     }        
 
-    
-    res.status(200).header('Content-Type','image/png').send( await canvas.png );
+    res.writeHead(200, {'Content-Type': 'image/png'});
+    canvas.pngStream({ compressionLevel: 2, filters: 0 }).pipe(res);
 })
 
 module.exports = router
