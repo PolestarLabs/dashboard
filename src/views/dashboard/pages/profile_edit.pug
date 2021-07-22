@@ -286,7 +286,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 								:filter= "stkFiltering",
 								:clearable= "false",
 								:value= "boostersAvailable.find(x=> x.id ==  selectBooster.id) || {name:'none'}",
-								label='name'
+								label='code'
 							)
 								template(slot='selected-option', slot-scope='option')
 									span(style='transform:translateY(-5px)')
@@ -308,10 +308,10 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 									v-model="selectSticker"
 									:options= "stickerAvailable.filter(x=>x.series_id == selectBooster.icon )",
 									:filter= "stkFiltering",
-									:close-on-select= "false",
-									:clearable= "false",
+									:close-on-select= "true",
+									:clearable= "true",
 									:value= `stickerAvailable.find(x=>x.id=='${userdata.modules.sticker}')`,
-									label='name'
+									label='id'
 								)
 									template(slot='selected-option', slot-scope='option').test-templateclass
 										span(style='transform:translateY(-5px)')

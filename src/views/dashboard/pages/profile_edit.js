@@ -117,7 +117,7 @@ destroyed() {
           updateUserBGs(1);
         });
       }else{
-        console.log("no premium dawg")
+        console.warn("No Premium")
       }
     },
     async sendFile() {
@@ -203,7 +203,7 @@ destroyed() {
           (m) => m.rarity.toLowerCase() === this.select.toLowerCase()
         );
       }
-      console.log(filtered);
+ 
       return filtered;
     },
     setFavColor(color){
@@ -216,7 +216,7 @@ destroyed() {
     },
     fuckThis() {
       $("nav.topbar ").css({ background: this.favcolor.hex });
-      updateColorName(this.favcolor.hex);
+      //updateColorName(this.favcolor.hex);
     },
     saveFlair(payload) {
       setTimeout(() => {
@@ -235,7 +235,7 @@ destroyed() {
       AUTOSAVE("COLOR");
     },
     setSelected: (val) => {
-      console.log(val);
+ 
     },
     onChangeStickerPack(item) {
       this.selectSticker = "none";
@@ -500,7 +500,7 @@ async function AUTOSAVE(what,silent) {
       "background: #222; color: #bada55",
       "background: none; color: unset"
     );
-    console.log(relevantData);
+ 
  // }, 1200);
 }
 
@@ -511,16 +511,16 @@ fetch("/api/relationships?uid="+userinfo.id).then(r =>
 
 fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
   r.json().then((res) => {
+
     DASH.boostersAvailable = res.map((pack) => {
-      pack.size = res.filter((s) => s.series_id == pack.icon).length;
+      //pack.size = DASH.stickerAvailable.filter((s) => s.series_id == pack.icon).length;
       return pack;
     });
     DASH.boostersAvailable = res;
-    console.log({bav:DASH.boostersAvailable})
+ 
     fetch("/api/user/" + userinfo.id + "/stickers").then(
       (r) =>
         r.json().then((res2) => {
-          console.log({res2})
           DASH.calculateSuggestionColors(userdata.modules.bgID)
           DASH.stickerAvailable = res2;
           DASH.selectSticker =
@@ -541,10 +541,8 @@ fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
 function updateUserBGs(){
   fetch("/api/user/"+userinfo.id+"/bgs").then(r =>
     r.json().then(res =>  {
-      console.log({res})
+ 
       DASH.selectBackground = res.find((bg) => bg.code == userdata.modules.bgID) || "none";
-      
-      console.log()
       DASH.backgroundsAvailable = res.map(thisBgData=>{
         return {
           name: thisBgData.name,
@@ -553,7 +551,7 @@ function updateUserBGs(){
           code: thisBgData.code,
           img: "/backdrops/" + thisBgData.code + ".png",
         };
-      });
+      }).filter((v,i,a)=>a.findIndex(x=>x.code==v.code)==i);
       userdata.modules.bgInventory.map((bg) => {
         let thisBgData = res.find((x) => x.code == bg) || {
           name: "Unknown",
@@ -579,7 +577,7 @@ updateUserBGs()
 
 fetch("/api/user/"+userinfo.id+"/medals").then(r =>
   r.json().then(res => {
-    DASH.medals = res;
+    DASH.medals = res||[];
     DASH.medalsEquipped = res.filter((m,i,a)=> userdata.modules.medals.includes(m.icon) && a.map(x=>x.icon).indexOf(m.icon)===i)
   } )
     
@@ -640,7 +638,7 @@ function mouseMove(event) {
   } else if (event.type === "wheel") {
       event.preventDefault()
       mouse.w = -event.deltaY;
-      console.log(mouse.w)
+ 
   } else if (event.type === "DOMMouseScroll") {  
     mouse.w = -event.detail;
   }

@@ -368,13 +368,16 @@ section:focus {
   //display: flex;
 }
 
-.stick-sel-opt span {
-  width: 100%;
-  text-overflow: ellipsis;
+.sticker-select .stick-sel-opt  {
+  display: flex;
+  flex-direction: column;
  
 }
 .sticker-select .stick-sel-opt span{
-  display: none;
+  //display: none;
+    width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .sticker-select ul {
   display: flex;
@@ -384,11 +387,19 @@ section:focus {
   text-align: center;
   flex: 1 1 auto;
   min-width: 100px;
+ 
   border-radius: 25px;
 }
 .sticker-select .sticker-icon {
   margin: 10px auto 5px;
   transform: scale(1.4);
+  
+}
+.sticker-select .sticker-icon{
+  margin: 15px auto 15px;
+
+   height: 80px;
+  width:80px;
 }
 
 .sticker-icon,

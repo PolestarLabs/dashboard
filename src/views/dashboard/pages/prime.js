@@ -49,7 +49,7 @@ const PRIME = new Vue({
       },
     methods: {
         checkEligibility(flavorName){
-            console.log({flavorName})
+ 
             return ([
                 this.selectedFlavor == flavorName  ? 'selected' : '',
                 !this.eligibleFlavors[flavorName] || (this.eligibleFlavors[flavorName] <= this.levels[this.CLIENT_PRIME_INFO.tier]) ? 'eligible' :'not_eligible'

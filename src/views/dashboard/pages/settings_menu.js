@@ -109,7 +109,7 @@ $("#settings-options input").change(function () {
     partnerAnnouncements: $("#partner_announcements").prop("checked"),
   };
 
-  console.log({ settings });
+ 
 
   return fetch(`/dash/misc/notifs`, {
     headers: { "Content-Type": "application/json; charset=utf-8" },
