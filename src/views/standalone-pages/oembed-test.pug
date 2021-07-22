@@ -4,20 +4,20 @@ html
     title openg1
     meta(name='description' content='opengd')
     // Facebook Meta Tags
-    meta(property='og:url' content='https://hijola.pollux.gg/testone?v5')
+    meta(property='og:url' content= HOST+'/testone?v5')
     meta(property='og:type' content='website')
     meta(property='og:title' content='openg1')
     meta(property='og:description' content='opengd')
     meta(property='og:image' content='')
     // Twitter Meta Tags
     meta(name='twitter:card' content='summary_large_image')
-    meta(property='twitter:domain' content='hijola.pollux.gg')
-    meta(property='twitter:url' content='https://hijola.pollux.gg/testone?v5')
+    meta(property='twitter:domain' content= HOST)
+    meta(property='twitter:url' content=HOST+'/testone?v5')
     meta(name='twitter:title' content='openg1')
     meta(name='twitter:description' content='opengd')
     meta(name='twitter:image' content='')
-    // Meta Tags Generated via https://www.opengraph.xyz
 
-    link(rel='alternate' type='application/json+oembed' href ='https://hijola.pollux.gg/oembed?url=https%3A%2F%hijola.pollux.gg%2Ftestone&format=json&.png' )
+    - let encodedHost = encodeURIComponent(HOST)
+    link(rel='alternate' type='application/json+oembed' href=HOST+'/oembed?url='+( encodedHost )+'%2Ftestone&format=json&.png' )
   body
     p OK 

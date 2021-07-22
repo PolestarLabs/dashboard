@@ -1,0 +1,71 @@
+/* settings.css  */
+
+.connection-box{
+    border: solid 2px var(--light);
+    border-radius: 10px;
+    margin: 10px;
+    padding: 10px 10px 0 0;
+    cursor: url(/cur/pointer.png), pointer;
+    height: 0%;
+    min-height: 128px;
+    
+  }
+.connection-box .subtitle{
+  margin-top: -12px;
+  margin-bottom: 18px
+}
+.connection-box .subtitle img{
+  vertical-align: top;
+  margin-top: -3px;
+  border-radius: 100px;
+  margin-left: -10px;
+  
+}
+
+.connection-box.patreon{
+     background: #141518;
+    border-color: #FF424D;
+ 
+}
+.connection-box.lastfm{
+     background: #b90000;
+    border-color: white;
+
+ 
+}
+.connection-box.lastfm *:not(a){
+  color: white ;
+}
+.connection-box a{
+  padding: 1px 8px 2px ;
+  border-radius: 10px;
+  font-weight: 600;
+  margin-left: 6px;
+  }
+.connection-box.lastfm a{
+  color: #b90000;
+  
+  background: white;
+  
+}
+
+.connection-box.patreon .subtitle a{
+  color: #141518;
+  background: #FF424D;
+}
+
+.connection-box .title img{
+  margin: 12px .75rem 0;
+  vertical-align: baseline;
+}
+
+
+  .connection-box .inner-darkside .plx-accordion-content{
+    background: #0005;
+    padding:  16px 16px 24px;
+    margin: -10px;
+    margin-right: 16px;
+    margin-bottom: 24px;
+    border-radius: 20px;
+    
+  }
