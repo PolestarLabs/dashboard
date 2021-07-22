@@ -40,11 +40,11 @@ router.use("/nowplaying.png", async (...args) => {
    
 });
 router.use("/levelup.gif", async (...args) => {
-    //delete require.cache[require.resolve('./levelup')];
+    delete require.cache[require.resolve('./levelup')];
     return (require('./levelup.js'))( ...args);   
 });
 router.use("/levelupframe.png", async (...args) => {
-    //delete require.cache[require.resolve('./levelupframe')];
+    delete require.cache[require.resolve('./levelupframe')];
     return (require('./levelupframe.js'))( ...args);   
 });
 

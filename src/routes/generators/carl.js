@@ -20,8 +20,11 @@ router.get('/', async (req,res)=>{
 
     let result = canvas.toBuffer();
 
-    
- res.status(200).header('Content-Type','image/png').send( await canvas.png );
+    res.writeHead(200, {
+        'Content-Type': 'image/png',
+        'Content-Length': result.length
+    });
+    canvas.pngStream().pipe(res);
 })
 
 module.exports = router

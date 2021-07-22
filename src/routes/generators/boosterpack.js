@@ -106,8 +106,8 @@ router.get('/:series/:A/:B/booster.png', async (req,res)=>{
     aNew ? ctx.drawImage(isNew,400-60,0,60,60) : null;
     bNew ? ctx.drawImage(isNew,0,250-60,60,60) : null;
  
-    
- res.status(200).header('Content-Type','image/png').send( await canvas.png );
+    res.writeHead(200, {'Content-Type': 'image/png'});
+    canvas.pngStream({ compressionLevel: 2, filters: 0 }).pipe(res);
 
 })
 
