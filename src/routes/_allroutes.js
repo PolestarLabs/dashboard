@@ -238,8 +238,20 @@ router.use('/admin',checkAuth, (...args)=>{
     return invite(...args);
   });
   
+  router.use('/lastfm', (...args)=>{
+    if(process.env.NODE_ENV != "production" ) delete require.cache[require.resolve('./lastfm')];
+    const invite = require('./lastfm');
+    return invite(...args);
+  });
   
   
+  router.use('/patreon', (...args)=>{
+    if(process.env.NODE_ENV != "production" ) delete require.cache[require.resolve('./patreon')];
+    const invite = require('./patreon');
+    return invite(...args);
+  });
+  
+
   
 
 router.get("/error", async (req,res) => {
