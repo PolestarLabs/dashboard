@@ -35,11 +35,7 @@ let lnOptions = {
 
     let result = canvas.toBuffer();
 
-    res.writeHead(200, {
-        'Content-Type': 'image/png',
- 
-    });
-    canvas.pngStream().pipe(res);
+    res.status(200).header('Content-Type','image/png').send( await canvas.png );
 })
 
 module.exports = router
