@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const apikey = "5cb3a3ad4ba1619a89309269e1102faa";
-const secret = "0766ca6d063200649ad39cddc9c68cca";
+const {apikey,secret} = require("../../config.js").lastfm;
 const crypto = require('crypto')
 const axios = require('axios')
 
@@ -22,7 +21,6 @@ router.get("/callback", async (req, res) => {
         const restoken = response.data?.session;
         if (!restoken) return res.status(500).json({data:response.data});
         await DB.users.set(req.user.id,{'connections.lastfm':restoken});
-        axios.get("https://pollux.gg");
         return res.status(200).render("callback",{timer:5});
     }).catch(err=>{
          return res.status(500).json({ SIG, token});
