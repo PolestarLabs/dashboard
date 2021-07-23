@@ -1,7 +1,6 @@
 const axios = require("axios");
 const config = require("../../../config.js");
 const express = require("express");
-const { checkAuth } = require("../../pipelines/globalFunctions.js");
 const router = express.Router();
 
 const PATREON_URL = "https://patreon.com";
