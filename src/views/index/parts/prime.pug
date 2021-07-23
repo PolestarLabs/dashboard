@@ -1,0 +1,228 @@
+mixin magicPatreon(price,icon,tierid)
+        a(href=`https://www.patreon.com/join/pollux/checkout?rid=${tierid}` target="blank").plx-button.button
+            i
+                .tier-icon
+                    img(src="/images/donate/icony/"+icon+"-small.png")
+            span &#x2002 
+                block
+
+.common-tiers
+    .tier-card.raritybox.U: .inner
+        .tier-icon
+            img(src="/images/donate/aluminium.png")
+        h4.title Aluminium
+        h5.desc The most economic
+        h6.price
+            span.dol $
+            span.number 5
+        ul.perks
+            li 
+                | 3 
+                span.saph Sapphires
+                | 1st Month
+            li  Daily Bonus Boost
+            li  
+                | 1 
+                b (random) 
+                | Pollux 
+                span.stick Profile Sticker
+            li 
+                | 3 bonus 
+                span.saph  sapphires
+                | every month
+            li 
+                | 5 
+                span.rar.U
+                    i.plx-rarity-icon.U
+                    | Uncommon
+                span.box Funboxes
+            
+        //.button.special.alt
+            i: .fas.fa-star
+            .price Special
+        +magicPatreon(2,"aluminium","3326865")
+            | Details
+
+    .tier-card.best.raritybox.responses.toggle.disabledComSer.raritybox.R: .inner
+        .tier-icon
+            img(src="/images/donate/lithium.png")
+        h4.title Lithium / Iridium
+        h5.desc The most popular
+        h6.price
+            span.dol $
+            span.number 15
+        ul.perks
+            li 
+                | 10 
+                span.saph Sapphires
+                | 1st Month
+            li  Daily Bonus Boost
+            li  
+                | 2*                    
+                | Pollux 
+                span.stick Profile Stickers
+            li 
+                | 12 bonus 
+                span.saph  sapphires
+                | every month
+            li 
+                | 5 
+                span.rar.SR
+                    i.plx-rarity-icon.SR
+                    | Super-Rare 
+                span.box Funboxes
+            li A custom Profile Background
+
+        +magicPatreon(2,"lithium","3326881")
+            | Details
+    .tier-card.raritybox.SR: .inner
+        .tier-icon
+            img(src="/images/donate/palladium.png",)
+        h4.title Palladium
+        h5.desc The best value
+        h6.price
+            span.dol $
+            span.number 25
+        ul.perks
+            li 
+                | 15 
+                span.saph Sapphires
+                | 1st Month
+            li  Daily Bonus Boost
+            li  
+                | 3**                    
+                | Pollux 
+                span.stick Profile Stickers
+            li 
+                | 20 bonus 
+                span.saph  sapphires
+                | every month
+            li 
+                | 5 
+                span.rar.SR
+                    i.plx-rarity-icon.SR
+                    | Super-Rare 
+                span.box Funboxes
+            li A custom Profile Background
+            li A custom Profile Link
+
+
+
+        +magicPatreon(2,"palladium",'3326882')
+            | Details
+    .tier-card.UR.raritybox: .inner
+        .tier-icon
+            img(src="/images/donate/zircon.png")
+        h4.title Zirconium
+        h5.desc The unique perks
+        h6.price
+            span.dol $
+            span.number 50
+        ul.perks
+            li 
+                | 25 
+                span.saph Sapphires
+                | 1st Month
+            li  Daily Bonus Boost
+            li  
+                | 4***                    
+                | Pollux 
+                span.stick Profile Stickers
+            li 
+                | 30 bonus 
+                span.saph  sapphires
+                | every month
+            li 
+                | 8 
+                span.rar.UR
+                    i.plx-rarity-icon.UR
+                    | Super-Rare 
+                span.box Funboxes
+            li A custom Profile Background
+            li A custom Profile Link
+            li Free Shipping on Pollux merch
+            li 2 Custom Commands
+
+        +magicPatreon(2,"zircon","3326897")
+            | Details
+
+.explanation-box
+    
+    span.aster
+        i.fas.fa-asterisk
+    span Latest sticker announced + previous month one  
+    br
+    span.aster
+        i.fas.fa-asterisk
+        i.fas.fa-asterisk
+    span Latest sticker announced + previous month one + one random
+    br
+    span.aster
+        i.fas.fa-asterisk
+        i.fas.fa-asterisk
+        i.fas.fa-asterisk
+    span Latest sticker announced + previous month one + two random
+.plx-container
+    p.supershadow-text  We have other options with slightly different perks or directed at large communities with multiple PRIME memberships at once:
+
+.other-tiers
+    .mini-tier-card.raritybox.C.tier-card: .inner
+        .icon: img(src="/images/donate/plastic.png")
+        .text
+            h5 Plastic
+            h6 Show some love
+            ul.mini
+                li Special Flair
+        .price 
+            .dol $
+            .number 2
+        +magicPatreon(2,"plastic","3326854")
+            | Details
+    .mini-tier-card.raritybox.U.tier-card: .inner
+        .icon: img(src="/images/donate/carbon.png")
+        .text
+            h5 Iron/Carbon
+            h6 More perks that fit your pocket
+            ul.mini
+                li Latest Pollux Sticker
+        .price 
+            .dol $
+            .number 10
+        +magicPatreon(10,"carbon","3326868")
+            | Details
+    .mini-tier-card.raritybox.R.tier-card: .inner
+        .icon: img(src="/images/donate/uranium.png")
+        .text
+            h5 Uranium
+            h6 For large-community owners and power-players
+            ul.mini
+                li Pollux Sticker Boosters
+        .price 
+            .dol $
+            .number 75
+        +magicPatreon(75,"uranium",'3326899')
+            | Details
+    .mini-tier-card.raritybox.SR.tier-card: .inner
+        .icon: img(src="/images/donate/astatine.png")
+        .text
+            h5 Astatine
+            h6 The supporters elite
+            ul.mini
+                li Custom Server Shops
+        .price 
+            .dol $
+            .number 100
+        +magicPatreon(100,"astatine",'2735294')
+            | Details
+    .mini-tier-card.raritybox.UR.tier-card: .inner
+        .icon: img(src="/images/donate/antimatter.png")
+        .text
+            h5 Antimatter+
+            h6 The ultimate sponsors
+            ul.mini
+                li Additional Gift Subs
+        .price 
+            .dol $
+            .number 500
+        +magicPatreon(500,"antimatter",'3326916')
+            | Details

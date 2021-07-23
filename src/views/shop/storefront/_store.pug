@@ -113,7 +113,7 @@ mixin shopcard()
           i: .fas.fa-shopping-cart.icon24
 
 block head
-  script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
+  script(src=INSTANCE_VUE_PATH)
 
   link(rel='stylesheet' href="/css/store.css")
   link(rel='stylesheet' href="/css/rarityboxes.css")
@@ -151,7 +151,7 @@ block content
                     span= miliarize(userdata.modules.JDE) || 0
                 .tokens
                     span.plx-token.icon32.curr_icon_3
-                    span= miliarize(userdata.eventGoodie) || 0
+                    span= miliarize(userdata.modules.EVT) || 0
             else
               p
                 a(onclick="login()")
@@ -165,8 +165,8 @@ block content
         .plx-flex.plx-width-1-1
 
             .store-sidebar
-              ul.store-nav.plx-subnav(plx-sticky="offset:50; bottom: #endof",  plx-switcher="connect:.store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small; active: 0")
-                  li.megastroke.menuitem(plx-filter-control="filter: *" )
+              ul.store-nav.plx-subnav(plx-sticky="offset:50; bottom: #endof",  plx-switcher="connect: .store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small;")
+                  li.megastroke.menuitem( ).plx-active
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-star
                           label  Arrivals
@@ -213,7 +213,7 @@ block content
                           label  Supplier
                   div(style="margin-bottom:10rem")
               
-            ul.store-main.plx-width-1-1.store-tab-content.plx-switcher(plx-switcher='active:0')
+            ul.store-main.plx-width-1-1.store-tab-content.plx-switcher( )
                 
                     li#arrivals.plx-active
                         include pages/arrivals

@@ -40,11 +40,11 @@ router.use("/nowplaying.png", async (...args) => {
    
 });
 router.use("/levelup.gif", async (...args) => {
-    delete require.cache[require.resolve('./levelup')];
+    //delete require.cache[require.resolve('./levelup')];
     return (require('./levelup.js'))( ...args);   
 });
 router.use("/levelupframe.png", async (...args) => {
-    delete require.cache[require.resolve('./levelupframe')];
+    //delete require.cache[require.resolve('./levelupframe')];
     return (require('./levelupframe.js'))( ...args);   
 });
 
@@ -105,11 +105,7 @@ router.use("/repipe/:url", async (req,res) => {
 
     ctx.drawImage(base, 0, 0, newWidth, newHeight);
 
-    res.writeHead(200, {
-        'Content-Type': 'image/jpg',
-        'Cache-Control': 'public, max-age=31557600'
-    });
-    canvas.createJPEGStream().pipe(res);
+    res.status(200).header('Content-Type','image/png').send( await canvas.png );
 
 
 

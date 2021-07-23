@@ -1,20 +1,21 @@
 const Picto = require( process.env.BOT_PATH + '/core/utilities/Picto.js');
 const RANGE = [...Array(31).keys()].slice(1);
-let cacheReady = false;
-let lvupFramesCache = Promise.all( RANGE.map(async x => await Picto.getCanvas(`${HOST}/build/level up_frames/transp/lvup_frame_${x}.png`))).then(res=> {cacheReady=true; lvupFramesCache = res});
 
+global.lvupCacheReady ??= false;
+const waitAll = Promise.all( RANGE.map(async x => await Picto.getCanvas(`${HOST}/build/level up_frames/transp/lvup_frame_${x}.png`))).then(res=> {global.lvupCacheReady=true; global.lvupFramesCache = res});
 
 module.exports = async function(req,res){
-    res.writeHead(200, {'Content-Type': 'image/png'});
+    console.log("getting Frame".blue);
+ 
     let args = [200,200]
     const [argLv,user] = args;
 
     const canvas = Picto.new(800,300);
     const ctx = canvas.getContext('2d');
     
-    const avatar = await Picto.getCanvas( "https://cdn.discordapp.com/avatars/354285599588483082/d58284a1f1ff096efd13b4a9f4643023.png?size=512" );
+    const avatar = await Picto.getCanvas( "https://cdn.discordapp.com/avatars/354285599588483082/d58284a1f1ff096efd13b4a9f4643023.png?size=128" );
 
-    if (!cacheReady) await lvupFramesCache;
+    if (!lvupCacheReady) await waitAll;
     
     
 
@@ -33,9 +34,9 @@ module.exports = async function(req,res){
             return ctx
         }
         
-        ctx.drawImage(avatar,15 + Math.min( (10000 / Math.pow(20+frame,2)),45) ,0,320,320);
-        ctx.shadowColor = 'red';
-        ctx.shadowBlur = '15px';
+        //ctx.drawImage(avatar,15 + Math.min( (10000 / Math.pow(20+frame,2)),45) ,0,320,320);
+        ctx.shadowColor = '#2b2b3b';
+        ctx.shadowBlur = 5;
 
         if (frame < 22) LV_SIZE = 42-22+frame*2;
         if (frame == 22) LV_SIZE = 44;
@@ -58,10 +59,10 @@ module.exports = async function(req,res){
         ctx.drawImage(lvupFramesCache[Math.min(frame,29)],0,0);
 
         if(frame > 20){
-            ctx.drawImage(lvTag, 590 - lvtWidth, 124, lvtWidth, lvTag.height);
+            //ctx.drawImage(lvTag, 590 - lvtWidth, 124, lvtWidth, lvTag.height);
         }
         if (frame > 22){
-            ctx.drawImage(Level, 660 - lvWidth / 2, (105+20) - (LV_SIZE/3) , lvWidth, Level.height);
+           // ctx.drawImage(Level, 660 - lvWidth / 2, (105+20) - (LV_SIZE/3) , lvWidth, Level.height);
         }
 
         return ctx
@@ -70,6 +71,6 @@ module.exports = async function(req,res){
     
     commitFrame(Number(req.query.f));
     
-    canvas.pngStream({ compressionLevel: 5, filters: 0 }).pipe(res);
+    res.status(200).header('Content-Type','image/png').send( await canvas.png );
 
 }

@@ -184,7 +184,7 @@ ${message}
       
       } else {
 
-        if (!DATA.eventGoodie || DATA.eventGoodie < price) {console.log("UNAFFORD");return resolve("UNAFFORD");}
+        if (!DATA.modules.EVT || DATA.modules.EVT < price) {console.log("UNAFFORD");return resolve("UNAFFORD");}
       
       if(itemObj.buyable !== true && typeof itemObj.exclusive !=='string'){
          return resolve("CANTBUY");

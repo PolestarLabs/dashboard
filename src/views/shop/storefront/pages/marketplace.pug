@@ -33,7 +33,7 @@ ul.plx-flex.plx-flex-center
                 .author.truncate
                     .avatar(v-bind:style="{'background-image': `url('https://cdn.discordapp.com/avatars/${entry.userdata.id}/${entry.userdata.avatar}.png')`}")
                     .tag
-                        a(:href="`/profile/${entry.author}`").username {{entry.userdata.username}}
+                        a(:href="`/profile/${entry.author}`" target="blank").username {{entry.userdata.username}}
                         span.discrimin \#{{entry.userdata.discriminator}}
 
                     

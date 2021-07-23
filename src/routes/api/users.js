@@ -1,6 +1,5 @@
 
 const express = require('express');
-const { response } = require('express');
 const router = express.Router();
 
 router.get('/search',  cache(600), async(req,res)=>{
@@ -66,7 +65,7 @@ router.get('/:id/stickers', async (req,res)=>{
         let packs = await DB.items.find({icon: {$in: userMetaInventory.map(x=>x?.series_id)}}).lean();
         
         userMetaInventory.forEach(x=>{
-            x.packData = packs.find(y=> y.icon === x.series_id )
+            x.packData = packs.find(y=> y.icon === x.series_id )            
         })
         
         

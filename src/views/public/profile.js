@@ -135,6 +135,7 @@ function since(x){
               _wifeData.ring = featRel.ring;
               _wifeData.lovepoints = featRel.lovepoints;
               _wifeData.since = since(featRel.since);
+              _wifeData.rings = featRel.ringCollection;
               return _wifeData;
           }
           return {id:false};

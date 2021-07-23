@@ -14,10 +14,7 @@ const inviteString = (selected_client,server) =>
     `&permissions=268492816`+
     `&disable_guild_select=${ !!server }`+
     `&guild_id=${ server }`;
-  
 
-
-  
 
 router.get("/verify/:flavor", async  (req, res) => {
   const { flavor } = req.params;
@@ -28,6 +25,14 @@ router.get("/verify/:flavor", async  (req, res) => {
     const UID = req.user?.id;
     if (!UID) return res.status(403).redirect("/auth");
     const userData = await DB.users.findOne({id:UID}).noCache().lean();
+    const serverAlreadyRegistered = await DB.servers.findOne({id:guild_id}).noCache().lean();
+
+    if (serverAlreadyRegistered){
+      if (serverAlreadyRegistered.activeClients?.filter(x=>x!==PLX.id)?.length){
+        console.log(serverAlreadyRegistered.activeClients,'what bruh')
+        return res.status(403).send("THERE'S ALREADY ONE PRIME CLIENT IN THIS SERVER");
+      };
+    }
     
     if (!userData.prime?.servers?.includes(guild_id)){
       return res.status(403).send("PRIME NOT ENABLED FOR THIS SERVER");
@@ -76,5 +81,48 @@ router.get('/', function (req, res) {
   const flavored_client = config.clients.find(c=> c.id === PLX.id);  
   res.redirect( inviteString(flavored_client.id, server) );
 })
-  
+
+router.get("/activate/:flavor/:serverID", checkAuth, async (req, res) => {
+
+  const { flavor, serverID } = req.params;
+
+  const flavored_client = config.clients.find(c=> c.name === flavor);
+
+  const serverData = await DB.servers.findOne({id:serverID}).noCache().lean();
+  const userData = await DB.users.findOne({id:req.user.id}).noCache().lean();
+
+  if (!userData) return res.status(401).json({message:"User not found"});
+  if (!serverData) return res.status(404).json({message:"Server not found"});
+  if (!userData.prime || !userData.prime.active)  return res.status(403).json({message:"User not Prime or Prime not active."});
+  if (userData.prime.servers?.length >= userData.prime?.maxServers)  return res.status(403).json({message:"Max Prime servers reached."});
+
+    
+  const prePrime = await DB.users.findOne({"prime.servers":serverID});
+  if (prePrime && prePrime.id !== req.user.id) return res.status(409).json({
+    message:"Server already activated by someone else",
+    data: {
+      name: prePrime.name,
+      id: prePrime.id
+    }
+  });
+
+  //if (prePrime)  return res.status(409).json({message:"Server already activated by you! Deactivate it first if you want to switch clients"});
+
+  if (polluxClients?.has(flavored_client.id)){
+    Array.from(polluxClients, ([,{client,user}]) => {
+      if (client.category === "premium" && serverID !== config.official_guild){
+        client.leaveGuild(serverID).catch(er=>{})
+      }
+    })
+    
+  }
+
+  DB.users.set(req.user.id, {$addToSet:{ "prime.servers": serverID }}).then(r=>{
+    res.redirect(`/invite/${flavor}?sv=${serverID}`);
+  }).catch(err=>{
+    return res.status(500).json({message:"Internal server error."});
+  });
+
+})
+
 module.exports = router

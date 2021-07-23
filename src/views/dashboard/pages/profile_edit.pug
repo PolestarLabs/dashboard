@@ -4,11 +4,14 @@
 
 script(  src='https://cdnjs.cloudflare.com/ajax/libs/vue-color/2.2.3/vue-color.js')
 script(  src="https://unpkg.com/hooper@0.3.4/dist/hooper.min.js")
-script(  src='https://unpkg.com/vue-select@3.0.2')
+
 script(src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js')
 script(src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui-touch-punch/0.2.3/jquery.ui.touch-punch.min.js')
 link(rel='stylesheet' href='/css/hooper.css')
 link(rel='stylesheet' href='/css/loader.css')
+
+// LINK ../../../public/css/profile.css
+
 link(rel='stylesheet' href='/css/profile.css')
 #postloader(style="position: fixed;bottom: 50px;left: 50px;transform: scale(.5); display:none; z-index: 5000")
 	.whirly-loader Doing Things...
@@ -19,12 +22,12 @@ mixin wifeBox
 		.plx-width-1-1
 			.dash-pill#wife-bar(v-bind:style="{'border-color':favcolor.hex}" style="height:auto")
 				//.background-slot(style="background-image:url('/backdrops/"+userdata.modules.bgID+".png');"   )
-				.backblur 
+				.backblur
 				.plx-flex
 					.wifevatar
 					.wifename
 					.wifesince
-				.plx-flex-column     
+				.plx-flex-column
 					ul.menuzinho.plx-subnav.plx-subnav-pill
 						span SORT
 						.li(v-bind:class="{'plx-active': sortWife=='date'}"): a(@click="toggleWifeOrder('date')") DATE
@@ -39,29 +42,29 @@ mixin wifeBox
 							.avatar: img(:src="`https://cdn.discordapp.com/avatars/${rel.wife.id}/${rel.wife.avatar}.${rel.wife.avatar.startsWith('a_')?'gif':'png'}?size=64`")
 							.detail
 								.feats
-									div(v-if="rel.id == rel.wife.featuredMarriage" plx-tooltip="This person features you in their profile! <3")  
-										i.fas.fa-star 
-									div(v-else  plx-tooltip="This person does not display you in their profile. &lt;/3")  
+									div(v-if="rel.id == rel.wife.featuredMarriage" plx-tooltip="This person features you in their profile! <3")
+										i.fas.fa-star
+									div(v-else  plx-tooltip="This person does not display you in their profile. &lt;/3")
 										i.far.fa-star(style="opacity:.6")
 								.init
-									div(v-if=`'${userdata.id}' == rel.initiative` plx-tooltip="You proposed to this person!") 
+									div(v-if=`'${userdata.id}' == rel.initiative` plx-tooltip="You proposed to this person!")
 										i.far.fa-heart(style="opacity:.6")
 									div(v-else   plx-tooltip="This person proposed to you!")
 										i.fas.fa-heart
 							.username
 								span.name {{rel.wife.username}}
-								span.discrimin(class="-plx-visible@m") # {{rel.wife.discriminator}} 
+								span.discrimin(class="-plx-visible@m") # {{rel.wife.discriminator}}
 							.since.mome(class="-plx-visible@m") {{since(rel.since)}}
 							.ring: img(:src="`/build/items/ring_${rel.ring}.png`")
 
 						div(plx-drop='mode:click; animation:plx-animation-slide-top-small' style="width:auto"): .wife-actions(:id="rel.id")
-							.plx-button.plx-button-secondary(@click="changeFeatMarriage(rel.id)", :data-for="rel.id") 
+							.plx-button.plx-button-secondary(@click="changeFeatMarriage(rel.id)", :data-for="rel.id")
 								i.fas.fa-star
 								| FEATURE
-							.plx-button.plx-button-warn(:data-for="rel.id" @click="Swal.fire('','To upgrade your ring, craft a higher-quality ring and re-propose to your current spouse.','info' )") 
+							.plx-button.plx-button-warn(:data-for="rel.id" @click="Swal.fire('','To upgrade your ring, craft a higher-quality ring and re-propose to your current spouse.','info' )")
 								i.fas.fa-ring
 								| UPGRADE
-							.plx-button.plx-button-danger(:data-for="rel.id" @click="Swal.fire('','To divorce someone, use <code>p!divorce [USER ID]</code>.','info' )") 
+							.plx-button.plx-button-danger(:data-for="rel.id" @click="Swal.fire('','To divorce someone, use <code>p!divorce [USER ID]</code>.','info' )")
 								i.fas.fa-heart-broken
 								| DIVORCE
 
@@ -77,12 +80,12 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 	.profile-editor-sidebar.plx-width-1-1(class="plx-width-1-3@m" v-bind:style="{'--favcolor-dim':favcolor.hex+'56','--favcolor':favcolor.hex}"  )
 		.c(style="position: fixed; bottom: 20px; right: 20px; z-index: 10")
 			a(@click='saveAll()').plx-button.plx-button-secondary.plx-margin-right.plx-margin-bottom(type='button'  style="margin-top:100px")
-				i.fas.fa-save              
+				i.fas.fa-save
 				span &#x2002 Save All
 
 		// NOTE --Name, Tag, About
 		.main-profile.plx-flex(style="align-items: center; max-width:1250px; margin:auto " plx-scrollspy="cls:plx-animation-slide-top-small; delay: 600 ").plx-margin
-			.avicontainer     
+			.avicontainer
 				.avatar
 					img(src=userdata.meta.avatar||userinfo.pic width='512px' ).hexagon
 				#frame( plx-toggle="target: #frame img; cls: disengaged" )
@@ -94,7 +97,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 					.flair-container
 						#flairSelect
 							hooper(  :settings="hooperSettings" style='height:400px !important' ref='flairs' @slide="saveFlair" )
-								slide(v-for="(FLAIR, idx) in flairsAvailable" :key="idx" :index="idx" ) 
+								slide(v-for="(FLAIR, idx) in flairsAvailable" :key="idx" :index="idx" )
 									img.flair( :src='`/build/flairs/top/${FLAIR}.png`' v-on:click="gotoFlair(idx);" )
 
 					//.avatar(class='plx-hidden@s').plx-inline
@@ -103,31 +106,31 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 					span.discrimin="#"+ userdata.meta.discriminator
 
 				input.tagline(v-model="tagline" @change="AUTOSAVE('TGL')" placeholder="Write something sorta cool here...")
-				.help Tagline: 
+				.help Tagline:
 					small(style="opacity:.8;font-style: italic") A one-liner that best describe you
-				textarea.about(rows="4" cols="50" v-model='persotext' @change="AUTOSAVE('PTX')" placeholder="Write something extra flamboyantly cool here...") 
-				.help Personal Text: 
+				textarea.about(rows="4" cols="50" v-model='persotext' @change="AUTOSAVE('PTX')" placeholder="Write something extra flamboyantly cool here...")
+				.help Personal Text:
 					small(style="opacity:.8;font-style: italic") Up to 4 lines of anything you want to tell the world
 			.level.numeric-large(class='plx-visible@m')
 				.num= userdata.modules.level
-				.name LEVEL 
+				.name LEVEL
 
 
 		// NOTE --Custom BG Loader
 		br
 		br
 		br
-		
+
 		#custom-bg-loader
 			.plx-container
 				h3.title Custom Background
 				h5.subtitle(v-if="userIsPremium")
-					| Your 
+					| Your
 					b Prime subscription
 					| allows a custom background to be uploaded!*
-					
+
 				h5.subtitle(v-else)
-					a(href="https://patreon.com/join/pollux" target="blank") Upgrade to Prime 
+					a(href="https://patreon.com/join/pollux" target="blank") Upgrade to Prime
 					span and upload custom background!
 				small.help(v-if="userIsPremium" style="opacity:.5")
 					| (*) Images must be SFW. If the image is deemed inappropriate we reserve the right to reset it. Abusing this perk may result in a ban or suspension
@@ -138,10 +141,33 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 						.plx-slider
 							hr
 							label(for="op")
-								b Frame Opacity: 
+								b Frame Opacity:
 								| {{ ~~(frameOpacity*100) }}%
 							br
 							input#op(v-model='frameOpacity' type='range' min=.1 max=1 step=.01 style="width: 200px")
+							br
+							div(class="plx-hidden@m").plx-flex.plx-flex-wrap
+								div(style="margin:4px")
+									label(for="zm")
+										b Zoom:
+										| {{ ~~(displayTransform.scale*100) }}%
+									br
+									input#zm(v-model='displayTransform.scale' type='range' min=.1 max=3 step=.1 style="width: 200px")
+								br
+								div(style="margin:4px")
+									label(for="xxxx")
+										b X:
+										| {{ ~~(displayTransform.x) }}
+									br
+									input#xxxx(v-model='displayTransform.x' type='range'  min=-500 max=500 step=1  style="width: 200px")
+								br
+								div(style="margin:4px")
+									label(for="yyyy")
+										b Y:
+										| {{ ~~(displayTransform.y) }}
+									br
+									input#yyyy(v-model='displayTransform.y' type='range' min=-500 max=500 step=1 style="width: 200px")
+								br
 
 
 					.canvas-container
@@ -162,14 +188,14 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 				a.can-enable(v-if="userIsPremium", @click="createNewCustomBg()")
 					i.fas.fa-unlock
 					span &#x2000 Create Custom BG now!
-						
+
 				.cannot-enable.can-enable(v-else)
 					i.fas.fa-lock
 					span &#x2000 Reserved for Prime Users
-			
+
 			br
 			br
-			
+
 
 
 		// NOTE --Wifebox I (1400+)
@@ -177,7 +203,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 			.plx-container
 				h3.title Marriage Manager
 				h5.subtitle
-					|  In case of divorce disputes call 1-800-NUKE-MY-WIFE 
+					|  In case of divorce disputes call 1-800-NUKE-MY-WIFE
 			+wifeBox
 
 
@@ -196,8 +222,8 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 					.picker-container: .picker
 						transition(name="pop" )
 							chrome-picker(v-show='isColorpickerOpen', v-model='favcolor' )
-								.plx-invisible  {{fuckThis()}}
-						.swatch(v-on:click='', v-bind:style='{ background: favcolor.hex }') 
+								//.plx-invisible  {{fuckThis()}}
+						.swatch(v-on:click='', v-bind:style='{ background: favcolor.hex }')
 					.suggestions
 						.info.plx-flex.plx-flex-between.plx-width-1-1
 							.c1.plx-width-2-3
@@ -220,7 +246,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 						.background-thumb(style="background-image:url('/backdrops/"+userdata.modules.bgID+".png')" )
 
 				.bottom.test
-					#select-bg         
+					#select-bg
 						v-select(
 							@input="onChange",
 							v-model="selectBackground"
@@ -230,10 +256,10 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 							:clearable= "false",
 							:value= `backgroundsAvailable.find(x=>x.code=='${userdata.modules.bgID}')`,
 							label='name'
-						)    
+						)
 							template(slot='selected-option', slot-scope='option')
 								span(style='transform:translateY(-5px)')
-									.plx-rarity-icon(:class='option.rarity') 
+									.plx-rarity-icon(:class='option.rarity')
 									| {{option.name}}
 							template(slot='option', slot-scope='option')
 								.bg-sel-opt(:plx-tooltip='option.name')
@@ -246,13 +272,13 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 				.background-slot(v-bind:style="`background-image:url('/build/boosters/showcase/${selectBooster.icon}.png'); background-size: 200%;`" )
 				.backblur
 				.info.plx-flex.plx-flex-between
-					.c1.plx-width-1-1 
+					.c1.plx-width-1-1
 						.title Featured Sticker
 						br
 						br
 
-						#select-sticker   
-							.help Pack    
+						#select-sticker
+							.help Pack
 							v-select(
 								@input="onChangeStickerPack",
 								v-model="selectBooster"
@@ -260,55 +286,55 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 								:filter= "stkFiltering",
 								:clearable= "false",
 								:value= "boostersAvailable.find(x=> x.id ==  selectBooster.id) || {name:'none'}",
-								label='name'
-							)    
+								label='code'
+							)
 								template(slot='selected-option', slot-scope='option')
 									span(style='transform:translateY(-5px)')
-										.plx-rarity-icon(:class='option.rarity') 
-										span.sticker-sel-span &#x2000 {{option.name}}
+										.plx-rarity-icon(:class='option.rarity')
+										| &#x2000 {{option.name}}
 
 								template(slot='option', slot-scope='option')
 									.stick-sel-opt
-										.stickerpack-icon(:style="`background-image:url('/build/boosters/showcase/${option.icon}.png')`"  class="plx-visible@m")
+										.stickerpack-icon(:style="`background-image:url('/build/boosters/showcase/${option.icon}.png')`"  )
 										span(style='transform:translateY(-5px)')
 											.plx-rarity-icon(:class='option.rarity')
-											| {{option.name}} 
+											| {{option.name}}
 
 
-							div(v-show="selectBooster && selectBooster != 'none'")
+							div(v-show="selectBooster && selectBooster != 'none'").sticker-select
 								.help Sticker
-								v-select(                  
+								v-select(
 									@input="onChangeSticker",
 									v-model="selectSticker"
-									:options= "stickerAvailable.filter(x=>x.series_id == selectBooster.icon )", 
+									:options= "stickerAvailable.filter(x=>x.series_id == selectBooster.icon )",
 									:filter= "stkFiltering",
-									:close-on-select= "false",
-									:clearable= "false",
+									:close-on-select= "true",
+									:clearable= "true",
 									:value= `stickerAvailable.find(x=>x.id=='${userdata.modules.sticker}')`,
-									label='name'
-								)    
-									template(slot='selected-option', slot-scope='option')
+									label='id'
+								)
+									template(slot='selected-option', slot-scope='option').test-templateclass
 										span(style='transform:translateY(-5px)')
-											.plx-rarity-icon(:class='option.rarity') 
-											span.sticker-sel-span &#x2000 {{option.name}}
+											.plx-rarity-icon(:class='option.rarity')
+											| &#x2000 {{option.name}}
 
 
 									template(slot='option', slot-scope='option')
 										.stick-sel-opt
-											.sticker-icon(:style="`background-image:url('/stickers/${option.id}.png')`"  class="plx-visible@m")
+											.sticker-icon(:style="`background-image:url('/stickers/${option.id}.png')`" )
 											span(style='transform:translateY(-5px)')
 												.plx-rarity-icon(:class='option.rarity')
-												| {{option.name}} 
+												| {{option.name}}
 
 					.c2.plx-width-1-3
 
 						.sticker-pack(v-show="selectBooster && selectBooster != 'none'" :style="`background-image:url('/build/boosters/showcase/${selectBooster.icon}.png')`" )
 						.pakInfo(plx-drop="offset: -80").plx-card
-							.title 
+							.title
 								.plx-rarity-icon(:class='selectBooster.rarity')
 								span &#x2000  {{selectBooster.name}}
-							.size Pack Size: {{selectBooster.size}} 
-							.droppable Found on Lootboxes? {{selectBooster.droppable}} 
+							.size Pack Size: {{selectBooster.size}}
+							.droppable Found on Lootboxes? {{selectBooster.droppable}}
 
 						.sticker-thumb(v-show="selectSticker && selectSticker != 'none'" :style="`background-image:url('/stickers/${selectSticker.id}.png')`" )
 
@@ -348,7 +374,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 							a.danger(@click="medalreset")
 								i.fas.fa-fire-alt
 								span &#x2000 RESET &#x2003
-								i.fas.fa-cog.fa-spin.loading-icon         
+								i.fas.fa-cog.fa-spin.loading-icon
 
 						#filter(plx-filter-control="group:rarity")
 							.search
@@ -362,9 +388,9 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 							br
 			br
 
-		// NOTE --Wifebox II 
+		// NOTE --Wifebox II
 		div(v-if="window.width < 1400").plx-width-1-1
-			+wifeBox            
+			+wifeBox
 
 
 hr.plx-divider-icon

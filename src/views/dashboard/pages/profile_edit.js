@@ -28,6 +28,7 @@ var CANVAS, ctx;
         hex: userdata.modules.favcolor,
         source: "hex",
       },
+      displayTransform: {scale:1},
       window:{width:0,height:0},
       isColorpickerOpen: false,
       isFlairOpen: false,
@@ -43,6 +44,7 @@ var CANVAS, ctx;
       Swal,
       search: "",
       select: "",
+      customBGzoom: 1,
       tagline: userdata.modules.tagline,
       persotext: userdata.modules.persotext,
       frame: (userdata.switches || {}).profileFrame,
@@ -51,6 +53,7 @@ var CANVAS, ctx;
       frameOpacity:1,
       medalsEquipped: [],
       customBgUpload: null,
+      
       hooperSettings: {
         itemsToShow: 5,
         centerMode: true,
@@ -79,6 +82,19 @@ destroyed() {
     HooperNavigation: window.Hooper.Navigation,
   },
   methods: {
+    updateCustomBg(){
+      this.customBGzoom;
+    },
+    debounce(func, delay=300) {
+      let debounceTimer;
+      return function() {
+        const context = this;
+        const args = arguments;
+        clearTimeout(debounceTimer);
+        debounceTimer = setTimeout(() => func.apply(context, args), delay);
+      };
+    },
+    
 
     chooseFiles(){
       document.getElementById("file-upload").click()
@@ -101,7 +117,7 @@ destroyed() {
           updateUserBGs(1);
         });
       }else{
-        console.log("no premium dawg")
+        console.warn("No Premium")
       }
     },
     async sendFile() {
@@ -187,7 +203,7 @@ destroyed() {
           (m) => m.rarity.toLowerCase() === this.select.toLowerCase()
         );
       }
-      console.log(filtered);
+ 
       return filtered;
     },
     setFavColor(color){
@@ -200,7 +216,7 @@ destroyed() {
     },
     fuckThis() {
       $("nav.topbar ").css({ background: this.favcolor.hex });
-      updateColorName(this.favcolor.hex);
+      //updateColorName(this.favcolor.hex);
     },
     saveFlair(payload) {
       setTimeout(() => {
@@ -219,7 +235,7 @@ destroyed() {
       AUTOSAVE("COLOR");
     },
     setSelected: (val) => {
-      console.log(val);
+ 
     },
     onChangeStickerPack(item) {
       this.selectSticker = "none";
@@ -484,7 +500,7 @@ async function AUTOSAVE(what,silent) {
       "background: #222; color: #bada55",
       "background: none; color: unset"
     );
-    console.log(relevantData);
+ 
  // }, 1200);
 }
 
@@ -495,16 +511,16 @@ fetch("/api/relationships?uid="+userinfo.id).then(r =>
 
 fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
   r.json().then((res) => {
+
     DASH.boostersAvailable = res.map((pack) => {
-      pack.size = res.filter((s) => s.series_id == pack.icon).length;
+      //pack.size = DASH.stickerAvailable.filter((s) => s.series_id == pack.icon).length;
       return pack;
     });
     DASH.boostersAvailable = res;
-    console.log({bav:DASH.boostersAvailable})
+ 
     fetch("/api/user/" + userinfo.id + "/stickers").then(
       (r) =>
         r.json().then((res2) => {
-          console.log({res2})
           DASH.calculateSuggestionColors(userdata.modules.bgID)
           DASH.stickerAvailable = res2;
           DASH.selectSticker =
@@ -525,10 +541,8 @@ fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
 function updateUserBGs(){
   fetch("/api/user/"+userinfo.id+"/bgs").then(r =>
     r.json().then(res =>  {
-      console.log({res})
+ 
       DASH.selectBackground = res.find((bg) => bg.code == userdata.modules.bgID) || "none";
-      
-      console.log()
       DASH.backgroundsAvailable = res.map(thisBgData=>{
         return {
           name: thisBgData.name,
@@ -537,7 +551,7 @@ function updateUserBGs(){
           code: thisBgData.code,
           img: "/backdrops/" + thisBgData.code + ".png",
         };
-      });
+      }).filter((v,i,a)=>a.findIndex(x=>x.code==v.code)==i);
       userdata.modules.bgInventory.map((bg) => {
         let thisBgData = res.find((x) => x.code == bg) || {
           name: "Unknown",
@@ -563,7 +577,7 @@ updateUserBGs()
 
 fetch("/api/user/"+userinfo.id+"/medals").then(r =>
   r.json().then(res => {
-    DASH.medals = res;
+    DASH.medals = res||[];
     DASH.medalsEquipped = res.filter((m,i,a)=> userdata.modules.medals.includes(m.icon) && a.map(x=>x.icon).indexOf(m.icon)===i)
   } )
     
@@ -607,7 +621,7 @@ function mouseMove(event) {
   mouse.alt = event.altKey;
   mouse.shift = event.shiftKey;
   mouse.ctrl = event.ctrlKey;
-  if (event.type === "mousedown") {
+  if (event.type === "mousedown" || event.type === "touchstart") {
       if(mouse.buttonRaw === 4){
         mouse.buttonRaw |= mouse.buttons[event.which-1];
       }else{
@@ -616,15 +630,15 @@ function mouseMove(event) {
       }
   } else if (event.type === "mouseup") {
       mouse.buttonRaw &= mouse.buttons[event.which + 2];
-  } else if (event.type === "mouseout") {
+  } else if (event.type === "mouseout"  || event.type === "touchend") {
       mouse.buttonRaw = 0;
       mouse.over = false;
-  } else if (event.type === "mouseover") {
+  } else if (event.type === "mouseover"  || event.type === "touchstart") {
       mouse.over = true;
   } else if (event.type === "wheel") {
       event.preventDefault()
       mouse.w = -event.deltaY;
-      console.log(mouse.w)
+ 
   } else if (event.type === "DOMMouseScroll") {  
     mouse.w = -event.detail;
   }
@@ -633,9 +647,9 @@ function mouseMove(event) {
 }
 
 function setupMouse(e) {
-  e.addEventListener('mousemove', mouseMove);
-  e.addEventListener('mousedown', mouseMove);
-  e.addEventListener('mouseup', mouseMove);
+  e.addEventListener('mousemove', mouseMove);   e.addEventListener('touchmove', mouseMove);
+  e.addEventListener('mousedown', mouseMove);   e.addEventListener('touchstart', mouseMove);
+  e.addEventListener('mouseup', mouseMove);     e.addEventListener('touchend', mouseMove);
   e.addEventListener('mouseout', mouseMove);
   e.addEventListener('mouseover', mouseMove);
   e.addEventListener('wheel', mouseMove);
@@ -647,7 +661,6 @@ function setupMouse(e) {
 }
 
 function createCBGCanvas(){
-
   if( !DASH.userIsPremium || !DASH.backgroundsAvailable.find(x=>x.code==userdata.id)){
     return;
   }
@@ -659,7 +672,7 @@ function createCBGCanvas(){
   
   setupMouse(CANVAS);
 
-  var displayTransform = {
+  DASH.displayTransform = {
     x:0,
     y:0,
     ox:0,
@@ -786,11 +799,11 @@ function createCBGCanvas(){
   function update(){
     if(!ctx) return;
     timer += 1; 
-    displayTransform.update();
-    displayTransform.setHome();
+    DASH.displayTransform.update();
+    DASH.displayTransform.setHome();
     ctx.clearRect(0,0,CANVAS.width,CANVAS.height);
     if(img.complete){
-        displayTransform.setTransform();
+        DASH.displayTransform.setTransform();
         ctx.fillStyle = "#0b0b25"
         ctx.fillRect(-2000,-2000,5000,5000)
         ctx.drawImage(img,0,0);
@@ -799,7 +812,7 @@ function createCBGCanvas(){
         
 
     }else{
-        displayTransform.setTransform();
+        DASH.displayTransform.setTransform();
         ctx.fillText("Loading image...",100,100);
         
     }
@@ -825,4 +838,3 @@ function createCustomBG(){
 }
 
 createCBGCanvas()
-

@@ -38,7 +38,7 @@ baking:
     - live
   script:
     - echo "Building Live"
-    - cd /home/pollux/polaris/DEV/dashboard/
+    - cd /home/pollux/polaris/LIVE/dashboard/
     - npm build
 
 

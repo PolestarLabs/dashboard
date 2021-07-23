@@ -44,12 +44,12 @@ function itemsMatch(pot,recipe){
 
 
 router.get('/:endpoint', cache(0.1),  (req,res) => {
-
     let queries = {}
     //queries.crafted = true;
     //queries.display = true;
-
+    
     if(req.params.endpoint == 'search'){
+        if (process.env.NODE_ENV!=="production") res.startTime('search',"Search");
         Object.keys(req.query)
             .filter(qry => ['_id','id','rarity','code','type','crafted','open'].includes(qry) )
             .forEach(ky=> {
@@ -61,22 +61,28 @@ router.get('/:endpoint', cache(0.1),  (req,res) => {
             queries.display = true;
             queries.crafted = !!req.query.craftables;
         }
+        if (process.env.NODE_ENV!=="production") res.startTime('dbfsearchcol',"Database search collections");
         DB.items.find(queries,{emoji:0,usefile:0,altEmoji:0})
         .skip(parseInt(req.query.skip)||0)
         .limit( parseInt(req.query.lim)||50)
         .sort(sort).lean()
         .then(async result=>{
+            if (process.env.NODE_ENV!=="production") res.endTime('dbfsearchcol');
             if(result){
-                //let x = await Promise.all(result.map(res=> res.type == 'boosterpack' ? stickerCount(res) : null ));
+               // let x = 
             }
+            if (process.env.NODE_ENV!=="production") res.startTime('dbfsearchcol2',"Organise data");
             result.forEach(x=>{               
-                let timestamp = x._id.toString().substring(0,8)
-                x.release = parseInt( timestamp, 16 ) * 1000 
-                x.description = ( $t(["items:"+x.id+".description", ""]) )
-            })
+                let timestamp = x._id.toString().substring(0,8);
+                x.release = parseInt( timestamp, 16 ) * 1000 ;
+                x.description = ( $t(["items:"+x.id+".description", ""]) );
+            });
+            await Promise.all(result.map(res=> res.type == 'boosterpack' ? stickerCount(res) : null ));
+            if (process.env.NODE_ENV!=="production") res.endTime('dbfsearchcol2');
             res.json(result)
         })
     }else{
+        if (process.env.NODE_ENV!=="production") res.startTime('dbfsearchcol3',"Database search collections -- escaped");
         DB.items.findOne({id:req.params.endpoint,}, // crafted: !0, display: !0},
             { _id: 0, __v:0,emoji:0,}).lean().then(result=>{
             res.json(result)
@@ -94,11 +100,11 @@ router.get('/:endpoint', cache(0.1),  (req,res) => {
  
 
 async function stickerCount(pack){
-    packdatafind = pack.materials.map(x=>x.id||x);
-    console.log(packdatafind)
+    //packdatafind = pack.materials.map(x=>x.id||x);
+    //console.log(packdatafind)
     let [pdata,mdata] = await Promise.all([
         DB.cosmetics.find({series_id:pack.icon},{name:1,id:1,rarity:1}).lean(),
-        DB.items.find({id: {$in:pack.materials.map(x=>x.id||x) } },{name:1,id:1,rarity:1}).lean()
+        DB.items.find({id: {$in:pack?.materials?.map(x=>x.id||x)||[] } },{name:1,id:1,rarity:1}).lean()
     ]);
     pack.size = pdata.length;
     pack.materialsData = mdata;

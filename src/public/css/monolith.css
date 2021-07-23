@@ -1147,6 +1147,7 @@ div:not(.plx-open) .faders {
  border-radius:8px;
  display:block
 }
+
 .magic-outline {
  display:inline-flex;
  border:solid 2px var(--secondary-color);
@@ -1187,6 +1188,12 @@ div:not(.plx-open) .faders {
  background:var(--accent-color-strong)5;
  border-color:var(--text-accent)
 }
+.magic-outline.disabled {
+  opacity: .5;
+  cursor:not-allowed;
+  pointer-events: none;
+}
+
 .sidewinder {
  position:fixed;
  z-index:990;
@@ -1359,3 +1366,22 @@ button span,.ti-tag span{
 .color-secondary{ color: var(--secondary-color) !important }
 .color-accent{ color: var(--accent-color) !important }
 .color-contrast{ color: var(--text-contrast) !important }
+
+
+
+.tick{
+  display: inline-block;
+  height: 1.5rem;
+  width: 1.5rem;
+  vertical-align:middle;
+  background-size: contain;
+}
+.tick.yep{
+background-image: url('/build/icons/yep.png');
+}
+.tick.nope{
+background-image: url('/build/icons/nope.png');
+}
+.tick.maybe{
+background-image: url('/build/icons/maybe.png');
+}

@@ -1,11 +1,19 @@
+const Eris = require('eris')
 const ECO = require('../pipelines/economy.js')
 const express = require('express');
 const router = express.Router();
 const fx = require('../pipelines/globalFunctions.js');
+const config = require('../../config.js');
 
-global.serversWithPollux = global.serversWithPollux ? serversWithPollux : new Map();
+const serversWithPollux = global.serversWithPollux ? serversWithPollux : new Map();
 const serverHasPollux = async (id) => {
-    
+
+    const svData = await DB.servers.get(id,{id:1,activeClients:1});
+    if (!svData) return false;
+    if (!svData.activeClients?.length) return false;
+    return svData.activeClients;
+
+    /*
     let hasP = serversWithPollux.get(id);
     let hasPCheck = PLX.getRESTGuild(id)
         .catch(()=>{
@@ -21,6 +29,7 @@ const serverHasPollux = async (id) => {
     if (hasP) res = hasP.res;
     else res = await hasPCheck;
     return res === true;
+    */
 }
 
 
@@ -111,34 +120,60 @@ router.delete('/imgbookmarks/:id', async (req,res)=>{
 
 })
 
+const LOAD_ALL_SUBCLIENTS = Promise.all(
+    config.clients.map(async cli=>{
+        const newClient = new Eris.Client(cli.token,{restMode:true});
+        newClient.id = cli.id;
+        newClient.category = cli.category;
+        newClient.friendly_name = cli.fname;
+        newClient.internal_name = cli.name;
+        const user = JSON.parse(JSON.stringify(await newClient.getRESTUser(cli.id)));
+        user.fname = cli.fname;
+        user.flavor = cli.name;
+        user.category = cli.category;        
+        polluxClients.set(cli.id,{client:newClient,user});
+
+        return user;
+    })
+);
 router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
- 
+    
+    const [MANSION_SERVER_DATA,MANSION_MEMBER] = await Promise.all([
+         PLX.getRESTGuild(config.official_guild),
+         PLX.resolveMember(config.official_guild,req.user.id)
+    ]);
+
     const [ALLCOSM,ALLITEMS,BCOL,SERVEROWNERSHIP] = await Promise.all([
          DB.cosmetics.find({}).lean().exec(),
          DB.items.find({}).lean().exec(),
          DB.usercols.get(req.user.id),
          Promise.all(req.user.guilds.map(async g=>{
             g.rank= g.owner ? "Owner" : (g.permissions & 0x8) > 0 ? "Admin" : (g.permissions & 0x20) > 0 ? "Manager" : /*(await isAdmin(req,g.id)) ? "Moderator" :*/ 'Commoner';
-            g.hasPollux = !!(await serverHasPollux(g.id));
+            const hasPollux = await serverHasPollux(g.id);
+            g.hasPollux = !!(hasPollux);
+            g.hasPolluxDetail = hasPollux;
             g.rankSort = g.rank == "Owner" ? 0 : g.rank == "Admin" ? 1 : g.rank == "Manager" ? 2 : "Moderator" ? 3 : 4;
             return g;
-        }))
+        })),
+        LOAD_ALL_SUBCLIENTS
     ]);
-
-
 
     const MDINFO = ALLCOSM.filter(x=>x.type== "medal"      )
 
     const DCKINFO= ALLCOSM.filter(x=>x.type== "skin")
 
     if(res.locals?.userinfo){
-
         res.locals.userinfo.servers = SERVEROWNERSHIP; 
     }
 
     res.render('dashboard/main',{ALLITEMS,MDINFO,DCKINFO,
         boorucollection: BCOL?.collections?.boorusave || [],
-        endpoint: req.params.endpoint 
+        endpoint: req.params.endpoint,
+        MANSION_SERVER_DATA,MANSION_MEMBER,
+        POLLUX_USERS: Array.from(polluxClients, ([,{client,user}]) => {
+            client.user = user;
+            return client;
+        })
     })
 
 })

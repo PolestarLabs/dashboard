@@ -18,7 +18,7 @@ router.get('/:endpoint', async (req, res)=> {
         userprofile = res.locals.userdata;
 
     }else{
-        userprofile =  await DB.users.get({$or:[{id: req.params.endpoint},{personalhandle: req.params.endpoint}]});
+        userprofile =  await DB.users.findOne({$or:[{id: req.params.endpoint},{personalhandle: req.params.endpoint}]}).noCache();
     }
 
     if(!userprofile) return res.send(404);

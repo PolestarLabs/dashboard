@@ -89,8 +89,10 @@ const fx = require('../pipelines/globalFunctions.js');
 
 // API
 router.use('/api', (...args)=>{
+  let [,res] = args;
   delete require.cache[require.resolve('./api/_main.js')];
   const api = require('./api/_main.js');
+  if (process.env.NODE_ENV!=="production") res.endTime('route');
   return api(...args);
 });
 
@@ -236,8 +238,20 @@ router.use('/admin',checkAuth, (...args)=>{
     return invite(...args);
   });
   
+  router.use('/lastfm', (...args)=>{
+    if(process.env.NODE_ENV != "production" ) delete require.cache[require.resolve('./lastfm')];
+    const invite = require('./lastfm');
+    return invite(...args);
+  });
   
   
+  router.use('/patreon', (...args)=>{
+    if(process.env.NODE_ENV != "production" ) delete require.cache[require.resolve('./patreon')];
+    const invite = require('./patreon');
+    return invite(...args);
+  });
+  
+
   
 
 router.get("/error", async (req,res) => {
