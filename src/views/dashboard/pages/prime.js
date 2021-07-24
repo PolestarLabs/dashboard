@@ -42,6 +42,7 @@ const PRIME = new Vue({
         selectedFlavor: 'prime',
         CLIENT_PRIME_INFO:  Object.assign(DummyPrimeOptions, (userdata||{}).prime ) ,
         serverToPrime: {name:"Select a server..."},
+        allUserServers: userinfo.servers,
         primeEligibleServers: userinfo.servers.filter(g=> g.owner || (g.permissions & 0x8) > 0 || (g.permissions & 0x20) > 0 ),
     },
     components: {
@@ -56,6 +57,8 @@ const PRIME = new Vue({
             ].join(" "))
         },
         getServerIcon(server,size=64){
+            console.log({server})
+            if (!server || !server.id) return "0";
             return (
                 server.avi ||                //-----------------------------------------//
                 server.ava ||                // <--- Compat with self-supplied meta ----//
@@ -93,9 +96,12 @@ const PRIME = new Vue({
             //this.primeEligibleServers = this.primeEligibleServers.filter()
         },
         getServer(svid){
-            let aServer = this.primeEligibleServers.find(s=>s.id === svid);
+            if (!svid) return null;
+
+            let aServer = this.primeEligibleServers.find(s=>s.id === svid) || this.allUserServers.find(s=>s.id === svid);
             if (!aServer) aServer = {
-                name: "hm",
+                id:"000",
+                name: "Unknown Server",
                 icon: "",
                 permissions: 0,
             };
@@ -134,8 +140,10 @@ const PRIME = new Vue({
         },
     }
 });
+
 if(userdata && userdata.prime && userdata.prime.servers){
     ((userdata.prime||{}).servers||[]).forEach(sv=>{
+        console.log({sv});
         PRIME.getServer(sv);
     });
 }
