@@ -1,6 +1,6 @@
 ul.plx-flex.plx-flex-center 
-    li( v-for="(entry,i) in market" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small
-        .market-entry.raritybox( v-for="item in [entry.itemdata]",  v-if="!!item", :class="[item.type,'raritybox',item.rarity].join(' ')")
+    li( v-for="(entry,i) in market" :data-index='i' v-bind:style="{'animation-delay': timeFun(i) + 'ms'}" v-if="!entry.completed && entry.itemdata").plx-animation-slide-bottom-small
+        .market-entry.raritybox(  v-for="item in [entry.itemdata]", v-if="!!item", :class="[item.type,'raritybox',item.rarity,(entry.lock ? 'plx-disabled' : '')].join(' ')")
            div(v-if='item && entry') 
             
 
@@ -31,13 +31,13 @@ ul.plx-flex.plx-flex-center
                         img(plx-img :src="`/build/items/${item.id}.png`")
             .infobox
                 .author.truncate
-                    .avatar(v-bind:style="{'background-image': `url('${entry.userdata.avatar}')`}")
+                    .avatar(v-bind:style="{'background-image': `url('https://cdn.discordapp.com/avatars/${entry.userdata.id}/${entry.userdata.avatar}.png')`}")
                     .tag
-                        a(:href="`/profile/${entry.author}`").username {{entry.userdata.username}}
+                        a(:href="`/profile/${entry.author}`" target="blank").username {{entry.userdata.username}}
                         span.discrimin \#{{entry.userdata.discriminator}}
 
                     
-                .button.market(:class="'store-'+entry.type")
+                .button.market(:class="'store-'+entry.type", @click="setCurrentItem(entry)", plx-toggle="#modal-market")
                     i: div(:class="`plx-${entry.currency}`").icon24
                     .price  {{ miliarize(entry.price||"UNK",0,' ') }} 
                 .title.truncate {{item.name}}

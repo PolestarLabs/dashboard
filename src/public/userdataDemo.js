@@ -1304,7 +1304,7 @@ var userdata =
       }
     ],
     "name": "Flicky",
-    "eventGoodie": 10825,
+    "modules.EVT": 10825,
     "id": "88120564400553984",
     "favcolor": "#00FF00",
     "cherries": 3,

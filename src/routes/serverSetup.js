@@ -5,6 +5,8 @@ const operations = require('../pipelines/operations.js');
 
 exports.run = async (req,res)=>{
 
+    await wait(1);
+
     let SVID = req.params.serverid.toString();
 
       let [memberInfo,roleInfo,serverInfo,channelInfo] = await Promise.all([
@@ -13,7 +15,8 @@ exports.run = async (req,res)=>{
             PLX.getRESTGuild(SVID),
             PLX.getRESTGuildChannels(SVID)
         ]).catch(err=>{
-            res.render('404');
+            console.error(err)
+            res.redirect("/admin/"+SVID)
             return [0]
         });
         if(!memberInfo) return;
@@ -25,10 +28,10 @@ exports.run = async (req,res)=>{
 
     if (!serverInfo) return res.sendStatus(401);
     req.user.validator = md5(Date.now());
-    DB.serverDB.findOne({ id:SVID }).then(async serverData =>{
+    DB.serverDB.findOne({ id:SVID }).noCache().then(async serverData =>{
         if (!serverData){            
            await DB.serverDB.new(serverInfo);
-           serverData = await DB.serverDB.findOne({id:SVID});
+           serverData = await DB.serverDB.findOne({id:SVID}).noCache();
         }        
 
         if(req.query.pg){

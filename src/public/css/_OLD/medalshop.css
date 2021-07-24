@@ -189,7 +189,7 @@ img.R {
 }
 
 .openiv:hover {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   transform: scale(1.2)
 }
 

@@ -1,6 +1,7 @@
 extends ../../layout 
 
-mixin storeCard(item,options)
+mixin storeCard(preitem,options)
+  -var item = JSON.parse(JSON.stringify(preitem));
   .shopbox(class=item.rarity)
     .header
       .s-title= item.name
@@ -23,7 +24,7 @@ mixin storeCard(item,options)
           data-dsc=item.description
         )
           i.fas.fa-dollar-sign
-          .price
+          .price            
             span.face(data-original=item.price)= item.price
             span.cents(data-original=item.price) .00
  
@@ -51,6 +52,7 @@ block content
                 option#BRL BRL
 
     .plx-uncontainer.plx-flex.plx-flex-center.plx-flex-wrap
+        
         each item in base
             +storeCard(item,{preIn:item.preInput})
 

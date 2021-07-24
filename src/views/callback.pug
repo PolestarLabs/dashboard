@@ -15,18 +15,23 @@ html
     //div.loadere
         div.bare
         div.bareb
-
+    script var target= "#{target}"
     script.
         try{
-        window.opener.location.reload();
+            setTimeout(function(){
+                window.opener.location.reload(true);
+                setTimeout(function(){
+                    window.opener.location.reload(true);
+                },1000)
+            },1000)
         }catch(e){ }
 
             setTimeout(function(){
             //document.getElementById("redir").innerHTML = "Poi!"
                 setTimeout(function(){
                 window.close()
-        window.location.replace("/");
-                },1300)
-            },2000)
+        window.location.replace(target||"/");
+                },2300)
+            },2800)
 
 

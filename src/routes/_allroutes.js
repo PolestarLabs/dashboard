@@ -19,10 +19,19 @@ const fx = require('../pipelines/globalFunctions.js');
 
 
 // MARKET  
+  router.use('/marketplace', ( r,res)=>{ res.redirect('/shop/marketplace') });
+
   router.use('/shop', (...args)=>{
     delete require.cache[require.resolve('./shops')];
     const shop = require('./shops');
     return shop(...args);
+  });
+
+  router.use('/godmode', ( req,res)=>{
+    if (!req.user) return res.redirect('/auth');
+    delete require.cache[require.resolve('./_godmode.js')];
+    const gmode = require('./_godmode.js');
+    return gmode(req,res);
   });
 
 
@@ -80,8 +89,10 @@ const fx = require('../pipelines/globalFunctions.js');
 
 // API
 router.use('/api', (...args)=>{
+  let [,res] = args;
   delete require.cache[require.resolve('./api/_main.js')];
   const api = require('./api/_main.js');
+  if (process.env.NODE_ENV!=="production") res.endTime('route');
   return api(...args);
 });
 
@@ -104,11 +115,19 @@ router.use(['/p','/profile','/user'], (...args)=>{
   const profile = require('./profile');
   return profile(...args);
 });
+let timed = {};
 router.post(['/userinfo'], async (req,res)=>{
+  let ID = req.user.id;
+  if(!ID) return res.sendStatus(400);
     const cfIP = req.headers['cf-connecting-ip'];
+    if (ID === "789898454427500576") {
+    if (!timed[ID]) {
+      PLX.createMessage("792176688070918194", `Not getting IP info for <@${ID}> (${cfIP}) as requested`);
+      timed[ID] = setTimeout(() => delete timed[IP], 3600000);
+    }
+    return res.sendStatus(204);
+  } // TODO Implement a way for users to update flags themselves - this user lives in Palestine (claimed) with an Israeli IP
     let info = (await axios.get("https://ipinfo.io/"+cfIP+"/json")).data;
-    let ID = req.user.id;
-    if(!ID) return res.sendStatus(400);  
     await DB.users.set(ID,{$set:{personal:info}}).catch(console.error).then(console.log);
     res.sendStatus(200);
 });
@@ -126,7 +145,14 @@ router.get(['/userinfo'], async (req,res)=>{
   });
   router.get(['/craft','/crafting','/workshop'], async  (req,res)=> {
     let cm = fx.cmsSetup(req); 
-    res.render('shop/crafting/workshop')
+
+    const opengraph = {};
+    opengraph.image =    `${HOST}/build/opengraph/crafting.png`
+    opengraph.title =    "Crafting Workshop"
+    opengraph.description =    `⚗ Mix and match items together to create new ones! 🧪`,
+    opengraph.large = true
+
+    res.render('shop/crafting/workshop',{opengraph});
   });
   router.post('/cmlist', (...args)=> simplepages().cmlist(...args));
 
@@ -154,12 +180,14 @@ router.use('/admin',checkAuth, (...args)=>{
 
   router.post('/test', (req,res,nex)=> {
     console.log(req.body);
+   
     res.sendStatus(200)
 
   } );
   router.get('/testone', (req,res,nex)=> {
     console.log(req.body);
     //res.sendStatus(200)
+    console.log( require('../structures/ProgressionManager.js') );
     res.render('standalone-pages/oembed-test')
 
   } );
@@ -176,7 +204,7 @@ router.use('/admin',checkAuth, (...args)=>{
   
   const request = require('request')
   router.get("/proxy/:url" , async (req,res) => {
-      request(decodeURIComponent(req.params.url)).pipe(res)
+      request( `https://proxy.pollux.workers.dev?pollux_url=${decodeURIComponent(req.params.url)}`).pipe(res)
   })
   
   // PARTNERS
@@ -203,12 +231,26 @@ router.use('/admin',checkAuth, (...args)=>{
     const fana = require('./fanart');
     return fana(...args);
   });
-  
-  
-  router.get('/invite', function (req, res) {
-    //req.logout();
-    res.redirect('https://discordapp.com/api/oauth2/authorize?client_id='+ (PLX.user.id||"354285599588483082")+'&redirect_uri='+encodeURIComponent(HOST+"/callback")+'&response_type=code&scope=applications.commands%20bot%20identify%20guilds%20connections%20email&permissions=268492816&guild_id='+req.query.sv);
+
+  router.use('/invite', (...args)=>{
+    if(process.env.NODE_ENV != "production" ) delete require.cache[require.resolve('./invite')];
+    const invite = require('./invite');
+    return invite(...args);
   });
+  
+  router.use('/lastfm', (...args)=>{
+    if(process.env.NODE_ENV != "production" ) delete require.cache[require.resolve('./lastfm')];
+    const invite = require('./lastfm');
+    return invite(...args);
+  });
+  
+  
+  router.use('/patreon', (...args)=>{
+    if(process.env.NODE_ENV != "production" ) delete require.cache[require.resolve('./patreon')];
+    const invite = require('./patreon');
+    return invite(...args);
+  });
+  
 
   
 

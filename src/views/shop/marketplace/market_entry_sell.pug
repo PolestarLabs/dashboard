@@ -1,4 +1,5 @@
-if entry.userdata.meta
+
+if entry.userdata
     -item = (fullbase||[]).find(itm=>itm.type == entry.item_type && itm.id == entry.itemid)
     -item = entry.itemdata
     -
@@ -15,8 +16,9 @@ if entry.userdata.meta
     -item_pic = ""+item.img
 
 
-    .market-entry(class=item.rarity data-itype=entry.item_type data-rarity=item.rarity  id=entry.id )
-        a.piece-one(href=`http://beta.pollux.gg/shop/marketplace/entry/${entry.id}`) 
+    .market-entry(class=item.rarity+(" "+(entry.lock?"plx-hidden":"")), style=(entry.lock ? "display:none;" : '.'), data-itype=entry.item_type, data-rarity=item.rarity,  id=entry.id )
+        //pre= JSON.stringify(entry)
+        a.piece-one(href=`/shop/marketplace/entry/${entry.id}`) 
             .picture: div(plx-img style="background-image:url("+item_pic+")" )
             .name
                 .feat-text: span= item.name
@@ -39,14 +41,15 @@ if entry.userdata.meta
                 div.d-time ---
             .trade
                 if entry.type == "sell"
-                    button.plx-button.plx-button-small.plx-button-secondary
+                    
+                    button.plx-button.plx-button-small.plx-button-primary(onclick="buyStoreItem('marketplace','"+entry.id+"','"+entry.currency+"', {type:'sell'} )")
                         | BUY
                 if entry.type == "buy"
-                    button.plx-button.plx-button-small.plx-button-danger
+                    button.plx-button.plx-button-small.plx-button-secondary(onclick="buyStoreItem('marketplace','"+entry.id+"','"+entry.currency+"', {type:'buy'} )")
                         | SELL
 
                 | &#x2002
-                button.plx-button.plx-button-small.plx-button-primary.generateLink(type='button')
+                button.plx-button.plx-button-small.plx-button-default.generateLink(type='button')
                     i.fas.fa-link
                     span &#x200b
                 div(plx-drop="mode: click" ).plx-width-large.dropshare
@@ -54,7 +57,7 @@ if entry.userdata.meta
                         p
                             b Share this Listing
                             br
-                            -let link=`http://beta.pollux.gg/shop/marketplace/entry/${entry.id}`
+                            -let link=`${HOST}/shop/marketplace/entry/${entry.id}`
                             -let title= 'Pollux Marketplace Listing: '+item.name
                             include ../../tools/mixins
                             +share(link,title,{copy:true,id:entry.id})

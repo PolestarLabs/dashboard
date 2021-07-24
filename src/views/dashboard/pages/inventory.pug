@@ -1,0 +1,44 @@
+ 
+    
+mixin ITEM(ITEM, META)
+     div( class='plx-width-1-2@m'): .plx-card.plx-card-default(style="border-radius:8px")
+        .plx-card-header
+            .plx-grid-small.plx-flex-middle(plx-grid='')
+                .plx-card-badge.plx-label(style="background:"+ITEM.color )= META.count
+                .plx-width-auto
+                    img.plx-border-circle(src='/build/items/'+ITEM.icon+'.png', width='40', height='40',alt=" ")
+                .plx-width-expand
+                    h3.plx-card-title.plx-margin-remove-bottom= ITEM.name
+                    p.plx-text-meta.plx-margin-remove-top= translation.keywords[ITEM.rarity] + " " + ITEM.type + " item."
+                         
+        //.plx-card-body
+            //pre.mistyblue= JSON.stringify(ITEM,null,2)
+            p= ITEM.type
+                
+        .plx-card-footer.plx-flex.plx-flex-between
+            //button#inv-craft.plx-button.plx-button-text(href='#' disabled=!ITEM.crafted) CRAFT
+            button#inv-marketpost.plx-button.plx-button-text(
+                href='#',
+                disabled=(!ITEM.tradeable),
+                @click="marketplacePopup( ("+ JSON.stringify(ITEM||{}) +") )"
+            )
+                | POST IN MARKETPLACE
+            
+            // FIXME[epic=flicky] Remove !0 when destroy action is implemented
+            button#inv-destroy.plx-button.plx-button-text(href='#' disabled=(!0, !ITEM.destroyable) class=ITEM.destroyable?"plx-text-danger":"") DESTROY
+
+
+
+.plx-container
+    #invdash
+        .plx-grid-medium(plx-grid)
+            each ITEM in userdata.modules.inventory        
+                -let thisItem = ALLITEMS.find(x=>x.id == ITEM.id || x.id == ITEM )
+                
+                if thisItem && ITEM.count > 0
+                    +ITEM(thisItem,ITEM)
+    script
+        include inventory.js
+             
+                
+

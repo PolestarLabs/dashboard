@@ -1,11 +1,13 @@
+//FIXME inconsistency between "reason" and "status"
+
 const ECO = require("../../../pipelines/economy.js");
 const express = require("express");
 const router = express.Router();
-const marketHook = require("../../../../config.js").webhooks.marketplace;
+const config = require("../../../../config.js");
+const marketHook = config.webhooks.marketplace;
 const axios = require('axios');
 
 /*
-
   CONTENTS:
 
       GET / 
@@ -22,95 +24,21 @@ const axios = require('axios');
 */
 
 // ROOT
-router.get("/", cache(60), async (req, res) => {
-  let queries = {};
-  Object.keys(req.query)
-    .filter((qry) =>
-      ["id", "item_id", "item_type", "author", "type", "price"].includes(qry)
-    )
-    .forEach((ky) => {
-      queries[ky] = req.query[ky];
-    });
-
-  if (req.query.after) {
-    queries.timestamp = {
-      $gte: Number(req.query.after) || Date.now() - 86400000,
-    };
-  }
-  if (req.query.before) {
-    queries.timestamp = { $lte: Number(req.query.before) || Date.now() };
-  }
-
-  let lim = Math.min(Number(req.query.limit) || 25, 100);
-  let skip = Number(req.query.skip) || 0;
-  let sort = req.query.sort == "oldest" ? 1 : -1;
-
-  DB.marketplace
-    .find(queries, { __v: 0 })
-    .sort({ timestamp: sort })
-    .limit(lim)
-    .skip(skip)
-    .then(async (result) => {
-      let [marketeers, cosmetics, goods] = await Promise.all([
-        DB.users
-          .find(
-            { id: { $in: result.map((i) => i.author) } },
-            { meta: 1, id: 1 }
-          )
-          .lean()
-          .exec()
-          .catch((e) => []),
-        DB.cosmetics
-          .find({ _id: { $in: result.map((i) => i.item_id) } })
-          .lean()
-          .exec()
-          .catch((e) => []),
-        DB.items
-          .find({ _id: { $in: result.map((i) => i.item_id) } })
-          .lean()
-          .exec()
-          .catch((e) => []),
-      ]).catch((err) => {
-        console.error(result.map((i) => i.item_id));
-
-        res.status(500).send("ERROR");
-      });
-
-      let newThing = result.map((entry) => {
-        return Object.assign(
-          {
-            itemdata: cosmetics
-              .concat(goods)
-              .find((i) => i._id == entry.item_id),
-          },
-          { userdata: marketeers.find((u) => u.id === entry.author).meta },
-          entry._doc
-        );
-      });
-
-      res.json(newThing);
-    })
-    .catch((e) => {
-      console.error(e);
-      res.status(500).send("What the fuck are you trying?");
-    });
-});
 
 // RATES
 router.get("/rates", async (req, res) => {
   // TODO[epic=flicky] Move Global Numbers & Rates to Database ?
-  const { bgPrices, medalPrices,sapphireModifier, jadeModifier } = require( process.env.BOT_PATH + "/resources/lists/GlobalNumbers.js");
-  return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier });
+  const { BackgroundPrices: bgPrices, MedalPrices: medalPrices, SAPPHIRE_MODIFIER: sapphireModifier, JADE_MODIFIER: jadeModifier, TOKEN_MODIFIER : tokenModifier} = require("@polestar/constants/shop")
+  return res.json({ bgPrices, medalPrices, sapphireModifier, jadeModifier, tokenModifier });
 });
 
 // ITEM INFO
 // - takes an ObjectID
-router.get("/:item", async (req, res) => {
+router.get("/item/:item", async (req, res) => {
   const { item } = req.params;
-
   getItemMarketDetails(item)
-    .catch((code, reason) => {
-      res.status(code).json({ reason });
+    .catch(({status,info}) => {
+      res.status(status).json({ status,info });
     })
     .then((response) => {
       res.json(response);
@@ -127,29 +55,73 @@ router.get("/:item", async (req, res) => {
       --> TO-DO: >> must check for rotation and retail prices in the future
     pollux = Bot Request Validator 
 */
+
+
+const rotationSetsCache = new Map();
+
+router.get("/bgrotation", cache(30), async (req,res)=>{
+  const ts = Number(req.query.ts) || Date.now();
+  const currentDate = new Date(ts);
+  const yearMonthFifteenWeek = currentDate.getFullYear() + currentDate.getMonth() + (( currentDate.getDate() - currentDate.getDay() ) * 15);
+  const preseed = getPreviousRotationSeed(1,ts);
+  const preseed2 = getPreviousRotationSeed(2,ts);
+  const preseed3 = getPreviousRotationSeed(3,ts);
+
+  const SEED = Number(req.query.seed) || yearMonthFifteenWeek || 1;
+  const PREV_SEED = Number(req.query.preseed) || preseed || 0;
+
+  let allBGs = shuffle( await DB.cosmetics.find(
+    {type:"background",public:"true",event:"none",buyable:true,arrival:{$exists:false}},
+    {_id:0,name:1,code:1,rarity:1}),
+  SEED);
+
+  const start = Date.now();
+  console.log({ts,PREV_SEED,preseed2,preseed3})
+  const previous_payload3 = rotationSetsCache.get(preseed3) || getFinalRotation(allBGs, preseed3);
+  const previous_payload2 = rotationSetsCache.get(preseed2) || getFinalRotation(allBGs, preseed2, previous_payload3);
+  const previous_payload = rotationSetsCache.get(PREV_SEED) || getFinalRotation(allBGs, PREV_SEED, previous_payload2);
+  
+  const payload = rotationSetsCache.get(SEED) || getFinalRotation(allBGs, SEED, previous_payload);
+  const end = Date.now();
+
+  rotationSetsCache.set(preseed3,previous_payload3);
+  rotationSetsCache.set(preseed2,previous_payload2);
+  rotationSetsCache.set(PREV_SEED,previous_payload);
+  rotationSetsCache.set(yearMonthFifteenWeek,payload);
+
+  return res.json({bench: end - start + "ms" ,payload})
+});
+
+
+
 router.post("/", async (req, res) => {
   
   const DATA = req.body;
   const PAYLOAD = req.body.pollux ? req.body.LISTING : req.body;
   
+  console.log({DATA,PAYLOAD});
 
   // VALIDATION
   if (!PAYLOAD) return res.status(400).json("No Listing Supplied");
+
   if (PAYLOAD.pollux && !PAYLOAD.author && !req.user)
     return res.status(401).json("No Author Supplied");
+    
   if (req.user) PAYLOAD.author = req.user.id;
   const userDiscordData = await userCache.get(PAYLOAD.author);
 console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
-  
+
+if (!userDiscordData) return res.status(500).json("NO DISCORD USER DATA");
+
   PAYLOAD.id = (Date.now()).toString(16).toUpperCase()+process.pid;
   PAYLOAD.timestamp = Date.now();
   
   //let {item} = (await getItemMarketDetails(PAYLOAD.item_id)); 
   const itemMarketDetails = await getItemMarketDetails(PAYLOAD.item_id).catch(e=>e); 
   let {item: ITEM,status,info} = itemMarketDetails;
-  
-  PAYLOAD.item_type = ITEM.type;
+  console.log({ITEM})
   if (!ITEM) return res.status(status).json(info);
+  PAYLOAD.item_type = ITEM.type;
 
   if (PAYLOAD.type == "sell") {
     let result = await userCanSell(
@@ -163,6 +135,7 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
 
       if (finder === {}) return res.status(400).json("Dangerous Query Result");
       await DB.users.updateOne(finder,action);
+      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? 50 : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
 
     } else {
       return res.status(result.status).json(result.reason);
@@ -178,9 +151,11 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
       await ECO.pay(
         PAYLOAD.author,
         Math.abs(PAYLOAD.price),
-        "marketplace_buy",
+        "Marketplace Listing Deposit",
         PAYLOAD.currency
       );
+      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? 50 : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
+
     } else {
       return res.status(result.status).json(result.reason);
     }
@@ -210,8 +185,11 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
 
   PAYLOAD.url = `${HOST}/shop/marketplace/entry/${PAYLOAD.id}`
 
+  console.log({PAYLOAD})
   const reputation = (await axios.get(`${HOST}/api/user/${PAYLOAD.author}/commends`).catch(e=>null))?.data || {};
+  console.log({reputation});
 
+  console.log({marketHook})
   //PLX.executeWebhook(marketHook.id,marketHook.token,{
   PLX.createMessage( marketHook.channel, {
     //auth: true,
@@ -234,17 +212,17 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
           fields: [
             {
               name: "Min",
-              value: `${ itemMarketDetails.min ||0 }`,
+              value: `${ itemMarketDetails.min || " --- "  }`,
               inline: true
             },
             {
               name: "Max",
-              value: `${ itemMarketDetails.max ||0 }`,
+              value: `${ itemMarketDetails.max || " --- "  }`,
               inline: true
             },
             {
               name: "Market Average",
-              value: `${ ~~(itemMarketDetails.average) || "??" }`,
+              value: `${ ~~(itemMarketDetails.average) || " Unique Listing " }`,
               inline: true
             },/*
             {
@@ -254,11 +232,11 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
             }*/
           ],
           footer: {
-            text: `${(itemMarketDetails.entries?.length || 0)} previous entries of this item. [ 📦 ${ 
+            text: `[ 📦 ${ 
               itemMarketDetails.entries?.filter(x=>x.type=='sell')?.length ||0
             } Selling | 🛒 ${ 
               itemMarketDetails.entries?.filter(x=>x.type=='buy')?.length ||0
-            } Buying ]`
+            } Buying ] ${(itemMarketDetails.entries?.length || 0)} previous entries of this item`
           },
           timestamp: new Date(PAYLOAD.timestamp)
         
@@ -268,8 +246,11 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
   }).then(async msg=>{
       const messageChannel = await PLX.getRESTChannel('792176688070918194');
       await DB.marketplace.updateOne({id: PAYLOAD.id},{$set:{feedMessage: [msg.channel.id,msg.id] }});
-      if (messageChannel.type !== 5 ) return;
-      await PLX.crosspostMessage(msg.channel.id,msg.id).then(console.log).catch(e=>null);
+      //if (messageChannel.type !== 5 ) return;
+      //await PLX.crosspostMessage(msg.channel.id,msg.id).then(console.log).catch(e=>null);
+  }).catch(err=>{
+    console.error(err);
+    return res.status(500).json({ status: "NOT OK", payload: {PAYLOAD,itemMarketDetails} });
   })
 
   return res.status(200).json({ status: "OK", payload: {PAYLOAD,itemMarketDetails} });
@@ -278,46 +259,20 @@ console.log({userDiscordData},PAYLOAD.author,typeof userDiscordData)
 });
 
 
-async function awardMarketplaceItem(item,userID,remove){
-  let query = {};
-  let finder = {id: userID}
-  let operation = remove ? "$pull" : "$addToSet";
 
-  switch(item.type){
-    case "background":
-      query[operation]= {'modules.bgInventory': item.code};
-      break;
-    case "medal":
-      query[operation]= {'modules.medalInventory': item.icon};
-      break;
-    case "sticker":
-      query[operation]= {'modules.stickerInventory': item.id};
-      break;
-    case "flair":
-      query[operation]= {'modules.stickerInventory': item.id};
-      break;
-    default:       
-      finder['modules.inventory.id'] = item.id;
-      query = {$inc: {'modules.inventory.$.count': (remove ? -1 : 1) } };
-  }
-  let res = await DB.users.set( finder, query ).catch(err=>null);
-  
-  if (res) return true;
-  else return false;
-}
 
 // BUY FROM ENTRY
 router.post("/buy/:entry_id", async (req,res)=>{
   const {entry_id} = req.params;
     
-  
   let CURRENT_USER;
   if(!req.user) {    
     if ( "Bot " + req.body?.token === PLX.token) CURRENT_USER = req.body.user;
     else return res.status(403).json({status: "LARIS TOKEN MISMATCH"});
   }else{CURRENT_USER = req.user}
   if (!CURRENT_USER)  return res.status(401).json({status: "CURRENT_USER MISSING"});
-
+  
+  console.log({CURRENT_USER})
 
   let entry = await DB.marketplace.findOne({ id: entry_id }).noCache().lean();
 
@@ -326,28 +281,33 @@ router.post("/buy/:entry_id", async (req,res)=>{
   if(entry.completed) return res.status(410).json({status: "LISTING HAS BEEN TERMINATED"});
   if(entry.lock) return res.status(409).json({status: "ENTRY IS LOCKED"});
 
-  //if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
+  if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
   if(entry.type !== 'sell') return res.status(403).json({status: "ITEM FOR SALE-ONLY"});
 
   let {item} = (await getItemMarketDetails(entry.item_id)); 
   let canBuy = await userCanBuy(CURRENT_USER.id,entry.currency,entry.price,item);
   
-  if(!canBuy.res) return res.status(canBuy.status).json({canBuy,item});
+  if(!canBuy.res) {
+    await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
+    return res.status(canBuy.status).json(canBuy);
+  }
 
   await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: true}});
   let sale = await awardMarketplaceItem(item,CURRENT_USER.id,false);
   
   if(sale) {
-    ECO.transfer(CURRENT_USER.id,entry.author,entry.price,'MARKETPLACE [BUY/SOLD]',entry.currency)
+    ECO.transfer(CURRENT_USER.id,entry.author,entry.price,'MARKETPLACE [PURCHASE]',entry.currency)
     .then(async receipt=>{
+      await ECO.pay(entry.author, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", entry.currency);
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       if(entry.feedMessage){
         await processFeedMessage(entry, item, CURRENT_USER);
       }
-      return res.status(200).json({status:'OK',receipt})
+      return res.status(200).json({status:'OK',receipt});
     }).catch(async err=>{
       await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
-      return res.status(500).json({status:'ERROR DURING PAYMENT PHASE'})
+      console.error(err)
+      return res.status(500).json({status: err.message })
     });
   }else{
     await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
@@ -376,7 +336,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
   if(entry.lock) return res.status(409).json({status: "ENTRY IS LOCKED"});
   
   if(entry.type )
-  //if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
+  if(entry.author === CURRENT_USER.id) return  res.status(403).json({status: "CANT BUY FROM SELF"});
   if(entry.type !== 'buy') return res.status(403).json({status: "ITEM FOR PURCHASE-ONLY"});
 
 
@@ -389,16 +349,17 @@ router.post("/sell/:entry_id", async (req,res)=>{
 
   let canSell = await userCanSell(CURRENT_USER.id,entry.currency,item,true);
   
-  
+  console.log({canSell})
 
-  if(!canSell.res) return res.status(canSell.status).json({canSell,item});
+  if(!canSell.res) return res.status(canSell.status).json(canSell);
   await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: true}});
   
   let sale = await awardMarketplaceItem(item,CURRENT_USER.id,true);
 
   if(sale) {
-    ECO.arbitraryAudit(entry.author, CURRENT_USER.id, entry.price, 'MARKETPLACE [SELL/BOUGHT]', entry.currency)
+    ECO.arbitraryAudit(entry.author, CURRENT_USER.id, entry.price, 'MARKETPLACE [SALE]', entry.currency)
     .then(async receipt=>{
+      await ECO.pay(CURRENT_USER.id, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", entry.currency);
       await DB.users.set(CURRENT_USER.id, {$inc: {["modules." + entry.currency]:entry.price} });
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       
@@ -412,7 +373,8 @@ router.post("/sell/:entry_id", async (req,res)=>{
     }).catch(async err=>{
       console.error(err)
       await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
-     return res.status(500).json({status:'ERROR DURING PAYMENT PHASE'})
+      console.error(err)
+     return res.status(500).json({status: err.message})
     });
   }else{
     await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: false}});
@@ -426,6 +388,7 @@ router.delete("/:entry_id", async (req,res)=>{
   const {entry_id} = req.params;
 
   let entry = await DB.marketplace.findOne({ id: entry_id }).lean();
+  console.log({entry_id})
   if(!entry) return res.status(404).json({status: "ENTRY NOT FOUND"});
   if(entry.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
@@ -444,18 +407,165 @@ router.patch("/:entry", async (req,res)=>{
   const {price} = req.body;
   if(!entry || !price) return res.status(404).json({status: "ENTRY/PRICE NOT SPECIFIED"});
 
-  let item = await DB.marketplace.findOne({ id: entry }).lean();
-  if(!item) res.status(404).json({status: "ENTRY NOT FOUND"});
-  if(item.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
+  let originalEntry = await DB.marketplace.findOne({ id: entry }).lean();
+  if(!originalEntry) res.status(404).json({status: "ENTRY NOT FOUND"});
+  if(originalEntry.author !== req.user.id) return  res.status(403).json({status: "NOT ALLOWED"});
 
-  DB.marketplace.updateOne({ id: entry } , {$set: {price} }).lean().then((r) => {
-    if(r.nModified) res.status(200).json({updated: r.nModified, status: "OK"});
+  DB.marketplace.updateOne({ id: entry } , {$set: {price} }).lean().then(async (r) => {
+    if(r.nModified) {
+      
+      await updateFeedMessage(originalEntry,price);
+      
+      return res.status(200).json({updated: r.nModified, status: "OK"})
+    }
     else res.status(410).json({status: "Nothing to update"});
   }).catch(err=>{
     console.error(err);
     res.status(500).json({status: "ERROR"});
   })
 })
+
+
+router.get(["/","/:entry"],  async (req, res) => {
+  console.log('["/","/:entry"],')
+  let queries = {};
+  if (req.params.entry) req.query.id = req.params.entry;
+  Object.keys(req.query)
+    .filter((qry) =>
+      ["id", "item_id", "item_type", "author", "type", "price"].includes(qry)
+    )
+    .forEach((ky) => {
+      queries[ky] = req.query[ky];
+    });
+
+  if (req.query.after) {
+    queries.timestamp = {
+      $gte: Number(req.query.after) || Date.now() - 86400000,
+    };
+  }
+  if (req.query.before) {
+    queries.timestamp = { $lte: Number(req.query.before) || Date.now() };
+  }
+
+  let lim = Math.min(Number(req.query.limit) || 25, 100);
+  let skip = Number(req.query.skip) || (Number(req.query.page) * 25) || 0;
+  let sort = req.query.sort == "oldest" ? 1 : -1;
+
+  DB.marketplace
+    .find(queries, { __v: 0 })
+    .sort({ timestamp: sort })
+    .limit(lim)
+    .skip(skip)
+    .then(async (result) => {
+      console.log({result})
+      let [marketeers, cosmetics, goods] = await Promise.all([
+        /*DB.users
+          .find(
+            { id: { $in: result.map((i) => i.author) } },
+            { meta: 1, id: 1 }
+          ).lean()
+          .catch((e) => []),*/
+        Promise.all(result.map(async (i) => await userCache.get(i.author)  ) ),
+        DB.cosmetics
+          .find({ _id: { $in: result.map((i) => i.item_id).filter(x=> parseInt(x) && x.length == 24) } }).lean()
+          .catch((e) => []),
+        DB.items
+          .find({ _id: { $in: result.map((i) => i.item_id).filter(x=> parseInt(x) && x.length == 24) } }).lean()
+          .catch((e) =>  console.error(e) ),
+      ]).catch((err) => {
+        console.error(result.map((i) => i.item_id));
+        res.status(500).send("ERROR");
+      });
+
+      let newThing = result.map((entry) => {
+        return Object.assign(
+          {
+            itemdata: cosmetics
+              .concat(goods)
+              .find((i) => i._id == entry.item_id),
+          },
+          { userdata: marketeers.find((u) => u.id === entry.author) },
+          entry._doc
+        );
+      });
+
+      res.json(newThing);
+    })
+    .catch((e) => {
+      console.error(e);
+      res.status(500).send("What the fuck are you trying?");
+    });
+});
+
+
+//SECTION FUNCTIONS
+
+function getPreviousRotationSeed( STEPS = 1, date = Date.now() ){
+  const currentDate = new Date(date);
+  console.log({date,currentDate,STEPS})
+  return currentDate.getFullYear() + currentDate.getMonth() + (( currentDate.getDate() - currentDate.getDay() - (6*STEPS) ) * 15);
+}
+function getFinalRotation(allBGs, SEED, previous) {
+  let everyBG = [].concat(allBGs)
+  if (previous) everyBG = everyBG.filter(x=> !previous.find(y=> y.code === x.code));
+  const allBGs1 = everyBG.slice(0, ~~(everyBG.length / 2));
+  const allBGs2 = everyBG.slice(~~(everyBG.length / 2) + 1);
+
+  everyBG = shuffle([
+    shuffle(shuffle(allBGs1.reverse(), SEED).reverse(), SEED).reverse(),
+    shuffle(shuffle(allBGs2.reverse(), SEED).reverse(), SEED).reverse()
+  ].flat(), SEED);
+
+  const rarMap = {};
+  let payload = [];
+  for (rar of ["C", "U", "R", "SR", "UR"])
+    rarMap[rar] = shuffle(shuffle(everyBG.reverse(), SEED).filter(bg => !!bg && bg.rarity === rar), SEED);
+  //[9,6,4,3,2].forEach((q,i)=>{
+  [8, 6, 4, 4, 4].forEach((q, i) => {
+    payload.push(shuffle(Object.values(rarMap)[i], SEED).filter(x => !!x).slice(0, q));
+  });
+
+  payload = payload.flat().map(x => { x.items = undefined; return x; });
+  return payload;
+}
+
+async function awardMarketplaceItem(item,userID,remove){
+  let query = {};
+  let errorQuery = {};
+  let finder = {id: userID}
+  let operation = remove ? "$pull" : "$addToSet";
+
+  switch(item.type){
+    case "background":
+      query[operation]= {'modules.bgInventory': item.code};
+      break;
+    case "medal":
+      query[operation]= {'modules.medalInventory': item.icon};
+      break;
+    case "sticker":
+      query[operation]= {'modules.stickerInventory': item.id};
+      break;
+    case "flair":
+      query[operation]= {'modules.stickerInventory': item.id};
+      break;
+    default:       
+      finder['modules.inventory.id'] = item.id;
+      query = {$inc: {'modules.inventory.$.count': (remove ? -1 : 1) } };
+      errorQuery = {$push: {'modules.inventory': {id: item.id, count: 1} } };
+  }
+  
+  let res = await DB.users.set( finder, query ).catch(err=> {      
+      if (errorQuery) {
+        delete finder['modules.inventory.id'];
+        console.log({finder,errorQuery})
+        return DB.users.set( finder, errorQuery ).catch(err2=>console.error(err2) && null);
+      }
+      console.error(err) && null;
+  });
+  
+  if (res) return true;
+  else return false;
+}
 
 async function processFeedMessage(entry, item, CURRENT_USER) {
   let entryOwner = await userCache.get(entry.author);
@@ -465,6 +575,28 @@ async function processFeedMessage(entry, item, CURRENT_USER) {
       description: `${_emoji(item.rarity)} **${item.name}** has been ${entry.type == 'sell' ? "sold to" : "bought by"} [${CURRENT_USER.username}#${CURRENT_USER.discriminator}](${HOST}/profile/${CURRENT_USER.id}) for ${_emoji(entry.currency)}**${entry.price}**`
     }
   });
+}
+async function updateFeedMessage(oldEntry, newPrice) {
+
+  if (!oldEntry.feedMessage) return;
+  console.log(oldEntry.feedMessage)
+  console.log(PLX.requestHandler.ratelimits['/channels/792176688070918194/messages/:id'])
+  console.log( require('eris').VERSION )
+  //FIXME replace with eris handler
+  let message = (await axios.get("https://discord.com/api/v8/channels/"+oldEntry.feedMessage[0]+"/messages/"+oldEntry.feedMessage[1],{headers:{"Authorization": PLX._token}})).data
+  //let message = await PLX.getMessage(...oldEntry.feedMessage).timeout(5000);
+  console.log(3)
+  let   embed   = message.embeds[0];
+  embed.description = embed.description.replace(`**${oldEntry.price}**`,`**${newPrice}**`);
+  embed.timestamp = new Date();
+  console.log(4)
+  await wait(4);
+  //await PLX.editMessage(...oldEntry.feedMessage, { content: message.content, embed });
+  (await axios.patch("https://discord.com/api/v8/channels/"+oldEntry.feedMessage[0]+"/messages/"+oldEntry.feedMessage[1],{ content: message.content, embed },{headers:{"Authorization": PLX._token} } )).data
+  console.log(45)
+  await wait(4);
+  //let channelInfo = await PLX.getRESTChannel(oldEntry.feedMessage[0]);
+  PLX.createMessage(marketHook.channel, {embed:{color: embed.color, description: `⬆️ **[\`${oldEntry.id}\`](https://discord.com/channels/${marketHook.guild}/${marketHook.channel}/${message.id})** has been **edited**. New price: ${_emoji(oldEntry.currency)}**${newPrice}** *(was ${oldEntry.price})*` }} )
 }
 
 function destroyEntry(entry) {
@@ -487,6 +619,7 @@ function destroyEntry(entry) {
 }
 
 function getItemMarketDetails(item) {
+
   return new Promise(async (resolve, reject) => {
     const [cos, itm] = await Promise.all([
       DB.cosmetics.find({ _id: item }).lean().exec(),
@@ -502,7 +635,7 @@ function getItemMarketDetails(item) {
         return reject({status:400, info: "Bad Request"});
       });
     });
-
+    console.log({cos,itm})
     const result = cos.concat(itm)[0];
     if (!result) return reject({status:404, info: "item not found"});
     const marketplace = await DB.marketplace
@@ -514,14 +647,16 @@ function getItemMarketDetails(item) {
       (x) => (x.currency === "SPH" ? 1000 : 1) * x.price
     );
 
+
     const response = {
       item: result,
-      max: Math.max(...marketplacePriceMap),
-      min: Math.min(...marketplacePriceMap),
+      max: Math.max(...marketplacePriceMap,0),
+      min: Math.min(...marketplacePriceMap,0),
       average:
         marketplacePriceMap.reduce((a, b) => a + b, 0) / marketplace.length,
       entries: marketplace,
     };
+
     return resolve(response);
   });
 }
@@ -534,12 +669,8 @@ function itemInInventory(item, userData) {
   let query = {};
   let prequery;
 
-
-  if (item.type === "boosterpack")
-    item_shallow_id = item_shallow_id + "_booster";
-
   if (["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)){
-    if (userData.amtItem(item.id) == 0 ) {
+    if ( userData.modules.inventory.find(it=>it.id === item.id)?.count < 1 ) {
       res = false;
       reason = "ITEM NOT IN INVENTORY";
       status = 404;
@@ -597,24 +728,25 @@ function itemInInventory(item, userData) {
 }
 // might need refactor
 async function userCanSell(id, currency, item, softCheck=false) {
-  if (!(await DB.users.get(id)))
-    return { res: false, reason: "USER NOT FOUND", status: 401 };
-  if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 300, currency)))
-    return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
 
   const userData = await DB.users.findOne({id}).noCache();
 
-  // Check item in inventory.
-  // Positive if
-  //  • item is in inventory
+  if (!softCheck){
+    if (!(await DB.users.get(id)))
+      return { res: false, reason: "USER NOT FOUND", status: 401 };
 
-  let { res, reason, status, prequery, query } = itemInInventory(item, userData);
- 
-  if (!softCheck && userData.amtItem("sph-license") < 1 && currency === "SPH") {
-    res = false;
-    reason = "NO SAPPHIRE LICENSE";
-    status = 401;
+    if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 50, currency)))
+      return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
+    if (userData.amtItem("sph-license") < 1 && currency === "SPH") {
+      res = false;
+      reason = "NO SAPPHIRE LICENSE";
+      status = 401;
+    }
   }
+
+ 
+
+  let { res, reason, status, prequery, query } = await itemInInventory(item, userData);
 
   if( !isTradeable(item) ){
     res = false;
@@ -660,3 +792,5 @@ function isTradeable(item){
 
 
 module.exports = router;
+
+ 

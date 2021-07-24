@@ -81,36 +81,35 @@ router.get('/:serverID', async function (req,res) {
 //SECTION POST
 
 router.post('/:serverID/save', async function(req,res){
-    console.log({req})
     let payload = req.body.data || req.body;
     
     const SVID = req.params.serverID;
     const serverInfo = await PLX.getRESTGuild(SVID);
     const [svData,userData]= await Promise.all([(await  DB.servers.get(SVID)), (await DB.users.get(serverInfo.ownerID))]);
 
-if(!payload.first && svData && payload && (!req.body.noDM && userData?.switches?.notifications?.ownerNotif === true)){
+    if(!payload.first && svData && payload && (!req.body.noDM && userData?.switches?.notifications?.ownerNotif === true)){
 
-    let diff=""
-    if( svData.modules.MODROLE !== payload.modrole) diff +=      `\nModeration Role   : ${payload.modrole }`;
-if( svData.progression?.upfactorA !== payload.upfactorA) diff += `\nProgression Fact-A : ${payload.upfactorA }`;
-if( svData.progression?.upfactorB !== payload.upfactorB) diff += `\nProgression Fact-B : ${payload.upfactorB }`;
-    if( svData.modules.MUTEROLE !== payload.muterole) diff +=    `\nMute Role         : ${payload.muterole }`;
-    if( svData.modules.DROPS !== payload.drops) diff +=          `\nBox Drops         : ${payload.drops ? "✅" : "❌️"  }`;
-    if( svData.modules.LVUP !== payload.lvup_glb) diff +=        `\nLevel Up Messages : ${payload.lvup_glb ? "✅" : "❌️"  }`;
-    if( svData.modules.LVUP_local !== payload.lvup_loc) diff +=  `\nLocal LevelUps    : ${payload.lvup_loc ? "✅" : "❌️"  }`;
-    if( svData.modules.LVUP_mess !== payload.l_mess) diff +=     `\nLevelUp Message   : ${payload.l_mess }`;
-    if( svData.modules.autoRoleStack !== payload.rolestack)diff+=`\nStack Level Roles : ${payload.rolestack ? "✅" : "❌️"  }`;
-    if( svData.modules.PREFIX !== payload.prefix) diff +=        `\nBot Prefix        : ${payload.prefix }`;
-    if( svData.modules.GREET.channel !== payload.w_chan) diff += `\nWelcome Channel   : ${payload.w_chan }`;
-    if( svData.modules.FWELL.channel !== payload.b_chan) diff += `\nGoodbye Channel   : ${payload.w_chan }`;
-    if( svData.modules.GREET.enabled !== payload.w_togg) diff += `\nWelcome Enabled   : ${payload.w_togg ? "✅" : "❌️"  }`;
-    if( svData.modules.FWELL.enabled !== payload.b_togg) diff += `\nGoodbye Enabled   : ${payload.w_togg ? "✅" : "❌️"  }`;
-    if( svData.respondDisabled !== payload.res_disa) diff +=     `\Disabled Response  : ${payload.res_disa ? "✅" : "❌️"  }`;
-    if( svData.modules.GREET.timer !== (payload.w_timeout || null)) diff +=`\nWelcome Timer     : ${payload.w_timeout || "//-NO TIMEOUT-"}`;
-    if( svData.modules.FWELL.timer !== (payload.b_timeout || null)) diff +=`\nGoodbye Timer     : ${payload.w_timeout || "//-NO TIMEOUT-"}`;
-    if( svData.modules.GREET.text !== payload.w_mess )   diff += `\nWelcome Text:     : ${payload.w_mess.slice(0,30) } `;
-    if( svData.modules.FWELL.text !== payload.b_mess) diff +=    `\nGoodbye Text:     : ${payload.b_mess.slice(0,30) } `;
-        PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
+        let diff=""
+        if( svData.modules.MODROLE !== payload.modrole) diff +=      `\nModeration Role   : ${payload.modrole }`;
+        if( svData.progression?.upfactorA !== payload.upfactorA) diff += `\nProgression Fact-A : ${payload.upfactorA }`;
+        if( svData.progression?.upfactorB !== payload.upfactorB) diff += `\nProgression Fact-B : ${payload.upfactorB }`;
+        if( svData.modules.MUTEROLE !== payload.muterole) diff +=    `\nMute Role         : ${payload.muterole }`;
+        if( svData.modules.DROPS !== payload.drops) diff +=          `\nBox Drops         : ${payload.drops ? "✅" : "❌️"  }`;
+        if( svData.modules.LVUP !== payload.lvup_glb) diff +=        `\nLevel Up Messages : ${payload.lvup_glb ? "✅" : "❌️"  }`;
+        if( svData.modules.LVUP_local !== payload.lvup_loc) diff +=  `\nLocal LevelUps    : ${payload.lvup_loc ? "✅" : "❌️"  }`;
+        if( svData.modules.LVUP_mess !== payload.l_mess) diff +=     `\nLevelUp Message   : ${payload.l_mess }`;
+        if( svData.modules.autoRoleStack !== payload.rolestack)diff+=`\nStack Level Roles : ${payload.rolestack ? "✅" : "❌️"  }`;
+        if( svData.modules.PREFIX !== payload.prefix) diff +=        `\nBot Prefix        : ${payload.prefix }`;
+        if( svData.modules.GREET.channel !== payload.w_chan) diff += `\nWelcome Channel   : ${payload.w_chan }`;
+        if( svData.modules.FWELL.channel !== payload.b_chan) diff += `\nGoodbye Channel   : ${payload.w_chan }`;
+        if( svData.modules.GREET.enabled !== payload.w_togg) diff += `\nWelcome Enabled   : ${payload.w_togg ? "✅" : "❌️"  }`;
+        if( svData.modules.FWELL.enabled !== payload.b_togg) diff += `\nGoodbye Enabled   : ${payload.w_togg ? "✅" : "❌️"  }`;
+        if( svData.respondDisabled !== payload.res_disa) diff +=     `\Disabled Response  : ${payload.res_disa ? "✅" : "❌️"  }`;
+        if( svData.modules.GREET.timer !== (payload.w_timeout || null)) diff +=`\nWelcome Timer     : ${payload.w_timeout || "//-NO TIMEOUT-"}`;
+        if( svData.modules.FWELL.timer !== (payload.b_timeout || null)) diff +=`\nGoodbye Timer     : ${payload.w_timeout || "//-NO TIMEOUT-"}`;
+        if( svData.modules.GREET.text !== payload.w_mess )   diff += `\nWelcome Text:     : ${payload.w_mess.slice(0,30) } `;
+        if( svData.modules.FWELL.text !== payload.b_mess) diff +=    `\nGoodbye Text:     : ${payload.b_mess.slice(0,30) } `;
+            PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
 embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 Changes:
 \`\`\`${diff.length > 1?"js":""}${diff}
@@ -146,12 +145,13 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
         setPayload['modules.LANGUAGE']= payload.language || 'en'
     }    
     await DB.servers.set(SVID,{        $set:  setPayload      });
-    await updateGlobalInstances({id:SVID});
+    await updateGlobalInstances({id:SVID}).timeout(1500).catch(err=>null);
 
     try{
         console.log(req.handled,"handled")
         return res.sendStatus(200);
     }catch(err){
+        return res.sendStatus(500);
         console.error(err)
     }
     

@@ -10,6 +10,8 @@ const readdirAsync = Promise.promisify(require("fs").readdir);
 
 
 router.get("/test", (rq,rs) => {
+  
+  RegisterAllCommands();
     console.log("test OK")
     return rs.json("OK");
 } )
@@ -31,7 +33,7 @@ router.post(["/test","/test2"],(rq,rs) => {
 
 
 router.post("/", async (req, res) => {
-  RegisterAllCommands()
+  //RegisterAllCommands()
 
   const signature = req.get("X-Signature-Ed25519");
   const timestamp = req.get("X-Signature-Timestamp");
@@ -45,14 +47,28 @@ router.post("/", async (req, res) => {
     return res.status(401).end("invalid request signature");
   }
 
+  if(req.body?.data?.component_type == 2 ){
+    console.log(req.body.data,'body-data')
+    if(req.body.data.custom_id == 'test'){
+      PLX.createMessage("834570253253869599","Pls stop")
+    }
+    if(req.body.data.custom_id == 'test2'){
+      PLX.createMessage("834570253253869599","uwu")
+    }
+    console.log('will return 200')
+    return res.status(200).json({type: 6 });
+  }
+
   if (req.body.type === 1) {
     return res.json({ type: 1 });
   } else {
 
-    console.log((require('util')).inspect(req.body.data,{colors:true,depth:8}))
+    console.log((require('util')).inspect(req.body.data,{colors:true,depth:8}),'inspect'.yellow)
+
 
     let command = require( `./${req.body.data.name}.js` );
-    if(!command) return res.status(400).json("Nope");
+
+    if(!command) return res.status(200).json("Nope");
     else res.json( await command.exec(req, req.body) );
   }
 });
@@ -82,7 +98,8 @@ function RegisterAllCommands(){
 
 function RegisterCommand(cmd){
   if ( !cmd.name && !cmd.description) return null;
-  return axios.post(`https://discord.com/api/v8/applications/${cfg.clientID_laris + ( (cmd.beta??true) ?'/guilds/789382326680551455':'') }/commands` ,
+  console.log(cmd.beta)
+  return axios.post(`https://discord.com/api/v9/applications/${PLX.id + ( (cmd.beta ?? true) ? '/guilds/277391723322408960':'') }/commands` ,
   {
     name:    cmd.name,
     //type: cmd.type || 4,
@@ -90,9 +107,10 @@ function RegisterCommand(cmd){
     options: cmd.options,
     choices: cmd.choices,
   },
-  {headers: { Authorization: PLX.token }})
+  {headers: { Authorization: PLX._token }})
 } 
 
 
 module.exports = router;
-RegisterAllCommands();
+
+//RegisterAllCommands();

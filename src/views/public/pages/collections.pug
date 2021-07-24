@@ -1,0 +1,54 @@
+#cols
+    ul(plx-accordion='collapsible: true')
+        li
+            a.plx-container(href="#").plx-accordion-title
+                h2.plx-title Backgrounds
+                h4.subtitle {{backgrounds.length || 1}}/{{backgroundsSize}}
+                
+            .plx-uncontainer.plx-accordion-content
+                ul: li.bg-info(v-for="bg in backgrounds", v-if="!!bg.code")
+                    .preview
+                        img(:src="`/backdrops/${bg.code}.png`")                        
+                    .plx-rarity-icon(:class="bg.rarity")
+                    b {{bg.name}}
+                    span.plx-margin-left.id ID 
+                        code {{bg.code}}
+                    span.event-tag(v-if="bg.event && bg.event != 'none'") {{bg.event}}
+
+
+        li
+            a.plx-container(href="#").plx-accordion-title
+                h2.plx-title Medals
+                h4.subtitle {{medals.length || 0}}/{{medalsSize}}
+                
+            .plx-uncontainer.plx-accordion-content
+                ul: li.md-info(v-for="medal in medals" v-if="medal && medal.name!='Unknown'")
+                    .preview
+                        img(:src="`/medals/${medal.icon}.png`")
+                    .plx-rarity-icon(:class="medal.rarity")
+                    b {{medal.name}}
+                    span.plx-margin-left.id ID 
+                        code {{medal.icon}}
+                    span.event-tag(v-if="medal.event && medal.event != 'none'") {{medal.event}}
+
+
+        li
+            a.plx-container(href="#").plx-accordion-title
+                h2.plx-title Stickers
+                h4.subtitle {{stickers.length || 0}}/{{stickersSize}}
+                
+            .plx-uncontainer.plx-accordion-content
+                ul: li.st-info(v-for="sticker in stickers")
+                    .preview
+                        img(:src="`/stickers/${sticker.id}.png`")
+                    .plx-rarity-icon(:class="sticker.rarity")
+                    b {{sticker.name}} 
+                    span
+                        .plx-rarity-icon(:class="(sticker.packData||{}).rarity" style="transform: scale(.7);")
+                        span(style=" opacity: .7") {{(sticker.packData||{}).name}}
+                    span.plx-margin-left.id ID 
+                        code {{sticker.id}}
+                    span.event-tag(v-if="sticker.event && sticker.event != 'none'") {{sticker.event}}
+
+
+

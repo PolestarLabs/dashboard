@@ -98,7 +98,7 @@ display: block;
   background-color: #24242A;
   border-color: #2b2b30;
   color: #dbdbdb;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   justify-content: center;
   padding-left: 0.75em;
   padding-right: 0.75em;
@@ -316,7 +316,7 @@ top:0;
   display: flex; }
 
 .navbar-burger {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: block;
   height: 3.25rem;
   position: relative;

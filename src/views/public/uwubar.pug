@@ -25,17 +25,17 @@
                 .badge
             .tagline {{wifeData.tagline}}
             .ringsbar.plx-flex.plx-flex-between
-                -rings = [0,0,0,0,0,0,0,0,0,0,0]
-                each ring in rings.slice(0,6)
-                    .ring
-                        img(  :src="`/build/items/ring_${wifeData.ring}.png`" width=24 )
+                //-rings = [0,0,0,0,0,0,0,0,0,0,0]
+                .ring(v-for="ring in wifeData.ringCollection||[]")
+                    img(  :src="`/build/items/ring_${ring}.png`"  width=24 )
                 .plus
-                    span= rings.length>6 ? rings.length - 6 :""
+                    span
+                        | {{(wifeData.ringCollection||[1]).length>6 ? (wifeData.ringCollection||[1]).length - 6 :""}}
 
     .uwu-status.plx-flex.plx-flex-between(v-if="!relationships.loading && wifeData.id")
         .info
             .since.moment {{ wifeData.since[0] }} ({{ wifeData.since[1] }})
-            .tier-name Tier Name Here
+            .tier-name ---
             .lvp {{wifeData.lovepoints}} LVP
         .ring
             img(  :src="`/build/items/ring_${wifeData.ring}.png`" width=64 )

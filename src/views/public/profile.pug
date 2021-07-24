@@ -18,7 +18,7 @@ mixin progressBar(val,max,label,format)
       | %
 
 block head
-  script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
+  script(src=INSTANCE_VUE_PATH)
   script(  src="https://unpkg.com/animated-number-vue@1.0.0/dist/AnimatedNumber.umd.min.js") 
   script( async custom-element="amp-ad" src="https://cdn.ampproject.org/v0/amp-ad-0.1.js")
   script( data-ad-client="ca-pub-6458250766331979" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" )
@@ -36,7 +36,7 @@ block content
 
  
   style :root{--favcolor-not-so-dim: #{FAVCOLOR}77; --favcolor-dim: #{FAVCOLOR}15; --favcolor: #{FAVCOLOR}} .favc-color{color: #{FAVCOLOR}}
-  style .has-user-bg{ background-image:url('/backdrops/#{userprofile.modules.bgID}.png')}
+  style .has-user-bg{ background-image:url('/backdrops/#{ userprofile.modules.bgID }.png')}
  
   .plx-animation-kenburns.background-container.has-user-bg
 
@@ -59,14 +59,13 @@ block content
           .plx-itmcard:hover .img-nsfw {
               transition-delay: 1s;
               cursor: url(/cur/pointer.png), pointer;
-          
           }
 
   
   #profile
     .profile-header.plx-flex.plx-flex-between.plx-relative
       .profile-header-container
-        .userblock.large(plx-sticky='top:200; animation: plx-animation-slide-top; offset: 50' plx-parallax="x:-200;easing:1;media:@m")
+        .userblock.large(plx-sticky='top:200; animation: plx-animation-slide-top; offset: 50' plx-parallax="x:-200;;easing:1;media:@m")
           .avatar(plx-parallax="stroke: 45")
           
             img.hexagon(src=userprofile.meta.avatar width="150px")
@@ -96,7 +95,8 @@ block content
 
         .numbersblock.plx-flex
           .rep(plx-parallax="y:200")
-            .number= miliarize(userprofile.modules.rep)
+            //= miliarize(userprofile.modules.rep)
+            .number {{commendInfo.totalIn}} 
             .sub Reputation
           .level(plx-parallax="y:150")
             .number= miliarize(userprofile.modules.level)
@@ -104,11 +104,11 @@ block content
           
 
       .header-background(plx-parallax='blur:15;media:@m; ')
-        .bg-banner( plx-parallax="bgy: 200;bgx:00; " ).has-user-bg.plx-animation-kenburns
+        .bg-banner( plx-parallax="bgy: 200; opacity:0; bgx:00; " ).has-user-bg.plx-animation-kenburns
         .favcol-grad
 
     .profile-container.plx-flex.plx-flex-between.plx-flex-wrap.plx-relative
-      .bg-container.has-user-bg(plx-parallax="opacity:0,.01,.2; blur:50px,50px,15px;viewport:.1; media: @m")
+      .bg-container.has-user-bg(plx-parallax="opacity:0; blur:50px,50px,15px;viewport:.1; media: @m")
       .profile-contents.plx-width-1-1(class="plx-width-3-4@m")
         .profile-sticky
           .wealth.plx-flex.plx-flex-around
@@ -117,13 +117,16 @@ block content
                   span= miliarize(userprofile.modules.RBN) || 0
               .sapphires
                   span.plx-sapphire.icon64.curr_icon_3
-                  span= miliarize(userprofile.modules.RBN) || 0
+                  span= miliarize(userprofile.modules.SPH) || 0
               .jades
                   span.plx-jade.icon64.curr_icon_3
-                  span= miliarize(userprofile.modules.RBN) || 0
+                  span= miliarize(userprofile.modules.JDE) || 0
+              .prism
+                  span.plx-prism.icon64.curr_icon_3
+                  span= miliarize(userprofile.modules.PSM) || 0
               .tokens
                   span.plx-token.icon64.curr_icon_3
-                  span= miliarize(userprofile.eventGoodie) || 0
+                  span= miliarize(userprofile.modules.EVT) || 0
 
           .column1.plx-width-1(class="plx-width-2-3@m")
              
@@ -134,7 +137,7 @@ block content
                   .about.plx-flex.plx-flex-column
                       .text= userprofile.modules.persotext
                       .signature= userprofile.meta.username
-            .profile-box
+            .profile-box.plx-relative
               
               
         ul.profile-nav.plx-subnav(plx-switcher="connect: .profile-tab-content; animation: plx-animation-slide-right-small, plx-animation-slide-right-small; active: 0")
@@ -147,10 +150,11 @@ block content
           li#overview
             include pages/overview
           li#commends
-            include profile_pieces/commend
+            include pages/commend
           li#achievements
+            h2 Coming Soon
           li#collections
-          
+            include pages/collections          
           li#gallery
             include pages/gallery
             
@@ -185,3 +189,4 @@ block scripts
     script(src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js")
     script
         include profile.js
+        include pages/cols.js

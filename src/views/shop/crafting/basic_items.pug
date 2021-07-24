@@ -1,3 +1,5 @@
+link(rel="stylesheet" href="/css/basic_items.css")
+
 mixin itemCard(itm,nested,mini)
   .item-card.plus.plx-position-relative(:id=itm+".id")    
     .top-line.plx-flex
@@ -48,8 +50,7 @@ mixin itemCard(itm,nested,mini)
     if !mini
       .card-footer
         span {{#{itm}.description}}
-style
-    include basic_items.css 
+ 
 
 #items-craft.disabled
 

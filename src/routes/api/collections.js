@@ -44,38 +44,53 @@ function itemsMatch(pot,recipe){
 
 
 router.get('/:endpoint', cache(0.1),  (req,res) => {
-
     let queries = {}
     //queries.crafted = true;
     //queries.display = true;
-
+    
     if(req.params.endpoint == 'search'){
+        if (process.env.NODE_ENV!=="production") res.startTime('search',"Search");
         Object.keys(req.query)
-            .filter(qry => ['_id','id','rarity','code','type'].includes(qry) )
+            .filter(qry => ['_id','id','rarity','code','type','crafted','open'].includes(qry) )
             .forEach(ky=> {
                     queries[ky] = req.query[ky]
                 })
         
         let sort = {_id:-1}
-        queries.display = true;
-        queries.crafted = !!req.query.craftables;
+        if(!req.query.all){
+            queries.display = true;
+            queries.crafted = !!req.query.craftables;
+        }
+        if (process.env.NODE_ENV!=="production") res.startTime('dbfsearchcol',"Database search collections");
         DB.items.find(queries,{emoji:0,usefile:0,altEmoji:0})
         .skip(parseInt(req.query.skip)||0)
         .limit( parseInt(req.query.lim)||50)
         .sort(sort).lean()
         .then(async result=>{
+            if (process.env.NODE_ENV!=="production") res.endTime('dbfsearchcol');
             if(result){
-                //let x = await Promise.all(result.map(res=> res.type == 'boosterpack' ? stickerCount(res) : null ));
+               // let x = 
             }
+            if (process.env.NODE_ENV!=="production") res.startTime('dbfsearchcol2',"Organise data");
             result.forEach(x=>{               
-                let timestamp = x._id.toString().substring(0,8)
-                x.release = parseInt( timestamp, 16 ) * 1000 
-                x.description = ( $t(["items:"+x.id+".description", ""]) )
-            })
+                let timestamp = x._id.toString().substring(0,8);
+                x.release = parseInt( timestamp, 16 ) * 1000 ;
+                x.description = ( $t(["items:"+x.id+".description", ""]) );
+            });
+            await Promise.all(result.map(res=> res.type == 'boosterpack' ? stickerCount(res) : null ));
+            if (process.env.NODE_ENV!=="production") res.endTime('dbfsearchcol2');
             res.json(result)
         })
     }else{
+        if (process.env.NODE_ENV!=="production") res.startTime('dbfsearchcol3',"Database search collections -- escaped");
         DB.items.findOne({id:req.params.endpoint,}, // crafted: !0, display: !0},
+            { _id: 0, __v:0,emoji:0,}).lean().then(result=>{
+            res.json(result)
+        })
+    }
+
+    if(req.params.endpoint == 'all'){
+        DB.items.find({ }, // crafted: !0, display: !0},
             { _id: 0, __v:0,emoji:0,}).lean().then(result=>{
             res.json(result)
         })
@@ -85,11 +100,11 @@ router.get('/:endpoint', cache(0.1),  (req,res) => {
  
 
 async function stickerCount(pack){
-    packdatafind = pack.materials.map(x=>x.id||x);
-    console.log(packdatafind)
+    //packdatafind = pack.materials.map(x=>x.id||x);
+    //console.log(packdatafind)
     let [pdata,mdata] = await Promise.all([
         DB.cosmetics.find({series_id:pack.icon},{name:1,id:1,rarity:1}).lean(),
-        DB.items.find({id: {$in:pack.materials.map(x=>x.id||x) } },{name:1,id:1,rarity:1}).lean()
+        DB.items.find({id: {$in:pack?.materials?.map(x=>x.id||x)||[] } },{name:1,id:1,rarity:1}).lean()
     ]);
     pack.size = pdata.length;
     pack.materialsData = mdata;
@@ -166,7 +181,7 @@ router.post('/mix', async (req,res) => {
     console.log("\n--------------------------Check 2", pItemcol(possible))
     if (!possible.length){
         
-        const refinedPot = pot //.map(item=> { item.count *= ((rars.indexOf(item.rarity)+1)/2); return item})
+        const refinedPot = pot.map(item=> { item.count *= ((rars.indexOf(item.rarity)+1)/2); return item})
         let querySameType = {
             $and: pot.map(itm=>{
                 let craftType = itm.type;
@@ -180,7 +195,7 @@ router.post('/mix', async (req,res) => {
                 }
             })
             .concat({'typeCraft.type': {$all: potTypeMap ,}}),
-            crafted: !0, //display: !0
+            crafted: !0, //open: !0
         };
         console.log({refinedPot})
         possible = await DB.items.find(querySameType).lean().exec();
@@ -331,25 +346,36 @@ router.post('/create', checkAuth, async (req,res)=> {
     const payGem = Object.keys(itemToCraft.gemcraft)?.map(it=>{
         let userBal = userData.modules[it];
         let itm = itemToCraft.gemcraft[it];
-
+        console.log({it,itm,userBal})
         if (userBal < itm) {
             //res.status(403).json({status:"ERROR",message:"You dont have enough "+itm+"."});
             throw new Error("Invalid Balance");
         };
-        return [userData.id,itm, "crafting_discovery", it === 'rubines' ? "RBN" : it === 'sapphires' ? "SPH" : "JDE" ,{details:{item_id:itemToCraft.id}}];
+        return [userData.id,itm, "crafting_discovery", it ,{details:{item_id:itemToCraft.id}}];
     });
     
     //console.log(pay,payGem)
     //console.log(PLX)
-    
-    await Promise.all( pay.map(material=> userData.removeItem(...material)) ).catch(err=> res.status(500).json("Error processing materials"));
-    await Promise.all( payGem.map(gems=> ECO.pay(...gems)) ).catch(err=> res.status(500).json("Error processing gems"));    
+    let errors = 0;
+    await Promise.all( pay.map(material=> userData.removeItem(...material)) ).catch(err=> {
+            console.error(err);
+            res.status(500).json("Error processing materials");
+            errors+=1;
+        });
+    if (errors) return;
+    await Promise.all( payGem.map(gems=> ECO.pay(...gems)) ).catch(err=> {
+            console.error(err);
+            res.status(500).json("Error processing gems");
+            errors+=1;
+        }); 
+    if (errors) return;        
     await Promise.all([
         userData.addItem(item, 1,true),
         DB.users.set(req.user.id, {
             $inc: { "progression.craftingExp": baselineBonus[itemToCraft.rarity] * 1 },
         })
     ]);
+    if (errors) return;   
     return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
 
 }catch(err){

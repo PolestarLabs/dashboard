@@ -20,6 +20,7 @@ function gatherData(){
  
     ,lvup_loc: $('#levelup-local').prop('checked')
     ,lvup_glb: $('#levelup-global').prop('checked')
+    ,l_mess: $('#levelup-message').val()
     ,updates: $('#update-alerts').prop('checked')
     ,drops: $('#loot-drops').prop('checked')
 

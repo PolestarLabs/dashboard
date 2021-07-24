@@ -146,7 +146,7 @@ body {
 
 a {
   color: #e87aa9;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   text-decoration: none;
   transition: none 86ms ease-out; }
   a:hover {
@@ -568,7 +568,7 @@ a.box:active {
   background-color: #24242A;
   border-color: #2b2b30;
   color: #dbdbdb;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   justify-content: center;
   padding-left: 0.75em;
   padding-right: 0.75em;
@@ -1813,13 +1813,13 @@ input[type="submit"].button {
 
 .checkbox,
 .radio {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: inline-block;
   line-height: 1.25;
   position: relative; }
   .checkbox input,
   .radio input {
-    cursor: pointer; }
+    cursor: url(/cur/pointer.png), pointer; }
   .checkbox:hover,
   .radio:hover {
     color: #363636; }
@@ -1873,7 +1873,7 @@ input[type="submit"].button {
     background-color: white;
     border-color: #dbdbdb;
     color: #363636;
-    cursor: pointer;
+    cursor: url(/cur/pointer.png), pointer;
     display: block;
     font-size: 1em;
     max-width: 100%;
@@ -2681,7 +2681,7 @@ input[type="submit"].button {
   background-color: rgba(10, 10, 10, 0.2);
   border: none;
   border-radius: 290486px;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
@@ -2861,7 +2861,7 @@ input[type="submit"].button {
 
 .card-header-icon {
   align-items: center;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: flex;
   justify-content: center;
   padding: 0.75rem; }
@@ -3258,7 +3258,7 @@ input[type="submit"].button {
   background-color: rgba(10, 10, 10, 0.2);
   border: none;
   border-radius: 290486px;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: inline-block;
   flex-grow: 0;
   flex-shrink: 0;
@@ -3378,7 +3378,7 @@ input[type="submit"].button {
     display: flex; }
 
 .nav-toggle {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: block;
   height: 3.25rem;
   position: relative;
@@ -3543,7 +3543,7 @@ a.nav-item:not(.button) {
   display: flex; }
 
 .navbar-burger {
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   display: block;
   height: 3.25rem;
   position: relative;
@@ -3970,7 +3970,7 @@ a.navbar-item:hover, a.navbar-item.is-active,
 
 a.panel-block,
 label.panel-block {
-  cursor: pointer; }
+  cursor: url(/cur/pointer.png), pointer; }
   a.panel-block:hover,
   label.panel-block:hover {
     background-color: #363636; }

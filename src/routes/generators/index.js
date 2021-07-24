@@ -24,10 +24,28 @@ router.use("/roulette.png", async (...args) => {
     return (require('./roulette.js'))( ...args,ImageCache);
    
 });
+router.use("/carl.png", async (...args) => {
+    delete require.cache[require.resolve('./carl.js')];
+    return (require('./carl.js'))( ...args,ImageCache);
+   
+});
+router.use("/pfpv.png", async (...args) => {
+    delete require.cache[require.resolve('./profilepreview.js')];
+    return (require('./profilepreview.js'))( ...args,ImageCache);
+   
+});
 router.use("/nowplaying.png", async (...args) => {
     delete require.cache[require.resolve('./nowplaying')];
     return (require('./nowplaying.js'))( ...args,ImageCache);
    
+});
+router.use("/levelup.gif", async (...args) => {
+    //delete require.cache[require.resolve('./levelup')];
+    return (require('./levelup.js'))( ...args);   
+});
+router.use("/levelupframe.png", async (...args) => {
+    //delete require.cache[require.resolve('./levelupframe')];
+    return (require('./levelupframe.js'))( ...args);   
 });
 
 router.use("/discoin", async (...args) => {
@@ -87,11 +105,7 @@ router.use("/repipe/:url", async (req,res) => {
 
     ctx.drawImage(base, 0, 0, newWidth, newHeight);
 
-    res.writeHead(200, {
-        'Content-Type': 'image/jpg',
-        'Cache-Control': 'public, max-age=31557600'
-    });
-    canvas.createJPEGStream().pipe(res);
+    res.status(200).header('Content-Type','image/png').send( await canvas.png );
 
 
 

@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-const beta = true; 
+const beta = false; 
 
 const request = require('request');
 const cfg = require('../../config.js');
@@ -12,13 +12,13 @@ const headers = {
 }
 
 class PaypalTransaction {
-    constructor(total,currency,items){
+    constructor(total,currency,items,options){
         Object.assign(this,{
             payment_options: {
                 allowed_payment_method: "INSTANT_FUNDING_SOURCE",
                 recurring_flag : false, 
             },
-            note_to_payee: "testing",
+            note_to_payee:  options.details,
             amount: { total,currency },
             item_list: { items },
             description: "Pollux Marketplace"
@@ -26,19 +26,19 @@ class PaypalTransaction {
     }
 }
 class PaymentPayload {
-    constructor(T,C,I){
+    constructor(T,C,I,O){
         Object.assign(this, {
             intent: "sale",
             payer: {
                 payment_method: "paypal"
             },
             redirect_urls: {
-                return_url: "http://pollux.fun/ppreturn",
-                cancel_url: "http://pollux.fun/ppcancel"
+                return_url: "https://pollux.gg/ppreturn",
+                cancel_url: "https://pollux.gg/ppcancel"
             },
             transactions: []
         })
-        this.transactions.push( new PaypalTransaction(T,C,I) )
+        this.transactions.push( new PaypalTransaction(T,C,I,O) )
     }
 }
 const RATES ={
@@ -114,12 +114,16 @@ router.post('/authorized', async function (req, res) {
           "currency": Currency,
           "description": konoItem.description
         }
+
+        const opts = {
+            details: `UID: ${req.user.id}`
+        }
       
         ITEMS = [ITM]
 
         console.log(ITM,TOTAL,Price)
 
-        const PAYMENT_PAYLOAD = new PaymentPayload(TOTAL,Currency,ITEMS)
+        const PAYMENT_PAYLOAD = new PaymentPayload(TOTAL,Currency,ITEMS,opts)
     
         console.log("Configure PP")
             console.log(req.query.beta == 1,'req query beta')
@@ -181,6 +185,14 @@ async function inventoryUpdate(user,transaction){
     let operation;
     if(item.filter == 'gem'){
         operation = DB.users.set(user, {$inc: {[meta.field]:meta.amount } } );
+        await DB.audits.new({
+            id: `SPH-${transData.id}`,
+            from: transData.to,
+            to: transData.from,
+            amt: transData.amt,
+            timestamp: transData.timestamp,
+            currency: meta.field.split('.')[1],
+        });
     }
     if(item.filter == 'box' || item.filter == 'item'){
         let userData = await DB.users.findOne({id:user});

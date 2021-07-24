@@ -98,12 +98,7 @@ router.get('/exchange.png', async (req,res)=>{
         ctx.drawImage(tag(ctx,"#B±ÁRÑð•–—˜™š¢£¤¥¦§¨©ª²³",' 600 14pt "Merchant Copy Doublesize", mono','#2b2b3b'),30,393)
     }
         
-        let result = await canvas.toBuffer();
-        res.writeHead(200, {
-            'Content-Type': 'image/png',
-            'Content-Length': result.length
-        });
-        res.end(result);
+        res.status(200).header('Content-Type','image/png').send( await canvas.png );
         
 })
 

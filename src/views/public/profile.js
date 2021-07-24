@@ -31,32 +31,38 @@ function since(x){
          {label: 'Stickers', val: userprofile.modules.stickerInventory.length ||0 , max: this.stickersSize},
          {label: 'Backgrounds', val: userprofile.modules.bgInventory.length ||0 , max: this.backgroundsSize},
          {label: 'Medals', val: userprofile.modules.medalInventory.length ||0 , max: this.medalsSize}
-        ]
+        ],
+
+        // COLLECTIONS TAB
+        backgrounds: {loading: true},
+        medals: {loading: true},
+        stickers: {loading: true},
+        inventory: {loading: true},
     }, 
       components:{
       "animated-number": window.AnimatedNumber,
       },
     methods:{
        bgInfo(bgID){
-          fetch("/api/cosmetics/search?code="+bgID).then(r =>
-            r.json().then(res => {
-                console.log(res)
-                this.bgData = res[0] || {name: "UNKNOWN", rarity: "C" };
-                if(!res[0]) return;
+          fetch("/api/cosmetics/backgrounds/"+bgID).then(r =>
+            r.json().then(res_1 => {
+                console.log(res_1)
+                this.bgData = res_1 || {name: "UNKNOWN", rarity: "C" };
+                if(!res_1) return;
                 fetch("/api/marketplace?item_id="+this.bgData._id).then(r =>
-                    r.json().then(res => {
+                    r.json().then(res_2 => {
                       const payload = {}
-                      payload.entries = res.length
+                      payload.entries = res_2.length
                      
                       if (payload.entries > 1){
-                        payload.cheapest =   res.sort((a,b)=> {
+                        payload.cheapest =   res_2.sort((a,b)=> {
                           let dfcA = a.price , dfcB = b.price;
                           if(a.currency == 'SPH') dfcA = a.price * 5000; 
                           if(b.currency == 'SPH') dfcB = b.price * 5000;
                           return b.price - a.price;
                         })[0]
                       }else if (payload.entries == 1){
-                        payload.cheapest = res[0]
+                        payload.cheapest = res_2[0]
                       }
                       
                       this.bgDataMarket = payload;      
@@ -66,24 +72,24 @@ function since(x){
           );       
       },
       udata(commend){
-        return this.commendInfo.userdata.find(x=> x.id == commend?.id) || {}
+        return this.commendInfo.userdata.find(x=> x.id == (commend||{}).id) || {}
       },
-      miliarize(numstring,strict,symbol){
-        let sym = symbol||"." 
+      miliarize(numstring="0", strict, separator="."){
+
         if (!numstring)return 0 ;
           if (typeof numstring == "number"){
               numstring = numstring.toString()
           }
           if(numstring.length < 4) return numstring;
-  
-          var stashe = numstring.replace(/\B(?=(\d{3})+(?!\d))/g, sym).toString();
+
+          var stashe = numstring.replace(/\B(?=(\d{3})+(?!\d))/g, separator).toString();
   
           if(strict==="ultra"){
               return stashe;
           }
           
           if(strict){
-              var stash = stashe.split(sym)
+              var stash = stashe.split(separator)
           switch(stash.length){
               case 1:
                   return stash;
@@ -92,16 +98,16 @@ function since(x){
                   return stash[0]+"K";
               case 3:
                   if(stash[2]!="000") break;
-                  return stash[0]+sym+stash[1][0]+stash[1][1]+"Mi";
+                  return stash[0]+separator+stash[1][0]+stash[1][1]+"Mi";
               case 4:
                   if(stash[3]!="000") break;
-                  return stash[0]+sym+stash[1][0]+stash[1][1]+"Bi";
+                  return stash[0]+separator+stash[1][0]+stash[1][1]+"Bi";
                }
-  
+
               return stashe;
           }        
   
-          stash = stashe.split(sym)
+          stash = stashe.split(separator)
           switch(stash.length){
               case 1:
                   return stash.join(" ");
@@ -129,6 +135,7 @@ function since(x){
               _wifeData.ring = featRel.ring;
               _wifeData.lovepoints = featRel.lovepoints;
               _wifeData.since = since(featRel.since);
+              _wifeData.rings = featRel.ringCollection;
               return _wifeData;
           }
           return {id:false};
@@ -143,13 +150,13 @@ function since(x){
 
 
 fetch("/api/cosmetics/count/background").then(r =>
-  r.json().then(res =>  PROFILE.backgroundsSize = res  )
+  r.json().then(res => (PROFILE.backgroundsSize = res) )
 );
 fetch("/api/cosmetics/count/sticker").then(r =>
-  r.json().then(res =>  PROFILE.stickersSize = res  )
+  r.json().then(res => (PROFILE.stickersSize = res) )
 );
 fetch("/api/cosmetics/count/medal").then(r =>
-  r.json().then(res =>  PROFILE.medalsSize = res  )
+  r.json().then(res => (PROFILE.medalsSize = res) )
 );
 
 
@@ -168,12 +175,12 @@ fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );  
 
-fetch("/api/cosmetics/search?type=sticker&id="+userprofile.modules.sticker).then(r =>
-    r.json().then(res =>  PROFILE.sticker = res[0]  )
+fetch("/api/cosmetics/stickers/"+userprofile.modules.sticker).then(r =>
+    r.json().then(res =>  PROFILE.sticker = res  )
 );
 
-fetch("/api/cosmetics/search?type=background&code="+userprofile.modules.bgID).then(r =>
-    r.json().then(res =>  PROFILE.background = res[0]  )
+fetch("/api/cosmetics/backgrounds/"+userprofile.modules.bgID).then(r =>
+    r.json().then(res =>  PROFILE.background = res  )
 );
 
 
@@ -221,6 +228,6 @@ window.onload = (event) => {
 };
 
 
-fetch("/dash/imgbookmarks/"+userprofile.id+"?.png").then(r =>
+fetch("/dash/imgbookmarks/"+userprofile.id).then(r =>
   r.json().then(res =>  PROFILE.boorucollection = res  )
 );

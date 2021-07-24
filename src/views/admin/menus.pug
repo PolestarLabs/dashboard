@@ -1,6 +1,6 @@
 link(rel='stylesheet' href='/css/profile.css')
 
-script(src='https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.10/vue.js')
+script(src=INSTANCE_VUE_PATH)
 script(src="https://twemoji.maxcdn.com/2/twemoji.min.js?12.0.4")
 script(src='https://unpkg.com/@johmun/vue-tags-input/dist/vue-tags-input.js')
 script(  src='https://unpkg.com/vue-select@3.11.0')
@@ -115,8 +115,9 @@ hr.plx-divider-small
         .plx-flex-end.plx-width-1-1(class="plx-width-1-2@m")
             +pinkSwitch("levelup-global","Enable <b>Global</b> LevelUps",serverData.modules.LVUP )
         p.plx-margin-remove-bottom Custom Local Level Up message
+            small.help Use %lv% to display the level number.
         .plx-pink-input
-            textarea#level-message(name="level-message", cols="25", rows="4")= serverData.modules.LVUP_text ||""
+            textarea#levelup-message(placeholder="You're now Level %lv% ! Congratulations!" name="levelup-message", cols="25", rows="4")= serverData.modules.LVUP_text ||""
 
 
 
@@ -230,7 +231,7 @@ style .cheatsheet_comm{font-family:Share Tech Mono, Consolas, monaco, monospace 
             p.plx-margin-remove-bottom Message
             .plx-pink-input
                 textarea#welcome-message(name="welcome-message", cols="25", rows="4")= serverData.modules.GREET.text ||""
-            +pinkSwitch("welcome-toggle","Enable welcome messages",serverData.modules.GREET.enabled || true)
+            +pinkSwitch("welcome-toggle","Enable welcome messages", serverData.modules.GREET.enabled === true)
             hr
             br
 
@@ -241,7 +242,7 @@ style .cheatsheet_comm{font-family:Share Tech Mono, Consolas, monaco, monospace 
             p.plx-margin-remove-bottom Message
             .plx-pink-input
                 textarea#bye-message(name="bye-message", cols="25", rows="4")= serverData.modules.FWELL.text ||""
-            +pinkSwitch("bye-toggle","Enable goodbye messages",serverData.modules.FWELL.enabled || true)
+            +pinkSwitch("bye-toggle","Enable goodbye messages",serverData.modules.FWELL.enabled === true)
             hr
             br
 

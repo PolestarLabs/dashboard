@@ -29,7 +29,7 @@ button {
   flex-direction: column;
   height: 100px;
   width: 100px;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   padding: 4px;
   margin: 4px;
   position: relative;
@@ -248,7 +248,7 @@ height: 99% !important;
   font-weight: 800;
   font-family: Panton;
   user-select: none;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
   margin: 8px;
   display: flex;
   align-items: center;
@@ -273,7 +273,7 @@ height: 99% !important;
   background-image: radial-gradient(#ffba3b, rgba(36, 36, 83, 0.7) 70%);
   background-position: center 10px;
   transition: all 10ms ease;
-  cursor: pointer;
+  cursor: url(/cur/pointer.png), pointer;
 }
 .craft-me:disabled{
     filter: grayscale(100%);
@@ -442,7 +442,7 @@ height: 99% !important;
   /*! pointer-events: none; */
 }
 
-@media screen and (max-width: 1400px){
+@media screen and (max-width: 1400px) and  (min-width: 1000px){
   .crafting-zone{
 transform: scale(.8) translate(-100px,-100px);
  
@@ -581,7 +581,7 @@ circle.craft5 {
 
   .inventory {
     //margin-bottom: 2rem;
-
+  transform: translateY(-50px) scale(.9);
     width: 100vw;
     box-sizing: border-box;
     display: flex;
@@ -593,6 +593,7 @@ circle.craft5 {
   .items-list {
     overflow: hidden;
     margin-bottom: -2rem;
+    
   }
   .inventory .items {
     mask: linear-gradient(#0000 0%, #ffff 10%, #ffff 80%, #0000 90%);
@@ -643,6 +644,7 @@ circle.craft5 {
     transform: translate(calc(50vw + -400px), -25px);
   }
   .inventory .items {
-    max-height: 210px;
+    margin-top:-16px;
+    /*max-height: 210px;*/
   }
 }

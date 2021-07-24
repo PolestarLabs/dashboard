@@ -122,7 +122,7 @@ block content
                 each pack in STKPAK
                   transition(name='fade')
                     .packrewards(v-if="selectedPak == '"+pack.icon+"' && selectedPakComplete.rewards"  )
-                      .reward(v-for="reward in selectedPakComplete.rewards")
+                      .reward(v-for="reward in selectedPakComplete.rewards" :class="reward.type")
                         .medalreward(v-if="reward.type == 'medal'")
                           | MEDAL
                           .img-container

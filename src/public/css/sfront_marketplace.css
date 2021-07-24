@@ -38,6 +38,7 @@ border-radius: 3px;
   
 .market-entry .title{
   font-size: 20px;
+  color: white;
   //text-shadow: var(--megastroke);
   filter: drop-shadow(-1px 1px 0px #223) drop-shadow(-1px 1px 0px #223) drop-shadow(1px -1px 0px #223) drop-shadow(1px 1px 0px #223) drop-shadow(-1px -1px 0px #223);
 }
@@ -120,20 +121,51 @@ opacity: .5
   
 }
 
+.plx-modal-footer .store-sell{
+  --this-color: var(--secondary-color-alt) !important;
+  --this-dim:  var(--secondary-color-alt);
+  --this-color-dark: var(--bg-main);
+}
+.plx-modal-footer .store-buy{
+  --this-color:  var(--accent-color-mid) !important;  
+  --this-dim:  var(--accent-color);
+  --this-color-dark: var(--bg-main);  
+}
+
+.plx-modal-footer .store-buy:after,.plx-modal-footer .store-sell:after{
+  content:"BUY";
+  font-size: 12pt;
+  margin-right: 20px;
+  font-family: 'Quicksand';
+  font-weight: 600;
+  opacity: .6
+}
+.plx-modal-footer .store-buy:after{
+  content:"SELL";
+}
+
+.plx-modal-footer .store-sell{
+  --this-color: red
+}
+
 .market-entry .button.store-sell{
-   --maincolor: #2A4EA2;
-   --fadecolor: #1e1c3c;
+  --maincolor: var(--secondary-color);
+  --fadecolor: var(--dark)
 }
 .market-entry .button.store-buy{
-   --maincolor: #38b390;
-   --fadecolor: rgb(16, 60, 49);
+  --maincolor: var(--accent-color);
+   --fadecolor: var(--dark)
 }
 .market-entry .button.store-sell:after{
-content:"\2000 BUY\2000"
+content:"\2000 BUY\2000";
+  color: #FFF8;
+  mix-blend-mode: color-dodge;
 
 }
 .market-entry .button.store-buy:after{
-content:"\2000 SELL\2000"
+content:"\2000 SELL\2000";
+  color: #FFF8;
+  mix-blend-mode: color-dodge;
 
 }
 

@@ -51,19 +51,19 @@ async function compileLeaderboard(TYPE){
       });
     }
   
-    LEAD = LEAD.map(U => userRankify(U));
+    LEAD = await Promise.all( LEAD.map(async U => await userRankify(U)) );
   
     return LEAD;
 }
-function userRankify(plxUser = {}, discordUser, member) {
+async function userRankify(plxUser = {}, discordUser, member) {
   let userRank = {};
 
+  discordUser = userCache.get(plxUser.id);
+  discordUser = discordUser instanceof Promise ? await discordUser.timeout(50).catch(e=>null) : discordUser;
   
-  discordUser= discordUser || userCache.get(plxUser.id) 
-  PLX.getRESTUser(plxUser.id ).then(u=> userCache.set(u.id,u));
- 
+  console.log(plxUser.id, discordUser?.id?"✅":"❌")
 
-  if (discordUser) {
+  if (discordUser?.id) {
     userRank.name = member
       ? discordUser.nick || discordUser.user.username
       : discordUser.username;

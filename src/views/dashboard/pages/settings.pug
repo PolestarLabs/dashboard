@@ -1,5 +1,91 @@
-include ../tools/mixins
+include ../../tools/mixins
 -const NOTIFS = ((userdata.switches||{}).notifications||{})
+
+style
+    include settings.css
+-const connections = userdata.connections || {}
+section.plx-container#connections 
+    h1.title Connections
+    .plx-width-1-1.plx-flex-wrap.plx-flex(class=' plx-child-width-1-3@m' )
+
+        // PATREON
+        .patreon.connection-box(plx-accordion="toggle:.wa")
+            ul.inner-darkside
+                .plx-accordion-title.wa
+                    h3.title 
+                        img(src="/build/logos/patreon.png" width="24px")
+                        | Patreon
+                    if userdata.switches && connections.patreon
+                        h5.subtitle 
+                            -let pdata = connections.patreon
+                            span Connected as 
+                                a( href=pdata.identity.url )
+                                    img(src=pdata.identity.thumb_url width=24)
+                                    span= "  "+pdata.identity.full_name
+                    else
+                        h5.subtitle 
+                            a(onclick="authwindow('/patreon/auth?state=popup','Last.fm Login')") Connect
+                if userdata.switches && connections.patreon
+                    a.small.help.wa.subtitle  More Info
+                    .plx-accordion-content
+                        -let pdata = connections.patreon
+                        span
+                            b Discord Connected: 
+                            .tick( class=(pdata.identity.discord_user_id ? "yep" : "nope") )
+                            if pdata.identity.discord_user_id!==userinfo.id
+                                br
+                                span ⚠ 
+                                    code Connected: #{pdata.identity.discord_user_id}
+                                br
+                                span ⚠ 
+                                    code Current: #{userinfo.id}
+                                .help.small.plx-text-danger Current logged-in user doesn't match the account associated with Patreon!
+                            
+
+                        br
+                        span
+                            b Tier: 
+                            | #{pdata.identity.tier}
+                        br
+                        br
+                        if (pdata.identity.discord_role_ids)
+                            - let discord_role_ids = pdata.identity.discord_role_ids
+                            - let dono_roles = MANSION_SERVER_DATA.roles.filter( r=> discord_role_ids.includes(r.id))
+                            - let member_roles = MANSION_MEMBER.roles.filter( r=> discord_role_ids.includes(r))
+
+                            mixin roleDisplay(r,override)
+                                if (r.id == '421181998439333901')
+                                    li(style=`color:${ override || "#05E580" }`)
+                                        block
+                                        | Verification Role
+                                else
+                                    li(style=`color:${ override || r.color ? "#" + r.color.toString(16) : 'inherit' }`)
+                                        block
+                                        | #{r.name}
+                            
+                            b Roles:
+                            ul
+                                each roledata in dono_roles
+                                    - let role=roledata.id
+                                    if member_roles.includes(role)
+                                        +roleDisplay(roledata)
+                                            .tick.yep
+                                            
+                                    else                                
+                                        +roleDisplay(roledata, "red")
+                                            .tick.nope
+                                if discord_role_ids.every(r=>member_roles==id)
+                                    .help.small.plx-text-success All Good!
+                                else
+                                    .help.small.plx-text-danger There are missing roles! Contact support.
+br
+br
+hr
+br
+                
+                        
+
+            
 section.plx-container#settings-options
     h1.title Notifications
     h3.subtitle Configure what to be notified via DMs to you
@@ -69,10 +155,10 @@ section.plx-container#settings-options
 -const myDeckCasino = SKINS.blackjack || "default"
 -const myDeckTarot  = SKINS.tarot || "default"
 
--const myDecks  = DCKINFO//.filter(t=>userdata.modules.skinInventory.includes(t.id))
+-const myDecks  = DCKINFO.filter(t=>userdata.modules.skinInventory.includes(t.id))
 
 -const DEFAULT_DECK_C = {for:'casino', id:'casino_default',name: 'Standard Casino Deck', rarity: 'C', localizer:'default'}
--const DEFAULT_DECK_T = {for:'tarot', id:'tarot_default',name: 'Standard Tarot Deck', rarity: 'C', localizer:'default'}
+-const DEFAULT_DECK_T = {for:'tarot', id:'tarot_persona3',name: 'Persona 3', rarity: 'C', localizer:'persona3'}
 
 -myDecks.unshift(DEFAULT_DECK_C)
 -myDecks.unshift(DEFAULT_DECK_T)
@@ -249,128 +335,7 @@ section.plx-container#custom-options
     br
     br
 
-script.
+script
+    include settings_menu.js
 
-    const Customization = new Vue({
-        el: "#custom-options",
-        components: {
-            "v-select": VueSelect.VueSelect
-        },
-        data:{
-            selectDeckTarot: myDeckTarot,
-            decksAvailableTarot,
-            isSearchBlurTarot: true,
-             selectDeckCasino: myDeckCasino,
-            decksAvailableCasino,
-            isSearchBlurCasino: true
-
-
-        },
-        methods:{
-            onChangeDeck(){
-               saveDeck(this)
-            },
-            howToDeck(){
-                Swal.fire({
-                    //title: 
-                    html: "Decks can be obtained via <b>Specialized Crafting</b>" 
-                    ,type: 'info'
-                    ,confirmButtonText: 'Hmmm I see...'
-                })
-            }
-        }
-    })
-
-    const Roleplay = new Vue({
-        el: "#roleplay",
-        components: {
-        
-        },
-        data:{
-            attributes:  [...ATTR]
-            ,attributes_bkp:  [...ATTR]
-            ,highlight: ''    
-            ,editing: ''      
-        },
-        methods:{
-            enableEditing(){                
-                this.editing = true;
-            },
-            addAttr(){                
-                this.attributes.push({tag:'new_tag',value:'new value'})
-            },
-            saveAttr(){                
-               saveAttr(this.attributes)
-            },
-            resetAttr(){                
-                this.attributes =  [...ATTR]
-            },
-            isMacro(attr){
-                return attr.tag.startsWith('!')
-            },
-            isDice(v){
-                if(!v.includes('d')) return false;
-                return v.match(/[0-9]?d[0-9]+/g)
-            },
-            diceValue(v){
-                if(!v.includes('d')) return null;
-                return v.replace(/[0-9]?d([0-9]+)/g,'$1')
-            },
-            isTag(part){
-                return this.attributes.map(x=>x.tag).includes(part) 
-            },
-            isHighlighted(item){
-               return this.highlight == item
-            }
-        }
-    })
-
-    function saveDeck(C){
-        Promise.all([fetch(`/dash/misc/skin`,{
-            headers: { "Content-Type": "application/json; charset=utf-8" },
-            body: JSON.stringify({ skinFor: 'casino', skinId: C.selectDeckCasino.localizer  }),
-            method:"PATCH"
-        }),
-         fetch(`/dash/misc/skin`,{
-            headers: { "Content-Type": "application/json; charset=utf-8" },
-            body: JSON.stringify({ skinFor: 'tarot', skinId: C.selectDeckTarot.localizer  }),
-            method:"PATCH"
-        })]).then(res=> processRes(res,"Skins","Deck Skins Saved!") )
-    }
-
-    function saveAttr(attrSet){
-        fetch(`/dash/misc/attr`,{
-            headers: { "Content-Type": "application/json; charset=utf-8" },
-            body: JSON.stringify({ attrSet }),
-            method:"PATCH"
-        }).then(res=> processRes(res,"Attributes","Attributes Saved!") )
-    }
-
-
-    $('#settings-options input').change(function(){
-
-        let settings = {
-             ownerNotif: $('#enable-dm-alerts-sv-changes').prop('checked')
-            ,dmWelcome: $('#dm-welcome-opt-out').prop('checked')
-            ,newCommand: $('#new_command').prop('checked')
-            ,patchNotes: $('#patch_note').prop('checked')
-            ,events: $('#events').prop('checked')
-            ,newCosmetics: $('#cosmetics').prop('checked')
-            ,miscAnnouncements: $('#general_announcements').prop('checked')
-            ,partnerAnnouncements: $('#partner_announcements').prop('checked')
-        };
-
-        console.log({settings});
-
-        return fetch(`/dash/misc/notifs`,{
-            headers: { "Content-Type": "application/json; charset=utf-8" },
-            body: JSON.stringify( settings ),
-            method:"PATCH"
-        }).then(res => processRes(res,"Notifications","Notification Settings Saved!") );
-          
-    })
-
-    $(".markall").click(function () {
-        var cat = $(this).data('cat')
-        $('.cat_' + cat +' input').prop('checked', this.checked);
-    })
+    
