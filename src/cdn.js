@@ -14,15 +14,17 @@ app.use(function (req, res, next) {
 
 const ASSETS_PATH = process.env.ASSETS_PATH || "/home/pollux/polaris/ASSETS/";
 
+
 app.use(Express.static(path.join(__dirname, './public')));
 app.use(Express.static(path.join( ASSETS_PATH, './imgres')));
 app.use(Express.static(path.join( ASSETS_PATH, './cosmetics')));
+app.use(["/images/artwork","/artwork"], Express.static(path.join( ASSETS_PATH, './artwork')));
 app.use("/images", Express.static(path.join(__dirname, './public/images')));
 app.use("/images", Express.static(path.join( ASSETS_PATH, './website')));
 app.use("/flairs",    Express.static(path.join( ASSETS_PATH, './cosmetics/flairs')));
 app.use("/medals",    Express.static(path.join( ASSETS_PATH, './cosmetics/medals')));
 app.use("/stickers",  Express.static(path.join( ASSETS_PATH, './cosmetics/stickers')));
-app.use("/items",    Express.static(path.join( ASSETS_PATH, './build/items')));
+app.use("/items",  Express.static(path.join( ASSETS_PATH, './build/items')));
 app.use("/boosters",  Express.static(path.join( ASSETS_PATH, './build/boosters')));
 app.use("/backdrops", Express.static(path.join( ASSETS_PATH, './cosmetics/backdrops')));
 app.use("/build",     Express.static(path.join( ASSETS_PATH, './build')));
@@ -53,9 +55,9 @@ process.on('uncaughtException', function (err) {
   process.exit(1)
 });
 
-
-app.listen(4727, function (err) {
+const port = process.env.DASHPORT;
+app.listen(port, function (err) {
     if (err) return console.log(err)
-    console.log('Listening at http://localhost:4727/')
+    console.log('Listening at http://localhost:'+port)
 })
 
