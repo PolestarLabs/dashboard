@@ -85,11 +85,11 @@ style
 					div(
 						v-for="server in currentPrimeServers",
 						v-if="currentPrimeServers.length",
-						:data-svid="server.id",
+						:data-svid="(server||{id:''}).id",
 						:style=" { opacity: server.pending ? .5 : 1 } "
 					).prime-server
 						.icon: img(
-							:alt="server.id[0]",
+							:alt="(server||{id:'A'}).id[0]",
 							:src="getServerIcon(server)"
 						)
 						.info

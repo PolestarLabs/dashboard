@@ -105,7 +105,7 @@ router.post("/backgrounds/custom", (req,res) =>{
 
 router.get("/backgrounds/:id/:endpoint", async (req,res) =>{    
     const canvas = await Picto.getFullCanvas(`${HOST}/backdrops/${req.params.id}.png`);   
-    let result = (await Promise.all( (await getColors(canvas.toBuffer('image/png',{ compressionLevel: 0, filters: 8 }),{count:11, type:"image/png"})).map(color => getColorData(color.hex()) ))).filter((v,i,a)=> a.map(x=>x.hex).indexOf(v.hex) ==i );
+    let result = (await Promise.all( (await getColors( await canvas.toBuffer('image/png',{ compressionLevel: 0, filters: 8 }),{count:11, type:"image/png"})).map(color => getColorData(color.hex()) ))).filter((v,i,a)=> a.map(x=>x.hex).indexOf(v.hex) ==i );
 
     
     if (req.params.endpoint?.endsWith(".png")){
