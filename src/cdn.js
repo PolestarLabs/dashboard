@@ -55,9 +55,9 @@ process.on('uncaughtException', function (err) {
   process.exit(1)
 });
 
-
-app.listen(4727, function (err) {
+const port = process.env.DASHPORT;
+app.listen(port, function (err) {
     if (err) return console.log(err)
-    console.log('Listening at http://localhost:4727/')
+    console.log('Listening at http://localhost:'+port)
 })
 
