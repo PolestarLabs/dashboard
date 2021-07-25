@@ -16,7 +16,7 @@ router.get('/:gallery', async function (req, res) {
         //let file = fs.readFileSync(filepath);
     
         if(req.query.json==1){
-            return res.json(HOST+"/build/galleries/"+files[rand])
+            return res.json(HOST+"/build/galleries/"+GAL+"/"+files[rand])
       } 
         res.sendFile(filepath_l)
 
