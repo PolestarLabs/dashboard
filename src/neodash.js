@@ -211,7 +211,7 @@ redis:{
 			if (!val) return;
 			userCacheMap.set(k,val);
 			PLX.redis.set("discord.users."+k,JSON.stringify(val));
-			PLX.redis.expire("discord.users."+k, 10 * 60 * 1);
+			PLX.redis.expire("discord.users."+k, 6 * 60 * 60);
 		},
 		get(k){
 			/*
