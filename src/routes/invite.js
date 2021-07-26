@@ -7,7 +7,7 @@ const router = express.Router();
 
 const inviteString = (selected_client,server) => 
     `https://discord.com/api/oauth2/authorize`+
-    `?client_id=${ selected_client }&permissions=2147532800`+
+    `?client_id=${ selected_client }&permissions=2416240704`+
     `&redirect_uri=${ HOST+"/invite/verify/" + selected_client }`+      
     `&response_type=code`+
     `&scope=${["applications.commands","bot","identify","guilds","connections","email"].join("%20")}`+
