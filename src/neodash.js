@@ -634,9 +634,13 @@ app.post('/checklogin', checkAuth, function (req, res) {
 });
 	 
 app.post('/sendform', async function (req, res) {
+	
 	let form = new formidable.IncomingForm();
 	delete require.cache[require.resolve('./pipelines/forms.js')];
-	require('./pipelines/forms.js').run(req, res,form).then(status => res.send(status))
+	require('./pipelines/forms.js').run(req, res,form).then(status => res.send(status)).catch(e=>{
+		console.log(e);
+		res.sendStatus(500);
+	})
 });
  
 app.get('/test', (...args)=> simplepages().test(...args));
