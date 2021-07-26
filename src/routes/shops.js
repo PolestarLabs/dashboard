@@ -129,7 +129,7 @@ router.get("/marketplace", async function (req, res) {
       }
     opengraph.image =    `${HOST}/build/opengraph/marketplace.png`
     opengraph.title =    "Player Marketplace"
-    opengraph.description =    `🛍️ Buy and sell items from/to other players! 🛒 Over ${marketplace.length} items have been traded here. 🏪`,
+    opengraph.description =    `🛍️ Buy and sell items from/to other players! 🛒 Over ${marketplace.length} items are been traded here. 🏪`,
     opengraph.large = true
     
       // await refreshBases();
@@ -147,8 +147,27 @@ router.get("/marketplace", async function (req, res) {
 router.get("/marketplace/entry/:id", async function (req, res, _404) {
   let ff = req.params.id  
   let entry = await DB.marketplace.findOne({id:ff});
-  console.log({entry},'db pure')
+  
   if(!entry) return _404();
+  if (entry.lock || entry.completed) {
+    let marketplace = await DB.marketplace.find({}).lean().exec();
+    const opengraph = {}
+    opengraph.title = `🔴 This entry is gone! 🔴`
+    opengraph.description = `Don't worry! You can still browse more items in the marketplace`
+    opengraph.image = `${HOST}/build/opengraph/marketplace.png`
+    opengraph.color = entry.type == 'sell' ? "#FF3355" : '#A853FA'
+    opengraph.large = true;
+
+    return res.render('shop/marketplace/market', {
+      sellPages: await require('./paginate').run(req,res,null,{
+        marketplace,
+        fullbase: [],
+        page: req.query.p||0,
+        endpoint:'marketplace',
+        rpp: 25,      
+      })
+      ,entry,opengraph});  
+  }
 
   let [marketplace,prefbase] = await Promise.all([
      DB.marketplace.aggregate(

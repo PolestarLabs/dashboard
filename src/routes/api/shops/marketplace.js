@@ -427,7 +427,7 @@ router.patch("/:entry", async (req,res)=>{
 
 
 router.get(["/","/:entry"],  async (req, res) => {
-  console.log('["/","/:entry"],')
+ 
   let queries = {};
   if (req.params.entry) req.query.id = req.params.entry;
   Object.keys(req.query)
@@ -459,13 +459,11 @@ router.get(["/","/:entry"],  async (req, res) => {
     .then(async (result) => {
       console.log({result})
       let [marketeers, cosmetics, goods] = await Promise.all([
-        /*DB.users
-          .find(
-            { id: { $in: result.map((i) => i.author) } },
-            { meta: 1, id: 1 }
-          ).lean()
-          .catch((e) => []),*/
-        Promise.all(result.map(async (i) => await userCache.get(i.author)  ) ),
+       
+        Promise.all(result.map(async (i) => await userCache.get(i.author).timeout(300).catch(async e=>{
+          const user = await DB.users.get(i.author);
+          return user.connections?.discord || user.discordData || { }
+        })  ) ),
         DB.cosmetics
           .find({ _id: { $in: result.map((i) => i.item_id).filter(x=> parseInt(x) && x.length == 24) } }).lean()
           .catch((e) => []),
