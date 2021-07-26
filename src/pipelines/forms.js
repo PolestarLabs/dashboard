@@ -26,6 +26,7 @@ exports.run = function(req,res,form){
       embed.timestamp = ts
 
 if(req.query.type=='fanart'){
+  console.log("fana");
   return require("../routes/forms/fanart.js").processForm(form,req,res,{sendWebhook,embed,ts});
 }else{
     
