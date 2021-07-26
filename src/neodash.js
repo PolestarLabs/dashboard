@@ -233,12 +233,14 @@ redis:{
 					}else{
 						console.log("❌ Cached Miss".red, k);            
 					}
-					PLX.getRESTUser(k).then(u=> {
-						if(!u && !returned) return reject("NO USER");
-						this.set(u.id,u);
-						console.log("✔️ Cache SAVE".green, u.id)
-						if (!returned) return resolve(u);
-					}).catch(reject);
+					setTimeout(()=>{
+						PLX.getRESTUser(k).timeout(1000).then(u=> {
+							if(!u && !returned) return reject("NO USER");
+							this.set(u.id,u);
+							console.log("✔️ Cache SAVE".green, u.id)
+							if (!returned) return resolve(u);
+						}).catch(reject);
+					},returned?20000:0);
 				});
 				
 			})
