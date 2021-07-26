@@ -236,7 +236,7 @@ redis:{
 					PLX.getRESTUser(k).then(u=> {
 						if(!u && !returned) return reject("NO USER");
 						this.set(u.id,u);
-						console.log("✔️ Cache SAVE".green, u.idk)
+						console.log("✔️ Cache SAVE".green, u.id)
 						if (!returned) return resolve(u);
 					}).catch(reject);
 				});
