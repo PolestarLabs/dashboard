@@ -5,7 +5,7 @@ global.lvupCacheReady ??= false;
 const waitAll = Promise.all( RANGE.map(async x => await Picto.getCanvas(`${HOST}/build/level up_frames/transp/lvup_frame_${x}.png`))).then(res=> {global.lvupCacheReady=true; global.lvupFramesCache = res});
 
 module.exports = async function(req,res){
-    console.log("getting Frame".blue);
+
  
     let args = [200,200]
     const [argLv,user] = args;

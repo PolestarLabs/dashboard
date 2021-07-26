@@ -21,11 +21,10 @@ module.exports = async function(req,res){
     
     const avatar = await Picto.getCanvas( req.query.avatar || "" );
 
-    console.log({cacheReady})
+
     if (!cacheReady) await waitingAll;
     lvupFramesCache = global.lvupFramesCache;
-    
-    console.log({cacheReady})
+  
     
     let GIF = new Anim({
         w: 800, h: 300,
@@ -71,7 +70,6 @@ module.exports = async function(req,res){
         const lvWidth = Math.min(118,Level.width);
         const lvtWidth = Math.min(150,lvTag.width);
         
-        console.log("drawing",frame)
         ctx.drawImage(lvupFramesCache[Math.min(frame,29)],0,0);
 
         if(frame > 20){
