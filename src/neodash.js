@@ -221,22 +221,26 @@ redis:{
 			}
 			*/
 			return new Promise((resolve,reject) => {
+				let returned = false;
 				PLX.redis.get("discord.users."+k, (_,d) => {
 					if(d){
-						console.log("✔️ Cached".green, k)
+						console.log("✅ Cache Hit".green, k)
 						//userCacheMap.set(k, new Eris.User(JSON.parse(d),PLX) );
 						//let resuser = userCacheMap.get(k);
 						//if (resuser) return resolve(resuser);
-						return resolve(new Eris.User(JSON.parse(d),PLX));
+						resolve(new Eris.User(JSON.parse(d),PLX));
+						returned = true;
 					}else{
-						console.log("❌ Not Cached".red, k);            
+						console.log("❌ Cached Miss".red, k);            
 					}
+					PLX.getRESTUser(k).then(u=> {
+						if(!u && !returned) return reject("NO USER");
+						this.set(u.id,u);
+						console.log("✔️ Cache SAVE".green, u.idk)
+						if (!returned) return resolve(u);
+					}).catch(reject);
 				});
-				PLX.getRESTUser(k).then(u=> {
-					if(!u) return reject("NO USER")
-					this.set(u.id,u);
-					return resolve(u)
-				}).catch(reject);
+				
 			})
 		}
 	}
