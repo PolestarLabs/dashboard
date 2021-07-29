@@ -135,7 +135,7 @@ destroyed() {
       
       setTimeout(_=>{
         userBG.img = userBG.img.split('?v=')[0] + `?v=${Date.now()}`;
-        this.selectBackground.code.startsWith(userdata.id) ? this.selectBackground.img = userBG.img.split('?v=')[0] + `?v=${Date.now()}` : null;
+        (this.selectBackground.code||"").startsWith(userdata.id) ? this.selectBackground.img = userBG.img.split('?v=')[0] + `?v=${Date.now()}` : null;
         this.onChange(this.selectBackground)
       },1000);      
     },

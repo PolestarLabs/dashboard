@@ -140,7 +140,7 @@ style.
 
 
 mixin ServerCard(Server,favs)
-    -Server.ava = Server.icon ? `https://cdn.discordapp.com/icons/${Server.id}/${Server.icon}${Server.features.includes('ANIMATED_ICON')&&Server.icon.startsWith('a_')?'.gif':'.png'}` : "https://cdn.discordapp.com/embed/avatars/0.png" 
+    -Server.ava = Server.icon ? `https://cdn.discordapp.com/icons/${Server.id}/${Server.icon}${Server.features.includes('ANIMATED_ICON')&&(Server.icon||"").startsWith('a_')?'.gif':'.png'}` : "https://cdn.discordapp.com/embed/avatars/0.png" 
     .server-card(class=`s-card-${Server.id} ${favs?'fv':''}`)
         .star(data-svid=Server.id class=Server.faved?'faved':'', data-fave=(Server.faved?'faved':'') )
             i.fas.fa-star
