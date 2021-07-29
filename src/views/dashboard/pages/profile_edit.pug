@@ -39,7 +39,7 @@ mixin wifeBox
 
 						.wife-block.plx-flex( v-bind:class="rel.id == featuredMarriage?'is-featured':''" v-if='rel.wife')
 
-							.avatar: img(:src="`https://cdn.discordapp.com/avatars/${rel.wife.id}/${rel.wife.avatar}.${(rel.wife.avatar||"").startsWith('a_')?'gif':'png'}?size=64`")
+							.avatar: img(:src="`https://cdn.discordapp.com/avatars/${rel.wife.id}/${rel.wife.avatar}.${(rel.wife.avatar||'').startsWith('a_')?'gif':'png'}?size=64`")
 							.detail
 								.feats
 									div(v-if="rel.id == rel.wife.featuredMarriage" plx-tooltip="This person features you in their profile! <3")

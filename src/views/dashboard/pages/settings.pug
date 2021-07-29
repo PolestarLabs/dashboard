@@ -178,7 +178,7 @@ section.plx-container#roleplay
     h3.subtitle Manage your Roleplay Module attribute list
 
     .attrib-list.plx-flex.plx-flex-wrap
-        .attrib( v-for="(attr,i) in attributes" :class=`(highlight == attr.tag ? 'is-highlighted' : '' ) + ((attr.tag||"").startsWith('!')? 'macro' : '' )` )
+        .attrib( v-for="(attr,i) in attributes" :class=`(highlight == attr.tag ? 'is-highlighted' : '' ) + ((attr.tag||'').startsWith('!')? 'macro' : '' )` )
             a(@click="attributes=attributes.filter((_,y)=>y!=i)").tag-delete: i.fas.fa-times-circle
 
             .tag
