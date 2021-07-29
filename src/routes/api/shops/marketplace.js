@@ -135,7 +135,7 @@ if (!userDiscordData) return res.status(500).json("NO DISCORD USER DATA");
 
       if (finder === {}) return res.status(400).json("Dangerous Query Result");
       await DB.users.updateOne(finder,action);
-      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? 50 : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
+      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? (PAYLOAD.price*.1) : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
 
     } else {
       return res.status(result.status).json(result.reason);
@@ -154,7 +154,7 @@ if (!userDiscordData) return res.status(500).json("NO DISCORD USER DATA");
         "Marketplace Listing Deposit",
         PAYLOAD.currency
       );
-      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? 50 : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
+      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? (PAYLOAD.price*.1) : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
 
     } else {
       return res.status(result.status).json(result.reason);
@@ -268,7 +268,7 @@ router.post("/buy/:entry_id", async (req,res)=>{
   let CURRENT_USER;
   if(!req.user) {    
     if ( "Bot " + req.body?.token === PLX.token) CURRENT_USER = req.body.user;
-    else return res.status(403).json({status: "LARIS TOKEN MISMATCH"});
+    else return res.status(403).json({status: "TOKEN MISMATCH"});
   }else{CURRENT_USER = req.user}
   if (!CURRENT_USER)  return res.status(401).json({status: "CURRENT_USER MISSING"});
   
@@ -298,7 +298,8 @@ router.post("/buy/:entry_id", async (req,res)=>{
   if(sale) {
     ECO.transfer(CURRENT_USER.id,entry.author,entry.price,'MARKETPLACE [PURCHASE]',entry.currency)
     .then(async receipt=>{
-      await ECO.pay(entry.author, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", entry.currency);
+      DB.users.set({id: CURRENT_USER.id},{$inc: {  "modules.exp": ~~(entry.price/12) } });
+      await ECO.pay(entry.author, Math.ceil(entry.price * 0.02) ,"Marketplace Trade Cut", entry.currency);
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       if(entry.feedMessage){
         await processFeedMessage(entry, item, CURRENT_USER);
@@ -360,7 +361,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
     ECO.arbitraryAudit(entry.author, CURRENT_USER.id, entry.price, 'MARKETPLACE [SALE]', entry.currency)
     .then(async receipt=>{
       await ECO.pay(CURRENT_USER.id, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", entry.currency);
-      await DB.users.set(CURRENT_USER.id, {$inc: {["modules." + entry.currency]:entry.price} });
+      await DB.users.set(CURRENT_USER.id, {$inc: { "modules.exp": ~~(entry.price/100) , ["modules." + entry.currency]:entry.price} });
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       
       //TODO[epic=anyone] Emit notification to the seller;
@@ -552,11 +553,10 @@ async function awardMarketplaceItem(item,userID,remove){
       errorQuery = {$push: {'modules.inventory': {id: item.id, count: 1} } };
   }
   
-  let res = await DB.users.set( finder, query ).catch(err=> {      
+  let res = await DB.users.set( finder, query ).catch(err=> {
       if (errorQuery) {
         delete finder['modules.inventory.id'];
-        console.log({finder,errorQuery})
-        return DB.users.set( finder, errorQuery ).catch(err2=>console.error(err2) && null);
+        return DB.users.set( finder, errorQuery ).catch(err2=>console.error(err2,"Market error".bgRed) && null);
       }
       console.error(err) && null;
   });
@@ -733,7 +733,7 @@ async function userCanSell(id, currency, item, softCheck=false) {
     if (!(await DB.users.get(id)))
       return { res: false, reason: "USER NOT FOUND", status: 401 };
 
-    if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : 50, currency)))
+    if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : (PAYLOAD.price*.1) , currency)))
       return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
     if (userData.amtItem("sph-license") < 1 && currency === "SPH") {
       res = false;
