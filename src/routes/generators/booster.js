@@ -2,7 +2,7 @@ const GIFEncoder = require('gif-encoder');
 const EventEmitter = require('events');
 const path = require('path')
 const fs = require('fs')
-const Canvas = require('canvas') 
+const Canvas = require('skia-canvas') 
 
 module.exports = async function(req,res){
 
@@ -103,7 +103,7 @@ module.exports = async function(req,res){
 
 
     function pandemonium(frame) {
-        canvas = Canvas.createCanvas(250, 250);
+        canvas = new Canvas.Canvas(250, 250);
         ctx = canvas.getContext('2d');
         ctx.translate(-50, 0);
 

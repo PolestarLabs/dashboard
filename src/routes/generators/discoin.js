@@ -1,13 +1,11 @@
-const Canvas = require('canvas')
+const Canvas = require('skia-canvas')
  
 const express = require('express');
 const router = express.Router();
  
 const Discoin = require('../../structures/Discoin.js');
 const DSC = new Discoin("")
-
-
-const Canvas = require('canvas')
+ 
 
 function tag(base, text,font,color) {
 
@@ -18,7 +16,7 @@ function tag(base, text,font,color) {
     let H = base.measureText(text).emHeightAscent
     let h = base.measureText(text).emHeightDescent;
     let w = base.measureText(text).width+20;
-    const item = new Canvas.createCanvas(w, h + H);
+    const item = new Canvas.Canvas(w, h + H);
         let c = item.getContext("2d")
         c.antialias = 'subpixel';
         c.filter = 'best';
@@ -32,7 +30,7 @@ function tag(base, text,font,color) {
 router.get('/exchange.png', async (req,res)=>{
     
     
-    const canvas = Canvas.createCanvas(500,500);
+    const canvas = new Canvas.Canvas(500,500);
     const ctx = canvas.getContext('2d')
     try{
 
