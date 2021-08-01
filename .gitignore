@@ -2,6 +2,7 @@
 /node_modules
 /config.js
 /public/images/
+/public/images/artwork
 *.png
 *.bak.*
 dist
@@ -9,6 +10,7 @@ dist
 *.woff2
 *.woff
 *.ttf
+*.
 *.jpg
 *.psd
 *.gif
