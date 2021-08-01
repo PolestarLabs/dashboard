@@ -135,7 +135,7 @@ if (!userDiscordData) return res.status(500).json("NO DISCORD USER DATA");
 
       if (finder === {}) return res.status(400).json("Dangerous Query Result");
       await DB.users.updateOne(finder,action);
-      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? (PAYLOAD.price*.1) : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
+      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? (PAYLOAD.price*.15) : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
 
     } else {
       return res.status(result.status).json(result.reason);
@@ -154,7 +154,7 @@ if (!userDiscordData) return res.status(500).json("NO DISCORD USER DATA");
         "Marketplace Listing Deposit",
         PAYLOAD.currency
       );
-      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? (PAYLOAD.price*.1) : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
+      await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? (PAYLOAD.price*.05) : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
 
     } else {
       return res.status(result.status).json(result.reason);
@@ -733,7 +733,7 @@ async function userCanSell(id, currency, item, softCheck=false) {
     if (!(await DB.users.get(id)))
       return { res: false, reason: "USER NOT FOUND", status: 401 };
 
-    if (!(await ECO.checkFunds(id, currency === "SPH" ? 2 : (PAYLOAD.price*.1) , currency)))
+    if (!(await ECO.checkFunds(id, currency === "SPH" ? (2 + ~~(PAYLOAD.price*0.05)) : (PAYLOAD.price*.15) , currency)))
       return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
     if (userData.amtItem("sph-license") < 1 && currency === "SPH") {
       res = false;
