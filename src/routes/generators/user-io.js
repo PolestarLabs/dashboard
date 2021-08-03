@@ -8,7 +8,7 @@ router.get('/:inout/:userID/minimal.png', async (req,res)=>{
 
     const inout  = req.params.inout
     const userID = req.params.userID
-    const user = await PLX.getRESTUser(userID);
+    const user = await userCache.get(userID);
 
     const canvas = Picto.new(800,150);
     const ctx = canvas.getContext('2d')
