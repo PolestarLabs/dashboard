@@ -261,7 +261,8 @@ $(document).ready( ()=> {
     if (this.id == "bye-channel" )          opt= { f_name: "Farewell Channel",param: data_payload.b_chan  };
     if (this.id == "bye-message" )          opt= { f_name: "Farewell Message",param: data_payload.b_mess  };
     if (this.id == "bye-toggle" )           opt= { f_name: "Farewell Toggle",param: data_payload.b_togg  };
-    if (this.id == "welcome-img" )          opt= { f_name: "Welcom Image",param: data_payload.w_img };
+    if (this.id == "welcome-img" )          opt= { f_name: "Welcome Image",param: data_payload.w_img };
+    if (this.id == "bye-img" )              opt= { f_name: "Farewell Image",param: data_payload.b_img };
     if (this.id == "respond-disabled" )     opt= { f_name: "Disabled Command Feedback",param: data_payload.res_disa  };
     if (this.id == "command-toggle" )       opt= { f_name: "Command Toggle",param: data_payload.cmd_disas };
     if (this.id == "loot-drops" )           opt= { f_name: "Lootbox Drops",param: data_payload.drops };

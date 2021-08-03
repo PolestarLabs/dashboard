@@ -40,6 +40,7 @@ function gatherData(){
     ,b_time: 0 //$('#bye-timer').val()
     
     ,w_img:$('#welcome-img').prop('checked')
+    ,b_img:$('#bye-img').prop('checked')
 
     ,res_disa: $('#respond-disabled').prop('checked')    
     ,cmd_disas:  $('.command-toggle').filter((v,i,a)=> !i.checked ).map((v,i,a)=> i.name )

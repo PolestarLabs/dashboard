@@ -109,6 +109,8 @@ router.post('/:serverID/save', async function(req,res){
         if( svData.modules.FWELL.timer !== (payload.b_timeout || null)) diff +=`\nGoodbye Timer     : ${payload.w_timeout || "//-NO TIMEOUT-"}`;
         if( svData.modules.GREET.text !== payload.w_mess )   diff += `\nWelcome Text:     : ${payload.w_mess.slice(0,30) } `;
         if( svData.modules.FWELL.text !== payload.b_mess) diff +=    `\nGoodbye Text:     : ${payload.b_mess.slice(0,30) } `;
+        if( svData.modules.GREET.image!== payload.b_mess) diff +=    `\nGoodbye Text:     : ${payload.w_img ? "✅" : "❌️"  }`;
+        if( svData.modules.FWELL.image!== payload.b_mess) diff +=    `\nGoodbye Text:     : ${payload.b_img ? "✅" : "❌️"  }`;
             PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
 embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 Changes:
@@ -135,6 +137,7 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
         'modules.GREET.enabled': JSON.parse(payload.w_togg||false),
         'modules.GREET.text': payload.w_mess,
         'modules.GREET.timer': payload.w_timeout,
+        'modules.GREET.image': payload.w_img,
         'modules.FWELL.channel': payload.b_chan,
         'modules.FWELL.enabled': JSON.parse(payload.b_togg||false),
         'modules.FWELL.text': payload.b_mess,
