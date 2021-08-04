@@ -121,4 +121,23 @@ router.post('/webloot', async (req,res)=>{
 })
 
 
+router.get('/check_handle/:handle',  cache(600), async(req,res)=>{
+    const {handle} = req.params;
+
+    console.log("aa")
+
+    if ( handle.length > 32 || handle.length < 3 ) return res.status(400).json({status:"length",error:true});
+    if (["pollux","polaris"].includes(handle)) return res.status(403).json({status:"reserved",error:true});
+
+    const user = await DB.users.get({personalhandle:handle});
+    if (user) return res.status(409).json({status:"taken",error:true});
+    
+    const userByID = await DB.users.get({id:handle});
+    if (userByID) return res.status(405).json({status:"invalid",error:true});
+    
+    
+    return res.status(200).json({status:"available",error:false});
+
+})
+
 module.exports = router
