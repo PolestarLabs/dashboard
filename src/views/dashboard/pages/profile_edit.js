@@ -21,6 +21,7 @@ var CANVAS, ctx;
   el: "#dash",
   data:  {
       userIsPremium: isPremium(),
+      hasCustomBack: hasCustomBackF(),
       RSHP: {loading:true},
       featuredMarriage: userdata.featuredMarriage,
       message: "hello",
@@ -37,6 +38,10 @@ var CANVAS, ctx;
       selectSticker:'LOADING...',
       selectBooster: 'LOADING...',       
       selectFlair: userdata.modules.flairTop,
+
+      userHandle: userdata.personalhandle || userdata.id,
+      userHandleStatus:{status:"none",error:false},
+
       flairsAvailable,
       backgroundsAvailable:[],
       stickerAvailable: [],
@@ -82,6 +87,14 @@ destroyed() {
     HooperNavigation: window.Hooper.Navigation,
   },
   methods: {
+    checkHandle(){
+      if (!this.userHandle) return this.userHandleStatus = {error:true,status:"empty"};
+      fetch(`/api/utils/check_handle/${this.userHandle}`).then(r =>
+        r.json().then(res => {
+          this.userHandleStatus = res;
+        } )
+      );      
+    },
     updateCustomBg(){
       this.customBGzoom;
     },
@@ -823,8 +836,11 @@ function createCBGCanvas(){
   update();
 }
 
-function isPremium(){
+function hasCustomBackF(){
   return userdata && userdata.prime?.custom_background
+}
+function isPremium(){
+  return userdata && userdata.prime?.active
 }
 
 function createCustomBG(){

@@ -119,23 +119,42 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 		// NOTE --Custom BG Loader
 		br
 		br
+		hr
 		br
 
+		#custom-handle-loader
+			.plx-container
+				h3.title Custom Profile Link
+				h5.subtitle(v-if="userIsPremium")
+					| Share your profile with a unique link instead of numbers.
+				h5.subtitle(v-else)
+					| This can be unlocked by subbing to Prime Carbon or above
+
+				.plx-flex(:class=" userIsPremium ? 'plx-disabled' : '' ")
+					.textSite= HOST + "/"
+					.insertHandle
+						input(v-model="userHandle" @change="checkHandle()").customLinkInput
+						br
+						.help
+							span(v-if="userHandleStatus.error") {{userHandleStatus.status}}
+
+		hr
+		br
 		#custom-bg-loader
 			.plx-container
 				h3.title Custom Background
-				h5.subtitle(v-if="userIsPremium")
+				h5.subtitle(v-if="hasCustomBack")
 					| Your
 					b Prime subscription
 					| allows a custom background to be uploaded!*
 
 				h5.subtitle(v-else)
-					a(href="https://patreon.com/join/pollux" target="blank") Upgrade to Prime
+					a(href="https://patreon.com/join/pollux" target="blank") Upgrade to Prime 
 					span and upload custom background!
-				small.help(v-if="userIsPremium" style="opacity:.5")
+				small.help(v-if="hasCustomBack" style="opacity:.5")
 					| (*) Images must be SFW. If the image is deemed inappropriate we reserve the right to reset it. Abusing this perk may result in a ban or suspension
 
-			.bg-load-container(v-if=`userIsPremium && backgroundsAvailable.find(x=>x.code=='${userdata.id}')`)
+			.bg-load-container(v-if=`hasCustomBack && backgroundsAvailable.find(x=>x.code=='${userdata.id}')`)
 				.bg-insertion(style="transform:scale(.8)").plx-position-relative
 					.slider
 						.plx-slider
@@ -185,10 +204,13 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 
 			.padlock(v-else).plx-position-relative
 				img.fake-frame(src="/images/demo/profile_dummy.png")
-				a.can-enable(v-if="userIsPremium", @click="createNewCustomBg()")
+				a.can-enable(v-if="hasCustomBack", @click="createNewCustomBg()")
 					i.fas.fa-unlock
 					span &#x2000 Create Custom BG now!
 
+				.cannot-enable.can-enable(v-else-if="!hasCustomBack && userIsPremium")
+					i.fas.fa-lock
+					span &#x2000 You need to be Lithium/Iridiu or above to unlock this
 				.cannot-enable.can-enable(v-else)
 					i.fas.fa-lock
 					span &#x2000 Reserved for Prime Users

@@ -1067,3 +1067,22 @@ span.vue-color__editable-input__label,
 }
 .padlock i {
 }
+
+
+.plx-disabled{
+  opacity: .5;
+  pointer-events: none;
+  cursor: not-allowed;
+  user-select: none;
+}
+
+input.customLinkInput{
+  border: none;
+  background: #1b1b2b;
+  color: #AAE;
+  font-family: Panton;
+  padding: 2px 6px;
+  font-size: 12pt;
+  border-radius: 8px;
+  
+}
