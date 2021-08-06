@@ -2,6 +2,7 @@
 const express = require('express');
 const router = express.Router();
 
+
 router.get('/search',  cache(600), async(req,res)=>{
     let queries = {}
     Object.keys(req.query)
@@ -30,6 +31,7 @@ router.get('/search',  cache(600), async(req,res)=>{
 
 
 router.use('/:id/', (req,res,nex)=>{
+    if (req.params.id === "check_handle") return nex();
     res.locals.userID = req.params.id
     if (req.params.id === '@me') res.locals.userID = req.user.id;
     nex();
