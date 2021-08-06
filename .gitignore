@@ -1,6 +1,7 @@
 /data/
 /node_modules
 /config.js
+/dist/*
 /public/images/
 /public/images/artwork
 *.png
