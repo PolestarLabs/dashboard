@@ -126,7 +126,7 @@ if (!userDiscordData) return res.status(500).json("NO DISCORD USER DATA");
   if (PAYLOAD.type == "sell") {
     let result = await userCanSell(
       PAYLOAD.author,
-      PAYLOAD.currency,    
+      PAYLOAD,
       ITEM
     );
     if (result.res === true) {
@@ -348,7 +348,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
   //  • must have item
   //  • must have 10 RBN
 
-  let canSell = await userCanSell(CURRENT_USER.id,entry.currency,item,true);
+  let canSell = await userCanSell(CURRENT_USER.id,entry,item,true);
   
   console.log({canSell})
 
@@ -725,7 +725,7 @@ function itemInInventory(item, userData) {
   return { res, reason, status, query , prequery};
 }
 // might need refactor
-async function userCanSell(id, currency, item, softCheck=false) {
+async function userCanSell(id, PAYLOAD, softCheck=false) {
 
   const userData = await DB.users.findOne({id}).noCache();
 
@@ -733,9 +733,9 @@ async function userCanSell(id, currency, item, softCheck=false) {
     if (!(await DB.users.get(id)))
       return { res: false, reason: "USER NOT FOUND", status: 401 };
 
-    if (!(await ECO.checkFunds(id, currency === "SPH" ? (2 + ~~(PAYLOAD.price*0.05)) : (PAYLOAD.price*.15) , currency)))
+    if (!(await ECO.checkFunds(id, PAYLOAD.currency === "SPH" ? (2 + ~~(PAYLOAD.price*0.05)) : (PAYLOAD.price*.15) , PAYLOAD.currency)))
       return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
-    if (userData.amtItem("sph-license") < 1 && currency === "SPH") {
+    if (userData.amtItem("sph-license") < 1 && PAYLOAD.currency === "SPH") {
       res = false;
       reason = "NO SAPPHIRE LICENSE";
       status = 401;
