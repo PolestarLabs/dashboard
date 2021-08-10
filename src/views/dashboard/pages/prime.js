@@ -76,10 +76,11 @@ const PRIME = new Vue({
                     // TODO Remove this when proper activeClients are in place
                     ['578913818961248256','271394014358405121'] // DEFAULT
                 ).includes(u.id)
-            )
+            ) || []
         },
         setPrime(){
-            const currentServer = JSON.parse(JSON.stringify(this.serverToPrime));
+            console.log(this.serverToPrime,'stopirem');
+            const currentServer = JSON.parse(JSON.stringify(this.serverToPrime||{}));
             currentServer.meta = this.serverToPrime;
             const flavor = this.availablePolluxUsers.find(x=>x.flavor === this.selectedFlavor);
             currentServer.dbData = {};
@@ -110,7 +111,11 @@ const PRIME = new Vue({
                 res.json().then(res=>{
                     aServer.dbData = res;
                     this.currentPrimeServers.push(aServer);
-                })
+                }).catch(err=> {
+
+                    console.log("err jso")
+
+                } )
             })
         },
         unprime(svid){
