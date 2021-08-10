@@ -33,7 +33,6 @@ let lnOptions = {
     ctx.drawImage(tag2.item ,254+tag.width+5,55+8);
     ctx.drawImage(tag3.item ,280 ,100);
 
-    let result = canvas.toBuffer();
 
     res.status(200).header('Content-Type','image/png').send( await canvas.png );
 })
