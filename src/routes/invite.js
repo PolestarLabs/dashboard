@@ -92,7 +92,10 @@ router.get("/activate/:flavor/:serverID", checkAuth, async (req, res) => {
   const userData = await DB.users.findOne({id:req.user.id}).noCache().lean();
 
   if (!userData) return res.status(401).json({message:"User not found"});
-  if (!serverData) return res.status(404).json({message:"Server not found"});
+  if (!serverData) {
+    //DB.servers.new({id: serverID});
+    //return res.status(404).json({message:"Server not found. Add regular Pollux in this server first"})
+  };
   if (!userData.prime || !userData.prime.active)  return res.status(403).json({message:"User not Prime or Prime not active."});
   if (userData.prime.servers?.length >= userData.prime?.maxServers)  return res.status(403).json({message:"Max Prime servers reached."});
 
