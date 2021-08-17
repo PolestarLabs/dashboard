@@ -5,7 +5,7 @@ const router = express.Router();
 const fx = require('../../pipelines/globalFunctions.js');
 const operations = require('../../pipelines/operations.js');
 
-const getActiveClient = gData =>  polluxClients.get( gData?.activeClients?.[0] ) || PLX;
+const getActiveClient = gData =>  polluxClients.get( gData?.activeClients?.[0] )?.client || PLX;
 
 router.use("/:serverID", ADMCHECKS);
 
@@ -40,16 +40,15 @@ router.get('/:serverID', async function (req,res) {
     if(  (req.user.id !== "88120564400553984" && req.query.admpass ) && !(await isAdmin(req,SVID))) return res.status(401).json("NoADM");
 
     req.user.validator = md5(Date.now());
-    await wait(3);
+    await wait(1.2);
 
     const guildData = req.user.guilds?.find(g=>g.id === SVID);
     const serverData = await DB.servers.get(SVID);
     const guildPermissions = guildData.permissions;
     const authPLX = getActiveClient(serverData);
 
-    console.log({arr: Array.of(polluxClients) });
     console.log({authPLX});
-    console.log({serverData});
+    console.log({getRESTGuildMember: authPLX.getRESTGuildMember});
     console.log({sdataatc: serverData.activeClients});
 
     let [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([

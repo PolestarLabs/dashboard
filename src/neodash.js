@@ -168,9 +168,9 @@ config.clients.forEach(async cli=>{
 	newClient.category = cli.category;
 	newClient.friendly_name = cli.fname;
 	newClient.internal_name = cli.name;
-	newClient.user = await newClient.getRESTUser(cli.id);
+	let user = await newClient.getRESTUser(cli.id);
 	
-	polluxClients.set(cli.id,newClient)
+	polluxClients.set(cli.id, {client:newClient,user} )
 })
 
 
