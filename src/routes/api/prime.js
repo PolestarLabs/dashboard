@@ -17,14 +17,13 @@ router.delete("/:serverID", async (req, res) => {
     if (!userID) return res.status(401).json({error: "Unauthorized"});
     
     const {serverID} = req.params;
-    
     const userData = await DB.users.get({id: userID, "prime.servers": serverID});
     if (!userData) return res.status(403).json({error: "Server Prime sub belongs to someone else"});
     
     await DB.users.set(userID, {$pull: {"prime.servers": serverID }});
     if (polluxClients){
         Array.from(polluxClients, ([,{client,user}]) => {
-          if (client.category === "premium" && serverID !== config.official_guild){            
+          if (client?.category === "premium" && serverID !== config.official_guild){            
             client.leaveGuild(serverID).catch(er=>{});
           }
         })        
