@@ -5,6 +5,7 @@ const router = express.Router();
 const fx = require('../../pipelines/globalFunctions.js');
 const operations = require('../../pipelines/operations.js');
 
+const getActiveClient = gData =>  polluxClients.get( gData?.activeClients?.[0] ) || PLX;
 
 router.use("/:serverID", ADMCHECKS);
 
@@ -39,14 +40,24 @@ router.get('/:serverID', async function (req,res) {
     if(  (req.user.id !== "88120564400553984" && req.query.admpass ) && !(await isAdmin(req,SVID))) return res.status(401).json("NoADM");
 
     req.user.validator = md5(Date.now());
+    await wait(3);
 
+    const guildData = req.user.guilds?.find(g=>g.id === SVID);
+    const serverData = await DB.servers.get(SVID);
+    const guildPermissions = guildData.permissions;
+    const authPLX = getActiveClient(serverData);
 
-    let [serverData, memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
-        DB.servers.get(SVID),
-        PLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
-        PLX.getRESTGuildRoles(SVID),
-        PLX.getRESTGuild(SVID),
-        PLX.getRESTGuildChannels(SVID),
+    console.log({arr: Array.of(polluxClients) });
+    console.log({authPLX});
+    console.log({serverData});
+    console.log({sdataatc: serverData.activeClients});
+
+    let [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
+        
+        authPLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
+        authPLX.getRESTGuildRoles(SVID),
+        authPLX.getRESTGuild(SVID),
+        authPLX.getRESTGuildChannels(SVID),
         DB.reactRoles.find({server:SVID}).lean().exec(),
         DB.feed.find({server:SVID}).lean().exec(),
         DB.localranks.find({server:SVID}).lean().exec(),
@@ -84,8 +95,11 @@ router.post('/:serverID/save', async function(req,res){
     let payload = req.body.data || req.body;
     
     const SVID = req.params.serverID;
-    const serverInfo = await PLX.getRESTGuild(SVID);
-    const [svData,userData]= await Promise.all([(await  DB.servers.get(SVID)), (await DB.users.get(serverInfo.ownerID))]);
+    const svData= await  DB.servers.get(SVID);
+    const authPLX = getActiveClient(serverData);
+
+    const serverInfo = await authPLX.getRESTGuild(SVID);
+    const userData = await DB.users.get(serverInfo.ownerID);
 
     if(!payload.first && svData && payload && (!req.body.noDM && userData?.switches?.notifications?.ownerNotif === true)){
 
@@ -109,9 +123,7 @@ router.post('/:serverID/save', async function(req,res){
         if( svData.modules.FWELL.timer !== (payload.b_timeout || null)) diff +=`\nGoodbye Timer     : ${payload.w_timeout || "//-NO TIMEOUT-"}`;
         if( svData.modules.GREET.text !== payload.w_mess )   diff += `\nWelcome Text:     : ${payload.w_mess.slice(0,30) } `;
         if( svData.modules.FWELL.text !== payload.b_mess) diff +=    `\nGoodbye Text:     : ${payload.b_mess.slice(0,30) } `;
-        if( svData.modules.GREET.image!== payload.b_mess) diff +=    `\nGoodbye Text:     : ${payload.w_img ? "✅" : "❌️"  }`;
-        if( svData.modules.FWELL.image!== payload.b_mess) diff +=    `\nGoodbye Text:     : ${payload.b_img ? "✅" : "❌️"  }`;
-            PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
+            authPLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
 embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 Changes:
 \`\`\`${diff.length > 1?"js":""}${diff}
@@ -137,7 +149,6 @@ Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"
         'modules.GREET.enabled': JSON.parse(payload.w_togg||false),
         'modules.GREET.text': payload.w_mess,
         'modules.GREET.timer': payload.w_timeout,
-        'modules.GREET.image': payload.w_img,
         'modules.FWELL.channel': payload.b_chan,
         'modules.FWELL.enabled': JSON.parse(payload.b_togg||false),
         'modules.FWELL.text': payload.b_mess,
@@ -170,15 +181,18 @@ router.delete("/:serverID/reactionrole", async (req,res) =>{
     if(req.user.validator != validator) return res.status(401).json("Validator Mismatch "+`${validator} / ${req.user.validator}`);
 
     let SVID = req.params.serverID;
+
+    const svData= await  DB.servers.get(SVID);
+    const authPLX = getActiveClient(serverData);
     
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
-    let serverInfo= (await PLX.getRESTGuild(SVID));
+    let serverInfo= (await authPLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
 
     if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
         //TODO Receive a switch to delete or not the message where the reaction role is
         //PLX.deleteMessage(payload.channel,payload.message).catch(err=>"No message to delete");
-        PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
+        authPLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
           embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 
         **Deleted Reaction Role Message at <#${payload.channel}>**
@@ -212,12 +226,15 @@ router.put("/:serverID/language",async (req,res)=>{
         updateGlobalInstances({id:SVID})
         .then(async response=>{
 
-            let serverInfo= (await PLX.getRESTGuild(SVID));
+            const svData= await  DB.servers.get(SVID);
+            const authPLX = getActiveClient(serverData);
+
+            let serverInfo= (await authPLX.getRESTGuild(SVID));
             let userData = (await DB.users.get(serverInfo.ownerID));
 
             if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
 
-            PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
+            authPLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
                 embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
         
                 **Changed Global Language to __${payload.data}__**
@@ -261,11 +278,14 @@ router.put("/:serverID/savechannelist",async (req,res)=>{
     let payload = req.body.data;
     const SVID = req.params.serverID;
 
-    let serverInfo= (await PLX.getRESTGuild(SVID));
+    const svData= await  DB.servers.get(SVID);
+    const authPLX = getActiveClient(serverData);
+
+    let serverInfo= (await authPLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
 
     if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
-    PLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
+    authPLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
         embed: {color:0xff6699,description: `<@${req.user.id}> changed channel overrides for **${serverInfo.name}**'s
         Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
         `}
@@ -315,6 +335,7 @@ global.GLOBALINSTANCES = [
 ]
 
 async function ADMCHECKS(req,res,nex){
+    await wait(3);
     if(!req.user) console.log("no-user".red);
     req.handled = true;
     if(req.user.id ==='88120564400553984') return nex(); 
