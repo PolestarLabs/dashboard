@@ -96,7 +96,7 @@ router.post('/:serverID/save', async function(req,res){
     
     const SVID = req.params.serverID;
     const svData= await  DB.servers.get(SVID);
-    const authPLX = getActiveClient(serverData);
+    const authPLX = getActiveClient(svData);
 
     const serverInfo = await authPLX.getRESTGuild(SVID);
     const userData = await DB.users.get(serverInfo.ownerID);
@@ -183,7 +183,7 @@ router.delete("/:serverID/reactionrole", async (req,res) =>{
     let SVID = req.params.serverID;
 
     const svData= await  DB.servers.get(SVID);
-    const authPLX = getActiveClient(serverData);
+    const authPLX = getActiveClient(svData);
     
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
     let serverInfo= (await authPLX.getRESTGuild(SVID));
@@ -227,7 +227,7 @@ router.put("/:serverID/language",async (req,res)=>{
         .then(async response=>{
 
             const svData= await  DB.servers.get(SVID);
-            const authPLX = getActiveClient(serverData);
+            const authPLX = getActiveClient(svData);
 
             let serverInfo= (await authPLX.getRESTGuild(SVID));
             let userData = (await DB.users.get(serverInfo.ownerID));
@@ -279,7 +279,7 @@ router.put("/:serverID/savechannelist",async (req,res)=>{
     const SVID = req.params.serverID;
 
     const svData= await  DB.servers.get(SVID);
-    const authPLX = getActiveClient(serverData);
+    const authPLX = getActiveClient(svData);
 
     let serverInfo= (await authPLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
