@@ -36,12 +36,12 @@ router.use(cors());
 router.use(helmet());
 
 const AUTHED = (rq,rs,nx) => rq.user ? nx() : (passport.authenticate('bearer', { session: false }))(rq,rs,nx);
-const FIRST_PARTY = (rq,rs,nx) => ['master','admin','first_party'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
-const MASTER = (rq,rs,nx) => rq.user.id === config.data_controller || rq.user.apiPermission === "master" ? nx() : rs.sendStatus(403);
-const ADMIN  = (rq,rs,nx) => ['master','admin'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
-const TRUSTED= (rq,rs,nx) => ['master','admin','trusted'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
-const SPONSOR= (rq,rs,nx) => ['master','admin','sponsor'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
-const DONOR  = (rq,rs,nx) => ['master','admin','sponsor','donor'].includes(rq.user.apiPermission) ? nx() : rs.sendStatus(403);
+const FIRST_PARTY = (rq,rs,nx) => ['master','admin','first_party'].includes(rq.user.apiPermission) ? nx() : rs.status(403).json({message: "API Gate Deny 1" });
+const MASTER = (rq,rs,nx) => rq.user.id === config.data_controller || rq.user.apiPermission === "master" ? nx() : rs.status(403).json({message: "API Gate Deny 2" });
+const ADMIN  = (rq,rs,nx) => ['master','admin'].includes(rq.user.apiPermission) ? nx() : rs.status(403).json({message: "API Gate Deny 3" });
+const TRUSTED= (rq,rs,nx) => ['master','admin','trusted'].includes(rq.user.apiPermission) ? nx() : rs.status(403).json({message: "API Gate Deny 4" });
+const SPONSOR= (rq,rs,nx) => ['master','admin','sponsor'].includes(rq.user.apiPermission) ? nx() : rs.status(403).json({message: "API Gate Deny 5" });
+const DONOR  = (rq,rs,nx) => ['master','admin','sponsor','donor'].includes(rq.user.apiPermission) ? nx() : rs.status(403).json({message: "API Gate Deny 6" });
 router.get('/',AUTHED, (req, res)=> {
 	res.json(req.user)
 });
@@ -141,7 +141,7 @@ router.use(["/prime/checkUser/:userID"], async (req,res,next) => {
     (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./prime.js'))];
     return  (require('./prime.js'))(req,res,next);
 });
-router.use(["/prime/"], AUTHED, MASTER, async (...args) => {
+router.use(["/prime/"], AUTHED, async (...args) => {
     (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./prime.js'))];
     return  (require('./prime.js'))( ...args);
 });
