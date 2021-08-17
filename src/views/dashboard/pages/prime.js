@@ -146,7 +146,7 @@ const PRIME = new Vue({
     },
     computed: {
         activePrimeServers(){
-            return (this.CLIENT_PRIME_INFO || []).length
+            return (this.CLIENT_PRIME_INFO.servers || []).length
         },
         maxPrimeServers(){
             return this.CLIENT_PRIME_INFO.maxServers||0
