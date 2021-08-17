@@ -143,6 +143,14 @@ const PRIME = new Vue({
 
             
         },
+    },
+    computed: {
+        activePrimeServers(){
+            return (this.CLIENT_PRIME_INFO || []).length
+        },
+        maxPrimeServers(){
+            return this.CLIENT_PRIME_INFO.maxServers||0
+        }
     }
 });
 

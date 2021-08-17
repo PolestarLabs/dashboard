@@ -79,7 +79,7 @@ style
 			hr.plx-divider-icon
 			section#prime_servers
 				h3.title Current Prime Servers
-					span.small [{{(CLIENT_PRIME_INFO.servers||[]).length || 0}}/{{CLIENT_PRIME_INFO.maxServers||0}}]
+					span.small [{{activePrimeServers}}/{{maxPrimeServers}}]
 
 				.primes-parent
 					div(
@@ -103,7 +103,7 @@ style
 										:src= "getAvatar(client)"
 									)
 
-					//a.prime-server.empty(href='#addprime' v-for="slot in [...new Array( Math.min(30,CLIENT_PRIME_INFO.maxServers) - ((CLIENT_PRIME_INFO.servers||[]).length || 0))]")
+					//a.prime-server.empty(href='#addprime' v-for="slot in [...new Array( Math.min(30,CLIENT_PRIME_INFO.maxServers) - (activePrimeServers))]")
 						p
 							i: .fas.fa-star
 							| Unused Slot
@@ -111,8 +111,8 @@ style
 
 		section#addprime.plx-width-1-1(class="plx-width-3-5@m")
 			p
-				| Total Tokens: {{CLIENT_PRIME_INFO.maxServers||0}}
-				| Tokens Used: {{(CLIENT_PRIME_INFO.servers||[]).length || 0}}
+				| Total Tokens: {{ maxPrimeServers }}
+				| Tokens Used: {{  activePrimeServers  }}
 
 			h3.title Enable Prime for a new Server:
 			.prime-select-container
@@ -120,7 +120,7 @@ style
 				.prime-select-row
 					button(
 						class="plx-width-1-1 plx-width-1-3@m"
-						:class='((!( (CLIENT_PRIME_INFO.servers||[]).length || 0 )||!serverToPrime.id)?"disabled red":"")',
+						:class='(( (( activePrimeServers ) >= (maxPrimeServers)) ||!serverToPrime.id)?"disabled red":"")',
 						@click="setPrime()"
 					).magic-outline.plx-button.plx-margin-left.plx-margin-bottom#assignPrime Activate!
 					div
@@ -154,7 +154,7 @@ style
 										span(v-else).description {{option.id}}
 						//------------------------------
 
-				.tip.plx-text-danger(v-if="!( (CLIENT_PRIME_INFO.servers||[]).length || 0 )") Max Servers Reached!
+				.tip.plx-text-danger(v-if="(( activePrimeServers ) >= (maxPrimeServers))") Max Servers Reached!
 				.tip.plx-text-danger(v-else-if="!serverToPrime.id") Select a Server first!
 
 				br
