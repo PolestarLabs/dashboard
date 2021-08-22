@@ -26,8 +26,11 @@ router.use("/roulette.png", async (...args) => {
 });
 router.use("/carl.png", async (...args) => {
     delete require.cache[require.resolve('./carl.js')];
-    return (require('./carl.js'))( ...args,ImageCache);
-   
+    return (require('./carl.js'))( ...args,ImageCache);   
+});
+router.use("/marry.png", async (...args) => {
+    delete require.cache[require.resolve('./marriage.js')];
+    return (require('./marriage.js'))( ...args,ImageCache);   
 });
 router.use("/pfpv.png", async (...args) => {
     delete require.cache[require.resolve('./profilepreview.js')];
