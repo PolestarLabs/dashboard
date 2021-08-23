@@ -16,16 +16,20 @@ router.get('/', async (req,res)=>{
 	const canvas = Picto.new(880,300);
 	const ctx = canvas.getContext('2d');
 
-	const [ringPic, mainframe, aviA, aviB] = await Promise.all([
+	const [ringPic, mainframe, secframe, aviA, aviB] = await Promise.all([
 		Picto.getCanvas(`https://cdn.pollux.gg/build/items/${ ring }.png`),
 		Picto.getCanvas(`https://cdn.pollux.gg/build/marry/frame.png`),
+		Picto.getCanvas(`https://cdn.pollux.gg/build/marry/frame_full.png`),
 		Picto.getCanvas( `https://cdn.discordapp.com/avatars/${uid1}/${hash1}.png?size=256` ),
 		Picto.getCanvas( `https://cdn.discordapp.com/avatars/${uid2}/${hash2}.png?size=256` ),
 	]);
 		
 	ctx.drawImage(aviA,50,60, 154,154 );
 	ctx.drawImage(aviB,600,80, 154,154 );
-	ctx.drawImage(mainframe,0,0);
+	if (req.query.full)
+		ctx.drawImage(secframe,0,0);
+	else
+		ctx.drawImage(mainframe,0,0);
 	
 	ctx.shadowBlur = 15;
 	ctx.shadowColor = "#FEA2";
