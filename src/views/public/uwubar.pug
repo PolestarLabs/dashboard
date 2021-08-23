@@ -27,7 +27,7 @@
             .ringsbar.plx-flex.plx-flex-between
                 //-rings = [0,0,0,0,0,0,0,0,0,0,0]
                 .ring(v-for="ring in wifeData.ringCollection||[]")
-                    img(  :src="`/build/items/ring_${ring}.png`"  width=24 )
+                    img(  :src="`/build/items/${ring}.png`"  width=24 )
                 .plus
                     span
                         | {{(wifeData.ringCollection||[1]).length>6 ? (wifeData.ringCollection||[1]).length - 6 :""}}
@@ -38,4 +38,4 @@
             .tier-name ---
             .lvp {{wifeData.lovepoints}} LVP
         .ring
-            img(  :src="`/build/items/ring_${wifeData.ring}.png`" width=64 )
+            img(  :src="`/build/items/${wifeData.ring}.png`" width=64 )

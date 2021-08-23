@@ -55,7 +55,7 @@ mixin wifeBox
 								span.name {{rel.wife.username}}
 								span.discrimin(class="-plx-visible@m") # {{rel.wife.discriminator}}
 							.since.mome(class="-plx-visible@m") {{since(rel.since)}}
-							.ring: img(:src="`/build/items/ring_${rel.ring}.png`")
+							.ring: img(:src="`/build/items/${rel.ring}.png`")
 
 						div(plx-drop='mode:click; animation:plx-animation-slide-top-small' style="width:auto"): .wife-actions(:id="rel.id")
 							.plx-button.plx-button-secondary(@click="changeFeatMarriage(rel.id)", :data-for="rel.id")
