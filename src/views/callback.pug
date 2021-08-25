@@ -19,10 +19,7 @@ html
     script.
         try{
             setTimeout(function(){
-                window.opener.location.reload(true);
-                setTimeout(function(){
-                    window.opener.location.reload(true);
-                },1000)
+                window.opener.location.reload( );
             },1000)
         }catch(e){ }
 
