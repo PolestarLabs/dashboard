@@ -325,9 +325,9 @@ router.post("/sell/:entry_id", async (req,res)=>{
   let CURRENT_USER;
   if(!req.user) {    
     if ( "Bot " + req.body?.token === PLX.token) CURRENT_USER = req.body.user;
-    else return res.status(403).json({status: "LARIS TOKEN MISMATCH"});
+    else return res.status(403).json({status: "PLEASE LOGIN FIRST"});
   }else{CURRENT_USER = req.user}
-  if (!CURRENT_USER)  return res.status(401).json({status: "CURRENT_USER MISSING"});
+  if (!CURRENT_USER)  return res.status(401).json({status: "CURRENT USER MISSING"});
 
 
   let entry = await DB.marketplace.findOne({ id: entry_id }).noCache().lean();
@@ -725,7 +725,7 @@ function itemInInventory(item, userData) {
   return { res, reason, status, query , prequery};
 }
 // might need refactor
-async function userCanSell(id, PAYLOAD, softCheck=false) {
+async function userCanSell(id, PAYLOAD, item, softCheck=false) {
 
   const userData = await DB.users.findOne({id}).noCache();
 
