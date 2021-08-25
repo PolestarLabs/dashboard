@@ -88,6 +88,7 @@ const formidable = require('formidable');
 
 
 const app = Express();
+
 app.use(serverTiming());
 app.use(function (req, res, next) {		
 
@@ -264,14 +265,8 @@ Object.assign(global,require( process.env.BOT_PATH + '/core/utilities/Gearbox' )
 
 //-- PASSPORT  
 const scopes = ['identify','email', 'guilds','connections'];
-Passport.serializeUser((user, done) => {
-	console.log({userSerialized:user});
-
-	done(null, user);
-}); 
-Passport.deserializeUser((obj, done) => {
-	done(null, obj);
-});
+Passport.serializeUser((user, done) => done(null, user)); 
+Passport.deserializeUser((obj, done) =>  done(null, obj));
 
 Passport.use(new CookieStrategy(
 	function (token, done) {
@@ -295,8 +290,7 @@ const discordStrategy = new Strategy({
 }, function (req, accessToken, refreshToken, profile, done) {
 		profile.refreshToken = refreshToken;
 		process.nextTick(function () {
-			console.log("HELLO",{profile})
-		DB.users.updateOne({id: profile.id},{discordData: profile}).then(x=>x);
+			DB.users.updateOne({id: profile.id},{discordData: profile}).then(x=>x);
 		return done(null, profile);
 	});
 });
@@ -405,7 +399,6 @@ app.use(logger(function(tokens,req,res){
 	let status = tokens.status(req,res);
 	let STATUS = status >= 500 ? status.red : status >= 400 ? status.yellow : status >= 300 ? status.cyan : status >= 200 ? status.green : status;
 	let METHOD = (M) => M=='POST'? " POST ".bgYellow : M=='GET' ? " GET  ".bgCyan : M.padEnd(6).bgRed;
-	if (process.env.NODE_ENV!=="production") res.endTime('setheaders', 'Set Headers');
 	return[
 		//("["+tokens.date(req,res)+"]").grey.bgBlack.dim,"\n",
 		METHOD(tokens.method(req,res)),
