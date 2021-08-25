@@ -230,7 +230,7 @@ router.get('/relationships', async (req, res)=> {
             type: rel.type,
             initiative: rel.initiative, 
             ring: rel.ring,
-            ringCollection: rel._doc?.ringCollection,
+            ringCollection: rel._doc?.ringCollection || rel?.ringCollection || [],
             since: rel.since,
             id: rel._id,
             users: rel.users,
