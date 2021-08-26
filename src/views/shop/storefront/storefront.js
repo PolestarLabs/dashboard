@@ -56,6 +56,12 @@ const STORE = new Vue({
     timer2: false,
     userdata,
     backgrounds: { loading: true },
+    rotation: { 
+      start: 0,
+      next: 0,
+      payload: [],
+      loading: true
+    },
     medals: { loading: true },
     boosters: { loading: true },
     stickers: { loading: true },
@@ -177,7 +183,7 @@ const STORE = new Vue({
         this.timer2 = null;
       }
       this.timer2 = setTimeout(() => {
-        fetch("/api/cosmetics/search?type=medal&lim=20&searchq="+q+(q.length<3?"&event=none":"")).then((r) =>
+        fetch("/api/cosmetics/search?type=medal&lim=20&searchq="+q+(q.length<3?"&event=null":"")).then((r) =>
           r.json().then( (res) => {STORE.medals = res; this.timer2 = null} )
         );
       }, 800);
@@ -202,7 +208,7 @@ const STORE = new Vue({
     },
     storepage(type,store,max,jump){
       this[store] = [];
-      fetch(`/api/cosmetics/search?type=${type}&lim=${max||20}&skip=${jump*(max||20)}&event=none`).then((r) =>
+      fetch(`/api/cosmetics/search?type=${type}&lim=${max||20}&skip=${jump*(max||20)}&event=null`).then((r) =>
         r.json().then(async (res) => this[store] = res )
       )
     }
@@ -213,19 +219,19 @@ console.log(STORE);
  
 
 Promise.all([
-  fetch("/api/cosmetics/search?type=background&lim=20&event=none").then((r) =>
+  fetch("/api/cosmetics/search?type=background&lim=10&event=null").then((r) =>
     r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
-  fetch("/api/cosmetics/search?type=medal&lim=20&event=none").then((r) =>
+  fetch("/api/cosmetics/search?type=medal&lim=10&event=null").then((r) =>
     r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
-  fetch("/api/cosmetics/search?type=sticker&lim=20&event=none").then((r) =>
+  fetch("/api/cosmetics/search?type=sticker&lim=10&event=null").then((r) =>
     0//r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
-  fetch("/api/cosmetics/search?type=skin&lim=20").then((r) =>
+  fetch("/api/cosmetics/search?type=skin&lim=10").then((r) =>
     r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
-  fetch("/api/cosmetics/search?type=flair&lim=20").then((r) =>
+  fetch("/api/cosmetics/search?type=flair&lim=10").then((r) =>
     0//r.json().then(async (res) => STORE.arrivals.push(...res))
   ),
   fetch("/api/items/search?lim=10&open=true").then((r) =>
@@ -235,11 +241,14 @@ Promise.all([
   STORE.arrivals.sort((a,b)=> b.release - a.release)
 });
 
-  fetch("/api/cosmetics/search?type=background&event=none").then((r) =>
+  fetch("/api/cosmetics/search?type=background&event=null").then((r) =>
     r.json().then(async (res) => (STORE.backgrounds = res.slice(0, 24)))
   ),
+  fetch("/api/shop/bgrotation").then((r) =>
+    r.json().then(async (res) => (STORE.rotation = res ))
+  ),
 
-  fetch("/api/cosmetics/search?type=medal&event=none").then((r) =>
+  fetch("/api/cosmetics/search?type=medal&event=null").then((r) =>
     r.json().then(async (res) => (STORE.medals = res.slice(0, 24)))
   ),
 
