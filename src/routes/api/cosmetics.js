@@ -51,6 +51,14 @@ router.get("/search", cache(2600), async (req,res) =>{
             })
     let sort = {_id:-1}
     if (queries.event == "null") queries.event = null;
+
+    if (req.query.before){
+        queries._id =  { $lt: objectIdReferenceTimestamp(req.query.before) }
+    }
+    if (req.query.after){
+        queries._id =  { $gt: objectIdReferenceTimestamp(req.query.after) }
+    }
+
     queries.public = req.query.public !== 0;
     if (req.query.searchq){
         const qRegex = new RegExp(`.*${req.query.searchq}.*`,'i');
@@ -196,4 +204,13 @@ function getColorData(color){
             return resolve(col)
         }
     })
+}
+
+
+function objectIdReferenceTimestamp(ts) {    
+    ts = new Date(ts).getTime() || Number(ts);
+    const hexSeconds = Math.floor(ts/1000).toString(16);
+    console.log({ts,hexSeconds})
+    const objid = MonTypes.ObjectId(hexSeconds + "0000000000000000");
+    return objid
 }

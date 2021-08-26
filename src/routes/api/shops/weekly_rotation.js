@@ -1,4 +1,4 @@
-
+const {Types: MonTypes} = require("mongoose");
 const rotationSetsCache = new Map();
 const DAY = 86400000;
 
@@ -27,8 +27,11 @@ module.exports = async (query) => {
   const PREV_SEED = Number(query.preseed) || preseed || 0;
 
   let allBGs = shuffle( await DB.cosmetics.find(
-    {type:"background",public:"true",event:null,buyable:true,arrival:{$exists:false}},
-    {_id:0}),
+	{
+		_id: {$lt: objectIdReferenceTimestamp(SEED) },
+		type:"background",public:"true",event:null,buyable:true,arrival:{$exists:false}
+	},
+	{_id:0}),
   SEED);
 
   const start = Date.now();
@@ -48,7 +51,17 @@ module.exports = async (query) => {
   return {bench: end - start + "ms" ,payload, start: new Date(SEED), next: new Date(nextSeed) }
 };
 
- function getFinalRotation(allBGs, SEED, previous) {
+
+function objectIdReferenceTimestamp(ts) {    
+	ts = new Date(ts).getTime() || Number(ts);
+	const hexSeconds = Math.floor(ts/1000).toString(16);
+	console.log({ts,hexSeconds})
+	const objid = MonTypes.ObjectId(hexSeconds + "0000000000000000");
+	return objid
+}
+
+
+function getFinalRotation(allBGs, SEED, previous) {
 	let everyBG = [].concat(allBGs)
 	if (previous) everyBG = everyBG.filter(x=> !previous.find(y=> y.code === x.code));
 	const allBGs1 = everyBG.slice(0, ~~(everyBG.length / 2));
@@ -70,5 +83,6 @@ module.exports = async (query) => {
  
 	payload = payload.flat().map(x => { x.items = undefined; return x; });
 	return payload;
- }
+}
+ 
  
