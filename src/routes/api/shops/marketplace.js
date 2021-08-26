@@ -321,8 +321,9 @@ router.post("/sell/:entry_id", async (req,res)=>{
   await DB.marketplace.updateOne({ id: entry_id },{$set: {lock: true}});
   
   let sale = await awardMarketplaceItem(item,CURRENT_USER.id,true);
+  let receive = await awardMarketplaceItem(item,entry.author,false);
 
-  if(sale) {
+  if(sale&&receive) {
     ECO.arbitraryAudit(entry.author, CURRENT_USER.id, entry.price, 'MARKETPLACE [SALE]', entry.currency)
     .then(async receipt=>{
       await ECO.pay(CURRENT_USER.id, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", entry.currency);
