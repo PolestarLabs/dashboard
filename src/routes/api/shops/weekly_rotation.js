@@ -6,7 +6,7 @@ const DAY = 86400000;
 // sunday is day 0
 function rotationStart(date,offset =0){
 	return new Date( 
-		~~( (date.getTime() + ( offset * DAY * 6 ) - date.getHours() * 60 * 60e3) / (60e3*60) ) // MIDNIGHT
+		~~( (date.getTime() + ( offset * DAY * 7 ) - date.getHours() * 60 * 60e3) / (60e3*60) ) // MIDNIGHT
 		*60*60e3 - (  date.getDay() * DAY) // SUNDAY
 	).getTime()
 }
@@ -27,8 +27,8 @@ module.exports = async (query) => {
   const PREV_SEED = Number(query.preseed) || preseed || 0;
 
   let allBGs = shuffle( await DB.cosmetics.find(
-    {type:"background",public:"true",event:"none",buyable:true,arrival:{$exists:false}},
-    {_id:0,name:1,code:1,rarity:1}),
+    {type:"background",public:"true",event:null,buyable:true,arrival:{$exists:false}},
+    {_id:0}),
   SEED);
 
   const start = Date.now();
@@ -64,7 +64,7 @@ module.exports = async (query) => {
 	for (rar of ["C", "U", "R", "SR", "UR"])
 	  rarMap[rar] = shuffle(shuffle(everyBG.reverse(), SEED).filter(bg => !!bg && bg.rarity === rar), SEED);
 	//[9,6,4,3,2].forEach((q,i)=>{
-	[8, 6, 4, 4, 4].forEach((q, i) => {
+	[6, 4, 4, 3, 3].forEach((q, i) => {
 	  payload.push(shuffle(Object.values(rarMap)[i], SEED).filter(x => !!x).slice(0, q));
 	});
  
