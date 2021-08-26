@@ -1,11 +1,19 @@
 const ECO = require("../../../pipelines/economy.js");
 const express = require("express");
 const router = express.Router();
-const { bgPrices, medalPrices,sapphireModifier, jadeModifier, tokenModifier } = require( process.env.BOT_PATH + "/resources/lists/GlobalNumbers.js" );
+
+const {
+    BackgroundPrices, 
+    MedalPrices, 
+    SAPPHIRE_MODIFIER, 
+    JADE_MODIFIER, 
+    TOKEN_MODIFIER 
+} = require("@polestar/constants");
+
 const defaultPrices = {
-    background: bgPrices,
-    bundle: bgPrices * 10,
-    medal: medalPrices
+    background: BackgroundPrices,
+    bundle: BackgroundPrices * 10,
+    medal: MedalPrices
 }
 
 
@@ -188,11 +196,11 @@ function itemPrice (item,currency="RBN"){
     let basePrice = item.price || defaultPrices[item.type]?.[item.rarity]
     switch (currency){
         case "SPH":
-            return  Math.ceil(basePrice * sapphireModifier);
+            return  Math.ceil(basePrice * SAPPHIRE_MODIFIER);
         case "JDE":
-            return  Math.ceil(basePrice * jadeModifier);
+            return  Math.ceil(basePrice * JADE_MODIFIER);
         case "EVT":
-            return  Math.ceil(basePrice * tokenModifier);
+            return  Math.ceil(basePrice * TOKEN_MODIFIER);
         case "RBN":
         default:
             return basePrice;
