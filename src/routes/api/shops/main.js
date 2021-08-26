@@ -8,7 +8,7 @@ const {
     SAPPHIRE_MODIFIER, 
     JADE_MODIFIER, 
     TOKEN_MODIFIER 
-} = require("@polestar/constants");
+} = require("@polestar/constants/shop");
 
 const defaultPrices = {
     background: BackgroundPrices,
@@ -206,5 +206,11 @@ function itemPrice (item,currency="RBN"){
             return basePrice;
     }
 }
+
+router.get("/bgrotation", cache(30), async (req,res)=>{
+    delete require.cache[ require.resolve("./weekly_rotation.js")]
+    const Rotation = require ("./weekly_rotation.js");
+    return res.json( await Rotation(req.query) );
+})
 
 module.exports = router;
