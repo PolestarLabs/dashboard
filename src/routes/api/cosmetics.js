@@ -50,7 +50,7 @@ router.get("/search", cache(2600), async (req,res) =>{
                 queries[ky] = req.query[ky]
             })
     let sort = {_id:-1}
-    //if (!queries.event) queries.event = 'none';
+    if (queries.event == "null") queries.event = null;
     queries.public = req.query.public !== 0;
     if (req.query.searchq){
         const qRegex = new RegExp(`.*${req.query.searchq}.*`,'i');
@@ -146,7 +146,7 @@ router.get("/count/:type", cache(3600), async (req,res) =>{
     const {type} = req.params;
     const {event,rarity} = req.query;
     const searchQuery = {type, public: true, rarity: rarity || {$ne:'XR'} };
-    searchQuery.event = event || 'none';
+    searchQuery.event = event || null;
     console.log({searchQuery})
     let response = await DB.cosmetics.find(searchQuery).noCache().count().catch(e=>"???");
     return res.status(200).json(response);
