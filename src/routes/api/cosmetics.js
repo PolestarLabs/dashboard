@@ -9,7 +9,7 @@ const {Types: MonTypes} = require("mongoose");
 
 function CLEANUP(item) {
     if (!item) return null;
-    if(item.event == 'none' ) item.event = false;
+    if( !item.event ) item.event = false;
     //TODO whether the item is in current rotation or not
     return {
         unified_id: item._id,
@@ -85,7 +85,7 @@ router.get("/search", cache(2600), async (req,res) =>{
 
         result.forEach(x=>{
             let timestamp = x._id.toString().substring(0,8)
-            if(x.event == 'none' ) x.event = false;
+            if( !x.event ) x.event = false;
             x.release = parseInt( timestamp, 16 ) * 1000
         })
         console.log(result)

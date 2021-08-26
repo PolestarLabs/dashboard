@@ -44,7 +44,7 @@ module.exports = {
             })
         })
 
-        await DB.cosmetics.updateOne({type:'background', code: req.user.id }, {$inc: {version: 1}, $set: { name: `${req.user.username}'s Custom Background`, tags:"CUSTOM", rarity: "XR", type:"background", id: req.user.id, tradeable: false, droppable: false, destroyable: false, event: 'none' } }, {upsert: true} );
+        await DB.cosmetics.updateOne({type:'background', code: req.user.id }, {$inc: {version: 1}, $set: { name: `${req.user.username}'s Custom Background`, tags:"CUSTOM", rarity: "XR", type:"background", id: req.user.id, tradeable: false, droppable: false, destroyable: false, event: null } }, {upsert: true} );
     },
     createNew: async (req,res) => {
 
@@ -65,7 +65,7 @@ module.exports = {
         
 
         await Promise.all([
-            DB.cosmetics.updateOne({type:'background', code: req.user.id }, {$set: {version: 0, name: `${req.user.username}'s Custom Background`, tags:"CUSTOM", rarity: "XR", type:"background", id: req.user.id, tradeable: false, droppable: false, destroyable: false, event: 'none' } }, {upsert: true} ),
+            DB.cosmetics.updateOne({type:'background', code: req.user.id }, {$set: {version: 0, name: `${req.user.username}'s Custom Background`, tags:"CUSTOM", rarity: "XR", type:"background", id: req.user.id, tradeable: false, droppable: false, destroyable: false, event: null } }, {upsert: true} ),
             DB.users.set({id: req.user.id }, {$addToSet: {"modules.bgInventory": req.user.id } })
         ]).then(resp=>{
             res.status(200).json(resp)
