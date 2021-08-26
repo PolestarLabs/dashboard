@@ -213,4 +213,10 @@ router.get("/bgrotation", cache(30), async (req,res)=>{
     return res.json( await Rotation(req.query) );
 })
 
+router.get("/userrotation", cache(30), async (req,res)=>{
+    delete require.cache[ require.resolve("./weekly_rotation.js")]
+    const Rotation = require ("./weekly_rotation.js");
+    return res.json( await Rotation(req.query, req.user?.id) );
+})
+
 module.exports = router;
