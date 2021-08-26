@@ -43,8 +43,8 @@ mixin shopcard()
         //assuming it is always DECK for now
         // PLEASE CHANGE THIS
         .container
-          img(:src="`/build/cards/${item.id.split('_').join('/')}/${item.id.startsWith('tarot')? 'star':'HQ'}.png`")
-          img(:src="`/build/cards/${item.id.split('_').join('/')}/backface.png`")
+          .cardface.face: img(:src="`/build/cards/${item.id.split('_').join('/')}/${item.id.startsWith('tarot')? 'star':'HQ'}.png`")
+          .cardface.backface: img(:src="`/build/cards/${item.id.split('_').join('/')}/backface.png`")
       .img(v-else).item
         img(:src="`/build/items/${item.id}.png`")
 
