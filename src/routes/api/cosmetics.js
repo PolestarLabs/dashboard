@@ -43,7 +43,6 @@ router.get("/all", cache(2600), async (req,res) =>{
 })
 router.get("/search", cache(2600), async (req,res) =>{
     let queries = {};
-    console.log('one')
     Object.keys(req.query)
         .filter(qry => ['_id','id','rarity','code','event','icon','type','expires','filter','name'].includes(qry) )
         .forEach(ky=> {
@@ -77,7 +76,7 @@ router.get("/search", cache(2600), async (req,res) =>{
         queries = Object.assign({},new_queries);
 
     }
-    console.log(queries)
+    //console.log(queries)
     DB.cosmetics.find(queries,{public:0,meta:0})
     .skip(parseInt(req.query.skip)||0)
     .limit( parseInt(req.query.lim)||50)
@@ -96,7 +95,6 @@ router.get("/search", cache(2600), async (req,res) =>{
             if( !x.event ) x.event = false;
             x.release = parseInt( timestamp, 16 ) * 1000
         })
-        console.log(result)
         res.json(result)
     })
 })
