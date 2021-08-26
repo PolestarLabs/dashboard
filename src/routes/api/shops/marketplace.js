@@ -57,41 +57,6 @@ router.get("/item/:item", async (req, res) => {
 */
 
 
-const rotationSetsCache = new Map();
-
-router.get("/bgrotation", cache(30), async (req,res)=>{
-  const ts = Number(req.query.ts) || Date.now();
-  const currentDate = new Date(ts);
-  const yearMonthFifteenWeek = currentDate.getFullYear() + currentDate.getMonth() + (( currentDate.getDate() - currentDate.getDay() ) * 15);
-  const preseed = getPreviousRotationSeed(1,ts);
-  const preseed2 = getPreviousRotationSeed(2,ts);
-  const preseed3 = getPreviousRotationSeed(3,ts);
-
-  const SEED = Number(req.query.seed) || yearMonthFifteenWeek || 1;
-  const PREV_SEED = Number(req.query.preseed) || preseed || 0;
-
-  let allBGs = shuffle( await DB.cosmetics.find(
-    {type:"background",public:"true",event:"none",buyable:true,arrival:{$exists:false}},
-    {_id:0,name:1,code:1,rarity:1}),
-  SEED);
-
-  const start = Date.now();
-  console.log({ts,PREV_SEED,preseed2,preseed3})
-  const previous_payload3 = rotationSetsCache.get(preseed3) || getFinalRotation(allBGs, preseed3);
-  const previous_payload2 = rotationSetsCache.get(preseed2) || getFinalRotation(allBGs, preseed2, previous_payload3);
-  const previous_payload = rotationSetsCache.get(PREV_SEED) || getFinalRotation(allBGs, PREV_SEED, previous_payload2);
-  
-  const payload = rotationSetsCache.get(SEED) || getFinalRotation(allBGs, SEED, previous_payload);
-  const end = Date.now();
-
-  rotationSetsCache.set(preseed3,previous_payload3);
-  rotationSetsCache.set(preseed2,previous_payload2);
-  rotationSetsCache.set(PREV_SEED,previous_payload);
-  rotationSetsCache.set(yearMonthFifteenWeek,payload);
-
-  return res.json({bench: end - start + "ms" ,payload})
-});
-
 
 
 router.post("/", async (req, res) => {
@@ -498,35 +463,6 @@ router.get(["/","/:entry"],  async (req, res) => {
 
 
 //SECTION FUNCTIONS
-
-function getPreviousRotationSeed( STEPS = 1, date = Date.now() ){
-  const currentDate = new Date(date);
-  console.log({date,currentDate,STEPS})
-  return currentDate.getFullYear() + currentDate.getMonth() + (( currentDate.getDate() - currentDate.getDay() - (6*STEPS) ) * 15);
-}
-function getFinalRotation(allBGs, SEED, previous) {
-  let everyBG = [].concat(allBGs)
-  if (previous) everyBG = everyBG.filter(x=> !previous.find(y=> y.code === x.code));
-  const allBGs1 = everyBG.slice(0, ~~(everyBG.length / 2));
-  const allBGs2 = everyBG.slice(~~(everyBG.length / 2) + 1);
-
-  everyBG = shuffle([
-    shuffle(shuffle(allBGs1.reverse(), SEED).reverse(), SEED).reverse(),
-    shuffle(shuffle(allBGs2.reverse(), SEED).reverse(), SEED).reverse()
-  ].flat(), SEED);
-
-  const rarMap = {};
-  let payload = [];
-  for (rar of ["C", "U", "R", "SR", "UR"])
-    rarMap[rar] = shuffle(shuffle(everyBG.reverse(), SEED).filter(bg => !!bg && bg.rarity === rar), SEED);
-  //[9,6,4,3,2].forEach((q,i)=>{
-  [8, 6, 4, 4, 4].forEach((q, i) => {
-    payload.push(shuffle(Object.values(rarMap)[i], SEED).filter(x => !!x).slice(0, q));
-  });
-
-  payload = payload.flat().map(x => { x.items = undefined; return x; });
-  return payload;
-}
 
 async function awardMarketplaceItem(item,userID,remove){
   let query = {};
