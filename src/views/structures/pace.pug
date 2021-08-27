@@ -1,4 +1,5 @@
-script window.paceOptions = {restartOnRequestAfter: 1500 , ajax: false,ghostTime: 100,restartOnPushState: false,startOnPageLoad:false}; Pace?.options.restartOnPushState = false;
+script window.paceOptions = {restartOnRequestAfter: 1500 , ajax: false,ghostTime: 100,restartOnPushState: false,startOnPageLoad:false}; Pace.options.restartOnPushState = false;
+script if (Pace) setTimeout( ()=> Pace.stop(), 1200 );
 style.
         .pace {
         -webkit-pointer-events: none;
