@@ -165,7 +165,7 @@ block content
         .plx-flex.plx-width-1-1
 
             .store-sidebar
-              ul.store-nav.plx-subnav(plx-sticky="offset:50; bottom: #endof",  plx-switcher="connect: .store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small")
+              ul.store-nav.plx-subnav(plx-sticky="offset:50; bottom: #endof",  plx-switcher="connect: .store-tab-content; animation: plx-animation-slide-left-small, plx-animation-slide-left-small; active: 0 ")
                   li.megastroke.menuitem( ).plx-active
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-star
@@ -215,7 +215,7 @@ block content
               
             ul.store-main.plx-width-1-1.store-tab-content.plx-switcher
                 
-                    li#arrivals.plx-active(class="plx-active")
+                    li#arrivals.plx-active
                         include pages/arrivals
                     //li#timed
                         include pages/timed
