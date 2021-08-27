@@ -3,7 +3,11 @@
     section.intro.plx-container.margin-top-mobo.plx-margin-top
         h1.title Backgrounds Rotation
         h3.subtitle Weekly roundup of buyable backdrops to decorate your profile
-        p Every week we have a selection of {{rotation.payload.length}} backgrounds that can be obtained at your choice from our BGShop.
+        p 
+            | Every week we have a selection of {{rotation.payload.length}} backgrounds that can be obtained at your choice from our BGShop.
+            br
+            | Rotations are guaranteed to not repeat items across from one week to the other.
+
         
         h5 Next Rotation
         div(:plx-countdown='`date: ${  new Date(rotation.next).toISOString() } `').plx-rotation-counter
@@ -19,7 +23,20 @@
             div.flex-row
                 span.plx-countdown-seconds
          
+    hr.plx-divider-icon
+    section.custom.plx-container.margin-top-mobo.plx-margin-top
+        h2.title Personal Rotation
+        h4.subtitle One pick of every tier of items you don't own already
+    ul.plx-flex.plx-flex-wrap.plx-flex-center(v-if="!custom_rotation.loading")
+        li(v-for="(item,i) in custom_rotation.payload" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small
+            .shopbox( :class="[hasItem(item)?'obtained':'',item.type,'raritybox',item.rarity].join(' ')" )
+                +shopcard()
+    .plx-container
+        hr
 
+    section.custom.plx-container.margin-top-mobo.plx-margin-top
+        h2.title Global Rotation
+        h4.subtitle Random picks for everyone
 
     ul.plx-flex.plx-flex-wrap.plx-flex-center 
         li(v-for="(item,i) in rotation.payload" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small

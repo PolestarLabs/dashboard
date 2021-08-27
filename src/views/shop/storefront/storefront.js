@@ -62,6 +62,7 @@ const STORE = new Vue({
       payload: [],
       loading: true
     },
+    custom_rotation:{ payload: [], loading: true },
     medals: { loading: true },
     boosters: { loading: true },
     stickers: { loading: true },
@@ -246,6 +247,9 @@ Promise.all([
   ),
   fetch("/api/shop/bgrotation").then((r) =>
     r.json().then(async (res) => (STORE.rotation = res ))
+  ),
+  fetch("/api/shop/userrotation").then((r) =>
+    r.json().then(async (res) => (STORE.custom_rotation = res ))
   ),
 
   fetch("/api/cosmetics/search?type=medal&event=null").then((r) =>
