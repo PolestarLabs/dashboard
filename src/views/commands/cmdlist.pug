@@ -76,7 +76,7 @@ block content
                         
                         ul.plx-subnav.plx-subnav-pill.subnavite
                             li(plx-filter-control="")#allFIlter: a All
-                            each cat in cm.CATS
+                            each cat in cm.CATS.filter(x=>(x.name||"").toLowerCase() !== "nsfw")
                                 li(plx-filter-control=".filter-"+cat.consolidated).genericFilter: a(class="c-outline "+cat.consolidated)=  cat.name
                         
                         
@@ -93,7 +93,7 @@ block content
                                     a(href="#top").plx-button
                                         i: .fas.fa-arrow-up
                                         | TOP
-                                    each cat in cm.CATS                      
+                                    each cat in cm.CATS.filter(x=>(x.name||"").toLowerCase() !== "nsfw")
                                         li(): a(href="#"+cat.consolidated)=  cat.name                                                 
 
 
