@@ -35,7 +35,7 @@ module.exports = async (query,user,rarArray) => {
 	if (user){
 		const userData = await DB.users.get(user);
 		
-		if (userData.switches?.custom_rt && userData.switches?.custom_rt.seed === SEED) {
+		if (userData.switches?.custom_rt && userData.switches?.custom_rt.seed === SEED && userData.items?.length ) {
 			filterQuery.code = {$in: userData.switches.custom_rt.items };
 		}else{
 			filterQuery.code = {$nin: userData.modules.bgInventory };
