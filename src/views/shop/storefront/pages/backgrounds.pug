@@ -24,19 +24,23 @@
                 span.plx-countdown-seconds
          
     hr.plx-divider-icon
-    section.custom.plx-container.margin-top-mobo.plx-margin-top
-        h2.title Personal Rotation
-        h4.subtitle One pick of every tier of items you don't own already
-    ul.plx-flex.plx-flex-wrap.plx-flex-center(v-if="!custom_rotation.loading")
-        li(v-for="(item,i) in custom_rotation.payload" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small
-            .shopbox( :class="[hasItem(item)?'obtained':'',item.type,'raritybox',item.rarity].join(' ')" )
-                +shopcard()
-    .plx-container
-        hr
+    
+    // TODO[epic=dashboard]: Personal Rotation Update
 
-    section.custom.plx-container.margin-top-mobo.plx-margin-top
-        h2.title Global Rotation
-        h4.subtitle Random picks for everyone
+        section.custom.plx-container.margin-top-mobo.plx-margin-top
+            h2.title Personal Rotation
+            h4.subtitle One pick of every tier of items you don't own already
+        ul.plx-flex.plx-flex-wrap.plx-flex-center(v-if="!custom_rotation.loading")
+            li(v-for="(item,i) in custom_rotation.payload" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small
+                .shopbox( :class="[hasItem(item)?'obtained':'',item.type,'raritybox',item.rarity].join(' ')" )
+                    +shopcard()
+        .plx-container
+            hr
+
+        section.custom.plx-container.margin-top-mobo.plx-margin-top
+            h2.title Global Rotation
+            h4.subtitle Random picks for everyone
+            
 
     ul.plx-flex.plx-flex-wrap.plx-flex-center 
         li(v-for="(item,i) in rotation.payload" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small
