@@ -325,7 +325,7 @@ router.post('/mix', async (req,res) => {
 })
 
 
-router.post('/create', checkAuth, async (req,res)=> {
+router.post(['/create','/craft'], checkAuth, async (req,res)=> {
     const {pot,item} = req.body;
     const itemToCraft = await DB.items.get({id:item});
 
@@ -335,11 +335,13 @@ router.post('/create', checkAuth, async (req,res)=> {
     try{
 
         const userData = await DB.users.getFull(req.user.id);
-        const pay = pot.map(itm=>{
+        if (!userData) return res.status(401).json({status:"ERROR",message:"Not Logged in"});
+
+        const pay = (pot||itemToCraft.materials).map(itm=>{
             let itemToCheck = userData.modules.inventory.find(i=>i.id === itm.id);
             if (itemToCheck.count < itm.count) {
-                //res.status(403).json({status:"ERROR",message:"You dont have enough of ["+itm.id+"]"});
-                throw new Error("Invalid Inventory");
+                return res.status(403).json({status:"ERROR",message:"You dont have enough of ["+itm.id+"]"});
+                //throw new Error("Invalid Inventory");
             };
         return [itm.id,itm.count];
     });
