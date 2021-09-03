@@ -42,13 +42,14 @@ router.use("/nowplaying.png", async (...args) => {
     return (require('./nowplaying.js'))( ...args,ImageCache);
    
 });
-router.use("/levelup.gif", async (...args) => {
-    //delete require.cache[require.resolve('./levelup')];
-    return (require('./levelup.js'))( ...args);   
+router.use("/levelup.gif", async (req,res) => {
+    if (req.query.nocache) delete require.cache[require.resolve('./levelup')];
+    return (require('./levelup.js'))( req,res);   
 });
-router.use("/levelupframe.png", async (...args) => {
+router.use("/levelupframe.png", async(req,res) => {
     //delete require.cache[require.resolve('./levelupframe')];
-    return (require('./levelupframe.js'))( ...args);   
+    if (req.query.nocache) delete require.cache[require.resolve('./levelupframe')];
+    return (require('./levelupframe.js'))( req,res);   
 });
 
 router.use("/discoin", async (...args) => {

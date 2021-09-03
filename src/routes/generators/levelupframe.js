@@ -1,8 +1,7 @@
 const Picto = require( process.env.BOT_PATH + '/core/utilities/Picto.js');
 const RANGE = [...Array(31).keys()].slice(1);
 
-global.lvupCacheReady ??= false;
-const waitAll = Promise.all( RANGE.map(async x => await Picto.getCanvas(`${HOST}/build/level up_frames/transp/lvup_frame_${x}.png`))).then(res=> {global.lvupCacheReady=true; global.lvupFramesCache = res});
+const framesSheet = Picto.getCanvas(HOST + "/build/LEVELUPbrick.png");
 
 module.exports = async function(req,res){
 
@@ -13,11 +12,13 @@ module.exports = async function(req,res){
     const canvas = Picto.new(800,300);
     const ctx = canvas.getContext('2d');
     
-    const avatar = await Picto.getCanvas( "https://cdn.discordapp.com/avatars/354285599588483082/d58284a1f1ff096efd13b4a9f4643023.png?size=128" );
+    
+    const [avatar,spritesheet] = await Promise.all([
+        Picto.getCanvas( req.query.avatar ||  "https://cdn.discordapp.com/avatars/354285599588483082/d58284a1f1ff096efd13b4a9f4643023.png?size=128" ),
+        framesSheet
+    ]);
 
-    if (!lvupCacheReady) await waitAll;
-    
-    
+
 
     const userData = await DB.users.get('88120564400553984');
     
@@ -56,7 +57,10 @@ module.exports = async function(req,res){
         const lvWidth = Math.min(118,Level.width);
         const lvtWidth = Math.min(150,lvTag.width);
         
-        ctx.drawImage(lvupFramesCache[Math.min(frame,29)],0,0);
+        //ctx.drawImage(spritesheet, 0, -300 * Math.min(frame,29) );
+        ctx.drawImage( spritesheet, -800 * (Math.min(frame,29) % 5) , -300 * ~~(Math.min(frame,29) / 5));
+
+      
 
         if(frame > 20){
             //ctx.drawImage(lvTag, 590 - lvtWidth, 124, lvtWidth, lvTag.height);

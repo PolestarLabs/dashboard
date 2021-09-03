@@ -1,16 +1,20 @@
-const Picto = require( process.env.BOT_PATH + '/core/utilities/Picto.js');
+
+const Picto = require( process.env.BOT_PATH + '/core/utilities/Picto-og.js');
 const Anim = require( process.env.BOT_PATH + '/core/structures/Animation.js');
 const RANGE = [...Array(31).keys()].slice(1);
 
-global.lvupCacheReady ??= false;
+
+const framesSheet = Picto.getCanvas(HOST + "/build/LEVELUP.png");
+//const framesSheet = Picto.getCanvas(HOST + "/build/LEVELUPbrick.png");
+
 //const waitingAll = Promise.all( RANGE.map(async x => await Picto.getCanvas(`${HOST}/build/level up_frames/transp/lvup_frame_${x}.png`))).then(res=> {global.lvupCacheReady=true; global.lvupFramesCache = res});
-const waitingAll = Promise.all( RANGE.map(async (x,i) => await Picto.getCanvas(`${HOST}/generators/levelupframe.png?f=${i}`))).then(res=> {global.lvupCacheReady=true; global.lvupFramesCache = res});
+//const waitingAll = Promise.all( RANGE.map(async (x,i) => await Picto.getCanvas(`${HOST}/generators/levelupframe.png?f=${i}`))).then(res=> {global.lvupCacheReady=true; global.lvupFramesCache = res});
 //let lvupMaskCache = Promise.all( RANGE.map(async x => await Picto.getCanvas(`${paths.BUILD}/level up_frames/mask/mk_${x}.gif`))).then(res=> {cacheStatus++; lvupMaskCache = res});
 
 
 module.exports = async function(req,res){
    
-    cacheReady = !!global.lvupCacheReady;
+    console.log(process.env.BOT_PATH)
 
 
     let args = [200,200]
@@ -19,12 +23,11 @@ module.exports = async function(req,res){
     const canvas = Picto.new(800,300);
     const ctx = canvas.getContext('2d');
     
-    const avatar = await Picto.getCanvas( req.query.avatar || "" );
-
-
-    if (!cacheReady) await waitingAll;
-    lvupFramesCache = global.lvupFramesCache;
-  
+    const [avatar,spritesheet] = await Promise.all([
+        Picto.getCanvas( req.query.avatar || "" ),
+        framesSheet
+    ]);
+ 
     
     let GIF = new Anim({
         w: 800, h: 300,
@@ -37,6 +40,14 @@ module.exports = async function(req,res){
         cache: req.query.cache || false
     });
 
+
+    GIF.on('finish',(gif)=>{
+        console.log('fini')
+    })
+    GIF.on('done',(gif)=>{
+        console.log({done:1,gif});
+        res.status(200).header('Content-Type','image/gif').send(gif.file);
+    })
     
     let LV_SIZE = 42; //52
     GIF.generate(function(actualFrame){
@@ -69,8 +80,12 @@ module.exports = async function(req,res){
         const Level = Picto.tag(ctx, req.query.level , "900 "+LV_SIZE+"px 'Panton Black'", "#223" ).item;
         const lvWidth = Math.min(118,Level.width);
         const lvtWidth = Math.min(150,lvTag.width);
-        
-        ctx.drawImage(lvupFramesCache[Math.min(frame,29)],0,0);
+
+        //ctx.drawImage( spritesheet, 0, Math.min(frame,29) * -300);
+    
+        //ctx.drawImage( spritesheet, -800 * (Math.min(frame,29) % 5) , -300 * ~~(Math.min(frame,29) / 5));
+        ctx.drawImage( spritesheet, 0, -300 * ~~(Math.min(frame,29)  ));
+ 
 
         if(frame > 20){
             ctx.drawImage(lvTag, 590 - lvtWidth, 124, lvtWidth, lvTag.height);
@@ -83,9 +98,10 @@ module.exports = async function(req,res){
     });
 
 
-    GIF.on('done',(gif)=>{
-        res.status(200).header('Content-Type','image/gif').send(gif.file);
-    })
+
+
+
+        
 }
 /*
     GIF.on('done',(gif)=>{
