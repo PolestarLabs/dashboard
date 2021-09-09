@@ -29,7 +29,7 @@ let PARTS = Promise.all([
 
 router.get('/', async (req,res)=>{
 
-    if(!PARTS.loaded) await PARTS;
+    if(!PARTS._loaded) await PARTS;
 
     const userID = req.query.uid
 
