@@ -120,5 +120,9 @@ router.post('/webloot', async (req,res)=>{
 
 })
 
+router.get('/pid', (req, res) => {
+    res.send(`${process.pid}`)
+})
+
 
 module.exports = router
