@@ -1,4 +1,4 @@
-const Picto = require(process.env.BOT_PATH+"/core/utilities/Picto");
+const Picto = require("../../../../bot/core/utilities/Picto");
 const express = require('express');
 const router = express.Router();
 
@@ -109,7 +109,7 @@ router.get('/', async (req,res)=>{
 
 
     
- res.status(200).header('Content-Type','image/png').send( await canvas.png );
+ res.status(200).header('Content-Type','image/png').send( await canvas.toBuffer("image/png") );
 })
 
 
