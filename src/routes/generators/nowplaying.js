@@ -6,7 +6,7 @@ const moment = require('moment');
 router.get('/', async (req,res)=>{
 
 
-    let Picto = require(process.env.BOT_PATH+"/core/utilities/Picto")
+    let Picto = require(process.env.BOT_PATH+"/core/utilities/Picto-skia")
 
    
     const {name, artist, time, dur, thumb, embed, embed_thumb, key, color, color_b, live, source, play, loop} = req.query;
