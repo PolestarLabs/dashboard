@@ -1,0 +1,83 @@
+name: Beta CI
+on:
+  push:
+    branches: [ master ]
+  workflow_dispatch:
+
+jobs:
+  pull:
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+    name: 🔁 Sync with Repository    
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v2
+      - name: Go to directory
+        run: cd $DIR        
+      - name: Git Reset
+        run: |
+          git reset --hard origin/master
+          git pull
+  
+  spawn2nd:
+    name: 🤖 Spawn Standby Runner
+    runs-on: self-hosted
+    needs: pull
+    steps:
+      - name: Spawn Second Runner
+        run: pm2 start "GitHub Runner 2"
+    
+  npm-dev:
+    runs-on: self-hosted
+    needs: pull
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}  
+    name: ⚙ Dev Deps
+    steps:
+      - name: Running NPM install
+        run: |
+          cd $DIR
+          npm install --only=dev
+        
+  gulp:
+    runs-on: self-hosted
+    needs: npm-dev
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}  
+    name: 🥤 Build (Gulp)
+    steps:
+      - name: Build (No Assets)
+        run: |
+          cd $DIR
+          gulp buildNoAssets
+  
+  npm:
+    runs-on: self-hosted
+    needs: spawn2nd
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}  
+    name: 📦 Build (NPM)
+    steps:
+      - name: Running NPM install
+        run: |
+          cd $DIR
+          npm install
+          
+      - name: Audit fix
+        run: npm audit fix
+        continue-on-error: true
+      - name: Shutdown Standby Runner
+        run: pm2 stop "GitHub Runner 2"
+        
+    
+  deploy:
+    name: 🚀 Launch
+    needs: [npm,gulp]
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+    steps:
+      - name: Go go Power Rangers
+        run: | 
+          pm2 restart 3
+          
