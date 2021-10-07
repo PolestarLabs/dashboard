@@ -91,6 +91,7 @@ router.get("/search", cache(2600), async (req,res) =>{
         }
 
         result.forEach(x=>{
+            if (!x.code) x.code = x.id;
             let timestamp = x._id.toString().substring(0,8)
             if( !x.event ) x.event = false;
             x.release = parseInt( timestamp, 16 ) * 1000
