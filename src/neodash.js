@@ -160,6 +160,7 @@ const central_pollux = config.clients.find(c=>{
 
 global.PLX = new Eris.Client(central_pollux.token,{restMode:true});
 PLX.id = central_pollux.id;
+PLX.user = central_pollux;
 
 global.polluxClients = new Map();
 
