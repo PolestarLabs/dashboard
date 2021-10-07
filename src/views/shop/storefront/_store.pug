@@ -55,7 +55,12 @@ mixin shopcard()
             i: .fas.fa-star
             .price Special
 
-        .button(v-else-if='item.event', :class="hasItem(item)?'disabled':''").event.alt
+        .button(
+          v-else-if='item.event',
+          :class="hasItem(item)?'disabled':''",
+          @click="setCurrentItem(item)"
+          plx-toggle="#modal-buy",
+        ).event.alt
           i: .plx-token.icon24.curr_icon_3
           .price
             span.face() {{ miliarize(item.price || (defaultPrices[item.type]||{})[item.rarity] * defaultPrices.tokenModifier || "N/A" ,0,' ')}}
@@ -191,14 +196,14 @@ block content
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-store
                           label  Marketplace
+                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" )
+                      a.plx-button(href="#storetop" plx-scroll="offset:30")
+                          i: .fas.fa-calendar
+                          label  Event Shop
                   //hr
                   br
                   li.menulabel.plx-disabled
                       a Coming Soon:
-                  li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" ).plx-disabled
-                      a.plx-button(href="#storetop" plx-scroll="offset:30")
-                          i: .fas.fa-calendar
-                          label  Event Shop
                   li.megastroke.menuitem(plx-filter-control="filter: .item ; group: type" ).plx-disabled
                       a.plx-button(href="#storetop" plx-scroll="offset:30")
                           i: .fas.fa-sync-alt
@@ -227,6 +232,8 @@ block content
                         include pages/medals        
                     li#marketplace
                         include pages/marketplace
+                    li#seasonals
+                        include pages/eventshop
 
 
         #modals-galore

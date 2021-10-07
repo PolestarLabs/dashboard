@@ -34,16 +34,28 @@
             
         .plx-modal-footer.plx-text-right.plx-flex.plx-flex-right
             button.plx-button.plx-button-default.plx-modal-close(type='button') Cancel
-            .button.RBN(@click="buyStoreItem(currentModalItem.type,  currentModalItem.id || currentModalItem.code || currentModalItem.icon   )")
+             
+            
+            
+            .button.event.alt( v-if="currentModalItem.event" @click="buyStoreItem(currentModalItem.type,  currentModalItem.id || currentModalItem.code || currentModalItem.icon, 'EVT'   )")
+                .plx-margin-auto
+                i: .plx-token.icon24.curr_icon_3
+                .plx-margin-auto
+                .price
+                    span.face() {{ miliarize( Math.ceil((currentModalItem.price || (defaultPrices[currentModalItem.type]||{})[currentModalItem.rarity]||0) * defaultPrices.tokenModifier) || "N/A" ,0,' ') }}
+                .plx-margin-auto
+
+
+            .button.RBN( v-if="!currentModalItem.event" @click="buyStoreItem(currentModalItem.type,  currentModalItem.id || currentModalItem.code || currentModalItem.icon   )")
                 .plx-margin-auto
                 i: .plx-rubine.icon24.curr_icon_3
                 .plx-margin-auto
                 .price
                     span.face() {{ miliarize(currentModalItem.price || (defaultPrices[currentModalItem.type]||{})[currentModalItem.rarity] || "N/A" ,1,' ')}}
                 .plx-margin-auto
- 
 
-            .button.sapphires(@click="buyStoreItem(currentModalItem.type,  currentModalItem.id || currentModalItem.code || currentModalItem.icon   ,'SPH')")
+
+            .button.sapphires( v-if="!currentModalItem.event" @click="buyStoreItem(currentModalItem.type,  currentModalItem.id || currentModalItem.code || currentModalItem.icon   ,'SPH')")
                 .plx-margin-auto
                 i: .plx-sapphire.icon24.curr_icon_3
                 .plx-margin-auto
