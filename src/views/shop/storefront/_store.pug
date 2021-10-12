@@ -56,7 +56,7 @@ mixin shopcard()
             .price Special
 
         .button(
-          v-else-if='item.event',
+          v-else-if='item.event && (item.price || (defaultPrices[item.type]||{})[item.rarity] * defaultPrices.tokenModifier)',
           :class="hasItem(item)?'disabled':''",
           @click="setCurrentItem(item)"
           plx-toggle="#modal-buy",
