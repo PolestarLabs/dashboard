@@ -63,5 +63,5 @@ section#SEASONAL
                         | Hide items you already own
                 hr.plx-divider-icon
             ul.plx-width-auto#arrivals2.plx-slider-items.plx-child-width-1-4.plx-flex-wrap.plx-flex-center
-                li.shopbox( v-if="!hideOwnedArrivals || !hasItem(item)", v-for="(item) in shuffle(seasonal)", :data-search="item.name", :class="[hasItem(item)?'obtained':'',(item.display||item.type=='skin')?'item':'',item.type,'raritybox',item.rarity].join(' ') " )
+                li.shopbox( v-if="!hideOwnedArrivals || !hasItem(item)", v-for="(item) in seasonal", :data-search="item.name", :class="[hasItem(item)?'obtained':'',(item.display||item.type=='skin')?'item':'',item.type,'raritybox',item.rarity].join(' ') " )
                     +shopcard()

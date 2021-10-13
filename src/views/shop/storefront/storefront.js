@@ -287,7 +287,7 @@ FurrBall2000("seasonal",{
   //event: {bg:'halloween', medal: 'halloween', sticker: 'halloween' }
   event_flt: {ALL: 'halloween'}
 }).then(res=>{
-  STORE.arrivals.sort((a,b)=> b.release - a.release)
+  STORE.seasonal= shuffle(STORE.seasonal)
 });
 
 fetch("/api/cosmetics/search?type=background&event=null").then((r) =>
