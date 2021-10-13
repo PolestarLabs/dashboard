@@ -6,7 +6,7 @@ const ServicePings = new Map();
 
 router.get('/theme/:id', async (req,res)=>{
     const {user} = req.query;
-	 const {id:theme} = requ.params;
+	 const {id:theme} = req.params;
 
 	 if (req.user && user === req.user.id){
 		await DB.users.set(user,{ $set:{"switches.dashTheme":theme}, $inc:{ [`counters.dashThemeClicks.${theme}`]: 1} });
