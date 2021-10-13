@@ -51,6 +51,7 @@
  
  function enableTheme(theme='default'){
     localStorage.setItem('plx-theme',theme)
+    if(userdata) fetch(`/api/telemetry/theme/${theme}?user=${userdata.id}`);
      $('.plxtheme').remove()
      $('head').append(`<link class='plxtheme' rel='stylesheet' href='/css/themes/${theme}.css'>`)
      $('.plx-theme-button').removeAttr('style')

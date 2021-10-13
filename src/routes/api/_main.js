@@ -78,6 +78,10 @@ router.use("/user/", async (...args) => {
     (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./users.js'))];
     return (require('./users.js'))( ...args);
 });
+router.use("/telemetry/", async (...args) => {
+    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./tele.js'))];
+    return (require('./tele.js'))( ...args);
+});
 
 router.use("/server/", async (...args) => {
     (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./servers.js'))];
