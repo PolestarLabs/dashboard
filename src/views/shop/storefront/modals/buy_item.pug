@@ -42,7 +42,7 @@
                 i: .plx-token.icon24.curr_icon_3
                 .plx-margin-auto
                 .price
-                    span.face() {{ miliarize( Math.ceil((currentModalItem.price || (defaultPrices[currentModalItem.type]||{})[currentModalItem.rarity]||0) * defaultPrices.tokenModifier) || "N/A" ,0,' ') }}
+                    span.face() {{ miliarize( Math.ceil(currentModalItem.price || ((defaultPrices[currentModalItem.type]||{})[currentModalItem.rarity]||0) * defaultPrices.tokenModifier) || "N/A" ,0,' ') }}
                 .plx-margin-auto
 
 
