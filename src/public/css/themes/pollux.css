@@ -46,9 +46,9 @@
 	--select-bg: var(--lightest)
   }
   html {
-	--color-contrast: var(--lightest);
+	--color-contrast: white;
 	--color-contrast-dim:   #FFFD;
-	--text-accent: var(--lightest);
+	--text-accent: white;
 	--text-accent-dim:  #FFFD;
 	--text-lightest:  #FFF;
 	--text-extra-bold: var(--lightest,#AAC);

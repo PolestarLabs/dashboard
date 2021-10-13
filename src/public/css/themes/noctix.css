@@ -24,6 +24,11 @@ html{
 --accent-color-strong: #3B2073;
 --accent-color-dark: #220F35;
 
+--text-accent: white;
+--color-contrast: white;
+
+  
+
 --secondary-color:  #8E273B;
 --secondary-color-alt:  #6A283B;
 --secondary-color-strong:  #A25;
