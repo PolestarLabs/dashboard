@@ -15,11 +15,11 @@
 
 const toCurrencies = {
   rubine: "RBN", jade: "JDE", sapphire: "SPH",
-  amethyst: "AMY", emerald: "EMD", topaze: "TPZ", prism: "PSM",
+  amethyst: "AMY", emerald: "EMD", topaze: "TPZ", prism: "PSM", eventToken: "EVT"
 }
 const currencies = [
   "RBN", "JDE", "SPH",
-  "AMY", "EMD", "TPZ", "PSM"
+  "AMY", "EMD", "TPZ", "PSM", "EVT"
 ]
 
 /**

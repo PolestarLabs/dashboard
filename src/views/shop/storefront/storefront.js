@@ -71,6 +71,7 @@ const STORE = new Vue({
     search: "",
     medalSearch: "",
     arrivals: [],
+    seasonal: [],
     currentModalItem: 0,
     hideOwnedArrivals: false,
     displayPackinfo:false,
@@ -218,43 +219,87 @@ const STORE = new Vue({
 console.log(STORE);
 
  
+function FurrBall2000(destination,filters){
 
-Promise.all([
-  fetch("/api/cosmetics/search?type=background&lim=10&event=null").then((r) =>
-    r.json().then(async (res) => STORE.arrivals.push(...res))
-  ),
-  fetch("/api/cosmetics/search?type=medal&lim=10&event=null").then((r) =>
-    r.json().then(async (res) => STORE.arrivals.push(...res))
-  ),
-  fetch("/api/cosmetics/search?type=sticker&lim=10&event=null").then((r) =>
-    0//r.json().then(async (res) => STORE.arrivals.push(...res))
-  ),
-  fetch("/api/cosmetics/search?type=skin&lim=10").then((r) =>
-    r.json().then(async (res) => STORE.arrivals.push(...res))
-  ),
-  fetch("/api/cosmetics/search?type=flair&lim=10").then((r) =>
-    0//r.json().then(async (res) => STORE.arrivals.push(...res))
-  ),
-  fetch("/api/items/search?lim=10&open=true").then((r) =>
-    r.json().then(async (res) => STORE.arrivals.push(...res))
-  ),
-]).then(res=>{
+  const PARAMS = {
+        BG_LIMIT      : filters?.limits?.ALL === undefined ? filters?.limits?.bg      : filters.limits.ALL,
+        MD_LIMIT      : filters?.limits?.ALL === undefined ? filters?.limits?.medal   : filters.limits.ALL,
+        ST_LIMIT      : filters?.limits?.ALL === undefined ? filters?.limits?.sticker : filters.limits.ALL,
+        SK_LIMIT      : filters?.limits?.ALL === undefined ? filters?.limits?.skin    : filters.limits.ALL,
+        FL_LIMIT      : filters?.limits?.ALL === undefined ? filters?.limits?.flair   : filters.limits.ALL,
+        IT_LIMIT      : filters?.limits?.ALL === undefined ? filters?.limits?.item    : filters.limits.ALL,
+
+        BG_EVT_SWITCH : filters?.event?.ALL  === undefined ? filters?.event?.bg       : filters.event.ALL,
+        MD_EVT_SWITCH : filters?.event?.ALL  === undefined ? filters?.event?.medal    : filters.event.ALL,
+        ST_EVT_SWITCH : filters?.event?.ALL  === undefined ? filters?.event?.sticker  : filters.event.ALL,
+        SK_EVT_SWITCH : filters?.event?.ALL  === undefined ? filters?.event?.skin     : filters.event.ALL,
+        FL_EVT_SWITCH : filters?.event?.ALL  === undefined ? filters?.event?.flair    : filters.event.ALL,
+        IT_EVT_SWITCH : filters?.event?.ALL  === undefined ? filters?.event?.item     : filters.event.ALL,
+
+        BG_FILTER     : filters?.event_flt?.ALL  === undefined ? filters?.event_flt?.bg       : filters.event_flt.ALL,
+        MD_FILTER     : filters?.event_flt?.ALL  === undefined ? filters?.event_flt?.medal    : filters.event_flt.ALL,
+        ST_FILTER     : filters?.event_flt?.ALL  === undefined ? filters?.event_flt?.sticker  : filters.event_flt.ALL,
+        SK_FILTER     : filters?.event_flt?.ALL  === undefined ? filters?.event_flt?.skin     : filters.event_flt.ALL,
+        FL_FILTER     : filters?.event_flt?.ALL  === undefined ? filters?.event_flt?.flair    : filters.event_flt.ALL,
+        IT_FILTER     : filters?.event_flt?.ALL  === undefined ? filters?.event_flt?.item     : filters.event_flt.ALL,
+
+        BG_RAR_FILTER : filters?.rarity?.ALL === undefined ? filters?.rarity?.bg      : filters.rarity.ALL,
+        MD_RAR_FILTER : filters?.rarity?.ALL === undefined ? filters?.rarity?.medal   : filters.rarity.ALL,
+        ST_RAR_FILTER : filters?.rarity?.ALL === undefined ? filters?.rarity?.sticker : filters.rarity.ALL,
+        SK_RAR_FILTER : filters?.rarity?.ALL === undefined ? filters?.rarity?.skin    : filters.rarity.ALL,
+        FL_RAR_FILTER : filters?.rarity?.ALL === undefined ? filters?.rarity?.flair   : filters.rarity.ALL,
+        IT_RAR_FILTER : filters?.rarity?.ALL === undefined ? filters?.rarity?.item    : filters.rarity.ALL,
+  }
+
+  const stringsPool = [];
+  if ( PARAMS.BG_LIMIT > 0 ) stringsPool.push( {uri: `/api/cosmetics/search?type=background`, key: "BG" } );
+  if ( PARAMS.MD_LIMIT > 0 ) stringsPool.push( {uri: `/api/cosmetics/search?type=medal`,      key: "MD" } );
+  if ( PARAMS.ST_LIMIT > 0 ) stringsPool.push( {uri: `/api/cosmetics/search?type=sticker`,    key: "ST" } );
+  if ( PARAMS.SK_LIMIT > 0 ) stringsPool.push( {uri: `/api/cosmetics/search?type=skin`,       key: "SK" } );
+  if ( PARAMS.FL_LIMIT > 0 ) stringsPool.push( {uri: `/api/cosmetics/search?type=flair`,      key: "FL" } );
+  if ( PARAMS.IT_LIMIT > 0 ) stringsPool.push( {uri: `/api/items/search?open=true`,           key: "IT" } );
+
+  return Promise.all(
+    stringsPool.map(({uri,key})=>{
+      return fetch(`${uri}`
+        + ( PARAMS[`${key}_EVT_SWITCH`] !== undefined ? `&event=${ PARAMS[`${key}_EVT_SWITCH`] }`   : "")
+        + ( PARAMS[`${key}_RAR_FILTER`] !== undefined ? `&rarity=${ PARAMS[`${key}_RAR_FILTER`] }`  : "")
+        + ( PARAMS[`${key}_LIMIT`]      !== undefined ? `&lim=${ PARAMS[`${key}_LIMIT`] }`          : "")
+        + ( PARAMS[`${key}_FILTER`]     !== undefined ? `&filter=${ PARAMS[`${key}_FILTER`] }`      : "")
+      ).then(r => r.json().then(async (res) => STORE?.[destination]?.push(...res)) )
+    })
+  )
+}
+
+FurrBall2000("arrivals",{
+  limits: {bg:10,medal:10,sticker:0,skin:10,flair:0,item:10},
+  event: {bg:null, medal: null, sticker: null },
+  
+}).then(res=>{
   STORE.arrivals.sort((a,b)=> b.release - a.release)
 });
 
-  fetch("/api/cosmetics/search?type=background&event=null").then((r) =>
-    r.json().then(async (res) => (STORE.backgrounds = res.slice(0, 24)))
-  ),
-  fetch("/api/shop/bgrotation").then((r) =>
-    r.json().then(async (res) => (STORE.rotation = res ))
-  ),
-  fetch("/api/shop/userrotation").then((r) =>
-    r.json().then(async (res) => (STORE.custom_rotation = res ))
-  ),
+FurrBall2000("seasonal",{
+  limits: {bg:50,medal:50,sticker:10,skin:10,flair:0,item:10},
+  //event: {bg:'halloween', medal: 'halloween', sticker: 'halloween' }
+  event_flt: {ALL: 'halloween'}
+}).then(res=>{
+  STORE.arrivals.sort((a,b)=> b.release - a.release)
+});
 
-  fetch("/api/cosmetics/search?type=medal&event=null").then((r) =>
-    r.json().then(async (res) => (STORE.medals = res.slice(0, 24)))
-  ),
+fetch("/api/cosmetics/search?type=background&event=null").then((r) =>
+  r.json().then(async (res) => (STORE.backgrounds = res.slice(0, 24)))
+),
+fetch("/api/shop/bgrotation").then((r) =>
+  r.json().then(async (res) => (STORE.rotation = res ))
+),
+fetch("/api/shop/userrotation").then((r) =>
+  r.json().then(async (res) => (STORE.custom_rotation = res ))
+),
+
+fetch("/api/cosmetics/search?type=medal&event=null").then((r) =>
+  r.json().then(async (res) => (STORE.medals = res.slice(0, 24)))
+),
 
 fetch("/api/items/search?type=boosterpack").then((r) =>
   r.json().then(async (res) => (STORE.boosters = res.slice(0, 24)))
