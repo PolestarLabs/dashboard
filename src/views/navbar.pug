@@ -19,13 +19,13 @@ nav.plx-navbar.plx-nav-container.topbar(plx-navbar class=index?"home":"" plx-sti
                 li.lv1-nav(class=currentPage==="commands"?"is-current":"")
                     i.fas.fa-cogs  
                     a(href="/commands") Commands
-                li.lv1-nav(class=currentPage==="market"?"is-current":"")
+                li.lv1-nav(class=currentPage==="market"?"is-current":"").has-tag.new
                     i.fas.fa-shopping-basket
                     a(href="#").arrowlink Market
                     .plx-navbar-dropdown.ballooned.market_menu
                         div
                             .mkmenu_title Rubine Market
-                            .plx-width-1-1: a(href="/shop").plx-button.plx-width-1-1.plx-button-menu
+                            .plx-width-1-1: a(href="/shop").plx-button.plx-width-1-1.plx-button-menu.new.has-tag
                                 i.fas.fa-store-alt 
                                 |&#x2000  Storefront
                             .plx-grid.fancylist
