@@ -203,7 +203,7 @@ function itemPrice (item,currency="RBN"){
         case "JDE":
             return  Math.ceil(basePrice * JADE_MODIFIER);
         case "EVT":
-            return  Math.ceil(basePrice * TOKEN_MODIFIER);
+            return  Math.ceil(item.price || (basePrice * TOKEN_MODIFIER));
         case "RBN":
         default:
             return basePrice;
