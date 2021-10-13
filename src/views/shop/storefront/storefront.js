@@ -157,6 +157,9 @@ const STORE = new Vue({
  
       this.currentModalItem = item
     },
+    shuffle(x){
+      return shuffle(x)
+    },
     hasItem(i) {
       if (!this.userdata) return false;
       if (i.type == "background")
