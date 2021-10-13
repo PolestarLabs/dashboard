@@ -84,6 +84,9 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
         case "medal":
             respons = await DB.users.set(userData.id,{$addToSet: {'modules.medalInventory': item.icon} });       
             break;
+        case "sticker":
+            respons = await DB.users.set(userData.id,{$addToSet: {'modules.stickerInventory': item.id} });       
+            break;
 
         default:
             return res.status(500).json(ERRORS.noType);
