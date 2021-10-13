@@ -216,7 +216,7 @@ a:hover>span.icon>i {
  opacity:1;
  color:var(--color-contrast)
 }
-.lv1-nav:hover:after {
+.lv1-nav:not(.has-tag):hover:after{
  content:" ";
  position:absolute;
  border-bottom:solid 2px var(--color-contrast-dim,#FFF5);
@@ -1384,4 +1384,26 @@ background-image: url('/build/icons/nope.png');
 }
 .tick.maybe{
 background-image: url('/build/icons/maybe.png');
+}
+
+.has-tag:after{
+    font-size: 9px;
+    font-weight: 500;
+    position: absolute;
+    /*top: 24px;*/
+    right: 0;
+    transform: rotate(30deg);
+    background-color: #9534ff;
+    padding: 1px 4px;
+    border-radius: 5px;
+    color: white;
+    line-height: 1.1rem;
+    text-align: center;
+}
+
+.has-tag.new:after {
+  content: 'NEW';
+}
+.has-tag.beta:after {
+  content: 'BETA';
 }
