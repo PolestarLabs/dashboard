@@ -50,13 +50,15 @@ router.get('/starting.png', async (req,res)=>{
 	const canvas = Picto.new(700,200);
 	const ctx = canvas.getContext('2d');
 	
-	const {IATA,make} = req.query;
+	const {IATA,id} = req.query;
 
 	const airData = await DB.airlines.AIRPORT.get({IATA});
+	const planeData = await DB.airlines.AIRPLANES.get({id});
 
 	const base = await Picto.getCanvas(HOST + "/build/airlines/airports/"+ IATA +".jpg", HOST + "/build/airlines/airports/GENERIC.jpg");
 	console.log("pre");
-	const air = await Picto.getCanvas(HOST + "/build/airlines/makes/"+ make +".png");
+	const air = await Picto.getCanvas(HOST + "/build/airlines/makes/"+ planeData.make +".png");
+	const plane = await Picto.getCanvas(HOST + "/build/airlines/planes/"+ planeData.id +".png");
 	
 	if (air.failed) console.log("FAIL");
 
@@ -65,8 +67,8 @@ router.get('/starting.png', async (req,res)=>{
 	ctx.blur(13);
 	ctx.drawImage(air,700-200,0,200,200);
 	
-
-
+	
+	
 	ctx.font = "700 42px Panton"
 	ctx.fillStyle = "#FFF";
 	ctx.strokeStyle = "#123";
@@ -79,6 +81,8 @@ router.get('/starting.png', async (req,res)=>{
 	ctx.lineWidth = 2
 	ctx.strokeText(airData.name ,34,160,480);
 	ctx.fillText(airData.name ,34,160,480);
+	
+	ctx.drawImage(plane,0,0);
  
 	res.status(200).header('Content-Type','image/png').send( await canvas.png );
 })
