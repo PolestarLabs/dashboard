@@ -87,7 +87,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 		.main-profile.plx-flex(style="align-items: center; max-width:1250px; margin:auto " plx-scrollspy="cls:plx-animation-slide-top-small; delay: 600 ").plx-margin
 			.avicontainer
 				.avatar
-					img(src=userdata.meta.avatar||userinfo.pic width='512px' ).hexagon
+					img(src=(userdata.meta||{}).avatar||userinfo.pic width='512px' ).hexagon
 				#frame( plx-toggle="target: #frame img; cls: disengaged" )
 					if(userdata.switches && userdata.donator)
 						img(src=`/build/profile/frames/${userdata.donator}.png` class=userdata.switches.profileFrame?'':'disengaged' @click="frame=!frame; AUTOSAVE('FRAME')")
