@@ -64,6 +64,11 @@ router.use("/userio", async (...args) => {
     return (require('./user-io.js'))( ...args);
 });
 
+router.use("/airlines", async (req,res) => {
+    if (req.query.nocache) delete require.cache[require.resolve('./airlines')];
+    return (require('./airlines.js'))( req,res);
+});
+
 router.use("/hangmaid", async (req,res) => {
     if(req.query.refresh) delete require.cache[require.resolve('./hangmaid')];
     return (require('./hangmaid.js'))(req,res);
