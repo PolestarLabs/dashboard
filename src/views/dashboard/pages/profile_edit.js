@@ -28,6 +28,7 @@ var CANVAS, ctx;
         hex: userdata.modules.favcolor,
         source: "hex",
       },
+      sort: "obtained",
       displayTransform: {scale:1},
       window:{width:0,height:0},
       isColorpickerOpen: false,
@@ -82,6 +83,32 @@ destroyed() {
     HooperNavigation: window.Hooper.Navigation,
   },
   methods: {
+    bgPickerSort(type){
+      const sortByOwned = (a,b) => a.ownedIndex - b.ownedIndex;
+      const sortByRelease = (a,b) => a.releaseIndex - b.releaseIndex;
+      const sortByRar = (a,b) => a.rarIndex - b.rarIndex;
+      const sortByName = (a,b) => a.name.localeCompare(b.name);
+      this.sort = (type)
+      switch (type){
+        case "name":
+          return this.backgroundsAvailable = this.backgroundsAvailable.sort(sortByName);
+        case "name_reverse":
+          return this.backgroundsAvailable = this.backgroundsAvailable.sort(sortByName).reverse();
+        case "rarity":
+          return this.backgroundsAvailable = this.backgroundsAvailable.sort(sortByRar).reverse();
+        case "release":
+          return this.backgroundsAvailable = this.backgroundsAvailable.sort(sortByRelease).reverse();
+        case "obtained":
+          return this.backgroundsAvailable = this.backgroundsAvailable.sort(sortByOwned).reverse();
+        case "release_older":
+          return this.backgroundsAvailable = this.backgroundsAvailable.sort(sortByRelease);
+        case "obtained_older":
+          return this.backgroundsAvailable = this.backgroundsAvailable.sort(sortByOwned);
+        //default:
+          //this.backgroundsAvailable = this.backgroundsAvailable.sort(sortByOwned);
+          
+      }
+    },
     updateCustomBg(){
       this.customBGzoom;
     },
@@ -543,7 +570,7 @@ function updateUserBGs(){
     r.json().then(res =>  {
  
       DASH.selectBackground = res.find((bg) => bg.code == userdata.modules.bgID) || "none";
-      DASH.backgroundsAvailable = res.map(thisBgData=>{
+      res.map(thisBgData=>{
         return {
           name: thisBgData.name,
           rarity: thisBgData.rarity,
@@ -552,7 +579,8 @@ function updateUserBGs(){
           img: "/backdrops/" + thisBgData.code + ".png",
         };
       }).filter((v,i,a)=>a.findIndex(x=>x.code==v.code)==i);
-      userdata.modules.bgInventory.map((bg) => {
+
+      DASH.backgroundsAvailable =  userdata.modules.bgInventory.map((bg,i) => {
         let thisBgData = res.find((x) => x.code == bg) || {
           name: "Unknown",
           rarity: "C",
@@ -563,9 +591,13 @@ function updateUserBGs(){
           rarity: thisBgData.rarity,
           tags: thisBgData.tags,
           code: thisBgData.code,
+          ownedIndex: i,
+          releaseIndex: parseInt( (thisBgData._id||0).toString().substring(0,8) , 16 ) * 1000 ,
+          rarIndex: ["C","U","R","SR","UR","XR"].indexOf(thisBgData.rarity),
           img: "/backdrops/" + thisBgData.code + ".png",
         };
-      }); 
+      }).filter(x=>x.name!="Unknown").filter((v,i,a)=>a.findIndex(x=>x.name==v.name)==i).reverse();
+
       setTimeout(_=>{
         createCBGCanvas();
       },1000)

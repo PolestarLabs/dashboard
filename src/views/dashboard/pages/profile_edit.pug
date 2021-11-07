@@ -247,6 +247,12 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 
 				.bottom.test
 					#select-bg
+						.bg-find-controls(style="display: flex;gap: 10px;margin: 10px;")
+							span Sort by:
+							button.plx-button.plx-label.sort-buttons( :class="sort==='name' ? 'plx-label-danger' : '' " @click="bgPickerSort('name')") Name
+							button.plx-button.plx-label.sort-buttons( :class="sort==='release' ? 'plx-label-danger' : '' " @click="bgPickerSort('release')") Release Date
+							button.plx-button.plx-label.sort-buttons( :class="sort==='obtained' ? 'plx-label-danger' : '' " @click="bgPickerSort('obtained')") Obtained Order
+							button.plx-button.plx-label.sort-buttons( :class="sort==='rarity' ? 'plx-label-danger' : '' " @click="bgPickerSort('rarity')") Rarity
 						v-select(
 							@input="onChange",
 							v-model="selectBackground"
@@ -257,6 +263,8 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 							:value= `backgroundsAvailable.find(x=>x.code=='${userdata.modules.bgID}')`,
 							label='name'
 						)
+							template(slot='list-header')
+								p Choose a background. Type in the box above to search by name, tags, or rarity!
 							template(slot='selected-option', slot-scope='option')
 								span(style='transform:translateY(-5px)')
 									.plx-rarity-icon(:class='option.rarity')
