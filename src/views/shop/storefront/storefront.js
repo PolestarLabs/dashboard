@@ -275,7 +275,7 @@ function FurrBall2000(destination,filters){
 }
 
 FurrBall2000("arrivals",{
-  limits: {bg:10,medal:10,sticker:0,skin:10,flair:0,item:10},
+  limits: {bg:50,medal:15,sticker:0,skin:10,flair:0,item:10},
   event: {bg:null, medal: null, sticker: null },
   
 }).then(res=>{
