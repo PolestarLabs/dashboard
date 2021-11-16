@@ -63,7 +63,7 @@ mixin shopcard(defaultPrice)
         ).event.alt
           i: .plx-token.icon24.curr_icon_3
           .price
-            span.face() {{ miliarize( (!defaultPrice ? item.price : null) || (defaultPrices[item.type]||{})[item.rarity] * defaultPrices.tokenModifier || "N/A" ,0,' ')}}
+            span.face() {{ miliarize( (!#{defaultPrice} ? item.price : null) || (defaultPrices[item.type]||{})[item.rarity] * defaultPrices.tokenModifier || "N/A" ,0,' ')}}
 
 
         .button(
@@ -104,11 +104,11 @@ mixin shopcard(defaultPrice)
                   .txt-off OFF 
           i: .plx-rubine.icon24.curr_icon_3
           .price
-            span.face() {{ miliarize( (!defaultPrice ? item.price : null) || (defaultPrices[item.type]||{})[item.rarity] || "N/A" ,0,' ')}}
+            span.face() {{ miliarize( (!#{defaultPrice} ? item.price : null) || (defaultPrices[item.type]||{})[item.rarity] || "N/A" ,0,' ')}}
           //.button(style="padding:0 5px")
           i: .plx-sapphire.icon24.curr_icon_3
           .price
-            span.face() {{ miliarize( Math.ceil(( (!defaultPrice ? item.price : null) || (defaultPrices[item.type]||{})[item.rarity]||0) * defaultPrices.sapphireModifier) || "N/A" ,0,' ') }}
+            span.face() {{ miliarize( Math.ceil(( (!#{defaultPrice} ? item.price : null) || (defaultPrices[item.type]||{})[item.rarity]||0) * defaultPrices.sapphireModifier) || "N/A" ,0,' ') }}
         
         
         .button(v-else style="padding:0 5px").dead
