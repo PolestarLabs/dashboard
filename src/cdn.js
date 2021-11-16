@@ -13,7 +13,7 @@ const cacheOpts = {
   ]
 }
 
-app.use(cache(cacheOpts));
+app.use(cacheMid(cacheOpts));
 app.use(Express.static(path.join(__dirname, './public')));
 app.use(Express.static(path.join( ASSETS_PATH, './imgres')));
 app.use(Express.static(path.join( ASSETS_PATH, './cosmetics')));
