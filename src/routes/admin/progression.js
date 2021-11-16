@@ -9,10 +9,12 @@ router.get('/', async (req,res)=>{
 const TOP100CACHE = new Map();
 router.get('/top100', async (req,res)=>{
     const serverID = res.locals.serverID;
+    console.log('top100',{serverID})
 
     const top100wait = DB.localranks.find({server:serverID},{_id:0,__v:0}).sort({exp:-1}).limit(100).lean().then(x=>TOP100CACHE.set(serverID,x) && x);
     await Promise.race([top100wait,wait(1)]);
-    const top100 = TOP100CACHE.get(serverID) || await top100wait;
+    let top100 = TOP100CACHE.get(serverID);
+    if (!top100?.length) top100 = await top100wait;
 
     const discordUsers = await Promise.all(top100.map(async RNK=>{
         let discordUser =   await userCache.get( RNK.user ) || (await PLX.getRESTUser( RNK.user ).catch(e=>{ id: "error" }));
