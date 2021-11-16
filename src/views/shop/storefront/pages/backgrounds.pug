@@ -45,4 +45,4 @@
     ul.plx-flex.plx-flex-wrap.plx-flex-center 
         li(v-for="(item,i) in rotation.payload" v-bind:style="{'animation-delay': timeFun(i) + 'ms'}").plx-animation-slide-bottom-small
             .shopbox( :class="[hasItem(item)?'obtained':'',item.type,'raritybox',item.rarity].join(' ')" )
-                +shopcard()
+                +shopcard(1)

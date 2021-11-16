@@ -1,6 +1,6 @@
 extends ../../layout
 
-mixin shopcard()
+mixin shopcard(defaultPrice)
   div(v-if="item" )
     .header
       
@@ -63,7 +63,7 @@ mixin shopcard()
         ).event.alt
           i: .plx-token.icon24.curr_icon_3
           .price
-            span.face() {{ miliarize(item.price || (defaultPrices[item.type]||{})[item.rarity] * defaultPrices.tokenModifier || "N/A" ,0,' ')}}
+            span.face() {{ miliarize( (!defaultPrice ? item.price : null) || (defaultPrices[item.type]||{})[item.rarity] * defaultPrices.tokenModifier || "N/A" ,0,' ')}}
 
 
         .button(
