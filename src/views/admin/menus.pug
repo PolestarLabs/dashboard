@@ -528,7 +528,7 @@ hr.plx-divider-small
                         .waiting(v-if="top100.loading === true")
                             p Please wait...
                         .membersearch(v-if="!top100.loading")
-                            .member( v-for="option in top100" @click="setMember({user:option,id:option.id,polluxData:option.polluxData},true)")
+                            .member( v-for="option in top100" v-if="!!option" @click="setMember({user:option,id:option.id,polluxData:option.polluxData},true)")
                                 img(:src='`https://cdn.discordapp.com/avatars/${option.id}/${option.avatar}.png`')
                                 .info
                                     .name
