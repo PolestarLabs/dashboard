@@ -2,19 +2,18 @@ const Express = require('express');
 const path = require('path');
 
 const app = Express();
-app.use(function (req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'GET');
-    res.header('Access-Control-Allow-Credentials', true);
-    res.header('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    
-    next();
-});
 
 const ASSETS_PATH = process.env.ASSETS_PATH || "/home/pollux/polaris/ASSETS/";
+const cacheOpts = {
+  "cache": [
+    {
+      "path": "(.*).(jpg|png)$",
+      "ttl": 3600
+    }
+  ]
+}
 
-
+app.use(cache(cacheOpts));
 app.use(Express.static(path.join(__dirname, './public')));
 app.use(Express.static(path.join( ASSETS_PATH, './imgres')));
 app.use(Express.static(path.join( ASSETS_PATH, './cosmetics')));
@@ -61,3 +60,19 @@ app.listen(port, function (err) {
     console.log('Listening at http://localhost:'+port)
 })
 
+
+
+function cacheMid(opts){
+  return function (req, res, next) {
+    if (typeof opts === 'object' && typeof opts.cache === 'object') {
+        opts.cache.forEach(function (route) {
+
+            if (req.path.match(new RegExp(route.path, 'g'))) {
+                res.set('Cache-Control', 'max-age=' + route.ttl);
+            }
+        });
+    }
+
+    next();
+  }
+}
