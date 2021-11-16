@@ -326,6 +326,10 @@ app.set('view engine', 'pug');
 
 const ASSETS_PATH = process.env.ASSETS_PATH || "/home/pollux/polaris/ASSETS/";
 
+ 
+
+app.use( /(.*).(jpg|png|gif|webm|avi|mov|mp4)$/g, (r,res,nex)=> res.set('Cache-Control', 'max-age=3600') && nex()  );
+
 app.use(Express.static(path.join(__dirname, './public')));
 app.use(Express.static(path.join( ASSETS_PATH, './imgres')));
 app.use(Express.static(path.join( ASSETS_PATH, './cosmetics')));
