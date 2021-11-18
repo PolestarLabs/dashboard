@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@polestar/constants": "github:PolestarLabs/constants",
+    "@polestar/progression": "github:PolestarLabs/plx-progression",
     "@polestar/database_schema": "gitlab:PolestarLabs/database_schema",
     "@polestar/emoji-grimoire": "github:PolestarLabs/emoji-grimoire",
     "@polestar/i18n": "github:PolestarLabs/pollux-i18n",

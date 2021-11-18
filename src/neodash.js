@@ -159,6 +159,9 @@ const central_pollux = config.clients.find(c=>{
 });
 
 global.PLX = new Eris.Client(central_pollux.token,{restMode:true});
+
+require("@polestar/progression").init(PLX); // initialize progression tracking
+
 PLX.id = central_pollux.id;
 PLX.user = central_pollux;
 
@@ -194,9 +197,6 @@ redis:{
 	port: 6379
 }}).then(Connection => {
 	global.DB  = Connection;
-	setTimeout(()=>{
-		require('@polestar/pollux/core/archetypes/Progression').init();
-	},2500)
 
 
 	app.listen( process.env.DASHPORT || 4728, function (err) {
