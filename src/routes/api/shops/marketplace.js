@@ -604,15 +604,17 @@ function itemInInventory(item, userData) {
   let query = {};
   let prequery;
 
+
   if (["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)){
-    if ( userData.modules.inventory.find(it=>it.id === item.id)?.count < 1 ) {
-      res = false;
-      reason = "ITEM NOT IN INVENTORY";
-      status = 404;
-    }else{
+    
+    if ( userData.modules.inventory.find(it=>it.id === item.id)?.count > 0 ) {
       res = true;
       prequery = { id: userData.id, "modules.inventory.id": item.id };
       query = { $inc: { "modules.inventory.$.count": -1 } };
+    }else{
+      res = false;
+      reason = "ITEM NOT IN INVENTORY";
+      status = 404;
     }
   }
   if (item.type === "background") {
@@ -665,6 +667,7 @@ function itemInInventory(item, userData) {
 async function userCanSell(id, PAYLOAD, item, softCheck=false) {
 
   const userData = await DB.users.findOne({id}).noCache();
+  
 
   if (!softCheck){
     if (!(await DB.users.get(id)))
