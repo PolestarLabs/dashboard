@@ -152,7 +152,7 @@ function receive(user, amt, type = "OTHER", currency = "RBN") {
  * @throws {Error} Invalid arguments.
  * @throws {Error} Not enough funds.
  */
-function transfer(userFrom, userTo, amt, type = "SEND", curr = "RBN", subtype = "TRANSFER", symbol = ">") {
+function transfer(userFrom, userTo, amt, type = "SEND", curr = "RBN", subtype = "TRANSFER", symbol = ">", { allowZero = false, disableFundsCheck = false, fields = {}, progressionOptions = {} } = {}) {
   if (!(userFrom && userTo)) throw new Error("Missing arguments");
   if (amt === 0) return Promise.resolve(null);
   if (!amt || (typeof amt !== "number" && !amt.length)) return Promise.resolve(null);
@@ -185,6 +185,14 @@ function transfer(userFrom, userTo, amt, type = "SEND", curr = "RBN", subtype = 
       fromUpdate[`modules.${curr[i]}`] = -absAmount;
       toUpdate[`modules.${curr[i]}`] = absAmount;
       payloads.push(generatePayload(userFrom, userTo, amt[i], type, curr[i], subtype, symbol));
+    }
+    
+    let incomeType;
+    if ((incomeType = ["INCOME", "PAYMENT"].indexOf(subtype)) > -1) {
+    
+      curr.forEach((CURR, i) => {
+        Progression.emit(`${["earn", "spend"][incomeType]}.${CURR}.${type}`, { value: amt[i], userID: ([userTo, userFrom][incomeType]), options: progressionOptions });
+      });
     }
 
     // If every amt was zero
