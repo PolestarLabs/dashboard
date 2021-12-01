@@ -53,7 +53,7 @@ block content
 
     .plx-uncontainer.plx-flex.plx-flex-center.plx-flex-wrap
         
-        each item in base.sort((x,y)=> x.position - y.position )
+        each item in base.sort((x,y)=> (x.position||0) - (y.position||0) )
             +storeCard(item,{preIn:item.preInput})
 
     #modal-buy(hidden)
