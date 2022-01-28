@@ -45,8 +45,12 @@ each cat in cm.CATS
                             each perm in (cmd.perms||[] ).filter(x=>x!="attachFiles"&&x!="embedLinks")
                                 span= perm.replace(/([A-Z])/g," $1").toUpperCase()
 
-        script(async='', src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js')
-        ins.adsbygoogle(style='display:block', data-ad-format='fluid', data-ad-layout-key='-go-3+1f-3d+2z', data-ad-client='ca-pub-6458250766331979', data-ad-slot='3291580116')
-        script (adsbygoogle = window.adsbygoogle || []).push({});
+        //script(async='', src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js')
+        //ins.adsbygoogle(style='display:block', data-ad-format='fluid', data-ad-layout-key='-go-3+1f-3d+2z', data-ad-client='ca-pub-6458250766331979', data-ad-slot='3291580116')
+            script (adsbygoogle = window.adsbygoogle || []).push({});
+        script(async='' src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-6458250766331979' crossorigin='anonymous')
+        ins.adsbygoogle(style='display:block' data-ad-client='ca-pub-6458250766331979' data-ad-slot='7628843587' data-ad-format='auto' data-full-width-responsive='true')
+            script (adsbygoogle = window.adsbygoogle || []).push({});
+
         
 
