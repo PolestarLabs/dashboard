@@ -127,7 +127,7 @@ const LOAD_ALL_SUBCLIENTS = Promise.all(
         newClient.category = cli.category;
         newClient.friendly_name = cli.fname;
         newClient.internal_name = cli.name;
-        const user = JSON.parse(JSON.stringify(await newClient.getRESTUser(cli.id)));
+        const user = JSON.parse(JSON.stringify( await newClient.getRESTUser(cli.id).catch(e=>PLX.user)  ));
         user.fname = cli.fname;
         user.flavor = cli.name;
         user.category = cli.category;        
