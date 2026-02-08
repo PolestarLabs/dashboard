@@ -14,7 +14,7 @@
     "@polestar/database_schema": "github:PolestarLabs/db-schema",
     "@polestar/emoji-grimoire": "github:PolestarLabs/emoji-grimoire",
     "@polestar/i18n": "github:PolestarLabs/pollux-i18n",
-    "@polestar/pollux": "github:PolestarLabs/pollux#dev",
+    "@polestar/pollux": "github:PolestarLabs/polaris#dev",
     "@polestar/timed-usage": "github:PolestarLabs/timed-usage",
     "@sentry/node": "^6.2.5",
     "axios": "^0.21.1",
