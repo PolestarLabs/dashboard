@@ -4,6 +4,12 @@ Date: 2026-02-08
 
 Scope reviewed:
 - [src/routes/dashboard.js](src/routes/dashboard.js)
+- [src/neodash.js](src/neodash.js)
+- [src/cdn.js](src/cdn.js)
+- [src/routes/_allroutes.js](src/routes/_allroutes.js)
+- [src/routes/webhooks.js](src/routes/webhooks.js)
+- [src/pipelines/forms.js](src/pipelines/forms.js)
+- [src/views/dashboard/pages/profile_edit.js](src/views/dashboard/pages/profile_edit.js)
 - TODO/FIXME markers surfaced in dashboard source (routes, views, gulpfile)
 
 ## Action items
@@ -19,6 +25,27 @@ Scope reviewed:
 - [ ] Wrap the main dashboard route’s `Promise.all` block with error handling to avoid unhandled rejections and no response on failure. See [src/routes/dashboard.js](src/routes/dashboard.js).
 - [ ] Normalize `req.query.switch` to a boolean (string vs number comparison). See [src/routes/dashboard.js](src/routes/dashboard.js).
 - [ ] Add cleanup/teardown for created `Eris.Client` instances to avoid resource leaks on reloads. See [src/routes/dashboard.js](src/routes/dashboard.js).
+
+### Deeper findings (memory leaks, bad practices, uncaught exceptions, security)
+- [ ] Fix cache key precedence in `cacheFunction` so `req.originalUrl` fallback works and keys are consistent. See [src/neodash.js](src/neodash.js).
+- [ ] Prevent JSON parse crashes and content-type mismatch in cached responses; cache should preserve original body/headers or use `res.send` on replay. See [src/neodash.js](src/neodash.js).
+- [ ] Add bounds/eviction policy to `memory-cache` to prevent unbounded growth under high traffic. See [src/neodash.js](src/neodash.js).
+- [ ] Fix CORS configuration: `Access-Control-Allow-Origin: *` with credentials is invalid; avoid duplicate header sets and use an allowlist. See [src/neodash.js](src/neodash.js).
+- [ ] Remove implicit globals (`SVID`, `embed`, `request`, `chal`) by declaring with `const`/`let`. See [src/neodash.js](src/neodash.js) and [src/routes/webhooks.js](src/routes/webhooks.js).
+- [ ] Replace `new Promise(async resolve => ...)` anti-patterns with plain `async` functions. See [src/neodash.js](src/neodash.js).
+- [ ] Handle missing `auth` dependency in `compulsoryAuth` to avoid runtime exceptions. See [src/neodash.js](src/neodash.js).
+- [ ] Add error handling for `config.clients.forEach(async ...)` to avoid unhandled rejections. See [src/neodash.js](src/neodash.js).
+- [ ] Remove hardcoded webhook tokens/secrets from source and move to environment/config with rotation. See [src/neodash.js](src/neodash.js) and [src/routes/webhooks.js](src/routes/webhooks.js).
+- [ ] Fix `cdn` 404 handler referencing an undefined `err` variable. See [src/cdn.js](src/cdn.js).
+- [ ] Add auth guard in `/userinfo` and fix `timed[IP]` typo (`IP` is undefined) to prevent leaks and crashes. See [src/routes/_allroutes.js](src/routes/_allroutes.js).
+- [ ] Wrap IP info lookup in try/catch; handle axios failures to avoid unhandled rejections and hanging requests. See [src/routes/_allroutes.js](src/routes/_allroutes.js).
+- [ ] Replace deprecated `request` usage and add error handling for proxy streaming to avoid process crashes. See [src/routes/_allroutes.js](src/routes/_allroutes.js).
+- [ ] Avoid deleting `require.cache` on every request in production to reduce memory churn and hidden state bugs. See [src/routes/_allroutes.js](src/routes/_allroutes.js).
+- [ ] Validate webhook payloads before dereferencing arrays to avoid TypeErrors on malformed events. See [src/routes/webhooks.js](src/routes/webhooks.js).
+- [ ] Avoid `async` inside `forEach` for Asana events; use `Promise.all` to await errors and rate-limit. See [src/routes/webhooks.js](src/routes/webhooks.js).
+- [ ] Add signature validation and branch allowlist for GitLab webhook before executing shell commands. See [src/routes/webhooks.js](src/routes/webhooks.js).
+- [ ] Fix potential null deref when unauthenticated (`req.user.id`) and ensure `run()` resolves/sends a response in all form paths. See [src/pipelines/forms.js](src/pipelines/forms.js).
+- [ ] Clear pending timers on Vue teardown to avoid state updates after unmount. See [src/views/dashboard/pages/profile_edit.js](src/views/dashboard/pages/profile_edit.js).
 
 ### TODO/FIXME markers to triage
 - [ ] TODO: “modular check for best font per type” in build pipeline. See [gulpfile.js](gulpfile.js).
