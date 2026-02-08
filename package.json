@@ -9,13 +9,13 @@
     "build": "gulp build"
   },
   "dependencies": {
-    "@polestar/constants": "github:PolestarLabs/constants",
+    "@polestar/pollux": "github:PolestarLabs/polaris#dev",
+    "@polestar/constants": "github:PolestarLabs/constants#b3e559e4d93db705cb080f2b8d3fc980d0a464e1",
     "@polestar/progression": "github:PolestarLabs/plx-progression",
     "@polestar/database_schema": "github:PolestarLabs/db-schema",
     "@polestar/emoji-grimoire": "github:PolestarLabs/emoji-grimoire",
     "@polestar/i18n": "github:PolestarLabs/pollux-i18n",
-    "@polestar/pollux": "github:PolestarLabs/polaris#dev",
-    "@polestar/timed-usage": "github:PolestarLabs/timed-usage",
+    "@polestar/timed-usage": "github:PolestarLabs/timed-usage#c5dccb85a2118a8c41636663ed7dd8bd5a0cc671",
     "@sentry/node": "^6.2.5",
     "axios": "^0.21.1",
     "bluebird": "^3.5.5",
