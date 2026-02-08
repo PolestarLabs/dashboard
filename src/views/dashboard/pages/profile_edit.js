@@ -398,7 +398,7 @@ function seeEquips() {
   AUTOSAVE("MEDALS");
 }
 
-$("document").ready(() => setTimeout(() => DASH.$refs.flairs.update(), 1000));
+$("document").ready(() => setTimeout(() => DASH.$refs.flairs.update(), 5000));
 
 async function AUTOSAVE(what,silent) {
   if(!DASH) return;
@@ -600,7 +600,7 @@ function updateUserBGs(){
 
       setTimeout(_=>{
         createCBGCanvas();
-      },1000)
+      },3000)
     } )
   );
 }
