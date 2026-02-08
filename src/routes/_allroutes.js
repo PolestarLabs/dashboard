@@ -2,6 +2,8 @@
 const express = require('express')
 const router = express.Router()
 const axios = require('axios')
+const LOG_LEVEL = (process.env.LOG_LEVEL || process.env.LOGLEVEL || "").toLowerCase();
+const DEBUG_LOGS = LOG_LEVEL === "x-verbose";
 
 const fx = require('../pipelines/globalFunctions.js');
 
@@ -132,8 +134,8 @@ router.post(['/userinfo'], async (req,res)=>{
     res.sendStatus(200);
 });
 router.get(['/userinfo'], async (req,res)=>{
-    console.log(req.headers)
-    res.json((req.headers));
+  if (DEBUG_LOGS) console.log(req.headers)
+  res.json((req.headers));
 });
 
   
@@ -179,15 +181,15 @@ router.use('/admin',checkAuth, (...args)=>{
 });
 
   router.post('/test', (req,res,nex)=> {
-    console.log(req.body);
+    if (DEBUG_LOGS) console.log(req.body);
    
     res.sendStatus(200)
 
   } );
   router.get('/testone', (req,res,nex)=> {
-    console.log(req.body);
+    if (DEBUG_LOGS) console.log(req.body);
     //res.sendStatus(200)
-    console.log( require('../structures/ProgressionManager.js') );
+    if (DEBUG_LOGS) console.log( require('../structures/ProgressionManager.js') );
     res.render('standalone-pages/oembed-test')
 
   } );

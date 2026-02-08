@@ -5,6 +5,8 @@ const router = express.Router()
 const axios = require('axios');
 const cfg = require('../../config.js')
 const fx = require('../pipelines/globalFunctions.js');
+const LOG_LEVEL = (process.env.LOG_LEVEL || process.env.LOGLEVEL || "").toLowerCase();
+const DEBUG_LOGS = LOG_LEVEL === "x-verbose";
 request = require('request')
 
 router.get('/', function (req, res) {
@@ -16,7 +18,7 @@ router.post('/patreon', function (req, res) {
   let payload = req.body;
   let type = req.query.t
 
-  console.log(require('util').inspect(payload, {
+  if (DEBUG_LOGS) console.log(require('util').inspect(payload, {
     depth: 6,
     colors: true
   }))
@@ -70,7 +72,7 @@ zircon: "<:zircon:673593105525637140>"
   }
   // embed.footer = {}
   embed.timestamp = payload.data.attributes.created_at.split('+')[0]
-console.log(embed)
+if (DEBUG_LOGS) console.log(embed)
   sendWebhook({embeds: [embed]})
   res.sendStatus(200);
 })
@@ -152,7 +154,7 @@ const AsanaTask = async id => {
 let sendingNotes = false;
 router.post('/asana', async  (req,res) =>{
 
-  console.log( JSON.stringify(req.body,0,2))
+  if (DEBUG_LOGS) console.log( JSON.stringify(req.body,0,2))
 //console.log( await AsanaUser(req.body?.events[0]?.user?.gid) )
 
   if(req.headers["x-hook-secret"]){
@@ -160,7 +162,7 @@ router.post('/asana', async  (req,res) =>{
   }
 
   req.body?.events?.forEach( async ev=>{
-    if(!ev.user.gid) return console.log({ev},"NO USER");
+    if(!ev.user.gid) return DEBUG_LOGS ? console.log({ev},"NO USER") : undefined;
 
     let description = "";
     let author;
@@ -438,7 +440,7 @@ let embed =   {
 router.get('/minecraft', function (req, res) {
   let payload = req.body;
 
-  console.log(payload);
+  if (DEBUG_LOGS) console.log(payload);
   sendWebhook({embeds:[
     {description: "Web Request, no Payload"}
   ]
@@ -456,7 +458,7 @@ router.post('/minecraft', async function (req, res) {
 
     await DB.globals.set({$set:{'data.mine_payload':payload}});
   }
-  console.log(require('util').inspect(payload,{color:true}));
+  if (DEBUG_LOGS) console.log(require('util').inspect(payload,{color:true}));
   sendWebhook({embeds:[
     {description: JSON.stringify(payload,null,2).slice(0,2000) }
   ]
@@ -469,7 +471,7 @@ router.post('/minecraft', async function (req, res) {
 router.post('/:any', function (req, res) {
   let payload = req.body;
 
-  console.log(payload);
+  if (DEBUG_LOGS) console.log(payload);
  
 
   res.send(200)
@@ -492,8 +494,8 @@ function sendWebhook(data,url) {
     method: 'POST'
   }
   request(opts, function (error, response, body) {
-    console.log("WebHook'd".green)
-    console.log(JSON.stringify(data,0,2))
+    if (DEBUG_LOGS) console.log("WebHook'd".green)
+    if (DEBUG_LOGS) console.log(JSON.stringify(data,0,2))
   })
 }
 
