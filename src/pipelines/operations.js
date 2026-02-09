@@ -9,6 +9,13 @@ const ECO = ('../database/Economy')
   const STICKERBASE= DB.cosmetics.stickers({});
   const BUNDLEBASE= DB.cosmetics.find({type:'bundle'});
 
+  function publishServerConfigUpdate(serverId) {
+    if (!serverId) return;
+    if (global.PLX?.redis?.publish) {
+      PLX.redis.publish("pollux:server-config-updated", String(serverId));
+    }
+  }
+
 
   function getComms() {
     let path = __dirname + "/../../core"
@@ -258,6 +265,7 @@ ${message}
         await DB.serverDB.set(G,{$set:{'modules.SELFROLES':payload.self }});
         await DB.serverDB.set(G,{$set:{'modules.MODROLE'  :payload.mod  }});
         await DB.serverDB.set(G,{$set:{'modules.MUTEROLE' :payload.mute }});
+        publishServerConfigUpdate(G);
         
       resolve("ALRITE");
         
@@ -333,6 +341,7 @@ ${message}
         }
   */      
         await DB.serverDB.set(G,{$set:payload});
+        publishServerConfigUpdate(G);
     
         
       resolve("ALRITE");
