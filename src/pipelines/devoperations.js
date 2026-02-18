@@ -21,10 +21,9 @@ exports.run = function(req,res,auth){
     if(USR){
     userinfo= {
         pix: `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
-        name: `${USR.username}#${USR.discriminator}`,
+        name: USR.username,
         uname: USR.username,
         id: USR.id,
-        discriminator: USR.discriminator,
         servers:USR.guilds||USR.servers
       }
     }

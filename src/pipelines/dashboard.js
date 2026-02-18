@@ -24,9 +24,8 @@ router.get('/', async function(req, res, next) {
 
     res.render(__dirname+'/dash.html', {
       pix:`https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
-      name:`${USR.username}#${USR.discriminator}`,
+      name: USR.username,
         uname: USR.username,
-        discriminator: USR.discriminator,
       rubys:UDB.modules.RBN,
       exp:UDB.modules.exp,
       level:UDB.modules.level,

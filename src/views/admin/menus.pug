@@ -533,7 +533,7 @@ hr.plx-divider-small
                                 .info
                                     .name
                                         .uname {{option.username}}
-                                        .discr # {{option.discriminator}}                                       
+
                                     .alt-level(v-if=" levelFromXP(option.polluxData.exp,0,option.polluxData) != option.polluxData.level")
                                         .val {{levelFromXP(option.polluxData.exp,0,option.polluxData)}}
                                     .level
@@ -563,7 +563,7 @@ hr.plx-divider-small
                                         .info
                                             .name
                                                 .uname {{option.user.username}}
-                                                .discr # {{option.user.discriminator}}
+
                                                 .nick {{option.nick?`(${option.nick})`:''}}
                                             .level
                                                 i.fas.fa-medal
@@ -584,7 +584,7 @@ hr.plx-divider-small
                                     .info
                                         .name
                                             .uname {{selectedMember.user.username}}
-                                            .discr # {{selectedMember.user.discriminator}}
+
                                             .nick(v-if="selectedMember.nick") {{selectedMember.nick?`(${selectedMember.nick})`:''}}
                                         .level
                                             i.fas.fa-medal

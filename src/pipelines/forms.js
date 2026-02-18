@@ -14,15 +14,16 @@ exports.run = function(req,res,form){
       let ts = new Date()
             
 
-      USR=req.user
-      embed.title = "📠 New Form Submission"
-     if (!req.user) {
-       USR={username:"unauth",discriminator:"0000"}
-     }
-    embed.author = { name:`${USR.username}#${USR.discriminator}`,avatar_url:`https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`}
-      embed.description = "Submission from **"+ req.query.from+"** Form"
-      embed.footer = {text: req.user.id}
-      
+      USR = req.user || { username: "unauth" };
+      embed.title = "📠 New Form Submission";
+      // build author safely — only include avatar_url when we have id + avatar
+      const _author = { name: USR.username || "unauth" };
+      if (USR.id && USR.avatar) _author.avatar_url = `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`;
+      embed.author = _author;
+      embed.description = "Submission from **" + (req.query.from || "unknown") + "** Form";
+      // footer should derive id from USR with a safe fallback
+      embed.footer = { text: USR.id || "" };
+
       embed.timestamp = ts
 
 if(req.query.type=='fanart'){
@@ -40,7 +41,7 @@ if(req.query.type=='fanart'){
         
         DB.serverDB.set(fields.ID, {
           $set: {
-            "partnerDetails.owner": `${USR.username}#${USR.discriminator}`,
+            "partnerDetails.owner": USR.username,
             "partnerDetails.ownerID": USR.id,
             "partnerDetails.description": fields.description,
             "partnerDetails.website": fields.website,

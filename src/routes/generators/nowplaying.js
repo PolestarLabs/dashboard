@@ -209,7 +209,7 @@ let lnOptions = {
     lnOptions.textAlign = 'right'
     lnOptions.sizeToFill= false
     ctx.drawImage(
-        Picto.block(ctx, user.username + "#"+ user.discriminator ,"500 24px 'Panton'","#DDF",260,30,lnOptions).item,
+        Picto.block(ctx, user.username ,"500 24px 'Panton'","#DDF",260,30,lnOptions).item,
         470,        
         200 - 10 - 35,
     );

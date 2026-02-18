@@ -397,7 +397,7 @@ global.complexpages  = function complexpages(location=false){
 
 colors = require('colors')
 logger.token('userID', function (req, res) { return  (` ${req.headers['cf-ipcountry']} `).bgMagenta.yellow +" "+ (req.user? req.user.id.blue : (req.headers['cf-connecting-ip']).magenta) })
-logger.token('userTag', function (req, res) { return req.user? req.user.username+"#"+req.user.discriminator?.bgGray : "" })
+logger.token('userTag', function (req, res) { return req.user? req.user.username : "" })
 logger.token('date', function(){  return new Date().toUTCString(); });
 app.use(logger(function(tokens,req,res){
 	if (process.env.NODE_ENV!=="production") res.startTime('logger', 'Config Logger');
@@ -462,10 +462,9 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
 		console.log(USR.accessToken)
 		res.locals.userinfo= {
 			pix: (result.meta||{}).avatar || `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
-			name: `${USR.username}#${USR.discriminator}`,
+			name: USR.username,
 			uname: USR.username,
 			id: USR.id,
-			discriminator: USR.discriminator,
 			servers:USR.guilds||USR.servers
 		}
 	}

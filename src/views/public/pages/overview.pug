@@ -9,7 +9,7 @@
 
         h4 Also married to:
         .profile-box.marriages
-            a.wife-miniavi(v-for="rel in relationships" v-if='rel.users && !rel.users.includes(wifeData.id)', v-bind:class=" {initiative:rel.initiative==parseWife(rel).id }  ", :plx-tooltip="parseWife(rel).username+'#'+parseWife(rel).discriminator", :href="'/profile/'+parseWife(rel).id" )
+            a.wife-miniavi(v-for="rel in relationships" v-if='rel.users && !rel.users.includes(wifeData.id)', v-bind:class=" {initiative:rel.initiative==parseWife(rel).id }  ", :plx-tooltip="parseWife(rel).username", :href="'/profile/'+parseWife(rel).id" )
                 img( :src="`https://cdn.discordapp.com/avatars/${parseWife(rel).id}/${parseWife(rel).avatar}.${parseWife(rel).avatar.startsWith('a_')?'gif':'png'}?size=64`")
        
             
