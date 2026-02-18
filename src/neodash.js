@@ -237,11 +237,20 @@ redis:{
 					}
 					setTimeout(()=>{
 						PLX.getRESTUser(k).timeout(1000).then(u=> {
-							if(!u && !returned) return reject("NO USER");
-							this.set(u.id,u);
-							console.log("✔️ Cache SAVE".green, u.id)
-							if (!returned) return resolve(u);
-						}).catch(reject);
+						// If we couldn't fetch a fresh user, resolve with null for callers
+						if (!u) {
+							if (!returned) return resolve(null);
+							return; // background refresh failed — swallow silently
+						}
+						this.set(u.id,u);
+						console.log("✔️ Cache SAVE".green, u.id)
+						if (!returned) return resolve(u);
+					}).catch(err=>{
+						// Don't reject the outer promise — callers often don't handle this.
+						console.warn("userCache.get: PLX.getRESTUser error", err && err.message ? err.message : err);
+						if (!returned) return resolve(null);
+						// if this was a background refresh (returned === true) just swallow the error
+					});
 					},returned?20000:0);
 				});
 				
