@@ -87,4 +87,10 @@ async function userRankify(plxUser = {}, discordUser, member) {
     userRank.name = plxUser.meta.username;
     userRank.avatar = plxUser.meta.avatar;
     userRank.disc = "";
+  }
+
+  userRank.id = plxUser.id;
+
+  return userRank;
+}
 module.exports = router;
