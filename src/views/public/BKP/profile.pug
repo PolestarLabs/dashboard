@@ -48,7 +48,7 @@ block content
         .textdata( )
           .username
             span.name {{wifeData.username}}
-            span.discrim # {{wifeData.discriminator}}
+
           .since.moment {{ wifeData.since[0] }} ({{ wifeData.since[1] }})
         .ring
           img(  :src="`/build/items/${wifeData.ring}.png`" width=48 )
@@ -76,7 +76,7 @@ block content
       .userinfo
         .username
           span.name= userprofile.meta.username
-          span.discrim= "#" + userprofile.meta.discriminator
+
         .tagline= userprofile.modules.tagline
         p.persotex!= userprofile.modules.persotext.replace(/\n/g,'<br>') 
 

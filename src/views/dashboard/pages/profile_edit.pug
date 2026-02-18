@@ -103,7 +103,6 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 					//.avatar(class='plx-hidden@s').plx-inline
 						img(src=userdata.meta.avatar ).hexagon
 					span= userdata.meta.username
-					span.discrimin="#"+ userdata.meta.discriminator
 
 				input.tagline(v-model="tagline" @change="AUTOSAVE('TGL')" placeholder="Write something sorta cool here...")
 				.help Tagline:
