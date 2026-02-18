@@ -12,15 +12,15 @@ async function processForm(form,req,res,{sendWebhook,embed}){
 
 		console.log("\n "+" • NEW FANART SUBMISSION • ".bgBlue);
 
-		let authorTag = req.user? req.user.username+"#"+req.user.discriminator : "Anonymous";
+let authorTag = req.user ? req.user.username : "Anonymous";
 		let authorID = ((req.user||{id:'anonymous'}).id);
 		let userData = req.user;
 
 		if (fields.behalf) {
 			userData = await PLX.getRESTUser(fields.behalf);
 			if(!userData) return res.status(400).json("WRONG BEHALF - NO USER")
-			embed.author = { name:`${userData.username}#${userData.discriminator}`,avatar_url:`https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`}
-			authorTag = userData.username + "#" + userData.discriminator;
+				embed.author = { name: userData.username, avatar_url:`https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png`}
+				authorTag = userData.username;
 			authorID = userData.id;
 			console.log('•'.magenta + " Fanart: In behalf of ".gray + authorTag );
 		}

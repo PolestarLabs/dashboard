@@ -253,7 +253,7 @@ async function parseUserAndReturn(uID, res) {
 function parse_userdata(discordUser, USR, STATUS) {
     let response = {
         id: discordUser.id,
-        tag: discordUser.id ? (discordUser.username + "#" + discordUser.discriminator) : ((USR || {}).meta || {}).tag,
+        tag: discordUser.id ? discordUser.username : ((USR || {}).meta || {}).tag,
         avatar: discordUser.avatarURL
     };
     //if(discordUser.bot) return res.json(response);        

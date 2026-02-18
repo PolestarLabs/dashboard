@@ -507,7 +507,7 @@ async function processFeedMessage(entry, item, CURRENT_USER) {
   PLX.editMessage(...entry.feedMessage, {
     content: `${_emoji('nope')} • This listing is gone!`,
     embed: {
-      description: `${_emoji(item.rarity)} **${item.name}** has been ${entry.type == 'sell' ? "sold to" : "bought by"} [${CURRENT_USER.username}#${CURRENT_USER.discriminator}](${HOST}/profile/${CURRENT_USER.id}) for ${_emoji(entry.currency)}**${entry.price}**`
+      description: `${_emoji(item.rarity)} **${item.name}** has been ${entry.type == 'sell' ? "sold to" : "bought by"} [${CURRENT_USER.username}](${HOST}/profile/${CURRENT_USER.id}) for ${_emoji(entry.currency)}**${entry.price}**`
     }
   });
 }
