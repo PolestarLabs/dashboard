@@ -12,7 +12,7 @@ async function processForm(form,req,res,{sendWebhook,embed}){
 
 		console.log("\n "+" • NEW FANART SUBMISSION • ".bgBlue);
 
-let authorTag = req.user ? req.user.username : "Anonymous";
+		let authorTag = req.user ? req.user.username : "Anonymous";
 		let authorID = ((req.user||{id:'anonymous'}).id);
 		let userData = req.user;
 
