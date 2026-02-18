@@ -70,12 +70,12 @@ async function userRankify(plxUser = {}, discordUser, member) {
     userRank.avatar = member
       ? discordUser.user.avatarURL
       : discordUser.avatarURL;
-    userRank.disc = member ? "" : discordUser.discriminator;
+    userRank.disc = "";
   } else {
     userRank.name = "----------";
     userRank.avatar =
       "https://discordapp.com/assets/6debd47ed13483642cf09e832ed0bc1b.png";
-    userRank.disc = "0000";
+    userRank.disc = "";
   }
   if (plxUser.modules) {
     userRank.level = plxUser.modules.level;
@@ -86,12 +86,5 @@ async function userRankify(plxUser = {}, discordUser, member) {
   if (plxUser.meta) {
     userRank.name = plxUser.meta.username;
     userRank.avatar = plxUser.meta.avatar;
-    userRank.disc = plxUser.meta.discriminator;
-  }
-
-  userRank.id = plxUser.user || plxUser.id || (discordUser || {}).id;
-
-  return userRank;
-}
-
+    userRank.disc = "";
 module.exports = router;

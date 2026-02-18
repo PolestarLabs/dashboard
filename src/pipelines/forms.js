@@ -17,9 +17,9 @@ exports.run = function(req,res,form){
       USR=req.user
       embed.title = "📠 New Form Submission"
      if (!req.user) {
-       USR={username:"unauth",discriminator:"0000"}
+       USR={username:"unauth"}
      }
-    embed.author = { name:`${USR.username}#${USR.discriminator}`,avatar_url:`https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`}
+    embed.author = { name: USR.username, avatar_url:`https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`} 
       embed.description = "Submission from **"+ req.query.from+"** Form"
       embed.footer = {text: req.user.id}
       

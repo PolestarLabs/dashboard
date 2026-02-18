@@ -1309,9 +1309,8 @@ var userdata =
     "favcolor": "#00FF00",
     "cherries": 3,
     "meta": {
-      "tag": "Flicky#9065",
+      "tag": "Flicky",
       "username": "Flicky",
-      "discriminator": "9065",
       "avatar": "https://cdn.discordapp.com/avatars/88120564400553984/8340ed69f925533f1e9aa4d80bb89321.png?size=512",
       "staticAvatar": "https://cdn.discordapp.com/avatars/88120564400553984/8340ed69f925533f1e9aa4d80bb89321.png?size=512"
     },

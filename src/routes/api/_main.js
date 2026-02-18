@@ -240,10 +240,10 @@ router.get('/relationships', async (req, res)=> {
             users: rel.users,
             usersData: rel.users.map(u=> {
                 let udbData = {};
-                let {avatar,bot,discriminator,username} = usersDiscordData.find(usr=> usr.id === u);
+                let {avatar,bot,username} = usersDiscordData.find(usr=> usr.id === u);
                 if(rel.usersData) udbData = rel.usersData.find(usr=> usr.id === u);           
                 
-                return  Object.assign( {id:u, avatar, bot, discriminator, username} , {tagline:udbData?.modules?.tagline,featuredMarriage:udbData?.featuredMarriage} )
+                return  Object.assign( {id:u, avatar, bot, username} , {tagline:udbData?.modules?.tagline,featuredMarriage:udbData?.featuredMarriage} )
             })
         };
         parsedRelationships.push(item)

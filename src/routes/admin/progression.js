@@ -20,8 +20,8 @@ router.get('/top100', async (req,res)=>{
         let discordUser =   await userCache.get( RNK.user ).catch(err=>null);
         if (!discordUser) return null;
         userCache.set(discordUser.id,discordUser);
-        let {id,avatar,bot,discriminator,username} = discordUser;
-        const response =  {id,avatar,bot,discriminator,username};
+        let {id,avatar,bot,username} = discordUser;
+        const response =  {id,avatar,bot,username};
         response.polluxData = RNK ? {
             exp: RNK.exp, 
             level: RNK.level 

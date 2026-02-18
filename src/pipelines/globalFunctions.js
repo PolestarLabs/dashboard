@@ -14,10 +14,9 @@ module.exports = {
     try {
       return {
         pix: `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
-        name: `${USR.username}#${USR.discriminator}`,
+        name: USR.username,
         uname: USR.username,
         id: USR.id,
-        discriminator: USR.discriminator,
       };
     } catch (e) {
       return this.universaldummy();
@@ -63,7 +62,7 @@ module.exports = {
     dbpars = await DB.userDB.findOne({ id: id });
     try {
       if (!dbpars) {
-        req.user.tag = req.user.username + "#" + req.user.discriminator;
+        req.user.tag = req.user.username;
         await DB.userDB.new(req.user);
         dbpars = await DB.userDB.findOne({ id: id });
       }

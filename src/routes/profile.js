@@ -57,7 +57,7 @@ router.get('/:endpoint', async (req, res)=> {
     const opengraph = {
         image: `${HOST}/generators/pfpv.png?u=${userprofile.id}`,
         large: true,
-        title: `${userDiscord.username}#${userDiscord.discriminator}`,
+        title: `${userDiscord.username}`,
         color: userprofile.modules?.favcolor,
         description: `${userprofile.modules?.persotext}`,
       }
