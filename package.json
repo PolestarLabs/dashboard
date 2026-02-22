@@ -65,7 +65,6 @@
     "gulp-clean-css": "^4.3.0",
     "gulp-debug": "^4.0.0",
     "gulp-font": "^1.0.2",
-    "gulp-image": "^6.2.1",
     "gulp-minify": "^3.1.0",
     "gulp-uglify": "^3.0.2",
     "node-pre-gyp": "github:mapbox/node-pre-gyp",
