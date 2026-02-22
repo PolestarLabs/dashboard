@@ -32,7 +32,6 @@ jobs:
           cd "$DIR"
           git fetch origin
           git reset --hard origin/dev
-          git pull
 
   deps-staging:
     name: 📦 Dependencies (Staging)
@@ -95,7 +94,6 @@ jobs:
           cd "$DIR"
           git fetch origin
           git reset --hard origin/master
-          git pull
 
   deps-production:
     name: 📦 Dependencies (Production)
