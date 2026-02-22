@@ -89,6 +89,7 @@ const formidable = require('formidable');
 
 const app = Express();
 
+app.set('trust proxy', 1); // trust X-Forwarded-Proto from nginx
 app.use(serverTiming());
 app.use(function (req, res, next) {		
 
