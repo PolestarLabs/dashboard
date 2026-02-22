@@ -18,9 +18,6 @@ router.get('/', async (req,res)=>{
     ctx.drawImage(carl ,0 ,0);
     ctx.drawImage(tag.item ,110 ,102);
 
-    let result = canvas.toBuffer();
-
-    
  res.status(200).header('Content-Type','image/png').send( await canvas.png );
 })
 

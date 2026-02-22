@@ -27,7 +27,7 @@ module.exports = {
         stream.pipe(res);
         
 
-        outFile.on('finish', () =>  {
+        outFile.on('finish', async () =>  {
             console.log("• ".green + 'Custom BG Saved!');
             PLX.executeWebhook("832619958915694592","oerDKvMDto44S3hE474tyfRI30w0CuQrt-A7H_nSUU77kOKf3inDtn9qJNKwWtBhB4fy",{
                 wait: true,
@@ -38,7 +38,7 @@ module.exports = {
                     }
                 ],
                 file:{
-                    file: canvas.toBuffer(),
+                    file: await canvas.toBuffer(),
                     name: "bg.png"
                 }
             })
