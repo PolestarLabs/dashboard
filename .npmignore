@@ -1,0 +1,12 @@
+# ignore everything by default
+node_modules/
+.git
+.gitignore
+npm-debug.log
+.DS_Store
+coverage/
+logs/
+.env
+src/
+test/
+README.md
