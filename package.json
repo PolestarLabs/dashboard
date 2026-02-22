@@ -9,11 +9,11 @@
     "build": "gulp build"
   },
   "dependencies": {
-    "@polestar/pollux": "github:PolestarLabs/polaris#dev",
     "@polestar/constants": "github:PolestarLabs/constants#b3e559e4d93db705cb080f2b8d3fc980d0a464e1",
     "@polestar/database_schema": "github:PolestarLabs/db-schema",
     "@polestar/emoji-grimoire": "github:PolestarLabs/emoji-grimoire",
     "@polestar/i18n": "github:PolestarLabs/pollux-i18n",
+    "@polestar/pollux": "github:PolestarLabs/polaris#dev",
     "@polestar/progression": "github:PolestarLabs/plx-progression",
     "@polestar/timed-usage": "github:PolestarLabs/timed-usage#c5dccb85a2118a8c41636663ed7dd8bd5a0cc671",
     "@sentry/node": "^6.2.5",
@@ -24,6 +24,7 @@
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.5",
     "date-fns": "^2.30.0",
+    "detect-libc": "^2.0.0",
     "eris": "^0.14.0",
     "express": "^4.16.2",
     "express-session": "^1.15.6",
@@ -54,14 +55,11 @@
     "rss-parser": "^3.7.1",
     "serve-favicon": "^2.4.5",
     "server-timing": "^3.3.1",
-    "skia-canvas": "^2.0.0",
-    "tweetnacl": "^1.0.3",
-    "detect-libc": "^2.0.0"
+    "skia-canvas": "^3.0.8",
+    "tweetnacl": "^1.0.3"
   },
   "devDependencies": {
     "@types/node": "^14.18.63",
-    "typescript": "^4.3.5",
-    "undici-types": "^5.26.0",
     "gulp": "^4.0.2",
     "gulp-clean": "^0.4.0",
     "gulp-clean-css": "^4.3.0",
@@ -70,6 +68,9 @@
     "gulp-image": "^6.2.1",
     "gulp-minify": "^3.1.0",
     "gulp-uglify": "^3.0.2",
-    "node-pre-gyp": "github:mapbox/node-pre-gyp"
+    "node-pre-gyp": "github:mapbox/node-pre-gyp",
+    "pend": "^1.2.0",
+    "typescript": "^4.3.5",
+    "undici-types": "^5.26.0"
   }
 }
