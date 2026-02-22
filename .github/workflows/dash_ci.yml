@@ -1,83 +1,137 @@
-name: Beta CI
+name: Dashboard CI
 on:
   push:
-    branches: [ master ]
+    branches: [dev, master]
   workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: choice
+        description: "Target environment"
+        options: [staging, production]
+        default: staging
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+# ── Staging pipeline (dev branch) ──────────────────────────────────────────
 
 jobs:
-  pull:
+  pull-staging:
+    name: 🔁 Sync Staging
+    if: >
+      github.ref == 'refs/heads/dev' ||
+      (github.event_name == 'workflow_dispatch' && inputs.environment == 'staging')
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
-    name: 🔁 Sync with Repository    
     runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v2
-      - name: Go to directory
-        run: cd $DIR        
-      - name: Git Reset
+      - name: Sync with repository
         run: |
+          cd "$DIR"
+          git fetch origin
+          git reset --hard origin/dev
+          git pull
+
+  deps-staging:
+    name: 📦 Dependencies (Staging)
+    needs: pull-staging
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+    steps:
+      - name: Spawn standby runner
+        run: pm2 start "GitHub Runner 2" || true
+
+      - name: Install dev dependencies
+        run: |
+          cd "$DIR"
+          npm install --include=dev
+
+      - name: Install all dependencies
+        run: |
+          cd "$DIR"
+          npm install
+        continue-on-error: false
+
+      - name: Stop standby runner
+        if: always()
+        run: pm2 stop "GitHub Runner 2" || true
+
+  build-staging:
+    name: 🥤 Build (Staging)
+    needs: deps-staging
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+    steps:
+      - name: Gulp build (no assets — fast)
+        run: |
+          cd "$DIR"
+          npx gulp buildNoAssets
+
+  deploy-staging:
+    name: 🧪 Deploy → Staging
+    needs: build-staging
+    runs-on: self-hosted
+    steps:
+      - name: Reload PM2 staging processes
+        run: /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
+
+  # ── Production pipeline (master branch) ──────────────────────────────────
+
+  pull-production:
+    name: 🔁 Sync Production
+    if: >
+      github.ref == 'refs/heads/master' ||
+      (github.event_name == 'workflow_dispatch' && inputs.environment == 'production')
+    env:
+      DIR: ${{ secrets.DASH_DIR_PROD }}
+    runs-on: self-hosted
+    steps:
+      - name: Sync with repository
+        run: |
+          cd "$DIR"
+          git fetch origin
           git reset --hard origin/master
           git pull
-  
-  spawn2nd:
-    name: 🤖 Spawn Standby Runner
+
+  deps-production:
+    name: 📦 Dependencies (Production)
+    needs: pull-production
     runs-on: self-hosted
-    needs: pull
-    steps:
-      - name: Spawn Second Runner
-        run: pm2 start "GitHub Runner 2"
-    
-  npm-dev:
-    runs-on: self-hosted
-    needs: pull
     env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}  
-    name: ⚙ Dev Deps
+      DIR: ${{ secrets.DASH_DIR_PROD }}
     steps:
-      - name: Running NPM install
+      - name: Spawn standby runner
+        run: pm2 start "GitHub Runner 2" || true
+
+      - name: Install all dependencies
         run: |
-          cd $DIR
-          npm install --only=dev
-        
-  gulp:
-    runs-on: self-hosted
-    needs: npm-dev
-    env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}  
-    name: 🥤 Build (Gulp)
-    steps:
-      - name: Build (No Assets)
-        run: |
-          cd $DIR
-          gulp buildNoAssets
-  
-  npm:
-    runs-on: self-hosted
-    needs: spawn2nd
-    env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}  
-    name: 📦 Build (NPM)
-    steps:
-      - name: Running NPM install
-        run: |
-          cd $DIR
+          cd "$DIR"
           npm install
-          
-      - name: Audit fix
-        run: npm audit fix
-        continue-on-error: true
-      - name: Shutdown Standby Runner
-        run: pm2 stop "GitHub Runner 2"
-        
-    
-  deploy:
-    name: 🚀 Launch
-    needs: [npm,gulp]
+
+      - name: Stop standby runner
+        if: always()
+        run: pm2 stop "GitHub Runner 2" || true
+
+  build-production:
+    name: 🥤 Build (Production)
+    needs: deps-production
     runs-on: self-hosted
     env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}
+      DIR: ${{ secrets.DASH_DIR_PROD }}
     steps:
-      - name: Go go Power Rangers
-        run: | 
-          pm2 restart 3
-          
+      - name: Gulp build (full)
+        run: |
+          cd "$DIR"
+          npx gulp build
+
+  deploy-production:
+    name: 🚀 Deploy → Production
+    needs: build-production
+    runs-on: self-hosted
+    steps:
+      - name: Reload PM2 production processes
+        run: /home/pollux/polaris/scripts/server-deploy.sh dashboard production
