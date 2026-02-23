@@ -31,14 +31,3 @@ export const utilsRoutes = new Elysia({ tags: ["utils"] })
 
   // GET /api/pid — process id (useful for debugging cluster routing)
   .get("/api/pid", () => ({ pid: process.pid }));
-
-
-import Elysia from "elysia";
-import { dbPlugin } from "@plugins/db";
-
-export const utilsRoutes = new Elysia({ prefix: "/api/utils", tags: ["utils"] })
-  .use(dbPlugin)
-
-  .get("/", async () => {
-    return { _stub: true, message: "Not yet ported to Elysia" };
-  });

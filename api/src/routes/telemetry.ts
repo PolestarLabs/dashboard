@@ -33,12 +33,3 @@ export const telemetryRoutes = new Elysia({ prefix: "/api/telemetry", tags: ["te
     params: t.Object({ id: t.String() }),
     query:  t.Object({ user: t.Optional(t.String()) }),
   });
-
-
-import Elysia from "elysia";
-import { dbPlugin } from "@plugins/db";
-
-export const telemetryRoutes = new Elysia({ prefix: "/api/telemetry", tags: ["telemetry"] })
-  .use(dbPlugin)
-
-  .all("/*", async () => ({ _stub: true, message: "Not yet ported to Elysia" }));

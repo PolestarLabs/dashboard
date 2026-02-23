@@ -74,23 +74,3 @@ export const relationshipsRoutes = new Elysia({ prefix: "/api/relationships", ta
       page: t.Optional(t.String()),
     }),
   });
-
-
-import Elysia, { t } from "elysia";
-import { dbPlugin } from "@plugins/db";
-import { redisPlugin } from "@plugins/redis";
-
-export const relationshipsRoutes = new Elysia({ prefix: "/api/relationships", tags: ["relationships"] })
-  .use(dbPlugin)
-  .use(redisPlugin)
-
-  // GET /api/relationships?id=&uid=&page=
-  .get("/", async ({ query }) => {
-    return { _stub: true, message: "Not yet ported to Elysia", query };
-  }, {
-    query: t.Object({
-      id:   t.Optional(t.String()),
-      uid:  t.Optional(t.String()),
-      page: t.Optional(t.String()),
-    }),
-  });
