@@ -38,8 +38,13 @@ function jsOnly() {
 }
 
 function assets() {
+    // image optimization is best-effort; failures shouldn't stop the build
     return src([`./src/**/*.{${imgExt}}`,`../../DEV/dashboard/src/**/*.{${imgExt}}`, ...ignore])
-        .pipe(image())
+        .pipe(image().on('error', function(err) {
+            // log the error and continue
+            console.warn('gulp-image failed:', err.message || err);
+            this.emit('end');
+        }))
         .pipe(dest(out));
 }
 
