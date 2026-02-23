@@ -19,3 +19,4 @@ dist
 *.mp3
 .env
 config.js.bak
+*.secret.js
