@@ -13,7 +13,7 @@
  *   requireRole("admin")  — admin or higher
  */
 
-import Elysia, { error } from "elysia";
+import Elysia, { status } from "elysia";
 import { bearer } from "@elysiajs/bearer";
 
 export type ApiPermission =
@@ -68,14 +68,14 @@ export const authPlugin = new Elysia({ name: "auth" })
 
     /** Throw 401 if there is no authenticated API user. */
     function requireAuth(): asserts apiUser is ApiUser {
-      if (!apiUser) throw error(401, { message: "API Token required" });
+      if (!apiUser) throw status(401, { message: "API Token required" });
     }
 
     /** Throw 403 if the user doesn't hold at least the given permission level. */
     function requireRole(min: ApiPermission): asserts apiUser is ApiUser {
       requireAuth();
       if (PERMISSION_RANK[apiUser!.apiPermission] < PERMISSION_RANK[min]) {
-        throw error(403, { message: "Insufficient API permissions" });
+        throw status(403, { message: "Insufficient API permissions" });
       }
     }
 
