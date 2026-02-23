@@ -169,14 +169,18 @@ PLX.user = central_pollux;
 global.polluxClients = new Map();
 
 config.clients.forEach(async cli=>{
-	const newClient = new Eris.Client(cli.token,{restMode:true});
-	newClient.id = cli.id;
-	newClient.category = cli.category;
-	newClient.friendly_name = cli.fname;
-	newClient.internal_name = cli.name;
-	let user = await newClient.getRESTUser(cli.id);
-	
-	polluxClients.set(cli.id, {client:newClient,user} )
+	try {
+		const newClient = new Eris.Client(cli.token,{restMode:true});
+		newClient.id = cli.id;
+		newClient.category = cli.category;
+		newClient.friendly_name = cli.fname;
+		newClient.internal_name = cli.name;
+		const meta = {name:cli.name, fname:cli.fname, id:cli.id, category:cli.category};
+		let user = await newClient.getRESTUser(cli.id).catch(()=>({id:cli.id,username:cli.fname}));
+		polluxClients.set(cli.id, {client:newClient, user, meta});
+	} catch(e) {
+		console.warn('polluxClients: failed to init client', cli.name, e.message);
+	}
 })
 
 
@@ -372,6 +376,41 @@ app.use(exSession({
 
 app.use(Passport.initialize());
 app.use(Passport.session());
+
+// Per-request active PLX client resolver
+// On staging, session can pin a specific client; production always uses global PLX.
+global.getActivePLX = function(req) {
+	if (process.env.NODE_ENV !== 'production' && req?.session?.activeClientId) {
+		const entry = polluxClients.get(req.session.activeClientId);
+		if (entry) return entry.client;
+	}
+	return PLX;
+};
+
+app.use(function(req, res, next) {
+	req.PLX = getActivePLX(req);
+	// Expose safe client meta to views on staging
+	if (process.env.NODE_ENV !== 'production') {
+		const activeId = req.session?.activeClientId || PLX.id;
+		const entry = polluxClients.get(activeId);
+		res.locals.ACTIVE_CLIENT = entry?.meta || {name: central_pollux.name, fname: central_pollux.fname, id: central_pollux.id, category: central_pollux.category};
+	}
+	next();
+});
+
+// Staging-only: safe client switcher API (no tokens ever exposed)
+if (process.env.NODE_ENV !== 'production') {
+	app.get('/api/dev/clients', (req, res) => {
+		const safe = Array.from(polluxClients.values()).map(({meta}) => meta).filter(Boolean);
+		res.json({clients: safe, activeId: req.session?.activeClientId || PLX.id});
+	});
+	app.post('/api/dev/set-client', (req, res) => {
+		const {clientId} = req.body;
+		if (!clientId || !polluxClients.has(clientId)) return res.status(400).json({error: 'Unknown client'});
+		req.session.activeClientId = clientId;
+		req.session.save(() => res.json({ok: true, activeId: clientId}));
+	});
+}
 
 //======================================================================
 //              DASHBOARD
