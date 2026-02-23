@@ -1,0 +1,48 @@
+{
+  "compilerOptions": {
+    // ── Output ───────────────────────────────────────────────────────────────
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "./dist",
+    // rootDir intentionally omitted — we do not emit; noEmit:true handles this
+
+    // ── Migration helpers (incremental JS→TS) ────────────────────────────────
+    "allowJs": true,          // let .ts files import existing .js modules
+    "checkJs": false,         // do NOT type-check .js files (they're still untyped)
+    "strict": true,           // full strict mode for all .ts files
+    "noEmit": true,           // type-check only; Node runs src/ directly via tsx
+
+    // ── Interop ──────────────────────────────────────────────────────────────
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+
+    // ── Paths ────────────────────────────────────────────────────────────────
+    "baseUrl": "./src",
+    "paths": {
+      "@routes/*": ["routes/*"],
+      "@pipelines/*": ["pipelines/*"],
+      "@types/*": ["types/*"]
+    },
+
+    // ── Source maps ──────────────────────────────────────────────────────────
+    "sourceMap": true,
+    "inlineSources": true,
+
+    // ── Misc ─────────────────────────────────────────────────────────────────
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true
+  },
+  "include": [
+    // Only explicitly type-check .ts files — .js files are allowed as imports
+    // but not checked. Move a file from .js → .ts to opt it into strict mode.
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/public",
+    "src/views"
+  ]
+}
