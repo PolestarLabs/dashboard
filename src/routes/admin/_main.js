@@ -5,7 +5,7 @@ const router = express.Router();
 const fx = require('../../pipelines/globalFunctions.js');
 const operations = require('../../pipelines/operations.js');
 
-const getActiveClient = gData =>  polluxClients.get( gData?.activeClients?.[0] )?.client || PLX;
+const getActiveClient = (gData, req) =>  polluxClients.get( gData?.activeClients?.[0] )?.client || (req?.PLX ?? PLX);
 
 router.use("/:serverID", ADMCHECKS);
 
@@ -45,7 +45,7 @@ router.get('/:serverID', async function (req,res) {
     const guildData = req.user.guilds?.find(g=>g.id === SVID);
     const serverData = await DB.servers.get(SVID);
     const guildPermissions = guildData.permissions;
-    const authPLX = getActiveClient(serverData);
+    const authPLX = getActiveClient(serverData, req);
 
     console.log({authPLX});
     console.log({getRESTGuildMember: authPLX.getRESTGuildMember});
@@ -95,7 +95,7 @@ router.post('/:serverID/save', async function(req,res){
     
     const SVID = req.params.serverID;
     const svData= await  DB.servers.get(SVID);
-    const authPLX = getActiveClient(svData);
+    const authPLX = getActiveClient(svData, req);
 
     const serverInfo = await authPLX.getRESTGuild(SVID);
     const userData = await DB.users.get(serverInfo.ownerID);
@@ -182,7 +182,7 @@ router.delete("/:serverID/reactionrole", async (req,res) =>{
     let SVID = req.params.serverID;
 
     const svData= await  DB.servers.get(SVID);
-    const authPLX = getActiveClient(svData);
+    const authPLX = getActiveClient(svData, req);
     
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
     let serverInfo= (await authPLX.getRESTGuild(SVID));
@@ -226,7 +226,7 @@ router.put("/:serverID/language",async (req,res)=>{
         .then(async response=>{
 
             const svData= await  DB.servers.get(SVID);
-            const authPLX = getActiveClient(svData);
+            const authPLX = getActiveClient(svData, req);
 
             let serverInfo= (await authPLX.getRESTGuild(SVID));
             let userData = (await DB.users.get(serverInfo.ownerID));
@@ -278,7 +278,7 @@ router.put("/:serverID/savechannelist",async (req,res)=>{
     const SVID = req.params.serverID;
 
     const svData= await  DB.servers.get(SVID);
-    const authPLX = getActiveClient(svData);
+    const authPLX = getActiveClient(svData, req);
 
     let serverInfo= (await authPLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));
