@@ -6,11 +6,13 @@ const fx = require('../pipelines/globalFunctions.js');
 const config = require('../../config.js');
 
 const serversWithPollux = global.serversWithPollux ? serversWithPollux : new Map();
-const serverHasPollux = async (id) => {
+const serverHasPollux = async (id, activePLXId) => {
 
     const svData = await DB.servers.get(id,{id:1,activeClients:1});
     if (!svData) return false;
     if (!svData.activeClients?.length) return false;
+    // On staging, only count the server as "has Pollux" if the active session client is one of its clients
+    if (activePLXId && svData.activeClients && !svData.activeClients.includes(activePLXId)) return false;
     return svData.activeClients;
 
     /*
@@ -141,6 +143,7 @@ const LOAD_ALL_SUBCLIENTS = Promise.all(
 router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
     
     const activePLX = req.PLX || PLX;
+    const stagingClientId = (process.env.STAGING || process.env.NODE_ENV !== 'production') ? activePLX.id : null;
     const [MANSION_SERVER_DATA,MANSION_MEMBER] = await Promise.all([
          activePLX.getRESTGuild(config.official_guild).catch(err=>null),
          activePLX.resolveMember(config.official_guild,req.user.id).catch(err=>null)
@@ -152,7 +155,7 @@ router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
          DB.usercols.get(req.user.id),
          Promise.all(req.user.guilds.map(async g=>{
             g.rank= g.owner ? "Owner" : (g.permissions & 0x8) > 0 ? "Admin" : (g.permissions & 0x20) > 0 ? "Manager" : /*(await isAdmin(req,g.id)) ? "Moderator" :*/ 'Commoner';
-            const hasPollux = await serverHasPollux(g.id);
+            const hasPollux = await serverHasPollux(g.id, stagingClientId);
             g.hasPollux = !!(hasPollux);
             g.hasPolluxDetail = hasPollux;
             g.rankSort = g.rank == "Owner" ? 0 : g.rank == "Admin" ? 1 : g.rank == "Manager" ? 2 : "Moderator" ? 3 : 4;

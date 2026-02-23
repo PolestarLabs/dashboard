@@ -636,10 +636,11 @@ global.isAdmin = function isAdmin(req, svID) {
 
     try {
       SVID = req.query.serverID || req.params.serverID || svID;
+      const authPLX = req.PLX || PLX;
       let [memberInfo, roleInfo, serverInfo, serverData] = await Promise.all([
-        PLX.getRESTGuildMember(SVID, req.user.id).catch(() => null),
-        PLX.getRESTGuildRoles(SVID).catch(() => null),
-        PLX.getRESTGuild(SVID).catch(() => null),
+        authPLX.getRESTGuildMember(SVID, req.user.id).catch(() => null),
+        authPLX.getRESTGuildRoles(SVID).catch(() => null),
+        authPLX.getRESTGuild(SVID).catch(() => null),
         DB.servers.get(svID).catch(() => null),
       ]);
 
