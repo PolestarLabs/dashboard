@@ -98,9 +98,29 @@ html(class="no-js" lang=locale||"en")
 
         // staging banner insertion point
         if ENV !== 'production'
-            // warning ribbon at bottom
             div#staging-banner
-                | ⚠️ This is a staging build ••• do not use for production.
+                span ⚠️ Staging build
+                if ACTIVE_CLIENT
+                    span.staging-sep  ·  bot: 
+                        strong= ACTIVE_CLIENT.fname
+                        span.staging-client-name  (#{ACTIVE_CLIENT.name})
+                    button#staging-switch-btn(type="button" onclick="_stagingSwitchClient()") switch client
+                script.
+                    function _stagingSwitchClient(){
+                        fetch('/api/dev/clients').then(function(r){return r.json();}).then(function(data){
+                            var lines = data.clients.map(function(c,i){
+                                return (i+1)+'. '+c.fname+' ['+c.name+']'+(c.id===data.activeId?' ✓':'');
+                            });
+                            var choice = prompt('Select active bot client:\n'+lines.join('\n'));
+                            var n = parseInt(choice,10)-1;
+                            if(isNaN(n)||!data.clients[n]) return;
+                            fetch('/api/dev/set-client',{
+                                method:'POST',
+                                headers:{'Content-Type':'application/json'},
+                                body:JSON.stringify({clientId:data.clients[n].id})
+                            }).then(function(r){return r.json();}).then(function(){location.reload();});
+                        });
+                    }
 
         if index
             include structures/pace_home
