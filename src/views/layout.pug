@@ -78,7 +78,8 @@ html(class="no-js" lang=locale||"en")
         script.
             console.group('%c[PLX ENV DEBUG]', 'color:#f48;font-weight:bold;font-size:13px');
             console.log('ENV (NODE_ENV):', "#{ENV}");
-            console.log('banner should show?', "#{ENV}" !== 'production');
+            console.log('STAGING flag:', !{STAGING});
+            console.log('banner should show?', !{STAGING} || "#{ENV}" !== 'production');
             console.log('ACTIVE_CLIENT:', !{JSON.stringify(ACTIVE_CLIENT || null)});
             console.groupEnd();
         // ribbon style for staging/dev environments
@@ -113,7 +114,7 @@ html(class="no-js" lang=locale||"en")
 
         block head
     body
-        if ENV !== 'production'
+        if ENV !== 'production' || STAGING
             div#staging-banner
                 span ⚠️ Staging build
                 if ACTIVE_CLIENT

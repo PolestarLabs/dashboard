@@ -390,10 +390,12 @@ global.getActivePLX = function(req) {
 	return PLX;
 };
 
+const IS_STAGING = process.env.STAGING || process.env.NODE_ENV !== 'production';
+
 app.use(function(req, res, next) {
 	req.PLX = getActivePLX(req);
 	// Expose safe client meta to views on staging
-	if (process.env.NODE_ENV !== 'production') {
+	if (IS_STAGING) {
 		const activeId = req.session?.activeClientId || PLX.id;
 		const entry = polluxClients.get(activeId);
 		res.locals.ACTIVE_CLIENT = entry?.meta || {name: central_pollux.name, fname: central_pollux.fname, id: central_pollux.id, category: central_pollux.category};
@@ -402,7 +404,7 @@ app.use(function(req, res, next) {
 });
 
 // Staging-only: safe client switcher API (no tokens ever exposed)
-if (process.env.NODE_ENV !== 'production') {
+if (IS_STAGING) {
 	app.get('/api/dev/clients', (req, res) => {
 		const safe = Array.from(polluxClients.values()).map(({meta}) => meta).filter(Boolean);
 		res.json({clients: safe, activeId: req.session?.activeClientId || PLX.id});
@@ -496,8 +498,9 @@ const authCacheExpiration = new Map();
 app.use(function(req,res,next){
 	res.locals.HOST = HOST;
 	res.locals.ENV = process.env.NODE_ENV;
+	res.locals.STAGING = !!process.env.STAGING;
 	if (req.method === 'GET' && !req.path.startsWith('/api')) {
-		console.log('[ENV DEBUG]', { url: req.path, NODE_ENV: process.env.NODE_ENV, ACTIVE_CLIENT: res.locals.ACTIVE_CLIENT || null });
+		console.log('[ENV DEBUG]', { url: req.path, NODE_ENV: process.env.NODE_ENV, STAGING: process.env.STAGING, ACTIVE_CLIENT: res.locals.ACTIVE_CLIENT || null });
 	}
 	res.locals.INSTANCE_VUE_PATH = process.env.NODE_ENV === "production" 
 		? "https://cdn.jsdelivr.net/npm/vue@2.6.14"
