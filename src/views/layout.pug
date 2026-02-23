@@ -96,7 +96,17 @@ html(class="no-js" lang=locale||"en")
         if opengraph&&opengraph.sitename === "POLLUX MARKETPLACE"
             include structures/pace
 
-        // staging banner insertion point
+
+        if index
+            include structures/pace_home
+            script(defer src="/js/preload.js")
+        else
+            include structures/pace_home
+            script(src="/js/preload.js")
+
+
+        block head
+    body
         if ENV !== 'production'
             div#staging-banner
                 span ⚠️ Staging build
@@ -121,17 +131,6 @@ html(class="no-js" lang=locale||"en")
                             }).then(function(r){return r.json();}).then(function(){location.reload();});
                         });
                     }
-
-        if index
-            include structures/pace_home
-            script(defer src="/js/preload.js")
-        else
-            include structures/pace_home
-            script(src="/js/preload.js")
-
-
-        block head
-    body
         style
         
         if (true &&opengraph&& opengraph.sitename  !== "POLLUX MARKETPLACE") || index
