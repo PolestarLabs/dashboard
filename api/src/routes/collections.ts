@@ -51,8 +51,8 @@ export const collectionsRoutes = new Elysia({ tags: ["collections"] })
   .use(authPlugin)
   .use(dbPlugin)
 
-  // GET /api/items/:endpoint  (search or single item by id)
-  .get("/api/items/:endpoint", async ({ params, query, db }) => {
+  // GET /items/:endpoint  (search or single item by id)
+  .get("/items/:endpoint", async ({ params, query, db }) => {
     const DB = db as any;
     const endpoint = params.endpoint;
 
@@ -106,7 +106,7 @@ export const collectionsRoutes = new Elysia({ tags: ["collections"] })
   })
 
   // GET /api/crafting/:endpoint  — alias
-  .get("/api/crafting/:endpoint", async ({ params, query, db }) => {
+  .get("/crafting/:endpoint", async ({ params, query, db }) => {
     const DB = db as any;
     return DB.items.findOne({ id: params.endpoint }, { _id: 0, __v: 0, emoji: 0 }).lean();
   }, {
@@ -115,7 +115,7 @@ export const collectionsRoutes = new Elysia({ tags: ["collections"] })
   })
 
   // POST /api/crafting/mix — crafting discovery
-  .post("/api/crafting/mix", async ({ body, apiUser, db, set }) => {
+  .post("/crafting/mix", async ({ body, apiUser, db, set }) => {
     const DB  = db as any;
     const pot: any[] = body.pot;
 
@@ -216,7 +216,7 @@ export const collectionsRoutes = new Elysia({ tags: ["collections"] })
   })
 
   // POST /api/crafting/create  (alias: /craft) — execute a craft
-  .post("/api/crafting/create", async ({ body, apiUser, requireAuth, db, set }) => {
+  .post("/crafting/create", async ({ body, apiUser, requireAuth, db, set }) => {
     requireAuth();
     const DB = db as any;
     const { pot, item } = body as { pot?: any[]; item: string };
@@ -253,7 +253,7 @@ export const collectionsRoutes = new Elysia({ tags: ["collections"] })
   })
 
   // Alias: /craft
-  .post("/api/crafting/craft", async ({ body, apiUser, requireAuth, db, set }) => {
+  .post("/crafting/craft", async ({ body, apiUser, requireAuth, db, set }) => {
     requireAuth();
     const DB = db as any;
     const { pot, item } = body as { pot?: any[]; item: string };

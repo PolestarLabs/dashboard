@@ -7,7 +7,7 @@
 import Elysia, { t } from "elysia";
 import { dbPlugin } from "@plugins/db";
 
-export const internalRoutes = new Elysia({ prefix: "/api/internal", tags: ["internal"] })
+export const internalRoutes = new Elysia({ prefix: "/internal", tags: ["internal"] })
   .use(dbPlugin)
 
   // GET /api/internal/ping?filter=

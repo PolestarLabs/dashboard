@@ -72,7 +72,7 @@ async function parseUserAndReturn(uID: string, db: DB, redis: any) {
 // Route definitions
 // ---------------------------------------------------------------------------
 
-export const usersRoutes = new Elysia({ prefix: "/api/user", tags: ["users"] })
+export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
   .use(authPlugin)
   .use(redisPlugin)
   .use(dbPlugin)

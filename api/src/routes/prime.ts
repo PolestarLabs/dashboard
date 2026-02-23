@@ -45,7 +45,7 @@ async function getPatreonPayload(): Promise<any[]> {
     });
 }
 
-export const primeRoutes = new Elysia({ prefix: "/api/prime", tags: ["prime"] })
+export const primeRoutes = new Elysia({ prefix: "/prime", tags: ["prime"] })
   .use(authPlugin)
   .use(dbPlugin)
 

@@ -9,18 +9,18 @@ import Elysia, { t } from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
 
-export const utilsRoutes = new Elysia({ tags: ["utils"] })
+export const utilsRoutes = new Elysia({ prefix: "/", tags: ["utils"] })
   .use(authPlugin)
   .use(dbPlugin)
 
   // GET /api/discoin/currencies
-  .get("/api/discoin/currencies", async ({ db }) => {
+  .get("/discoin/currencies", async ({ db }) => {
     const DB = db as any;
     return DB.globals.find({ type: "discoin" }, { type: 0, _id: 0, data: 0 }).lean();
   })
 
   // GET /api/achievements/:id
-  .get("/api/achievements/:id", async ({ params, db }) => {
+  .get("/achievements/:id", async ({ params, db }) => {
     const DB = db as any;
     // user-level achievements branch kept stubbed — no aggregate logic yet
     if (params.id === "user") return {};
@@ -30,4 +30,4 @@ export const utilsRoutes = new Elysia({ tags: ["utils"] })
   })
 
   // GET /api/pid — process id (useful for debugging cluster routing)
-  .get("/api/pid", () => ({ pid: process.pid }));
+  .get("/pid", () => ({ pid: process.pid }));

@@ -8,7 +8,7 @@ import Elysia, { t } from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
 
-export const telemetryRoutes = new Elysia({ prefix: "/api/telemetry", tags: ["telemetry"] })
+export const telemetryRoutes = new Elysia({ prefix: "/telemetry", tags: ["telemetry"] })
   .use(authPlugin)
   .use(dbPlugin)
 

@@ -8,7 +8,7 @@ import Elysia, { t } from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
 
-export const leaderboardsRoutes = new Elysia({ prefix: "/api/leaderboards", tags: ["leaderboards"] })
+export const leaderboardsRoutes = new Elysia({ prefix: "/leaderboards", tags: ["leaderboards"] })
   .use(authPlugin)
   .use(dbPlugin)
 

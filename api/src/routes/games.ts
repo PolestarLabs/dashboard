@@ -32,7 +32,7 @@ export const gamesRoutes = new Elysia({ tags: ["games"] })
   .use(dbPlugin)
 
   // GET /api/games/hangmaid/words?t=theme&l=level&q=count
-  .get("/api/games/hangmaid/words", ({ query }) => {
+  .get("/games/hangmaid/words", ({ query }) => {
     let words = (WORDS as WordEntry[]).filter((w) => {
       if (query.t && w.theme !== query.t) return false;
       if (query.l && w.level !== parseInt(query.l)) return false;
@@ -49,7 +49,7 @@ export const gamesRoutes = new Elysia({ tags: ["games"] })
   })
 
   // GET /api/minigames/hangmaid/words — alias
-  .get("/api/minigames/hangmaid/words", ({ query }) => {
+  .get("/minigames/hangmaid/words", ({ query }) => {
     let words = (WORDS as WordEntry[]).filter((w) => {
       if (query.t && w.theme !== query.t) return false;
       if (query.l && w.level !== parseInt(query.l)) return false;

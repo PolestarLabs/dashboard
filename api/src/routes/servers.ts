@@ -8,7 +8,7 @@ import Elysia, { t } from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
 
-export const serversRoutes = new Elysia({ prefix: "/api/server", tags: ["servers"] })
+export const serversRoutes = new Elysia({ prefix: "/server", tags: ["servers"] })
   .use(authPlugin)
   .use(dbPlugin)
 

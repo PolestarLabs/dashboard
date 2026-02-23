@@ -9,7 +9,7 @@ import { dbPlugin } from "@plugins/db";
 import { redisPlugin } from "@plugins/redis";
 import { getManyDiscordUsers } from "@helpers/discord";
 
-export const relationshipsRoutes = new Elysia({ prefix: "/api/relationships", tags: ["relationships"] })
+export const relationshipsRoutes = new Elysia({ prefix: "/relationships", tags: ["relationships"] })
   .use(dbPlugin)
   .use(redisPlugin)
 

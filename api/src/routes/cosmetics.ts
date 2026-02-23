@@ -84,7 +84,7 @@ async function stickerCount(pack: any, DB: any) {
 // Route definitions
 // ---------------------------------------------------------------------------
 
-export const cosmeticsRoutes = new Elysia({ prefix: "/api/cosmetics", tags: ["cosmetics"] })
+export const cosmeticsRoutes = new Elysia({ prefix: "/cosmetics", tags: ["cosmetics"] })
   .use(dbPlugin)
   .use(redisPlugin)
 

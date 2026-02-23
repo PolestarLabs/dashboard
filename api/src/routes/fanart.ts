@@ -8,7 +8,7 @@ import Elysia, { t } from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
 
-export const fanartRoutes = new Elysia({ prefix: "/api/galleries/fanart", tags: ["fanart"] })
+export const fanartRoutes = new Elysia({ prefix: "/galleries/fanart", tags: ["fanart"] })
   .use(authPlugin)
   .use(dbPlugin)
 
