@@ -5,7 +5,11 @@ const router = express.Router();
 const fx = require('../../pipelines/globalFunctions.js');
 const operations = require('../../pipelines/operations.js');
 
-const getActiveClient = (gData, req) =>  polluxClients.get( gData?.activeClients?.[0] )?.client || (req?.PLX ?? PLX);
+const getActiveClient = (gData, req) => {
+    // On staging, always use the session-selected client — DB activeClients don't apply
+    if (process.env.STAGING || process.env.NODE_ENV !== 'production') return req?.PLX ?? PLX;
+    return polluxClients.get(gData?.activeClients?.[0])?.client || PLX;
+};
 
 router.use("/:serverID", ADMCHECKS);
 
