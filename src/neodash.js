@@ -168,8 +168,6 @@ PLX.user = central_pollux;
 
 global.polluxClients = new Map();
 
-const GearboxClient = require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client;
-
 config.clients.forEach(async cli=>{
 	try {
 		const newClient = new Eris.Client(cli.token,{restMode:true});
@@ -177,7 +175,6 @@ config.clients.forEach(async cli=>{
 		newClient.category = cli.category;
 		newClient.friendly_name = cli.fname;
 		newClient.internal_name = cli.name;
-		Object.assign(newClient, GearboxClient);
 		const meta = {name:cli.name, fname:cli.fname, id:cli.id, category:cli.category};
 		let user = await newClient.getRESTUser(cli.id).catch(()=>({id:cli.id,username:cli.fname}));
 		polluxClients.set(cli.id, {client:newClient, user, meta});
@@ -194,7 +191,7 @@ setTimeout(()=>{
 },5000)
 
 
-Object.assign(PLX, GearboxClient);
+Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client);
 
 (require('@polestar/database_schema'))({
 	url: dbURL,
