@@ -61,7 +61,7 @@ router.use( (req,res,nex)=>{
 });
 
 
-router.get((rq,rs,nx)=> {
+router.use((rq,rs,nx)=> {
     if(rq.query.nocache) nx();
     else (cache(60))(rq,rs,nx);
 });

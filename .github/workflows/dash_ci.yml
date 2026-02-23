@@ -32,7 +32,6 @@ jobs:
           cd "$DIR"
           git fetch origin
           git reset --hard origin/dev
-          git pull
 
   deps-staging:
     name: 📦 Dependencies (Staging)
@@ -41,9 +40,6 @@ jobs:
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
     steps:
-      - name: Spawn standby runner
-        run: pm2 start "GitHub Runner 2" || true
-
       - name: Install dev dependencies
         run: |
           cd "$DIR"
@@ -53,27 +49,10 @@ jobs:
         run: |
           cd "$DIR"
           npm install
-        continue-on-error: false
-
-      - name: Stop standby runner
-        if: always()
-        run: pm2 stop "GitHub Runner 2" || true
-
-  build-staging:
-    name: 🥤 Build (Staging)
-    needs: deps-staging
-    runs-on: self-hosted
-    env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}
-    steps:
-      - name: Gulp build (no assets — fast)
-        run: |
-          cd "$DIR"
-          npx gulp buildNoAssets
 
   deploy-staging:
     name: 🧪 Deploy → Staging
-    needs: build-staging
+    needs: deps-staging
     runs-on: self-hosted
     steps:
       - name: Reload PM2 staging processes
@@ -95,7 +74,6 @@ jobs:
           cd "$DIR"
           git fetch origin
           git reset --hard origin/master
-          git pull
 
   deps-production:
     name: 📦 Dependencies (Production)
@@ -104,33 +82,14 @@ jobs:
     env:
       DIR: ${{ secrets.DASH_DIR_PROD }}
     steps:
-      - name: Spawn standby runner
-        run: pm2 start "GitHub Runner 2" || true
-
       - name: Install all dependencies
         run: |
           cd "$DIR"
           npm install
 
-      - name: Stop standby runner
-        if: always()
-        run: pm2 stop "GitHub Runner 2" || true
-
-  build-production:
-    name: 🥤 Build (Production)
-    needs: deps-production
-    runs-on: self-hosted
-    env:
-      DIR: ${{ secrets.DASH_DIR_PROD }}
-    steps:
-      - name: Gulp build (full)
-        run: |
-          cd "$DIR"
-          npx gulp build
-
   deploy-production:
     name: 🚀 Deploy → Production
-    needs: build-production
+    needs: deps-production
     runs-on: self-hosted
     steps:
       - name: Reload PM2 production processes

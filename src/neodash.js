@@ -89,6 +89,7 @@ const formidable = require('formidable');
 
 const app = Express();
 
+app.set('trust proxy', 1); // trust X-Forwarded-Proto from nginx
 app.use(serverTiming());
 app.use(function (req, res, next) {		
 
@@ -167,15 +168,22 @@ PLX.user = central_pollux;
 
 global.polluxClients = new Map();
 
+const GearboxClient = require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client;
+
 config.clients.forEach(async cli=>{
-	const newClient = new Eris.Client(cli.token,{restMode:true});
-	newClient.id = cli.id;
-	newClient.category = cli.category;
-	newClient.friendly_name = cli.fname;
-	newClient.internal_name = cli.name;
-	let user = await newClient.getRESTUser(cli.id);
-	
-	polluxClients.set(cli.id, {client:newClient,user} )
+	try {
+		const newClient = new Eris.Client(cli.token,{restMode:true});
+		newClient.id = cli.id;
+		newClient.category = cli.category;
+		newClient.friendly_name = cli.fname;
+		newClient.internal_name = cli.name;
+		Object.assign(newClient, GearboxClient);
+		const meta = {name:cli.name, fname:cli.fname, id:cli.id, category:cli.category};
+		let user = await newClient.getRESTUser(cli.id).catch(()=>({id:cli.id,username:cli.fname}));
+		polluxClients.set(cli.id, {client:newClient, user, meta});
+	} catch(e) {
+		console.warn('polluxClients: failed to init client', cli.name, e.message);
+	}
 })
 
 
@@ -186,7 +194,7 @@ setTimeout(()=>{
 },5000)
 
 
-Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client);
+Object.assign(PLX, GearboxClient);
 
 (require('@polestar/database_schema'))({
 	url: dbURL,
@@ -372,6 +380,43 @@ app.use(exSession({
 app.use(Passport.initialize());
 app.use(Passport.session());
 
+// Per-request active PLX client resolver
+// On staging, session can pin a specific client; production always uses global PLX.
+global.getActivePLX = function(req) {
+	if (process.env.NODE_ENV !== 'production' && req?.session?.activeClientId) {
+		const entry = polluxClients.get(req.session.activeClientId);
+		if (entry) return entry.client;
+	}
+	return PLX;
+};
+
+const IS_STAGING = process.env.STAGING || process.env.NODE_ENV !== 'production';
+
+app.use(function(req, res, next) {
+	req.PLX = getActivePLX(req);
+	// Expose safe client meta to views on staging
+	if (IS_STAGING) {
+		const activeId = req.session?.activeClientId || PLX.id;
+		const entry = polluxClients.get(activeId);
+		res.locals.ACTIVE_CLIENT = entry?.meta || {name: central_pollux.name, fname: central_pollux.fname, id: central_pollux.id, category: central_pollux.category};
+	}
+	next();
+});
+
+// Staging-only: safe client switcher API (no tokens ever exposed)
+if (IS_STAGING) {
+	app.get('/api/dev/clients', (req, res) => {
+		const safe = Array.from(polluxClients.values()).map(({meta}) => meta).filter(Boolean);
+		res.json({clients: safe, activeId: req.session?.activeClientId || PLX.id});
+	});
+	app.post('/api/dev/set-client', (req, res) => {
+		const {clientId} = req.body;
+		if (!clientId || !polluxClients.has(clientId)) return res.status(400).json({error: 'Unknown client'});
+		req.session.activeClientId = clientId;
+		req.session.save(() => res.json({ok: true, activeId: clientId}));
+	});
+}
+
 //======================================================================
 //              DASHBOARD
 //======================================================================
@@ -453,6 +498,10 @@ const authCacheExpiration = new Map();
 app.use(function(req,res,next){
 	res.locals.HOST = HOST;
 	res.locals.ENV = process.env.NODE_ENV;
+	res.locals.STAGING = !!process.env.STAGING;
+	if (req.method === 'GET' && !req.path.startsWith('/api')) {
+		console.log('[ENV DEBUG]', { url: req.path, NODE_ENV: process.env.NODE_ENV, STAGING: process.env.STAGING, ACTIVE_CLIENT: res.locals.ACTIVE_CLIENT || null });
+	}
 	res.locals.INSTANCE_VUE_PATH = process.env.NODE_ENV === "production" 
 		? "https://cdn.jsdelivr.net/npm/vue@2.6.14"
 		//? "https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.js"
@@ -587,10 +636,11 @@ global.isAdmin = function isAdmin(req, svID) {
 
     try {
       SVID = req.query.serverID || req.params.serverID || svID;
+      const authPLX = req.PLX || PLX;
       let [memberInfo, roleInfo, serverInfo, serverData] = await Promise.all([
-        PLX.getRESTGuildMember(SVID, req.user.id).catch(() => null),
-        PLX.getRESTGuildRoles(SVID).catch(() => null),
-        PLX.getRESTGuild(SVID).catch(() => null),
+        authPLX.getRESTGuildMember(SVID, req.user.id).catch(() => null),
+        authPLX.getRESTGuildRoles(SVID).catch(() => null),
+        authPLX.getRESTGuild(SVID).catch(() => null),
         DB.servers.get(svID).catch(() => null),
       ]);
 

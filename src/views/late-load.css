@@ -67,3 +67,31 @@
     font-weight: 100
 }
 */
+
+#staging-banner {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    z-index: 9999;
+    background: #b8860b;
+    color: #fff;
+    font-size: 12px;
+    font-family: monospace;
+    padding: 4px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+#staging-banner .staging-sep { opacity: .7; }
+#staging-banner .staging-client-name { opacity: .7; font-size: 11px; }
+#staging-switch-btn {
+    margin-left: 6px;
+    padding: 1px 8px;
+    font-size: 11px;
+    font-family: monospace;
+    background: rgba(255,255,255,.15);
+    border: 1px solid rgba(255,255,255,.4);
+    color: #fff;
+    border-radius: 3px;
+    cursor: pointer;
+}
+#staging-switch-btn:hover { background: rgba(255,255,255,.28); }
