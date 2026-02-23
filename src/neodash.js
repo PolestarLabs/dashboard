@@ -499,9 +499,6 @@ app.use(function(req,res,next){
 	res.locals.HOST = HOST;
 	res.locals.ENV = process.env.NODE_ENV;
 	res.locals.STAGING = !!process.env.STAGING;
-	if (req.method === 'GET' && !req.path.startsWith('/api')) {
-		console.log('[ENV DEBUG]', { url: req.path, NODE_ENV: process.env.NODE_ENV, STAGING: process.env.STAGING, ACTIVE_CLIENT: res.locals.ACTIVE_CLIENT || null });
-	}
 	res.locals.INSTANCE_VUE_PATH = process.env.NODE_ENV === "production" 
 		? "https://cdn.jsdelivr.net/npm/vue@2.6.14"
 		//? "https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.js"

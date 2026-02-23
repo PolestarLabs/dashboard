@@ -21,8 +21,9 @@
 
     "baseUrl": "./src",
     "paths": {
-      "@plugins/*": ["plugins/*"],
-      "@routes/*":  ["routes/*"]
+      "@plugins/*":  ["plugins/*"],
+      "@routes/*":   ["routes/*"],
+      "@helpers/*":  ["helpers/*"]
     }
   },
   "include": ["src/**/*.ts"],
