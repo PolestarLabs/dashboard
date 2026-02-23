@@ -39,7 +39,9 @@ function js() {
     return src(["./src/+(views|public)/**/*.js", ...ignore])
         .pipe(debug())
         .pipe(uglify().on('error', function(err) {
-            console.warn('uglify failed:', err.message || err);
+            const msg = err.message || err;
+            console.warn('uglify failed:', msg);
+            annotateGitHub(err, 'uglify failed');
             this.emit('end');
         }))
         .pipe(dest(out));
@@ -47,10 +49,31 @@ function js() {
 function jsOnly() {
     return src(["./src/+(views|public)/**/*.js", ...ignore])
         .pipe(uglify().on('error', function(err) {
-            console.warn('uglify failed:', err.message || err);
+            const msg = err.message || err;
+            console.warn('uglify failed:', msg);
+            annotateGitHub(err, 'uglify failed');
             this.emit('end');
         }))
         .pipe(dest(out));
+}
+
+function annotateGitHub(err, defaultMessage) {
+    // try to parse a filename and line from the message
+    let file = "";
+    let line = "";
+    if (err && err.message) {
+        const m = err.message.match(/File:\s*([^\n]+)\n?[^\n]*Line:\s*(\d+)/i);
+        if (m) {
+            file = m[1];
+            line = m[2];
+        }
+    }
+    const message = defaultMessage || (err && err.message) || String(err);
+    if (file) {
+        console.log(`::warning file=${file},line=${line}::${message}`);
+    } else {
+        console.log(`::warning::${message}`);
+    }
 }
 
 function assets() {
@@ -59,6 +82,7 @@ function assets() {
         .pipe(image().on('error', function(err) {
             // log the error and continue
             console.warn('gulp-image failed:', err.message || err);
+            annotateGitHub(err, 'gulp-image failed');
             this.emit('end');
         }))
         .pipe(dest(out));
