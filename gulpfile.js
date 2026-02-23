@@ -38,12 +38,18 @@ function css() {
 function js() {
     return src(["./src/+(views|public)/**/*.js", ...ignore])
         .pipe(debug())
-        .pipe(uglify())
+        .pipe(uglify().on('error', function(err) {
+            console.warn('uglify failed:', err.message || err);
+            this.emit('end');
+        }))
         .pipe(dest(out));
 }
 function jsOnly() {
     return src(["./src/+(views|public)/**/*.js", ...ignore])
-        .pipe(uglify())
+        .pipe(uglify().on('error', function(err) {
+            console.warn('uglify failed:', err.message || err);
+            this.emit('end');
+        }))
         .pipe(dest(out));
 }
 
