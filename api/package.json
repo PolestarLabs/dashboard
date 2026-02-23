@@ -1,0 +1,26 @@
+{
+  "name": "pollux-core-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Pollux REST API — ElysiaJS on Bun. Lives alongside the Express dashboard during migration; will be extracted to its own repo in Phase 5.",
+  "scripts": {
+    "dev":       "bun run --watch src/index.ts",
+    "start":     "bun run src/index.ts",
+    "typecheck": "bun tsc --noEmit"
+  },
+  "dependencies": {
+    "elysia":                  "^1.2.25",
+    "@elysiajs/bearer":        "^1.2.2",
+    "@elysiajs/cors":          "^1.2.3",
+    "@elysiajs/jwt":           "^1.2.2",
+    "@elysiajs/server-timing": "^1.2.0",
+    "@elysiajs/swagger":       "^1.2.2",
+    "@polestar/database_schema": "github:PolestarLabs/db-schema",
+    "ioredis":  "^5.4.1",
+    "mongoose": "^8.9.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript":  "^5.7.0"
+  }
+}

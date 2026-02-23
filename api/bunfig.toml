@@ -1,0 +1,11 @@
+# Bun configuration for pollux-core-api
+[run]
+# Allow top-level await (default in Bun — explicit for clarity)
+bun = true
+
+[install]
+# Respect the lockfile on CI
+frozenLockfile = false
+
+[install.cache]
+dir = "~/.bun/install/cache"
