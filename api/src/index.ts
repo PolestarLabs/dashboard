@@ -13,6 +13,7 @@ import { cors } from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
 import { serverTiming } from "@elysiajs/server-timing";
 
+import { printBanner } from "./banner";
 import { dbPlugin } from "@plugins/db";
 import { redisPlugin } from "@plugins/redis";
 import { authPlugin } from "@plugins/auth";
@@ -106,7 +107,7 @@ const app = new Elysia({ prefix: "/api" })
   });
 
 app.listen({ port: PORT, hostname: "127.0.0.1" }, ({ hostname, port }) => {
-  console.log(`🦊 Pollux Core API listening on http://${hostname}:${port}/api`);
+  printBanner(hostname, port);
 });
 
 export type App = typeof app;
