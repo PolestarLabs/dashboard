@@ -6,6 +6,3 @@ bun = true
 [install]
 # Respect the lockfile on CI
 frozenLockfile = false
-
-[install.cache]
-dir = "~/.bun/install/cache"
