@@ -74,8 +74,8 @@ const app = new Elysia({ prefix: "/api" })
   .use(authPlugin)
 
   // ── Health ────────────────────────────────────────────────────────────────
-  .get("/api/ping", () => ({ ok: true, pid: process.pid, ts: Date.now() }))
-  .get("/api/pid",  () => String(process.pid))
+  .get("/ping", () => ({ ok: true, pid: process.pid, ts: Date.now() }))
+  .get("/pid",  () => String(process.pid))
 
   // ── Domain routes ─────────────────────────────────────────────────────────
   .use(usersRoutes)
