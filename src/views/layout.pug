@@ -75,6 +75,12 @@ html(class="no-js" lang=locale||"en")
         script(src="/js/login.js" async) 
         
         script var ENV = "#{ENV}"
+        script.
+            console.group('%c[PLX ENV DEBUG]', 'color:#f48;font-weight:bold;font-size:13px');
+            console.log('ENV (NODE_ENV):', "#{ENV}");
+            console.log('banner should show?', "#{ENV}" !== 'production');
+            console.log('ACTIVE_CLIENT:', !{JSON.stringify(ACTIVE_CLIENT || null)});
+            console.groupEnd();
         // ribbon style for staging/dev environments
         style
             | #staging-banner { position:fixed; bottom:0; left:0; right:0; background:#d9263f; color:#fff; text-align:center; padding:8px 0; font-size:14px; z-index:9999; }
