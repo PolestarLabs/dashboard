@@ -30,6 +30,7 @@ import { gamesRoutes } from "@routes/games";
 import { collectionsRoutes } from "@routes/collections";
 import { telemetryRoutes } from "@routes/telemetry";
 import { fanartRoutes } from "@routes/fanart";
+import { shipRoutes } from "@routes/ship";
 
 const PORT = parseInt(process.env.API_PORT ?? "6056", 10);
 const IS_DEV = process.env.NODE_ENV !== "production";
@@ -62,6 +63,7 @@ const app = new Elysia({ prefix: "/api" })
           { name: "fanart",        description: "Fanart gallery" },
           { name: "telemetry",     description: "Internal pings and metrics" },
           { name: "internal",      description: "Internal service endpoints" },
+          { name: "generators",    description: "Image generator endpoints" },
           { name: "utils",         description: "Utility endpoints" },
         ],
       },
@@ -90,6 +92,8 @@ const app = new Elysia({ prefix: "/api" })
   .use(collectionsRoutes)
   .use(telemetryRoutes)
   .use(fanartRoutes)
+  .use(shipRoutes)
+  .use(shipRoutes)
 
   // ── Global error handler ──────────────────────────────────────────────────
   .onError(({ code, error, set }) => {
