@@ -32,7 +32,7 @@ import { telemetryRoutes } from "@routes/telemetry";
 import { fanartRoutes } from "@routes/fanart";
 import { shipRoutes } from "@routes/ship";
 
-const PORT = parseInt(process.env.API_PORT ?? "6056", 10);
+const PORT = parseInt(process.env.API_PORT ?? "7056", 10);
 const IS_DEV = process.env.NODE_ENV !== "production";
 
 const app = new Elysia({ prefix: "/api" })
@@ -41,7 +41,7 @@ const app = new Elysia({ prefix: "/api" })
   .use(
     cors({
       origin: IS_DEV
-        ? ["https://staging.pollux.gg", "http://localhost:6055"]
+        ? ["https://staging.pollux.gg", "http://localhost:7056"]
         : ["https://pollux.gg"],
       credentials: true,
     })
