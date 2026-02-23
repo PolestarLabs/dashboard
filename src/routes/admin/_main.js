@@ -51,22 +51,38 @@ router.get('/:serverID', async function (req,res) {
     const guildPermissions = guildData.permissions;
     const authPLX = getActiveClient(serverData, req);
 
-    console.log({authPLX});
-    console.log({getRESTGuildMember: authPLX.getRESTGuildMember});
-    console.log({sdataatc: serverData.activeClients});
-
-    let [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
-        
-        authPLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
-        authPLX.getRESTGuildRoles(SVID),
-        authPLX.getRESTGuild(SVID),
-        authPLX.getRESTGuildChannels(SVID),
-        DB.reactRoles.find({server:SVID}).lean().exec(),
-        DB.feed.find({server:SVID}).lean().exec(),
-        DB.localranks.find({server:SVID}).lean().exec(),
-        DB.temproles.find({server:SVID}).lean().exec(),
-        DB.paidroles.find({server:SVID}).lean().exec(),
-    ]);
+    let memberInfo, roleInfo, serverInfo, channelInfo, reactRoles, feeds, localranks, temproles, paidroles;
+    try {
+        [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
+            authPLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
+            authPLX.getRESTGuildRoles(SVID),
+            authPLX.getRESTGuild(SVID),
+            authPLX.getRESTGuildChannels(SVID),
+            DB.reactRoles.find({server:SVID}).lean().exec(),
+            DB.feed.find({server:SVID}).lean().exec(),
+            DB.localranks.find({server:SVID}).lean().exec(),
+            DB.temproles.find({server:SVID}).lean().exec(),
+            DB.paidroles.find({server:SVID}).lean().exec(),
+        ]);
+    } catch(e) {
+        console.error(`[admin/${SVID}] Discord API error:`, e.message || e);
+        const isDiscordError = e?.constructor?.name === 'DiscordHTTPError';
+        const httpStatus = isDiscordError ? (e.code || (e.message?.match(/^(\d+)/)?.[1] | 0)) : 0;
+        const status = (httpStatus === 401 || httpStatus === 403) ? 403 : isDiscordError ? 502 : 500;
+        const messages = {
+            403: "The bot doesn't have access to this server, or lacks permissions to fetch its data.",
+            502: "Discord returned an error while fetching server data. Try again in a moment.",
+            500: "An unexpected error occurred while loading the server dashboard.",
+        };
+        return res.status(status).render('error', {
+            message: messages[status] || messages[500],
+            error: {
+                status,
+                name: e.constructor?.name || 'Error',
+                stack: process.env.STAGING ? (e.stack || e.message || String(e)) : '',
+            },
+        });
+    }
 
     let payload = {
         reactRoles,
@@ -83,9 +99,7 @@ router.get('/:serverID', async function (req,res) {
         paidroles,
         validator:req.user.validator
     };
-    
-   
-    
+
    return res.render('admin/base', payload);
 
 });
