@@ -133,7 +133,7 @@ export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
     userInventory.forEach((item: any) => { item.meta = meta.find((m: any) => m.id === item.id); });
     return userInventory;
   }, {
-    params: t.Object({ id: t.String() }),
+    params: t.Object({ id: t.String({ default: "88120564400553984" }) }),
   })
 
   // GET /api/user/:id/stickers
@@ -147,7 +147,7 @@ export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
     stickerMeta.forEach((x: any) => { x.packData = packs.find((p: any) => p.icon === x.series_id); });
     return stickerMeta;
   }, {
-    params: t.Object({ id: t.String() }),
+    params: t.Object({ id: t.String({ default: "88120564400553984" }) }),
   })
 
   // GET /api/user/:id/medals
@@ -158,7 +158,7 @@ export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
     const ids: string[] = USR.modules.medalInventory.filter(Boolean);
     return DB.cosmetics.find({ icon: { $in: ids } }).lean().noCache();
   }, {
-    params: t.Object({ id: t.String() }),
+    params: t.Object({ id: t.String({ default: "88120564400553984" }) }),
   })
 
   // GET /api/user/:id/bgs  (alias: /backgrounds)
@@ -168,7 +168,7 @@ export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
     if (!USR) return new Response("Not Found", { status: 404 });
     const codes: string[] = USR.modules.bgInventory.filter(Boolean);
     return DB.cosmetics.find({ code: { $in: codes } }).lean();
-  }, { params: t.Object({ id: t.String() }) })
+  }, { params: t.Object({ id: t.String({ default: "88120564400553984" }) }) })
 
   .get("/:id/backgrounds", async ({ params, db }) => {
     const DB = db as DB;
@@ -176,7 +176,7 @@ export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
     if (!USR) return new Response("Not Found", { status: 404 });
     const codes: string[] = USR.modules.bgInventory.filter(Boolean);
     return DB.cosmetics.find({ code: { $in: codes } }).lean();
-  }, { params: t.Object({ id: t.String() }) })
+  }, { params: t.Object({ id: t.String({ default: "88120564400553984" }) }) })
 
   // GET /api/user/:id/commends
   .get("/:id/commends", async ({ params, query, db, redis }) => {
@@ -203,7 +203,7 @@ export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
 
     return { userData, whoIn, whoOut, totalIn, totalOut, average, normalized };
   }, {
-    params: t.Object({ id: t.String() }),
+    params: t.Object({ id: t.String({ default: "88120564400553984" }) }),
     query:  t.Object({ full: t.Optional(t.String()) }),
   })
 
@@ -219,7 +219,7 @@ export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
     ]);
     return { rank: ranks[0]?.count, count };
   }, {
-    params: t.Object({ id: t.String(), endpoint: t.String() }),
+    params: t.Object({ id: t.String({ default: "88120564400553984" }), endpoint: t.String() }),
   })
 
   // POST /api/user/fanart-hearts/:operation/:id
@@ -256,7 +256,7 @@ export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
     if (user?.switches?.booruPublic === false) return { loading: true, status: "PRIVATE" };
     return gallery?.collections.boorusave ?? [];
   }, {
-    params: t.Object({ id: t.String() }),
+    params: t.Object({ id: t.String({ default: "88120564400553984" }) }),
   })
 
   // GET /api/user/:id/galleries/fanart
@@ -277,7 +277,7 @@ export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
       status:      item.publish ? "published" : item.publish === false ? "denied" : "pending",
     }));
   }, {
-    params: t.Object({ id: t.String() }),
+    params: t.Object({ id: t.String({ default: "88120564400553984" }) }),
   })
 
   // GET /api/user/:id  (must come after sub-resource routes)
@@ -292,5 +292,5 @@ export const usersRoutes = new Elysia({ prefix: "/user", tags: ["users"] })
     set.status = status;
     return body;
   }, {
-    params: t.Object({ id: t.String() }),
+    params: t.Object({ id: t.String({ default: "88120564400553984" }) }),
   });

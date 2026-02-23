@@ -47,7 +47,7 @@ const app = new Elysia({ prefix: "/api" })
   )
   .use(
     swagger({
-      path: "/api/docs",
+      path: "/docs",
       documentation: {
         info: { title: "Pollux Core API", version: "0.1.0" },
         tags: [
@@ -106,7 +106,7 @@ const app = new Elysia({ prefix: "/api" })
     };
   });
 
-app.listen({ port: PORT, hostname: "127.0.0.1" }, ({ hostname, port }) => {
+app.listen({ port: PORT, hostname: "0.0.0.0" }, ({ hostname, port }) => {
   printBanner(hostname, port);
 });
 
