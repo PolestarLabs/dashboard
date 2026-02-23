@@ -140,9 +140,10 @@ const LOAD_ALL_SUBCLIENTS = Promise.all(
 );
 router.get(["/","/:endpoint"], checkAuth, async (req,res)=>{
     
+    const activePLX = req.PLX || PLX;
     const [MANSION_SERVER_DATA,MANSION_MEMBER] = await Promise.all([
-         PLX.getRESTGuild(config.official_guild),
-         PLX.resolveMember(config.official_guild,req.user.id).catch(err=>null)
+         activePLX.getRESTGuild(config.official_guild).catch(err=>null),
+         activePLX.resolveMember(config.official_guild,req.user.id).catch(err=>null)
     ]);
 
     const [ALLCOSM,ALLITEMS,BCOL,SERVEROWNERSHIP] = await Promise.all([

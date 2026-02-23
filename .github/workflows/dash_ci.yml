@@ -32,7 +32,6 @@ jobs:
           cd "$DIR"
           git fetch origin
           git reset --hard origin/dev
-          git pull
 
   deps-staging:
     name: 📦 Dependencies (Staging)
@@ -41,9 +40,6 @@ jobs:
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
     steps:
-      - name: Spawn standby runner
-        run: pm2 start "GitHub Runner 2" || true
-
       - name: Install dev dependencies
         run: |
           cd "$DIR"
@@ -53,11 +49,6 @@ jobs:
         run: |
           cd "$DIR"
           npm install
-        continue-on-error: false
-
-      - name: Stop standby runner
-        if: always()
-        run: pm2 stop "GitHub Runner 2" || true
 
   build-staging:
     name: 🥤 Build (Staging)
@@ -95,7 +86,6 @@ jobs:
           cd "$DIR"
           git fetch origin
           git reset --hard origin/master
-          git pull
 
   deps-production:
     name: 📦 Dependencies (Production)
@@ -104,17 +94,10 @@ jobs:
     env:
       DIR: ${{ secrets.DASH_DIR_PROD }}
     steps:
-      - name: Spawn standby runner
-        run: pm2 start "GitHub Runner 2" || true
-
       - name: Install all dependencies
         run: |
           cd "$DIR"
           npm install
-
-      - name: Stop standby runner
-        if: always()
-        run: pm2 stop "GitHub Runner 2" || true
 
   build-production:
     name: 🥤 Build (Production)

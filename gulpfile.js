@@ -1,6 +1,16 @@
 const { parallel, series, src, dest } = require("gulp");
 const cleanCSS = require("gulp-clean-css");
-const image = require("gulp-image");
+let image;
+const through = require("through2");
+
+try {
+    image = require("gulp-image");
+} catch (err) {
+    console.warn("gulp-image not available, image optimization will be skipped");
+    // provide a passthrough stream so tasks using `image()` still work
+    image = () => through.obj(function(file, enc, cb) { cb(null, file); });
+}
+
 const debug = require("gulp-debug");
 const minify = require("gulp-minify");
 const uglify = require("gulp-uglify");
@@ -28,18 +38,53 @@ function css() {
 function js() {
     return src(["./src/+(views|public)/**/*.js", ...ignore])
         .pipe(debug())
-        .pipe(uglify())
+        .pipe(uglify().on('error', function(err) {
+            const msg = err.message || err;
+            console.warn('uglify failed:', msg);
+            annotateGitHub(err, 'uglify failed');
+            this.emit('end');
+        }))
         .pipe(dest(out));
 }
 function jsOnly() {
     return src(["./src/+(views|public)/**/*.js", ...ignore])
-        .pipe(uglify())
+        .pipe(uglify().on('error', function(err) {
+            const msg = err.message || err;
+            console.warn('uglify failed:', msg);
+            annotateGitHub(err, 'uglify failed');
+            this.emit('end');
+        }))
         .pipe(dest(out));
 }
 
+function annotateGitHub(err, defaultMessage) {
+    // try to parse a filename and line from the message
+    let file = "";
+    let line = "";
+    if (err && err.message) {
+        const m = err.message.match(/File:\s*([^\n]+)\n?[^\n]*Line:\s*(\d+)/i);
+        if (m) {
+            file = m[1];
+            line = m[2];
+        }
+    }
+    const message = defaultMessage || (err && err.message) || String(err);
+    if (file) {
+        console.log(`::warning file=${file},line=${line}::${message}`);
+    } else {
+        console.log(`::warning::${message}`);
+    }
+}
+
 function assets() {
+    // image optimization is best-effort; failures shouldn't stop the build
     return src([`./src/**/*.{${imgExt}}`,`../../DEV/dashboard/src/**/*.{${imgExt}}`, ...ignore])
-        .pipe(image())
+        .pipe(image().on('error', function(err) {
+            // log the error and continue
+            console.warn('gulp-image failed:', err.message || err);
+            annotateGitHub(err, 'gulp-image failed');
+            this.emit('end');
+        }))
         .pipe(dest(out));
 }
 

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const Canvas = require('canvas')
+const { Canvas, loadImage } = require('skia-canvas')
 
 router.get('/lunanuli.png', async (req,res)=>{
     
@@ -11,13 +11,12 @@ router.get('/lunanuli.png', async (req,res)=>{
     let color = req.query.c;
     let img = await Picto.getCanvas(`${HOST}/build/events/hallowinter19/cooking/${color}.png`);
     ctx.drawImage(img,0,0);
-    
 
-    canvas.pngStream().pipe(res);;
+    res.send(await canvas.png);
 })
 router.get('/selenedi.png', async (req,res)=>{
 
-    const canvas = Canvas.createCanvas(825,600);
+    const canvas = new Canvas(825,600);
     const ctx = canvas.getContext('2d')
     let cooktop  = "main_off"
     let cauldron = false
@@ -60,9 +59,9 @@ router.get('/selenedi.png', async (req,res)=>{
             break;
     }
 
-    const X = await Canvas.loadImage(HOST+"/build/events/hallowinter19/cooking/"+cooktop+".png");
-    const _cauld = cauldron ? await Canvas.loadImage(HOST+"/build/events/hallowinter19/cooking/"+cauldron+".png") : false;
-    const _smoke = smoke ? await Canvas.loadImage(HOST+"/build/events/hallowinter19/cooking/"+smoke+".png") : false;
+    const X = await loadImage(HOST+"/build/events/hallowinter19/cooking/"+cooktop+".png");
+    const _cauld = cauldron ? await loadImage(HOST+"/build/events/hallowinter19/cooking/"+cauldron+".png") : false;
+    const _smoke = smoke ? await loadImage(HOST+"/build/events/hallowinter19/cooking/"+smoke+".png") : false;
 
    ctx.drawImage(X,0,0)
    if(_cauld) ctx.drawImage(_cauld,0,0); 
@@ -74,24 +73,18 @@ router.get('/selenedi.png', async (req,res)=>{
             let utensils = req.query.ut.split(',').slice(0,3)
             
             const [u1,u2,u3] = await Promise.all([
-                Canvas.loadImage(HOST+"/build/events/hallowinter19/cooking/cauldron_0"+(utensils[0]||4)+".png"),
-                Canvas.loadImage(HOST+"/build/events/hallowinter19/cooking/cauldron_0"+(utensils[1]||4)+".png"),
-                Canvas.loadImage(HOST+"/build/events/hallowinter19/cooking/cauldron_0"+(utensils[2]||4)+".png")
+                loadImage(HOST+"/build/events/hallowinter19/cooking/cauldron_0"+(utensils[0]||4)+".png"),
+                loadImage(HOST+"/build/events/hallowinter19/cooking/cauldron_0"+(utensils[1]||4)+".png"),
+                loadImage(HOST+"/build/events/hallowinter19/cooking/cauldron_0"+(utensils[2]||4)+".png")
             ]);
             
-            try{
-                ctx.drawImage(u1,460,468, 85,85);
-            }catch(e){}
-            try{
-                ctx.drawImage(u2,460+90,468, 85,85);
-            }catch(e){}
-            try{
-                ctx.drawImage(u3,460+180,468, 85,85);
-            }catch(e){}
+            try{ ctx.drawImage(u1,460,468, 85,85); }catch(e){}
+            try{ ctx.drawImage(u2,460+90,468, 85,85); }catch(e){}
+            try{ ctx.drawImage(u3,460+180,468, 85,85); }catch(e){}
            
         }
    }
-    canvas.pngStream().pipe(res);;
+    res.send(await canvas.png);
 })
 
 module.exports = router
