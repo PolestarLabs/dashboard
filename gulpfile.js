@@ -1,6 +1,16 @@
 const { parallel, series, src, dest } = require("gulp");
 const cleanCSS = require("gulp-clean-css");
-const image = require("gulp-image");
+let image;
+const through = require("through2");
+
+try {
+    image = require("gulp-image");
+} catch (err) {
+    console.warn("gulp-image not available, image optimization will be skipped");
+    // provide a passthrough stream so tasks using `image()` still work
+    image = () => through.obj(function(file, enc, cb) { cb(null, file); });
+}
+
 const debug = require("gulp-debug");
 const minify = require("gulp-minify");
 const uglify = require("gulp-uglify");
