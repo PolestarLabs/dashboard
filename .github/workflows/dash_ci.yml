@@ -77,9 +77,9 @@ jobs:
         with:
           node-version: 20
       - name: Install bun runtime
-        run: |
-          curl -fsSL https://bun.sh/install | bash
-          echo "$HOME/.bun/bin" >> $GITHUB_PATH
+        uses: oven-sh/setup-bun@v2
+        with:
+          version: latest
       - name: 🐇 Install API deps (bun)
         run: |
           cd api
