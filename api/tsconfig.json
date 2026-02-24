@@ -23,7 +23,8 @@
     "paths": {
       "@plugins/*":  ["plugins/*"],
       "@routes/*":   ["routes/*"],
-      "@helpers/*":  ["helpers/*"]
+      "@helpers/*":  ["helpers/*"],
+      "@definitions/*": ["definitions/*"]
     }
   },
   "include": ["src/**/*.ts"],
