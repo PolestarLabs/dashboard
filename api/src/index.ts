@@ -8,6 +8,8 @@
  * Express continues to serve page renders on port 6055.
  */
 
+import {version} from "../package.json";
+
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
@@ -18,7 +20,7 @@ import { dbPlugin } from "@plugins/db";
 import { redisPlugin } from "@plugins/redis";
 import { authPlugin } from "@plugins/auth";
 
-import { usersRoutes } from "@routes/users";
+import { usersRoutes } from "@routes/users";    
 import { serversRoutes } from "@routes/servers";
 import { internalRoutes } from "@routes/internal";
 import { cosmeticsRoutes } from "@routes/cosmetics";
@@ -30,6 +32,7 @@ import { gamesRoutes } from "@routes/games";
 import { collectionsRoutes } from "@routes/collections";
 import { telemetryRoutes } from "@routes/telemetry";
 import { fanartRoutes } from "@routes/fanart";
+
 import { shipRoutes } from "@routes/ship";
 
 const PORT = parseInt(process.env.API_PORT ?? "7056", 10);
@@ -41,7 +44,7 @@ const app = new Elysia({ prefix: "/api" })
   .use(
     cors({
       origin: IS_DEV
-        ? ["https://staging.pollux.gg", "http://localhost:7056"]
+        ? ["https://staging.pollux.gg", `http://localhost:${PORT}`]
         : ["https://pollux.gg"],
       credentials: true,
     })
@@ -50,7 +53,7 @@ const app = new Elysia({ prefix: "/api" })
     swagger({
       path: "/docs",
       documentation: {
-        info: { title: "Pollux Core API", version: "0.1.0" },
+        info: { title: "Pollux Core API", version },
         tags: [
           { name: "users",         description: "User data and profiles" },
           { name: "servers",       description: "Server (guild) data" },
@@ -110,8 +113,8 @@ const app = new Elysia({ prefix: "/api" })
     };
   });
 
-app.listen({ port: PORT, hostname: "0.0.0.0" }, ({ hostname, port }) => {
-  printBanner(hostname, port);
+app.listen({ port: PORT, hostname: IS_DEV ? "0.0.0.0" : "127.0.0.1" }, ({ hostname, port }) => {
+  printBanner(hostname, port, version);
 });
 
 export type App = typeof app;

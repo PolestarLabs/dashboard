@@ -9,8 +9,9 @@ import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
 
 // Word list lives in the Express API sources — shared, not duplicated.
-// Relative path: api/src/routes → dashboard/src/routes/api/games/words.json
-import WORDS from "../../../src/routes/api/games/words.json";
+// Relative path: api/src/routes/games → dashboard/src/routes/api/games/words.json
+// need four ups to escape the /api subdirectory
+import WORDS from "./words.json";
 
 interface WordEntry {
   theme?: string;
