@@ -1,9 +1,13 @@
 name: Dashboard CI
 on:
   push:
-    branches: [dev, master]
+    branches: [dev, master, elysia]
+    paths:
+      - 'api/**'
   pull_request:
-    branches: [dev, master]
+    branches: [dev, master, elysia]
+    paths:
+      - 'api/**'
   workflow_dispatch:
     inputs:
       environment:
@@ -39,6 +43,11 @@ jobs:
   deps-staging:
     name: 📦 Dependencies (Staging)
     needs: pull-staging
+    # skip staging job if nothing under api/ changed (allows dashboard-only PRs)
+    if: |
+      contains(github.event.head_commit.message, 'api/') ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'pull_request'
     runs-on: self-hosted
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
@@ -99,6 +108,10 @@ jobs:
   deps-production:
     name: 📦 Dependencies (Production)
     needs: pull-production
+    if: |
+      contains(github.event.head_commit.message, 'api/') ||
+      github.event_name == 'workflow_dispatch' ||
+      github.event_name == 'pull_request'
     runs-on: self-hosted
     env:
       DIR: ${{ secrets.DASH_DIR_PROD }}
