@@ -24,11 +24,38 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  gate:
-    name: ⛔ Gate (dependency install)
+  gate-root:
+    name: ⛔ Root gate (dashboard deps)
     runs-on: ubuntu-latest
     outputs:
       non_api_changed: ${{ steps.diff.outputs.non_api }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compute changed paths
+        id: diff
+        run: |
+          git fetch origin
+          base=$([[ "${{ github.event_name }}" == "push" ]] && echo "${{ github.event.before }}" || echo "origin/${{ github.event.pull_request.base.ref }}")
+          git diff --name-only $base ${{ github.sha }} > changed.txt
+          if grep -qv '^api/' changed.txt; then
+            echo "non_api=true" >> $GITHUB_OUTPUT
+          else
+            echo "non_api=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install root deps
+        run: |
+          npm ci
+
+  gate-bun:
+    name: ✨ Bun gate (API deps)
+    runs-on: ubuntu-latest
+    outputs:
       api_changed: ${{ steps.diff.outputs.api }}
     steps:
       - uses: actions/checkout@v4
@@ -37,16 +64,9 @@ jobs:
       - name: Compute changed paths
         id: diff
         run: |
-          # list all changed files in this event (push or PR)
           git fetch origin
           base=$([[ "${{ github.event_name }}" == "push" ]] && echo "${{ github.event.before }}" || echo "origin/${{ github.event.pull_request.base.ref }}")
           git diff --name-only $base ${{ github.sha }} > changed.txt
-          echo "changed:"; cat changed.txt
-          if grep -qv '^api/' changed.txt; then
-            echo "non_api=true" >> $GITHUB_OUTPUT
-          else
-            echo "non_api=false" >> $GITHUB_OUTPUT
-          fi
           if grep -q '^api/' changed.txt; then
             echo "api=true" >> $GITHUB_OUTPUT
           else
@@ -57,16 +77,13 @@ jobs:
         with:
           node-version: 20
       - name: Install bun runtime
-        uses: oven-sh/setup-bun@v2
-        with:
-          version: latest
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "$HOME/.bun/bin" >> $GITHUB_PATH
       - name: 🐇 Install API deps (bun)
         run: |
           cd api
           bun install
-      - name: Install root deps
-        run: |
-          npm ci
 
   fastlane:
     name: 🚄 Fastlane label control
@@ -93,7 +110,7 @@ jobs:
 
   pull-staging:
     name: 🔄️ Sync Staging
-    needs: gate
+    needs: gate-root
     if: >
       (needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
       (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'dev' && contains(github.event.pull_request.labels.*.name, 'fastlane'))
@@ -105,11 +122,18 @@ jobs:
         run: |
           cd "$DIR"
           git fetch origin
-          git reset --hard origin/dev
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # pull the PR head directly
+            prref=${{ github.event.pull_request.head.ref }}
+            git fetch origin "$prref":"pr-head"
+            git reset --hard pr-head
+          else
+            git reset --hard origin/dev
+          fi
 
   pull-production:
     name: 🔄️ Sync Production
-    needs: gate
+    needs: gate-root
     if: >
       needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: self-hosted
