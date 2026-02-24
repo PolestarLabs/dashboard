@@ -57,9 +57,9 @@ jobs:
         with:
           node-version: 20
       - name: Install bun runtime
-        uses: jarred-sumner/setup-bun@v2
-        with:
-          version: latest
+        run: |
+          curl -fsSL https://bun.sh/install | bash
+          echo "::add-path::$HOME/.bun/bin"
       - name: 🐇 Install API deps (bun)
         run: |
           cd api
