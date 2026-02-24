@@ -21,5 +21,4 @@ dist
 config.js.bak
 *.secret.js
 .github/copilot-instructions.md
-api/bun.lock
 api/tmp

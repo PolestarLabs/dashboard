@@ -25,7 +25,7 @@ concurrency:
 
 jobs:
   gate:
-    name: ��� Gate (dependency install)
+    name: ⛔ Gate (dependency install)
     runs-on: ubuntu-latest
     outputs:
       non_api_changed: ${{ steps.diff.outputs.non_api }}
@@ -56,16 +56,16 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install API deps
+      - name: 🐇 Install API deps (bun)
         run: |
           cd api
-          npm ci
+          bun install
       - name: Install root deps
         run: |
           npm ci
 
   fastlane:
-    name: ��� Fastlane label control
+    name: 🚄 Fastlane label control
     if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
@@ -88,7 +88,7 @@ jobs:
           fi
 
   pull-staging:
-    name: ��� Sync Staging
+    name: 🔄️ Sync Staging
     needs: gate
     if: >
       (needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
@@ -104,7 +104,7 @@ jobs:
           git reset --hard origin/dev
 
   pull-production:
-    name: ��� Sync Production
+    name: 🔄️ Sync Production
     needs: gate
     if: >
       needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
@@ -119,7 +119,7 @@ jobs:
           git reset --hard origin/master
 
   deploy-staging:
-    name: ��� Deploy → Staging
+    name: 🚀 Deploy → Staging
     needs: pull-staging
     if: needs.pull-staging.result == 'success'
     runs-on: self-hosted
@@ -127,7 +127,7 @@ jobs:
       - run: /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
 
   deploy-production:
-    name: ��� Deploy → Production
+    name: 🚀 Deploy → Production
     needs: pull-production
     if: needs.pull-production.result == 'success'
     runs-on: self-hosted
@@ -135,7 +135,7 @@ jobs:
       - run: /home/pollux/polaris/scripts/server-deploy.sh dashboard production
 
   elysia-check:
-    name: ��� Elysia deps & postinstall
+    name: ✨ Elysia deps & postinstall
     needs: gate
     if: needs.gate.outputs.api_changed == 'true'
     runs-on: ubuntu-latest
@@ -145,17 +145,17 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
-      - name: Install API deps
+      - name: Install API deps (bun)
         run: |
           cd api
-          npm ci
+          bun install
       - name: Run postinstall
         run: |
           cd api
           node ./scripts/postinstall.js
 
   elysia-deploy:
-    name: ��� Elysia deploy → staging
+    name: 🛩️ Elysia deploy → staging
     needs: elysia-check
     if: needs.gate.outputs.api_changed == 'true'
     runs-on: self-hosted
