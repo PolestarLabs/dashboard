@@ -29,6 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       non_api_changed: ${{ steps.diff.outputs.non_api }}
+      api_changed: ${{ steps.diff.outputs.api }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -45,6 +46,11 @@ jobs:
             echo "non_api=true" >> $GITHUB_OUTPUT
           else
             echo "non_api=false" >> $GITHUB_OUTPUT
+          fi
+          if grep -q '^api/' changed.txt; then
+            echo "api=true" >> $GITHUB_OUTPUT
+          else
+            echo "api=false" >> $GITHUB_OUTPUT
           fi
       - name: Install Node
         uses: actions/setup-node@v4
@@ -130,9 +136,8 @@ jobs:
 
   elysia-check:
     name: ��� Elysia deps & postinstall
-    if: github.event_name == 'push' || github.event_name == 'pull_request'
-    paths:
-      - 'api/**'
+    needs: gate
+    if: needs.gate.outputs.api_changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -152,9 +157,7 @@ jobs:
   elysia-deploy:
     name: ��� Elysia deploy → staging
     needs: elysia-check
-    if: github.event_name == 'push' || github.event_name == 'pull_request'
-    paths:
-      - 'api/**'
+    if: needs.gate.outputs.api_changed == 'true'
     runs-on: self-hosted
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
