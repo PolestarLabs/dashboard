@@ -190,6 +190,9 @@ jobs:
     name: ✅ Combined gate
     needs: [gate-root, gate-bun]
     runs-on: ubuntu-latest
+    steps:
+      - name: final gate check
+        run: echo "Gate jobs completed successfully"
 
   elysia-deploy:
     name: 🛩️ Elysia deploy → staging
