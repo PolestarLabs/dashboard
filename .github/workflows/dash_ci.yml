@@ -2,6 +2,8 @@ name: Dashboard CI
 on:
   push:
     branches: [dev, master]
+  pull_request:
+    branches: [dev, master]
   workflow_dispatch:
     inputs:
       environment:
@@ -50,6 +52,23 @@ jobs:
           cd "$DIR"
           npm install
 
+      - name: Run postinstall helper
+        run: |
+          cd "$DIR"
+          if node ./scripts/postinstall.js; then
+            echo "[CI] postinstall succeeded"
+          else
+            echo "[CI] postinstall failed" >&2
+            # on staging/dev we log and continue, but master (production) aborts
+            if [[ '${{ github.ref }}' == 'refs/heads/master' ]] || \
+               ( [[ "${{ github.event_name }}" == "workflow_dispatch" ]] && [[ "${{ inputs.environment }}" == "production" ]] ); then
+              echo "[CI] production build: aborting due to postinstall failure" >&2
+              exit 1
+            else
+              echo "[CI] non-production build: continuing despite postinstall failure" >&2
+            fi
+          fi
+
   deploy-staging:
     name: 🧪 Deploy → Staging
     needs: deps-staging
@@ -86,6 +105,17 @@ jobs:
         run: |
           cd "$DIR"
           npm install
+
+      - name: Run postinstall helper
+        run: |
+          cd "$DIR"
+          if node ./scripts/postinstall.js; then
+            echo "[CI] postinstall succeeded"
+          else
+            echo "[CI] postinstall failed" >&2
+            echo "[CI] production build: aborting due to postinstall failure" >&2
+            exit 1
+          fi
 
   deploy-production:
     name: 🚀 Deploy → Production
