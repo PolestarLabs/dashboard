@@ -1,0 +1,287 @@
+/**
+ * routes/schemas.ts — Single source of truth for ALL Elysia/TypeBox validation schemas.
+ * Merged from: models/{users,cosmetics,fanart,games,internal,leaderboards,prime,
+ *              relationships,servers,ship,telemetry,utils,collections}.ts
+ *              + services/collections/crafting/model.ts
+ *
+ * Domain interfaces (CosmeticDoc, WordEntry) live in routes/types.ts and are
+ * re-exported here so controllers can keep a single import target.
+ */
+
+import { RARITY_VALUES } from "@definitions/Rarity";
+import { t } from "elysia";
+
+// Re-export domain interfaces so controllers importing from @routes/schemas still work.
+export type { CosmeticDoc, WordEntry } from "@routes/types";
+
+// ── Users ────────────────────────────────────────────────────────────────────
+
+export const UserSearchQuery = t.Object({
+  id:             t.Optional(t.String()),
+  name:           t.Optional(t.String()),
+  donator:        t.Optional(t.String()),
+  personalhandle: t.Optional(t.String()),
+  skip:           t.Optional(t.String()),
+  lim:            t.Optional(t.String()),
+});
+
+export const HandleCheckQuery = t.Object({
+  handle: t.Optional(t.String()),
+});
+
+export const UserIdParams = t.Object({
+  id: t.String({ default: "88120564400553984" }),
+});
+
+export const CommendQuery = t.Object({
+  full: t.Optional(t.String()),
+});
+
+export const CommendEndpointParams = t.Object({
+  id:       t.String({ default: "88120564400553984" }),
+  endpoint: t.String(),
+});
+
+export const FanartHeartParams = t.Object({
+  operation: t.Union([t.Literal("add"), t.Literal("remove")]),
+  id:        t.String(),
+});
+
+// ── Cosmetics ────────────────────────────────────────────────────────────────
+
+export const CosmeticSearchQuery = t.Object({
+  id:      t.Optional(t.String()),
+  rarity:  t.Optional(t.String()),
+  code:    t.Optional(t.String()),
+  event:   t.Optional(t.String()),
+  icon:    t.Optional(t.String()),
+  type:    t.Optional(t.String()),
+  expires: t.Optional(t.String()),
+  filter:  t.Optional(t.String()),
+  name:    t.Optional(t.String()),
+  before:  t.Optional(t.String()),
+  after:   t.Optional(t.String()),
+  searchq: t.Optional(t.String()),
+  skip:    t.Optional(t.String()),
+  lim:     t.Optional(t.String()),
+  all:     t.Optional(t.String()),
+  public:  t.Optional(t.String()),
+});
+
+export const CosmeticIdParams = t.Object({
+  id: t.String(),
+});
+
+export const CosmeticCountParams = t.Object({
+  type: t.String(),
+});
+
+export const CosmeticCountQuery = t.Object({
+  event:  t.Optional(t.String()),
+  rarity: t.Optional(t.String()),
+});
+
+export const CosmeticGenericParams = t.Object({
+  other: t.String(),
+  id:    t.String(),
+});
+
+// ── Fanart ───────────────────────────────────────────────────────────────────
+
+export const FanartIdParams = t.Object({
+  id: t.String(),
+});
+
+export const FanartUpdateParams = t.Object({
+  id:   t.String(),
+  what: t.String(),
+});
+
+export const FanartUpdateBody = t.Object({
+  value:       t.Optional(t.String()),
+  title:       t.Optional(t.String()),
+  description: t.Optional(t.String()),
+});
+
+// ── Games ────────────────────────────────────────────────────────────────────
+
+export const HangmaidQuery = t.Object({
+  t: t.Optional(t.String()),  // theme
+  l: t.Optional(t.String()),  // level
+  q: t.Optional(t.String()),  // quantity
+});
+
+// ── Internal ─────────────────────────────────────────────────────────────────
+
+export const PingFilterQuery = t.Object({
+  filter: t.Optional(t.String()),
+});
+
+export const PingBody = t.Object({
+  instance: t.String(),
+  cluster:  t.Union([t.String(), t.Number()]),
+  last:     t.Union([t.String(), t.Number()]),
+  diff:     t.Optional(t.Number()),
+});
+
+// ── Leaderboards ─────────────────────────────────────────────────────────────
+
+export const LeaderboardUserParams = t.Object({
+  userID: t.String(),
+});
+
+export const LeaderboardServerParams = t.Object({
+  serverID: t.String(),
+});
+
+export const LeaderboardPageQuery = t.Object({
+  page: t.Optional(t.String()),
+});
+
+export const LeaderboardUserServerParams = t.Object({
+  serverID: t.String(),
+  userID:   t.String(),
+});
+
+// ── Prime / Patreon ──────────────────────────────────────────────────────────
+
+export const PrimeServerParams = t.Object({
+  serverID: t.String(),
+});
+
+export const PatreonFinderParams = t.Object({
+  finder: t.String(),
+});
+
+export const PatreonTopParams = t.Object({
+  max: t.String(),
+});
+
+export const PatreonTotalParams = t.Object({
+  scale: t.String(),
+});
+
+export const PatreonTotalQuery = t.Object({
+  active: t.Optional(t.String()),
+});
+
+// ── Relationships ────────────────────────────────────────────────────────────
+
+export const RelationshipQuery = t.Object({
+  id:   t.Optional(t.String()),
+  uid:  t.Optional(t.String()),
+  page: t.Optional(t.String()),
+});
+
+// ── Servers ──────────────────────────────────────────────────────────────────
+
+export const ServerIdParams = t.Object({
+  id: t.String(),
+});
+
+// ── Ship generator ───────────────────────────────────────────────────────────
+
+export const ShipQuery = t.Object({
+  av1: t.String(),
+  av2: t.String(),
+  spn: t.String(),
+  pct: t.String(),
+});
+
+// ── Telemetry ────────────────────────────────────────────────────────────────
+
+export const ThemeParams = t.Object({
+  id: t.String(),
+});
+
+export const ThemeQuery = t.Object({
+  user: t.Optional(t.String()),
+});
+
+// ── Utils ────────────────────────────────────────────────────────────────────
+
+export const AchievementParams = t.Object({
+  id: t.String(),
+});
+
+// ── Collections — Items ──────────────────────────────────────────────────────
+
+export const ItemsEndpointParams = t.Object({ endpoint: t.String() });
+
+export const ItemsSearchQuery = t.Object({
+  id:         t.Optional(t.String()),
+  rarity:     t.Optional(t.String()),
+  code:       t.Optional(t.String()),
+  type:       t.Optional(t.String()),
+  crafted:    t.Optional(t.String()),
+  open:       t.Optional(t.String()),
+  all:        t.Optional(t.String()),
+  craftables: t.Optional(t.String()),
+  skip:       t.Optional(t.String()),
+  lim:        t.Optional(t.String()),
+});
+
+// ── Collections — Crafting ───────────────────────────────────────────────────
+
+export const PotItemSchema = t.Object({
+  id:     t.String({ description: "Material item id" }),
+  count:  t.Number({ description: "Quantity of that item" }),
+  type:   t.Optional(t.String({ description: "Item type for type-crafting" })),
+  rarity: t.Optional(t.String({ description: RARITY_VALUES.join(" | ") })),
+});
+export type PotItem = typeof PotItemSchema.static;
+
+export const MixBodySchema = t.Object({
+  pot: t.Array(PotItemSchema, { description: "Materials to throw in the pot" }),
+});
+export type MixBody = typeof MixBodySchema.static;
+
+export const MixResponseSchema = t.Unsafe({
+  description: "Crafting discovery result",
+  type: "object",
+  properties: {
+    discovery:   {
+      type: "object",
+      description: "The discovered/crafted item",
+      properties: {
+        id:     { type: "string", examples: ["item_sword"] },
+        name:   { type: "string", examples: ["Iron Sword"] },
+        rarity: { type: "string", examples: ["R"] },
+      },
+    },
+    isDiscovery: { type: "boolean", description: "True if first time the user discovers this recipe" },
+    canCraftNow: { type: "boolean", description: "True if user has the exact materials to craft right now" },
+    typeCraft:   { type: "boolean", description: "True if match was type-based rather than exact" },
+    notQuite:    { type: "boolean", description: "True if a fallback item was returned but requirements aren't fully met" },
+    noMoreTable: { type: "boolean", description: "True if the pot types have no matchable items at all" },
+  },
+});
+
+export type MixResponse = {
+  discovery?:   { id: string; name?: string; rarity?: string };
+  isDiscovery?: boolean;
+  canCraftNow?: boolean;
+  typeCraft?:   boolean;
+  notQuite?:    boolean;
+  noMoreTable?: boolean;
+  error?:       string;
+};
+
+export const CreateBodySchema = t.Object({
+  item: t.String({ description: "Item id to craft" }),
+  pot:  t.Optional(t.Array(t.Object({
+    id:    t.String(),
+    count: t.Number(),
+  }), { description: "Override material list; defaults to the item's stored recipe" })),
+});
+export type CreateBody = typeof CreateBodySchema.static;
+
+export const CreateResponseSchema = t.Object({
+  status:    t.String({ examples: ["OK", "ERROR"] }),
+  message:   t.String(),
+  inventory: t.Optional(t.Array(t.Unknown())),
+});
+export type CreateResponse = typeof CreateResponseSchema.static;
+
+export const ItemParamsSchema = t.Object({ item: t.String({ description: "Item id" }) });
+export type ItemParams = typeof ItemParamsSchema.static;
