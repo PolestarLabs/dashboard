@@ -2,7 +2,7 @@
  * services/fanart.ts — Fanart gallery business logic, decoupled from Elysia.
  */
 
-type DB = Record<string, any>;
+import type { DB } from "@routes/types";
 
 export async function deleteFanart(fanartId: string, userId: string, db: DB) {
   const oldData = await db.fanart.get(fanartId);

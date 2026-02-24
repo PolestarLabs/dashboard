@@ -3,8 +3,7 @@
  */
 
 import { getDiscordUser, getManyDiscordUsers, type DiscordUser } from "@helpers/discord";
-
-type DB = Record<string, any>;
+import type { DB } from "@routes/types";
 
 // ── Response building ────────────────────────────────────────────────────────
 

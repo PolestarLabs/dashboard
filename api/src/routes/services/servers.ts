@@ -2,7 +2,7 @@
  * services/servers.ts — Server data assembly, decoupled from Elysia.
  */
 
-type DB = Record<string, any>;
+import type { DB } from "@routes/types";
 
 export async function getServerData(serverId: string, db: DB) {
   const [serverData, serverMetaData] = await Promise.all([

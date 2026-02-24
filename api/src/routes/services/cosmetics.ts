@@ -2,8 +2,8 @@
  * services/cosmetics.ts — Cosmetics business logic, decoupled from Elysia.
  */
 
-import { Types as MonTypes } from "mongoose";
-import type { CosmeticDoc } from "@routes/models/cosmetics";
+import type { CosmeticDoc } from "@routes/types";
+import { objectIdFromTimestamp, isValidObjectId, stickerCount } from "@routes/helpers";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -35,28 +35,7 @@ export function cleanup(item: CosmeticDoc | null): Record<string, unknown> | nul
   };
 }
 
-export function objectIdFromTimestamp(ts: string): InstanceType<typeof MonTypes.ObjectId> {
-  const ms = new Date(ts).getTime() || Number(ts);
-  const hex = Math.floor(ms / 1000).toString(16).padStart(8, "0");
-  return new MonTypes.ObjectId(hex + "0000000000000000");
-}
-
-export async function stickerCount(pack: any, DB: any) {
-  const [pdata, mdata] = await Promise.all([
-    DB.cosmetics.find({ series_id: pack.icon }, { name: 1, id: 1, rarity: 1 }).lean(),
-    DB.items.find({ id: { $in: pack.materials?.map((x: any) => x.id ?? x) ?? [] } }, { name: 1, id: 1, rarity: 1 }).lean(),
-  ]);
-  pack.materialsData = mdata;
-  pack.size          = pdata.length;
-  pack.content       = pdata;
-  return pack;
-}
-
 // ── Querying ─────────────────────────────────────────────────────────────────
-
-export function isValidObjectId(q: string): boolean {
-  return MonTypes.ObjectId.isValid(q) && new MonTypes.ObjectId(q).toString() === q;
-}
 
 const SEARCH_ALLOWED = ["_id", "id", "rarity", "code", "event", "icon", "type", "expires", "filter", "name"] as const;
 

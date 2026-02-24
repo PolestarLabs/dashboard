@@ -3,7 +3,7 @@
  * Centralises logic that was previously duplicated across models/ and services/.
  */
 
-import { Types as MonTypes } from "mongoose";
+import { Types as MonTypes, isValidObjectId as mongoIsValid } from "mongoose";
 
 // ── Array utilities ──────────────────────────────────────────────────────────
 
@@ -61,13 +61,16 @@ export async function stickerCount(pack: any, DB: any): Promise<any> {
 /**
  * Converts a timestamp (ISO string or epoch ms) to a MongoDB ObjectId whose
  * creation time equals that timestamp. Useful for range queries via _id.
+ * Note: ObjectId constructor argument is valid at runtime; cast suppresses stale @types.
  */
 export function objectIdFromTimestamp(
   ts: string,
-): InstanceType<typeof MonTypes.ObjectId> {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+): any {
   const ms  = new Date(ts).getTime() || Number(ts);
   const hex = Math.floor(ms / 1000).toString(16).padStart(8, "0");
-  return new MonTypes.ObjectId(hex + "0000000000000000");
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  return new (MonTypes.ObjectId as any)(hex + "0000000000000000");
 }
 
 /**
@@ -75,5 +78,5 @@ export function objectIdFromTimestamp(
  * 24-hex-character MongoDB ObjectId string.
  */
 export function isValidObjectId(q: string): boolean {
-  return MonTypes.ObjectId.isValid(q) && new MonTypes.ObjectId(q).toString() === q;
+  return mongoIsValid(q);
 }

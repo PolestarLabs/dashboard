@@ -3,8 +3,7 @@
  */
 
 import { getManyDiscordUsers } from "@helpers/discord";
-
-type DB = Record<string, any>;
+import type { DB } from "@routes/types";
 
 export async function getRelationships(
   query: { id?: string; uid?: string; page?: string },

@@ -2,7 +2,7 @@
  * services/leaderboards.ts — Leaderboard business logic, decoupled from Elysia.
  */
 
-type DB = Record<string, any>;
+import type { DB } from "@routes/types";
 
 export async function getUserRanks(userId: string, db: DB) {
   return db.localranks.find({ user: userId }, { _id: 0, __v: 0 }).lean();
