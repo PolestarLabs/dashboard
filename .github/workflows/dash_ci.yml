@@ -38,6 +38,11 @@ jobs:
         run: |
           git fetch origin
           base=$([[ "${{ github.event_name }}" == "push" ]] && echo "${{ github.event.before }}" || echo "origin/${{ github.event.pull_request.base.ref }}")
+          # verify base exists, fallback to before SHA if not
+          if ! git rev-parse --verify "$base" >/dev/null 2>&1; then
+            echo "warning: base ref '$base' not found, using event.before" >&2
+            base="${{ github.event.before }}"
+          fi
           git diff --name-only $base ${{ github.sha }} > changed.txt
           if grep -qv '^api/' changed.txt; then
             echo "non_api=true" >> $GITHUB_OUTPUT
@@ -51,6 +56,8 @@ jobs:
       - name: Install root deps
         run: |
           npm ci
+      with:
+        gate: 1
 
   gate-bun:
     name: ✨ Bun gate (API deps)
@@ -66,6 +73,10 @@ jobs:
         run: |
           git fetch origin
           base=$([[ "${{ github.event_name }}" == "push" ]] && echo "${{ github.event.before }}" || echo "origin/${{ github.event.pull_request.base.ref }}")
+          if ! git rev-parse --verify "$base" >/dev/null 2>&1; then
+            echo "warning: base ref '$base' not found, using event.before" >&2
+            base="${{ github.event.before }}"
+          fi
           git diff --name-only $base ${{ github.sha }} > changed.txt
           if grep -q '^api/' changed.txt; then
             echo "api=true" >> $GITHUB_OUTPUT
@@ -84,6 +95,8 @@ jobs:
         run: |
           cd api
           bun install
+    with:
+      gate: 1
 
   fastlane:
     name: 🚄 Fastlane label control
