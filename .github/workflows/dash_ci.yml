@@ -81,6 +81,13 @@ jobs:
         with:
           version: latest
       - name: 🐇 Install API deps (bun)
+
+  gate:
+    name: ✅ Combined gate
+    needs: [gate-root, gate-bun]
+    runs-on: ubuntu-latest
+    steps: []
+
         run: |
           cd api
           bun install
@@ -165,7 +172,7 @@ jobs:
   elysia-check:
     name: ✨ Elysia deps & postinstall
     needs: gate-bun
-    if: needs.gate.outputs.api_changed == 'true'
+    if: needs.gate-bun.outputs.api_changed == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -178,6 +185,13 @@ jobs:
         with:
           version: latest
       - name: Install API deps (bun)
+
+  gate:
+    name: ✅ Combined gate
+    needs: [gate-root, gate-bun]
+    runs-on: ubuntu-latest
+    steps: []
+
         run: |
           cd api
           bun install
