@@ -2,6 +2,8 @@
  * services/ship.ts — Ship canvas generation, decoupled from Elysia.
  */
 
+import Picto from "utils/Picto";
+
 export async function generateShipCanvas(
   av1: string,
   av2: string,
@@ -11,8 +13,6 @@ export async function generateShipCanvas(
   const [uid1, hash1] = av1.split("::");
   const [uid2, hash2] = av2.split("::");
   const pctNum = parseFloat(pct);
-
-  const { Picto } = await import("utils/Picto");
 
   const canvas = Picto.new(796, 445);
   const ctx = canvas.getContext("2d");

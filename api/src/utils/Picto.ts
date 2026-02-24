@@ -107,7 +107,11 @@ function makeTag(
   if (font.toLowerCase().includes("italic")) w += (w / (str.length || 1)) * 0.32;
 
   const W = Math.max(1, Math.ceil(w));
-  const totalH = Math.max(1, Math.ceil(1.1 * (h + H)));
+  // Legacy implementation simply used h + H (no extra padding).  Previous
+  // attempt at 10% padding caused vertical positioning drift compared to
+  // the original renders, which is why the 45% text looked off.  Keep the
+  // same formula as tagMoji and the original JS version.
+  const totalH = Math.max(1, Math.ceil(h + H));
 
   const item = new Canvas.Canvas(W, totalH);
   const c    = item.getContext("2d") as any;
@@ -520,7 +524,15 @@ const Picto = {
       tag.height,
     );
 
-    return { w: tag.width, h: tag.height };
+    // Legacy implementation added stroke+shadow padding to the returned width
+    // (see bot/core/utilities/Picto-skia.js).  Call-sites subtract ~30px
+    // themselves, so returning the full padded width restores the original
+    // coordinate math.
+    const paddedW = mW && tag.width > mW
+      ? mW
+      : tag.width + stroke.line + shadow + 2;
+
+    return { w: paddedW, h: tag.height };
   },
 
   // ── Circular progress chart ──────────────────────────────────────────────────
