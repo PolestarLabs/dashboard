@@ -178,16 +178,17 @@ jobs:
         with:
           version: latest
       - name: Install API deps (bun)
-
+        run: |
+          cd api
+          bun install
+      - name: Run postinstall
+        run: |
+          cd api
   gate:
     name: ✅ Combined gate
     needs: [gate-root, gate-bun]
     runs-on: ubuntu-latest
     steps: []
-
-        run: |
-          cd api
-          bun install
       - name: Run postinstall
         run: |
           cd api
