@@ -49,7 +49,7 @@ async function getDB(): Promise<Schemas> {
 }
 
 export const dbPlugin = new Elysia({ name: "db" })
-  .decorate("db", {} as Record<string, unknown>)
+  .decorate("db", {} as Schemas)
   .onStart(async ({ decorator }: { decorator: Record<string, any> }) => {
     const db = await getDB();
     decorator.db = db;

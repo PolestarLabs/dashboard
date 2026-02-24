@@ -48,8 +48,12 @@ export function isExact(pot: any[], recipe: any[]): boolean {
 import { itemsRoutes } from "./items";
 import { craftingRoutes } from "./crafting";
 
-export const collectionsRoutes = new Elysia({ tags: ["collections"] })
-  .use(authPlugin)
+export const collectionsBase = new Elysia({ tags: ["collections"] })
   .use(dbPlugin)
+  .use(authPlugin)
+
+export type CollectionsApp = typeof collectionsBase;
+
+export const collectionsRoutes = collectionsBase
   .use(itemsRoutes)
   .use(craftingRoutes);

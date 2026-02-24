@@ -9,8 +9,8 @@ import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
 
 export const fanartRoutes = new Elysia({ prefix: "/galleries/fanart", tags: ["fanart"] })
-  .use(authPlugin)
   .use(dbPlugin)
+  .use(authPlugin)
 
   // DELETE /api/galleries/fanart/:id
   .delete("/:id", async ({ params, apiUser, requireAuth, db, set }) => {

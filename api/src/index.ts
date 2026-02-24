@@ -118,3 +118,4 @@ app.listen({ port: PORT, hostname: IS_DEV ? "0.0.0.0" : "127.0.0.1" }, ({ hostna
 });
 
 export type App = typeof app;
+export default app;
