@@ -188,11 +188,6 @@ jobs:
     name: ✅ Combined gate
     needs: [gate-root, gate-bun]
     runs-on: ubuntu-latest
-    steps: []
-      - name: Run postinstall
-        run: |
-          cd api
-          node ./scripts/postinstall.js
 
   elysia-deploy:
     name: 🛩️ Elysia deploy → staging
