@@ -184,7 +184,7 @@ jobs:
       - name: Run postinstall
         run: |
           cd api
-          node ./scripts/postinstall.js
+          bun ./scripts/postinstall.js
 
   gate:
     name: ✅ Combined gate
