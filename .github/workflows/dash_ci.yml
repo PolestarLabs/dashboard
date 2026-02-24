@@ -164,7 +164,7 @@ jobs:
 
   elysia-check:
     name: ✨ Elysia deps & postinstall
-    needs: gate
+    needs: gate-bun
     if: needs.gate.outputs.api_changed == 'true'
     runs-on: ubuntu-latest
     steps:
