@@ -1,9 +1,11 @@
 name: Dashboard CI
+
 on:
   push:
     branches: [dev, master, elysia]
     paths:
       - 'api/**'
+      - '!api/**'   # always run gate regardless of path
   pull_request:
     branches: [dev, master, elysia]
     paths:
@@ -21,121 +23,146 @@ concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
-# ── Staging pipeline (dev branch) ──────────────────────────────────────────
-
 jobs:
+  gate:
+    name: ��� Gate (dependency install)
+    runs-on: ubuntu-latest
+    outputs:
+      non_api_changed: ${{ steps.diff.outputs.non_api }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compute changed paths
+        id: diff
+        run: |
+          # list all changed files in this event (push or PR)
+          git fetch origin
+          base=$([[ "${{ github.event_name }}" == "push" ]] && echo "${{ github.event.before }}" || echo "origin/${{ github.event.pull_request.base.ref }}")
+          git diff --name-only $base ${{ github.sha }} > changed.txt
+          echo "changed:"; cat changed.txt
+          if grep -qv '^api/' changed.txt; then
+            echo "non_api=true" >> $GITHUB_OUTPUT
+          else
+            echo "non_api=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install API deps
+        run: |
+          cd api
+          npm ci
+      - name: Install root deps
+        run: |
+          npm ci
+
+  fastlane:
+    name: ��� Fastlane label control
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check fastlane label
+        id: labelcheck
+        run: |
+          labels=$(jq -r '.pull_request.labels[].name' < $GITHUB_EVENT_PATH || echo "")
+          echo "labels=$labels" >> $GITHUB_OUTPUT
+          if echo "$labels" | grep -q '^fastlane$'; then echo "has=1" >> $GITHUB_OUTPUT; else echo "has=0" >> $GITHUB_OUTPUT; fi
+      - name: Enforce single fastlane PR
+        if: steps.labelcheck.outputs.has == '1'
+        run: |
+          prs=$(gh pr list --label fastlane --state open --json number --jq '.[].number')
+          count=$(echo "$prs" | grep -c .)
+          if [ "$count" -gt 1 ]; then
+            echo "Multiple fastlane PRs exist: $prs" >&2
+            gh pr edit ${{ github.event.number }} --remove-label fastlane
+            echo "Removed fastlane label from current PR" >&2
+          fi
+
   pull-staging:
-    name: 🔁 Sync Staging
+    name: ��� Sync Staging
+    needs: gate
     if: >
-      github.ref == 'refs/heads/dev' ||
-      github.event_name == 'pull_request' && github.base_ref == 'dev' ||
-      (github.event_name == 'workflow_dispatch' && inputs.environment == 'staging')
+      (needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'dev' && contains(github.event.pull_request.labels.*.name, 'fastlane'))
+    runs-on: self-hosted
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
-    runs-on: self-hosted
     steps:
-      - name: Sync with repository
+      - name: Sync repo
         run: |
           cd "$DIR"
           git fetch origin
           git reset --hard origin/dev
 
-  deps-staging:
-    name: 📦 Dependencies (Staging)
-    needs: pull-staging
-    # skip staging job if nothing under api/ changed (allows dashboard-only PRs)
-    if: |
-      contains(github.event.head_commit.message, 'api/') ||
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'pull_request'
-    runs-on: self-hosted
-    env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}
-    steps:
-      - name: Install dev dependencies
-        run: |
-          cd "$DIR"
-          npm install --include=dev
-
-      - name: Install all dependencies
-        run: |
-          cd "$DIR"
-          npm install
-
-      - name: Run postinstall helper
-        run: |
-          cd "$DIR"
-          if node ./scripts/postinstall.js; then
-            echo "[CI] postinstall succeeded"
-          else
-            echo "[CI] postinstall failed" >&2
-            # on staging/dev we log and continue, but master (production) aborts
-            if [[ '${{ github.ref }}' == 'refs/heads/master' ]] || \
-               ( [[ "${{ github.event_name }}" == "workflow_dispatch" ]] && [[ "${{ inputs.environment }}" == "production" ]] ); then
-              echo "[CI] production build: aborting due to postinstall failure" >&2
-              exit 1
-            else
-              echo "[CI] non-production build: continuing despite postinstall failure" >&2
-            fi
-          fi
-
-  deploy-staging:
-    name: 🧪 Deploy → Staging
-    needs: deps-staging
-    runs-on: self-hosted
-    steps:
-      - name: Reload PM2 staging processes
-        run: /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
-
-  # ── Production pipeline (master branch) ──────────────────────────────────
-
   pull-production:
-    name: 🔁 Sync Production
+    name: ��� Sync Production
+    needs: gate
     if: >
-      github.ref == 'refs/heads/master' ||
-      github.event_name == 'pull_request' && github.base_ref == 'master' ||
-      (github.event_name == 'workflow_dispatch' && inputs.environment == 'production')
+      needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: self-hosted
     env:
       DIR: ${{ secrets.DASH_DIR_PROD }}
-    runs-on: self-hosted
     steps:
-      - name: Sync with repository
+      - name: Sync repo
         run: |
           cd "$DIR"
           git fetch origin
           git reset --hard origin/master
 
-  deps-production:
-    name: 📦 Dependencies (Production)
-    needs: pull-production
-    if: |
-      contains(github.event.head_commit.message, 'api/') ||
-      github.event_name == 'workflow_dispatch' ||
-      github.event_name == 'pull_request'
+  deploy-staging:
+    name: ��� Deploy → Staging
+    needs: pull-staging
+    if: needs.pull-staging.result == 'success'
     runs-on: self-hosted
-    env:
-      DIR: ${{ secrets.DASH_DIR_PROD }}
     steps:
-      - name: Install all dependencies
-        run: |
-          cd "$DIR"
-          npm install
-
-      - name: Run postinstall helper
-        run: |
-          cd "$DIR"
-          if node ./scripts/postinstall.js; then
-            echo "[CI] postinstall succeeded"
-          else
-            echo "[CI] postinstall failed" >&2
-            echo "[CI] production build: aborting due to postinstall failure" >&2
-            exit 1
-          fi
+      - run: /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
 
   deploy-production:
-    name: 🚀 Deploy → Production
-    needs: deps-production
+    name: ��� Deploy → Production
+    needs: pull-production
+    if: needs.pull-production.result == 'success'
     runs-on: self-hosted
     steps:
-      - name: Reload PM2 production processes
-        run: /home/pollux/polaris/scripts/server-deploy.sh dashboard production
+      - run: /home/pollux/polaris/scripts/server-deploy.sh dashboard production
+
+  elysia-check:
+    name: ��� Elysia deps & postinstall
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    paths:
+      - 'api/**'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install API deps
+        run: |
+          cd api
+          npm ci
+      - name: Run postinstall
+        run: |
+          cd api
+          node ./scripts/postinstall.js
+
+  elysia-deploy:
+    name: ��� Elysia deploy → staging
+    needs: elysia-check
+    if: github.event_name == 'push' || github.event_name == 'pull_request'
+    paths:
+      - 'api/**'
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+    steps:
+      - name: Sync api folder
+        run: |
+          cd "$DIR"
+          git fetch origin
+          git checkout origin/${{ github.ref_name }} -- api
+      - name: Restart api-dev
+        run: /home/pollux/polaris/scripts/server-deploy.sh api-dev staging
