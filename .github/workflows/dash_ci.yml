@@ -24,6 +24,7 @@ jobs:
     name: 🔁 Sync Staging
     if: >
       github.ref == 'refs/heads/dev' ||
+      github.event_name == 'pull_request' && github.base_ref == 'dev' ||
       (github.event_name == 'workflow_dispatch' && inputs.environment == 'staging')
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
@@ -83,6 +84,7 @@ jobs:
     name: 🔁 Sync Production
     if: >
       github.ref == 'refs/heads/master' ||
+      github.event_name == 'pull_request' && github.base_ref == 'master' ||
       (github.event_name == 'workflow_dispatch' && inputs.environment == 'production')
     env:
       DIR: ${{ secrets.DASH_DIR_PROD }}
