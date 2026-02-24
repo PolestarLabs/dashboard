@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@elysiajs/bearer": "^1.2.2",
+    "skia-canvas": "^1.0.2",
+    "stackblur-canvas": "^2.7.0",
     "@elysiajs/cors": "^1.2.3",
     "@elysiajs/jwt": "^1.2.2",
     "@elysiajs/server-timing": "^1.2.0",
@@ -21,6 +23,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
+    "@types/stackblur-canvas": "^2.6.0",
     "typescript": "^5.7.0"
   }
 }

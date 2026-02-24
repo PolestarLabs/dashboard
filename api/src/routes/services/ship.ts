@@ -12,9 +12,7 @@ export async function generateShipCanvas(
   const [uid2, hash2] = av2.split("::");
   const pctNum = parseFloat(pct);
 
-  // dynamic require for bot utilities — kept for compat
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const Picto = require(process.env.BOT_PATH + "/core/utilities/Picto");
+  const { Picto } = await import("utils/Picto");
 
   const canvas = Picto.new(796, 445);
   const ctx = canvas.getContext("2d");
