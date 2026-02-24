@@ -1,8 +1,11 @@
 /**
- * services/users.ts — User business logic, decoupled from Elysia.
+ * services/users.ts — User profile business logic, decoupled from Elysia.
+ * Commends → services/commends.ts
+ * Galleries → services/galleries.ts
+ * Fanart hearts → services/fanart.ts
  */
 
-import { getDiscordUser, getManyDiscordUsers, type DiscordUser } from "@helpers/discord";
+import { getDiscordUser, type DiscordUser } from "@helpers/discord";
 import type { DB } from "@routes/types";
 
 // ── Response building ────────────────────────────────────────────────────────
@@ -123,91 +126,9 @@ export async function getUserBackgrounds(userId: string, db: DB) {
 }
 
 // ── Commends ─────────────────────────────────────────────────────────────────
-
-export async function getCommendsSimple(userId: string, db: DB) {
-  return db.commends.parseFull(userId);
-}
-
-export async function getCommendsFull(userId: string, db: DB, redis: any) {
-  const userCommends = await db.commends.parseFull(userId, { _id: 0, __v: 0 });
-  if (!userCommends) return null;
-
-  const usersInSet = [...new Set([
-    ...userCommends.whoIn.map((u: any) => u.id).slice(0, 10),
-    ...userCommends.whoOut.map((u: any) => u.id).slice(0, 10),
-  ])] as string[];
-
-  const userData = await getManyDiscordUsers(usersInSet, redis);
-  const whoIn  = userCommends.whoIn.sort((a: any, b: any) => b.count - a.count) || [];
-  const whoOut = userCommends.whoOut.sort((a: any, b: any) => b.count - a.count) || [];
-  const totalIn  = userCommends.totalIn  || 0;
-  const totalOut = userCommends.totalOut || 0;
-  const average    = Math.floor(totalIn / whoIn.length) || 0;
-  const normalized = Math.floor((totalIn * whoIn.length) / (totalIn / average)) || 0;
-
-  return { userData, whoIn, whoOut, totalIn, totalOut, average, normalized };
-}
-
-export async function getCommendRank(userId: string, endpoint: string, db: DB) {
-  const count = (await db.commends.get(userId))?.whoIn?.reduce((a: any, b: any) => ({ count: a.count + b.count }))?.count;
-  const ranks: any[] = await db.commends.aggregate([
-    { $addFields: { countIn: { $sum: "$whoIn.count" }, countOut: { $sum: "$whoOut.count" } } },
-    { $match: { [endpoint === "in" ? "countIn" : "countOut"]: { $gt: count } } },
-    { $project: { id: 1, whoOut: 1, whoIn: 1, pplIn: { $size: "$whoIn" }, pplOut: { $size: "$whoOut" } } },
-    { $count: "count" },
-  ]);
-  return { rank: ranks[0]?.count, count };
-}
-
-// ── Fanart Hearts ────────────────────────────────────────────────────────────
-
-export async function toggleFanartHeart(
-  userId: string,
-  fanartId: string,
-  operation: "add" | "remove",
-  db: DB,
-): Promise<{ ok: boolean; status: number; message: string }> {
-  const fana = await db.collections.fanart.findOne({ id: fanartId });
-  if (!fana) return { ok: false, status: 404, message: "Not Found" };
-
-  if (operation === "add") {
-    await Promise.all([
-      db.users.set(userId, { $addToSet: { "counters.hearts": fanartId } }),
-      db.collections.fanart.updateOne({ id: fanartId }, { $inc: { hearts: 1 } }),
-    ]);
-  } else {
-    await Promise.all([
-      db.users.set(userId, { $pull: { "counters.hearts": fanartId } }),
-      db.collections.fanart.updateOne({ id: fanartId }, { $inc: { hearts: -1 } }),
-    ]);
-  }
-  return { ok: true, status: 200, message: "OK" };
-}
-
+// Moved to services/commends.ts
+// ── Fanart Hearts ─────────────────────────────────────────────────────────────
+// Moved to services/fanart.ts
 // ── Galleries ────────────────────────────────────────────────────────────────
+// Moved to services/galleries.ts
 
-export async function getGallerySaves(userId: string, db: DB) {
-  const [gallery, user] = await Promise.all([
-    db.usercols.get(userId),
-    db.users.get(userId, { switches: 1 }),
-  ]);
-  if (user?.switches?.booruPublic === false) return { loading: true, status: "PRIVATE" };
-  return gallery?.collections.boorusave ?? [];
-}
-
-export async function getGalleryFanart(userId: string, viewerId: string | undefined, db: DB) {
-  const query: Record<string, unknown> = { author_ID: userId };
-  if (viewerId !== userId) query.publish = true;
-
-  const gallery: any[] = await db.fanart.find(query).lean();
-  return gallery.map((item: any) => ({
-    title:       item.title,
-    description: item.description,
-    author:      item.author_ID,
-    author_url:  item.artistlink,
-    likes:       item.hearts || 0,
-    url:         item.src,
-    thumb:       item.src.replace("artwork/", "artwork/thumbs/"),
-    status:      item.publish ? "published" : item.publish === false ? "denied" : "pending",
-  }));
-}

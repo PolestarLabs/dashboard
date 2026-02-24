@@ -4,6 +4,33 @@
 
 import type { DB } from "@routes/types";
 
+// ── Fanart Hearts ────────────────────────────────────────────────────────────
+
+export async function toggleFanartHeart(
+  userId: string,
+  fanartId: string,
+  operation: "add" | "remove",
+  db: DB,
+): Promise<{ ok: boolean; status: number; message: string }> {
+  const fana = await db.collections.fanart.findOne({ id: fanartId });
+  if (!fana) return { ok: false, status: 404, message: "Not Found" };
+
+  if (operation === "add") {
+    await Promise.all([
+      db.users.set(userId, { $addToSet: { "counters.hearts": fanartId } }),
+      db.collections.fanart.updateOne({ id: fanartId }, { $inc: { hearts: 1 } }),
+    ]);
+  } else {
+    await Promise.all([
+      db.users.set(userId, { $pull: { "counters.hearts": fanartId } }),
+      db.collections.fanart.updateOne({ id: fanartId }, { $inc: { hearts: -1 } }),
+    ]);
+  }
+  return { ok: true, status: 200, message: "OK" };
+}
+
+// ── CRUD ─────────────────────────────────────────────────────────────────────
+
 export async function deleteFanart(fanartId: string, userId: string, db: DB) {
   const oldData = await db.fanart.get(fanartId);
   if (!oldData)                      return { ok: false, status: 404, message: "Not Found" };

@@ -3,7 +3,7 @@
  */
 
 import type { WordEntry } from "@routes/types";
-import { shuffle } from "@routes/helpers";
+import { shuffle } from "utils/shuffle";
 
 export function filterWords(
   words: WordEntry[],

@@ -3,7 +3,8 @@
  */
 
 import type { CosmeticDoc } from "@routes/types";
-import { objectIdFromTimestamp, isValidObjectId, stickerCount } from "@routes/helpers";
+import { objectIdFromTimestamp, isValidObjectId } from "utils/objectid";
+import { stickerCount } from "utils/cosmetics";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 

@@ -6,7 +6,8 @@
  */
 
 import { RARITY_VALUES, RarityType as Rarity } from "@definitions/Rarity";
-import { shuffle, isExact } from "@routes/helpers";
+import { shuffle } from "utils/shuffle";
+import { isExact } from "utils/crafting";
 import type { PotItem, MixBody, MixResponse, CreateBody, CreateResponse } from "@routes/schemas";
 
 // ── Internal helpers ─────────────────────────────────────────────────────────
