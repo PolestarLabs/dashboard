@@ -12,10 +12,10 @@
  * Blur:  stackblur-canvas via getImageData/putImageData (works on any canvas impl).
  */
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const Canvas = require("skia-canvas") as typeof import("skia-canvas");
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const StackBlur = require("stackblur-canvas") as typeof import("stackblur-canvas");
+import * as Canvas from "skia-canvas";
+import { CanvasRenderingContext2D } from "skia-canvas";
+import * as StackBlur from "stackblur-canvas";
+
 
 const π = Math.PI;
 
@@ -214,8 +214,9 @@ const Picto = {
   ): Promise<TagResult> {
     let fillTextWithTwemoji: ((c: any, t: string, x: number, y: number, opts?: any) => Promise<void>) | null = null;
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      fillTextWithTwemoji = require("@polestar/skia-twemoji").fillTextWithTwemoji;
+        // dynamically import emoji helper if present
+      ({ fillTextWithTwemoji } = await import("@polestar/skia-twemoji")).fillTextWithTwemoji; // may throw
+
     } catch {
       return this.tag(ctx, text, font, color, stroke);
     }
@@ -300,7 +301,7 @@ const Picto = {
    * Variant of `block` that uses canvas-text-wrapper when available, falling
    * back to the native `textWrap` path. Mirrors the `block2` implementation.
    */
-  block2(
+  async block2(
     ctx:            CanvasRenderingContext2D,
     text:           unknown,
     font            = "14px",
@@ -329,8 +330,8 @@ const Picto = {
     // Try the external text-wrapper first; fall back to native textWrap
     let wrap: ((canvas: any, text: string, opts: any) => void) | null = null;
     try {
-      // eslint-disable-next-line @typescript-eslint/no-require-imports
-      wrap = require("canvas-text-wrapper").CanvasTextWrapper;
+      const mod = await import("canvas-text-wrapper");
+      wrap = mod.CanvasTextWrapper;
     } catch { /* not installed */ }
 
     if (wrap) {
