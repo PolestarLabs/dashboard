@@ -59,7 +59,7 @@ jobs:
 
 
   gate-bun:
-    name: ✨ Bun gate (API deps)
+    name: 🧄 Bun gate (API deps)
     runs-on: ubuntu-latest
     outputs:
       api_changed: ${{ steps.diff.outputs.api }}
@@ -225,8 +225,8 @@ jobs:
 
 
   elysia-deploy:
-    name: 🛩️ Elysia deploy → staging
-    needs: [elysia-check, gate-bun]
+    name: 🎈 Elysia deploy → staging
+    needs: [elysia-check, gate-bun, full-tests]
     runs-on: self-hosted
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
