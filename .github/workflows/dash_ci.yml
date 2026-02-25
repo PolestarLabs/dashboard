@@ -146,16 +146,44 @@ jobs:
     secrets: inherit
     if: >
       needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
-
+  
   elysia-check:
     needs: gate-bun
-    uses: ./.github/workflows/elysia-check.yml
-    secrets: inherit
-    if: needs.gate-bun.outputs.api_changed == 'true'
+    name: ✨ Elysia deps & postinstall
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install bun runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          version: latest
+      - name: Install API deps (bun)
+        run: |
+          cd api
+          bun install
+      - name: Run postinstall
+        run: |
+          cd api
+          bun ./scripts/postinstall.js
+
+
 
   elysia-deploy:
+    name: 🛩️ Elysia deploy → staging
     needs: [elysia-check, gate-bun]
-    uses: ./.github/workflows/elysia-deploy.yml
-    secrets: inherit
-    if: >
-      needs.gate-bun.outputs.api_changed == 'true'
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+    steps:
+      - name: Sync api folder
+        run: |
+          cd "$DIR"
+          git fetch origin
+          # always pull from elysia branch regardless of triggering ref
+          git checkout origin/elysia -- api
+      - name: Restart api-dev
+        run: /home/pollux/polaris/scripts/server-deploy.sh api-dev staging
