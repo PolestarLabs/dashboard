@@ -1,0 +1,11 @@
+name: Deploy Production
+
+on:
+  workflow_call:
+
+jobs:
+  deploy-production:
+    name: 🚀 Deploy → Production
+    runs-on: self-hosted
+    steps:
+      - run: /home/pollux/polaris/scripts/server-deploy.sh dashboard production

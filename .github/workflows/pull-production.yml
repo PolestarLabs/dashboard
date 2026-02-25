@@ -1,0 +1,17 @@
+name: Sync Production
+
+on:
+  workflow_call:
+
+jobs:
+  pull-production:
+    name: 🔄️ Sync Production
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_PROD }}
+    steps:
+      - name: Sync repo
+        run: |
+          cd "$DIR"
+          git fetch origin
+          git reset --hard origin/master

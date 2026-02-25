@@ -1,0 +1,11 @@
+name: Deploy Staging
+
+on:
+  workflow_call:
+
+jobs:
+  deploy-staging:
+    name: 🚀 Deploy → Staging
+    runs-on: self-hosted
+    steps:
+      - run: /home/pollux/polaris/scripts/server-deploy.sh dashboard staging

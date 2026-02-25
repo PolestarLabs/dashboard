@@ -1,0 +1,12 @@
+name: Combined Gate
+
+on:
+  workflow_call:
+
+jobs:
+  gate:
+    name: ✅ Combined gate
+    runs-on: ubuntu-latest
+    steps:
+      - name: final gate check
+        run: echo "Gate jobs completed successfully"

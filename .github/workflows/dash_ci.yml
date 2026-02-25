@@ -25,200 +25,63 @@ concurrency:
 
 jobs:
   gate-root:
-    name: ⛔ Root gate (dashboard deps)
-    runs-on: ubuntu-latest
-    outputs:
-      non_api_changed: ${{ steps.diff.outputs.non_api }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Compute changed paths
-        id: diff
-        run: |
-          git fetch origin
-          base=$([[ "${{ github.event_name }}" == "push" ]] && echo "${{ github.event.before }}" || echo "origin/${{ github.event.pull_request.base.ref }}")
-          # verify base exists, fallback to before SHA if not
-          if ! git rev-parse --verify "$base" >/dev/null 2>&1; then
-            echo "warning: base ref '$base' not found, using event.before" >&2
-            base="${{ github.event.before }}"
-          fi
-          git diff --name-only $base ${{ github.sha }} > changed.txt
-          if grep -qv '^api/' changed.txt; then
-            echo "non_api=true" >> $GITHUB_OUTPUT
-          else
-            echo "non_api=false" >> $GITHUB_OUTPUT
-          fi
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install root deps
-        run: |
-          npm ci
-      with:
-        gate: 1
+    uses: ./.github/workflows/gate-root.yml
+    secrets: inherit
 
   gate-bun:
-    name: ✨ Bun gate (API deps)
-    runs-on: ubuntu-latest
-    outputs:
-      api_changed: ${{ steps.diff.outputs.api }}
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      - name: Compute changed paths
-        id: diff
-        run: |
-          git fetch origin
-          base=$([[ "${{ github.event_name }}" == "push" ]] && echo "${{ github.event.before }}" || echo "origin/${{ github.event.pull_request.base.ref }}")
-          if ! git rev-parse --verify "$base" >/dev/null 2>&1; then
-            echo "warning: base ref '$base' not found, using event.before" >&2
-            base="${{ github.event.before }}"
-          fi
-          git diff --name-only $base ${{ github.sha }} > changed.txt
-          if grep -q '^api/' changed.txt; then
-            echo "api=true" >> $GITHUB_OUTPUT
-          else
-            echo "api=false" >> $GITHUB_OUTPUT
-          fi
-      - name: Install Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install bun runtime
-        uses: oven-sh/setup-bun@v2
-        with:
-          version: latest
-      - name: 🐇 Install API deps (bun)
-        run: |
-          cd api
-          bun install
-    with:
-      gate: 1
+    needs: gate-root
+    uses: ./.github/workflows/gate-bun.yml
+    secrets: inherit
 
   fastlane:
-    name: 🚄 Fastlane label control
-    if: github.event_name == 'pull_request'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Check fastlane label
-        id: labelcheck
-        run: |
-          labels=$(jq -r '.pull_request.labels[].name' < $GITHUB_EVENT_PATH || echo "")
-          echo "labels=$labels" >> $GITHUB_OUTPUT
-          if echo "$labels" | grep -q '^fastlane$'; then echo "has=1" >> $GITHUB_OUTPUT; else echo "has=0" >> $GITHUB_OUTPUT; fi
-      - name: Enforce single fastlane PR
-        if: steps.labelcheck.outputs.has == '1'
-        run: |
-          prs=$(gh pr list --label fastlane --state open --json number --jq '.[].number')
-          count=$(echo "$prs" | grep -c .)
-          if [ "$count" -gt 1 ]; then
-            echo "Multiple fastlane PRs exist: $prs" >&2
-            gh pr edit ${{ github.event.number }} --remove-label fastlane
-            echo "Removed fastlane label from current PR" >&2
-          fi
+    needs: gate-root
+    uses: ./.github/workflows/fastlane.yml
+    secrets: inherit
+
+
 
   pull-staging:
-    name: 🔄️ Sync Staging
     needs: gate-root
+    uses: ./.github/workflows/pull-staging.yml
+    secrets: inherit
     if: >
-      (needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
+      (needs.gate-root.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
       (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'dev' && contains(github.event.pull_request.labels.*.name, 'fastlane'))
-    runs-on: self-hosted
-    env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}
-    steps:
-      - name: Sync repo
-        run: |
-          cd "$DIR"
-          git fetch origin
-          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            # pull the PR head directly
-            prref=${{ github.event.pull_request.head.ref }}
-            git fetch origin "$prref":"pr-head"
-            git reset --hard pr-head
-          else
-            git reset --hard origin/dev
-          fi
 
   pull-production:
-    name: 🔄️ Sync Production
     needs: gate-root
+    uses: ./.github/workflows/pull-production.yml
+    secrets: inherit
     if: >
-      needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
-    runs-on: self-hosted
-    env:
-      DIR: ${{ secrets.DASH_DIR_PROD }}
-    steps:
-      - name: Sync repo
-        run: |
-          cd "$DIR"
-          git fetch origin
-          git reset --hard origin/master
+      needs.gate-root.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
 
   deploy-staging:
-    name: 🚀 Deploy → Staging
     needs: pull-staging
+    uses: ./.github/workflows/deploy-staging.yml
+    secrets: inherit
     if: needs.pull-staging.result == 'success'
-    runs-on: self-hosted
-    steps:
-      - run: /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
 
   deploy-production:
-    name: 🚀 Deploy → Production
     needs: pull-production
+    uses: ./.github/workflows/deploy-production.yml
+    secrets: inherit
     if: needs.pull-production.result == 'success'
-    runs-on: self-hosted
-    steps:
-      - run: /home/pollux/polaris/scripts/server-deploy.sh dashboard production
+
+
 
   elysia-check:
-    name: ✨ Elysia deps & postinstall
     needs: gate-bun
+    uses: ./.github/workflows/elysia-check.yml
+    secrets: inherit
     if: needs.gate-bun.outputs.api_changed == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-      - name: Install bun runtime
-        uses: oven-sh/setup-bun@v2
-        with:
-          version: latest
-      - name: Install API deps (bun)
-        run: |
-          cd api
-          bun install
-      - name: Run postinstall
-        run: |
-          cd api
-          bun ./scripts/postinstall.js
 
   gate:
-    name: ✅ Combined gate
     needs: [gate-root, gate-bun]
-    runs-on: ubuntu-latest
-    steps:
-      - name: final gate check
-        run: echo "Gate jobs completed successfully"
+    uses: ./.github/workflows/gate.yml
+    secrets: inherit
 
   elysia-deploy:
-    name: 🛩️ Elysia deploy → staging
     needs: elysia-check
+    uses: ./.github/workflows/elysia-deploy.yml
+    secrets: inherit
     if: needs.gate-bun.outputs.api_changed == 'true'
-    runs-on: self-hosted
-    env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}
-    steps:
-      - name: Sync api folder
-        run: |
-          cd "$DIR"
-          git fetch origin
-          git checkout origin/${{ github.ref_name }} -- api
-      - name: Restart api-dev
-        run: /home/pollux/polaris/scripts/server-deploy.sh api-dev staging

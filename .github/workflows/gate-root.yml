@@ -1,0 +1,38 @@
+name: Gate Root
+
+on:
+  workflow_call:
+
+jobs:
+  gate-root:
+    name: ⛔ Root gate (dashboard deps)
+    runs-on: ubuntu-latest
+    outputs:
+      non_api_changed: ${{ steps.diff.outputs.non_api }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compute changed paths
+        id: diff
+        run: |
+          git fetch origin
+          base=$([[ "${{ github.event_name }}" == "push" ]] && echo "${{ github.event.before }}" || echo "origin/${{ github.event.pull_request.base.ref }}")
+          # verify base exists, fallback to before SHA if not
+          if ! git rev-parse --verify "$base" >/dev/null 2>&1; then
+            echo "warning: base ref '$base' not found, using event.before" >&2
+            base="${{ github.event.before }}"
+          fi
+          git diff --name-only $base ${{ github.sha }} > changed.txt
+          if grep -qv '^api/' changed.txt; then
+            echo "non_api=true" >> $GITHUB_OUTPUT
+          else
+            echo "non_api=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install root deps
+        run: |
+          npm ci

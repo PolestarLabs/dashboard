@@ -1,0 +1,27 @@
+name: Elysia Check
+
+on:
+  workflow_call:
+
+jobs:
+  elysia-check:
+    name: ✨ Elysia deps & postinstall
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install bun runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          version: latest
+      - name: Install API deps (bun)
+        run: |
+          cd api
+          bun install
+      - name: Run postinstall
+        run: |
+          cd api
+          bun ./scripts/postinstall.js
