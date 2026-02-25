@@ -4,8 +4,21 @@ on:
   workflow_call:
 
 jobs:
+  pull-production:
+    name: 🔄️ Sync Production
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_PROD }}
+    steps:
+      - name: Sync repo
+        run: |
+          cd "$DIR"
+          git fetch origin
+          git reset --hard origin/master
+
   deploy-production:
     name: 🚀 Deploy → Production
     runs-on: self-hosted
+    needs: pull-production
     steps:
       - run: /home/pollux/polaris/scripts/server-deploy.sh dashboard production
