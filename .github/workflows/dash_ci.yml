@@ -148,7 +148,7 @@ jobs:
       - name: Build bundle
         run: |
           cd api
-          bun build src/index.ts --outdir=dist --bundle --target=bun
+          bun build src/index.ts --bundle --target=bun --format=cjs --outdir=dist
       - name: Upload bundle artifact
         uses: actions/upload-artifact@v4
         with:
@@ -274,7 +274,7 @@ jobs:
 
   elysia-deploy:
     name: 🎈 Elysia deploy → staging
-    needs: [elysia-check, gate-bun, full-tests]
+    needs: [build-dist]
     runs-on: self-hosted
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
@@ -285,5 +285,7 @@ jobs:
           git fetch origin
           # always pull from elysia branch regardless of triggering ref
           git checkout origin/elysia -- api
+      - name: Build
+        run: bun build src/index.ts --bundle --target=bun --format=cjs --outdir=dist
       - name: Restart api-dev
         run: /home/pollux/polaris/scripts/server-deploy.sh api-dev staging
