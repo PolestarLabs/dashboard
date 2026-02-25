@@ -5,10 +5,10 @@
   "description": "Pollux REST API — ElysiaJS on Bun. Lives alongside the Express dashboard during migration; will be extracted to its own repo in Phase 5.",
   "scripts": {
     "dev": "bun run --watch src/index.ts",
-    "start": "bun run postinstall && bun run src/index.ts",
+    "start": "bun run src/index.ts",
     "typecheck": "bun tsc --noEmit",
-    "postinstall": "node node_modules/skia-canvas/lib/prebuild.mjs download --or-compile"
-
+    "postinstall": "bun scripts/postinstall.js",
+    "test": "bun test"
   },
   "dependencies": {
     "@elysiajs/bearer": "^1.4.3",
@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@types/node": "^22.19.11",
+    "@types/jest": "^30.0.0",
     "typescript": "^5.9.3"
   }
 }
