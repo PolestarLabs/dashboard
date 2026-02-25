@@ -12,15 +12,11 @@ import initSchema from "@polestar/database_schema";
 import { Schemas } from "@polestar/database_schema";
 
 
-const DEFAULT_MONGO = require("../../../config.js").mongodb;
 const MONGO_URL =
   process.env.MONGO_URL ??
-  process.env.MONGODB_URL ??
-  DEFAULT_MONGO;
+  process.env.MONGODB_URL ?? ""
 
-if (MONGO_URL === DEFAULT_MONGO) {
-  console.warn("[DB] no MONGO_URL set, falling back to localhost; this may be wrong in PM2/Ecosystem environment");
-}
+
 
 const REDIS_HOST = process.env.REDIS_HOST ?? "127.0.0.1";
 const REDIS_PORT = parseInt(process.env.REDIS_PORT ?? "6379", 10);
@@ -44,7 +40,7 @@ async function getDB(): Promise<Schemas> {
     },
     { redis: { host: REDIS_HOST, port: REDIS_PORT } }
   );
-  console.log("✅ [DB] Connected to MongoDB:", MONGO_URL.replace(/:\/\/[^@]*@/, "://***@"));
+  console.log("✅ [DB] Connected to MongoDB:", MONGO_URL!.replace(/:\/\/[^@]*@/, "://***@"));
   return _db!;
 }
 
