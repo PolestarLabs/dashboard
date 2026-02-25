@@ -8,7 +8,8 @@
     "start": "bun run src/index.ts",
     "typecheck": "bun tsc --noEmit",
     "postinstall": "bun scripts/postinstall.js",
-    "test": "bun test"
+    "test": "bun test",
+    "test:sanity": "bun test src/__tests__/img/*sanity.test.ts --run"
   },
   "dependencies": {
     "@elysiajs/bearer": "^1.4.3",
