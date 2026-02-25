@@ -290,4 +290,4 @@ jobs:
           cd "$DIR"/api
           bun build src/index.ts --bundle --target=bun --format=cjs --outdir=dist
       - name: Restart api-dev
-        run: /home/pollux/polaris/scripts/server-deploy.sh api-dev staging
+        run: pm2 restart api-dev
