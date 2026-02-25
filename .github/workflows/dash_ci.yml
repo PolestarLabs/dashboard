@@ -107,6 +107,28 @@ jobs:
       - name: final gate check
         run: echo "Gate jobs completed successfully"
 
+  typecheck:
+    name: 🧠 Run TypeScript typecheck
+    needs: gate-bun
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          version: latest
+      - name: Install API deps
+        run: |
+          cd api
+          bun install
+      - name: Type-check API
+        run: |
+          cd api
+          bun run typecheck
+      # this job is informational only; other jobs do not depend on it
+
   sanity-tests:
     name: 🔬 API sanity tests
     needs: gate-bun
