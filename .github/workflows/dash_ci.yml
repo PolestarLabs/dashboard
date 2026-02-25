@@ -27,11 +27,14 @@ jobs:
   gate-root:
     uses: ./.github/workflows/gate-root.yml
     secrets: inherit
+    with:
+      version: ${{github.event_name}}
 
   gate-bun:
-    needs: gate-root
     uses: ./.github/workflows/gate-bun.yml
     secrets: inherit
+    with:
+      version: ${{github.event_name}}
 
   fastlane:
     needs: gate-root
