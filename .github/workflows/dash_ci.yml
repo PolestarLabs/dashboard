@@ -27,21 +27,19 @@ jobs:
   gate-root:
     uses: ./.github/workflows/gate-root.yml
     secrets: inherit
-    with:
-      version: ${{github.event_name}}
 
   gate-bun:
     uses: ./.github/workflows/gate-bun.yml
     secrets: inherit
-    with:
-      version: ${{github.event_name}}
 
-  fastlane:
-    needs: gate-root
-    uses: ./.github/workflows/fastlane.yml
+  gate:
+    needs: [gate-root, gate-bun]
+    uses: ./.github/workflows/gate.yml
     secrets: inherit
 
-
+  fastlane:
+    uses: ./.github/workflows/fastlane.yml
+    secrets: inherit
 
   pull-staging:
     needs: gate-root
@@ -77,11 +75,6 @@ jobs:
     uses: ./.github/workflows/elysia-check.yml
     secrets: inherit
     if: needs.gate-bun.outputs.api_changed == 'true'
-
-  gate:
-    needs: [gate-root, gate-bun]
-    uses: ./.github/workflows/gate.yml
-    secrets: inherit
 
   elysia-deploy:
     needs: elysia-check
