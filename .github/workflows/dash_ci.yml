@@ -134,7 +134,7 @@ jobs:
 
   staging:
     needs: gate-root
-    uses: ./.github/workflows/pull-staging.yml
+    uses: ./.github/workflows/staging.yml
     secrets: inherit
     if: >
       (needs.gate-root.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
@@ -142,7 +142,7 @@ jobs:
 
   production:
     needs: gate
-    uses: ./.github/workflows/pull-production.yml
+    uses: ./.github/workflows/production.yml
     secrets: inherit
     if: >
       needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
