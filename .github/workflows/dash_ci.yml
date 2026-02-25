@@ -128,7 +128,7 @@ jobs:
           cd api
           bun run test:sanity
       - name: Upload fixtures artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: sanity-fixtures
           path: api/src/__tests__/img/fixtures
@@ -146,7 +146,7 @@ jobs:
         with:
           version: latest
       - name: Download fixtures
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v2
         with:
           name: sanity-fixtures
           path: api/src/__tests__/img/fixtures
