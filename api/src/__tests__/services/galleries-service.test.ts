@@ -3,13 +3,7 @@ import {
   getGalleryFanart,
 } from "../../routes/services/galleries";
 
-function makeFakeDb(): any {
-  return {
-    usercols: { get: jest.fn() },
-    users: { get: jest.fn() },
-    fanart: { find: jest.fn() },
-  };
-}
+import { makeFakeDb } from "../factories";
 
 describe("services/galleries.ts", () => {
   let db: any;
@@ -26,7 +20,8 @@ describe("services/galleries.ts", () => {
 
   it("getGalleryFanart maps fields correctly", async () => {
     const item = { title: "t", description: "d", author_ID: "u", artistlink: "url", hearts: 5, src: "artwork/foo.png", publish: true };
-    db.fanart.find.mockResolvedValueOnce([item]);
+    // return cursor-like object for .lean()
+    db.fanart.find.mockReturnValueOnce({ lean: async () => [item] });
     const arr = await getGalleryFanart("u", "x", db);
     expect(arr[0].thumb).toContain("thumbs");
     expect(arr[0].status).toBe("published");

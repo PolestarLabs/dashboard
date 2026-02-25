@@ -4,18 +4,14 @@ import {
   getCommendRank,
 } from "../../routes/services/commends";
 
-function makeFakeDb(): any {
-  return {
-    commends: { parseFull: jest.fn(), get: jest.fn(), aggregate: jest.fn() },
-  };
-}
+import { makeFakeDb } from "../factories";
 
 const fakeRedis = { get: jest.fn(), set: jest.fn(), del: jest.fn() };
 
 describe("services/commends.ts", () => {
   let db: any;
   beforeEach(() => {
-    db = makeFakeDb();
+    db = makeFakeDb({ commends: { parseFull: jest.fn(), get: jest.fn(), aggregate: jest.fn() } });
   });
 
   it("getCommendsSimple proxies to db", async () => {
@@ -38,8 +34,8 @@ describe("services/commends.ts", () => {
     };
     db.commends.parseFull.mockResolvedValueOnce(userCommends);
     const result = await getCommendsFull("u", db, fakeRedis);
-    expect(result.whoIn[0].count).toBe(3);
-    expect(result.average).toBe(Math.floor(4 / userCommends.whoIn.length));
+    expect(result!.whoIn[0].count).toBe(3);
+    expect(result!.average).toBe(Math.floor(4 / userCommends.whoIn.length));
   });
 
   it("getCommendRank computes rank from aggregate", async () => {

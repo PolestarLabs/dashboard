@@ -4,13 +4,7 @@ import {
   updateFanart,
 } from "../../routes/services/fanart";
 
-function makeFakeDb(): any {
-  return {
-    collections: { fanart: { findOne: jest.fn(), updateOne: jest.fn() } },
-    users: { set: jest.fn() },
-    fanart: { get: jest.fn(), remove: jest.fn(), updateMany: jest.fn(), set: jest.fn() },
-  };
-}
+import { makeFakeDb } from "../factories";
 
 describe("services/fanart.ts", () => {
   let db: any;
@@ -25,7 +19,8 @@ describe("services/fanart.ts", () => {
   });
 
   it("toggleFanartHeart increments and decrements appropriately", async () => {
-    db.collections.fanart.findOne.mockResolvedValueOnce({ id: "f" });
+    // make findOne persist across both calls
+    db.collections.fanart.findOne.mockResolvedValue({ id: "f" });
     const r1 = await toggleFanartHeart("u", "f", "add", db);
     expect(r1.status).toBe(200);
     const r2 = await toggleFanartHeart("u", "f", "remove", db);
@@ -41,7 +36,7 @@ describe("services/fanart.ts", () => {
 
   it("updateFanart handles various fields and permissions", async () => {
     const old = { author_ID: "u" };
-    db.fanart.get.mockResolvedValueOnce(old);
+    db.fanart.get.mockResolvedValue(old);
     db.fanart.updateMany = jest.fn().mockResolvedValue({});
     db.fanart.set = jest.fn().mockResolvedValue({});
 

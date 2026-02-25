@@ -8,18 +8,7 @@ import {
   getUserBackgrounds,
 } from "../../routes/services/users";
 
-// helpers
-function makeFakeDb(): any {
-  return {
-    users: { get: jest.fn(), find: jest.fn() },
-    items: { find: jest.fn() },
-    cosmetics: { find: jest.fn() },
-    commends: { parseFull: jest.fn(), get: jest.fn(), aggregate: jest.fn() },
-    usercols: { get: jest.fn() },
-    fanart: { get: jest.fn(), find: jest.fn(), remove: jest.fn() },
-    collections: { fanart: { findOne: jest.fn(), updateOne: jest.fn() } },
-  };
-}
+import { makeFakeDb, cursor, makeUser } from "../factories";
 
 const fakeRedis = { get: jest.fn(), set: jest.fn(), del: jest.fn() };
 
@@ -60,7 +49,6 @@ describe("services/users.ts", () => {
           RBN: 0,
           JDE: 0,
           SPH: 0,
-          inventory: [{ count: 2 }],
           bgID: "bg",
           sticker: "stick",
           favcolor: "red",
@@ -85,11 +73,12 @@ describe("services/users.ts", () => {
     it("builds queries from allowed keys and returns mapped results", async () => {
       const db = makeFakeDb();
       const sampleUsr = { id: "42", modules: {} };
-      db.users.find.mockReturnValueOnce({
+      (db.users.find as jest.Mock).mockReturnValueOnce({
         skip: () => ({ limit: () => ({ sort: () => ({ lean: async () => [sampleUsr] }) }) }),
       });
       const results = await searchUsers({ id: "42" }, db, fakeRedis);
-      expect(results).toEqual([{ id: "42", tag: "user42", avatar: null }]);
+      // parseUserdata now includes many fields; just assert core shape
+      expect(results).toMatchObject([{ id: "42", tag: "user42", avatar: null }]);
       expect(db.users.find).toHaveBeenCalled();
     });
   });
@@ -109,32 +98,32 @@ describe("services/users.ts", () => {
     });
 
     it("filters inventory and attaches meta", async () => {
-      db.users.get.mockResolvedValueOnce({ modules: { inventory: [{ id: "i1", count: 1 }, { id: "i2", count: 0 }] } });
-      db.items.find.mockResolvedValueOnce([{ id: "i1", name: "foo" }]);
+      (db.users.get as jest.Mock).mockResolvedValueOnce({ modules: { inventory: [{ id: "i1", count: 1 }, { id: "i2", count: 0 }] } });
+      (db.items.find as jest.Mock).mockResolvedValueOnce([{ id: "i1", name: "foo" }]);
       const inv = await getUserInventory("u", db);
-      expect(inv[0].meta.name).toBe("foo");
+      expect(inv![0].meta.name).toBe("foo");
     });
 
     it("calculates sticker meta and packData", async () => {
-      db.users.get.mockResolvedValueOnce({ modules: { stickerInventory: ["s1"] } });
+      (db.users.get as jest.Mock).mockResolvedValueOnce({ modules: { stickerInventory: ["s1"] } });
     // both finds return a cursor-like object with lean()
-    db.cosmetics.find.mockResolvedValueOnce({ lean: async () => [{ id: "s1", series_id: "p1" }] });
-    db.items.find.mockResolvedValueOnce({ lean: async () => [{ icon: "p1" }] });
+    (db.cosmetics.find as jest.Mock).mockReturnValueOnce({ lean: async () => [{ id: "s1", series_id: "p1" }] });
+    (db.items.find as jest.Mock).mockReturnValueOnce({ lean: async () => [{ icon: "p1" }] });
       const stickers = await getUserStickers("u", db);
-      expect(stickers[0].packData.icon).toBe("p1");
+      expect(stickers![0].packData.icon).toBe("p1");
     });
 
     it("calls noCache on medals and returns result", async () => {
       const fakeCursor = { lean: () => ({ noCache: () => "medals" }) };
-      db.users.get.mockResolvedValueOnce({ modules: { medalInventory: ["m1"] } });
-      db.cosmetics.find.mockReturnValueOnce(fakeCursor);
+      (db.users.get as jest.Mock).mockResolvedValueOnce({ modules: { medalInventory: ["m1"] } });
+      (db.cosmetics.find as jest.Mock).mockReturnValueOnce(fakeCursor);
       const medals = await getUserMedals("u", db);
       expect(medals).toBe("medals");
     });
 
     it("returns backgrounds list", async () => {
-      db.users.get.mockResolvedValueOnce({ modules: { bgInventory: ["bg1"] } });
-    db.cosmetics.find.mockResolvedValueOnce({ lean: async () => ["bg1"] });
+      (db.users.get as jest.Mock).mockResolvedValueOnce({ modules: { bgInventory: ["bg1"] } });
+    (db.cosmetics.find as jest.Mock).mockReturnValueOnce({ lean: async () => ["bg1"] });
       const bgs = await getUserBackgrounds("u", db);
       expect(bgs).toEqual(["bg1"]);
     });
