@@ -129,6 +129,32 @@ jobs:
           bun run typecheck
       # this job is informational only; other jobs do not depend on it
 
+  build-dist:
+    name: 📦 Build Elysia API bundle
+    needs: gate-bun
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          version: latest
+      - name: Install API deps
+        run: |
+          cd api
+          bun install
+      - name: Build bundle
+        run: |
+          cd api
+          bun build src/index.ts --outdir=dist --bundle --target=bun
+      - name: Upload bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: elysia-bundle
+          path: api/dist
+
   sanity-tests:
     name: 🔬 API sanity tests
     needs: gate-bun
