@@ -38,13 +38,13 @@ import { shipRoutes } from "@routes/controllers/ship";
 const PORT = parseInt(process.env.API_PORT ?? "7056", 10);
 const IS_DEV = process.env.NODE_ENV !== "production";
 
-const app = new Elysia({ prefix: "/api" })
+const app = new Elysia()
     // ── Cross-cutting concerns ───────────────────────────────────────────────
     .use(serverTiming())
     .use(
         cors({
             origin: IS_DEV
-                ? ["https://staging.pollux.gg", `http://localhost:${PORT}`]
+                ? ["https://staging.pollux.gg","https://api-staging.pollux.gg", `http://localhost:${PORT}`]
                 : ["https://pollux.gg"],
             credentials: true,
         })
