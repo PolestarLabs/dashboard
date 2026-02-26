@@ -18,6 +18,8 @@ export function printBanner(hostname: string, port: number, version: string): vo
     `     v${version}                               ${GR("Powered by Elysia")}`,
     R("                                                                "),
     M(`> API listening on http://${hostname}:${port}/api                `),
+    M(`>                  http://${process.env.HOST}/api                `),
+    M(`>                  http://${process.env.API_HOST}                `),
     R("                                                                "),
   ].join("\n");
 
