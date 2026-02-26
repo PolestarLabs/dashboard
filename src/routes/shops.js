@@ -73,7 +73,6 @@ router.get(["/backgrounds","/bgs","bgshop"], async function (req, res) {
   delete require.cache[require.resolve('./paginate')];
   
   const bgBase =  await DB.cosmetics.find({type:"background",public:true,exclusive:{$exists:false}}).limit(50);
-  console.log(bgBase.length)
   
   res.render('shop/bgshop/bgshop',{
     bgBase,
@@ -117,7 +116,6 @@ router.get("/marketplace", async function (req, res) {
           let authordata = marketeers.find(x=>x.id==entry.author);
           let item = fullbase.find(x=> x.id == entry.item_id && x.type == entry.item_type );
           if (item){
-            console.log(item)
             opengraph.title = `[${item.rarity}] ${item.name} (${item.type}) `
             opengraph.sitename = ((authordata||{}).meta||{}).tag||"-no author-"
             opengraph.description = `Posted by ${authordata.meta.tag} | <b>Price: ${entry.price} ${entry.currency}</b>`
@@ -276,11 +274,6 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
 
   let listings = marketplace.filter(it=>it.item_id.toString() == entry.item_id && !it.lock);
   let morefrom = marketplace.filter(it=>it.author == entry.author && !it.lock);
-  console.log({marketplace})
-  console.log({listings})
-  console.log({entry},'from payload')
-  entry = listings.find(x=>x.id==entry.id)
-  console.log({entry},'from db')
   
   if (entry) {
     let item = entry.itemdata // fullbase.find(it=> it.id == entry.item_id && it.type == entry.item_type);
@@ -327,12 +320,10 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
 
     }else{
 
-      console.log('noitemu');
       return _404();
     }
   }else{
     
-    console.log('noentry');
     return _404();
   }
 })
