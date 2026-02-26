@@ -22,5 +22,5 @@ if (cluster.isPrimary) {
     _log(`[Worker ${clusterId}]`, ...args);
   };
   
-  await import('./server')
+  (async () => await import('./server'))();
 }
