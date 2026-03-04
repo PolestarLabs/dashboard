@@ -20,20 +20,20 @@ import { dbPlugin } from "@plugins/db";
 import { redisPlugin } from "@plugins/redis";
 import { authPlugin } from "@plugins/auth";
 
-import { usersRoutes } from "@routes/controllers/users";
-import { serversRoutes } from "@routes/controllers/servers";
-import { internalRoutes } from "@routes/controllers/internal";
-import { cosmeticsRoutes } from "@routes/controllers/cosmetics";
-import { leaderboardsRoutes } from "@routes/controllers/leaderboards";
-import { relationshipsRoutes } from "@routes/controllers/relationships";
-import { primeRoutes } from "@routes/controllers/prime";
-import { utilsRoutes } from "@routes/controllers/utils";
-import { gamesRoutes } from "@routes/controllers/games";
-import { collectionsRoutes } from "@routes/controllers/collections/collections";
-import { telemetryRoutes } from "@routes/controllers/telemetry";
-import { fanartRoutes } from "@routes/controllers/fanart";
+import { usersRoutes } from "@routes/users";
+import { serversRoutes } from "@routes/servers";
+import { internalRoutes } from "@routes/internal";
+import { cosmeticsRoutes } from "@routes/cosmetics";
+import { leaderboardsRoutes } from "@routes/leaderboards";
+import { relationshipsRoutes } from "@routes/relationships";
+import { primeRoutes } from "@routes/prime";
+import { utilsRoutes } from "@routes/utils";
+import { gamesRoutes } from "@routes/games";
+import { collectionsRoutes } from "@routes/collections";
+import { telemetryRoutes } from "@routes/telemetry";
+import { fanartRoutes } from "@routes/fanart";
 
-import { shipRoutes } from "@routes/controllers/ship";
+import { shipRoutes } from "@routes/ship";
 
 const PORT = parseInt(process.env.API_PORT ?? "7056", 10);
 const IS_DEV = process.env.NODE_ENV !== "production";
