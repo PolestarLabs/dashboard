@@ -27,7 +27,8 @@ Scope reviewed:
 - [ ] Add cleanup/teardown for created `Eris.Client` instances to avoid resource leaks on reloads. See [src/routes/dashboard.js](src/routes/dashboard.js).
 
 ### Deeper findings (memory leaks, bad practices, uncaught exceptions, security)
-- [ ] Fix cache key precedence in `cacheFunction` so `req.originalUrl` fallback works and keys are consistent. See [src/neodash.js](src/neodash.js).
+- [x] Fix cache key precedence in `cacheFunction` so `req.originalUrl` fallback works and keys are consistent. See [src/neodash.js](src/neodash.js).
+  - [x] Prevent middleware from wrapping `res.send` multiple times, which caused stack overflow recursion on repeated middleware invocations.
 - [ ] Prevent JSON parse crashes and content-type mismatch in cached responses; cache should preserve original body/headers or use `res.send` on replay. See [src/neodash.js](src/neodash.js).
 - [ ] Add bounds/eviction policy to `memory-cache` to prevent unbounded growth under high traffic. See [src/neodash.js](src/neodash.js).
 - [ ] Fix CORS configuration: `Access-Control-Allow-Origin: *` with credentials is invalid; avoid duplicate header sets and use an allowlist. See [src/neodash.js](src/neodash.js).
