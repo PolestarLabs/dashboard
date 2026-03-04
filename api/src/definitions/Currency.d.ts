@@ -1,1 +1,1 @@
-export type Currency = "RBN" | "JDE" | "SPH";
+export type Currency = "RBN" | "JDE" | "SPH" | "TKN";
