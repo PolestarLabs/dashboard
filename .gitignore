@@ -21,5 +21,6 @@ dist
 config.js.bak
 *.secret.js
 .github/copilot-instructions.md
-api/tmp
+api/src/tmp/*
+api/tmp/*
 !api/src/__tests__/img/fixtures/**
