@@ -1,0 +1,16 @@
+name: Restart Dashboard
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  restart:
+    name: Restart dashboard processes
+    runs-on: [self-hosted, polestar-dashboard]
+    steps:
+      - name: Checkout (for context)
+        uses: actions/checkout@v4
+      - name: Restart PM2 dashboard
+        run: |
+          echo "Restarting dashboard via PM2"
+          pm2 reload dash-dev || pm2 reload dash || echo "dashboard process may not be running"
