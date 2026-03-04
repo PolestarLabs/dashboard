@@ -2,7 +2,7 @@ import {
   toggleFanartHeart,
   deleteFanart,
   updateFanart,
-} from "../../routes/services/fanart";
+} from "../../services/fanart";
 
 import { makeFakeDb } from "../factories";
 

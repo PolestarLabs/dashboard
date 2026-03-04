@@ -1,7 +1,7 @@
 import {
   getGallerySaves,
   getGalleryFanart,
-} from "../../routes/services/galleries";
+} from "../../services/galleries";
 
 import { makeFakeDb } from "../factories";
 

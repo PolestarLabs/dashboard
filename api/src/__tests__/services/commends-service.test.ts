@@ -2,7 +2,7 @@ import {
   getCommendsSimple,
   getCommendsFull,
   getCommendRank,
-} from "../../routes/services/commends";
+} from "../../services/commends";
 
 import { makeFakeDb } from "../factories";
 

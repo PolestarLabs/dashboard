@@ -6,7 +6,7 @@ import {
   getUserStickers,
   getUserMedals,
   getUserBackgrounds,
-} from "../../routes/services/users";
+} from "../../services/users";
 
 import { makeFakeDb, cursor, makeUser } from "../factories";
 
