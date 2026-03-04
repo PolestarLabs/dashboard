@@ -5,7 +5,7 @@
 
 import Elysia from "elysia";
 import { ShipQuery } from "@routes/schemas";
-import { generateShipCanvas } from "services/ship";
+import { generateShipCanvas } from "@services/ship";
 
 export const shipRoutes = new Elysia({ prefix: "/generators/ship", tags: ["generators"] })
   .get("/", async ({ query }) => {

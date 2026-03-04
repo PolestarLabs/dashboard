@@ -15,7 +15,7 @@ import {
 import {
   getPatreonPayload, findPatron, topPatrons,
   totalRevenue, removePrimeFromServer,
-} from "services/prime";
+} from "@services/prime";
 
 export const primeRoutes = new Elysia({ prefix: "/prime", tags: ["prime"] })
   .use(authPlugin)

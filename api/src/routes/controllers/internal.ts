@@ -6,7 +6,7 @@
 import Elysia from "elysia";
 import { dbPlugin } from "@plugins/db";
 import { PingFilterQuery, PingBody } from "@routes/schemas";
-import { getPings, upsertPing } from "services/internal";
+import { getPings, upsertPing } from "@services/internal";
 
 export const internalRoutes = new Elysia({ prefix: "/internal", tags: ["internal"] })
   .use(dbPlugin)

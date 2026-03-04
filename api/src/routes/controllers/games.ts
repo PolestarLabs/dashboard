@@ -7,7 +7,7 @@ import Elysia from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
 import { HangmaidQuery } from "@routes/schemas";
-import { filterWords } from "services/games";
+import { filterWords } from "@services/games/utils";
 import type { WordEntry } from "@routes/types";
 
 //import WORDS from "../words.json";

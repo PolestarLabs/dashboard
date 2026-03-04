@@ -8,7 +8,7 @@ import { makeFakeDb } from "../factories";
 
 const fakeRedis = { get: jest.fn(), set: jest.fn(), del: jest.fn() };
 
-describe("services/commends.ts", () => {
+describe("@services/commends.ts", () => {
   let db: any;
   beforeEach(() => {
     db = makeFakeDb({ commends: { parseFull: jest.fn(), get: jest.fn(), aggregate: jest.fn() } });

@@ -5,7 +5,7 @@ import {
 
 import { makeFakeDb } from "../factories";
 
-describe("services/galleries.ts", () => {
+describe("@services/galleries.ts", () => {
   let db: any;
   beforeEach(() => {
     db = makeFakeDb();

@@ -7,7 +7,7 @@ import Elysia from "elysia";
 import { dbPlugin } from "@plugins/db";
 import { redisPlugin } from "@plugins/redis";
 import { RelationshipQuery } from "@routes/schemas";
-import { getRelationships } from "services/relationships";
+import { getRelationships } from "@services/relationships";
 
 export const relationshipsRoutes = new Elysia({ prefix: "/relationships", tags: ["relationships"] })
   .use(dbPlugin)

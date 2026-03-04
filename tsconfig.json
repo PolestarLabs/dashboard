@@ -23,7 +23,8 @@
     "paths": {
       "@routes/*": ["routes/*"],
       "@pipelines/*": ["pipelines/*"],
-      "@types/*": ["types/*"]
+      "@types/*": ["types/*"],
+      "@services/*": ["services/*"]
     },
 
     // ── Source maps ──────────────────────────────────────────────────────────

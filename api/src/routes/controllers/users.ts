@@ -13,10 +13,10 @@ import {
   CommendQuery, CommendEndpointParams, FanartHeartParams,
 } from "@routes/schemas";
 
-import { searchUsers, parseUserAndReturn, getUserInventory, getUserStickers, getUserMedals, getUserBackgrounds } from "services/users";
-import { getCommendsSimple, getCommendsFull, getCommendRank } from "services/commends";
-import { toggleFanartHeart } from "services/fanart";
-import { getGallerySaves, getGalleryFanart } from "services/galleries";
+import { searchUsers, parseUserAndReturn, getUserInventory, getUserStickers, getUserMedals, getUserBackgrounds } from "@services/users";
+import { getCommendsSimple, getCommendsFull, getCommendRank } from "@services/commends";
+import { toggleFanartHeart } from "@services/fanart";
+import { getGallerySaves, getGalleryFanart } from "@services/galleries";
 
 import type { DB } from "@routes/types";
 

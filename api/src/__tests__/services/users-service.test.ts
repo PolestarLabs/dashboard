@@ -18,7 +18,7 @@ jest.mock("@helpers/discord", () => ({
   getManyDiscordUsers: jest.fn(async (ids: string[]) => ids.map((id) => ({ id, username: `user${id}`, avatarURL: null }))),
 }));
 
-describe("services/users.ts", () => {
+describe("@services/users.ts", () => {
   afterEach(() => jest.clearAllMocks());
 
   describe("parseUserdata", () => {

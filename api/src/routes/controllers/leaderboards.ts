@@ -14,7 +14,7 @@ import {
 
 import {
   getUserRanks, getServerLeaderboard, getUserServerRank,
-} from "services/leaderboards";
+} from "@services/leaderboards";
 
 export const leaderboardsRoutes = new Elysia({ prefix: "/leaderboards", tags: ["leaderboards"] })
   .use(authPlugin)
