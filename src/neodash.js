@@ -7,19 +7,24 @@ Promise.config({
 const memCache = require('memory-cache');
 global.cacheFunction = (duration) => {
 	return (req, res, next) => {
-		res.set('Cache-control', 'public, max-age='+duration);
-		let key = '__express__' + req.originalUrl || req.url
-		let cachedBody = memCache.get(key)
+		res.set('Cache-control', 'public, max-age=' + duration);
+		// compute key with correct precedence; parentheses matter
+		let key = '__express__' + (req.originalUrl || req.url);
+		let cachedBody = memCache.get(key);
 		if (cachedBody) {
-			res.json(typeof cachedBody == 'string' ? JSON.parse(cachedBody) : cachedBody)
-			return
+			res.json(typeof cachedBody == 'string' ? JSON.parse(cachedBody) : cachedBody);
+			return;
 		} else {
-			res.sendResponse = res.send
-			res.send = (body) => {
-				memCache.put(key, body, duration * 1000);
-				res.sendResponse(body)
+			// avoid wrapping send repeatedly on the same response object
+			if (!res._cacheWrapped) {
+				const originalSend = res.send.bind(res);
+				res.send = (body) => {
+					memCache.put(key, body, duration * 1000);
+					return originalSend(body);
+				};
+				res._cacheWrapped = true;
 			}
-			next()
+			next();
 		}
 	}
 }
