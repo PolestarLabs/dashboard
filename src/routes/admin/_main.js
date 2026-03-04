@@ -5,7 +5,11 @@ const router = express.Router();
 const fx = require('../../pipelines/globalFunctions.js');
 const operations = require('../../pipelines/operations.js');
 
-const getActiveClient = gData =>  polluxClients.get( gData?.activeClients?.[0] )?.client || PLX;
+const getActiveClient = (gData, req) => {
+    // On staging, always use the session-selected client — DB activeClients don't apply
+    if (process.env.STAGING || process.env.NODE_ENV !== 'production') return req?.PLX ?? PLX;
+    return polluxClients.get(gData?.activeClients?.[0])?.client || PLX;
+};
 
 router.use("/:serverID", ADMCHECKS);
 
@@ -45,24 +49,40 @@ router.get('/:serverID', async function (req,res) {
     const guildData = req.user.guilds?.find(g=>g.id === SVID);
     const serverData = await DB.servers.get(SVID);
     const guildPermissions = guildData.permissions;
-    const authPLX = getActiveClient(serverData);
+    const authPLX = getActiveClient(serverData, req);
 
-    console.log({authPLX});
-    console.log({getRESTGuildMember: authPLX.getRESTGuildMember});
-    console.log({sdataatc: serverData.activeClients});
-
-    let [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
-        
-        authPLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
-        authPLX.getRESTGuildRoles(SVID),
-        authPLX.getRESTGuild(SVID),
-        authPLX.getRESTGuildChannels(SVID),
-        DB.reactRoles.find({server:SVID}).lean().exec(),
-        DB.feed.find({server:SVID}).lean().exec(),
-        DB.localranks.find({server:SVID}).lean().exec(),
-        DB.temproles.find({server:SVID}).lean().exec(),
-        DB.paidroles.find({server:SVID}).lean().exec(),
-    ]);
+    let memberInfo, roleInfo, serverInfo, channelInfo, reactRoles, feeds, localranks, temproles, paidroles;
+    try {
+        [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
+            authPLX.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
+            authPLX.getRESTGuildRoles(SVID),
+            authPLX.getRESTGuild(SVID),
+            authPLX.getRESTGuildChannels(SVID),
+            DB.reactRoles.find({server:SVID}).lean().exec(),
+            DB.feed.find({server:SVID}).lean().exec(),
+            DB.localranks.find({server:SVID}).lean().exec(),
+            DB.temproles.find({server:SVID}).lean().exec(),
+            DB.paidroles.find({server:SVID}).lean().exec(),
+        ]);
+    } catch(e) {
+        console.error(`[admin/${SVID}] Discord API error:`, e.message || e);
+        const isDiscordError = e?.constructor?.name === 'DiscordHTTPError';
+        const httpStatus = isDiscordError ? (e.code || (e.message?.match(/^(\d+)/)?.[1] | 0)) : 0;
+        const status = (httpStatus === 401 || httpStatus === 403) ? 403 : isDiscordError ? 502 : 500;
+        const messages = {
+            403: "The bot doesn't have access to this server, or lacks permissions to fetch its data.",
+            502: "Discord returned an error while fetching server data. Try again in a moment.",
+            500: "An unexpected error occurred while loading the server dashboard.",
+        };
+        return res.status(status).render('error', {
+            message: messages[status] || messages[500],
+            error: {
+                status,
+                name: e.constructor?.name || 'Error',
+                stack: process.env.STAGING ? (e.stack || e.message || String(e)) : '',
+            },
+        });
+    }
 
     let payload = {
         reactRoles,
@@ -79,9 +99,7 @@ router.get('/:serverID', async function (req,res) {
         paidroles,
         validator:req.user.validator
     };
-    
-   
-    
+
    return res.render('admin/base', payload);
 
 });
@@ -95,7 +113,7 @@ router.post('/:serverID/save', async function(req,res){
     
     const SVID = req.params.serverID;
     const svData= await  DB.servers.get(SVID);
-    const authPLX = getActiveClient(svData);
+    const authPLX = getActiveClient(svData, req);
 
     const serverInfo = await authPLX.getRESTGuild(SVID);
     const userData = await DB.users.get(serverInfo.ownerID);
@@ -182,7 +200,7 @@ router.delete("/:serverID/reactionrole", async (req,res) =>{
     let SVID = req.params.serverID;
 
     const svData= await  DB.servers.get(SVID);
-    const authPLX = getActiveClient(svData);
+    const authPLX = getActiveClient(svData, req);
     
     if(!(await isAdmin(req,SVID))) return res.status(401).json("User is not Admin");
     let serverInfo= (await authPLX.getRESTGuild(SVID));
@@ -226,7 +244,7 @@ router.put("/:serverID/language",async (req,res)=>{
         .then(async response=>{
 
             const svData= await  DB.servers.get(SVID);
-            const authPLX = getActiveClient(svData);
+            const authPLX = getActiveClient(svData, req);
 
             let serverInfo= (await authPLX.getRESTGuild(SVID));
             let userData = (await DB.users.get(serverInfo.ownerID));
@@ -278,7 +296,7 @@ router.put("/:serverID/savechannelist",async (req,res)=>{
     const SVID = req.params.serverID;
 
     const svData= await  DB.servers.get(SVID);
-    const authPLX = getActiveClient(svData);
+    const authPLX = getActiveClient(svData, req);
 
     let serverInfo= (await authPLX.getRESTGuild(SVID));
     let userData = (await DB.users.get(serverInfo.ownerID));

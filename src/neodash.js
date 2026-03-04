@@ -7,19 +7,24 @@ Promise.config({
 const memCache = require('memory-cache');
 global.cacheFunction = (duration) => {
 	return (req, res, next) => {
-		res.set('Cache-control', 'public, max-age='+duration);
-		let key = '__express__' + req.originalUrl || req.url
-		let cachedBody = memCache.get(key)
+		res.set('Cache-control', 'public, max-age=' + duration);
+		// compute key with correct precedence; parentheses matter
+		let key = '__express__' + (req.originalUrl || req.url);
+		let cachedBody = memCache.get(key);
 		if (cachedBody) {
-			res.json(typeof cachedBody == 'string' ? JSON.parse(cachedBody) : cachedBody)
-			return
+			res.json(typeof cachedBody == 'string' ? JSON.parse(cachedBody) : cachedBody);
+			return;
 		} else {
-			res.sendResponse = res.send
-			res.send = (body) => {
-				memCache.put(key, body, duration * 1000);
-				res.sendResponse(body)
+			// avoid wrapping send repeatedly on the same response object
+			if (!res._cacheWrapped) {
+				const originalSend = res.send.bind(res);
+				res.send = (body) => {
+					memCache.put(key, body, duration * 1000);
+					return originalSend(body);
+				};
+				res._cacheWrapped = true;
 			}
-			next()
+			next();
 		}
 	}
 }
@@ -168,6 +173,8 @@ PLX.user = central_pollux;
 
 global.polluxClients = new Map();
 
+const GearboxClient = require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client;
+
 config.clients.forEach(async cli=>{
 	try {
 		const newClient = new Eris.Client(cli.token,{restMode:true});
@@ -175,6 +182,7 @@ config.clients.forEach(async cli=>{
 		newClient.category = cli.category;
 		newClient.friendly_name = cli.fname;
 		newClient.internal_name = cli.name;
+		Object.assign(newClient, GearboxClient);
 		const meta = {name:cli.name, fname:cli.fname, id:cli.id, category:cli.category};
 		let user = await newClient.getRESTUser(cli.id).catch(()=>({id:cli.id,username:cli.fname}));
 		polluxClients.set(cli.id, {client:newClient, user, meta});
@@ -191,7 +199,7 @@ setTimeout(()=>{
 },5000)
 
 
-Object.assign(PLX,require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client);
+Object.assign(PLX, GearboxClient);
 
 (require('@polestar/database_schema'))({
 	url: dbURL,
@@ -387,10 +395,12 @@ global.getActivePLX = function(req) {
 	return PLX;
 };
 
+const IS_STAGING = process.env.STAGING || process.env.NODE_ENV !== 'production';
+
 app.use(function(req, res, next) {
 	req.PLX = getActivePLX(req);
 	// Expose safe client meta to views on staging
-	if (process.env.NODE_ENV !== 'production') {
+	if (IS_STAGING) {
 		const activeId = req.session?.activeClientId || PLX.id;
 		const entry = polluxClients.get(activeId);
 		res.locals.ACTIVE_CLIENT = entry?.meta || {name: central_pollux.name, fname: central_pollux.fname, id: central_pollux.id, category: central_pollux.category};
@@ -399,7 +409,7 @@ app.use(function(req, res, next) {
 });
 
 // Staging-only: safe client switcher API (no tokens ever exposed)
-if (process.env.NODE_ENV !== 'production') {
+if (IS_STAGING) {
 	app.get('/api/dev/clients', (req, res) => {
 		const safe = Array.from(polluxClients.values()).map(({meta}) => meta).filter(Boolean);
 		res.json({clients: safe, activeId: req.session?.activeClientId || PLX.id});
@@ -493,6 +503,10 @@ const authCacheExpiration = new Map();
 app.use(function(req,res,next){
 	res.locals.HOST = HOST;
 	res.locals.ENV = process.env.NODE_ENV;
+	res.locals.STAGING = !!process.env.STAGING;
+	if (req.method === 'GET' && !req.path.startsWith('/api')) {
+		console.log('[ENV DEBUG]', { url: req.path, NODE_ENV: process.env.NODE_ENV, STAGING: process.env.STAGING, ACTIVE_CLIENT: res.locals.ACTIVE_CLIENT || null });
+	}
 	res.locals.INSTANCE_VUE_PATH = process.env.NODE_ENV === "production" 
 		? "https://cdn.jsdelivr.net/npm/vue@2.6.14"
 		//? "https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.js"
@@ -627,10 +641,11 @@ global.isAdmin = function isAdmin(req, svID) {
 
     try {
       SVID = req.query.serverID || req.params.serverID || svID;
+      const authPLX = req.PLX || PLX;
       let [memberInfo, roleInfo, serverInfo, serverData] = await Promise.all([
-        PLX.getRESTGuildMember(SVID, req.user.id).catch(() => null),
-        PLX.getRESTGuildRoles(SVID).catch(() => null),
-        PLX.getRESTGuild(SVID).catch(() => null),
+        authPLX.getRESTGuildMember(SVID, req.user.id).catch(() => null),
+        authPLX.getRESTGuildRoles(SVID).catch(() => null),
+        authPLX.getRESTGuild(SVID).catch(() => null),
         DB.servers.get(svID).catch(() => null),
       ]);
 

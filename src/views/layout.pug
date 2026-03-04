@@ -75,6 +75,13 @@ html(class="no-js" lang=locale||"en")
         script(src="/js/login.js" async) 
         
         script var ENV = "#{ENV}"
+        script.
+            console.group('%c[PLX ENV DEBUG]', 'color:#f48;font-weight:bold;font-size:13px');
+            console.log('ENV (NODE_ENV):', "#{ENV}");
+            console.log('STAGING flag:', !{STAGING});
+            console.log('banner should show?', !{STAGING} || "#{ENV}" !== 'production');
+            console.log('ACTIVE_CLIENT:', !{JSON.stringify(ACTIVE_CLIENT || null)});
+            console.groupEnd();
         // ribbon style for staging/dev environments
         style
             | #staging-banner { position:fixed; bottom:0; left:0; right:0; background:#d9263f; color:#fff; text-align:center; padding:8px 0; font-size:14px; z-index:9999; }
@@ -96,8 +103,18 @@ html(class="no-js" lang=locale||"en")
         if opengraph&&opengraph.sitename === "POLLUX MARKETPLACE"
             include structures/pace
 
-        // staging banner insertion point
-        if ENV !== 'production'
+
+        if index
+            include structures/pace_home
+            script(defer src="/js/preload.js")
+        else
+            include structures/pace_home
+            script(src="/js/preload.js")
+
+
+        block head
+    body
+        if ENV !== 'production' || STAGING
             div#staging-banner
                 span ⚠️ Staging build
                 if ACTIVE_CLIENT
@@ -121,17 +138,6 @@ html(class="no-js" lang=locale||"en")
                             }).then(function(r){return r.json();}).then(function(){location.reload();});
                         });
                     }
-
-        if index
-            include structures/pace_home
-            script(defer src="/js/preload.js")
-        else
-            include structures/pace_home
-            script(src="/js/preload.js")
-
-
-        block head
-    body
         style
         
         if (true &&opengraph&& opengraph.sitename  !== "POLLUX MARKETPLACE") || index

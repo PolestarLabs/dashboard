@@ -50,21 +50,9 @@ jobs:
           cd "$DIR"
           npm install
 
-  build-staging:
-    name: 🥤 Build (Staging)
-    needs: deps-staging
-    runs-on: self-hosted
-    env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}
-    steps:
-      - name: Gulp build (no assets — fast)
-        run: |
-          cd "$DIR"
-          npx gulp buildNoAssets
-
   deploy-staging:
     name: 🧪 Deploy → Staging
-    needs: build-staging
+    needs: deps-staging
     runs-on: self-hosted
     steps:
       - name: Reload PM2 staging processes
@@ -99,21 +87,9 @@ jobs:
           cd "$DIR"
           npm install
 
-  build-production:
-    name: 🥤 Build (Production)
-    needs: deps-production
-    runs-on: self-hosted
-    env:
-      DIR: ${{ secrets.DASH_DIR_PROD }}
-    steps:
-      - name: Gulp build (full)
-        run: |
-          cd "$DIR"
-          npx gulp build
-
   deploy-production:
     name: 🚀 Deploy → Production
-    needs: build-production
+    needs: deps-production
     runs-on: self-hosted
     steps:
       - name: Reload PM2 production processes
