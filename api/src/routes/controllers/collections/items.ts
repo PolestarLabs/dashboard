@@ -6,7 +6,7 @@
 import Elysia from "elysia";
 import { dbPlugin } from "@plugins/db";
 import { ItemsEndpointParams, ItemsSearchQuery } from "@routes/schemas";
-import { getAllItems, searchItems, getItemById } from "@routes/services/items";
+import { getAllItems, searchItems, getItemById } from "services/items";
 
 export const itemsRoutes = new Elysia()
   .use(dbPlugin)

@@ -7,7 +7,7 @@ import Elysia from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
 import { ServerIdParams } from "@routes/schemas";
-import { getServerData } from "@routes/services/servers";
+import { getServerData } from "services/servers";
 
 export const serversRoutes = new Elysia({ prefix: "/server", tags: ["servers"] })
   .use(authPlugin)

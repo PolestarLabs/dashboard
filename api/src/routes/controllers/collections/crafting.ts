@@ -13,7 +13,7 @@ import {
   MixResponseSchema,
   CreateBodySchema,
 } from "@routes/schemas";
-import { CraftingService } from "@routes/services/crafting";
+import { CraftingService } from "services/crafting";
 
 export const craftingRoutes = new Elysia()
   .use(authPlugin)

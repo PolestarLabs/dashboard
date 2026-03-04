@@ -15,7 +15,7 @@ import {
 
 import {
   cleanup, searchCosmetics, findCosmeticById, countCosmetics,
-} from "@routes/services/cosmetics";
+} from "services/cosmetics";
 
 import type { CosmeticDoc } from "@routes/types";
 

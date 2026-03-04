@@ -29,7 +29,7 @@ import { relationshipsRoutes } from "@routes/controllers/relationships";
 import { primeRoutes } from "@routes/controllers/prime";
 import { utilsRoutes } from "@routes/controllers/utils";
 import { gamesRoutes } from "@routes/controllers/games";
-import { collectionsRoutes } from "@routes/controllers/collections";
+import { collectionsRoutes } from "@routes/controllers/collections/collections";
 import { telemetryRoutes } from "@routes/controllers/telemetry";
 import { fanartRoutes } from "@routes/controllers/fanart";
 
