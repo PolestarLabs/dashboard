@@ -54,6 +54,9 @@ jobs:
     name: 🧪 Deploy → Staging
     needs: deps-staging
     runs-on: self-hosted
+    environment:
+      name: "staging"
+      url: https://staging.pollux.gg
     steps:
       - name: Reload PM2 staging processes
         run: /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
@@ -91,6 +94,9 @@ jobs:
     name: 🚀 Deploy → Production
     needs: deps-production
     runs-on: self-hosted
+    environment:
+      name: "live"
+      url: https://pollux.gg
     steps:
       - name: Reload PM2 production processes
         run: /home/pollux/polaris/scripts/server-deploy.sh dashboard production

@@ -2,15 +2,26 @@ name: Restart Dashboard
 
 on:
   workflow_dispatch: {}
+  workflow_call:
+    inputs:
+      upstream_url:
+        required: false
+        type: string
 
 jobs:
   restart:
     name: Restart dashboard processes
     runs-on: [self-hosted, polestar-dashboard]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Link to Upstream
+        run: |
+          echo "### Triggered by Upstream 🔗" >> $GITHUB_STEP_SUMMARY
+          echo "This run was started by: [Upstream Workflow Run](https://github.com/${{ github.event.inputs.upstream_url }})" >> $GITHUB_STEP_SUMMARY
       - name: Checkout (for context)
         uses: actions/checkout@v4
       - name: Restart PM2 dashboard
         run: |
           echo "Restarting dashboard via PM2"
-          pm2 reload dash-dev || pm2 reload dash || echo "dashboard process may not be running"
+          pm2 restart dash-dev || pm2 restart dash || echo "dashboard process may not be running"
