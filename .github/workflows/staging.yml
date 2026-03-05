@@ -10,6 +10,11 @@ jobs:
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
     steps:
+      - name: Backup current state
+        run: |
+          cd "$DIR"
+          git rev-parse HEAD > /tmp/oldrev
+          tar -czf /tmp/node_modules.tar.gz node_modules || true
       - name: Sync repo
         run: |
           cd "$DIR"
@@ -23,9 +28,49 @@ jobs:
             git reset --hard origin/dev
           fi
 
-  deploy-staging:
-    name: 🚀 Deploy → Staging
+  deps-staging:
+    name: 📦 Dependencies (Staging)
     runs-on: self-hosted
     needs: pull-staging
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
     steps:
-      - run: /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
+      - name: Install dependencies
+        run: |
+          set -e
+          cd "$DIR"
+          npm install
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          cd "$DIR"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1
+
+  deploy-staging:
+    name: 🚀 Deploy → Staging
+    environment:
+      name: "staging"
+      url: https://staging.pollux.gg
+    runs-on: self-hosted
+    needs: deps-staging
+    steps:
+      - run: |
+          /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
+
+  rollback-staging:
+    name: 🔄❌ Rollback Staging
+    runs-on: self-hosted
+    needs: deploy-staging
+    if: failure()
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+    steps:
+      - name: Restore previous state
+        run: |
+          echo "rolling back code and dependencies"
+          cd "$DIR"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1
