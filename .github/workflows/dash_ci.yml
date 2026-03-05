@@ -40,15 +40,34 @@ jobs:
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
     steps:
+      - name: Backup current state
+        run: |
+          cd "$DIR"
+          echo "saving current commit hash"
+          git rev-parse HEAD > /tmp/oldrev
+          echo "archiving node_modules"
+          tar -czf /tmp/node_modules.tar.gz node_modules || true
+
       - name: Install dev dependencies
         run: |
+          set -e
           cd "$DIR"
           npm install --include=dev
 
       - name: Install all dependencies
         run: |
+          set -e
           cd "$DIR"
           npm install
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          cd "$DIR"
+          echo "deployment failed, restoring previous node_modules and tag"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1
 
   deploy-staging:
     name: 🧪 Deploy → Staging
@@ -59,7 +78,16 @@ jobs:
       url: https://staging.pollux.gg
     steps:
       - name: Reload PM2 staging processes
-        run: /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
+        run: |
+          if /home/pollux/polaris/scripts/server-deploy.sh dashboard staging; then
+            echo "deploy succeeded"
+          else
+            echo "deploy failed, rolling back code and deps"
+            cd "${{ secrets.DASH_DIR_DEV }}"
+            tar -xzf /tmp/node_modules.tar.gz
+            git checkout $(cat /tmp/oldrev)
+            exit 1
+          fi
 
   # ── Production pipeline (master branch) ──────────────────────────────────
 
@@ -85,10 +113,23 @@ jobs:
     env:
       DIR: ${{ secrets.DASH_DIR_PROD }}
     steps:
-      - name: Install all dependencies
+      - name: Backup current state
         run: |
           cd "$DIR"
+          git rev-parse HEAD > /tmp/oldrev
+          tar -czf /tmp/node_modules.tar.gz node_modules || true
+      - name: Install all dependencies
+        run: |
+          set -e
+          cd "$DIR"
           npm install
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          cd "$DIR"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1
 
   deploy-production:
     name: 🚀 Deploy → Production
@@ -99,4 +140,13 @@ jobs:
       url: https://pollux.gg
     steps:
       - name: Reload PM2 production processes
-        run: /home/pollux/polaris/scripts/server-deploy.sh dashboard production
+        run: |
+          if /home/pollux/polaris/scripts/server-deploy.sh dashboard production; then
+            echo "deploy succeeded"
+          else
+            echo "deploy failed, rolling back code and deps"
+            cd "${{ secrets.DASH_DIR_PROD }}"
+            tar -xzf /tmp/node_modules.tar.gz
+            git checkout $(cat /tmp/oldrev)
+            exit 1
+          fi
