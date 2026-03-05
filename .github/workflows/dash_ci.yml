@@ -281,6 +281,7 @@ jobs:
     steps:
       - name: Sync api folder
         run: |
+          set -e
           cd "$DIR"
           git fetch origin
           # always pull from elysia branch regardless of triggering ref
