@@ -50,11 +50,11 @@ jobs:
 
   deploy-staging:
     name: 🚀 Deploy → Staging
+    runs-on: self-hosted
+    needs: deps-staging
     environment:
       name: "staging"
       url: https://staging.pollux.gg
-    runs-on: self-hosted
-    needs: deps-staging
     steps:
       - run: |
           /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
