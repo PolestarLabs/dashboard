@@ -54,6 +54,7 @@ jobs:
         with:
           node-version: 20
       - name: Cache root node_modules
+        id: cache
         uses: actions/cache@v3
         with:
           path: |
@@ -63,6 +64,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-root-deps-
       - name: Install root deps
+        if: steps.cache.outputs.cache-hit != 'true'
         run: |
           npm ci
 
@@ -118,7 +120,7 @@ jobs:
 
   typecheck:
     name: 🧠 Run TypeScript typecheck
-    needs: gate-bun
+    needs: [build-dist, elysia-check]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
