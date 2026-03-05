@@ -89,7 +89,7 @@ jobs:
       - name: Install bun runtime
         uses: oven-sh/setup-bun@v2
         with:
-          version: latest
+          bun-version: latest
       - name: 🐇 Install API deps (bun)
         run: |
           cd api
@@ -118,7 +118,7 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
-          version: latest
+          bun-version: latest
       - name: Install API deps
         run: |
           cd api
@@ -140,7 +140,7 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
-          version: latest
+          bun-version: latest
       - name: Install API deps
         run: |
           cd api
@@ -166,7 +166,7 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
-          version: latest
+          bun-version: latest
       - name: Install API deps
         run: |
           cd api
@@ -192,7 +192,7 @@ jobs:
       - name: Install Bun
         uses: oven-sh/setup-bun@v2
         with:
-          version: latest
+          bun-version: latest
       - name: Download fixtures
         uses: actions/download-artifact@v4
         with:
@@ -260,7 +260,7 @@ jobs:
       - name: Install bun runtime
         uses: oven-sh/setup-bun@v2
         with:
-          version: latest
+          bun-version: latest
       - name: Install API deps (bun)
         run: |
           cd api
