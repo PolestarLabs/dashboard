@@ -1,0 +1,152 @@
+name: Dashboard CI
+on:
+  push:
+    branches: [dev, master]
+  workflow_dispatch:
+    inputs:
+      environment:
+        required: true
+        type: choice
+        description: "Target environment"
+        options: [staging, production]
+        default: staging
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+# ── Staging pipeline (dev branch) ──────────────────────────────────────────
+
+jobs:
+  pull-staging:
+    name: 🔁 Sync Staging
+    if: >
+      github.ref == 'refs/heads/dev' ||
+      (github.event_name == 'workflow_dispatch' && inputs.environment == 'staging')
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+    runs-on: self-hosted
+    steps:
+      - name: Sync with repository
+        run: |
+          cd "$DIR"
+          git fetch origin
+          git reset --hard origin/dev
+
+  deps-staging:
+    name: 📦 Dependencies (Staging)
+    needs: pull-staging
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+    steps:
+      - name: Backup current state
+        run: |
+          cd "$DIR"
+          echo "saving current commit hash"
+          git rev-parse HEAD > /tmp/oldrev
+          echo "archiving node_modules"
+          tar -czf /tmp/node_modules.tar.gz node_modules || true
+
+      - name: Install dev dependencies
+        run: |
+          set -e
+          cd "$DIR"
+          npm install --include=dev
+
+      - name: Install all dependencies
+        run: |
+          set -e
+          cd "$DIR"
+          npm install
+
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          cd "$DIR"
+          echo "deployment failed, restoring previous node_modules and tag"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1
+
+  deploy-staging:
+    name: 🧪 Deploy → Staging
+    needs: deps-staging
+    runs-on: self-hosted
+    environment:
+      name: "staging"
+      url: https://staging.pollux.gg
+    steps:
+      - name: Reload PM2 staging processes
+        run: |
+          if /home/pollux/polaris/scripts/server-deploy.sh dashboard staging; then
+            echo "deploy succeeded"
+          else
+            echo "deploy failed, rolling back code and deps"
+            cd "${{ secrets.DASH_DIR_DEV }}"
+            tar -xzf /tmp/node_modules.tar.gz
+            git checkout $(cat /tmp/oldrev)
+            exit 1
+          fi
+
+  # ── Production pipeline (master branch) ──────────────────────────────────
+
+  pull-production:
+    name: 🔁 Sync Production
+    if: >
+      github.ref == 'refs/heads/master' ||
+      (github.event_name == 'workflow_dispatch' && inputs.environment == 'production')
+    env:
+      DIR: ${{ secrets.DASH_DIR_PROD }}
+    runs-on: self-hosted
+    steps:
+      - name: Sync with repository
+        run: |
+          cd "$DIR"
+          git fetch origin
+          git reset --hard origin/master
+
+  deps-production:
+    name: 📦 Dependencies (Production)
+    needs: pull-production
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_PROD }}
+    steps:
+      - name: Backup current state
+        run: |
+          cd "$DIR"
+          git rev-parse HEAD > /tmp/oldrev
+          tar -czf /tmp/node_modules.tar.gz node_modules || true
+      - name: Install all dependencies
+        run: |
+          set -e
+          cd "$DIR"
+          npm install
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          cd "$DIR"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1
+
+  deploy-production:
+    name: 🚀 Deploy → Production
+    needs: deps-production
+    runs-on: self-hosted
+    environment:
+      name: "live"
+      url: https://pollux.gg
+    steps:
+      - name: Reload PM2 production processes
+        run: |
+          if /home/pollux/polaris/scripts/server-deploy.sh dashboard production; then
+            echo "deploy succeeded"
+          else
+            echo "deploy failed, rolling back code and deps"
+            cd "${{ secrets.DASH_DIR_PROD }}"
+            tar -xzf /tmp/node_modules.tar.gz
+            git checkout $(cat /tmp/oldrev)
+            exit 1
+          fi
