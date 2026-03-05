@@ -2,6 +2,11 @@ name: Restart Dashboard
 
 on:
   workflow_dispatch: {}
+  workflow_call:
+    inputs:
+      upstream_url:
+        required: false
+        type: string
 
 jobs:
   restart:
@@ -13,4 +18,4 @@ jobs:
       - name: Restart PM2 dashboard
         run: |
           echo "Restarting dashboard via PM2"
-          pm2 reload dash-dev || pm2 reload dash || echo "dashboard process may not be running"
+          pm2 restart dash-dev || pm2 restart dash || echo "dashboard process may not be running"
