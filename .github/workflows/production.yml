@@ -49,18 +49,11 @@ jobs:
     runs-on: self-hosted
     needs: deps-production
     steps:
-      - run: |
+      - name: Run deploy script
+        run: |
           /home/pollux/polaris/scripts/server-deploy.sh dashboard production
-
-  rollback-production:
-    name: 🔄 Rollback Production
-    runs-on: self-hosted
-    needs: deploy-production
-    if: failure()
-    env:
-      DIR: ${{ secrets.DASH_DIR_PROD }}
-    steps:
-      - name: Restore previous state
+      - name: Rollback on failure
+        if: failure()
         run: |
           echo "rolling back code and dependencies"
           cd "$DIR"

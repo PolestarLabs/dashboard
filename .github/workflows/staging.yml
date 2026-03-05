@@ -56,18 +56,11 @@ jobs:
       name: "staging"
       url: https://staging.pollux.gg
     steps:
-      - run: |
+      - name: Run deploy script
+        run: |
           /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
-
-  rollback-staging:
-    name: 🔄❌ Rollback Staging
-    runs-on: self-hosted
-    needs: deploy-staging
-    if: failure()
-    env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}
-    steps:
-      - name: Restore previous state
+      - name: Rollback on failure
+        if: failure()
         run: |
           echo "rolling back code and dependencies"
           cd "$DIR"
