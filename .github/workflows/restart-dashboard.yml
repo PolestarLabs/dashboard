@@ -13,6 +13,8 @@ jobs:
     name: Restart dashboard processes
     runs-on: [self-hosted, polestar-dashboard]
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Link to Upstream
         run: |
           echo "### Triggered by Upstream 🔗" >> $GITHUB_STEP_SUMMARY
