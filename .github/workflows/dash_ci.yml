@@ -53,6 +53,15 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 20
+      - name: Cache root node_modules
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+            ~/.npm
+          key: ${{ runner.os }}-root-deps-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-root-deps-
       - name: Install root deps
         run: |
           npm ci
