@@ -166,7 +166,7 @@ jobs:
 
   sanity-tests:
     name: 🔬 API sanity tests
-    needs: gate-bun
+    needs: [build-dist, elysia-check]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
