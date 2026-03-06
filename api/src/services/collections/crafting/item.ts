@@ -1,13 +1,13 @@
 import { Elysia, t, status } from "elysia";
-import type Context from "elysia";
+import { dbPlugin } from "@plugins/db";
 
 export default new Elysia()
+    .use(dbPlugin)
     // alias lookup
-    .get("/crafting/:item", async (context: Context): void => {
-        const { params, db: DB } = context;
+    .get("/crafting/:item", async ({ params, db }) => {
         const { item } = params;
 
-        const resultItem = await DB.items.findOne(
+        const resultItem = await db.items.findOne(
             { id: item },
             { _id: 0, __v: 0, emoji: 0 }
         ).lean();
