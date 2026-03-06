@@ -42,13 +42,19 @@ describe("@services/users.ts", () => {
     it("includes profile data when USR is present", () => {
       const discord = { id: "1", username: "a", avatarURL: null } as any;
       const USR: any = {
-        modules: {
+        progression: {
           level: 2,
           exp: 100,
-          commend: 5,
+        },
+        currency: {
           RBN: 0,
           JDE: 0,
           SPH: 0,
+        },
+        counters: {
+          commend: 5,
+        },
+        profile: {
           bgID: "bg",
           sticker: "stick",
           favcolor: "red",
@@ -58,7 +64,7 @@ describe("@services/users.ts", () => {
           medals: [],
           inventory: [{ count: 3 }],
         },
-        donator: "gold",
+        prime: { tier: "gold" },
         blacklisted: "",
       };
       const { response, STATUS } = parseUserdata(discord, USR, 200);

@@ -43,8 +43,8 @@ export class CraftingService {
     // Resolve crafting history to detect new discoveries
     let craftingHistory: string[] = [];
     if (userId) {
-      const userData = await DB.users.get(userId, { "modules.inventory": 1 });
-      craftingHistory = ((userData?.modules?.inventory ?? []) as any[])
+      const userData = await DB.users.get(userId, { "profile.inventory": 1 });
+      craftingHistory = ((userData?.profile?.inventory ?? []) as any[])
         .filter((x) => x.crafted > 0)
         .map((i) => i.id);
     }
@@ -206,7 +206,7 @@ export class CraftingService {
 
     const materials = pot ?? itemToCraft.materials;
     for (const itm of materials) {
-      const has = userData.modules.inventory.find((i: any) => i.id === itm.id);
+      const has = userData.profile.inventory.find((i: any) => i.id === itm.id);
       if (!has || has.count < itm.count)
         return {
           ok: false, code: 403,
@@ -228,7 +228,7 @@ export class CraftingService {
       body: {
         status:    "OK",
         message:   "Item has been crafted",
-        inventory: userData.modules.inventory,
+        inventory: userData.profile.inventory,
       },
     };
   }
