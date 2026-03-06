@@ -163,13 +163,13 @@ const STORE = new Vue({
     hasItem(i) {
       if (!this.userdata) return false;
       if (i.type == "background")
-        return (this.userdata.modules.bgInventory||[]).includes(i.code);
+        return (this.userdata.profile.bgInventory||[]).includes(i.code);
       if (i.type == "medal")
-        return (this.userdata.modules.medalInventory||[]).includes(i.icon);
+        return (this.userdata.profile.medalInventory||[]).includes(i.icon);
       if (i.type == "sticker")
-        return (this.userdata.modules.stickerInventory||[]).includes(i.id);
+        return (this.userdata.profile.stickerInventory||[]).includes(i.id);
       if (i.type == "skin")
-        return (this.userdata.modules.skinInventory||[]).includes(i.id);
+        return (this.userdata.profile.skinInventory||[]).includes(i.id);
       return false;
     },
     timeFun(i) {

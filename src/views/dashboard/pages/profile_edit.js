@@ -10,9 +10,9 @@ VueSelect.VueSelect.methods.maybeAdjustScroll = () => false;
 
 var Chrome = window.VueColor.Chrome;
 
-if (!userdata.modules.flairsInventory.includes("default"))
-  userdata.modules.flairsInventory.push("default");
-const flairsAvailable = userdata.modules.flairsInventory;
+if (!userdata.profile.flairsInventory.includes("default"))
+  userdata.profile.flairsInventory.push("default");
+const flairsAvailable = userdata.profile.flairsInventory;
 
 var CANVAS, ctx;
 
@@ -25,7 +25,7 @@ var CANVAS, ctx;
       featuredMarriage: userdata.featuredMarriage,
       message: "hello",
       favcolor: {
-        hex: userdata.modules.favcolor,
+        hex: userdata.profile.favcolor,
         source: "hex",
       },
       sort: "obtained",
@@ -37,7 +37,7 @@ var CANVAS, ctx;
       selectBackground: 'LOADING...',
       selectSticker:'LOADING...',
       selectBooster: 'LOADING...',       
-      selectFlair: userdata.modules.flairTop,
+      selectFlair: userdata.profile.flairTop,
       flairsAvailable,
       backgroundsAvailable:[],
       stickerAvailable: [],
@@ -46,8 +46,8 @@ var CANVAS, ctx;
       search: "",
       select: "",
       customBGzoom: 1,
-      tagline: userdata.modules.tagline,
-      persotext: userdata.modules.persotext,
+      tagline: userdata.profile.tagline,
+      persotext: userdata.profile.persotext,
       frame: (userdata.switches || {}).profileFrame,
       medals: [],
       favcolorOptions: [],
@@ -61,7 +61,7 @@ var CANVAS, ctx;
         infiniteScroll: true,
         vertical: true,
         transition: 100,
-        initialSlide: flairsAvailable.indexOf(userdata.modules.flairTop),
+        initialSlide: flairsAvailable.indexOf(userdata.profile.flairTop),
       },
       sortWife: "ring",
       loadedBGimage: "/backdrops/"+userdata.id+".png"
@@ -198,7 +198,7 @@ destroyed() {
       return moment(x).fromNow(true);
     },
     updateRubines(x) {
-      this.RBN = x || userdata.modules.RBN;
+      this.RBN = x || userdata.currency.RBN;
     },
     filterMeds() {
       if (this.timer) {
@@ -548,16 +548,16 @@ fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
     fetch("/api/user/" + userinfo.id + "/stickers").then(
       (r) =>
         r.json().then((res2) => {
-          DASH.calculateSuggestionColors(userdata.modules.bgID)
+          DASH.calculateSuggestionColors(userdata.profile.bgID)
           DASH.stickerAvailable = res2;
           DASH.selectSticker =
-            res2.find((x) => x.id == userdata.modules.sticker) || "none";
+            res2.find((x) => x.id == userdata.profile.sticker) || "none";
 
           DASH.selectBooster =
             res.find(
               (x) =>
                 x.icon ==
-                (res2.find((y) => y.id == userdata.modules.sticker) || {})
+                (res2.find((y) => y.id == userdata.profile.sticker) || {})
                   .series_id
             ) || "none";
         })
@@ -569,7 +569,7 @@ function updateUserBGs(){
   fetch("/api/user/"+userinfo.id+"/bgs").then(r =>
     r.json().then(res =>  {
  
-      DASH.selectBackground = res.find((bg) => bg.code == userdata.modules.bgID) || "none";
+      DASH.selectBackground = res.find((bg) => bg.code == userdata.profile.bgID) || "none";
       res.map(thisBgData=>{
         return {
           name: thisBgData.name,
@@ -580,7 +580,7 @@ function updateUserBGs(){
         };
       }).filter((v,i,a)=>a.findIndex(x=>x.code==v.code)==i);
 
-      DASH.backgroundsAvailable =  userdata.modules.bgInventory.map((bg,i) => {
+      DASH.backgroundsAvailable =  userdata.profile.bgInventory.map((bg,i) => {
         let thisBgData = res.find((x) => x.code == bg) || {
           name: "Unknown",
           rarity: "C",
@@ -610,7 +610,7 @@ updateUserBGs()
 fetch("/api/user/"+userinfo.id+"/medals").then(r =>
   r.json().then(res => {
     DASH.medals = res||[];
-    DASH.medalsEquipped = res.filter((m,i,a)=> userdata.modules.medals.includes(m.icon) && a.map(x=>x.icon).indexOf(m.icon)===i)
+    DASH.medalsEquipped = res.filter((m,i,a)=> userdata.profile.medals.includes(m.icon) && a.map(x=>x.icon).indexOf(m.icon)===i)
   } )
     
 );
