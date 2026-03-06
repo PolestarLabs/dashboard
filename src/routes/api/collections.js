@@ -162,10 +162,10 @@ router.post('/mix', async (req,res) => {
 
 
     
-    let possible =  await DB.items.find(queryExact).lean().exec();
+    let possible =  await DB.items.find(queryExact).lean();
     console.log("\n--------------------------Check 1",pItemcol(possible) )
 
-    if (!possible.length) possible = await DB.items.find(query).lean().exec();
+    if (!possible.length) possible = await DB.items.find(query).lean();
     else possible.exact = true;
 
     let insufficient = possible.filter(item=>{
@@ -198,7 +198,7 @@ router.post('/mix', async (req,res) => {
             crafted: !0, //open: !0
         };
         console.log({refinedPot})
-        possible = await DB.items.find(querySameType).lean().exec();
+        possible = await DB.items.find(querySameType).lean();
         const potSorted = pot.sort((a,b) => rars.indexOf(b.rarity) - rars.indexOf(a.rarity) );
         const highestRar = potSorted[0].rarity;
         const lowestRar = potSorted[pot.length -1].rarity;
@@ -226,7 +226,7 @@ router.post('/mix', async (req,res) => {
             querySameType = {'typeCraft.type' : {$all: potTypeMap } }
             if (pot.length === 3) querySameType.rarity = {$in: pot.map(i=>i.rarity)};
             console.log(querySameType)        
-            possible = await DB.items.find(querySameType).lean().exec();
+            possible = await DB.items.find(querySameType).lean();
             possible.typeCraft = true
             possible.notQuite = true
         }

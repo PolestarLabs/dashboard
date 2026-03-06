@@ -77,7 +77,7 @@ router.post('/imgbookmarks/shrink', async (req,res)=>{
         if(!req.user) return res.sendStatus(401);
         let userdata = await DB.users.get(req.user.id);        
         if(!userdata.switches || userdata.switches.booruSlots === undefined ){
-             userdata = await DB.users.findOneAndUpdate({id:req.user.id},{$set: {"switches.booruSlots":25} }).lean().exec();
+             userdata = await DB.users.findOneAndUpdate({id:req.user.id},{$set: {"switches.booruSlots":25} }).lean();
         }        
         if (userdata.switches.booruSlots+userdata.progression.level <= 3) return res.status(403).send("No more slots!");
         let reduce = (userdata.switches.booruSlots+userdata.progression.level) < 10 ? (userdata.switches.booruSlots+userdata.progression.level) : 10; 

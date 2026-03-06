@@ -41,7 +41,7 @@ router.get('/:endpoint', async (req, res)=> {
 
     let donoranks;
     if(userprofile.prime?.tier){
-        let donators = await DB.users.find( {'switches.donateStreak.total' :{$gte: 1}},{profile:0,personal:0,eventData:0} ).lean().exec();
+        let donators = await DB.users.find( {'switches.donateStreak.total' :{$gte: 1}},{profile:0,personal:0,eventData:0} ).lean();
         function donatorScore(dono){
             let tally =0;
             tally+= 2 * dono.switches?.donateStreak.plastic      || 0

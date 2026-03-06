@@ -87,7 +87,7 @@ router.get(["/backgrounds","/bgs","bgshop"], async function (req, res) {
 router.get(["/premium","/cash","prime"], async function (req, res) {
   delete require.cache[require.resolve('./paginate')];
   
-  const base =  await DB.buyables.find({available:true}).limit(50).lean().exec();
+  const base =  await DB.buyables.find({available:true}).limit(50).lean();
  
   res.render('shop/premium/main',{
     base,
@@ -103,8 +103,8 @@ router.get("/marketplace", async function (req, res) {
     delete require.cache[require.resolve('./paginate')];      
     await refreshBases();
     req.app.locals.fullbase = fullbase
-    let marketplace = await DB.marketplace.find({}).lean().exec();
-    let marketeers = await DB.users.find({id:{$in:marketplace.map(i=>i.author)}},{meta:1,id:1}).lean().exec()
+    let marketplace = await DB.marketplace.find({}).lean();
+    let marketeers = await DB.users.find({id:{$in:marketplace.map(i=>i.author)}},{meta:1,id:1}).lean()
     let item, opengraph={};    
 
     // THIS PIECE IS PROBS DEPRECATED
@@ -148,7 +148,7 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
   
   if(!entry) return _404();
   if (entry.lock || entry.completed) {
-    let marketplace = await DB.marketplace.find({}).lean().exec();
+    let marketplace = await DB.marketplace.find({}).lean();
     const opengraph = {}
     opengraph.title = `🔴 This entry is gone! 🔴`
     opengraph.description = `Don't worry! You can still browse more items in the marketplace`

@@ -12,7 +12,7 @@ global.cache= cacheFunction
 
 passport.use(new Strategy(
     (token,cb) =>{
-        DB.users.findOne({ "meta.apiKey": token }).lean().then(user=>{
+        DB.users.findOne({ "meta.apiKey": token }).exec().then(user=>{
             if(!user) return cb(null,false,{message: "API Token Needed"});
             let resUser={
                 id: user.id,
