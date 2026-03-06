@@ -26,11 +26,11 @@ router.get('/', async function(req, res, next) {
       pix:`https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
       name: USR.username,
         uname: USR.username,
-      rubys:UDB.modules.RBN,
-      exp:UDB.modules.exp,
-      level:UDB.modules.level,
-      ptxt:UDB.modules.persotext,
-      background:`http://files.pollux.fun/${UDB.modules.bgID}.png`,
+      rubys:UDB.currency.RBN,
+      exp:UDB.progression.exp,
+      level:UDB.progression.level,
+      ptxt:UDB.profile.persotext,
+      background:`http://files.pollux.fun/${UDB.profile.bgID}.png`,
 
     });
    // res.json(req.user);

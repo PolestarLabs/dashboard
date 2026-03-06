@@ -59,18 +59,18 @@ module.exports = {
     //let client_user = await bot.fetchUser(id) ;
     let dbpars;
 
-    dbpars = await DB.userDB.findOne({ id: id });
+    dbpars = await DB.users.findOne({ id: id });
     try {
       if (!dbpars) {
         req.user.tag = req.user.username;
-        await DB.userDB.new(req.user);
-        dbpars = await DB.userDB.findOne({ id: id });
+        await DB.users.new(req.user);
+        dbpars = await DB.users.findOne({ id: id });
       }
     } catch (e) {
       if (!dbpars) {
         if (req.user) {
-          await DB.userDB.new(req.user);
-          dbpars = await DB.userDB.findOne({ id: id });
+          await DB.users.new(req.user);
+          dbpars = await DB.users.findOne({ id: id });
         } else {
           return null;
         }

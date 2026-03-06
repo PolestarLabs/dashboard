@@ -17,7 +17,7 @@ module.exports={
 
     //Collect User Info
     let USR = req.user
-    let UDB = dbpars || (await DB.userDB.findOne({id:USR.id}));
+    let UDB = dbpars || (await DB.users.findOne({id:USR.id}));
 
     let guilds = USR.guilds
     let gs = guilds.length
@@ -74,12 +74,12 @@ module.exports={
     USR = fx.userBasics(req.user)
     dbpars = UDB
     
-    let expR = await DB.userDB.find({"modules.exp": { "$gt" : UDB.modules.exp}}).countDocuments();
-    let rubR = await DB.userDB.find({"modules.RBN": { "$gt" : UDB.modules.RBN}}).countDocuments();
+    let expR = await DB.users.find({"progression.exp": { "$gt" : UDB.progression.exp}}).countDocuments();
+    let rubR = await DB.users.find({"currency.RBN": { "$gt" : UDB.currency.RBN}}).countDocuments();
     
       let MEDALBASE = await DB.cosmetics.find({type:'medal'});
       let BGBASE = await DB.cosmetics.bgs();
-    let wife_metadata = await DB.userDB.find({id:{$in:UDB.married.map(wife=>wife.id)}});
+    let wife_metadata = await DB.users.find({id:{$in:UDB.married.map(wife=>wife.id)}});
  
     let payload = {
       title: "Dashboard",
@@ -133,13 +133,13 @@ module.exports={
     
     if(endpoint === 'user') {
 
-      DB.userDB.findOne({id:target}).then( async USR=>{
+      DB.users.findOne({id:target}).then( async USR=>{
         if(!USR) return res.send("USER ID NOT FOUND");
-        
+
         let lranks =[]
         let uSvs =[]
         if(req.query.localranks){
-          
+
          lranks = await DB.localranks.find({user:USR.id},{_id:0});
          uSvs = await DB.serverDB.find({id:{$in:lranks.map(x=>x.server)}},{_id:0,id:1,'meta.name':1});
         }
@@ -148,25 +148,25 @@ module.exports={
           id: USR.id,
           tag: USR.meta.tag
           ,avatar: USR.meta.avatar
-          ,exp: USR.modules.exp
-          ,level: USR.modules.level
-          ,rubines: USR.modules.RBN
-          ,jades: USR.modules.JDE
-          ,sapphires: USR.modules.SPH
-          ,is_donator: USR.donator && USR.donator != ""
-          ,donator_tier: USR.donator
+          ,exp: USR.progression.exp
+          ,level: USR.progression.level
+          ,rubines: USR.currency.RBN
+          ,jades: USR.currency.JDE
+          ,sapphires: USR.currency.SPH
+          ,is_donator: USR.prime?.tier && USR.prime.tier != ""
+          ,donator_tier: USR.prime?.tier
           ,is_blacklisted: USR.blacklisted && USR.blacklisted != ""?true:false
           ,profile:{
-            background: USR.modules.bgID
-            ,featured_sticker: USR.modules.sticker
-            ,color: USR.modules.favcolor
-            ,flair: USR.modules.flairTop
-            ,about: USR.modules.persotext
-            ,tagline: USR.modules.tagline
-            ,medals: USR.modules.medals
+            background: USR.profile.bgID
+            ,featured_sticker: USR.profile.sticker
+            ,color: USR.profile.favcolor
+            ,flair: USR.profile.flairTop
+            ,about: USR.profile.persotext
+            ,tagline: USR.profile.tagline
+            ,medals: USR.profile.medals
           } 
           
-          ,inventory_size: USR.modules.inventory.length
+          ,inventory_size: USR.profile.inventory?.length || 0
           
           
           ,localranks: lranks.length>0
@@ -225,14 +225,14 @@ module.exports={
       let querytring 
         if(!subtarget) res.sendCode(400);
         if(!target) res.sendCode(400);
-        DB.userDB.findOne({id:subtarget},{'modules.inventory':1,'modules.bgInventory':1,'modules.stickerInventory':1,'modules.medalInventory':1,'modules.flairsInventory':1,_id:0})
+        DB.users.findOne({id:subtarget},{'profile.inventory':1,'profile.bgInventory':1,'profile.stickerInventory':1,'profile.medalInventory':1,'profile.flairsInventory':1,_id:0})
         .then(async udata=>{
 
-          if(target == "bgs") querystring = {type:'background' ,code:{$in:udata.modules.bgInventory}} ;
-          if(target == "medals") querystring = {type:'medal' ,icon:{$in:udata.modules.medalInventory}} ;
-          if(target == "stickers") querystring = {type:'sticker' ,id:{$in:udata.modules.stickerInventory}} ;
-          if(target == "flairs") querystring = {type:'flair' ,id:{$in:udata.modules.flairsInventory}} ;
-          if(target == "items") querystring = {id:{$in:udata.modules.inventory}};
+          if(target == "bgs") querystring = {type:'background' ,code:{$in:udata.profile.bgInventory}} ;
+          if(target == "medals") querystring = {type:'medal' ,icon:{$in:udata.profile.medalInventory}} ;
+          if(target == "stickers") querystring = {type:'sticker' ,id:{$in:udata.profile.stickerInventory}} ;
+          if(target == "flairs") querystring = {type:'flair' ,id:{$in:udata.profile.flairsInventory}} ;
+          if(target == "items") querystring = {id:{$in:udata.profile.inventory}};
 
           await DB.cosmetics.find(querystring,{_id:0,code:1,icon:1,id:1,type:1,name:1,rarity:1}).then(cos3=>{
             let response = cos3.map(x=> x);
