@@ -105,7 +105,9 @@ db.userdb.aggregate([
         },
         lastLogin: { $ifNull: ["$meta.lastLogin", new Date(0)] },
         lastUpdated: "$lastUpdated",
-        migrated: true
+        migrated: true,
+        apiKey: "$apiKey",
+        apiPerms: "$apiPerms"
       },
       prime: 1,
       blacklisted: 1,
