@@ -1,46 +1,30 @@
+/**
+ * Legacy pipeline — NOT MOUNTED in _allroutes.js (dashboard uses routes/dashboard.js).
+ * If this is ever mounted, it uses DB.users (new collection), not old userdb.
+ */
 var express = require('express');
 var router = express.Router();
-const sv= require("../../core/gearbox.js")
-
-// const DB = require('../database')
 
 router.get('/', async function(req, res, next) {
-    console.log(req.user)
+    if (!req.user) return next(new Error('Not authenticated'));
 
+    const USR = req.user;
+    const UDB = await DB.users.get(USR.id);
 
-   //  if (!req.isAuthenticated()) return  res.send('not logged in :(');
-
-    console.log(req)
-
-
-
-    let USR = req.user
-    let UDB =  sv.userDB.get(USR.id)
-
-    if (UDB == undefined){
-        return "SHIT"
+    if (!UDB) {
+        return res.status(404).send('User not found');
     }
 
-
-    res.render(__dirname+'/dash.html', {
-      pix:`https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
-      name: USR.username,
+    res.render(__dirname + '/dash.html', {
+        pix: `https://cdn.discordapp.com/avatars/${USR.id}/${USR.avatar}.png`,
+        name: USR.username,
         uname: USR.username,
-      rubys:UDB.currency.RBN,
-      exp:UDB.progression.exp,
-      level:UDB.progression.level,
-      ptxt:UDB.profile.persotext,
-      background:`http://files.pollux.fun/${UDB.profile.bgID}.png`,
-
+        rubys: UDB.currency?.RBN ?? 0,
+        exp: UDB.progression?.exp ?? 0,
+        level: UDB.progression?.level ?? 0,
+        ptxt: UDB.profile?.persotext ?? '',
+        background: UDB.profile?.bgID ? `http://files.pollux.fun/${UDB.profile.bgID}.png` : '',
     });
-   // res.json(req.user);
 });
-
-function checkAuth(req, res, next) {
-    if (req.isAuthenticated()) return next();
-
-
-     res.send('not logged in :(');
-}
 
 module.exports = router;
