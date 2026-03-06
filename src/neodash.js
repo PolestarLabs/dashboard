@@ -312,7 +312,31 @@ const discordStrategy = new Strategy({
 }, function (req, accessToken, refreshToken, profile, done) {
 		profile.refreshToken = refreshToken;
 		process.nextTick(function () {
-			DB.users.updateOne({id: profile.id},{discordData: profile}).then(x=>x);
+			// Update OAuth data in the new split collection
+			DB.userOAuth.set(profile.id, { $set: {
+				discordIdentityCache: {
+					id: profile.id,
+					username: profile.username,
+					avatar: profile.avatar,
+					discriminator: profile.discriminator,
+					global_name: profile.global_name,
+					banner: profile.banner,
+					flags: profile.flags,
+					premium_type: profile.premium_type,
+				},
+				discord: {
+					accessToken: accessToken,
+					refreshToken: refreshToken,
+					scope: profile.scope,
+					email: profile.email,
+					locale: profile.locale,
+					verified: profile.verified,
+					mfa_enabled: profile.mfa_enabled,
+				},
+				fetchedAt: new Date(),
+			}}).catch(e => console.error("userOAuth update failed", e));
+			// Also update core user meta for backwards-compat
+			DB.users.updateOne({id: profile.id},{ $set: { "meta.lastLogin": new Date(), "meta.lastUpdated": new Date() } }).then(x=>x);
 		return done(null, profile);
 	});
 });
