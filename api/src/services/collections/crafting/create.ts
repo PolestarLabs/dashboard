@@ -1,7 +1,8 @@
-import Elysia from "elysia";
+import Elysia, { t } from "elysia";
+import { authPlugin } from "@plugins/auth";
 
 export default new Elysia()
-
+    .use(authPlugin)
     // POST /api/crafting/create  (alias: /craft) — execute a craft
     .post("/crafting/create", async ({ body, requireAuth, db, set } ) => {
         const apiUser = requireAuth();
