@@ -215,7 +215,7 @@ router.get('/relationships', async (req, res)=> {
 
     let Relationships;
     if (req.query.id){
-        Relationships = await DB.relationships.find({_id: req.query.id }).populate({path: 'usersData', select:'featuredMarriage id modules.tagline'}).lean();
+        Relationships = await DB.relationships.find({_id: req.query.id }).populate({path: 'usersData', select:'profile.featuredMarriage id profile.tagline'}).lean();
         if(!Relationships) return res.status(404).json("RELATIONSHIP ID NOT FOUND");
     }
     if (req.query.uid){

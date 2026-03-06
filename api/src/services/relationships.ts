@@ -16,7 +16,7 @@ export async function getRelationships(
   if (query.id) {
     Relationships = await db.relationships
       .find({ _id: query.id })
-      .populate({ path: "usersData", select: "featuredMarriage id modules.tagline" })
+      .populate({ path: "usersData", select: "profile.featuredMarriage id profile.tagline" })
       .lean();
     if (!Relationships?.length) return { ok: false, status: 404, message: "RELATIONSHIP ID NOT FOUND" };
   } else if (query.uid) {

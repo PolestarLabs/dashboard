@@ -263,7 +263,7 @@ router.post("/buy/:entry_id", async (req,res)=>{
   if(sale) {
     ECO.transfer(CURRENT_USER.id,entry.author,entry.price,'MARKETPLACE [PURCHASE]',entry.currency)
     .then(async receipt=>{
-      DB.users.set({id: CURRENT_USER.id},{$inc: {  "modules.exp": ~~(entry.price/12) } });
+      DB.users.set({id: CURRENT_USER.id},{$inc: {  "progression.exp": ~~(entry.price/12) } });
       await ECO.pay(entry.author, Math.ceil(entry.price * 0.02) ,"Marketplace Trade Cut", entry.currency);
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       if(entry.feedMessage){
@@ -473,26 +473,26 @@ async function awardMarketplaceItem(item,userID,remove){
 
   switch(item.type){
     case "background":
-      query[operation]= {'modules.bgInventory': item.code};
+      query[operation]= {'profile.bgInventory': item.code};
       break;
     case "medal":
-      query[operation]= {'modules.medalInventory': item.icon};
+      query[operation]= {'profile.medalInventory': item.icon};
       break;
     case "sticker":
-      query[operation]= {'modules.stickerInventory': item.id};
+      query[operation]= {'profile.stickerInventory': item.id};
       break;
     case "flair":
-      query[operation]= {'modules.stickerInventory': item.id};
+      query[operation]= {'profile.stickerInventory': item.id};
       break;
-    default:       
-      finder['modules.inventory.id'] = item.id;
-      query = {$inc: {'modules.inventory.$.count': (remove ? -1 : 1) } };
-      errorQuery = {$push: {'modules.inventory': {id: item.id, count: 1} } };
+    default:
+      finder['profile.inventory.id'] = item.id;
+      query = {$inc: {'profile.inventory.$.count': (remove ? -1 : 1) } };
+      errorQuery = {$push: {'profile.inventory': {id: item.id, count: 1} } };
   }
   
   let res = await DB.users.set( finder, query ).catch(err=> {
       if (errorQuery) {
-        delete finder['modules.inventory.id'];
+        delete finder['profile.inventory.id'];
         return DB.users.set( finder, errorQuery ).catch(err2=>console.error(err2,"Market error".bgRed) && null);
       }
       console.error(err) && null;

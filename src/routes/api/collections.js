@@ -128,10 +128,10 @@ router.post('/mix', async (req,res) => {
     let inventory,craftingHistory;
     if(req.user?.id){
         let [userData] = await Promise.all([
-            DB.users.get( req.user.id, {'modules.inventory':1}),          
+            DB.users.get( req.user.id, {'profile.inventory':1}),          
         ]);
-    let   inventory = (userData?.modules?.inventory || []).filter(x=>x.count > 0);
-    craftingHistory = (userData?.modules?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
+    let   inventory = (userData?.profile?.inventory || []).filter(x=>x.count > 0);
+    craftingHistory = (userData?.profile?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
        
     } 
 

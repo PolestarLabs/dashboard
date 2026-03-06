@@ -6,10 +6,10 @@ const router = express.Router();
 router.get('/search',  cache(600), async(req,res)=>{
     let queries = {}
     Object.keys(req.query)
-        .filter(qry => ['_id','id','donator','name','meta.tag','personalhandle'].includes(qry) )
+        .filter(qry => ['_id','id','prime.tier','name','meta.tag','personalhandle'].includes(qry) )
         .forEach(ky=> queries[ky] = req.query[ky])
 
-    if(queries.donator == 'exists') queries.donator = {$exists:true};
+    if(queries['prime.tier'] == 'exists') queries['prime.tier'] = {$exists:true};
     let sort = {_id:-1}
 
     DB.users.find(queries)
