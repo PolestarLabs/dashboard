@@ -53,8 +53,8 @@ export async function getRelationships(
         avatar:           discord?.avatar ?? null,
         bot:              discord?.bot    ?? false,
         username:         discord?.username ?? "Unknown",
-        tagline:          dbData?.modules?.tagline ?? null,
-        featuredMarriage: dbData?.featuredMarriage ?? null,
+        tagline:          dbData?.profile?.tagline ?? null,
+        featuredMarriage: dbData?.profile?.featuredMarriage ?? null,
       };
     }),
   }));
