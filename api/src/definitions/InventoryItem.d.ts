@@ -38,3 +38,8 @@ export interface InventoryItem {
     exclusive?: string;
 
 };
+
+export interface UserInventoryItem {
+    id: string;
+    count: number;
+}
