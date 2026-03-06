@@ -151,7 +151,7 @@ app.post('/webhook/bsian-stripe', async (req, res) => {
 const dbURL = config.mongodb;
 const dbOptions = { 
 	useNewUrlParser: true,
-	keepAlive: 1,
+	keepAlive: true,
 	connectTimeoutMS: 30000,
 	useUnifiedTopology: true
 }
@@ -280,8 +280,7 @@ const MongoStore = require('connect-mongo')(exSession);
 mongoose.connect( dbURL, dbOptions);
 
 
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
+mongoose.set('strictQuery', true);
 mongoose.Promise = require('bluebird');
 Promise.promisifyAll(require("mongoose"));
 Object.assign(global,require( process.env.BOT_PATH + '/core/utilities/Gearbox' ).Global)
