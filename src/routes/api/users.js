@@ -46,22 +46,22 @@ router.get('/:id', cache(30), async (req,res) => {
  
 router.get('/:id/inventory', async (req,res)=>{
     const uID = res.locals.userID;
-        
-        let USR = await DB.users.get(uID);
-        let userInventory = USR.profile.inventory.filter(itm=> itm.count > 0 && typeof itm.id === 'string');
+
+        let cosmeticsData = await DB.userCosmetics.get(uID);
+        let userInventory = (cosmeticsData?.inventory||[]).filter(itm=> itm.count > 0 && typeof itm.id === 'string');
         let userMetaInventory = await DB.items.find({id: {$in: userInventory.map(i=>i.id) } });
         userInventory.forEach(item=>{
             item.meta = userMetaInventory.find(itm=>itm.id === item.id);
         })
-        
+
         res.json(userInventory)
 
 })
 router.get('/:id/stickers', async (req,res)=>{
     const uID = res.locals.userID;
-        
-        let USR = await DB.users.get(uID);
-        let userInventory = USR.profile.stickerInventory.filter(x=>!!x);
+
+        let cosmeticsData = await DB.userCosmetics.get(uID);
+        let userInventory = (cosmeticsData?.stickerInventory||[]).filter(x=>!!x);
         let userMetaInventory = await DB.cosmetics.find({id: {$in: userInventory } }).lean();
 
         let packs = await DB.items.find({icon: {$in: userMetaInventory.map(x=>x?.series_id)}}).lean();
@@ -76,22 +76,22 @@ router.get('/:id/stickers', async (req,res)=>{
 })
 router.get('/:id/medals', async (req,res)=>{
     const uID = res.locals.userID;
-        
-        let USR = await DB.users.get(uID);
-        let userInventory = USR.profile.medalInventory.filter(x=>!!x);
+
+        let cosmeticsData = await DB.userCosmetics.get(uID);
+        let userInventory = (cosmeticsData?.medalInventory||[]).filter(x=>!!x);
         let userMetaInventory = await DB.cosmetics.find({icon: {$in: userInventory } }).lean().noCache();
         console.log({userInventory})
-        
+
         res.json(userMetaInventory)
 
 })
 router.get(['/:id/bgs','/:id/backgrounds'], async (req,res)=>{
     const uID = res.locals.userID;
-        
-        let USR = await DB.users.get(uID);
-        let userInventory = USR.profile.bgInventory.filter(x=>!!x);;
+
+        let cosmeticsData = await DB.userCosmetics.get(uID);
+        let userInventory = (cosmeticsData?.bgInventory||[]).filter(x=>!!x);
         let userMetaInventory = await DB.cosmetics.find({code: {$in: userInventory } }).lean();
-        
+
         res.json(userMetaInventory)
 
 })
@@ -242,15 +242,16 @@ async function parseUserAndReturn(uID, res) {
     let discordUser =   (await userCache.get( uID )) || (await PLX.getRESTUser( uID ).catch(e=>{ error: "error" }));
     userCache.set(discordUser.id,discordUser);
 
-    return DB.users.get(uID).then(USR => {
-        let response;
-        ({ response, STATUS } = parse_userdata(discordUser, USR, STATUS));
+    const [USR, cosmeticsData] = await Promise.all([
+        DB.users.get(uID),
+        DB.userCosmetics.get(uID),
+    ]);
+    let response;
+    ({ response, STATUS } = parse_userdata(discordUser, USR, STATUS, cosmeticsData));
 
-        return res.status(STATUS).json(response);
-        // res.json(USR._doc)
-    }); 
+    return res.status(STATUS).json(response);
 }
-function parse_userdata(discordUser, USR, STATUS) {
+function parse_userdata(discordUser, USR, STATUS, cosmeticsData) {
     let response = {
         id: discordUser.id,
         tag: discordUser.id ? discordUser.username : ((USR || {}).meta || {}).tag,
@@ -281,7 +282,7 @@ function parse_userdata(discordUser, USR, STATUS) {
             tagline: USR.profile.tagline,
             medals: USR.profile.medals
         };
-        response.inventorySize = USR.profile.inventory?.reduce((a, b) => a + b.count, 0) || 0;
+        response.inventorySize = cosmeticsData?.inventory?.reduce((a, b) => a + b.count, 0) || 0;
     }
     if (discordUser.error) {
         console.log("AAAAAAAAAAAAAAAAA".red)

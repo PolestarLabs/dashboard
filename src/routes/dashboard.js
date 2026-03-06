@@ -191,12 +191,15 @@ router.patch("/misc/:endpoint", async (req,res)=>{
     const UID = req.user.id;
     const _endpt = req.params.endpoint;
     const payload = req.body
-    const USERDATA = await DB.users.get(UID);
+    const [USERDATA, cosmeticsData] = await Promise.all([
+        DB.users.get(UID),
+        DB.userCosmetics.get(UID),
+    ]);
 
 
-    
+
     if (_endpt == "skin"){
-        if (payload.skinId!='default' && !USERDATA.profile.skinInventory.includes(payload.skinFor+"_"+payload.skinId)) return res.status(403).json("INVALID SKIN");
+        if (payload.skinId!='default' && !cosmeticsData?.skinInventory?.includes(payload.skinFor+"_"+payload.skinId)) return res.status(403).json("INVALID SKIN");
         return DB.users.set(UID, {$set: {["profile.skins."+payload.skinFor] : payload.skinId } } ).then(()=> res.sendStatus(200) ).catch(e=> res.status(500).send(e) );
     }
     
@@ -226,7 +229,10 @@ router.patch("/profile/:endpoint", async (req,res)=>{
 
 
     console.log(UID)
-    const USERDATA = await DB.users.get(UID);
+    const [USERDATA, cosmeticsData] = await Promise.all([
+        DB.users.get(UID),
+        DB.userCosmetics.get(UID),
+    ]);
     if(!USERDATA.profile) return res.status(400).send("Incomplete UserData");
 
 
@@ -238,9 +244,8 @@ router.patch("/profile/:endpoint", async (req,res)=>{
         console.log("Global Progression Emit: Edit Profile")
     }
     
-    //traditional
     if (_endpt == "background-legacy"){
-        if (!USERDATA.profile.bgInventory.includes(payload)) return invalidPayload(payload);
+        if (!cosmeticsData?.bgInventory?.includes(payload)) return invalidPayload(payload);
         return DB.users.set(UID, {$set: {"profile.bgID" : payload} } ).then(()=> res.sendStatus(200) );
     }
     //positional
@@ -248,23 +253,23 @@ router.patch("/profile/:endpoint", async (req,res)=>{
         if (payload === -2 && USERDATA.prime?.tier){
             return DB.users.set(UID, {$set: {"profile.bgID" : UID} } ).then(()=> res.status(200).send("Saved! "+payload) );
         }
-        if (!Number(payload+1) || USERDATA.profile.bgInventory.length <= Number(payload) ) return invalidPayload("Index out of Range");
-        return DB.users.set(UID, {$set: {"profile.bgID" : USERDATA.profile.bgInventory[payload]} } ).then(()=> res.status(200).send("Saved! "+payload) );
+        if (!Number(payload+1) || (cosmeticsData?.bgInventory?.length || 0) <= Number(payload) ) return invalidPayload("Index out of Range");
+        return DB.users.set(UID, {$set: {"profile.bgID" : cosmeticsData?.bgInventory?.[payload]} } ).then(()=> res.status(200).send("Saved! "+payload) );
     }
 
     if (_endpt == "flair"){
-        if (payload!="default" && !USERDATA.profile.flairsInventory.includes(payload)) return invalidPayload(payload);
+        if (payload!="default" && !cosmeticsData?.flairInventory?.includes(payload)) return invalidPayload(payload);
         return DB.users.set(UID, {$set: {"profile.flairTop" : payload} } ).then(()=> res.sendStatus(200) );
     }
 
     if (_endpt == "medal"){
         let [medal,index] = payload.split(',');
-        if (medal!="0" && !USERDATA.profile.medalInventory.includes(medal)) return invalidPayload(payload);
+        if (medal!="0" && !cosmeticsData?.medalInventory?.includes(medal)) return invalidPayload(payload);
         return DB.users.set(UID, {$set: {[`profile.medals.${index}`] : medal} } ).then(()=> res.sendStatus(200) );
     }
 
     if (_endpt == "sticker"){
-        if (payload && !USERDATA.profile.stickerInventory.includes(payload)) return invalidPayload(payload);
+        if (payload && !cosmeticsData?.stickerInventory?.includes(payload)) return invalidPayload(payload);
         return DB.users.set(UID, {$set: {"profile.sticker" : payload} } ).then(()=> res.sendStatus(200) );
     }
 
@@ -287,12 +292,15 @@ router.put('/profile/medals', async (req,res)=>{
         
 
         const UID = req.user.id;
-        const USERDATA = await DB.users.get(UID);
-        
+        const [USERDATA, cosmeticsData] = await Promise.all([
+            DB.users.get(UID),
+            DB.userCosmetics.get(UID),
+        ]);
+
         let payload = req.body.map((v,i,a) => a.indexOf(v) == i ?v:v=="0"?0:0);
         payload = payload.map((medal,i,pld) => (
-            USERDATA.profile.medalInventory.includes(medal)||
-            USERDATA.profile.achievements.includes(medal)) ||
+            cosmeticsData?.medalInventory?.includes(medal)||
+            cosmeticsData?.achievements?.includes(medal)) ||
             pld.indexOf(medal) === i
             ? medal : 0 );
             console.log(payload)

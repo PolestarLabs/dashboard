@@ -127,11 +127,11 @@ router.post('/mix', async (req,res) => {
     
     let inventory,craftingHistory;
     if(req.user?.id){
-        let [userData] = await Promise.all([
-            DB.users.get( req.user.id, {'profile.inventory':1}),          
+        let [cosmeticsData] = await Promise.all([
+            DB.userCosmetics.get( req.user.id, {'inventory':1}),
         ]);
-    let   inventory = (userData?.profile?.inventory || []).filter(x=>x.count > 0);
-    craftingHistory = (userData?.profile?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
+    let   inventory = (cosmeticsData?.inventory || []).filter(x=>x.count > 0);
+    craftingHistory = (cosmeticsData?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
        
     } 
 
@@ -334,23 +334,24 @@ router.post(['/create','/craft'], checkAuth, async (req,res)=> {
     }
     try{
 
-        const userData = await DB.users.getFull(req.user.id);
+        const [userData, cosmeticsDoc] = await Promise.all([
+            DB.users.getFull(req.user.id),
+            DB.userCosmetics.getFull(req.user.id),
+        ]);
         if (!userData) return res.status(401).json({status:"ERROR",message:"Not Logged in"});
 
         const pay = (pot||itemToCraft.materials).map(itm=>{
-            let itemToCheck = userData.profile.inventory.find(i=>i.id === itm.id);
+            let itemToCheck = cosmeticsDoc.inventory.find(i=>i.id === itm.id);
             if (itemToCheck.count < itm.count) {
                 return res.status(403).json({status:"ERROR",message:"You dont have enough of ["+itm.id+"]"});
-                //throw new Error("Invalid Inventory");
             };
         return [itm.id,itm.count];
     });
     const payGem = Object.keys(itemToCraft.gemcraft)?.map(it=>{
-        let userBal = userData.modules[it];
+        let userBal = userData.currency[it];
         let itm = itemToCraft.gemcraft[it];
         console.log({it,itm,userBal})
         if (userBal < itm) {
-            //res.status(403).json({status:"ERROR",message:"You dont have enough "+itm+"."});
             throw new Error("Invalid Balance");
         };
         return [userData.id,itm, "crafting_discovery", it ,{details:{item_id:itemToCraft.id}}];
@@ -359,7 +360,7 @@ router.post(['/create','/craft'], checkAuth, async (req,res)=> {
     //console.log(pay,payGem)
     //console.log(PLX)
     let errors = 0;
-    await Promise.all( pay.map(material=> userData.removeItem(...material)) ).catch(err=> {
+    await Promise.all( pay.map(material=> cosmeticsDoc.removeItem(...material)) ).catch(err=> {
             console.error(err);
             res.status(500).json("Error processing materials");
             errors+=1;
@@ -372,13 +373,13 @@ router.post(['/create','/craft'], checkAuth, async (req,res)=> {
         }); 
     if (errors) return;        
     await Promise.all([
-        userData.addItem(item, 1,true),
+        cosmeticsDoc.addItem(item, 1,true),
         DB.users.set(req.user.id, {
             $inc: { "progression.craftingExp": baselineBonus[itemToCraft.rarity] * 1 },
         })
     ]);
-    if (errors) return;   
-    return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.profile.inventory});
+    if (errors) return;
+    return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: cosmeticsDoc.inventory});
 
 }catch(err){
     console.error(err)

@@ -26,6 +26,17 @@ router.get('/:endpoint', async (req, res)=> {
  
     const userDiscord = (await userCache.get( userprofile.id )) || (await PLX.getRESTUser( userprofile.id ));
 
+    const userCosmetics = await DB.userCosmetics.get( userprofile.id );
+    if (userCosmetics && userprofile.profile) {
+        userprofile.profile.inventory        = userCosmetics.inventory        ?? userprofile.profile.inventory;
+        userprofile.profile.bgInventory      = userCosmetics.bgInventory      ?? userprofile.profile.bgInventory;
+        userprofile.profile.medalInventory   = userCosmetics.medalInventory   ?? userprofile.profile.medalInventory;
+        userprofile.profile.stickerInventory = userCosmetics.stickerInventory ?? userprofile.profile.stickerInventory;
+        userprofile.profile.skinInventory    = userCosmetics.skinInventory    ?? userprofile.profile.skinInventory;
+        userprofile.profile.flairsInventory  = userCosmetics.flairInventory   ?? userprofile.profile.flairsInventory;
+        userprofile.profile.stickerShowcase  = userCosmetics.stickerShowcase  ?? userprofile.profile.stickerShowcase;
+    }
+
     let donoranks;
     if(userprofile.prime?.tier){
         let donators = await DB.users.find( {'switches.donateStreak.total' :{$gte: 1}},{profile:0,personal:0,eventData:0} ).lean().exec();

@@ -78,7 +78,10 @@ ${message}
       let $index = $=='rubines'?'RBN':$=='jades'?'JDE':$=='sapphires'?'SPH':'event';
       
       let U = payload.user
-      let DATA = await DB.users.findOne({id:U.id});
+      let [DATA, cosmeticsData] = await Promise.all([
+          DB.users.findOne({id:U.id}),
+          DB.userCosmetics.get(U.id),
+      ]);
       
       let ITM = payload.item
       let base;
@@ -132,18 +135,18 @@ ${message}
           let hasAnyItem, hasAllItems;       
 
           if (
-            toadd.mdl.some(item=> DATA.profile.medalInventory.includes(item)) ||
-            toadd.bgd.some(item=> DATA.profile.bgInventory.includes(item)) ||
-            toadd.stk.some(item=> DATA.profile.stickerInventory.includes(item))
+            toadd.mdl.some(item=> (cosmeticsData?.medalInventory||[]).includes(item)) ||
+            toadd.bgd.some(item=> (cosmeticsData?.bgInventory||[]).includes(item)) ||
+            toadd.stk.some(item=> (cosmeticsData?.stickerInventory||[]).includes(item))
           ) hasAnyItem = true;
           if (
-            toadd.mdl.every(item=> DATA.profile.medalInventory.includes(item)) &&
-            toadd.bgd.every(item=> DATA.profile.bgInventory.includes(item)) &&
-            toadd.stk.every(item=> DATA.profile.stickerInventory.includes(item))
+            toadd.mdl.every(item=> (cosmeticsData?.medalInventory||[]).includes(item)) &&
+            toadd.bgd.every(item=> (cosmeticsData?.bgInventory||[]).includes(item)) &&
+            toadd.stk.every(item=> (cosmeticsData?.stickerInventory||[]).includes(item))
           ) hasAllItems = true;
-          
+
             console.log(toadd.bgd )
-            console.log(toadd.bgd.every(item=> DATA.profile.bgInventory.includes(item)) )
+            console.log(toadd.bgd.every(item=> (cosmeticsData?.bgInventory||[]).includes(item)) )
             
             if(hasAllItems === true) return resolve("DUPLICATE");
             if(hasAnyItem === true) price -= Math.round(price * .20);
@@ -154,11 +157,11 @@ ${message}
 
 
 
-          return DB.users.set(U.id, {
+          return DB.userCosmetics.set(U.id, {
             $addToSet:{
-              'profile.medalInventory'   : {$each:toadd.mdl},
-              'profile.bgInventory'      : {$each:toadd.bgd},
-              'profile.stickerInventory' : {$each:toadd.stk},
+              'medalInventory'   : {$each:toadd.mdl},
+              'bgInventory'      : {$each:toadd.bgd},
+              'stickerInventory' : {$each:toadd.stk},
             }
           }).then(ok => resolve("OK"));
         }else{
@@ -168,7 +171,7 @@ ${message}
       
       let itemObj = base.find(i=>i.icon==ITM||i.code==ITM)
       
-      if(DATA.profile[T+"Inventory"].includes(ITM)) return resolve("DUPLICATE");
+      if(cosmeticsData?.[T+"Inventory"]?.includes(ITM)) return resolve("DUPLICATE");
       console.log({$index,$,itemObj})
       
       let price= $==='event'? itemObj.price? itemObj.price : T=='bg'? rarmult[itemObj.rarity]*5: rarmult[itemObj.rarity]*2 : convert(itemObj.price,$);
@@ -186,13 +189,13 @@ ${message}
           console.log({line:"post non ev check y price check",$index,$,price})
           await ECO.pay(U.id,price,T+"shop_dash",$index||"RBN");
 
-             DB.users.set(USER.id, {$push: {["profile."+T+"Inventory"]: ITM}}).then(ok => resolve("OK"));
+             DB.userCosmetics.set(USER.id, {$push: {[T+"Inventory"]: ITM}}).then(ok => resolve("OK"));
         })
-      
+
       } else {
 
         if (!DATA.currency.EVT || DATA.currency.EVT < price) {console.log("UNAFFORD");return resolve("UNAFFORD");}
-      
+
       if(itemObj.buyable !== true && typeof itemObj.exclusive !=='string'){
          return resolve("CANTBUY");
         //return DB.users.set(U.id,{'blacklisted':"XSS Attempt - Shop ["+ITM+"]"});
@@ -201,23 +204,23 @@ ${message}
         DB.users.findOne({id: U.id}).then(async USER => {
 
          await ECO.pay(U.id,price,T+"shop_dash","EVT");
-            DB.users.set(USER.id, {$push: {["profile."+T+"Inventory"]: ITM}}).then(ok => resolve("OK"))
+            DB.userCosmetics.set(USER.id, {$push: {[T+"Inventory"]: ITM}}).then(ok => resolve("OK"))
         })
       }
-
-
-      })
       },
   
   equip: function equip(req,bot){
       return new Promise( async resolve=>{
-      DB.users.findOne({id:req.user.id}).then(async USER=>{
+      Promise.all([
+          DB.users.findOne({id:req.user.id}),
+          DB.userCosmetics.get(req.user.id)
+      ]).then(async ([USER, cosmeticsData])=>{
 
           let type = req.params.type;
           let item = req.params.item;
 
           if(type=='bg'){
-            if(USER.profile.bgInventory.includes(item)){
+            if(cosmeticsData?.bgInventory?.includes(item)){
               DB.users.set(USER.id,{
                 $set:{'profile.bgID':item}
               }).then(async ok=> {console.log("OK");resolve("OK")})
@@ -228,9 +231,9 @@ ${message}
             }
           }else if (type=='medal'){
             let itemArray = req.body.itemArray;
-              
+
               itemArray= itemArray.filter(async function(item, pos) {
-                  if(!USER.profile.medalInventory.includes(item)){
+                  if(!cosmeticsData?.medalInventory?.includes(item)){
                     await DB.users.set(USER.id,{'blacklisted':"XSS Attempt - MedalShop ["+item+"]"});
                     return resolve("XSS")
                   };

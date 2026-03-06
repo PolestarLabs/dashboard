@@ -133,7 +133,10 @@ module.exports={
     
     if(endpoint === 'user') {
 
-      DB.users.findOne({id:target}).then( async USR=>{
+      Promise.all([
+          DB.users.findOne({id:target}),
+          DB.userCosmetics.get(target),
+      ]).then( async ([USR, cosmeticsData])=>{
         if(!USR) return res.send("USER ID NOT FOUND");
 
         let lranks =[]
@@ -166,7 +169,7 @@ module.exports={
             ,medals: USR.profile.medals
           } 
           
-          ,inventory_size: USR.profile.inventory?.length || 0
+          ,inventory_size: cosmeticsData?.inventory?.length || 0
           
           
           ,localranks: lranks.length>0
@@ -225,14 +228,13 @@ module.exports={
       let querytring 
         if(!subtarget) res.sendCode(400);
         if(!target) res.sendCode(400);
-        DB.users.findOne({id:subtarget},{'profile.inventory':1,'profile.bgInventory':1,'profile.stickerInventory':1,'profile.medalInventory':1,'profile.flairsInventory':1,_id:0})
-        .then(async udata=>{
+        DB.userCosmetics.get(subtarget).then(async udata=>{
 
-          if(target == "bgs") querystring = {type:'background' ,code:{$in:udata.profile.bgInventory}} ;
-          if(target == "medals") querystring = {type:'medal' ,icon:{$in:udata.profile.medalInventory}} ;
-          if(target == "stickers") querystring = {type:'sticker' ,id:{$in:udata.profile.stickerInventory}} ;
-          if(target == "flairs") querystring = {type:'flair' ,id:{$in:udata.profile.flairsInventory}} ;
-          if(target == "items") querystring = {id:{$in:udata.profile.inventory}};
+          if(target == "bgs") querystring = {type:'background' ,code:{$in:udata?.bgInventory||[]}} ;
+          if(target == "medals") querystring = {type:'medal' ,icon:{$in:udata?.medalInventory||[]}} ;
+          if(target == "stickers") querystring = {type:'sticker' ,id:{$in:udata?.stickerInventory||[]}} ;
+          if(target == "flairs") querystring = {type:'flair' ,id:{$in:udata?.flairInventory||[]}} ;
+          if(target == "items") querystring = {id:{$in:(udata?.inventory||[]).map(i=>i.id)}};
 
           await DB.cosmetics.find(querystring,{_id:0,code:1,icon:1,id:1,type:1,name:1,rarity:1}).then(cos3=>{
             let response = cos3.map(x=> x);

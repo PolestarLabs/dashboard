@@ -559,7 +559,17 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
 
 			if(!data) {
 				let dscUser = (await userCache.get(req.user.id)) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
-				data = await DB.users.new(dscUser); 
+				data = await DB.users.new(dscUser);
+			}
+			const cosmetics = await DB.userCosmetics.get(data.id);
+			if (cosmetics && data.profile) {
+				data.profile.inventory        = cosmetics.inventory        ?? data.profile.inventory;
+				data.profile.bgInventory      = cosmetics.bgInventory      ?? data.profile.bgInventory;
+				data.profile.medalInventory   = cosmetics.medalInventory   ?? data.profile.medalInventory;
+				data.profile.stickerInventory = cosmetics.stickerInventory ?? data.profile.stickerInventory;
+				data.profile.skinInventory    = cosmetics.skinInventory    ?? data.profile.skinInventory;
+				data.profile.flairsInventory  = cosmetics.flairInventory   ?? data.profile.flairsInventory;
+				data.profile.stickerShowcase  = cosmetics.stickerShowcase  ?? data.profile.stickerShowcase;
 			}
 			authCacheExpiration.set(req.user.id,{data,exp: Date.now() + 10e3  })
 			preDataProcess(data)

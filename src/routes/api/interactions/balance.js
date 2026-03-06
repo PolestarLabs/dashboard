@@ -32,7 +32,10 @@ module.exports = {
 
     moment.locale('en');
 
-    const TARGETDATA = await DB.users.get({ id: Target.id });
+    const [TARGETDATA, cosmeticsData] = await Promise.all([
+        DB.users.get({ id: Target.id }),
+        DB.userCosmetics.get(Target.id),
+    ]);
     responseEmbed.color = 0xffc156;
     responseEmbed.title = bal;
 console.log('hare')
@@ -100,7 +103,7 @@ console.log('hare')
           `\u2003${_emoji("COS")} ${$t("keywords.COS_plural", {
             lngs: P.lngs,
           })}: **${miliarize(
-            TARGETDATA.profile.inventory.find((i) => i.id === "cosmo_fragment")
+            cosmeticsData?.inventory?.find((i) => i.id === "cosmo_fragment")
               ?.count || 0,
             true
           )}**` +

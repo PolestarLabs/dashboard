@@ -45,7 +45,10 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
 
     if (currency === 'JDE') return res.status(401).json(ERRORS.noJades);
 
-    const userData = await DB.users.findOne({id: req.user.id});
+    const [userData, cosmeticsData] = await Promise.all([
+        DB.users.findOne({id: req.user.id}),
+        DB.userCosmetics.get(req.user.id),
+    ]);
 
     
     let item = await DB.cosmetics.findOne({ 
@@ -61,12 +64,12 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
     if(!userData) return res.status(404).json(ERRORS.user404);
     
     if (type === 'bundle'){
-        return buyBundle({req,res,userData,bundle:item,price,currency});
+        return buyBundle({req,res,userData,cosmeticsData,bundle:item,price,currency});
     }
     
     if(
-        (type == 'medal' && userData.profile.medalInventory.includes(item.icon)) ||
-        (type == 'background' && userData.profile.bgInventory.includes(item.code))
+        (type == 'medal' && cosmeticsData?.medalInventory?.includes(item.icon)) ||
+        (type == 'background' && cosmeticsData?.bgInventory?.includes(item.code))
     )  return res.status(403).json(ERRORS.itemOwned);
      
     if ( !(await ECO.checkFunds(userData.id,price,currency)) )  
@@ -78,14 +81,14 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
     let respons;
     switch(type){
         case "background":
-            respons = await DB.users.set(userData.id,{$addToSet: {'profile.bgInventory': item.code} });
+            respons = await DB.userCosmetics.set(userData.id,{$addToSet: {bgInventory: item.code} });
             break;
 
         case "medal":
-            respons = await DB.users.set(userData.id,{$addToSet: {'profile.medalInventory': item.icon} });
+            respons = await DB.userCosmetics.set(userData.id,{$addToSet: {medalInventory: item.icon} });
             break;
         case "sticker":
-            respons = await DB.users.set(userData.id,{$addToSet: {'profile.stickerInventory': item.id} });       
+            respons = await DB.userCosmetics.set(userData.id,{$addToSet: {stickerInventory: item.id} });
             break;
 
         default:
@@ -95,9 +98,9 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
 
 })
 
-async function buyBundle({req,res,userData,bundle,price,currency}){
+async function buyBundle({req,res,userData,cosmeticsData,bundle,price,currency}){
 
-    let bundleStats = calculateBundlePrice({userData,bundle,price});
+    let bundleStats = calculateBundlePrice({userData,cosmeticsData,bundle,price});
 
     if(bundleStats.complete) return res.status(403).json(ERRORS.bundleOwned);
  
@@ -106,7 +109,7 @@ async function buyBundle({req,res,userData,bundle,price,currency}){
     let trans = await ECO.pay(userData.id,bundleStats.finalPrice,`storefront_bundle`,currency).catch(err=>{
         res.status(500).json(ERRORS.ecoFail);
     });
-    return DB.users.updateOne({id:userData.id}, bundleStats.query ).exec().then(ok=>{
+    return DB.userCosmetics.updateOne({userId:userData.id}, bundleStats.query ).exec().then(ok=>{
         res.status(200).json({status:"OK", cost: bundleStats.finalPrice, trans, ok,x:bundleStats.query});   
     }).catch(err=>{
         res.status(500).json({code: -1, status:"ERR", err});   
@@ -118,10 +121,13 @@ router.get("/bundle/price/:finder", async (req,res)=>{
 
     let bundle =  await DB.cosmetics.findOne({type:'bundle', id: req.params.finder}).lean();
     if(!req.user) return res.status(206).json({price: bundle.price, owned: [], info:"User not authenticated. This data is not complete."});
-    const userData = await DB.users.get(req.user.id);
+    const [userData, cosmeticsData] = await Promise.all([
+        DB.users.get(req.user.id),
+        DB.userCosmetics.get(req.user.id),
+    ]);
 
-    let bundleStatsRBN = calculateBundlePrice({userData,bundle,price: ~~(itemPrice(bundle,"RBN")) });
-    let bundleStatsSPH = calculateBundlePrice({userData,bundle,price: ~~(itemPrice(bundle,"SPH")) });
+    let bundleStatsRBN = calculateBundlePrice({userData,cosmeticsData,bundle,price: ~~(itemPrice(bundle,"RBN")) });
+    let bundleStatsSPH = calculateBundlePrice({userData,cosmeticsData,bundle,price: ~~(itemPrice(bundle,"SPH")) });
     
     const payload = {}
     payload.SPH = {price: bundleStatsSPH.finalPrice, original: bundleStatsSPH.originalPrice}
@@ -135,15 +141,15 @@ router.get("/bundle/price/:finder", async (req,res)=>{
     return res.status(200).json(payload)
 })
 
-function calculateBundlePrice({userData,bundle,price}){
+function calculateBundlePrice({userData,cosmeticsData,bundle,price}){
 
     let tally = 0;
     let owned = []
     let toBeAdded = []
     let query = {$addToSet:{
-        "profile.bgInventory" : {$each:[]},
-        "profile.medalInventory" : {$each:[]},
-        "profile.stickerInventory" : {$each:[]},
+        "bgInventory" : {$each:[]},
+        "medalInventory" : {$each:[]},
+        "stickerInventory" : {$each:[]},
     }};
 
     price = price || bundle.price;
@@ -153,27 +159,27 @@ function calculateBundlePrice({userData,bundle,price}){
         switch(itm.type){
             case "background":
             case "bg":
-                if(userData.profile.bgInventory.includes(itm.id)){
+                if(cosmeticsData?.bgInventory?.includes(itm.id)){
                     ownsItem = !0
                     tally+= 1;
                 }else{
-                    query.$addToSet["profile.bgInventory"].$each.push(itm.id)
+                    query.$addToSet["bgInventory"].$each.push(itm.id)
                 }
                 break;
             case "medal":
-                if(userData.profile.medalInventory.includes(itm.id)){
+                if(cosmeticsData?.medalInventory?.includes(itm.id)){
                     ownsItem = !0
                     tally+= .6;
                 }else{
-                    query.$addToSet["profile.medalInventory"].$each.push(itm.id)
+                    query.$addToSet["medalInventory"].$each.push(itm.id)
                 }
                 break;
             case "sticker":
-                if(userData.profile.stickerInventory.includes(itm.id)){
+                if(cosmeticsData?.stickerInventory?.includes(itm.id)){
                     ownsItem = !0
                     tally+=1.3;
                 }else{
-                    query.$addToSet["profile.stickerInventory"].$each.push(itm.id)
+                    query.$addToSet["stickerInventory"].$each.push(itm.id)
                 }
                 break;
         }

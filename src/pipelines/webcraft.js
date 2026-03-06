@@ -9,7 +9,10 @@ exports.run = async function(ITEM_IN,checking,req,res){
   
   let crafted_item = ITEMS.find(itm=>itm.id==ITEM_IN||itm.code==ITEM_IN);
     
-  const userData = await DB.users.findOne({id:req.user.id},{"currency.JDE":1,"currency.SPH":1,"currency.RBN":1,"profile.inventory":1});
+  const [userData, cosmeticsData] = await Promise.all([
+      DB.users.findOne({id:req.user.id},{"currency.JDE":1,"currency.SPH":1,"currency.RBN":1}),
+      DB.userCosmetics.getFull(req.user.id),
+  ]);
   if(crafted_item){
     let ID = crafted_item.id
     let NAME = crafted_item.name
@@ -25,13 +28,8 @@ exports.run = async function(ITEM_IN,checking,req,res){
       
     ]
     async function breakit(item,USID){
-      DB.users.findOneAndUpdate({
-      'id':USID,
-      'profile.inventory':item
-      },{$set:{'profile.inventory.$':'DRAGGE'}}).then(async x=>{
-        await DB.users.findOneAndUpdate({'id':USID},{$pull:{'profile.inventory':'DRAGGE'}});
-      })
-    };    
+      await cosmeticsData.removeItem(item, 1);
+    };
     
     console.log(GC)
     
@@ -71,7 +69,7 @@ exports.run = async function(ITEM_IN,checking,req,res){
       
     
     MAT.forEach(material=>{
-      if (userData.profile.inventory&&userData.profile.inventory.includes(material)){
+      if ((cosmeticsData?.inventory||[]).some(i => i.id === material && i.count > 0)){
         
       }else{
         fails+=1
@@ -95,7 +93,7 @@ exports.run = async function(ITEM_IN,checking,req,res){
               await breakit(itm,req.user.id);
             })
             
-            await DB.users.set(req.user.id,{$push:{'profile.inventory': crafted_item.id}});
+            await cosmeticsData.addItem(crafted_item.id, 1, true);
 
             res.send({title:"SUCCESS!"})
           }

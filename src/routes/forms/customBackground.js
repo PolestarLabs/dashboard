@@ -57,7 +57,7 @@ module.exports = {
 
         await Promise.all([
             DB.cosmetics.updateOne({type:'background', code: req.user.id }, {$set: {version: 0, name: `${req.user.username}'s Custom Background`, tags:"CUSTOM", rarity: "XR", type:"background", id: req.user.id, tradeable: false, droppable: false, destroyable: false, event: null } }, {upsert: true} ),
-            DB.users.set({id: req.user.id }, {$addToSet: {"profile.bgInventory": req.user.id } })
+            DB.userCosmetics.set(req.user.id, {$addToSet: {"bgInventory": req.user.id } })
         ]).then(resp=>{
             res.status(200).json(resp)
         }).catch(err=>{
@@ -131,7 +131,7 @@ module.exports = {
 
         await Promise.all([
             DB.cosmetics.updateOne({type:'background', code: req.user.id }, {$set: {version: 0, name: `${req.user.username}'s Custom Background`, tags:"CUSTOM", rarity: "XR", type:"background", id: req.user.id, tradeable: false, droppable: false, destroyable: false, event: null } }, {upsert: true} ),
-            DB.users.set({id: req.user.id }, {$addToSet: {"profile.bgInventory": req.user.id } })
+            DB.userCosmetics.set(req.user.id, {$addToSet: {"bgInventory": req.user.id } })
         ]).then(resp=>{
             res.status(200).json(resp)
         }).catch(err=>{

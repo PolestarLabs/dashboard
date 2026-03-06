@@ -95,11 +95,10 @@ if (!userDiscordData) return res.status(500).json("NO DISCORD USER DATA");
       ITEM
     );
     if (result.res === true) {
-      const finder = (DATA.itemStatus || {}).prequery || result.prequery || { id: PAYLOAD.author };
+      const finder = (DATA.itemStatus || {}).prequery || result.prequery || { userId: PAYLOAD.author };
       const action = (DATA.itemStatus || {}).query || result.query;
-
       if (finder === {}) return res.status(400).json("Dangerous Query Result");
-      await DB.users.updateOne(finder,action);
+      await DB.userCosmetics.updateOne(finder, action);
       await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? (PAYLOAD.price*.15) : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
 
     } else {
@@ -465,41 +464,29 @@ router.get(["/","/:entry"],  async (req, res) => {
 
 //SECTION FUNCTIONS
 
-async function awardMarketplaceItem(item,userID,remove){
-  let query = {};
-  let errorQuery = {};
-  let finder = {id: userID}
-  let operation = remove ? "$pull" : "$addToSet";
-
-  switch(item.type){
+async function awardMarketplaceItem(item, userID, remove) {
+  const operation = remove ? "$pull" : "$addToSet";
+  switch (item.type) {
     case "background":
-      query[operation]= {'profile.bgInventory': item.code};
-      break;
+      return DB.userCosmetics.set(userID, { [operation]: { bgInventory: item.code } }).then(() => true).catch(() => false);
     case "medal":
-      query[operation]= {'profile.medalInventory': item.icon};
-      break;
+      return DB.userCosmetics.set(userID, { [operation]: { medalInventory: item.icon } }).then(() => true).catch(() => false);
     case "sticker":
-      query[operation]= {'profile.stickerInventory': item.id};
-      break;
     case "flair":
-      query[operation]= {'profile.stickerInventory': item.id};
-      break;
-    default:
-      finder['profile.inventory.id'] = item.id;
-      query = {$inc: {'profile.inventory.$.count': (remove ? -1 : 1) } };
-      errorQuery = {$push: {'profile.inventory': {id: item.id, count: 1} } };
+      return DB.userCosmetics.set(userID, { [operation]: { stickerInventory: item.id } }).then(() => true).catch(() => false);
+    default: {
+      const delta = remove ? -1 : 1;
+      const r = await DB.userCosmetics.set(
+        userID,
+        { $inc: { "inventory.$[item].count": delta } },
+        { arrayFilters: [{ "item.id": item.id }] }
+      ).catch(() => null);
+      if (r?.modifiedCount > 0) return true;
+      return DB.userCosmetics.set(userID, { $push: { inventory: { id: item.id, count: 1 } } })
+        .then(() => true)
+        .catch(err => { console.error(err, "Market error".bgRed); return false; });
+    }
   }
-  
-  let res = await DB.users.set( finder, query ).catch(err=> {
-      if (errorQuery) {
-        delete finder['profile.inventory.id'];
-        return DB.users.set( finder, errorQuery ).catch(err2=>console.error(err2,"Market error".bgRed) && null);
-      }
-      console.error(err) && null;
-  });
-  
-  if (res) return true;
-  else return false;
 }
 
 async function processFeedMessage(entry, item, CURRENT_USER) {
@@ -597,20 +584,18 @@ function getItemMarketDetails(item) {
 }
 
 // might need refactor
-function itemInInventory(item, userData) {
+function itemInInventory(item, cosmeticsData) {
   let res = false;
   let reason = "UNKNOWN";
   let status = 400;
   let query = {};
   let prequery;
 
-
   if (["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)){
-    
-    if ( userData.profile.inventory.find(it=>it.id === item.id)?.count > 0 ) {
+    if ( cosmeticsData?.inventory?.find(it=>it.id === item.id)?.count > 0 ) {
       res = true;
-      prequery = { id: userData.id, "profile.inventory.id": item.id };
-      query = { $inc: { "profile.inventory.$.count": -1 } };
+      prequery = { userId: cosmeticsData.userId, "inventory.id": item.id };
+      query = { $inc: { "inventory.$.count": -1 } };
     }else{
       res = false;
       reason = "ITEM NOT IN INVENTORY";
@@ -618,46 +603,46 @@ function itemInInventory(item, userData) {
     }
   }
   if (item.type === "background") {
-    if (!userData.profile.bgInventory.includes(item.code)) {
+    if (!cosmeticsData?.bgInventory?.includes(item.code)) {
       res = false;
       reason = "BACKGROUND NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "profile.bgInventory": item.code } };
+      query = { $pull: { bgInventory: item.code } };
       res = true;
     }
   }
   if (item.type === "medal") {
-    if (!userData.profile.medalInventory.includes(item.icon)) {
+    if (!cosmeticsData?.medalInventory?.includes(item.icon)) {
       res = false;
       reason = "MEDAL NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "profile.medalInventory": item.icon } };
+      query = { $pull: { medalInventory: item.icon } };
       res = true;
     }
   }
   if (item.type === "skin") {
-    if (!userData.profile.skinInventory.includes(item.id)) {
+    if (!cosmeticsData?.skinInventory?.includes(item.id)) {
       res = false;
       reason = "SKIN NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "profile.skinInventory": item.id } };
+      query = { $pull: { skinInventory: item.id } };
       res = true;
     }
   }
   if (item.type === "sticker") {
-    if (!userData.profile.stickerInventory.includes(item.id)) {
+    if (!cosmeticsData?.stickerInventory?.includes(item.id)) {
       res = false;
       reason = "STICKER NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "profile.stickerInventory": item.id } };
+      query = { $pull: { stickerInventory: item.id } };
       res = true;
     }
   }
@@ -665,26 +650,25 @@ function itemInInventory(item, userData) {
 }
 // might need refactor
 async function userCanSell(id, PAYLOAD, item, softCheck=false) {
-
-  const userData = await DB.users.findOne({id}).noCache();
-  
+  const [userData, cosmeticsData] = await Promise.all([
+    DB.users.findOne({id}).noCache(),
+    DB.userCosmetics.get(id),
+  ]);
 
   if (!softCheck){
-    if (!(await DB.users.get(id)))
+    if (!userData)
       return { res: false, reason: "USER NOT FOUND", status: 401 };
 
     if (!(await ECO.checkFunds(id, PAYLOAD.currency === "SPH" ? (2 + ~~(PAYLOAD.price*0.05)) : (PAYLOAD.price*.15) , PAYLOAD.currency)))
       return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
-    if (userData.amtItem("sph-license") < 1 && PAYLOAD.currency === "SPH") {
+    if ((cosmeticsData?.inventory?.find(it=>it.id==="sph-license")?.count || 0) < 1 && PAYLOAD.currency === "SPH") {
       res = false;
       reason = "NO SAPPHIRE LICENSE";
       status = 401;
     }
   }
 
- 
-
-  let { res, reason, status, prequery, query } = await itemInInventory(item, userData);
+  let { res, reason, status, prequery, query } = itemInInventory(item, cosmeticsData);
 
   if( !isTradeable(item) ){
     res = false;
@@ -700,8 +684,8 @@ async function userCanBuy(userId, currency, price, item) {
     reason = "UNKNOWN",
     status = 200;
 
-  const userData = await DB.users.findOne({id:userId}).noCache();
-  let itemInInv = itemInInventory(item, userData);
+  const cosmeticsData = await DB.userCosmetics.get(userId);
+  let itemInInv = itemInInventory(item, cosmeticsData);
 
   if( itemInInv.res ){
     if(['background','medal','sticker','flair','skin'].includes(item.type)){     

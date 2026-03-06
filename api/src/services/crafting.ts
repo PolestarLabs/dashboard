@@ -43,8 +43,8 @@ export class CraftingService {
     // Resolve crafting history to detect new discoveries
     let craftingHistory: string[] = [];
     if (userId) {
-      const userData = await DB.users.get(userId, { "profile.inventory": 1 });
-      craftingHistory = ((userData?.profile?.inventory ?? []) as any[])
+      const cosmeticsData = await DB.userCosmetics.get(userId);
+      craftingHistory = ((cosmeticsData?.inventory ?? []) as any[])
         .filter((x) => x.crafted > 0)
         .map((i) => i.id);
     }
@@ -197,7 +197,10 @@ export class CraftingService {
         body: { status: "ERROR", message: "This item can't be crafted" },
       };
 
-    const userData = await DB.users.getFull(userId);
+    const [userData, cosmeticsDoc] = await Promise.all([
+      DB.users.get(userId),
+      DB.userCosmetics.getFull(userId),
+    ]);
     if (!userData)
       return {
         ok: false, code: 401,
@@ -206,7 +209,7 @@ export class CraftingService {
 
     const materials = pot ?? itemToCraft.materials;
     for (const itm of materials) {
-      const has = userData.profile.inventory.find((i: any) => i.id === itm.id);
+      const has = cosmeticsDoc.inventory.find((i: any) => i.id === itm.id);
       if (!has || has.count < itm.count)
         return {
           ok: false, code: 403,
@@ -214,9 +217,9 @@ export class CraftingService {
         };
     }
 
-    await Promise.all(materials.map((m: any) => userData.removeItem(m.id, m.count)));
+    await Promise.all(materials.map((m: any) => cosmeticsDoc.removeItem(m.id, m.count)));
     await Promise.all([
-      userData.addItem(item, 1, true),
+      cosmeticsDoc.addItem(item, 1, true),
       DB.users.set(userId, {
         $inc: { "progression.craftingExp": EXP_TABLE[itemToCraft.rarity as string] ?? 1 },
       }),
@@ -228,7 +231,7 @@ export class CraftingService {
       body: {
         status:    "OK",
         message:   "Item has been crafted",
-        inventory: userData.profile.inventory,
+        inventory: cosmeticsDoc.inventory,
       },
     };
   }
