@@ -25,7 +25,8 @@
       "@routes/*":   ["routes/*"],
       "@helpers/*":  ["helpers/*"],
       "@definitions/*": ["definitions/*"],
-      "@services/*": ["services/*"]
+      "@services/*": ["services/*"],
+      "@types/*": ["types/*"]
     }
   },
   "include": ["src/**/*.ts"],
