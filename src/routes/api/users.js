@@ -48,7 +48,7 @@ router.get('/:id/inventory', async (req,res)=>{
     const uID = res.locals.userID;
         
         let USR = await DB.users.get(uID);
-        let userInventory = USR.modules.inventory.filter(itm=> itm.count > 0 && typeof itm.id === 'string');
+        let userInventory = USR.profile.inventory.filter(itm=> itm.count > 0 && typeof itm.id === 'string');
         let userMetaInventory = await DB.items.find({id: {$in: userInventory.map(i=>i.id) } });
         userInventory.forEach(item=>{
             item.meta = userMetaInventory.find(itm=>itm.id === item.id);
@@ -61,7 +61,7 @@ router.get('/:id/stickers', async (req,res)=>{
     const uID = res.locals.userID;
         
         let USR = await DB.users.get(uID);
-        let userInventory = USR.modules.stickerInventory.filter(x=>!!x);
+        let userInventory = USR.profile.stickerInventory.filter(x=>!!x);
         let userMetaInventory = await DB.cosmetics.find({id: {$in: userInventory } }).lean();
 
         let packs = await DB.items.find({icon: {$in: userMetaInventory.map(x=>x?.series_id)}}).lean();
@@ -78,7 +78,7 @@ router.get('/:id/medals', async (req,res)=>{
     const uID = res.locals.userID;
         
         let USR = await DB.users.get(uID);
-        let userInventory = USR.modules.medalInventory.filter(x=>!!x);
+        let userInventory = USR.profile.medalInventory.filter(x=>!!x);
         let userMetaInventory = await DB.cosmetics.find({icon: {$in: userInventory } }).lean().noCache();
         console.log({userInventory})
         
@@ -89,7 +89,7 @@ router.get(['/:id/bgs','/:id/backgrounds'], async (req,res)=>{
     const uID = res.locals.userID;
         
         let USR = await DB.users.get(uID);
-        let userInventory = USR.modules.bgInventory.filter(x=>!!x);;
+        let userInventory = USR.profile.bgInventory.filter(x=>!!x);;
         let userMetaInventory = await DB.cosmetics.find({code: {$in: userInventory } }).lean();
         
         res.json(userMetaInventory)
@@ -263,25 +263,25 @@ function parse_userdata(discordUser, USR, STATUS) {
         response.isBot = discordUser.bot;
     }
     else {
-        response.level = USR.modules.level;
-        response.exp = USR.modules.exp;
-        response.commends = USR.modules.commend;
-        response.RBN = USR.modules.RBN;
-        response.JDE = USR.modules.JDE;
-        response.SPH = USR.modules.SPH;
-        response.isDonator = USR.donator && USR.donator != "";
-        response.donatorTier = USR.donator;
+        response.level = USR.progression.level;
+        response.exp = USR.progression.exp;
+        response.commends = USR.counters?.commend;
+        response.RBN = USR.currency.RBN;
+        response.JDE = USR.currency.JDE;
+        response.SPH = USR.currency.SPH;
+        response.isDonator = USR.prime?.tier && USR.prime.tier != "";
+        response.donatorTier = USR.prime?.tier;
         response.isBlacklisted = USR.blacklisted && USR.blacklisted != "" ? true : false;
         response.profile = {
-            background: USR.modules.bgID,
-            sticker: USR.modules.sticker,
-            color: USR.modules.favcolor,
-            flair: USR.modules.flairTop,
-            about: USR.modules.persotext,
-            tagline: USR.modules.tagline,
-            medals: USR.modules.medals
+            background: USR.profile.bgID,
+            sticker: USR.profile.sticker,
+            color: USR.profile.favcolor,
+            flair: USR.profile.flairTop,
+            about: USR.profile.persotext,
+            tagline: USR.profile.tagline,
+            medals: USR.profile.medals
         };
-        response.inventorySize = USR.modules.inventory?.reduce((a, b) => a + b.count, 0) || 0;
+        response.inventorySize = USR.profile.inventory?.reduce((a, b) => a + b.count, 0) || 0;
     }
     if (discordUser.error) {
         console.log("AAAAAAAAAAAAAAAAA".red)

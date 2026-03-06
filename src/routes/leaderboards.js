@@ -31,9 +31,9 @@ async function compileLeaderboard(TYPE){
 
     if (!TYPE ||TYPE === "global") {
       LEAD = await DB.users
-        .find({blacklisted:{$ne:"BOT ACCOUNT"}},{meta:1,id:1,'modules.exp':1,'modules.level':1,'modules.bgID':1})
+        .find({blacklisted:{$ne:"BOT ACCOUNT"}},{meta:1,id:1,'progression.exp':1,'progression.level':1,'profile.bgID':1})
         .limit(100)
-        .sort({ "modules.exp": -1 });
+        .sort({ "progression.exp": -1 });
     } else {
       let LEADS = await DB.localranks
         .find({ server: TYPE })
@@ -45,8 +45,8 @@ async function compileLeaderboard(TYPE){
         const thisUser = USERS.find(u => u.id == U.user);
   
         if (!U || !thisUser) return;
-        thisUser.modules.exp = U.exp;
-        thisUser.modules.level = U.level;
+        thisUser.progression.exp = U.exp;
+        thisUser.progression.level = U.level;
         return thisUser;
       });
     }
@@ -77,10 +77,10 @@ async function userRankify(plxUser = {}, discordUser, member) {
       "https://discordapp.com/assets/6debd47ed13483642cf09e832ed0bc1b.png";
     userRank.disc = "";
   }
-  if (plxUser.modules) {
-    userRank.level = plxUser.modules.level;
-    userRank.exp = plxUser.modules.exp;
-    userRank.bg = plxUser.modules.bgID;
+  if (plxUser.progression) {
+    userRank.level = plxUser.progression.level;
+    userRank.exp = plxUser.progression.exp;
+    userRank.bg = plxUser.profile?.bgID;
   }
 
   if (plxUser.meta) {

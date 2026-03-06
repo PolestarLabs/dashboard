@@ -186,7 +186,7 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
     
         // Stage 3
         {
-          $lookup: {from:"userdb",localField:"author",foreignField:"id",as:"userdata"}
+          $lookup: {from:"users",localField:"author",foreignField:"id",as:"userdata"}
         },
     
         // Stage 4
