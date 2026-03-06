@@ -22,12 +22,14 @@ export function cursor<T>(data: T) {
 
 export function makeFakeDb(overrides: Partial<any> = {}) {
   const db = {
-    users: MONGODB_DB_COLLECTION,
+    users: { ...MONGODB_DB_COLLECTION, findOne: jest.fn() },
+    userInventory: { ...MONGODB_DB_COLLECTION },
     items: MONGODB_DB_COLLECTION,
     cosmetics: MONGODB_DB_COLLECTION,
     commends: MONGODB_DB_COLLECTION,
     usercols: MONGODB_DB_COLLECTION,
     fanart: MONGODB_DB_COLLECTION,
+    relationships: MONGODB_DB_COLLECTION,
     collections: { fanart: MONGODB_DB_COLLECTION },
   } as unknown as Schemas;
   return Object.assign(db, overrides);
