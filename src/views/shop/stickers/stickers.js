@@ -36,13 +36,13 @@ STICKERS = new Vue({
   methods:{
       packProgress(){
         let thisPack = this.STIKS.filter(x=>x.series_id == this.selectedPak).map(x=>x.id);
-        let val = userdata.profile.stickerInventory.filter(x=> thisPack.includes(x) ).length
+        let val = (userdata.inventory?.stickerInventory||[]).filter(x=> thisPack.includes(x) ).length
         let max = thisPack.length;
         
         return {pct: Math.floor(100/(val==0?100:(max / val))), val,max}
     },
     hasSticker(stk){
-        return this.toggleOwned? userdata.profile.stickerInventory.includes(stk.id):true;
+        return this.toggleOwned? (userdata.inventory?.stickerInventory||[]).includes(stk.id):true;
     },
     calculateTime(item){
       let timestamp = item._id.toString().substring(0,8)

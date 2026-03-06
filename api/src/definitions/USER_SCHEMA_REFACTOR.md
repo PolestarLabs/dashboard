@@ -17,7 +17,7 @@
    - [Undeclared Ghost Fields](#24-undeclared-ghost-fields-strictfalse-drift)
 3. [Proposed Schema Split (7 Collections)](#3-proposed-schema-split)
    - [users (core)](#31-users-core)
-   - [user_cosmetics](#32-user_cosmetics)
+   - [user_inventory](#32-user_inventory)
    - [user_oauth](#33-user_oauth)
    - [user_guilds](#34-user_guilds)
    - [user_quests](#35-user_quests)
@@ -288,7 +288,7 @@ Because `UserSchema` uses `{ strict: false }`, Mongoose does not strip unknown f
 | # | Collection | Cardinality | Indices | Replaces |
 |---|---|---|---|---|
 | 1 | `users` | 1 per user | `id` (unique), `personalhandle` (unique sparse) | Lean core doc |
-| 2 | `user_cosmetics` | 1 per user | `userId` (unique) | All `*Inventory` arrays |
+| 2 | `user_inventory` | 1 per user | `userId` (unique) | All `*Inventory` arrays |
 | 3 | `user_oauth` | 1 per user | `userId` (unique) | OAuth tokens + PII |
 | 4 | `user_guilds` | Redis preferred | `userId`, `guildId`, TTL | `discordData.guilds` |
 | 5 | `user_quests` | N per user | `userId + questId` (unique) | `quests[]` |
@@ -408,12 +408,12 @@ interface UserCore {
 }
 ```
 
-### 3.2 `user_cosmetics`
+### 3.2 `user_inventory`
 
 One document per user. All large inventory arrays.
 
 ```typescript
-interface UserCosmetics {
+interface UserInventory {
   _id: ObjectId;
   userId: string;               // FK → users.id (unique index)
 
@@ -555,20 +555,20 @@ interface UserConnection {
 
 ## 4. Field Migration Map
 
-### Moved to `user_cosmetics`
+### Moved to `user_inventory`
 
 | Old Path | New Path |
 |---|---|
-| `modules.inventory` | `user_cosmetics.inventory` |
-| `modules.bgInventory` | `user_cosmetics.bgInventory` |
-| `modules.medalInventory` | `user_cosmetics.medalInventory` |
-| `modules.stickerInventory` | `user_cosmetics.stickerInventory` |
-| `modules.flairsInventory` | `user_cosmetics.flairsInventory` |
-| `modules.skinInventory` | `user_cosmetics.skinInventory` |
-| `modules.stickerCollection` | `user_cosmetics.stickerCollection` |
-| `modules.fishCollection` | `user_cosmetics.fishCollection` |
-| `modules.fishes` | `user_cosmetics.fishes` |
-| `modules.achievements` | `user_cosmetics.achievements` |
+| `modules.inventory` | `user_inventory.inventory` |
+| `modules.bgInventory` | `user_inventory.bgInventory` |
+| `modules.medalInventory` | `user_inventory.medalInventory` |
+| `modules.stickerInventory` | `user_inventory.stickerInventory` |
+| `modules.flairsInventory` | `user_inventory.flairsInventory` |
+| `modules.skinInventory` | `user_inventory.skinInventory` |
+| `modules.stickerCollection` | `user_inventory.stickerCollection` |
+| `modules.fishCollection` | `user_inventory.fishCollection` |
+| `modules.fishes` | `user_inventory.fishes` |
+| `modules.achievements` | `user_inventory.achievements` |
 
 ### Moved to `user_oauth` (encrypted)
 
@@ -715,7 +715,7 @@ db.users.createIndex({ personalhandle: 1 },  { unique: true, sparse: true })
 db.users.createIndex({ "modules.PSM": 1 })   // if PSM stays under modules during transition
 
 // New collections
-db.user_cosmetics.createIndex(  { userId: 1 },                          { unique: true })
+db.user_inventory.createIndex(  { userId: 1 },                          { unique: true })
 db.user_oauth.createIndex(      { userId: 1 },                          { unique: true })
 db.user_guilds.createIndex(     { userId: 1 })
 db.user_guilds.createIndex(     { guildId: 1 })

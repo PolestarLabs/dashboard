@@ -98,7 +98,7 @@ if (!userDiscordData) return res.status(500).json("NO DISCORD USER DATA");
       const finder = (DATA.itemStatus || {}).prequery || result.prequery || { userId: PAYLOAD.author };
       const action = (DATA.itemStatus || {}).query || result.query;
       if (finder === {}) return res.status(400).json("Dangerous Query Result");
-      await DB.userCosmetics.updateOne(finder, action);
+      await DB.userInventory.updateOne(finder, action);
       await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? (PAYLOAD.price*.15) : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
 
     } else {
@@ -468,21 +468,21 @@ async function awardMarketplaceItem(item, userID, remove) {
   const operation = remove ? "$pull" : "$addToSet";
   switch (item.type) {
     case "background":
-      return DB.userCosmetics.set(userID, { [operation]: { bgInventory: item.code } }).then(() => true).catch(() => false);
+      return DB.userInventory.set(userID, { [operation]: { bgInventory: item.code } }).then(() => true).catch(() => false);
     case "medal":
-      return DB.userCosmetics.set(userID, { [operation]: { medalInventory: item.icon } }).then(() => true).catch(() => false);
+      return DB.userInventory.set(userID, { [operation]: { medalInventory: item.icon } }).then(() => true).catch(() => false);
     case "sticker":
     case "flair":
-      return DB.userCosmetics.set(userID, { [operation]: { stickerInventory: item.id } }).then(() => true).catch(() => false);
+      return DB.userInventory.set(userID, { [operation]: { stickerInventory: item.id } }).then(() => true).catch(() => false);
     default: {
       const delta = remove ? -1 : 1;
-      const r = await DB.userCosmetics.set(
+      const r = await DB.userInventory.set(
         userID,
         { $inc: { "inventory.$[item].count": delta } },
         { arrayFilters: [{ "item.id": item.id }] }
       ).catch(() => null);
       if (r?.modifiedCount > 0) return true;
-      return DB.userCosmetics.set(userID, { $push: { inventory: { id: item.id, count: 1 } } })
+      return DB.userInventory.set(userID, { $push: { inventory: { id: item.id, count: 1 } } })
         .then(() => true)
         .catch(err => { console.error(err, "Market error".bgRed); return false; });
     }
@@ -652,7 +652,7 @@ function itemInInventory(item, cosmeticsData) {
 async function userCanSell(id, PAYLOAD, item, softCheck=false) {
   const [userData, cosmeticsData] = await Promise.all([
     DB.users.findOne({id}).noCache(),
-    DB.userCosmetics.get(id),
+    DB.userInventory.get(id),
   ]);
 
   if (!softCheck){
@@ -684,7 +684,7 @@ async function userCanBuy(userId, currency, price, item) {
     reason = "UNKNOWN",
     status = 200;
 
-  const cosmeticsData = await DB.userCosmetics.get(userId);
+  const cosmeticsData = await DB.userInventory.get(userId);
   let itemInInv = itemInInventory(item, cosmeticsData);
 
   if( itemInInv.res ){

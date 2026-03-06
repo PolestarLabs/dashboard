@@ -46,7 +46,7 @@
  *  Collection          | Indices                      | Replaces / owns
  *  ------------------- | ---------------------------- | ----------------------------
  *  users               | id (unique), donator         | lean core doc (below)
- *  user_cosmetics      | userId (unique)              | all inventory arrays + cherryCosmetics
+ *  user_inventory      | userId (unique)              | all inventory arrays + cherryCosmetics
  *  user_guilds         | userId, guildId              | discordData.guilds  → Redis preferred
  *  user_oauth          | userId (unique)              | all OAuth tokens + personal + discordIdentityCache
  *  user_quests         | userId, id                   | quests[]
@@ -188,7 +188,7 @@ export interface UserCore {
 
   // ── Cherry cosmetic collection ─────────────────────────────
   // The `cherrySet` Mixed sub-doc tracks which cherry variants are collected.
-  // Cherry IDs live in user_cosmetics; the set/progress blob stays here.
+  // Cherry IDs live in user_inventory; the set/progress blob stays here.
   cherrySet?: Record<string, unknown>;
 
   // ── Social features ────────────────────────────────────────
@@ -207,7 +207,7 @@ export interface UserCore {
 /*
  * REMOVED from users:
  *
- * → user_cosmetics:
+ * → user_inventory:
  *   modules.inventory, modules.bgInventory, modules.medalInventory,
  *   modules.stickerInventory, modules.flairsInventory, modules.skinInventory,
  *   modules.stickerCollection, modules.fishCollection, modules.fishes,
@@ -247,12 +247,12 @@ export interface UserCore {
  *   rubinesOld, modules.coins, EVTbkp,
  *   eventTokens (root — consolidate into users.EVT),
  *   modules.daily (duplicate of counters.daily.last),
- *   module (singular, pending migration to user_cosmetics.inventory)
+ *   module (singular, pending migration to user_inventory.inventory)
  */
 
 
 // ─────────────────────────────────────────────────────────────
-// 2. USER COSMETICS  (new collection: `user_cosmetics`)
+// 2. USER COSMETICS  (new collection: `user_inventory`)
 // ─────────────────────────────────────────────────────────────
 
 /**
@@ -262,7 +262,7 @@ export interface UserCore {
  * needed by bot commands or API reads that only want level/currency.
  * Decoupling them drops the hot-path user document from ~4 800 lines to ~30 fields.
  */
-export interface UserCosmetics {
+export interface UserInventory {
   _id: ObjectId;
   userId: string;             // FK → UserCore.id
 
@@ -292,7 +292,7 @@ export interface UserCosmetics {
 /*
  * Mongoose schema hint:
  *
- *   const UserCosmeticsSchema = new Schema({
+ *   const UserInventorySchema = new Schema({
  *     userId: { type: String, required: true, unique: true, index: true },
  *     inventory: [{ id: String, count: Number, crafted: Number }],
  *     bgInventory:       [String],
@@ -534,7 +534,7 @@ export interface UserConnection {
  *    db.users.updateMany({}, { $unset: {
  *      "modules.rubinesOld": "",
  *      "modules.coins": "",
- *      "module": "",          // pending re-migration to user_cosmetics
+ *      "module": "",          // pending re-migration to user_inventory
  *      "EVTbkp": "",
  *      "eventTokens": "",     // consolidate into users.EVT
  *      "modules.daily": "",   // duplicate of counters.daily.last
@@ -559,7 +559,7 @@ export interface UserConnection {
  * 7. INDEX PLAN (Mongo commands)
  *    // users — preserve existing sparse unique index on personalhandle:
  *    db.users.createIndex({ personalhandle: 1 }, { unique: true, sparse: true })
- *    db.user_cosmetics.createIndex({ userId: 1 }, { unique: true })
+ *    db.user_inventory.createIndex({ userId: 1 }, { unique: true })
  *    db.user_oauth.createIndex({ userId: 1 }, { unique: true })
  *    db.user_guilds.createIndex({ userId: 1 })
  *    db.user_guilds.createIndex({ guildId: 1 })
@@ -569,9 +569,9 @@ export interface UserConnection {
  *    db.user_connections.createIndex({ userId: 1, type: 1 }, { unique: true })
  *
  * 8. ESTIMATED SIZE REDUCTION (per user)
- *    bgInventory (~200 IDs × ~32 chars)       ≈  6.4 KB  → user_cosmetics
- *    medalInventory (~350 IDs × ~20 chars)    ≈  7 KB    → user_cosmetics
- *    stickerInventory (~200 IDs × ~20 chars)  ≈  4 KB    → user_cosmetics
+ *    bgInventory (~200 IDs × ~32 chars)       ≈  6.4 KB  → user_inventory
+ *    medalInventory (~350 IDs × ~20 chars)    ≈  7 KB    → user_inventory
+ *    stickerInventory (~200 IDs × ~20 chars)  ≈  4 KB    → user_inventory
  *    discordData.guilds (~80 × ~500 bytes)    ≈  40 KB   → Redis
  *    OAuth tokens + personal                  ≈  2 KB    → user_oauth
  *    --------------------------------------------------

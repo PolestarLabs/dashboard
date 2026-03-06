@@ -34,7 +34,7 @@ module.exports = async (query,user,rarArray) => {
 	let burnInfo = false;
 	if (user){
 		const userData = await DB.users.get(user);
-		const cosmeticsData = await DB.userCosmetics.get(user);
+		const cosmeticsData = await DB.userInventory.get(user);
 
 		if (userData.switches?.custom_rt && userData.switches?.custom_rt.seed === SEED && userData.items?.length ) {
 			filterQuery.code = {$in: userData.switches.custom_rt.items };

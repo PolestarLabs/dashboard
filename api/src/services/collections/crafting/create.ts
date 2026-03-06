@@ -17,7 +17,7 @@ export default new Elysia()
 
         const [userData, cosmeticsDoc] = await Promise.all([
             DB.users.get(apiUser.id),
-            DB.userCosmetics.getFull(apiUser.id),
+            DB.userInventory.getFull(apiUser.id),
         ]);
         if (!userData) {
             set.status = 401;

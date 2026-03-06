@@ -11,7 +11,7 @@ exports.run = async function(ITEM_IN,checking,req,res){
     
   const [userData, cosmeticsData] = await Promise.all([
       DB.users.findOne({id:req.user.id},{"currency.JDE":1,"currency.SPH":1,"currency.RBN":1}),
-      DB.userCosmetics.getFull(req.user.id),
+      DB.userInventory.getFull(req.user.id),
   ]);
   if(crafted_item){
     let ID = crafted_item.id

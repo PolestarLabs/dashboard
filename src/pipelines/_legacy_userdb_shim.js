@@ -79,15 +79,15 @@ async function getUser(userId, projection) {
 /**
  * Get user cosmetics, falling back to legacy userdb.modules.* fields.
  *
- * @deprecated Use DB.userCosmetics.get() directly when migrated.
+ * @deprecated Use DB.userInventory.get() directly when migrated.
  * @param {string} userId
  * @returns {Promise<object|null>}
  */
-async function getUserCosmetics(userId) {
+async function getUserInventory(userId) {
   if (typeof userId === "object" && userId.id) userId = userId.id;
   userId = String(userId);
 
-  const cosmetics = await DB.userCosmetics.get(userId);
+  const cosmetics = await DB.userInventory.get(userId);
   if (cosmetics) return cosmetics;
 
   let legacyUser;
@@ -272,7 +272,7 @@ async function _markSunset(userId) {
 
 module.exports = {
   getUser,
-  getUserCosmetics,
+  getUserInventory,
   getUserOAuth,
   translateUpdate,
   FIELD_MAP,

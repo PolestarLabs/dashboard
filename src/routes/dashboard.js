@@ -193,7 +193,7 @@ router.patch("/misc/:endpoint", async (req,res)=>{
     const payload = req.body
     const [USERDATA, cosmeticsData] = await Promise.all([
         DB.users.get(UID),
-        DB.userCosmetics.get(UID),
+        DB.userInventory.get(UID),
     ]);
 
 
@@ -231,7 +231,7 @@ router.patch("/profile/:endpoint", async (req,res)=>{
     console.log(UID)
     const [USERDATA, cosmeticsData] = await Promise.all([
         DB.users.get(UID),
-        DB.userCosmetics.get(UID),
+        DB.userInventory.get(UID),
     ]);
     if(!USERDATA.profile) return res.status(400).send("Incomplete UserData");
 
@@ -294,7 +294,7 @@ router.put('/profile/medals', async (req,res)=>{
         const UID = req.user.id;
         const [USERDATA, cosmeticsData] = await Promise.all([
             DB.users.get(UID),
-            DB.userCosmetics.get(UID),
+            DB.userInventory.get(UID),
         ]);
 
         let payload = req.body.map((v,i,a) => a.indexOf(v) == i ?v:v=="0"?0:0);

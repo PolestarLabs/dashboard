@@ -128,7 +128,7 @@ router.post('/mix', async (req,res) => {
     let inventory,craftingHistory;
     if(req.user?.id){
         let [cosmeticsData] = await Promise.all([
-            DB.userCosmetics.get( req.user.id, {'inventory':1}),
+            DB.userInventory.get( req.user.id, {'inventory':1}),
         ]);
     let   inventory = (cosmeticsData?.inventory || []).filter(x=>x.count > 0);
     craftingHistory = (cosmeticsData?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
@@ -336,7 +336,7 @@ router.post(['/create','/craft'], checkAuth, async (req,res)=> {
 
         const [userData, cosmeticsDoc] = await Promise.all([
             DB.users.getFull(req.user.id),
-            DB.userCosmetics.getFull(req.user.id),
+            DB.userInventory.getFull(req.user.id),
         ]);
         if (!userData) return res.status(401).json({status:"ERROR",message:"Not Logged in"});
 

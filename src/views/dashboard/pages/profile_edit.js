@@ -10,9 +10,9 @@ VueSelect.VueSelect.methods.maybeAdjustScroll = () => false;
 
 var Chrome = window.VueColor.Chrome;
 
-if (!userdata.profile.flairsInventory.includes("default"))
-  userdata.profile.flairsInventory.push("default");
-const flairsAvailable = userdata.profile.flairsInventory;
+if (!(userdata.inventory?.flairInventory||[]).includes("default"))
+  userdata.inventory?.flairInventory?.push("default");
+const flairsAvailable = userdata.inventory?.flairInventory || [];
 
 var CANVAS, ctx;
 
@@ -580,7 +580,7 @@ function updateUserBGs(){
         };
       }).filter((v,i,a)=>a.findIndex(x=>x.code==v.code)==i);
 
-      DASH.backgroundsAvailable =  userdata.profile.bgInventory.map((bg,i) => {
+      DASH.backgroundsAvailable =  (userdata.inventory?.bgInventory||[]).map((bg,i) => {
         let thisBgData = res.find((x) => x.code == bg) || {
           name: "Unknown",
           rarity: "C",

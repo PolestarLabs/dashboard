@@ -135,7 +135,7 @@ module.exports={
 
       Promise.all([
           DB.users.findOne({id:target}),
-          DB.userCosmetics.get(target),
+          DB.userInventory.get(target),
       ]).then( async ([USR, cosmeticsData])=>{
         if(!USR) return res.send("USER ID NOT FOUND");
 
@@ -228,7 +228,7 @@ module.exports={
       let querytring 
         if(!subtarget) res.sendCode(400);
         if(!target) res.sendCode(400);
-        DB.userCosmetics.get(subtarget).then(async udata=>{
+        DB.userInventory.get(subtarget).then(async udata=>{
 
           if(target == "bgs") querystring = {type:'background' ,code:{$in:udata?.bgInventory||[]}} ;
           if(target == "medals") querystring = {type:'medal' ,icon:{$in:udata?.medalInventory||[]}} ;

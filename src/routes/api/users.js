@@ -47,7 +47,7 @@ router.get('/:id', cache(30), async (req,res) => {
 router.get('/:id/inventory', async (req,res)=>{
     const uID = res.locals.userID;
 
-        let cosmeticsData = await DB.userCosmetics.get(uID);
+        let cosmeticsData = await DB.userInventory.get(uID);
         let userInventory = (cosmeticsData?.inventory||[]).filter(itm=> itm.count > 0 && typeof itm.id === 'string');
         let userMetaInventory = await DB.items.find({id: {$in: userInventory.map(i=>i.id) } });
         userInventory.forEach(item=>{
@@ -60,7 +60,7 @@ router.get('/:id/inventory', async (req,res)=>{
 router.get('/:id/stickers', async (req,res)=>{
     const uID = res.locals.userID;
 
-        let cosmeticsData = await DB.userCosmetics.get(uID);
+        let cosmeticsData = await DB.userInventory.get(uID);
         let userInventory = (cosmeticsData?.stickerInventory||[]).filter(x=>!!x);
         let userMetaInventory = await DB.cosmetics.find({id: {$in: userInventory } }).lean();
 
@@ -77,7 +77,7 @@ router.get('/:id/stickers', async (req,res)=>{
 router.get('/:id/medals', async (req,res)=>{
     const uID = res.locals.userID;
 
-        let cosmeticsData = await DB.userCosmetics.get(uID);
+        let cosmeticsData = await DB.userInventory.get(uID);
         let userInventory = (cosmeticsData?.medalInventory||[]).filter(x=>!!x);
         let userMetaInventory = await DB.cosmetics.find({icon: {$in: userInventory } }).lean().noCache();
         console.log({userInventory})
@@ -88,7 +88,7 @@ router.get('/:id/medals', async (req,res)=>{
 router.get(['/:id/bgs','/:id/backgrounds'], async (req,res)=>{
     const uID = res.locals.userID;
 
-        let cosmeticsData = await DB.userCosmetics.get(uID);
+        let cosmeticsData = await DB.userInventory.get(uID);
         let userInventory = (cosmeticsData?.bgInventory||[]).filter(x=>!!x);
         let userMetaInventory = await DB.cosmetics.find({code: {$in: userInventory } }).lean();
 
@@ -244,7 +244,7 @@ async function parseUserAndReturn(uID, res) {
 
     const [USR, cosmeticsData] = await Promise.all([
         DB.users.get(uID),
-        DB.userCosmetics.get(uID),
+        DB.userInventory.get(uID),
     ]);
     let response;
     ({ response, STATUS } = parse_userdata(discordUser, USR, STATUS, cosmeticsData));

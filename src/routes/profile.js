@@ -26,16 +26,18 @@ router.get('/:endpoint', async (req, res)=> {
  
     const userDiscord = (await userCache.get( userprofile.id )) || (await PLX.getRESTUser( userprofile.id ));
 
-    const userCosmetics = await DB.userCosmetics.get( userprofile.id );
-    if (userCosmetics && userprofile.profile) {
-        userprofile.profile.inventory        = userCosmetics.inventory        ?? userprofile.profile.inventory;
-        userprofile.profile.bgInventory      = userCosmetics.bgInventory      ?? userprofile.profile.bgInventory;
-        userprofile.profile.medalInventory   = userCosmetics.medalInventory   ?? userprofile.profile.medalInventory;
-        userprofile.profile.stickerInventory = userCosmetics.stickerInventory ?? userprofile.profile.stickerInventory;
-        userprofile.profile.skinInventory    = userCosmetics.skinInventory    ?? userprofile.profile.skinInventory;
-        userprofile.profile.flairsInventory  = userCosmetics.flairInventory   ?? userprofile.profile.flairsInventory;
-        userprofile.profile.stickerShowcase  = userCosmetics.stickerShowcase  ?? userprofile.profile.stickerShowcase;
-    }
+    const userInventory = await DB.userInventory.get( userprofile.id );
+    userprofile.inventory = {
+        items:            userInventory?.inventory         ?? [],
+        bgInventory:      userInventory?.bgInventory       ?? [],
+        medalInventory:   userInventory?.medalInventory    ?? [],
+        stickerInventory: userInventory?.stickerInventory  ?? [],
+        skinInventory:    userInventory?.skinInventory     ?? [],
+        flairInventory:   userInventory?.flairInventory    ?? [],
+        stickerShowcase:  userInventory?.stickerShowcase   ?? [],
+        achievements:     userInventory?.achievements      ?? [],
+        fishes:           userInventory?.fishes            ?? [],
+    };
 
     let donoranks;
     if(userprofile.prime?.tier){

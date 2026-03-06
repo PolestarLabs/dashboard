@@ -43,7 +43,7 @@ export class CraftingService {
     // Resolve crafting history to detect new discoveries
     let craftingHistory: string[] = [];
     if (userId) {
-      const cosmeticsData = await DB.userCosmetics.get(userId);
+      const cosmeticsData = await DB.userInventory.get(userId);
       craftingHistory = ((cosmeticsData?.inventory ?? []) as any[])
         .filter((x) => x.crafted > 0)
         .map((i) => i.id);
@@ -199,7 +199,7 @@ export class CraftingService {
 
     const [userData, cosmeticsDoc] = await Promise.all([
       DB.users.get(userId),
-      DB.userCosmetics.getFull(userId),
+      DB.userInventory.getFull(userId),
     ]);
     if (!userData)
       return {

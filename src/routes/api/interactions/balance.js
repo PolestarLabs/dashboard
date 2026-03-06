@@ -34,7 +34,7 @@ module.exports = {
 
     const [TARGETDATA, cosmeticsData] = await Promise.all([
         DB.users.get({ id: Target.id }),
-        DB.userCosmetics.get(Target.id),
+        DB.userInventory.get(Target.id),
     ]);
     responseEmbed.color = 0xffc156;
     responseEmbed.title = bal;

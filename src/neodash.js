@@ -561,16 +561,18 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
 				let dscUser = (await userCache.get(req.user.id)) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
 				data = await DB.users.new(dscUser);
 			}
-			const cosmetics = await DB.userCosmetics.get(data.id);
-			if (cosmetics && data.profile) {
-				data.profile.inventory        = cosmetics.inventory        ?? data.profile.inventory;
-				data.profile.bgInventory      = cosmetics.bgInventory      ?? data.profile.bgInventory;
-				data.profile.medalInventory   = cosmetics.medalInventory   ?? data.profile.medalInventory;
-				data.profile.stickerInventory = cosmetics.stickerInventory ?? data.profile.stickerInventory;
-				data.profile.skinInventory    = cosmetics.skinInventory    ?? data.profile.skinInventory;
-				data.profile.flairsInventory  = cosmetics.flairInventory   ?? data.profile.flairsInventory;
-				data.profile.stickerShowcase  = cosmetics.stickerShowcase  ?? data.profile.stickerShowcase;
-			}
+			const cosmetics = await DB.userInventory.get(data.id);
+			data.inventory = {
+				items:            cosmetics?.inventory         ?? [],
+				bgInventory:      cosmetics?.bgInventory       ?? [],
+				medalInventory:   cosmetics?.medalInventory    ?? [],
+				stickerInventory: cosmetics?.stickerInventory  ?? [],
+				skinInventory:    cosmetics?.skinInventory     ?? [],
+				flairInventory:   cosmetics?.flairInventory    ?? [],
+				stickerShowcase:  cosmetics?.stickerShowcase   ?? [],
+				achievements:     cosmetics?.achievements      ?? [],
+				fishes:           cosmetics?.fishes            ?? [],
+			};
 			authCacheExpiration.set(req.user.id,{data,exp: Date.now() + 10e3  })
 			preDataProcess(data)
 		});

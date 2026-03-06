@@ -80,7 +80,7 @@ ${message}
       let U = payload.user
       let [DATA, cosmeticsData] = await Promise.all([
           DB.users.findOne({id:U.id}),
-          DB.userCosmetics.get(U.id),
+          DB.userInventory.get(U.id),
       ]);
       
       let ITM = payload.item
@@ -157,7 +157,7 @@ ${message}
 
 
 
-          return DB.userCosmetics.set(U.id, {
+          return DB.userInventory.set(U.id, {
             $addToSet:{
               'medalInventory'   : {$each:toadd.mdl},
               'bgInventory'      : {$each:toadd.bgd},
@@ -189,7 +189,7 @@ ${message}
           console.log({line:"post non ev check y price check",$index,$,price})
           await ECO.pay(U.id,price,T+"shop_dash",$index||"RBN");
 
-             DB.userCosmetics.set(USER.id, {$push: {[T+"Inventory"]: ITM}}).then(ok => resolve("OK"));
+             DB.userInventory.set(USER.id, {$push: {[T+"Inventory"]: ITM}}).then(ok => resolve("OK"));
         })
 
       } else {
@@ -204,7 +204,7 @@ ${message}
         DB.users.findOne({id: U.id}).then(async USER => {
 
          await ECO.pay(U.id,price,T+"shop_dash","EVT");
-            DB.userCosmetics.set(USER.id, {$push: {[T+"Inventory"]: ITM}}).then(ok => resolve("OK"))
+            DB.userInventory.set(USER.id, {$push: {[T+"Inventory"]: ITM}}).then(ok => resolve("OK"))
         })
       }
       },
@@ -213,7 +213,7 @@ ${message}
       return new Promise( async resolve=>{
       Promise.all([
           DB.users.findOne({id:req.user.id}),
-          DB.userCosmetics.get(req.user.id)
+          DB.userInventory.get(req.user.id)
       ]).then(async ([USER, cosmeticsData])=>{
 
           let type = req.params.type;

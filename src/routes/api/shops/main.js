@@ -47,7 +47,7 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
 
     const [userData, cosmeticsData] = await Promise.all([
         DB.users.findOne({id: req.user.id}),
-        DB.userCosmetics.get(req.user.id),
+        DB.userInventory.get(req.user.id),
     ]);
 
     
@@ -81,14 +81,14 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
     let respons;
     switch(type){
         case "background":
-            respons = await DB.userCosmetics.set(userData.id,{$addToSet: {bgInventory: item.code} });
+            respons = await DB.userInventory.set(userData.id,{$addToSet: {bgInventory: item.code} });
             break;
 
         case "medal":
-            respons = await DB.userCosmetics.set(userData.id,{$addToSet: {medalInventory: item.icon} });
+            respons = await DB.userInventory.set(userData.id,{$addToSet: {medalInventory: item.icon} });
             break;
         case "sticker":
-            respons = await DB.userCosmetics.set(userData.id,{$addToSet: {stickerInventory: item.id} });
+            respons = await DB.userInventory.set(userData.id,{$addToSet: {stickerInventory: item.id} });
             break;
 
         default:
@@ -109,7 +109,7 @@ async function buyBundle({req,res,userData,cosmeticsData,bundle,price,currency})
     let trans = await ECO.pay(userData.id,bundleStats.finalPrice,`storefront_bundle`,currency).catch(err=>{
         res.status(500).json(ERRORS.ecoFail);
     });
-    return DB.userCosmetics.updateOne({userId:userData.id}, bundleStats.query ).exec().then(ok=>{
+    return DB.userInventory.updateOne({userId:userData.id}, bundleStats.query ).exec().then(ok=>{
         res.status(200).json({status:"OK", cost: bundleStats.finalPrice, trans, ok,x:bundleStats.query});   
     }).catch(err=>{
         res.status(500).json({code: -1, status:"ERR", err});   
@@ -123,7 +123,7 @@ router.get("/bundle/price/:finder", async (req,res)=>{
     if(!req.user) return res.status(206).json({price: bundle.price, owned: [], info:"User not authenticated. This data is not complete."});
     const [userData, cosmeticsData] = await Promise.all([
         DB.users.get(req.user.id),
-        DB.userCosmetics.get(req.user.id),
+        DB.userInventory.get(req.user.id),
     ]);
 
     let bundleStatsRBN = calculateBundlePrice({userData,cosmeticsData,bundle,price: ~~(itemPrice(bundle,"RBN")) });
