@@ -30,7 +30,7 @@ STICKERS = new Vue({
           }}
         //mouseDrag:false,
         //transition: 100,
-        //initialSlide: flairsAvailable.indexOf(userdata.modules.flairTop)
+        //initialSlide: flairsAvailable.indexOf(userdata.profile && userdata.profile.flairTop)
       }
   },
   methods:{

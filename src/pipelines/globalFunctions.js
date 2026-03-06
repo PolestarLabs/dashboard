@@ -95,12 +95,12 @@ module.exports = {
   failsafe: async function failsafe(dbo, req) {
     return;
 
-    //console.log("ESSE [E P DENO",dbo)
-    if (typeof dbo != "object" || !dbo.modules) {
+    // Legacy: if user doc missing or incomplete, ensure from users collection (no .modules)
+    if (typeof dbo != "object" || !dbo.profile) {
       dbo = defaults.udefal;
       try {
         await fx.run("userSetup", { id: req.user.id, name: req.user.name });
-        dbo = await userDB.findOne({ id: req.user.id });
+        dbo = await DB.users.findOne({ id: req.user.id }).lean();
       } catch (e) {
         console.log(e);
       }

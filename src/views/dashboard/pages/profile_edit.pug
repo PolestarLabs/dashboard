@@ -21,7 +21,7 @@ mixin wifeBox
 	#wifebox.plx-container.plx-flex.plx-flex-wrap
 		.plx-width-1-1
 			.dash-pill#wife-bar(v-bind:style="{'border-color':favcolor.hex}" style="height:auto")
-				//.background-slot(style="background-image:url('/backdrops/"+userdata.modules.bgID+".png');"   )
+				//.background-slot(style="background-image:url('/backdrops/"+ (userdata.profile && userdata.profile.bgID || '') +".png');"   )
 				.backblur
 				.plx-flex
 					.wifevatar
@@ -111,7 +111,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 				.help Personal Text:
 					small(style="opacity:.8;font-style: italic") Up to 4 lines of anything you want to tell the world
 			.level.numeric-large(class='plx-visible@m')
-				.num= userdata.modules.level
+				.num= userdata.progression && userdata.progression.level
 				.name LEVEL
 
 
@@ -233,16 +233,16 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 		// NOTE --BG PICKER
 		.plx-width-1-1(class="plx-width-3-5@l")
 			.dash-pill#background-bar(v-bind:style="{'border-color':favcolor.hex}")
-				.background-slot(style="background-image:url('/backdrops/"+userdata.modules.bgID+".png');"   )
+				.background-slot(style="background-image:url('/backdrops/"+ (userdata.profile && userdata.profile.bgID || '') +".png');"   )
 				.backblur
 				.info.plx-flex.plx-flex-between
 					.c1.plx-width-2-3
 						.title Background
 						.name.sel {{selectBackground.name}}
 						.bgcode
-							code.mistyblue= userdata.modules.bgID
+							code.mistyblue= userdata.profile && userdata.profile.bgID
 					.c2.plx-width-1-3(class="plx-visible@m")
-						.background-thumb(style="background-image:url('/backdrops/"+userdata.modules.bgID+".png')" )
+						.background-thumb(style="background-image:url('/backdrops/"+ (userdata.profile && userdata.profile.bgID || '') +".png')" )
 
 				.bottom.test
 					#select-bg
@@ -259,7 +259,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 							:filter= "bgFiltering",
 							:close-on-select= "false",
 							:clearable= "false",
-							:value= `backgroundsAvailable.find(x=>x.code=='${userdata.modules.bgID}')`,
+							:value= `backgroundsAvailable.find(x=>x.code=='${userdata.profile && userdata.profile.bgID || ''}')`,
 							label='name'
 						)
 							template(slot='list-header')
@@ -317,7 +317,7 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 									:filter= "stkFiltering",
 									:close-on-select= "true",
 									:clearable= "true",
-									:value= `stickerAvailable.find(x=>x.id=='${userdata.modules.sticker}')`,
+									:value= `stickerAvailable.find(x=>x.id=='${userdata.profile && userdata.profile.sticker || ''}')`,
 									label='id'
 								)
 									template(slot='selected-option', slot-scope='option').test-templateclass
