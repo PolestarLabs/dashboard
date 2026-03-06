@@ -327,7 +327,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
     ECO.arbitraryAudit(entry.author, CURRENT_USER.id, entry.price, 'MARKETPLACE [SALE]', entry.currency)
     .then(async receipt=>{
       await ECO.pay(CURRENT_USER.id, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", entry.currency);
-      await DB.users.set(CURRENT_USER.id, {$inc: { "modules.exp": ~~(entry.price/100) , ["modules." + entry.currency]:entry.price} });
+      await DB.users.set(CURRENT_USER.id, {$inc: { "progression.exp": ~~(entry.price/100) , ["currency." + entry.currency]:entry.price} });
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       
       //TODO[epic=anyone] Emit notification to the seller;
