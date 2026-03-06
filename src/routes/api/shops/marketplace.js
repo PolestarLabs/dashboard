@@ -607,10 +607,10 @@ function itemInInventory(item, userData) {
 
   if (["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)){
     
-    if ( userData.modules.inventory.find(it=>it.id === item.id)?.count > 0 ) {
+    if ( userData.profile.inventory.find(it=>it.id === item.id)?.count > 0 ) {
       res = true;
-      prequery = { id: userData.id, "modules.inventory.id": item.id };
-      query = { $inc: { "modules.inventory.$.count": -1 } };
+      prequery = { id: userData.id, "profile.inventory.id": item.id };
+      query = { $inc: { "profile.inventory.$.count": -1 } };
     }else{
       res = false;
       reason = "ITEM NOT IN INVENTORY";
@@ -618,46 +618,46 @@ function itemInInventory(item, userData) {
     }
   }
   if (item.type === "background") {
-    if (!userData.modules.bgInventory.includes(item.code)) {
+    if (!userData.profile.bgInventory.includes(item.code)) {
       res = false;
       reason = "BACKGROUND NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "modules.bgInventory": item.code } };
+      query = { $pull: { "profile.bgInventory": item.code } };
       res = true;
     }
   }
   if (item.type === "medal") {
-    if (!userData.modules.medalInventory.includes(item.icon)) {
+    if (!userData.profile.medalInventory.includes(item.icon)) {
       res = false;
       reason = "MEDAL NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "modules.medalInventory": item.icon } };
+      query = { $pull: { "profile.medalInventory": item.icon } };
       res = true;
     }
   }
   if (item.type === "skin") {
-    if (!userData.modules.skinInventory.includes(item.id)) {
+    if (!userData.profile.skinInventory.includes(item.id)) {
       res = false;
       reason = "SKIN NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "modules.skinInventory": item.id } };
+      query = { $pull: { "profile.skinInventory": item.id } };
       res = true;
     }
   }
   if (item.type === "sticker") {
-    if (!userData.modules.stickerInventory.includes(item.id)) {
+    if (!userData.profile.stickerInventory.includes(item.id)) {
       res = false;
       reason = "STICKER NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "modules.stickerInventory": item.id } };
+      query = { $pull: { "profile.stickerInventory": item.id } };
       res = true;
     }
   }

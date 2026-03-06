@@ -65,8 +65,8 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
     }
     
     if(
-        (type == 'medal' && userData.modules.medalInventory.includes(item.icon)) ||
-        (type == 'background' && userData.modules.bgInventory.includes(item.code))
+        (type == 'medal' && userData.profile.medalInventory.includes(item.icon)) ||
+        (type == 'background' && userData.profile.bgInventory.includes(item.code))
     )  return res.status(403).json(ERRORS.itemOwned);
      
     if ( !(await ECO.checkFunds(userData.id,price,currency)) )  
@@ -78,14 +78,14 @@ router.post("/:type/buy/:finder",checkAuth, async (req,res)=>{
     let respons;
     switch(type){
         case "background":
-            respons = await DB.users.set(userData.id,{$addToSet: {'modules.bgInventory': item.code} });            
+            respons = await DB.users.set(userData.id,{$addToSet: {'profile.bgInventory': item.code} });
             break;
 
         case "medal":
-            respons = await DB.users.set(userData.id,{$addToSet: {'modules.medalInventory': item.icon} });       
+            respons = await DB.users.set(userData.id,{$addToSet: {'profile.medalInventory': item.icon} });
             break;
         case "sticker":
-            respons = await DB.users.set(userData.id,{$addToSet: {'modules.stickerInventory': item.id} });       
+            respons = await DB.users.set(userData.id,{$addToSet: {'profile.stickerInventory': item.id} });       
             break;
 
         default:
@@ -141,9 +141,9 @@ function calculateBundlePrice({userData,bundle,price}){
     let owned = []
     let toBeAdded = []
     let query = {$addToSet:{
-        "modules.bgInventory" : {$each:[]},
-        "modules.medalInventory" : {$each:[]},
-        "modules.stickerInventory" : {$each:[]},
+        "profile.bgInventory" : {$each:[]},
+        "profile.medalInventory" : {$each:[]},
+        "profile.stickerInventory" : {$each:[]},
     }};
 
     price = price || bundle.price;
@@ -153,27 +153,27 @@ function calculateBundlePrice({userData,bundle,price}){
         switch(itm.type){
             case "background":
             case "bg":
-                if(userData.modules.bgInventory.includes(itm.id)){
+                if(userData.profile.bgInventory.includes(itm.id)){
                     ownsItem = !0
                     tally+= 1;
                 }else{
-                    query.$addToSet["modules.bgInventory"].$each.push(itm.id)
+                    query.$addToSet["profile.bgInventory"].$each.push(itm.id)
                 }
                 break;
             case "medal":
-                if(userData.modules.medalInventory.includes(itm.id)){
+                if(userData.profile.medalInventory.includes(itm.id)){
                     ownsItem = !0
                     tally+= .6;
                 }else{
-                    query.$addToSet["modules.medalInventory"].$each.push(itm.id)
+                    query.$addToSet["profile.medalInventory"].$each.push(itm.id)
                 }
                 break;
             case "sticker":
-                if(userData.modules.stickerInventory.includes(itm.id)){
+                if(userData.profile.stickerInventory.includes(itm.id)){
                     ownsItem = !0
                     tally+=1.3;
                 }else{
-                    query.$addToSet["modules.stickerInventory"].$each.push(itm.id)
+                    query.$addToSet["profile.stickerInventory"].$each.push(itm.id)
                 }
                 break;
         }

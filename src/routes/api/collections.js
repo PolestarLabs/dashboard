@@ -338,7 +338,7 @@ router.post(['/create','/craft'], checkAuth, async (req,res)=> {
         if (!userData) return res.status(401).json({status:"ERROR",message:"Not Logged in"});
 
         const pay = (pot||itemToCraft.materials).map(itm=>{
-            let itemToCheck = userData.modules.inventory.find(i=>i.id === itm.id);
+            let itemToCheck = userData.profile.inventory.find(i=>i.id === itm.id);
             if (itemToCheck.count < itm.count) {
                 return res.status(403).json({status:"ERROR",message:"You dont have enough of ["+itm.id+"]"});
                 //throw new Error("Invalid Inventory");
@@ -378,7 +378,7 @@ router.post(['/create','/craft'], checkAuth, async (req,res)=> {
         })
     ]);
     if (errors) return;   
-    return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
+    return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.profile.inventory});
 
 }catch(err){
     console.error(err)
