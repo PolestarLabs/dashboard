@@ -68,6 +68,10 @@ jobs:
       - name: Install root deps
         if: steps.cache.outputs.cache-hit != 'true'
         run: |
+          # configure git so npm can fetch private repo dependencies
+          git config --global credential.helper store
+          echo "https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           npm ci
 
 
