@@ -26,9 +26,13 @@ router.get('/:endpoint', async (req, res)=> {
  
     const userDiscord = (await userCache.get( userprofile.id )) || (await PLX.getRESTUser( userprofile.id ));
 
-    const userInventory = await DB.userInventory.get( userprofile.id );
+    // Use itemsData virtual so inventory screen has item details without manual lookups.
+    const userInventory = await DB.userInventory.findOne({ id: userprofile.id })
+        .populate({ path: "itemsData", select: "id name rarity type icon code" })
+        .lean();
     userprofile.inventory = {
         items:            userInventory?.inventory         ?? [],
+        itemsData:        userInventory?.itemsData        ?? [],
         bgInventory:      userInventory?.bgInventory       ?? [],
         medalInventory:   userInventory?.medalInventory    ?? [],
         stickerInventory: userInventory?.stickerInventory  ?? [],
