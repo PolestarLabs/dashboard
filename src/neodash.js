@@ -556,6 +556,7 @@ app.use(function(req,res,next){
 })
 
 app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
+	res.setHeader('X-API-Version', "Pollux Dash v1.0");
 	if (process.env.NODE_ENV!=="production") res.startTime('preudata', 'Pre userdata fetching');
 	let preDataProcess = result=>{
 		let USR = req.user;

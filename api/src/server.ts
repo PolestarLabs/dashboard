@@ -42,6 +42,7 @@ const IS_DEV = process.env.NODE_ENV !== "production";
 const app = new Elysia()
     // ── Cross-cutting concerns ───────────────────────────────────────────────
     .use(serverTiming())
+    .headers({"X-API-Version": "Pollux API v2 :: Elysia"})
     .use(
         cors({
             origin: IS_DEV
