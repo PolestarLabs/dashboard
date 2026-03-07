@@ -54,7 +54,7 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
           registry-url: 'https://npm.pkg.github.com'
           scope: '@polestarlabs'
       - name: Cache root node_modules
@@ -261,7 +261,6 @@ jobs:
     steps:
       - name: label present
         run: echo "fastlane label present; job executed"
-
 
   staging:
     needs: gate-root
