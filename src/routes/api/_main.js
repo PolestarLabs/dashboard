@@ -54,7 +54,7 @@ router.get('/master',MASTER, (req, res)=> {
 router.use( (req,res,nex)=>{
     Object.keys(require.cache).forEach((r)=>{
         //FIXME[epic=anyone] remember to remove this on prod
-        if(r.includes("/api/")) (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[r];
+        if(r.includes("/api/")) (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[r];
     })
     //if (req.headers.authorization && !req.user) return AUTHED(req,res,nex);
     nex();
@@ -75,43 +75,43 @@ router.use( (req,res,nex)=>{
 
 
 router.use("/user/", async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./users.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./users.js'))];
     return (require('./users.js'))( ...args);
 });
 router.use("/telemetry/", async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./tele.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./tele.js'))];
     return (require('./tele.js'))( ...args);
 });
 
 router.use("/server/", async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./servers.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./servers.js'))];
     return (require('./servers.js'))( ...args);
 });
 
 router.use(["/market/","/marketplace/","/shop/marketplace"], async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./shops/marketplace.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./shops/marketplace.js'))];
     return (require('./shops/marketplace.js'))( ...args);
 });
 
 router.use(["/shop/","/store/"], async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./shops/main.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./shops/main.js'))];
     return (require('./shops/main.js'))( ...args);
 });
 
 router.use(["/playlists/","/music/playlists/"],AUTHED,FIRST_PARTY, async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./playlists.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./playlists.js'))];
     return (require('./playlists.js'))( ...args);
 });
 
 router.use(["/music/"],AUTHED,FIRST_PARTY, async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./music.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./music.js'))];
     return (require('./music.js'))( ...args);
 });
 
 router.use(["/games/:game","/minigames/:game"], async (req,res) => {
     const {game} = req.params;
     try {
-        (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./games/'+game+'.js'))];
+        (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./games/'+game+'.js'))];
         return (require('./games/'+game+'.js'))( req,res );
     } catch (err) {
         return res.sendStatus(404);
@@ -119,17 +119,17 @@ router.use(["/games/:game","/minigames/:game"], async (req,res) => {
 });
 
 router.use(["/crafting/","/items/"], async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./collections.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./collections.js'))];
     return (require('./collections.js'))( ...args);
 });
 
 router.use(["/cosmetics/"], async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./cosmetics.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./cosmetics.js'))];
     return (require('./cosmetics.js'))( ...args);
 });
 
 router.use(["/interactions/"], async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./interactions/_main.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./interactions/_main.js'))];
     return  (require('./interactions/_main.js'))( ...args);
 
 });
@@ -142,21 +142,21 @@ router.use(["/prime/checkUser/:userID"], async (req,res,next) => {
         !req.user.id === config.data_controller
     ) return res.sendStatus(403);
 
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./prime.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./prime.js'))];
     return  (require('./prime.js'))(req,res,next);
 });
 router.use(["/prime/"], AUTHED, async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./prime.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./prime.js'))];
     return  (require('./prime.js'))( ...args);
 });
 
 router.use(["/utils/"], async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./utils.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./utils.js'))];
     return (require('./utils.js'))( ...args);
 });
 
 router.use(["/internal/"], async (...args) => {
-    (process.env.NODE_ENV !== 'dev') ? null : delete require.cache[(require.resolve('./internal.js'))];
+    (process.env.NODE_ENV !== 'staging') ? null : delete require.cache[(require.resolve('./internal.js'))];
     return (require('./internal.js'))( ...args);
 });
 
