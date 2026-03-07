@@ -97,11 +97,16 @@ export async function searchUsers(query: Record<string, string | undefined>, db:
 // ── Inventory / Stickers / Medals / Backgrounds ──────────────────────────────
 
 export async function getUserInventory(userId: string, db: DB) {
-  const USR = await db.userInventory.get(userId);
-  if (!USR) return null;
-  const userInventory: any[] = USR.inventory.filter((i: any) => i.count > 0 && typeof i.id === "string");
-  const meta: any[] = await db.items.find({ id: { $in: userInventory.map((i: any) => i.id) } });
-  userInventory.forEach((item: any) => { item.meta = meta.find((m: any) => m.id === item.id); });
+  const userWithInventory = await (db.userInventory as any)
+    .findOne({ id: userId })
+    .populate({ path: "itemsData", select: "id name rarity type icon code" })
+    .lean();
+  if (!userWithInventory) return null;
+  const userInventory: any[] = (userWithInventory.inventory ?? []).filter((i: any) => i.count > 0 && typeof i.id === "string");
+  const itemsData: any[] = userWithInventory.itemsData ?? [];
+  userInventory.forEach((item: any) => {
+    item.meta = itemsData.find((m: any) => m.id === item.id);
+  });
   return userInventory;
 }
 
