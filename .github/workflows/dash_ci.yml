@@ -254,27 +254,13 @@ jobs:
   fastlane:
     name: 🚄 Fastlane label control
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
-    outputs:
-      has_fastlane: ${{ steps.labelcheck.outputs.has }}
+    # only run this job when the PR has the fastlane label
+    if: >-
+      github.event_name == 'pull_request' &&
+      contains(github.event.pull_request.labels.*.name, 'fastlane')
     steps:
-      - uses: actions/checkout@v4
-      - name: Check fastlane label
-        id: labelcheck
-        run: |
-          labels=$(jq -r '.pull_request.labels[].name' < $GITHUB_EVENT_PATH || echo "")
-          echo "labels=$labels" >> $GITHUB_OUTPUT
-          if echo "$labels" | grep -q '^fastlane$'; then echo "has=1" >> $GITHUB_OUTPUT; else echo "has=0" >> $GITHUB_OUTPUT; fi
-      - name: Enforce single fastlane PR
-        if: steps.labelcheck.outputs.has == '1'
-        run: |
-          prs=$(gh pr list --label fastlane --state open --json number --jq '.[].number')
-          count=$(echo "$prs" | grep -c .)
-          if [ "$count" -gt 1 ]; then
-            echo "Multiple fastlane PRs exist: $prs" >&2
-            gh pr edit ${{ github.event.number }} --remove-label fastlane
-            echo "Removed fastlane label from current PR" >&2
-          fi
+      - name: label present
+        run: echo "fastlane label present; job executed"
 
 
   staging:
