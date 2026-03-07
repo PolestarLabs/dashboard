@@ -125,14 +125,15 @@ router.post('/mix', async (req,res) => {
     const rars = ["C","U","R","SR","UR","XR"];
     const potTypeMap = pot.map(i=>i.type);
     
-    let inventory,craftingHistory;
+    let inventory, craftingHistory, itemsData;
     if(req.user?.id){
-        let [cosmeticsData] = await Promise.all([
-            DB.userInventory.get( req.user.id, {'inventory':1}),
-        ]);
-    let   inventory = (cosmeticsData?.inventory || []).filter(x=>x.count > 0);
-    craftingHistory = (cosmeticsData?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
-       
+        // Use itemsData virtual instead of separate item lookups for inventory screen.
+        const cosmeticsData = await DB.userInventory.findOne({ id: req.user.id }, { inventory: 1 })
+            .populate({ path: "itemsData", select: "id name rarity type icon code" })
+            .lean();
+        inventory = (cosmeticsData?.inventory || []).filter(x=>x.count > 0);
+        craftingHistory = (cosmeticsData?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
+        itemsData = cosmeticsData?.itemsData || [];
     } 
 
     if (!pot) return res.status(400).json({error: "No Pot"});
@@ -297,32 +298,13 @@ router.post('/mix', async (req,res) => {
         
     }else{
         return res.json({
-            possible: possible.length ||0, 
+            possible: possible.length ||0,
             inventory,
+            itemsData: itemsData || [],
             noMoreTable: possible.noMoreTable
-            
-        })
-    };
-
-
-
-
-
-   
-
-
-    
-    
-    DB.items.find({$or: [{materials: {$all:items}}, {'materials.id': {$all:items}}], crafted: !0, display: !0},
-        {name:1, rarity:1, event:1, icon:1, id:1, type:1, gemcraft: 1, materials: 1, code: 1}).then(result=>{
-        
-            result.map(itm=> {
-                itm.materials.every(t=>items.includes(t))
-            })
-        res.json(result)
-    })
-     
-})
+        });
+    }
+});
 
 
 router.post(['/create','/craft'], checkAuth, async (req,res)=> {

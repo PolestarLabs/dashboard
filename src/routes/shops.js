@@ -103,28 +103,27 @@ router.get("/marketplace", async function (req, res) {
     delete require.cache[require.resolve('./paginate')];      
     await refreshBases();
     req.app.locals.fullbase = fullbase
-    let marketplace = await DB.marketplace.find({}).lean();
-    let marketeers = await DB.users.find({id:{$in:marketplace.map(i=>i.author)}},{meta:1,id:1}).lean()
+    // Use authorData virtual instead of separate users query + in-memory join.
+    let marketplace = await DB.marketplace.find({}).populate({ path: "authorData", select: "id meta" }).lean();
     let item, opengraph={};    
 
     // THIS PIECE IS PROBS DEPRECATED
     if(req.query.ff){
-      let ff = req.query.ff
-        entry = marketplace.find(x=>x.id==ff)
-        let authordata
-        if(entry){
-          let authordata = marketeers.find(x=>x.id==entry.author);
-          let item = fullbase.find(x=> x.id == entry.item_id && x.type == entry.item_type );
-          if (item){
-            opengraph.title = `[${item.rarity}] ${item.name} (${item.type}) `
-            opengraph.sitename = ((authordata||{}).meta||{}).tag||"-no author-"
-            opengraph.description = `Posted by ${authordata.meta.tag} | <b>Price: ${entry.price} ${entry.currency}</b>`
-            opengraph.image = ROOT+item.img
-            opengraph.type = "arcticle"
-            opengraph.ts = new Date(entry.timestamp).toISOString()
-          }
+      const ff = req.query.ff;
+      const entry = marketplace.find(x=>x.id==ff);
+      if(entry){
+        const authordata = entry.authorData;
+        const itemFromBase = fullbase.find(x=> x.id == entry.item_id && x.type == entry.item_type );
+        if (itemFromBase){
+          opengraph.title = `[${itemFromBase.rarity}] ${itemFromBase.name} (${itemFromBase.type}) `
+          opengraph.sitename = ((authordata||{}).meta||{}).tag||"-no author-"
+          opengraph.description = `Posted by ${(authordata&&authordata.meta&&authordata.meta.tag)||"?"} | <b>Price: ${entry.price} ${entry.currency}</b>`
+          opengraph.image = ROOT+itemFromBase.img
+          opengraph.type = "arcticle"
+          opengraph.ts = new Date(entry.timestamp).toISOString()
         }
       }
+    }
     opengraph.image =    `${HOST}/build/opengraph/marketplace.png`
     opengraph.title =    "Player Marketplace"
     opengraph.description =    `🛍️ Buy and sell items from/to other players! 🛒 Over ${marketplace.length} items are been traded here. 🏪`,
@@ -143,11 +142,11 @@ router.get("/marketplace", async function (req, res) {
 })
 
 router.get("/marketplace/entry/:id", async function (req, res, _404) {
-  let ff = req.params.id  
-  let entry = await DB.marketplace.findOne({id:ff});
-  
-  if(!entry) return _404();
+  const ff = req.params.id;
+  let entry = await DB.marketplace.findOne({ id: ff }).populate({ path: "authorData", select: "id meta" });
+  if (!entry) return _404();
   if (entry.lock || entry.completed) {
+    if (entry.authorData) entry.userdata = entry.authorData;
     let marketplace = await DB.marketplace.find({}).lean();
     const opengraph = {}
     opengraph.title = `🔴 This entry is gone! 🔴`
