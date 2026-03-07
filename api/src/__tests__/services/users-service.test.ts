@@ -110,7 +110,9 @@ describe("@services/users.ts", () => {
     });
 
     it("returns null when user not found", async () => {
-      (db.userInventory.get as jest.Mock).mockResolvedValueOnce(null);
+      (db.userInventory.findOne as jest.Mock).mockReturnValueOnce({
+        populate: () => ({ lean: () => Promise.resolve(null) }),
+      });
       expect(await getUserInventory("x", db)).toBeNull();
       (db.userInventory.get as jest.Mock).mockResolvedValueOnce(null);
       expect(await getUserStickers("x", db)).toBeNull();
@@ -120,9 +122,16 @@ describe("@services/users.ts", () => {
       expect(await getUserBackgrounds("x", db)).toBeNull();
     });
 
-    it("filters inventory and attaches meta", async () => {
-      (db.userInventory.get as jest.Mock).mockResolvedValueOnce({ inventory: [{ id: "i1", count: 1 }, { id: "i2", count: 0 }] });
-      (db.items.find as jest.Mock).mockResolvedValueOnce([{ id: "i1", name: "foo" }]);
+    it("filters inventory and attaches meta (itemsData from populate)", async () => {
+      (db.userInventory.findOne as jest.Mock).mockReturnValueOnce({
+        populate: () => ({
+          lean: () =>
+            Promise.resolve({
+              inventory: [{ id: "i1", count: 1 }, { id: "i2", count: 0 }],
+              itemsData: [{ id: "i1", name: "foo" }],
+            }),
+        }),
+      });
       const inv = await getUserInventory("u", db);
       expect(inv![0].meta.name).toBe("foo");
     });
