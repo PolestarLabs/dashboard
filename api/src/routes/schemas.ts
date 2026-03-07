@@ -8,7 +8,7 @@
  * re-exported here so controllers can keep a single import target.
  */
 
-import  RARITY_VALUES from "@definitions/constants/Rarity";
+import RARITY_VALUES from "@definitions/constants/Rarity";
 import { t } from "elysia";
 
 // Re-export domain interfaces so controllers importing from @routes/schemas still work.
