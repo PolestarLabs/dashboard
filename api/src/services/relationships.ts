@@ -16,16 +16,14 @@ export async function getRelationships(
   if (query.id) {
     Relationships = await db.relationships
       .find({ _id: query.id })
-      .populate({ path: "usersData", select: "profile.featuredMarriage id profile.tagline" })
-      .lean();
+      .populate({ path: "usersData", select: "profile.featuredMarriage id profile.tagline" });
     if (!Relationships?.length) return { ok: false, status: 404, message: "RELATIONSHIP ID NOT FOUND" };
   } else if (query.uid) {
     Relationships = await db.relationships
       .find({ users: query.uid })
       .limit(10)
       .skip(10 * skip)
-      .populate("usersData")
-      .lean();
+      .populate("usersData");
     if (!Relationships?.length) return { ok: false, status: 404, message: "USER NOT FOUND" };
   } else {
     return { ok: false, status: 400, message: "Provide ?id= or ?uid=" };

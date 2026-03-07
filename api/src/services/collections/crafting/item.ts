@@ -10,7 +10,7 @@ export default new Elysia()
         const resultItem = await db.items.findOne(
             { id: item },
             { _id: 0, __v: 0, emoji: 0 }
-        ).lean();
+        );
 
         if (!resultItem) {
             return status(404, { error: `Item "${item}" does not exist.` });

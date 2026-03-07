@@ -5,14 +5,14 @@
 import type { DB } from "@routes/types";
 
 export async function getUserRanks(userId: string, db: DB) {
-  return db.localranks.find({ user: userId }, { _id: 0, __v: 0 }).lean();
+  return db.localranks.find({ user: userId }, { _id: 0, __v: 0 });
 }
 
 export async function getServerLeaderboard(serverId: string, page: number, db: DB) {
   const p = Math.abs(page - 1);
   const [serverData, total] = await Promise.all([
     db.localranks.find({ server: serverId }, { _id: 0, __v: 0 })
-      .limit(50).skip(50 * p).lean(),
+      .limit(50).skip(50 * p),
     db.localranks.find({ server: serverId }).count(),
   ]);
   return {

@@ -65,11 +65,10 @@ export async function searchCosmetics(query: Record<string, string | undefined>,
     .skip(parseInt(query.skip ?? "0") || 0)
     .limit(parseInt(query.lim ?? "50") || 50)
     .sort({ _id: -1 })
-    .noCache()
-    .lean();
+    .noCache();
 
   if (result.length && query.type === "sticker") {
-    const packs: any[] = await DB.items.find({ icon: { $in: result.map((x: any) => x.series_id) } }).lean();
+    const packs: any[] = await DB.items.find({ icon: { $in: result.map((x: any) => x.series_id) } });
     await Promise.all(packs.map((p) => stickerCount(p, DB)));
     result.forEach((x: any) => { x.packData = packs.find((p: any) => p.icon === x.series_id); });
   }
@@ -86,8 +85,7 @@ export async function searchCosmetics(query: Record<string, string | undefined>,
 export async function findCosmeticById(type: string, idOrCode: string, DB: any) {
   const isOid = isValidObjectId(idOrCode);
   return DB.cosmetics
-    .findOne({ type, $or: [isOid ? { _id: idOrCode } : { id: idOrCode }, { code: idOrCode }, { icon: idOrCode }] }, { public: 0, meta: 0 })
-    .lean();
+    .findOne({ type, $or: [isOid ? { _id: idOrCode } : { id: idOrCode }, { code: idOrCode }, { icon: idOrCode }] }, { public: 0, meta: 0 });
 }
 
 export async function countCosmetics(type: string, query: { event?: string; rarity?: string }, DB: any) {

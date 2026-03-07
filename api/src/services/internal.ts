@@ -13,7 +13,7 @@ export async function getPings(
   filter: string | undefined,
   db: DB,
 ): Promise<{ ok: boolean; status?: number; message?: string; data?: unknown }> {
-  let pings = await db.globals.findOne({ id: 1, type: "pings" }).lean();
+  let pings = await db.globals.findOne({ id: 1, type: "pings" });
   if (filter) {
     pings = pings?.[filter];
     if (!pings) return { ok: false, status: 404, message: "NOT FOUND" };

@@ -9,7 +9,7 @@ import { stickerCount } from "utils/cosmetics";
 const SEARCH_ALLOWED = ["_id", "id", "rarity", "code", "type", "crafted", "open"] as const;
 
 export async function getAllItems(DB: any) {
-  return DB.items.find({}, { _id: 0, __v: 0, emoji: 0 }).lean();
+  return DB.items.find({}, { _id: 0, __v: 0, emoji: 0 });
 }
 
 export async function searchItems(query: Record<string, string | undefined>, DB: any) {
@@ -27,8 +27,7 @@ export async function searchItems(query: Record<string, string | undefined>, DB:
     .find(queries, { emoji: 0, usefile: 0, altEmoji: 0 })
     .skip(parseInt(query.skip ?? "0") || 0)
     .limit(parseInt(query.lim ?? "50") || 50)
-    .sort({ _id: -1 })
-    .lean();
+    .sort({ _id: -1 });
 
   result.forEach((x: any) => {
     const ts = x._id.toString().substring(0, 8);
@@ -43,5 +42,5 @@ export async function searchItems(query: Record<string, string | undefined>, DB:
 }
 
 export async function getItemById(id: string, DB: any) {
-  return DB.items.findOne({ id }, { _id: 0, __v: 0, emoji: 0 }).lean();
+  return DB.items.findOne({ id }, { _id: 0, __v: 0, emoji: 0 });
 }

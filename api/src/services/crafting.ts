@@ -116,7 +116,7 @@ export class CraftingService {
       const lowestRar   = potSorted[pot.length - 1]?.rarity as Rarity;
 
       if (isSameTypeMatch) {
-        possible = await DB.items.find(querySameType).lean();
+        possible = await DB.items.find(querySameType);
         possible = possible.filter((x: any) => {
           const ri = RARITY_VALUES.indexOf(x.rarity as Rarity);
           return (
@@ -137,7 +137,7 @@ export class CraftingService {
       }
 
       // Last resort — any item with matching types
-      possible = await DB.items.find({ "typeCraft.type": { $all: potTypeMap } }).lean();
+      possible = await DB.items.find({ "typeCraft.type": { $all: potTypeMap } });
       if (!possible.length) return { possible: 0, noMoreTable: true } as any;
 
       const fallback = shuffle(possible)[0]!;
@@ -152,7 +152,7 @@ export class CraftingService {
 
     // Exact match: prefer the result that fits the pot most closely
     if (isExactMatch) {
-      possible = await DB.items.find(queryExact).lean();
+      possible = await DB.items.find(queryExact);
       if (possible.length > 1) {
         possible = [
           possible.sort((a: any, b: any) => {

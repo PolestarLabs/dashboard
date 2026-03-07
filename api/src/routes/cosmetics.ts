@@ -24,7 +24,7 @@ export const cosmeticsRoutes = new Elysia({ prefix: "/cosmetics", tags: ["cosmet
   .use(redisPlugin)
 
   .get("/all", async ({ db }) => {
-    const result: CosmeticDoc[] = await (db as any).cosmetics.find({}).lean();
+    const result: CosmeticDoc[] = await (db as any).cosmetics.find({});
     return result.map(cleanup);
   })
 

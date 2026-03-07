@@ -8,7 +8,7 @@ import type { DB } from "@routes/types";
 
 /** Returns all Discoin-type global currency documents. */
 export async function getDiscoinCurrencies(db: DB) {
-  return db.globals.find({ type: "discoin" }, { type: 0, _id: 0, data: 0 }).lean();
+  return db.globals.find({ type: "discoin" }, { type: 0, _id: 0, data: 0 });
 }
 
 /**

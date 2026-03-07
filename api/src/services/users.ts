@@ -78,8 +78,7 @@ export async function searchUsers(query: Record<string, string | undefined>, db:
   const results: any[] = await db.users.find(queries)
     .skip(parseInt(query.skip ?? "0", 10) || 0)
     .limit(parseInt(query.lim ?? "50", 10) || 50)
-    .sort({ _id: -1 })
-    .lean();
+    .sort({ _id: -1 });
 
   const parsed = await Promise.all(results.map(async (USR: any) => {
     const [discordUser, cosmetics] = await Promise.all([
@@ -99,8 +98,7 @@ export async function searchUsers(query: Record<string, string | undefined>, db:
 export async function getUserInventory(userId: string, db: DB) {
   const userWithInventory = await (db.userInventory as any)
     .findOne({ id: userId })
-    .populate({ path: "itemsData", select: "id name rarity type icon code" })
-    .lean();
+    .populate({ path: "itemsData", select: "id name rarity type icon code" });
   if (!userWithInventory) return null;
   const userInventory: any[] = (userWithInventory.inventory ?? []).filter((i: any) => i.count > 0 && typeof i.id === "string");
   const itemsData: any[] = userWithInventory.itemsData ?? [];
@@ -114,8 +112,8 @@ export async function getUserStickers(userId: string, db: DB) {
   const USR = await db.userInventory.get(userId);
   if (!USR) return null;
   const stickerIds: string[] = USR.stickerInventory.filter(Boolean);
-  const stickerMeta: any[] = await db.cosmetics.find({ id: { $in: stickerIds } }).lean();
-  const packs: any[] = await db.items.find({ icon: { $in: stickerMeta.map((x: any) => x?.series_id) } }).lean();
+  const stickerMeta: any[] = await db.cosmetics.find({ id: { $in: stickerIds } });
+  const packs: any[] = await db.items.find({ icon: { $in: stickerMeta.map((x: any) => x?.series_id) } });
   stickerMeta.forEach((x: any) => { x.packData = packs.find((p: any) => p.icon === x.series_id); });
   return stickerMeta;
 }
@@ -124,14 +122,14 @@ export async function getUserMedals(userId: string, db: DB) {
   const USR = await db.userInventory.get(userId);
   if (!USR) return null;
   const ids: string[] = USR.medalInventory.filter(Boolean);
-  return db.cosmetics.find({ icon: { $in: ids } }).lean().noCache();
+  return db.cosmetics.find({ icon: { $in: ids } }).noCache();
 }
 
 export async function getUserBackgrounds(userId: string, db: DB) {
   const USR = await db.userInventory.get(userId);
   if (!USR) return null;
   const codes: string[] = USR.bgInventory.filter(Boolean);
-  return db.cosmetics.find({ code: { $in: codes } }).lean();
+  return db.cosmetics.find({ code: { $in: codes } });
 }
 
 // ── Commends ─────────────────────────────────────────────────────────────────
