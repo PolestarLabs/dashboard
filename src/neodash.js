@@ -148,7 +148,7 @@ app.post('/webhook/bsian-stripe', async (req, res) => {
 */
 // =======================================================================================
 
-const dbURL = config.mongodb;
+const dbURL = process.env.DB_INFO || config.mongodb;
 const dbOptions = { 
 	useNewUrlParser: true,
 	keepAlive: true,
@@ -156,13 +156,27 @@ const dbOptions = {
 	useUnifiedTopology: true
 }
 
+// central_pollux is the client used by most of the app (bot REST, etc.)
+// historically on production this was the "main" client, but auth is
+// performed using the alpha/polaris application (ID 354285599588483082).
+// the following logic picks the appropriate client for runtime use and
+// ensures we can override the OAuth client if needed.
 const central_pollux = config.clients.find(c=>{
-	if(process.env.NODE_ENV === "production"){
-		return c.name==='main';
-	}else{
-		return c.name==='polaris';
-	}
+    if(process.env.NODE_ENV === "production"){
+        return c.name==='main';
+    }else{
+        return c.name==='polaris';
+    }
 });
+
+// explicitly choose the auth application. this will usually be the polaris
+// client (alpha) regardless of NODE_ENV. allow an override via an environment
+// variable if we ever need to switch.
+const authClient = process.env.FORCE_ALPHA_AUTH === '1'
+    ? config.clients.find(c=>c.id === '354285599588483082')
+    : config.clients.find(c=>c.id === '354285599588483082') || central_pollux;
+console.log("[auth] using OAuth client", authClient.id, authClient.name || authClient.fname);
+
 
 global.PLX = new Eris.Client(central_pollux.token,{restMode:true});
 
@@ -302,9 +316,12 @@ Passport.use(new CookieStrategy(
 	}
 ));
 
+// authentication strategy uses the dedicated authClient (polaris by
+// default). this allows the dashboard to redirect to the application that
+// actually has the appropriate OAuth settings configured.
 const discordStrategy = new Strategy({
-	clientID: central_pollux.id,
-	clientSecret: central_pollux.secret,
+	clientID: authClient.id,
+	clientSecret: authClient.secret,
 	authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
 	callbackURL:   HOST + "/callback",
 	scope: scopes,
