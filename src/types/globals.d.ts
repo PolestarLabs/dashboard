@@ -35,7 +35,7 @@ export type PLXClient = ErisClient & GearboxClientMethods & {
 
 // ── DB shape ──────────────────────────────────────────────────────────────────
 // Each collection exposes Mongoose methods plus the custom helpers added by
-// @polestar/database_schema (get, set, new, etc.).
+// @polestarlabs/database_schema (get, set, new, etc.).
 type MongooseModel = Model<Document> & {
   get(idOrQuery: string | Record<string, unknown>, projection?: Record<string, unknown>): Promise<Document & Record<string, unknown>>;
   set(idOrQuery: string | Record<string, unknown>, update: Record<string, unknown>): Promise<unknown>;
