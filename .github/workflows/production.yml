@@ -27,6 +27,7 @@ jobs:
     needs: pull-production
     env:
       DIR: ${{ secrets.DASH_DIR_PROD }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Install dependencies
         run: |
@@ -43,6 +44,8 @@ jobs:
 
   deploy-production:
     name: 🚀 Deploy → Production
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     environment:
       name: "live"
       url: https://pollux.gg

@@ -27,6 +27,8 @@ jobs:
   gate-root:
     name: ⛔ Root gate (dashboard deps)
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       non_api_changed: ${{ steps.diff.outputs.non_api }}
     steps:
@@ -52,7 +54,9 @@ jobs:
       - name: Install Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 24
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@polestarlabs'
       - name: Cache root node_modules
         id: cache
         uses: actions/cache@v3
@@ -65,13 +69,16 @@ jobs:
             ${{ runner.os }}-root-deps-
       - name: Install root deps
         if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          npm ci
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   gate-bun:
     name: 🧄 Bun gate (API deps)
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       api_changed: ${{ steps.diff.outputs.api }}
     steps:
@@ -104,6 +111,9 @@ jobs:
       - name: 🐇 Install API deps (bun)
         run: |
           cd api
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
           bun install
 
 
@@ -133,6 +143,10 @@ jobs:
       - name: Install API deps
         run: |
           cd api
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Type-check API
         run: |
@@ -144,6 +158,8 @@ jobs:
     name: 📦 Build Elysia API bundle
     needs: gate-bun
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -155,6 +171,10 @@ jobs:
       - name: Install API deps
         run: |
           cd api
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Build bundle
         run: |
@@ -170,6 +190,8 @@ jobs:
     name: 🔬 API sanity tests
     needs: [build-dist, elysia-check]
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -181,6 +203,10 @@ jobs:
       - name: Install API deps
         run: |
           cd api
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Run sanity suite
         run: |
@@ -196,6 +222,8 @@ jobs:
     name: ✅ API full tests
     needs: sanity-tests
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -212,6 +240,10 @@ jobs:
       - name: Install API deps
         run: |
           cd api
+          # configure git for private git deps
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Run full API tests
         run: |
@@ -222,34 +254,20 @@ jobs:
   fastlane:
     name: 🚄 Fastlane label control
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request'
+    # only run this job when the PR has the fastlane label
+    if: >-
+      github.event_name == 'pull_request' &&
+      contains(github.event.pull_request.labels.*.name, 'fastlane')
     steps:
-      - uses: actions/checkout@v4
-      - name: Check fastlane label
-        id: labelcheck
-        run: |
-          labels=$(jq -r '.pull_request.labels[].name' < $GITHUB_EVENT_PATH || echo "")
-          echo "labels=$labels" >> $GITHUB_OUTPUT
-          if echo "$labels" | grep -q '^fastlane$'; then echo "has=1" >> $GITHUB_OUTPUT; else echo "has=0" >> $GITHUB_OUTPUT; fi
-      - name: Enforce single fastlane PR
-        if: steps.labelcheck.outputs.has == '1'
-        run: |
-          prs=$(gh pr list --label fastlane --state open --json number --jq '.[].number')
-          count=$(echo "$prs" | grep -c .)
-          if [ "$count" -gt 1 ]; then
-            echo "Multiple fastlane PRs exist: $prs" >&2
-            gh pr edit ${{ github.event.number }} --remove-label fastlane
-            echo "Removed fastlane label from current PR" >&2
-          fi
-
+      - name: label present
+        run: echo "fastlane label present; job executed"
 
   staging:
     needs: gate-root
     uses: ./.github/workflows/staging.yml
     secrets: inherit
-    if: >
-      (needs.gate-root.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
-      (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'dev' && contains(github.event.pull_request.labels.*.name, 'fastlane'))
+    if: > 
+      contains(github.event.pull_request.labels.*.name, 'fastlane')
 
   production:
     needs: gate
@@ -262,6 +280,8 @@ jobs:
     needs: gate-bun
     name: ✨ Elysia deps & postinstall
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node
@@ -275,6 +295,10 @@ jobs:
       - name: Install API deps (bun)
         run: |
           cd api
+          # configure git for private git deps
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Run postinstall
         run: |
@@ -289,14 +313,21 @@ jobs:
     runs-on: self-hosted
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Sync api folder
         run: |
           set -e
           cd "$DIR"
           git fetch origin
-          # always pull from elysia branch regardless of triggering ref
-          git checkout origin/elysia -- api
+          #git checkout origin/elysia -- api
+          # force checkout to discard local changes then into the current PR head.
+          # pull the PR head directly
+          prref=${{ github.event.pull_request.head.ref }}
+          git fetch origin "$prref":"pr-head"
+          git reset --hard pr-head
+
+
       - name: Build
         run: |
           cd "$DIR"/api

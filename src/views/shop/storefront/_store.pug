@@ -156,16 +156,16 @@ block content
             if userdata
                 .RBN
                     span.plx-rubine.icon32.curr_icon_3
-                    span= miliarize(userdata.modules.RBN) || 0
+                    span= miliarize(userdata.currency && userdata.currency.RBN) || 0
                 .sapphires
                     span.plx-sapphire.icon32.curr_icon_3
-                    span= miliarize(userdata.modules.SPH) || 0
+                    span= miliarize(userdata.currency && userdata.currency.SPH) || 0
                 .jades
                     span.plx-jade.icon32.curr_icon_3
-                    span= miliarize(userdata.modules.JDE) || 0
+                    span= miliarize(userdata.currency && userdata.currency.JDE) || 0
                 .tokens
                     span.plx-token.icon32.curr_icon_3
-                    span= miliarize(userdata.modules.EVT) || 0
+                    span= miliarize(userdata.currency && userdata.currency.EVT) || 0
             else
               p
                 a(onclick="login()")

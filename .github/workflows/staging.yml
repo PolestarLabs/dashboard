@@ -34,6 +34,7 @@ jobs:
     needs: pull-staging
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Install dependencies
         run: |
@@ -52,13 +53,19 @@ jobs:
     name: 🚀 Deploy → Staging
     runs-on: self-hosted
     needs: deps-staging
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     environment:
       name: "staging"
       url: https://staging.pollux.gg
     steps:
       - name: Run deploy script
         run: |
-          /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
+          # the sync step above may leave us on a detached PR head; pass the
+          # checked‑out SHA so the deploy helper doesn’t later reset us to a
+          # random fallback branch
+          current=$(git -C "${{ secrets.DASH_DIR_DEV }}" rev-parse HEAD)
+          /home/pollux/polaris/scripts/server-deploy.sh dashboard staging "$current"
       - name: Rollback on failure
         if: failure()
         run: |

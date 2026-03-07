@@ -5,7 +5,8 @@
  * No Elysia Context imported here — accepts typed payloads, returns plain objects.
  */
 
-import { RARITY_VALUES, RarityType as Rarity } from "@definitions/Rarity";
+import type { Rarity } from "@definitions/Rarity";
+import RARITY_VALUES from "@definitions/constants/Rarity";
 import { shuffle } from "utils/shuffle";
 import { isExact } from "utils/crafting";
 import type { PotItem, MixBody, MixResponse, CreateBody, CreateResponse } from "@routes/schemas";
@@ -22,7 +23,7 @@ function findInPot(id: string, pot: PotItem[]): PotItem | undefined {
   return pot.find((i) => i.id === id);
 }
 
-const EXP_TABLE: Record<string, number> = { C: 1, U: 2, R: 5, SR: 10, UR: 25, XR: 50 };
+const EXP_TABLE: Record<Rarity, number> = { C: 1, U: 2, R: 5, SR: 10, UR: 25, XR: 50 };
 
 // ── Service ──────────────────────────────────────────────────────────────────
 
@@ -43,8 +44,8 @@ export class CraftingService {
     // Resolve crafting history to detect new discoveries
     let craftingHistory: string[] = [];
     if (userId) {
-      const userData = await DB.users.get(userId, { "modules.inventory": 1 });
-      craftingHistory = ((userData?.modules?.inventory ?? []) as any[])
+      const cosmeticsData = await DB.userInventory.get(userId);
+      craftingHistory = ((cosmeticsData?.inventory ?? []) as any[])
         .filter((x) => x.crafted > 0)
         .map((i) => i.id);
     }
@@ -116,7 +117,7 @@ export class CraftingService {
       const lowestRar   = potSorted[pot.length - 1]?.rarity as Rarity;
 
       if (isSameTypeMatch) {
-        possible = await DB.items.find(querySameType).lean().exec();
+        possible = await DB.items.find(querySameType);
         possible = possible.filter((x: any) => {
           const ri = RARITY_VALUES.indexOf(x.rarity as Rarity);
           return (
@@ -137,7 +138,7 @@ export class CraftingService {
       }
 
       // Last resort — any item with matching types
-      possible = await DB.items.find({ "typeCraft.type": { $all: potTypeMap } }).lean().exec();
+      possible = await DB.items.find({ "typeCraft.type": { $all: potTypeMap } });
       if (!possible.length) return { possible: 0, noMoreTable: true } as any;
 
       const fallback = shuffle(possible)[0]!;
@@ -152,7 +153,7 @@ export class CraftingService {
 
     // Exact match: prefer the result that fits the pot most closely
     if (isExactMatch) {
-      possible = await DB.items.find(queryExact).lean().exec();
+      possible = await DB.items.find(queryExact);
       if (possible.length > 1) {
         possible = [
           possible.sort((a: any, b: any) => {
@@ -197,7 +198,10 @@ export class CraftingService {
         body: { status: "ERROR", message: "This item can't be crafted" },
       };
 
-    const userData = await DB.users.getFull(userId);
+    const [userData, cosmeticsDoc] = await Promise.all([
+      DB.users.get(userId),
+      DB.userInventory.getFull(userId),
+    ]);
     if (!userData)
       return {
         ok: false, code: 401,
@@ -206,7 +210,7 @@ export class CraftingService {
 
     const materials = pot ?? itemToCraft.materials;
     for (const itm of materials) {
-      const has = userData.modules.inventory.find((i: any) => i.id === itm.id);
+      const has = cosmeticsDoc.inventory.find((i: any) => i.id === itm.id);
       if (!has || has.count < itm.count)
         return {
           ok: false, code: 403,
@@ -214,9 +218,9 @@ export class CraftingService {
         };
     }
 
-    await Promise.all(materials.map((m: any) => userData.removeItem(m.id, m.count)));
+    await Promise.all(materials.map((m: any) => cosmeticsDoc.removeItem(m.id, m.count)));
     await Promise.all([
-      userData.addItem(item, 1, true),
+      cosmeticsDoc.addItem(item, 1, true),
       DB.users.set(userId, {
         $inc: { "progression.craftingExp": EXP_TABLE[itemToCraft.rarity as string] ?? 1 },
       }),
@@ -228,7 +232,7 @@ export class CraftingService {
       body: {
         status:    "OK",
         message:   "Item has been crafted",
-        inventory: userData.modules.inventory,
+        inventory: cosmeticsDoc.inventory,
       },
     };
   }

@@ -34,6 +34,7 @@ import { telemetryRoutes } from "@routes/telemetry";
 import { fanartRoutes } from "@routes/fanart";
 
 import { shipRoutes } from "@routes/ship";
+import { marketplaceRoutes } from "@routes/marketplace";
 
 const PORT = parseInt(process.env.API_PORT ?? "7056", 10);
 const IS_DEV = process.env.NODE_ENV !== "production";
@@ -41,6 +42,7 @@ const IS_DEV = process.env.NODE_ENV !== "production";
 const app = new Elysia()
     // ── Cross-cutting concerns ───────────────────────────────────────────────
     .use(serverTiming())
+    .headers({"X-API-Version": "Pollux API v2 :: Elysia"})
     .use(
         cors({
             origin: IS_DEV
@@ -68,6 +70,7 @@ const app = new Elysia()
                     { name: "internal", description: "Internal service endpoints" },
                     { name: "generators", description: "Image generator endpoints" },
                     { name: "utils", description: "Utility endpoints" },
+                    { name: "marketplace", description: "Marketplace listings" },
                 ],
             },
         })
@@ -99,7 +102,7 @@ const app = new Elysia()
     .use(telemetryRoutes)
     .use(fanartRoutes)
     .use(shipRoutes)
-    .use(shipRoutes)
+    .use(marketplaceRoutes)
 
     // ── Global error handler ──────────────────────────────────────────────────
     .onError(({ code, error, set }) => {

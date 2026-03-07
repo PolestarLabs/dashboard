@@ -163,13 +163,13 @@ const STORE = new Vue({
     hasItem(i) {
       if (!this.userdata) return false;
       if (i.type == "background")
-        return (this.userdata.modules.bgInventory||[]).includes(i.code);
+        return (this.userdata.inventory?.bgInventory||[]).includes(i.code);
       if (i.type == "medal")
-        return (this.userdata.modules.medalInventory||[]).includes(i.icon);
+        return (this.userdata.inventory?.medalInventory||[]).includes(i.icon);
       if (i.type == "sticker")
-        return (this.userdata.modules.stickerInventory||[]).includes(i.id);
+        return (this.userdata.inventory?.stickerInventory||[]).includes(i.id);
       if (i.type == "skin")
-        return (this.userdata.modules.skinInventory||[]).includes(i.id);
+        return (this.userdata.inventory?.skinInventory||[]).includes(i.id);
       return false;
     },
     timeFun(i) {
@@ -394,12 +394,11 @@ function shuffle(array) {
               return Swal.showValidationMessage(val.reason || val.status);
             }else{
               if(STORE && type!="marketplace"){
-                STORE.userdata.modules[
-                  (type=="background"?"bg"
-                  :type=="flair"?"flairs"
+                const invKey = (type=="background"?"bg"
+                  :type=="flair"?"flair"
                   :type)
-                  + "Inventory"
-                ].push(item)
+                  + "Inventory";
+                if(STORE.userdata.inventory?.[invKey]) STORE.userdata.inventory[invKey].push(item)
               }else if(STORE && type === 'marketplace'){
                 let itemToChange = STORE.market.find(e=>e.id == marketOps.id);
                 if (itemToChange){

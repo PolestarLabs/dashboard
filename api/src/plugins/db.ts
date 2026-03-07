@@ -2,14 +2,14 @@
  * DB plugin — connects Mongoose and exposes the DB collections decoreated on
  * every Elysia handler via `.use(dbPlugin)`.
  *
- * @polestar/database_schema is the shared schema package (same as Express).
+ * @polestarlabs/database_schema is the shared schema package (same as Express).
  * We re-use the same models; the connection URL is driven by env vars so
  * prod/alpha environments are kept strictly isolated.
  */
 
 import { Elysia } from "elysia";
-import initSchema from "@polestar/database_schema";
-import { Schemas } from "@polestar/database_schema";
+import initSchema from "@polestarlabs/database_schema";
+import { Schemas } from "@polestarlabs/database_schema";
 
 
 const MONGO_URL =

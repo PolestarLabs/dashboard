@@ -1,6 +1,20 @@
 import { Currency } from "./Currency";
 import { RarityType } from "./Rarity";
 
+
+export type InventoryItemType =
+    'consumable'
+    | 'key'
+    | 'background'
+    | 'medal'
+    | 'sticker'
+    | 'junk'
+    | 'material'
+    | 'boosterpack'
+    | 'flair'
+    | 'skin'
+    | 'other';
+
 export interface InventoryItem {
     // Basic
     id: string;
@@ -10,7 +24,7 @@ export interface InventoryItem {
     icon: string;
     emoji: string;
     altEmoji: string;
-    type: string; //check all possible types in codebase later
+    type: InventoryItemType;
     price: number;
     public: boolean;
     crafted: boolean;

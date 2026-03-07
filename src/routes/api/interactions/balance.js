@@ -32,7 +32,10 @@ module.exports = {
 
     moment.locale('en');
 
-    const TARGETDATA = await DB.users.get({ id: Target.id });
+    const [TARGETDATA, cosmeticsData] = await Promise.all([
+        DB.users.get({ id: Target.id }),
+        DB.userInventory.get(Target.id),
+    ]);
     responseEmbed.color = 0xffc156;
     responseEmbed.title = bal;
 console.log('hare')
@@ -84,13 +87,13 @@ console.log('hare')
         value: "\u200b" +
           `\u2003${_emoji("RBN")} ${$t("keywords.RBN_plural", {
             lngs: P.lngs,
-          })}: **${miliarize(TARGETDATA.modules.RBN, true)}**` +
+          })}: **${miliarize(TARGETDATA.currency.RBN, true)}**` +
           `\n\u2003${_emoji("SPH")} ${$t("keywords.SPH_plural", {
             lngs: P.lngs,
-          })}: **${miliarize(TARGETDATA.modules.SPH, true)}**` +
+          })}: **${miliarize(TARGETDATA.currency.SPH, true)}**` +
           `\n\u2003${_emoji("JDE")} ${$t("keywords.JDE_plural", {
             lngs: P.lngs,
-          })}: **${miliarize(TARGETDATA.modules.JDE, true)}**`,
+          })}: **${miliarize(TARGETDATA.currency.JDE, true)}**`,
         inline:true
         });
 
@@ -100,15 +103,15 @@ console.log('hare')
           `\u2003${_emoji("COS")} ${$t("keywords.COS_plural", {
             lngs: P.lngs,
           })}: **${miliarize(
-            TARGETDATA.modules.inventory.find((i) => i.id === "cosmo_fragment")
+            cosmeticsData?.inventory?.find((i) => i.id === "cosmo_fragment")
               ?.count || 0,
             true
           )}**` +
           `\n\u2003${_emoji("PSM")} ${$t("keywords.PSM_plural", {
             lngs: P.lngs,
-          })}: **${miliarize(TARGETDATA.modules.PSM ?? 0, true)}**` +
+          })}: **${miliarize(TARGETDATA.currency.PSM ?? 0, true)}**` +
           `\n\u2003${_emoji("EVT")} ${"Event Tokens"}: **${miliarize(
-            TARGETDATA.modules.EVT || 0,
+            TARGETDATA.currency.EVT || 0,
             true
           )}**` +
           `\n${invisibar}`,

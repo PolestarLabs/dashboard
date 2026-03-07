@@ -22,8 +22,7 @@ export const craftingRoutes = new Elysia()
   // GET /api/crafting/:item — item lookup by id
   .get("/crafting/:item", async ({ params, db }) => {
     const result = await (db as any).items
-      .findOne({ id: params.item }, { _id: 0, __v: 0, emoji: 0 })
-      .lean();
+      .findOne({ id: params.item }, { _id: 0, __v: 0, emoji: 0 });
     if (!result)
       return status(404, { error: `Item "${params.item}" does not exist.` });
     return result;

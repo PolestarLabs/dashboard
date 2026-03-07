@@ -189,7 +189,7 @@ router.use('/admin',checkAuth, (...args)=>{
   router.get('/testone', (req,res,nex)=> {
     if (DEBUG_LOGS) console.log(req.body);
     //res.sendStatus(200)
-    if (DEBUG_LOGS) console.log( require('../structures/ProgressionManager.js') );
+    //if (DEBUG_LOGS) console.log( require('../structures/ProgressionManager.js') );
     res.render('standalone-pages/oembed-test')
 
   } );

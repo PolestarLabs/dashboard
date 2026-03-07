@@ -59,18 +59,18 @@ module.exports = {
     //let client_user = await bot.fetchUser(id) ;
     let dbpars;
 
-    dbpars = await DB.userDB.findOne({ id: id });
+    dbpars = await DB.users.findOne({ id: id });
     try {
       if (!dbpars) {
         req.user.tag = req.user.username;
-        await DB.userDB.new(req.user);
-        dbpars = await DB.userDB.findOne({ id: id });
+        await DB.users.new(req.user);
+        dbpars = await DB.users.findOne({ id: id });
       }
     } catch (e) {
       if (!dbpars) {
         if (req.user) {
-          await DB.userDB.new(req.user);
-          dbpars = await DB.userDB.findOne({ id: id });
+          await DB.users.new(req.user);
+          dbpars = await DB.users.findOne({ id: id });
         } else {
           return null;
         }
@@ -95,12 +95,12 @@ module.exports = {
   failsafe: async function failsafe(dbo, req) {
     return;
 
-    //console.log("ESSE [E P DENO",dbo)
-    if (typeof dbo != "object" || !dbo.modules) {
+    // Legacy: if user doc missing or incomplete, ensure from users collection (no .modules)
+    if (typeof dbo != "object" || !dbo.profile) {
       dbo = defaults.udefal;
       try {
         await fx.run("userSetup", { id: req.user.id, name: req.user.name });
-        dbo = await userDB.findOne({ id: req.user.id });
+        dbo = await DB.users.findOne({ id: req.user.id }).lean();
       } catch (e) {
         console.log(e);
       }

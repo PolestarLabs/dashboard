@@ -30,7 +30,7 @@ if(!req.user.guilds.find(g=>g.id==theG.id&&g.owner==true)&&!['88120564400553984'
     dbpars.id  = req.params.id;
     bot={}
     bot.server = dbpars.meta;
-    let user= await DB.userDB.findOne({id:req.user.id})
+    let user= await DB.users.findOne({id:req.user.id})
     delete require.cache[require.resolve('../../utils/i18n.json')];
     const i18n = (require('../../utils/i18n.json'));
     
@@ -40,7 +40,7 @@ if(!req.user.guilds.find(g=>g.id==theG.id&&g.owner==true)&&!['88120564400553984'
     await Object.keys(eligiblelorank).forEach(async i => {
       try{     
       let u = i;
-      let usr = await DB.userDB.findOne({id:i.user}); //await bot.fetchUser(i);      
+      let usr = await DB.users.findOne({id:i.user}); //await bot.fetchUser(i);      
       let x = {
         tag: usr.tag||(usr.meta||{tag:false}).tag||usr.name,
         id: usr.id,

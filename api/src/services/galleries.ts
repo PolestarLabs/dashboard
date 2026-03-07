@@ -18,6 +18,7 @@ export async function getGalleryFanart(userId: string, viewerId: string | undefi
   const query: Record<string, unknown> = { author_ID: userId };
   if (viewerId !== userId) query.publish = true;
 
+  // .find() returns a query/cursor; ensure we execute it via .lean()
   const gallery: any[] = await db.fanart.find(query).lean();
   return gallery.map((item: any) => ({
     title:       item.title,

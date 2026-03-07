@@ -10,7 +10,7 @@ import type { DB } from "@routes/types";
 
 // ── Response building ────────────────────────────────────────────────────────
 
-export function parseUserdata(discordUser: DiscordUser, USR: Record<string, any> | null, STATUS: number) {
+export function parseUserdata(discordUser: DiscordUser, USR: Record<string, any> | null, STATUS: number, cosmetics?: Record<string, any> | null) {
   const response: Record<string, unknown> = {
     id:     discordUser.id,
     tag:    discordUser.id ? discordUser.username : (USR?.meta?.tag ?? null),
@@ -22,25 +22,25 @@ export function parseUserdata(discordUser: DiscordUser, USR: Record<string, any>
     response.isPolluxUser = false;
     response.isBot        = discordUser.bot;
   } else {
-    response.level     = USR.modules.level;
-    response.exp       = USR.modules.exp;
-    response.commends  = USR.modules.commend;
-    response.RBN       = USR.modules.RBN;
-    response.JDE       = USR.modules.JDE;
-    response.SPH       = USR.modules.SPH;
-    response.isDonator = USR.donator && USR.donator !== "";
-    response.donatorTier = USR.donator;
+    response.level     = USR.progression.level;
+    response.exp       = USR.progression.exp;
+    response.commends  = USR.counters?.commend;
+    response.RBN       = USR.currency.RBN;
+    response.JDE       = USR.currency.JDE;
+    response.SPH       = USR.currency.SPH;
+    response.isDonator = USR.prime?.tier && USR.prime.tier !== "";
+    response.donatorTier = USR.prime?.tier;
     response.isBlacklisted = !!USR.blacklisted && USR.blacklisted !== "";
     response.profile   = {
-      background: USR.modules.bgID,
-      sticker:    USR.modules.sticker,
-      color:      USR.modules.favcolor,
-      flair:      USR.modules.flairTop,
-      about:      USR.modules.persotext,
-      tagline:    USR.modules.tagline,
-      medals:     USR.modules.medals,
+      background: USR.profile.bgID,
+      sticker:    USR.profile.sticker,
+      color:      USR.profile.favcolor,
+      flair:      USR.profile.flairTop,
+      about:      USR.profile.persotext,
+      tagline:    USR.profile.tagline,
+      medals:     USR.profile.medals,
     };
-    response.inventorySize = USR.modules.inventory?.reduce((a: number, b: { count: number }) => a + b.count, 0) ?? 0;
+    response.inventorySize = cosmetics?.inventory?.reduce((a: number, b: { count: number }) => a + b.count, 0) ?? 0;
   }
 
   if (discordUser.error) {
@@ -52,19 +52,20 @@ export function parseUserdata(discordUser: DiscordUser, USR: Record<string, any>
 }
 
 export async function parseUserAndReturn(uID: string, db: DB, redis: any) {
-  const [discordUser, USR] = await Promise.all([
+  const [discordUser, USR, cosmetics] = await Promise.all([
     getDiscordUser(uID, redis),
     db.users.get(uID),
+    db.userInventory.get(uID),
   ]);
 
   let STATUS = 200;
-  const { response, STATUS: s } = parseUserdata(discordUser, USR, STATUS);
+  const { response, STATUS: s } = parseUserdata(discordUser, USR, STATUS, cosmetics);
   return { status: s, body: response };
 }
 
 // ── Search ───────────────────────────────────────────────────────────────────
 
-const SEARCH_ALLOWED = ["_id", "id", "donator", "name", "meta.tag", "personalhandle"];
+const SEARCH_ALLOWED = ["_id", "id", "prime.tier", "name", "meta.tag", "personalhandle"];
 
 export async function searchUsers(query: Record<string, string | undefined>, db: DB, redis: any) {
   const queries: Record<string, unknown> = {};
@@ -74,6 +75,7 @@ export async function searchUsers(query: Record<string, string | undefined>, db:
   }
   if (queries.donator === "exists") queries.donator = { $exists: true };
 
+  // execute the query and return plain objects so we can map over them
   const results: any[] = await db.users.find(queries)
     .skip(parseInt(query.skip ?? "0", 10) || 0)
     .limit(parseInt(query.lim ?? "50", 10) || 50)
@@ -81,9 +83,12 @@ export async function searchUsers(query: Record<string, string | undefined>, db:
     .lean();
 
   const parsed = await Promise.all(results.map(async (USR: any) => {
-    const discordUser = await getDiscordUser(USR.id, redis);
+    const [discordUser, cosmetics] = await Promise.all([
+      getDiscordUser(USR.id, redis),
+      db.userInventory.get(USR.id),
+    ]);
     if (!discordUser) return null;
-    const { response } = parseUserdata(discordUser, USR, 200);
+    const { response } = parseUserdata(discordUser, USR, 200, cosmetics);
     return response;
   }));
 
@@ -93,18 +98,23 @@ export async function searchUsers(query: Record<string, string | undefined>, db:
 // ── Inventory / Stickers / Medals / Backgrounds ──────────────────────────────
 
 export async function getUserInventory(userId: string, db: DB) {
-  const USR = await db.users.get(userId);
-  if (!USR) return null;
-  const userInventory: any[] = USR.modules.inventory.filter((i: any) => i.count > 0 && typeof i.id === "string");
-  const meta: any[] = await db.items.find({ id: { $in: userInventory.map((i: any) => i.id) } });
-  userInventory.forEach((item: any) => { item.meta = meta.find((m: any) => m.id === item.id); });
+  const userWithInventory = await (db.userInventory as any)
+    .findOne({ id: userId })
+    .populate({ path: "itemsData", select: "id name rarity type icon code" })
+    .lean();
+  if (!userWithInventory) return null;
+  const userInventory: any[] = (userWithInventory.inventory ?? []).filter((i: any) => i.count > 0 && typeof i.id === "string");
+  const itemsData: any[] = userWithInventory.itemsData ?? [];
+  userInventory.forEach((item: any) => {
+    item.meta = itemsData.find((m: any) => m.id === item.id);
+  });
   return userInventory;
 }
 
 export async function getUserStickers(userId: string, db: DB) {
-  const USR = await db.users.get(userId);
+  const USR = await db.userInventory.get(userId);
   if (!USR) return null;
-  const stickerIds: string[] = USR.modules.stickerInventory.filter(Boolean);
+  const stickerIds: string[] = USR.stickerInventory.filter(Boolean);
   const stickerMeta: any[] = await db.cosmetics.find({ id: { $in: stickerIds } }).lean();
   const packs: any[] = await db.items.find({ icon: { $in: stickerMeta.map((x: any) => x?.series_id) } }).lean();
   stickerMeta.forEach((x: any) => { x.packData = packs.find((p: any) => p.icon === x.series_id); });
@@ -112,16 +122,17 @@ export async function getUserStickers(userId: string, db: DB) {
 }
 
 export async function getUserMedals(userId: string, db: DB) {
-  const USR = await db.users.get(userId);
+  const USR = await db.userInventory.get(userId);
   if (!USR) return null;
-  const ids: string[] = USR.modules.medalInventory.filter(Boolean);
+  const ids: string[] = USR.medalInventory.filter(Boolean);
+  // call lean() first so we can chain noCache if available
   return db.cosmetics.find({ icon: { $in: ids } }).lean().noCache();
 }
 
 export async function getUserBackgrounds(userId: string, db: DB) {
-  const USR = await db.users.get(userId);
+  const USR = await db.userInventory.get(userId);
   if (!USR) return null;
-  const codes: string[] = USR.modules.bgInventory.filter(Boolean);
+  const codes: string[] = USR.bgInventory.filter(Boolean);
   return db.cosmetics.find({ code: { $in: codes } }).lean();
 }
 

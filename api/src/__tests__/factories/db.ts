@@ -1,6 +1,6 @@
 // database-related factory helpers for tests
 
-import { Schemas } from "@polestar/database_schema";
+import { Schemas } from "@polestarlabs/database_schema";
 
 const MONGODB_DB_COLLECTION = {
     get: jest.fn(),
@@ -15,20 +15,36 @@ const MONGODB_DB_COLLECTION = {
 }
 
 export function cursor<T>(data: T) {
-  return {
+  const cur: any = {
     lean: async () => data,
+    skip: () => cur,
+    limit: () => cur,
+    sort: () => cur,
+    populate: () => cur,
+    noCache: () => cur,
   };
+  return cur;
 }
 
 export function makeFakeDb(overrides: Partial<any> = {}) {
+  // wrap a default collection so that .find() and .findOne() return cursor objects
+  function makeCollection() {
+    const col: any = { ...MONGODB_DB_COLLECTION };
+    col.find = jest.fn().mockImplementation(() => cursor([]));
+    col.findOne = jest.fn().mockImplementation(() => cursor(null));
+    return col;
+  }
+
   const db = {
-    users: MONGODB_DB_COLLECTION,
-    items: MONGODB_DB_COLLECTION,
-    cosmetics: MONGODB_DB_COLLECTION,
-    commends: MONGODB_DB_COLLECTION,
-    usercols: MONGODB_DB_COLLECTION,
-    fanart: MONGODB_DB_COLLECTION,
-    collections: { fanart: MONGODB_DB_COLLECTION },
+    users: makeCollection(),
+    userInventory: makeCollection(),
+    items: makeCollection(),
+    cosmetics: makeCollection(),
+    commends: makeCollection(),
+    usercols: makeCollection(),
+    fanart: makeCollection(),
+    relationships: makeCollection(),
+    collections: { fanart: makeCollection() },
   } as unknown as Schemas;
   return Object.assign(db, overrides);
 }

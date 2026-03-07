@@ -9,7 +9,10 @@ exports.run = async function(ITEM_IN,checking,req,res){
   
   let crafted_item = ITEMS.find(itm=>itm.id==ITEM_IN||itm.code==ITEM_IN);
     
-  const userData = await DB.userDB.findOne({id:req.user.id},{"modules.JDE":1,"modules.SPH":1,"modules.RBN":1,"modules.inventory":1});
+  const [userData, cosmeticsData] = await Promise.all([
+      DB.users.findOne({id:req.user.id},{"currency.JDE":1,"currency.SPH":1,"currency.RBN":1}),
+      DB.userInventory.getFull(req.user.id),
+  ]);
   if(crafted_item){
     let ID = crafted_item.id
     let NAME = crafted_item.name
@@ -25,19 +28,14 @@ exports.run = async function(ITEM_IN,checking,req,res){
       
     ]
     async function breakit(item,USID){
-      DB.userDB.findOneAndUpdate({
-      'id':USID,
-      'modules.inventory':item
-      },{$set:{'modules.inventory.$':'DRAGGE'}}).then(async x=>{        
-        await DB.userDB.findOneAndUpdate({'id':USID},{$pull:{'modules.inventory':'DRAGGE'}});
-      })
-    };    
+      await cosmeticsData.removeItem(item, 1);
+    };
     
     console.log(GC)
     
     if(GC.JDE){
-      let afford = userData.modules.JDE >= GC.JDE;
-      let diff = Math.abs(userData.modules.JDE - GC.JDE);
+      let afford = userData.currency.JDE >= GC.JDE;
+      let diff = Math.abs(userData.currency.JDE - GC.JDE);
       let icona='yep';
       if(!afford){
         fails+=1
@@ -48,8 +46,8 @@ exports.run = async function(ITEM_IN,checking,req,res){
       
     
     if(GC.RBN){
-      let afford = userData.modules.RBN >= GC.RBN;
-          let diff = Math.abs(userData.modules.RBN - GC.RBN);
+      let afford = userData.currency.RBN >= GC.RBN;
+          let diff = Math.abs(userData.currency.RBN - GC.RBN);
       let icona='yep';
       if(!afford){
         fails+=1
@@ -60,8 +58,8 @@ exports.run = async function(ITEM_IN,checking,req,res){
       
     
     if(GC.SPH){
-      let afford = userData.modules.SPH >= GC.SPH;
-      let diff = Math.abs(userData.modules.SPH - GC.SPH);
+      let afford = userData.currency.SPH >= GC.SPH;
+      let diff = Math.abs(userData.currency.SPH - GC.SPH);
       let icona='yep';
       if(!afford){
         fails+=1
@@ -71,7 +69,7 @@ exports.run = async function(ITEM_IN,checking,req,res){
       
     
     MAT.forEach(material=>{
-      if (userData.modules.inventory&&userData.modules.inventory.includes(material)){
+      if ((cosmeticsData?.inventory||[]).some(i => i.id === material && i.count > 0)){
         
       }else{
         fails+=1
@@ -95,7 +93,7 @@ exports.run = async function(ITEM_IN,checking,req,res){
               await breakit(itm,req.user.id);
             })
             
-            await DB.userDB.set(req.user.id,{$push:{'modules.inventory': crafted_item.id}});
+            await cosmeticsData.addItem(crafted_item.id, 1, true);
 
             res.send({title:"SUCCESS!"})
           }

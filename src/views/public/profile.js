@@ -28,9 +28,9 @@ function since(x){
         background: {loading:true},
         medals: [null,null,null,null,null,null,null,null,null],
         completionist:[
-         {label: 'Stickers', val: userprofile.modules.stickerInventory.length ||0 , max: this.stickersSize},
-         {label: 'Backgrounds', val: userprofile.modules.bgInventory.length ||0 , max: this.backgroundsSize},
-         {label: 'Medals', val: userprofile.modules.medalInventory.length ||0 , max: this.medalsSize}
+         {label: 'Stickers', val: userprofile.profile.stickerInventory.length ||0 , max: this.stickersSize},
+         {label: 'Backgrounds', val: userprofile.profile.bgInventory.length ||0 , max: this.backgroundsSize},
+         {label: 'Medals', val: userprofile.profile.medalInventory.length ||0 , max: this.medalsSize}
         ],
 
         // COLLECTIONS TAB
@@ -129,7 +129,7 @@ function since(x){
     computed:{
       wifeData(){
           if(!this.relationships.loading){
-              const featRel = this.relationships.find(rel=> rel.id == userprofile.featuredMarriage )
+              const featRel = this.relationships.find(rel=> rel.id == userprofile.profile.featuredMarriage )
               if(!featRel) return {id:false};
               let _wifeData = featRel.usersData.find(u=> u.id != userprofile.id)
               _wifeData.ring = featRel.ring;
@@ -175,23 +175,23 @@ fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );  
 
-fetch("/api/cosmetics/stickers/"+userprofile.modules.sticker).then(r =>
+fetch("/api/cosmetics/stickers/"+userprofile.profile.sticker).then(r =>
     r.json().then(res =>  PROFILE.sticker = res  )
 );
 
-fetch("/api/cosmetics/backgrounds/"+userprofile.modules.bgID).then(r =>
+fetch("/api/cosmetics/backgrounds/"+userprofile.profile.bgID).then(r =>
     r.json().then(res =>  PROFILE.background = res  )
 );
 
 
-userprofile.modules.medals.forEach(async (medal,i)=>{
-  
-  fetch("/api/cosmetics/search?type=medal&icon="+userprofile.modules.medals[i]).then(r =>{
-  
+userprofile.profile.medals.forEach(async (medal,i)=>{
+
+  fetch("/api/cosmetics/search?type=medal&icon="+userprofile.profile.medals[i]).then(r =>{
+
     r.json().then(res => {
       PROFILE.medals[i] = res[0]
       if(!res[0]){
-        fetch("/api/achievements/"+userprofile.modules.medals[i]).then(rr =>
+        fetch("/api/achievements/"+userprofile.profile.medals[i]).then(rr =>
           rr.json().then(res2 =>  {
             if(!res2) return PROFILE.medals[i] = {name:"Unknown ",type:'achievement'};
             PROFILE.medals[i] = res2[0];

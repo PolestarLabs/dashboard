@@ -1,6 +1,6 @@
 .subpom(plx-scrollspy="target: .animate, .plx-nav>li; cls: plx-animation-slide-right-medium; delay: 10").plx-animation-slide-bottom-small
     if userinfo && userdata
-        img.sidebg(src="/backdrops/"+userdata.modules.bgID+".png")
+        img.sidebg(src="/backdrops/"+ (userdata.profile && userdata.profile.bgID || '') +".png")
         img.mugshot(src=userinfo.pix).pinkord-placeholder
         if userdata.donator
             .don-icon.icon40(class= userdata.donator )
@@ -8,7 +8,7 @@
         br
         div.animate
             h3.title #{userinfo.uname}
-            h5.subtitle: i #{userdata.modules.tagline}
+            h5.subtitle: i #{userdata.profile && userdata.profile.tagline}
         hr
         .plx-flex-around
             a(href="/profile/"+userinfo.id).plx-button-default.plx-button.plx-button-small.plx-align-center.plx-margin-small.animate
@@ -31,13 +31,13 @@
         .curcho_dis
             .currencysho.curr.animate
                 .plx-rubine.icon32.curr_icon_3.level-start
-                span.level-end= "" + miliarize(userdata.modules.RBN,false,' ')
+                span.level-end= "" + miliarize(userdata.currency && userdata.currency.RBN,false,' ')
             .currencysho.curr.animate
                 .plx-jade.icon32.curr_icon_3.level-start
-                span.level-end= "" + miliarize(userdata.modules.JDE,false,' ')
+                span.level-end= "" + miliarize(userdata.currency && userdata.currency.JDE,false,' ')
             .currencysho.curr.animate
                 .plx-sapphire.icon32.curr_icon_3.level-start
-                span.level-end= "" + miliarize(userdata.modules.SPH,false,' ')
+                span.level-end= "" + miliarize(userdata.currency && userdata.currency.SPH,false,' ')
     else
         a.plx-button.plx-width-1-1( onclick="login()").bg-discord
             | LOGIN &#x2002 

@@ -6,3 +6,11 @@ bun = true
 [install]
 # Respect the lockfile on CI
 frozenLockfile = false
+
+[alias]
+"@plugins/*" = "src/plugins/*"
+"@routes/*" = "src/routes/*"
+"@helpers/*" = "src/helpers/*"
+"@definitions/*" = "src/definitions/*"
+"@services/*" = "src/services/*"
+"@types/*" = "src/types/*"

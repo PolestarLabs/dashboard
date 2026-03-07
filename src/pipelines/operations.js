@@ -78,7 +78,10 @@ ${message}
       let $index = $=='rubines'?'RBN':$=='jades'?'JDE':$=='sapphires'?'SPH':'event';
       
       let U = payload.user
-      let DATA = await DB.userDB.findOne({id:U.id});
+      let [DATA, cosmeticsData] = await Promise.all([
+          DB.users.findOne({id:U.id}),
+          DB.userInventory.get(U.id),
+      ]);
       
       let ITM = payload.item
       let base;
@@ -132,33 +135,33 @@ ${message}
           let hasAnyItem, hasAllItems;       
 
           if (
-            toadd.mdl.some(item=> DATA.modules.medalInventory.includes(item)) ||
-            toadd.bgd.some(item=> DATA.modules.bgInventory.includes(item)) ||
-            toadd.stk.some(item=> DATA.modules.stickerInventory.includes(item))
-          ) hasAnyItem = true;          
+            toadd.mdl.some(item=> (cosmeticsData?.medalInventory||[]).includes(item)) ||
+            toadd.bgd.some(item=> (cosmeticsData?.bgInventory||[]).includes(item)) ||
+            toadd.stk.some(item=> (cosmeticsData?.stickerInventory||[]).includes(item))
+          ) hasAnyItem = true;
           if (
-            toadd.mdl.every(item=> DATA.modules.medalInventory.includes(item)) &&
-            toadd.bgd.every(item=> DATA.modules.bgInventory.includes(item)) &&
-            toadd.stk.every(item=> DATA.modules.stickerInventory.includes(item))
+            toadd.mdl.every(item=> (cosmeticsData?.medalInventory||[]).includes(item)) &&
+            toadd.bgd.every(item=> (cosmeticsData?.bgInventory||[]).includes(item)) &&
+            toadd.stk.every(item=> (cosmeticsData?.stickerInventory||[]).includes(item))
           ) hasAllItems = true;
-          
+
             console.log(toadd.bgd )
-            console.log(toadd.bgd.every(item=> DATA.modules.bgInventory.includes(item)) )
+            console.log(toadd.bgd.every(item=> (cosmeticsData?.bgInventory||[]).includes(item)) )
             
             if(hasAllItems === true) return resolve("DUPLICATE");
             if(hasAnyItem === true) price -= Math.round(price * .20);
           
-          if(!DATA.modules[$] || DATA.modules[$] < price)return resolve("UNAFFORD");
-          await ECO.pay(U.id,price,T+"shop_dash_bundle",$index||"RBN");              
+          if(!DATA.currency[$] || DATA.currency[$] < price)return resolve("UNAFFORD");
+          await ECO.pay(U.id,price,T+"shop_dash_bundle",$index||"RBN");
           //console.log(bndl)
-          
- 
-           
-          return DB.userDB.set(U.id, {
+
+
+
+          return DB.userInventory.set(U.id, {
             $addToSet:{
-              'modules.medalInventory'   : {$each:toadd.mdl},
-              'modules.bgInventory'      : {$each:toadd.bgd},
-              'modules.stickerInventory' : {$each:toadd.stk},
+              'medalInventory'   : {$each:toadd.mdl},
+              'bgInventory'      : {$each:toadd.bgd},
+              'stickerInventory' : {$each:toadd.stk},
             }
           }).then(ok => resolve("OK"));
         }else{
@@ -168,7 +171,7 @@ ${message}
       
       let itemObj = base.find(i=>i.icon==ITM||i.code==ITM)
       
-      if(DATA.modules[T+"Inventory"].includes(ITM)) return resolve("DUPLICATE");
+      if(cosmeticsData?.[T+"Inventory"]?.includes(ITM)) return resolve("DUPLICATE");
       console.log({$index,$,itemObj})
       
       let price= $==='event'? itemObj.price? itemObj.price : T=='bg'? rarmult[itemObj.rarity]*5: rarmult[itemObj.rarity]*2 : convert(itemObj.price,$);
@@ -176,62 +179,62 @@ ${message}
       
       if($!='event'){
         console.error({test:"0"})
-        console.error({test:DATA.modules[$], minus:DATA.modules[$] < price,price}) 
-        if(!DATA.modules[$] || DATA.modules[$] < price)return resolve("UNAFFORD");
-        
+        console.error({test:DATA.currency[$], minus:DATA.currency[$] < price,price})
+        if(!DATA.currency[$] || DATA.currency[$] < price)return resolve("UNAFFORD");
+
         console.error({test:"1"})
-          DB.userDB.findOne({id: U.id}).then(async USER => {
+          DB.users.findOne({id: U.id}).then(async USER => {
         console.error({test:"2"})
-          
+
           console.log({line:"post non ev check y price check",$index,$,price})
           await ECO.pay(U.id,price,T+"shop_dash",$index||"RBN");
-          
-             DB.userDB.set(USER.id, {$push: {["modules."+T+"Inventory"]: ITM}}).then(ok => resolve("OK"));
+
+             DB.userInventory.set(USER.id, {$push: {[T+"Inventory"]: ITM}}).then(ok => resolve("OK"));
         })
-      
+
       } else {
 
-        if (!DATA.modules.EVT || DATA.modules.EVT < price) {console.log("UNAFFORD");return resolve("UNAFFORD");}
-      
+        if (!DATA.currency.EVT || DATA.currency.EVT < price) {console.log("UNAFFORD");return resolve("UNAFFORD");}
+
       if(itemObj.buyable !== true && typeof itemObj.exclusive !=='string'){
          return resolve("CANTBUY");
-        //return DB.userDB.set(U.id,{'blacklisted':"XSS Attempt - Shop ["+ITM+"]"});
+        //return DB.users.set(U.id,{'blacklisted':"XSS Attempt - Shop ["+ITM+"]"});
       }
-        
-        DB.userDB.findOne({id: U.id}).then(async USER => {
-          
+
+        DB.users.findOne({id: U.id}).then(async USER => {
+
          await ECO.pay(U.id,price,T+"shop_dash","EVT");
-            DB.userDB.set(USER.id, {$push: {["modules."+T+"Inventory"]: ITM}}).then(ok => resolve("OK"))
+            DB.userInventory.set(USER.id, {$push: {[T+"Inventory"]: ITM}}).then(ok => resolve("OK"))
         })
       }
-
-
-      })
       },
   
   equip: function equip(req,bot){
       return new Promise( async resolve=>{
-      DB.userDB.findOne({id:req.user.id}).then(async USER=>{
+      Promise.all([
+          DB.users.findOne({id:req.user.id}),
+          DB.userInventory.get(req.user.id)
+      ]).then(async ([USER, cosmeticsData])=>{
 
           let type = req.params.type;
           let item = req.params.item;
 
           if(type=='bg'){
-            if(USER.modules.bgInventory.includes(item)){
-              DB.userDB.set(USER.id,{
-                $set:{'modules.bgID':item}
+            if(cosmeticsData?.bgInventory?.includes(item)){
+              DB.users.set(USER.id,{
+                $set:{'profile.bgID':item}
               }).then(async ok=> {console.log("OK");resolve("OK")})
             }else{
               console.log("INVALID_ITEM");
-              await DB.userDB.set(USER.id,{'blacklisted':"XSS Attempt - BGShop ["+item+"]"});
+              await DB.users.set(USER.id,{'blacklisted':"XSS Attempt - BGShop ["+item+"]"});
               resolve("XSS")
             }
           }else if (type=='medal'){
             let itemArray = req.body.itemArray;
-              
+
               itemArray= itemArray.filter(async function(item, pos) {
-                  if(!USER.modules.medalInventory.includes(item)){
-                    await DB.userDB.set(USER.id,{'blacklisted':"XSS Attempt - MedalShop ["+item+"]"});
+                  if(!cosmeticsData?.medalInventory?.includes(item)){
+                    await DB.users.set(USER.id,{'blacklisted':"XSS Attempt - MedalShop ["+item+"]"});
                     return resolve("XSS")
                   };
                         return a.indexOf(item) == pos;
@@ -239,8 +242,8 @@ ${message}
             if (itemArray.constructor != Array) return resolve("NOT_ARRAY");
             if (itemArray.length != 9) return resolve("NOT_NINE");
         
-               DB.userDB.set(USER.id,{
-                $set:{'modules.medals':itemArray}
+               DB.users.set(USER.id,{
+                $set:{'profile.medals':itemArray}
               }).then(ok=> {console.log("OK");resolve("OK")})
           }
       

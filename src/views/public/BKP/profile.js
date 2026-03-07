@@ -11,9 +11,9 @@ function since(x){
       bgData: {loading:true},
         bgDataMarket: {loading:true},
         completionist:[
-         {label: 'Stickers', val: userprofile.modules.stickerInventory.length ||0 , max: stickersSize},
-         {label: 'Backgrounds', val: userprofile.modules.bgInventory.length ||0 , max: backgroundsSize},
-         {label: 'Medals', val: userprofile.modules.medalInventory.length ||0 , max: medalsSize}
+         {label: 'Stickers', val: userprofile.profile.stickerInventory.length ||0 , max: stickersSize},
+         {label: 'Backgrounds', val: userprofile.profile.bgInventory.length ||0 , max: backgroundsSize},
+         {label: 'Medals', val: userprofile.profile.medalInventory.length ||0 , max: medalsSize}
         ]
     }, 
       components:{

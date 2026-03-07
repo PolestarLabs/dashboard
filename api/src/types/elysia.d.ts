@@ -24,7 +24,7 @@ export type { ApiUser, ApiPermission } from "../plugins/auth";
 
 /**
  * Context for routes wired to `dbPlugin`.
- * Decorated: `db` (`Schemas` from @polestar/database_schema).
+ * Decorated: `db` (`Schemas` from @polestarlabs/database_schema).
  */
 export type DbContext = InferContext<typeof dbPlugin>;
 

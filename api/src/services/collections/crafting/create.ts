@@ -15,7 +15,10 @@ export default new Elysia()
             return { status: "ERROR", message: "This item can't be crafted" };
         }
 
-        const userData = await DB.users.getFull(apiUser.id);
+        const [userData, cosmeticsDoc] = await Promise.all([
+            DB.users.get(apiUser.id),
+            DB.userInventory.getFull(apiUser.id),
+        ]);
         if (!userData) {
             set.status = 401;
             return { status: "ERROR", message: "Not Logged in" };
@@ -23,7 +26,7 @@ export default new Elysia()
 
         const materials = pot ?? itemToCraft.materials;
         for (const itm of materials) {
-            const has = userData.modules.inventory.find((i: any) => i.id === itm.id);
+            const has = cosmeticsDoc.inventory.find((i: any) => i.id === itm.id);
             if (!has || has.count < itm.count) {
                 set.status = 403;
                 return {
@@ -33,9 +36,9 @@ export default new Elysia()
             }
         }
 
-        await Promise.all(materials.map((m: any) => userData.removeItem(m.id, m.count)));
+        await Promise.all(materials.map((m: any) => cosmeticsDoc.removeItem(m.id, m.count)));
         await Promise.all([
-            userData.addItem(item, 1, true),
+            cosmeticsDoc.addItem(item, 1, true),
             DB.users.set(apiUser.id, {
                 $inc: {
                     "progression.craftingExp": {
@@ -50,7 +53,7 @@ export default new Elysia()
             }),
         ]);
 
-        return { status: "OK", message: "Item has been crafted", inventory: userData.modules.inventory };
+        return { status: "OK", message: "Item has been crafted", inventory: cosmeticsDoc.inventory };
     }, {
         body: t.Object({
             item: t.String(),

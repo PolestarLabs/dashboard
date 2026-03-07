@@ -32,7 +32,7 @@ mixin ITEM(ITEM, META)
 .plx-container
     #invdash
         .plx-grid-medium(plx-grid)
-            each ITEM in userdata.modules.inventory        
+            each ITEM in (userdata.inventory?.items || [])
                 -let thisItem = ALLITEMS.find(x=>x.id == ITEM.id || x.id == ITEM )
                 
                 if thisItem && ITEM.count > 0
