@@ -61,7 +61,11 @@ jobs:
     steps:
       - name: Run deploy script
         run: |
-          /home/pollux/polaris/scripts/server-deploy.sh dashboard staging
+          # the sync step above may leave us on a detached PR head; pass the
+          # checked‑out SHA so the deploy helper doesn’t later reset us to a
+          # random fallback branch
+          current=$(git -C "${{ secrets.DASH_DIR_DEV }}" rev-parse HEAD)
+          /home/pollux/polaris/scripts/server-deploy.sh dashboard staging "$current"
       - name: Rollback on failure
         if: failure()
         run: |
