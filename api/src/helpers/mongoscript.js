@@ -8,6 +8,7 @@ print('creating required indexes');
 db.users.createIndex({ id: 1 }, { unique: true });
 db.users.createIndex({ personalhandle: 1 }, { unique: true, sparse: true });
 db.user_inventory.createIndex({ userId: 1 }, { unique: true });
+db.user_inventory.createIndex({ id: 1 }, { unique: true, sparse: true });
 db.user_oauth.createIndex({ userId: 1 }, { unique: true });
 db.user_guilds.createIndex({ userId: 1 });
 db.user_guilds.createIndex({ guildId: 1 });
@@ -127,10 +128,12 @@ db.userdb.aggregate([
 ]);
 
 // 2. user_inventory
+// Include id so app code that queries findOne({ id: userId }) works (schema uses userId; both kept).
 print('migrating user_inventory');
 db.userdb.aggregate([
   {
     $project: {
+      id: "$id",
       userId: "$id",
       inventory: "$modules.inventory",
       bgInventory: "$modules.bgInventory",
@@ -272,6 +275,9 @@ db.userdb.aggregate([
   },
   { $out: "user_quests" }
 ]);
+// $out replaces the collection, so indexes created above are dropped. Recreate them.
+print('recreating user_quests indexes after $out');
+db.user_quests.createIndex({ userId: 1, questId: 1 }, { unique: true });
 
 // 6. user_analytics
 print('migrating user_analytics');
