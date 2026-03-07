@@ -32,12 +32,15 @@ import {
 } from "@services/marketplace";
 
 import type { MarketplacePostBodyType } from "@routes/schemas";
-import type { Currency } from "@services/economy";
+import type { Currency } from "@definitions/Currency";
 
 export const marketplaceRoutes = new Elysia({ prefix: "/marketplace", tags: ["marketplace"] })
   .use(dbPlugin)
   .use(redisPlugin)
   .use(authPlugin)
+
+
+/// GET ==>
 
   // ── GET /marketplace ───────────────────────────────────────────────────────
   // List / filter active listings. Open endpoint.
@@ -52,6 +55,9 @@ export const marketplaceRoutes = new Elysia({ prefix: "/marketplace", tags: ["ma
     if (!details) { set.status = 404; return { message: "Item not found" }; }
     return details;
   }, { params: MarketplaceItemParams })
+
+
+// POST
 
   // ── POST /marketplace ──────────────────────────────────────────────────────
   // Post a new buy or sell listing. Requires auth.
@@ -85,6 +91,9 @@ export const marketplaceRoutes = new Elysia({ prefix: "/marketplace", tags: ["ma
     return { status: "OK", receipt: result.receipt };
   }, { params: MarketplaceEntryParams })
 
+
+//DELETE and PATCH ==>
+
   // ── DELETE /marketplace/:entry_id ─────────────────────────────────────────
   // Cancel a listing and restore the item to the author. Requires auth (owner only).
   .delete("/:entry_id", async ({ params, requireAuth, db, set }) => {
@@ -93,6 +102,7 @@ export const marketplaceRoutes = new Elysia({ prefix: "/marketplace", tags: ["ma
     if (!result.ok) { set.status = result.status; return { message: result.message }; }
     return { status: "OK" };
   }, { params: MarketplaceEntryParams })
+
 
   // ── PATCH /marketplace/:entry_id ──────────────────────────────────────────
   // Edit listing price. Requires auth (owner only).
