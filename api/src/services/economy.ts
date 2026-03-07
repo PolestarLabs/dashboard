@@ -77,10 +77,10 @@ import CURRENCY_VALUES from "@definitions/constants/Currency";
  * Normalise a free-text currency string or array to canonical code(s).
  * Mirrors `parseCurrencies` in Economy.js exactly.
  */
-export function parseCurrencies(curr: string[]): Currency[] {
-  const parsed = curr.map(c => c.trim().toUpperCase() as Currency);
-  if (parsed.some(c => !(CURRENCY_VALUES.includes(c))))
-    throw new Error(`Unknown currencies: ${parsed}`);
+export function parseCurrency(curr: string): Currency {
+  const parsed = curr.trim().toUpperCase() as Currency;
+  if (!(CURRENCY_VALUES.includes(parsed)))
+    throw new Error(`Unknown currency: ${parsed}`);
 
   return parsed;
 }
@@ -211,7 +211,7 @@ export async function transfer(
   const hasFunds = await checkFunds(uFrom, amount, curr, db);
   if (!hasFunds && !disableFundsCheck) throw new Error("NO FUNDS");
 
-  const parsedCurr: Currency = parseCurrencies([curr].flat())[0]!;
+  const parsedCurr: Currency = parseCurrency(curr);
 
   const fromUpdate: Record<string, number> = {};
   const toUpdate:   Record<string, number> = {};
