@@ -66,12 +66,8 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-root-deps-
       - name: Install root deps
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          # configure git so npm can fetch private repo dependencies
-          git config --global credential.helper store
-          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
-          npm ci
+          if: steps.cache.outputs.cache-hit != 'true'
+          run: npm ci
 
 
   gate-bun:
