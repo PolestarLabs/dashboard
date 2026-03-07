@@ -1,7 +1,12 @@
 import { Request, Response, NextFunction } from 'express';
 
+// stub modules that neodash pulls in so we don't hit heavy or missing deps
+jest.mock('@polestar/progression', () => ({ init: jest.fn() }));
+jest.mock('date-fns/formatDistanceToNow', () => jest.fn(() => '')); // some submodules may import this
+
 // require neodash to populate global.cacheFunction
-require('../../../neodash');
+// module lives under dashboard/src, so climb out of api and into src
+require('../../../src/neodash');
 
 describe('cacheFunction middleware', () => {
   let req: Partial<Request>;
