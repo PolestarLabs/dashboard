@@ -67,6 +67,8 @@ jobs:
           key: ${{ runner.os }}-root-deps-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-root-deps-
+      - name: Configure git for https
+        run: git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
       - name: Install root deps
         if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
