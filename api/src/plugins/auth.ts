@@ -15,7 +15,7 @@
 
 import Elysia, { status } from "elysia";
 import { bearer } from "@elysiajs/bearer";
-import { Schemas } from "@polestar/database_schema";
+import { Schemas } from "@polestarlabs/database_schema";
 import dbPlugin from "./db";
 
 export type ApiPermission =

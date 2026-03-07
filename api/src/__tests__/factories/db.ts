@@ -1,6 +1,6 @@
 // database-related factory helpers for tests
 
-import { Schemas } from "@polestar/database_schema";
+import { Schemas } from "@polestarlabs/database_schema";
 
 const MONGODB_DB_COLLECTION = {
     get: jest.fn(),
