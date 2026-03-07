@@ -149,7 +149,7 @@ jobs:
           cd api
           # ensure git can fetch private repos
           git config --global credential.helper store
-          echo "https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          echo "https://${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
           git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Type-check API
@@ -177,7 +177,7 @@ jobs:
           cd api
           # ensure git can fetch private repos
           git config --global credential.helper store
-          echo "https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          echo "https://${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
           git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Build bundle
@@ -209,7 +209,7 @@ jobs:
           cd api
           # ensure git can fetch private repos
           git config --global credential.helper store
-          echo "https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          echo "https://${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
           git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Run sanity suite
@@ -246,7 +246,7 @@ jobs:
           cd api
           # configure git for private git deps
           git config --global credential.helper store
-          echo "https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          echo "https://${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
           git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Run full API tests
@@ -317,7 +317,7 @@ jobs:
           cd api
           # configure git for private git deps
           git config --global credential.helper store
-          echo "https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          echo "https://${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
           git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Run postinstall
