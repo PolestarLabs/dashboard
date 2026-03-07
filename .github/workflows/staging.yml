@@ -34,6 +34,7 @@ jobs:
     needs: pull-staging
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Install dependencies
         run: |
