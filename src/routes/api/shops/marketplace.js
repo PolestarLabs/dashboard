@@ -422,13 +422,15 @@ router.get(["/","/:entry"],  async (req, res) => {
     .sort({ timestamp: sort })
     .limit(lim)
     .skip(skip)
+    .noCache()
     .then(async (result) => {
-      console.log({result})
       let [marketeers, cosmetics, goods] = await Promise.all([
        
         Promise.all(result.map(async (i) => await userCache.get(i.author).timeout(300).catch(async e=>{
           const user = await DB.users.get(i.author);
-          return user.connections?.discord || user.discordData || { }
+          const userDiscordData = (await DB.userOauth.get(i.author)).discordIdentityCache || {};
+
+          return userDiscordData || user.discordData || user || { id: i.author, username: "Unknown", avatar: "", meta: {} }
         })  ) ),
         DB.cosmetics
           .find({ _id: { $in: result.map((i) => i.item_id).filter(x=> parseInt(x) && x.length == 24) } }).lean()
@@ -438,18 +440,23 @@ router.get(["/","/:entry"],  async (req, res) => {
           .catch((e) =>  console.error(e) ),
       ]).catch((err) => {
         console.error(result.map((i) => i.item_id));
+        console.error({err});
         res.status(500).send("ERROR");
       });
 
       let newThing = result.map((entry) => {
+        // try to resolve user data, fall back to minimal stub if missing
+        const found = marketeers.find((u) => u?.id === entry.author);
+        const userdata =
+          found || { id: entry.author, username: "Unknown", avatar: "", meta: {} };
         return Object.assign(
           {
             itemdata: cosmetics
               .concat(goods)
               .find((i) => i._id == entry.item_id),
           },
-          { userdata: marketeers.find((u) => u.id === entry.author) },
-          entry._doc
+          { userdata },
+          entry
         );
       });
 
