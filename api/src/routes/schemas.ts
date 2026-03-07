@@ -285,3 +285,43 @@ export type CreateResponse = typeof CreateResponseSchema.static;
 
 export const ItemParamsSchema = t.Object({ item: t.String({ description: "Item id" }) });
 export type ItemParams = typeof ItemParamsSchema.static;
+
+// ── Marketplace ───────────────────────────────────────────────────────────────
+
+import CURRENCY_VALUES from "@definitions/constants/Currency";
+
+export const MarketplaceListQuery = t.Object({
+  id:        t.Optional(t.String({ description: "Exact listing ID" })),
+  item_id:   t.Optional(t.String({ description: "Item ObjectId or legacy id" })),
+  item_type: t.Optional(t.String({ description: "Item type filter (background|medal|sticker…)" })),
+  author:    t.Optional(t.String({ description: "Author Discord snowflake" })),
+  type:      t.Optional(t.Union([t.Literal("sell"), t.Literal("buy")])),
+  price:     t.Optional(t.String({ description: "Exact price filter" })),
+  after:     t.Optional(t.String({ description: "Unix ms — return listings posted after this time" })),
+  before:    t.Optional(t.String({ description: "Unix ms — return listings posted before this time" })),
+  limit:     t.Optional(t.String({ description: "Max results (1–100, default 25)" })),
+  skip:      t.Optional(t.String({ description: "Skip N results" })),
+  page:      t.Optional(t.String({ description: "Page index (multiplied by 25)" })),
+  sort:      t.Optional(t.Union([t.Literal("oldest"), t.Literal("newest")])),
+});
+export type MarketplaceListQueryType = typeof MarketplaceListQuery.static;
+
+export const MarketplaceEntryParams = t.Object({
+  entry_id: t.String({ description: "Listing ID" }),
+});
+
+export const MarketplaceItemParams = t.Object({
+  item: t.String({ description: "Item ObjectId or legacy id/code/icon" }),
+});
+
+export const MarketplacePostBody = t.Object({
+  type:     t.Union([t.Literal("sell"), t.Literal("buy")]),
+  item_id:  t.String({ description: "Item ObjectId" }),
+  price:    t.Number({ minimum: 1 }),
+  currency: t.Union(CURRENCY_VALUES.map((c) => t.Literal(c)) as any),
+});
+export type MarketplacePostBodyType = typeof MarketplacePostBody.static;
+
+export const MarketplacePatchBody = t.Object({
+  price: t.Number({ minimum: 1, description: "New listing price" }),
+});
