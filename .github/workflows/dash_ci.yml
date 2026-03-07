@@ -197,6 +197,10 @@ jobs:
       - name: Install API deps
         run: |
           cd api
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://oauth2:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
           bun install
       - name: Run sanity suite
         run: |
