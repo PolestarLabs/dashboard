@@ -4,6 +4,8 @@ Promise.config({
 	longStackTraces: true
 })
 
+const BOT_PATH = process.env.BOT_PATH || "../../bot";	
+
 const memCache = require('memory-cache');
 global.cacheFunction = (duration) => {
 	return (req, res, next) => {
@@ -187,7 +189,7 @@ PLX.user = central_pollux;
 
 global.polluxClients = new Map();
 
-const GearboxClient = require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client;
+const GearboxClient = require(BOT_PATH + '/core/utilities/Gearbox').Client;
 
 config.clients.forEach(async cli=>{
 	try {
@@ -297,7 +299,7 @@ mongoose.connect( dbURL, dbOptions);
 mongoose.set('strictQuery', true);
 mongoose.Promise = require('bluebird');
 Promise.promisifyAll(require("mongoose"));
-Object.assign(global,require( process.env.BOT_PATH + '/core/utilities/Gearbox' ).Global)
+Object.assign(global,require( BOT_PATH + '/core/utilities/Gearbox' ).Global)
 
 //-- PASSPORT  
 const scopes = ['identify','email', 'guilds','connections'];
