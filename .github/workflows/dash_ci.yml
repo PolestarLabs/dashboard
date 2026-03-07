@@ -320,8 +320,14 @@ jobs:
           set -e
           cd "$DIR"
           git fetch origin
-          # always pull from elysia branch regardless of triggering ref
-          git checkout origin/elysia -- api
+          #git checkout origin/elysia -- api
+          # force checkout to discard local changes then into the current PR head.
+          # pull the PR head directly
+          prref=${{ github.event.pull_request.head.ref }}
+          git fetch origin "$prref":"pr-head"
+          git reset --hard pr-head
+
+
       - name: Build
         run: |
           cd "$DIR"/api
