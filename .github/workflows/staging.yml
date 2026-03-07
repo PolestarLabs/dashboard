@@ -52,6 +52,8 @@ jobs:
     name: 🚀 Deploy → Staging
     runs-on: self-hosted
     needs: deps-staging
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     environment:
       name: "staging"
       url: https://staging.pollux.gg

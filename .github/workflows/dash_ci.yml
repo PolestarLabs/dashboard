@@ -272,6 +272,8 @@ jobs:
     needs: gate-bun
     name: ✨ Elysia deps & postinstall
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - name: Setup Node
@@ -299,6 +301,7 @@ jobs:
     runs-on: self-hosted
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Sync api folder
         run: |
