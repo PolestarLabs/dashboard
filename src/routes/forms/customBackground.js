@@ -1,7 +1,7 @@
 const ASSETS_PATH = process.env.ASSETS_PATH || "/home/pollux/polaris/ASSETS/";
 const fs = require('fs')
 const { Canvas, loadImage } = require('skia-canvas');
-const { bgs } = require('@polestar/database_schema/schemas/cosmetics');
+const { bgs } = require('@polestarlabs/database_schema/schemas/cosmetics');
 
 module.exports = {
     process: async (req,res) => {

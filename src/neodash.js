@@ -201,7 +201,7 @@ setTimeout(()=>{
 
 Object.assign(PLX, GearboxClient);
 
-(require('@polestar/database_schema'))({
+(require('@polestarlabs/database_schema'))({
 	url: dbURL,
 	options: dbOptions,
 },{
