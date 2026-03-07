@@ -16,7 +16,7 @@
     "@elysiajs/jwt": "^1.4.0",
     "@elysiajs/server-timing": "^1.4.0",
     "@elysiajs/swagger": "^1.3.1",
-    "@polestarlabs/database_schema": "^0.19.1",
+    "@polestar/database_schema": "git@github.com:PolestarLabs/db-schema.git#refactor",
     "elysia": "^1.4.25",
     "ioredis": "^5.9.3",
     "mongoose": "^8.23.0",

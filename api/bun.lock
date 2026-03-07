@@ -10,7 +10,7 @@
         "@elysiajs/jwt": "^1.4.0",
         "@elysiajs/server-timing": "^1.4.0",
         "@elysiajs/swagger": "^1.3.1",
-        "@polestarlabs/database_schema": "^0.19.1",
+        "@polestar/database_schema": "git@github.com:PolestarLabs/db-schema.git#refactor",
         "elysia": "^1.4.25",
         "ioredis": "^5.9.3",
         "mongoose": "^8.23.0",
@@ -57,7 +57,7 @@
 
     "@mongodb-js/saslprep": ["@mongodb-js/saslprep@1.4.6", "", { "dependencies": { "sparse-bitfield": "^3.0.3" } }, "sha512-y+x3H1xBZd38n10NZF/rEBlvDOOMQ6LKUTHqr8R9VkJ+mmQOYtJFxIlkkK8fZrtOiL6VixbOBWMbZGBdal3Z1g=="],
 
-    "@polestarlabs/database_schema": ["@polestarlabs/database_schema@0.19.2", "https://npm.pkg.github.com/download/@polestarlabs/database_schema/0.19.2/0e6fd824666e6f25eed4f8a19c7cd7d9a7cafd97", { "dependencies": { "bluebird": "^3.5.1", "mongoose": "^5.9.20", "redis": "^3.1.0" } }, "sha512-VDAtKQ+ZXuBODUWn4ur4fZNgJftMZ0V+qGnfi4nqbGDWCro1cfYBS0NldXIb8QG8TgIVUbltzlKL50M0nPv68g=="],
+    "@polestar/database_schema": ["@polestarlabs/database_schema@git+ssh://git@github.com:PolestarLabs/db-schema.git#ecf64eb1dfccaf8e4be5458e07ac6f7fd6847bab", { "dependencies": { "bluebird": "^3.5.1", "mongoose": "^5.9.20", "redis": "^3.1.0" } }, "ecf64eb1dfccaf8e4be5458e07ac6f7fd6847bab"],
 
     "@scalar/openapi-types": ["@scalar/openapi-types@0.1.1", "", {}, "sha512-NMy3QNk6ytcCoPUGJH0t4NNr36OWXgZhA3ormr3TvhX1NDgoF95wFyodGVH8xiHeUyn2/FxtETm8UBLbB5xEmg=="],
 
@@ -293,7 +293,7 @@
 
     "zod": ["zod@3.25.76", "", {}, "sha512-gzUt/qt81nXsFGKIFcC3YnfEAx5NkunCfnDlvuBSSFS02bcXu4Lmea0AFIUwbLWxWPx3d9p8S5QoaujKcNQxcQ=="],
 
-    "@polestarlabs/database_schema/mongoose": ["mongoose@5.13.23", "", { "dependencies": { "@types/bson": "1.x || 4.0.x", "@types/mongodb": "^3.5.27", "bson": "^1.1.4", "kareem": "2.3.2", "mongodb": "3.7.4", "mongoose-legacy-pluralize": "1.0.2", "mpath": "0.8.4", "mquery": "3.2.5", "ms": "2.1.2", "optional-require": "1.0.x", "regexp-clone": "1.0.0", "safe-buffer": "5.2.1", "sift": "13.5.2", "sliced": "1.0.1" } }, "sha512-Q5bo1yYOcH2wbBPP4tGmcY5VKsFkQcjUDh66YjrbneAFB3vNKQwLvteRFLuLiU17rA5SDl3UMcMJLD9VS8ng2Q=="],
+    "@polestar/database_schema/mongoose": ["mongoose@5.13.23", "", { "dependencies": { "@types/bson": "1.x || 4.0.x", "@types/mongodb": "^3.5.27", "bson": "^1.1.4", "kareem": "2.3.2", "mongodb": "3.7.4", "mongoose-legacy-pluralize": "1.0.2", "mpath": "0.8.4", "mquery": "3.2.5", "ms": "2.1.2", "optional-require": "1.0.x", "regexp-clone": "1.0.0", "safe-buffer": "5.2.1", "sift": "13.5.2", "sliced": "1.0.1" } }, "sha512-Q5bo1yYOcH2wbBPP4tGmcY5VKsFkQcjUDh66YjrbneAFB3vNKQwLvteRFLuLiU17rA5SDl3UMcMJLD9VS8ng2Q=="],
 
     "@scalar/themes/@scalar/types": ["@scalar/types@0.1.7", "", { "dependencies": { "@scalar/openapi-types": "0.2.0", "@unhead/schema": "^1.11.11", "nanoid": "^5.1.5", "type-fest": "^4.20.0", "zod": "^3.23.8" } }, "sha512-irIDYzTQG2KLvFbuTI8k2Pz/R4JR+zUUSykVTbEMatkzMmVFnn1VzNSMlODbadycwZunbnL2tA27AXed9URVjw=="],
 
@@ -307,32 +307,32 @@
 
     "string_decoder/safe-buffer": ["safe-buffer@5.1.2", "", {}, "sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g=="],
 
-    "@polestarlabs/database_schema/mongoose/bson": ["bson@1.1.6", "", {}, "sha512-EvVNVeGo4tHxwi8L6bPj3y3itEvStdwvvlojVxxbyYfoaxJ6keLgrTuKdyfEAszFK+H3olzBuafE0yoh0D1gdg=="],
+    "@polestar/database_schema/mongoose/bson": ["bson@1.1.6", "", {}, "sha512-EvVNVeGo4tHxwi8L6bPj3y3itEvStdwvvlojVxxbyYfoaxJ6keLgrTuKdyfEAszFK+H3olzBuafE0yoh0D1gdg=="],
 
-    "@polestarlabs/database_schema/mongoose/kareem": ["kareem@2.3.2", "", {}, "sha512-STHz9P7X2L4Kwn72fA4rGyqyXdmrMSdxqHx9IXon/FXluXieaFA6KJ2upcHAHxQPQ0LeM/OjLrhFxifHewOALQ=="],
+    "@polestar/database_schema/mongoose/kareem": ["kareem@2.3.2", "", {}, "sha512-STHz9P7X2L4Kwn72fA4rGyqyXdmrMSdxqHx9IXon/FXluXieaFA6KJ2upcHAHxQPQ0LeM/OjLrhFxifHewOALQ=="],
 
-    "@polestarlabs/database_schema/mongoose/mongodb": ["mongodb@3.7.4", "", { "dependencies": { "bl": "^2.2.1", "bson": "^1.1.4", "denque": "^1.4.1", "optional-require": "^1.1.8", "safe-buffer": "^5.1.2" }, "optionalDependencies": { "saslprep": "^1.0.0" } }, "sha512-K5q8aBqEXMwWdVNh94UQTwZ6BejVbFhh1uB6c5FKtPE9eUMZPUO3sRZdgIEcHSrAWmxzpG/FeODDKL388sqRmw=="],
+    "@polestar/database_schema/mongoose/mongodb": ["mongodb@3.7.4", "", { "dependencies": { "bl": "^2.2.1", "bson": "^1.1.4", "denque": "^1.4.1", "optional-require": "^1.1.8", "safe-buffer": "^5.1.2" }, "optionalDependencies": { "saslprep": "^1.0.0" } }, "sha512-K5q8aBqEXMwWdVNh94UQTwZ6BejVbFhh1uB6c5FKtPE9eUMZPUO3sRZdgIEcHSrAWmxzpG/FeODDKL388sqRmw=="],
 
-    "@polestarlabs/database_schema/mongoose/mpath": ["mpath@0.8.4", "", {}, "sha512-DTxNZomBcTWlrMW76jy1wvV37X/cNNxPW1y2Jzd4DZkAaC5ZGsm8bfGfNOthcDuRJujXLqiuS6o3Tpy0JEoh7g=="],
+    "@polestar/database_schema/mongoose/mpath": ["mpath@0.8.4", "", {}, "sha512-DTxNZomBcTWlrMW76jy1wvV37X/cNNxPW1y2Jzd4DZkAaC5ZGsm8bfGfNOthcDuRJujXLqiuS6o3Tpy0JEoh7g=="],
 
-    "@polestarlabs/database_schema/mongoose/mquery": ["mquery@3.2.5", "", { "dependencies": { "bluebird": "3.5.1", "debug": "3.1.0", "regexp-clone": "^1.0.0", "safe-buffer": "5.1.2", "sliced": "1.0.1" } }, "sha512-VjOKHHgU84wij7IUoZzFRU07IAxd5kWJaDmyUzQlbjHjyoeK5TNeeo8ZsFDtTYnSgpW6n/nMNIHvE3u8Lbrf4A=="],
+    "@polestar/database_schema/mongoose/mquery": ["mquery@3.2.5", "", { "dependencies": { "bluebird": "3.5.1", "debug": "3.1.0", "regexp-clone": "^1.0.0", "safe-buffer": "5.1.2", "sliced": "1.0.1" } }, "sha512-VjOKHHgU84wij7IUoZzFRU07IAxd5kWJaDmyUzQlbjHjyoeK5TNeeo8ZsFDtTYnSgpW6n/nMNIHvE3u8Lbrf4A=="],
 
-    "@polestarlabs/database_schema/mongoose/ms": ["ms@2.1.2", "", {}, "sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w=="],
+    "@polestar/database_schema/mongoose/ms": ["ms@2.1.2", "", {}, "sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w=="],
 
-    "@polestarlabs/database_schema/mongoose/sift": ["sift@13.5.2", "", {}, "sha512-+gxdEOMA2J+AI+fVsCqeNn7Tgx3M9ZN9jdi95939l1IJ8cZsqS8sqpJyOkic2SJk+1+98Uwryt/gL6XDaV+UZA=="],
+    "@polestar/database_schema/mongoose/sift": ["sift@13.5.2", "", {}, "sha512-+gxdEOMA2J+AI+fVsCqeNn7Tgx3M9ZN9jdi95939l1IJ8cZsqS8sqpJyOkic2SJk+1+98Uwryt/gL6XDaV+UZA=="],
 
     "@scalar/themes/@scalar/types/@scalar/openapi-types": ["@scalar/openapi-types@0.2.0", "", { "dependencies": { "zod": "^3.23.8" } }, "sha512-waiKk12cRCqyUCWTOX0K1WEVX46+hVUK+zRPzAahDJ7G0TApvbNkuy5wx7aoUyEk++HHde0XuQnshXnt8jsddA=="],
 
-    "@polestarlabs/database_schema/mongoose/mongodb/denque": ["denque@1.5.1", "", {}, "sha512-XwE+iZ4D6ZUB7mfYRMb5wByE8L74HCn30FBN7sWnXksWc1LO1bPDl67pBR9o/kC4z/xSNAwkMYcGgqDV3BE3Hw=="],
+    "@polestar/database_schema/mongoose/mongodb/denque": ["denque@1.5.1", "", {}, "sha512-XwE+iZ4D6ZUB7mfYRMb5wByE8L74HCn30FBN7sWnXksWc1LO1bPDl67pBR9o/kC4z/xSNAwkMYcGgqDV3BE3Hw=="],
 
-    "@polestarlabs/database_schema/mongoose/mongodb/optional-require": ["optional-require@1.1.10", "", { "dependencies": { "require-at": "^1.0.6" } }, "sha512-0r3OB9EIQsP+a5HVATHq2ExIy2q/Vaffoo4IAikW1spCYswhLxqWQS0i3GwS3AdY/OIP4SWZHLGz8CMU558PGw=="],
+    "@polestar/database_schema/mongoose/mongodb/optional-require": ["optional-require@1.1.10", "", { "dependencies": { "require-at": "^1.0.6" } }, "sha512-0r3OB9EIQsP+a5HVATHq2ExIy2q/Vaffoo4IAikW1spCYswhLxqWQS0i3GwS3AdY/OIP4SWZHLGz8CMU558PGw=="],
 
-    "@polestarlabs/database_schema/mongoose/mquery/bluebird": ["bluebird@3.5.1", "", {}, "sha512-MKiLiV+I1AA596t9w1sQJ8jkiSr5+ZKi0WKrYGUn6d1Fx+Ij4tIj+m2WMQSGczs5jZVxV339chE8iwk6F64wjA=="],
+    "@polestar/database_schema/mongoose/mquery/bluebird": ["bluebird@3.5.1", "", {}, "sha512-MKiLiV+I1AA596t9w1sQJ8jkiSr5+ZKi0WKrYGUn6d1Fx+Ij4tIj+m2WMQSGczs5jZVxV339chE8iwk6F64wjA=="],
 
-    "@polestarlabs/database_schema/mongoose/mquery/debug": ["debug@3.1.0", "", { "dependencies": { "ms": "2.0.0" } }, "sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g=="],
+    "@polestar/database_schema/mongoose/mquery/debug": ["debug@3.1.0", "", { "dependencies": { "ms": "2.0.0" } }, "sha512-OX8XqP7/1a9cqkxYw2yXss15f26NKWBpDXQd0/uK/KPqdQhxbPa994hnzjcE2VqQpDslf55723cKPUOGSmMY3g=="],
 
-    "@polestarlabs/database_schema/mongoose/mquery/safe-buffer": ["safe-buffer@5.1.2", "", {}, "sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g=="],
+    "@polestar/database_schema/mongoose/mquery/safe-buffer": ["safe-buffer@5.1.2", "", {}, "sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g=="],
 
-    "@polestarlabs/database_schema/mongoose/mquery/debug/ms": ["ms@2.0.0", "", {}, "sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A=="],
+    "@polestar/database_schema/mongoose/mquery/debug/ms": ["ms@2.0.0", "", {}, "sha512-Tpp60P6IUJDTuOq/5Z8cdskzJujfwqfOTkrwIwj7IRISpnkJnT6SyJ4PCPnGMoFjC9ddhal5KVIYtAt97ix05A=="],
   }
 }
