@@ -5,7 +5,8 @@
  * No Elysia Context imported here — accepts typed payloads, returns plain objects.
  */
 
-import { RARITY_VALUES, RarityType as Rarity } from "@definitions/Rarity";
+import type { Rarity } from "@definitions/Rarity";
+import RARITY_VALUES from "@definitions/constants/Rarity";
 import { shuffle } from "utils/shuffle";
 import { isExact } from "utils/crafting";
 import type { PotItem, MixBody, MixResponse, CreateBody, CreateResponse } from "@routes/schemas";
@@ -22,7 +23,7 @@ function findInPot(id: string, pot: PotItem[]): PotItem | undefined {
   return pot.find((i) => i.id === id);
 }
 
-const EXP_TABLE: Record<string, number> = { C: 1, U: 2, R: 5, SR: 10, UR: 25, XR: 50 };
+const EXP_TABLE: Record<Rarity, number> = { C: 1, U: 2, R: 5, SR: 10, UR: 25, XR: 50 };
 
 // ── Service ──────────────────────────────────────────────────────────────────
 
