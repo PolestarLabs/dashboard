@@ -15,18 +15,23 @@
 import { getDiscordUser, getManyDiscordUsers } from "@helpers/discord";
 import {
   checkFunds, pay, transfer, arbitraryAudit,
-  TRANSACTION_TYPES, parseCurrencies,
+  TRANSACTION_TYPES, parseCurrency,
 } from "@services/economy";
-import type { Currency } from "@services/economy";
+import type { InventoryItemType } from "@definitions/InventoryItem";
+import type { Currency } from "@definitions/Currency";
+import type { ObjectId } from "mongoose";
+import { Rarity } from "@definitions/Rarity";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
+type BuyOrSell = "buy" | "sell";
+
 export interface MarketplaceEntry {
   id:          string;
-  type:        "sell" | "buy";
+  type:        BuyOrSell;
   author:      string;
   item_id:     string;
-  item_type:   string;
+  item_type:   InventoryItemType;
   price:       number;
   currency:    Currency;
   img:         string;
@@ -37,13 +42,13 @@ export interface MarketplaceEntry {
 }
 
 export interface ItemDoc {
-  _id:        any;
+  _id:        ObjectId;
   id:         string;
-  type:       string;
+  type:       InventoryItemType;
   code?:      string;
   icon?:      string;
   name?:      string;
-  rarity?:    string;
+  rarity?:    Rarity;
   tradeable?: boolean;
   droppable?: boolean;
 }
@@ -51,16 +56,16 @@ export interface ItemDoc {
 export interface MarketplaceListQuery {
   id?:        string;
   item_id?:   string;
-  item_type?: string;
+  item_type?: InventoryItemType;
   author?:    string;
-  type?:      string;
-  price?:     string;
+  type?:      BuyOrSell;
+  price?:     number;
   after?:     string;
   before?:    string;
-  limit?:     string;
-  skip?:      string;
+  limit?:     number;
+  skip?:      number;
   sort?:      string;
-  page?:      string;
+  page?:      number;
 }
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
@@ -81,7 +86,8 @@ export function getImagePath(item: ItemDoc): string {
  * Temporarily returns true unconditionally (mirrors the legacy TEMP SWITCH OFF).
  */
 export function isTradeable(_item: ItemDoc): boolean {
-  return true; // TODO: restore item.tradeable check once flags are reliable
+  return !!_item.tradeable;
+  // TODO: restore item.tradeable check once flags are reliable
 }
 
 /**
@@ -95,6 +101,7 @@ export function itemInInventory(item: ItemDoc, cosmeticsData: Record<string, any
   let query:    Record<string, any> = {};
   let prequery: Record<string, any> | undefined;
 
+  // Holdables
   if (["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)) {
     const owned = cosmeticsData?.inventory?.find((it: any) => it.id === item.id)?.count > 0;
     if (owned) {
@@ -106,6 +113,7 @@ export function itemInInventory(item: ItemDoc, cosmeticsData: Record<string, any
       reason     = "ITEM NOT IN INVENTORY";
       httpStatus = 404;
     }
+  // Cosmetics
   } else if (item.type === "background") {
     if (!cosmeticsData?.bgInventory?.includes(item.code)) {
       res        = false;
@@ -383,7 +391,7 @@ export async function postListing(
   if (!details) return { ok: false, status: 404, message: "Item not found" };
 
   const { item } = details;
-  const currency = parseCurrencies(payload.currency);
+  const currency = parseCurrency(payload.currency);
 
   if (payload.type === "sell") {
     const canSell = await userCanSell(payload.author, { price: payload.price, currency }, item, db);
