@@ -281,9 +281,8 @@ jobs:
     needs: gate-root
     uses: ./.github/workflows/staging.yml
     secrets: inherit
-    if: >
-      (needs.gate-root.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/dev') ||
-      (github.event_name == 'pull_request' && github.event.pull_request.base.ref == 'dev' && contains(github.event.pull_request.labels.*.name, 'fastlane'))
+    if: > 
+      contains(github.event.pull_request.labels.*.name, 'fastlane')
 
   production:
     needs: gate
