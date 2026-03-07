@@ -27,6 +27,8 @@ jobs:
   gate-root:
     name: ⛔ Root gate (dashboard deps)
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       non_api_changed: ${{ steps.diff.outputs.non_api }}
     steps:
@@ -72,6 +74,8 @@ jobs:
   gate-bun:
     name: 🧄 Bun gate (API deps)
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     outputs:
       api_changed: ${{ steps.diff.outputs.api }}
     steps:
@@ -144,6 +148,8 @@ jobs:
     name: 📦 Build Elysia API bundle
     needs: gate-bun
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -170,6 +176,8 @@ jobs:
     name: 🔬 API sanity tests
     needs: [build-dist, elysia-check]
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -196,6 +204,8 @@ jobs:
     name: ✅ API full tests
     needs: sanity-tests
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
