@@ -68,10 +68,10 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-root-deps-
       - name: Install root deps
-          if: steps.cache.outputs.cache-hit != 'true'
-          run: npm ci
-          env:
-            NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
   gate-bun:
