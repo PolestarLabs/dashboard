@@ -4,7 +4,6 @@ export enum CurrencyEnum {
   SPH = "Sapphire",
   AMY = "Amethyst",
   EMD = "Emerald",
-  TPZ = "Topaze",
   PSM = "Prism",
   EVT = "Event",
 };
