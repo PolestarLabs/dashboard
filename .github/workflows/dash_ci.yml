@@ -143,6 +143,8 @@ jobs:
       - name: Install API deps
         run: |
           cd api
+          # authenticate npm registry for private @polestarlabs packages
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
           # ensure git can fetch private repos
           git config --global credential.helper store
           echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
