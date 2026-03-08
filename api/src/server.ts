@@ -39,7 +39,7 @@ import { questsRoutes } from "@routes/quests";
 import { progressionRoutes } from "@routes/progression";
 import { systemRoutes } from "@routes/system";
 import { economyRoutes } from "@routes/economy";
-import { adventureRoutes } from "@routes/adventure";
+import { adventureRoutes } from "@routes/games/adventure";
 
 const PORT = parseInt(process.env.API_PORT ?? "7056", 10);
 const IS_DEV = process.env.NODE_ENV !== "production";
