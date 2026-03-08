@@ -132,6 +132,8 @@ jobs:
     name: 🧠 Run TypeScript typecheck
     needs: [build-dist, elysia-check]
     runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v4
         with:
