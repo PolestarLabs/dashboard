@@ -325,3 +325,120 @@ export type MarketplacePostBodyType = typeof MarketplacePostBody.static;
 export const MarketplacePatchBody = t.Object({
   price: t.Number({ minimum: 1, description: "New listing price" }),
 });
+
+// ── Shared user-ID param (userID field, distinct from UserIdParams which uses `id`) ──
+
+export const UserIDParam = t.Object({
+  userID: t.String({ description: "Discord snowflake user ID" }),
+});
+
+// ── Quests ────────────────────────────────────────────────────────────────────
+
+export const QuestGenericIdParams = t.Object({
+  questGenericID: t.String({ description: "Generic quest template ID (shared across all users)" }),
+});
+
+export const UserQuestAssignParams = t.Object({
+  userID:         t.String(),
+  questGenericID: t.String(),
+});
+
+export const UserQuestUniqParams = t.Object({
+  userID:      t.String(),
+  questUniqID: t.String({ description: "Unique quest instance ID for this user (or 'all')" }),
+});
+
+export const QuestsBulkUpdateBody = t.Object({
+  quests: t.Array(t.Object({
+    questUniqID: t.String(),
+    progression: t.Optional(t.Record(t.String(), t.Unknown())),
+  }), { description: "Array of quest progression updates" }),
+});
+
+export const QuestUpdateBody = t.Object({
+  progression: t.Optional(t.Record(t.String(), t.Unknown())),
+  status:      t.Optional(t.Union([
+    t.Literal("active"),
+    t.Literal("completed"),
+    t.Literal("failed"),
+  ])),
+});
+
+// ── Progression ───────────────────────────────────────────────────────────────
+
+export const ProgressionUpdateBody = t.Object({
+  exp:   t.Optional(t.Number({ description: "XP delta (positive = gain)" })),
+  level: t.Optional(t.Number()),
+  data:  t.Optional(t.Record(t.String(), t.Unknown())),
+});
+
+// ── System ────────────────────────────────────────────────────────────────────
+
+export const BlacklistPostBody = t.Object({
+  reason: t.Optional(t.String({ description: "Reason recorded on the user's record" })),
+});
+
+export const AuditLogBody = t.Object({
+  type:    t.String({ description: "Audit event type label (e.g. BAN, WARN, NOTE)" }),
+  details: t.Optional(t.Record(t.String(), t.Unknown(), { description: "Arbitrary extra payload" })),
+});
+
+// ── Economy ───────────────────────────────────────────────────────────────────
+
+export const EconomyTransactionIdParams = t.Object({
+  transactionID: t.String({ description: "Transaction ID (snowflake-style)" }),
+});
+
+export const PayBody = t.Object({
+  userID:   t.String({ description: "Discord snowflake of the user being debited" }),
+  amount:   t.Number({ minimum: 1 }),
+  type:     t.Optional(t.String({ description: "Transaction type label (default OTHER)" })),
+  currency: t.Optional(t.String({ description: "Currency code (default RBN)" })),
+});
+
+export const ReceiveBody = t.Object({
+  userID:   t.String({ description: "Discord snowflake of the user being credited" }),
+  amount:   t.Number({ minimum: 1 }),
+  type:     t.Optional(t.String({ description: "Transaction type label (default OTHER)" })),
+  currency: t.Optional(t.String({ description: "Currency code (default RBN)" })),
+});
+
+export const TransferBody = t.Object({
+  from:     t.String({ description: "Sender Discord snowflake" }),
+  to:       t.String({ description: "Recipient Discord snowflake" }),
+  amount:   t.Number({ minimum: 1 }),
+  type:     t.Optional(t.String()),
+  currency: t.Optional(t.String({ description: "Currency code (default RBN)" })),
+});
+
+export const TransactionsQueryBody = t.Object({
+  userID:   t.Optional(t.String({ description: "Filter by sender or recipient ID" })),
+  type:     t.Optional(t.String()),
+  currency: t.Optional(t.String()),
+  after:    t.Optional(t.Number({ description: "Unix ms lower bound" })),
+  before:   t.Optional(t.Number({ description: "Unix ms upper bound" })),
+  limit:    t.Optional(t.Number({ minimum: 1, maximum: 100 })),
+  skip:     t.Optional(t.Number()),
+});
+
+export const InventoryUpdateBody = t.Object({
+  items: t.Array(t.Object({
+    id:    t.String({ description: "Item ID" }),
+    count: t.Number({ description: "Count delta (positive = add, negative = remove)" }),
+  }), { description: "Inventory item delta list" }),
+});
+
+// ── Adventure ─────────────────────────────────────────────────────────────────
+
+export const AdventureLocationParams = t.Object({
+  locationID: t.String(),
+});
+
+export const AdventureEncounterParams = t.Object({
+  encounterID: t.String(),
+});
+
+export const AdventureJournalEntryParams = t.Object({
+  userID:  t.String(),
+  entryID: t.String(),
+});
