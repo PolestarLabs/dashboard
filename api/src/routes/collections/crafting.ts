@@ -12,7 +12,7 @@ import {
   MixBodySchema,
   MixResponseSchema,
   CreateBodySchema,
-} from "@routes/schemas";
+} from "@routes/_schemas";
 import { CraftingService } from "@services/crafting";
 
 export const craftingRoutes = new Elysia()

@@ -10,7 +10,7 @@ import { dbPlugin } from "@plugins/db";
 import {
   LeaderboardUserParams, LeaderboardServerParams,
   LeaderboardPageQuery, LeaderboardUserServerParams,
-} from "@routes/schemas";
+} from "@routes/_schemas";
 
 import {
   getUserRanks, getServerLeaderboard, getUserServerRank,

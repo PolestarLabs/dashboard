@@ -6,7 +6,7 @@
 import Elysia from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
-import { AchievementParams } from "@routes/schemas";
+import { AchievementParams } from "@routes/_schemas";
 import { getDiscoinCurrencies, getAchievement } from "@services/misc";
 
 export const utilsRoutes = new Elysia({ prefix: "/", tags: ["utils"] })

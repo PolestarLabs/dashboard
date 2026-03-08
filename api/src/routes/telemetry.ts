@@ -6,7 +6,7 @@
 import Elysia from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
-import { ThemeParams, ThemeQuery } from "@routes/schemas";
+import { ThemeParams, ThemeQuery } from "@routes/_schemas";
 import { saveTheme } from "@services/telemetry";
 
 export const telemetryRoutes = new Elysia({ prefix: "/telemetry", tags: ["telemetry"] })

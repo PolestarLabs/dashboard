@@ -11,7 +11,7 @@ import {
   CosmeticSearchQuery, CosmeticIdParams,
   CosmeticCountParams, CosmeticCountQuery,
   CosmeticGenericParams,
-} from "@routes/schemas";
+} from "@routes/_schemas";
 
 import {
   cleanup, searchCosmetics, findCosmeticById, countCosmetics,

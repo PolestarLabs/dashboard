@@ -19,7 +19,7 @@ import {
   MarketplaceItemParams,
   MarketplacePostBody,
   MarketplacePatchBody,
-} from "@routes/schemas";
+} from "@routes/_schemas";
 
 import {
   getMarketplaceListings,
@@ -31,7 +31,7 @@ import {
   editListingPrice,
 } from "@services/marketplace";
 
-import type { MarketplacePostBodyType } from "@routes/schemas";
+import type { MarketplacePostBodyType } from "@routes/_schemas";
 import type { Currency } from "@definitions/Currency";
 
 export const marketplaceRoutes = new Elysia({ prefix: "/marketplace", tags: ["marketplace"] })
@@ -112,3 +112,5 @@ export const marketplaceRoutes = new Elysia({ prefix: "/marketplace", tags: ["ma
     if (!result.ok) { set.status = result.status; return { message: result.message }; }
     return { status: "OK" };
   }, { params: MarketplaceEntryParams, body: MarketplacePatchBody });
+
+

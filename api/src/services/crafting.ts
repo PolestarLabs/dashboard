@@ -9,7 +9,7 @@ import type { Rarity } from "@definitions/Rarity";
 import RARITY_VALUES from "@definitions/constants/Rarity";
 import { shuffle } from "utils/shuffle";
 import { isExact } from "utils/crafting";
-import type { PotItem, MixBody, MixResponse, CreateBody, CreateResponse } from "@routes/schemas";
+import type { PotItem, MixBody, MixResponse, CreateBody, CreateResponse } from "@routes/_schemas";
 
 // ── Internal helpers ─────────────────────────────────────────────────────────
 

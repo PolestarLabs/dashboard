@@ -6,7 +6,7 @@
 import Elysia from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { dbPlugin } from "@plugins/db";
-import { FanartIdParams, FanartUpdateParams, FanartUpdateBody } from "@routes/schemas";
+import { FanartIdParams, FanartUpdateParams, FanartUpdateBody } from "@routes/_schemas";
 import { deleteFanart, updateFanart } from "@services/fanart";
 
 export const fanartRoutes = new Elysia({ prefix: "/galleries/fanart", tags: ["fanart"] })

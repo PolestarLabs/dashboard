@@ -11,7 +11,7 @@ import { dbPlugin } from "@plugins/db";
 import {
   UserSearchQuery, HandleCheckQuery, UserIdParams,
   CommendQuery, CommendEndpointParams, FanartHeartParams,
-} from "@routes/schemas";
+} from "@routes/_schemas";
 
 import { searchUsers, parseUserAndReturn, getUserInventory, getUserStickers, getUserMedals, getUserBackgrounds } from "@services/users";
 import { getCommendsSimple, getCommendsFull, getCommendRank } from "@services/commends";

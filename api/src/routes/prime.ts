@@ -10,7 +10,7 @@ import { dbPlugin } from "@plugins/db";
 import {
   PrimeServerParams, PatreonFinderParams,
   PatreonTopParams, PatreonTotalParams, PatreonTotalQuery,
-} from "@routes/schemas";
+} from "@routes/_schemas";
 
 import {
   getPatreonPayload, findPatron, topPatrons,
