@@ -35,6 +35,11 @@ import { fanartRoutes } from "@routes/fanart";
 
 import { shipRoutes } from "@routes/ship";
 import { marketplaceRoutes } from "@routes/marketplace";
+import { questsRoutes } from "@routes/quests";
+import { progressionRoutes } from "@routes/progression";
+import { systemRoutes } from "@routes/system";
+import { economyRoutes } from "@routes/economy";
+import { adventureRoutes } from "@routes/adventure";
 
 const PORT = parseInt(process.env.API_PORT ?? "7056", 10);
 const IS_DEV = process.env.NODE_ENV !== "production";
@@ -71,6 +76,11 @@ const app = new Elysia()
                     { name: "generators", description: "Image generator endpoints" },
                     { name: "utils", description: "Utility endpoints" },
                     { name: "marketplace", description: "Marketplace listings" },
+                    { name: "quests", description: "Quest definitions and user quest progression" },
+                    { name: "progression", description: "User XP and level progression" },
+                    { name: "system", description: "Blacklist management and audit logging" },
+                    { name: "economy", description: "Currency transfers, balances, and transactions" },
+                    { name: "adventure", description: "Adventure locations, encounters, and journals" },
                 ],
             },
         })
@@ -103,6 +113,11 @@ const app = new Elysia()
     .use(fanartRoutes)
     .use(shipRoutes)
     .use(marketplaceRoutes)
+    .use(questsRoutes)
+    .use(progressionRoutes)
+    .use(systemRoutes)
+    .use(economyRoutes)
+    .use(adventureRoutes)
 
     // ── Global error handler ──────────────────────────────────────────────────
     .onError(({ code, error, set }) => {
