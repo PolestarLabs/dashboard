@@ -227,7 +227,7 @@ export const PotItemSchema = t.Object({
   id:     t.String({ description: "Material item id" }),
   count:  t.Number({ description: "Quantity of that item" }),
   type:   t.Optional(t.String({ description: "Item type for type-crafting" })),
-  rarity: t.Optional(t.String({ description: RARITY_VALUES.join(" | ") })),
+  rarity: t.Optional(t.String({ description: RARITY_VALUES.join(" | ") })) ,
 });
 export type PotItem = typeof PotItemSchema.static;
 
@@ -236,25 +236,18 @@ export const MixBodySchema = t.Object({
 });
 export type MixBody = typeof MixBodySchema.static;
 
-export const MixResponseSchema = t.Unsafe({
-  description: "Crafting discovery result",
-  type: "object",
-  properties: {
-    discovery:   {
-      type: "object",
-      description: "The discovered/crafted item",
-      properties: {
-        id:     { type: "string", examples: ["item_sword"] },
-        name:   { type: "string", examples: ["Iron Sword"] },
-        rarity: { type: "string", examples: ["R"] },
-      },
-    },
-    isDiscovery: { type: "boolean", description: "True if first time the user discovers this recipe" },
-    canCraftNow: { type: "boolean", description: "True if user has the exact materials to craft right now" },
-    typeCraft:   { type: "boolean", description: "True if match was type-based rather than exact" },
-    notQuite:    { type: "boolean", description: "True if a fallback item was returned but requirements aren't fully met" },
-    noMoreTable: { type: "boolean", description: "True if the pot types have no matchable items at all" },
-  },
+export const MixResponseSchema = t.Object({
+  possible: t.Optional(t.Number({ description: "Number of possible discoveries with this pot" })),
+  discovery: t.Object({
+    id:     t.String({ examples: ["item_sword"] }),
+    name:   t.String({ examples: ["Iron Sword"] }),
+    rarity: t.String({ examples: ["R"] }),
+  }, { description: "The discovered/crafted item" }),
+  isDiscovery: t.Optional(t.Boolean({ description: "True if first time the user discovers this recipe" })),
+  canCraftNow: t.Optional(t.Boolean({ description: "True if user has the exact materials to craft right now" })),
+  typeCraft:   t.Optional(t.Boolean({ description: "True if match was type-based rather than exact" })),
+  notQuite:    t.Optional(t.Boolean({ description: "True if a fallback item was returned but requirements aren't fully met" })),
+  noMoreTable: t.Optional(t.Boolean({ description: "True if the pot types have no matchable items at all" })),
 });
 
 export type MixResponse = {
