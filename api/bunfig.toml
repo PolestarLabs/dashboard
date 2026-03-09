@@ -13,3 +13,4 @@ frozenLockfile = false
 "@helpers/*" = "src/helpers/*"
 "@definitions/*" = "src/definitions/*"
 "@services/*" = "src/services/*"
+"@schemas/*" = "src/schemas/*"
