@@ -14,6 +14,9 @@
 
 import * as Canvas from "skia-canvas";
 import { CanvasRenderingContext2D } from "skia-canvas";
+// optional dependencies don't always have usable typings; provide basic ambient modules below
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import * as StackBlur from "stackblur-canvas";
 
 
@@ -73,6 +76,7 @@ export interface BlockOptions {
   stroke?: StrokeOptions;
   [k: string]: unknown;
 }
+
 
 export interface RadiusOptions {
   tl?: number;
@@ -214,9 +218,9 @@ const Picto = {
   ): Promise<TagResult> {
     let fillTextWithTwemoji: ((c: any, t: string, x: number, y: number, opts?: any) => Promise<void>) | null = null;
     try {
-        // dynamically import emoji helper if present
-      ({ fillTextWithTwemoji } = await import("@polestar/skia-twemoji")).fillTextWithTwemoji; // may throw
-
+      // dynamically import emoji helper if present; module may not exist in open-source builds
+      const mod: any = await import("@polestar/skia-twemoji");
+      fillTextWithTwemoji = mod.fillTextWithTwemoji;
     } catch {
       return this.tag(ctx, text, font, color, stroke);
     }
@@ -309,7 +313,7 @@ const Picto = {
     W               = 300,
     H               = 200,
     options: BlockOptions = {},
-  ): TagResult {
+  ): Promise<TagResult> {
     const str = unshitify(text);
     const fs  = fontStr(font);
     (ctx as any).font = fs;
