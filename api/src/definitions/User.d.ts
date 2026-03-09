@@ -4,17 +4,16 @@ import Profilecard from "./Profilecard";
 import Currency from "./Currency";
 import { UserInventoryItem } from "./InventoryItem";
 
-type User = {
+export type User = {
     id: string;
     tag: string;
     avatar: string | null;
     level: number;
     exp: number;
     profile: Profilecard;
-    isDonator: boolean;
-    donatorTier: string | null;
+    prime: any;
     isBlacklisted: boolean;
-    inventorySize: number;
+    //inventorySize: number;
     discordDataUnavailable?: string | null;
     [key in Currency]: number;
 }
