@@ -34,8 +34,8 @@ global.cacheFunction = (duration) => {
 const config = require('../config.js');
 global.Sentry = require("@sentry/node");
 Sentry.init({ dsn: config.sentry });
-
-global.HOST = config.host //"https://beta.pollux.gg" 
+console.log(process.env)
+global.HOST = process.env.HOST || `http://localhost:${process.env.DASHPORT || 4728}`;
 
 global.hasPolluxRole = function hasPolluxRole(req,roleID){
 	return new Promise(async resolve=>{     
