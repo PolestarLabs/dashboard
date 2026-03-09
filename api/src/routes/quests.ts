@@ -73,14 +73,11 @@ export const questsRoutes = new Elysia({ prefix: "/", tags: ["quests", "progress
     return { message: "Not implemented" };
   }, { params: UserQuestUniqParams })
 
-  // GET /quests/:userID/:questUniqID — alias for the route above
-  .get("/quests/:userID/:questUniqID", async ({ params, requireAuth, set }) => {
-    requireAuth();
-    // TODO: requireSelfOrAdmin(apiUser, params.userID)
-    // TODO: services/quests.ts → getUserQuest(params.userID, params.questUniqID, db)
-    set.status = 501;
-    return { message: "Not implemented" };
-  }, { params: UserQuestUniqParams })
+  // NOTE: the following alias was causing a parameter name collision with
+  //       the `/quests/:questGenericID` route registered earlier. Elysia does
+  //       not allow two routes at the same path with different param names, so
+  //       we drop the alias and rely on the user‑scoped path above instead.
+  // GET /quests/:userID/:questUniqID — (removed alias)
 
   // PATCH /user/:userID/quests/:questUniqID — partial update of quest progression (app-authed)
   .patch("/user/:userID/quests/:questUniqID", async ({ params, body, requireAuth, set }) => {
