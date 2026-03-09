@@ -5,7 +5,7 @@
  * Fanart hearts → services/fanart.ts
  */
 
-import { getDiscordUser, type DiscordUser } from "@helpers/discord";
+import { getDiscordUser, type DiscordUser } from "utils/discord";
 import type { DB } from "@routes/types";
 
 // ── Response building ────────────────────────────────────────────────────────

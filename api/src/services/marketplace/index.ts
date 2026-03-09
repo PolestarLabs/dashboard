@@ -12,7 +12,7 @@
  *   - entry._doc spreads replaced by lean() + explicit mapping.
  */
 
-import { getDiscordUser, getManyDiscordUsers } from "@helpers/discord";
+import { getDiscordUser, getManyDiscordUsers } from "utils/discord";
 import {
   checkFunds, pay, transfer, arbitraryAudit,
   TRANSACTION_TYPES, parseCurrency,

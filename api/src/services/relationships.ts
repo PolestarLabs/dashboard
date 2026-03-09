@@ -2,7 +2,7 @@
  * services/relationships.ts — Relationship business logic, decoupled from Elysia.
  */
 
-import { getManyDiscordUsers } from "@helpers/discord";
+import { getManyDiscordUsers } from "utils/discord";
 import type { DB } from "@routes/types";
 
 export async function getRelationships(
