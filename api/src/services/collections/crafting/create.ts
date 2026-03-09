@@ -23,6 +23,10 @@ export default new Elysia()
             set.status = 401;
             return { status: "ERROR", message: "Not Logged in" };
         }
+        if (!cosmeticsDoc) {
+            set.status = 500;
+            return { status: "ERROR", message: "User inventory unavailable" };
+        }
 
         const materials = pot ?? itemToCraft.materials;
         for (const itm of materials) {
@@ -36,9 +40,9 @@ export default new Elysia()
             }
         }
 
-        await Promise.all(materials.map((m: any) => cosmeticsDoc.removeItem(m.id, m.count)));
+        await Promise.all(materials.map((m: any) => cosmeticsDoc!.removeItem(m.id, m.count)));
         await Promise.all([
-            cosmeticsDoc.addItem(item, 1, true),
+            cosmeticsDoc!.addItem(item, 1, true),
             DB.users.set(apiUser.id, {
                 $inc: {
                     "progression.craftingExp": {
