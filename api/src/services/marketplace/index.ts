@@ -20,8 +20,7 @@ import {
 } from "@services/economy";
 import type { InventoryItemType } from "@definitions/InventoryItem";
 import type { Currency } from "@definitions/Currency";
-import type { ObjectId } from "mongoose";
-import { Rarity } from "@definitions/Rarity";
+import type { ItemDoc } from "@definitions/ItemDoc";
 
 // ── Types ────────────────────────────────────────────────────────────────────
 
@@ -40,18 +39,6 @@ export interface MarketplaceEntry {
   completed?:  boolean;
   lock?:       boolean;
   feedMessage?: [string, string];
-}
-
-export interface ItemDoc {
-  _id:        ObjectId;
-  id:         string;
-  type:       InventoryItemType;
-  code?:      string;
-  icon?:      string;
-  name?:      string;
-  rarity?:    Rarity;
-  tradeable?: boolean;
-  droppable?: boolean;
 }
 
 export interface MarketplaceListQuery {

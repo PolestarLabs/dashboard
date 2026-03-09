@@ -10,28 +10,7 @@ import { db } from "@plugins/db";
 import type { Currency } from "@definitions/Currency";
 
 import { pay, receive, transfer } from "@services/economy";
-
-const PayBody = t.Object({
-  userID:   t.String(),
-  amount:   t.Number({ minimum: 1 }),
-  type:     t.Optional(t.String()),
-  currency: t.Optional(t.String()),
-});
-
-const ReceiveBody = t.Object({
-  userID:   t.String(),
-  amount:   t.Number({ minimum: 1 }),
-  type:     t.Optional(t.String()),
-  currency: t.Optional(t.String()),
-});
-
-const TransferBody = t.Object({
-  from:     t.String(),
-  to:       t.String(),
-  amount:   t.Number({ minimum: 1 }),
-  type:     t.Optional(t.String()),
-  currency: t.Optional(t.String()),
-});
+import { CurrencyOpBody, TransferBody } from "@schemas/economy";
 
 export const economyRoutes = new Elysia({ prefix: "/", tags: ["economy"] })
   .use(authPlugin)
@@ -75,7 +54,7 @@ export const economyRoutes = new Elysia({ prefix: "/", tags: ["economy"] })
       set.status = 400;
       return { error: err.message };
     }
-  }, { body: PayBody })
+  }, { body: CurrencyOpBody })
 
   .post("/economy/receive", async ({ body, requireAuth, set }) => {
     requireAuth();
@@ -91,7 +70,7 @@ export const economyRoutes = new Elysia({ prefix: "/", tags: ["economy"] })
       set.status = 400;
       return { error: err.message };
     }
-  }, { body: ReceiveBody })
+  }, { body: CurrencyOpBody })
 
   .post("/economy/transfer", async ({ body, requireAuth, set }) => {
     requireAuth();

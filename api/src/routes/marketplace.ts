@@ -6,7 +6,6 @@
 import Elysia from "elysia";
 import { t } from "elysia";
 import { authPlugin } from "@plugins/auth";
-import CURRENCY_VALUES from "@definitions/constants/Currency";
 
 import {
   getMarketplaceListings,
@@ -19,17 +18,7 @@ import {
 } from "@services/marketplace";
 
 import type { Currency } from "@definitions/Currency";
-
-const MarketplacePostBody = t.Object({
-  type:     t.Union([t.Literal("sell"), t.Literal("buy")]),
-  item_id:  t.String(),
-  price:    t.Number({ minimum: 1 }),
-  currency: t.Union(CURRENCY_VALUES.map((c) => t.Literal(c)) as any),
-});
-
-const MarketplacePatchBody = t.Object({
-  price: t.Number({ minimum: 1 }),
-});
+import { MarketplacePostBody, MarketplacePatchBody } from "@schemas/marketplace";
 
 export const marketplaceRoutes = new Elysia({ prefix: "/marketplace", tags: ["marketplace"] })
   .use(authPlugin)

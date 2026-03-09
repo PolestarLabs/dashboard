@@ -7,11 +7,7 @@ import { t } from "elysia";
 import { authPlugin } from "@plugins/auth";
 import { db } from "@plugins/db";
 import { arbitraryAudit, PLATFORM_ID } from "@services/economy";
-
-const AuditLogBody = t.Object({
-  type:    t.String(),
-  details: t.Optional(t.Record(t.String(), t.Unknown())),
-});
+import { AuditLogBody } from "@schemas/system";
 
 export const systemRoutes = new Elysia({ prefix: "/system", tags: ["system"] })
   .use(authPlugin)

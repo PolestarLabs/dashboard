@@ -3,6 +3,7 @@
  */
 
 import { db } from "@plugins/db";
+import type { ServiceResponse } from "@definitions/Misc";
 
 // ── Fanart Hearts ────────────────────────────────────────────────────────────────
 
@@ -10,7 +11,7 @@ export async function toggleFanartHeart(
   userId: string,
   fanartId: string,
   operation: "add" | "remove",
-): Promise<{ ok: boolean; status: number; message: string }> {
+): Promise<ServiceResponse> {
   const fana = await db.collections.fanart.findOne({ id: fanartId });
   if (!fana) return { ok: false, status: 404, message: "Not Found" };
 

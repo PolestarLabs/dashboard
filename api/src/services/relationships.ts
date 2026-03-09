@@ -4,10 +4,11 @@
 
 import { db } from "@plugins/db";
 import { getManyDiscordUsers } from "utils/discord";
+import type { ServiceResponse } from "@definitions/Misc";
 
 export async function getRelationships(
   query: { id?: string; uid?: string; page?: string },
-): Promise<{ ok: boolean; status?: number; message?: string; data?: any[] }> {
+): Promise<ServiceResponse<any[]>> {
   const skip = parseInt(query.page ?? "0", 10) || 0;
   let Relationships: any[] | null = null;
 

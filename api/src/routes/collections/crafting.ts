@@ -7,21 +7,7 @@ import { authPlugin } from "@plugins/auth";
 import { db } from "@plugins/db";
 import { CraftingService } from "@services/crafting";
 import RARITY_VALUES from "@definitions/constants/Rarity";
-
-const PotItemSchema = t.Object({
-  id:     t.String(),
-  count:  t.Number(),
-  rarity: t.Optional(t.String()),
-});
-
-const MixBodySchema = t.Object({
-  pot: t.Array(PotItemSchema),
-});
-
-const CreateBodySchema = t.Object({
-  item: t.String(),
-  pot:  t.Optional(t.Array(t.Object({ id: t.String(), count: t.Number() }))),
-});
+import { MixBodySchema, CreateBodySchema } from "@schemas/crafting";
 
 export const craftingRoutes = new Elysia()
   .use(authPlugin)

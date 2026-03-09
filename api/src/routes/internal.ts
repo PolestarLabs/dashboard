@@ -6,13 +6,7 @@
 import Elysia from "elysia";
 import { t } from "elysia";
 import { getPings, upsertPing } from "@services/internal";
-
-const PingBody = t.Object({
-  instance: t.String(),
-  cluster:  t.Union([t.String(), t.Number()]),
-  last:     t.Union([t.String(), t.Number()]),
-  diff:     t.Optional(t.Number()),
-});
+import { PingBody } from "@schemas/internal";
 
 export const internalRoutes = new Elysia({ prefix: "/internal", tags: ["internal"] })
 

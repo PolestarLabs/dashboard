@@ -4,6 +4,7 @@
  */
 
 import { db } from "@plugins/db";
+import type { ServiceResponse } from "@definitions/Misc";
 
 /**
  * Returns the global pings document, optionally filtered to a single key.
@@ -11,7 +12,7 @@ import { db } from "@plugins/db";
  */
 export async function getPings(
   filter: string | undefined,
-): Promise<{ ok: boolean; status?: number; message?: string; data?: unknown }> {
+): Promise<ServiceResponse> {
   let pings = await db.globals.findOne({ id: 1, type: "pings" });
   if (filter) {
     pings = pings?.[filter];
@@ -28,7 +29,7 @@ export async function upsertPing(
   cluster: string | number,
   last: string | number,
   diff: number | undefined,
-): Promise<{ ok: boolean; status?: number; message?: string }> {
+): Promise<ServiceResponse> {
   if (!instance || !last) return { ok: false, status: 400, message: "ERROR" };
   await db.globals.updateOne(
     { id: 1, type: "pings" },
