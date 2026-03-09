@@ -10,6 +10,7 @@
 import { Elysia } from "elysia";
 import initSchema from "@polestarlabs/database_schema";
 import { Schemas } from "@polestarlabs/database_schema";
+import { InventoryItem } from "@definitions/InventoryItem";
 
 
 const MONGO_URL =
@@ -21,9 +22,22 @@ const MONGO_URL =
 const REDIS_HOST = process.env.REDIS_HOST ?? "127.0.0.1";
 const REDIS_PORT = parseInt(process.env.REDIS_PORT ?? "6379", 10);
 
-let _db: Schemas;
+let _db: LocalSchemas;
 
-async function getDB(): Promise<Schemas> {
+interface LocalSchemas extends Schemas {
+  // Extend the shared schema with our custom expanded types if needed
+  userInventory: {
+    get(userId: string): Promise<{ inventory: InventoryItem[] }>;
+    addItem(itemId: string, count: number, crafted?: boolean): Promise<void>;
+    removeItem(itemId: string, count: number): Promise<void>;
+  } & Schemas["userInventory"];
+  items: {
+    find(query: any): Promise<InventoryItem[]>;
+  } & Schemas["items"];
+
+}
+
+async function getDB(): Promise<LocalSchemas> {
   if (_db) return _db;
 
   // The shared schema package refers to a global `PLX` object when
@@ -39,13 +53,13 @@ async function getDB(): Promise<Schemas> {
         hook: undefined, // disable default hooks which log to console; we'll handle logging in the plugin lifecycle
     },
     { redis: { host: REDIS_HOST, port: REDIS_PORT } }
-  );
+  ) as LocalSchemas;
   console.log("✅ [DB] Connected to MongoDB:", MONGO_URL!.replace(/:\/\/[^@]*@/, "://***@"));
   return _db!;
 }
 
 export const dbPlugin = new Elysia({ name: "db" })
-  .decorate("db", {} as Schemas)
+  .decorate("db", {} as LocalSchemas)
   .onStart(async ({ decorator }: { decorator: Record<string, any> }) => {
     const db = await getDB();
     decorator.db = db;
@@ -54,3 +68,4 @@ export const dbPlugin = new Elysia({ name: "db" })
 export { getDB };
 
 export default dbPlugin;
+
