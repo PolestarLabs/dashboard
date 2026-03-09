@@ -1,6 +1,6 @@
 type Profilecard = {
     background: string;
-    sticker: string | null;
+    sticker?: string;
     color: string;
     flair: string;
     about: string;
