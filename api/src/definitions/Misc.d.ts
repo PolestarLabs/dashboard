@@ -1,3 +1,12 @@
+// ── Service response envelope (shared across all services) ──────────────────
+
+export interface ServiceResponse<T = unknown> {
+  ok: boolean;
+  status?: number;
+  message?: string;
+  data?: T;
+}
+
 // Dashboard RPG Variables
 export type RPGVariable = {
     tag: string;
