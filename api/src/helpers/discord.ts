@@ -33,8 +33,10 @@ function avatarURL(u: DiscordUser): string | null {
 
 /** Normalise a raw Discord API user object to the shape the legacy code uses. */
 function normalise(raw: Record<string, unknown>): DiscordUser {
-  const u = raw as DiscordUser;
-  (u as Record<string, unknown>).avatarURL = avatarURL(u);
+  // cast via unknown to satisfy TS warnings about overlapping types
+  const u = raw as unknown as DiscordUser;
+  // attach legacy avatarURL property without upsetting the strict type
+  (u as any).avatarURL = avatarURL(u);
   return u;
 }
 
@@ -62,7 +64,7 @@ export async function getDiscordUser(
 
     if (!resp.ok) {
       const errUser: DiscordUser = { id, username: "Unknown", avatar: null, error: `HTTP ${resp.status}` };
-      (errUser as Record<string, unknown>).avatarURL = null;
+      (errUser as any).avatarURL = null;
       return errUser;
     }
 
@@ -73,7 +75,7 @@ export async function getDiscordUser(
     return user;
   } catch (err) {
     const errUser: DiscordUser = { id, username: "Unknown", avatar: null, error: String(err) };
-    (errUser as Record<string, unknown>).avatarURL = null;
+    (errUser as any).avatarURL = null;
     return errUser;
   }
 }
