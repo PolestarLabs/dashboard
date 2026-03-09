@@ -3,7 +3,7 @@
  */
 
 import { db } from "@plugins/db";
-import type { CosmeticDoc } from "@definitions/CosmeticDoc";
+import type { CosmeticDoc } from "@definitions/CosmeticItems";
 import { objectIdFromTimestamp, isValidObjectId } from "utils/objectid";
 import { stickerCount } from "utils/cosmetics";
 import { buildSearchQuery } from "utils/search";

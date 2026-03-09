@@ -6,7 +6,7 @@
 import Elysia from "elysia";
 import { db } from "@plugins/db";
 import { cleanup, searchCosmetics, findCosmeticById, countCosmetics } from "@services/cosmetics";
-import type { CosmeticDoc } from "@definitions/CosmeticDoc";
+import type { CosmeticDoc } from "@definitions/CosmeticItems";
 
 export const cosmeticsRoutes = new Elysia({ prefix: "/cosmetics", tags: ["cosmetics"] })
 
