@@ -7,6 +7,7 @@
 
 import { db } from "@plugins/db";
 import { getDiscordUser, type DiscordUser } from "utils/discord";
+import { buildSearchQuery } from "utils/search";
 
 // ── Response building ────────────────────────────────────────────────────────
 
@@ -68,11 +69,7 @@ export async function parseUserAndReturn(uID: string) {
 const SEARCH_ALLOWED = ["_id", "id", "prime.tier", "name", "meta.tag", "personalhandle"];
 
 export async function searchUsers(query: Record<string, string | undefined>) {
-  const queries: Record<string, unknown> = {};
-  for (const k of SEARCH_ALLOWED) {
-    const v = query[k === "_id" ? "_id" : k];
-    if (v !== undefined) queries[k] = v;
-  }
+  const queries = buildSearchQuery(query, SEARCH_ALLOWED);
   if (queries.donator === "exists") queries.donator = { $exists: true };
 
   // execute the query and return plain objects so we can map over them

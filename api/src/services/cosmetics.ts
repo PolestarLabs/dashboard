@@ -6,6 +6,7 @@ import { db } from "@plugins/db";
 import type { CosmeticDoc } from "@definitions/CosmeticDoc";
 import { objectIdFromTimestamp, isValidObjectId } from "utils/objectid";
 import { stickerCount } from "utils/cosmetics";
+import { buildSearchQuery } from "utils/search";
 
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
@@ -42,11 +43,7 @@ export function cleanup(item: CosmeticDoc | null): Record<string, unknown> | nul
 const SEARCH_ALLOWED = ["_id", "id", "rarity", "code", "event", "icon", "type", "expires", "filter", "name"] as const;
 
 export async function searchCosmetics(query: Record<string, string | undefined>) {
-  const queries: Record<string, unknown> = {};
-  for (const k of SEARCH_ALLOWED) {
-    const v = query[k];
-    if (v !== undefined) queries[k] = v;
-  }
+  const queries = buildSearchQuery(query, SEARCH_ALLOWED);
   if (queries.event === "null") queries.event = null;
   queries.public = query.public !== "0";
 

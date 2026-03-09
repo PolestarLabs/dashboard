@@ -6,6 +6,7 @@
 import { db } from "@plugins/db";
 import { shuffle } from "utils/shuffle";
 import { stickerCount } from "utils/cosmetics";
+import { buildSearchQuery } from "utils/search";
 
 const SEARCH_ALLOWED = ["_id", "id", "rarity", "code", "type", "crafted", "open"] as const;
 
@@ -14,11 +15,7 @@ export async function getAllItems() {
 }
 
 export async function searchItems(query: Record<string, string | undefined>) {
-  const queries: Record<string, unknown> = {};
-  for (const k of SEARCH_ALLOWED) {
-    const v = query[k];
-    if (v !== undefined) queries[k] = v;
-  }
+  const queries = buildSearchQuery(query, SEARCH_ALLOWED);
   if (!query.all) {
     queries.display = true;
     queries.crafted = !!query.craftables;
