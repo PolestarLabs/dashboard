@@ -2,11 +2,13 @@
  * utils/cosmetics.ts — helpers related to cosmetics and sticker packs.
  */
 
-export async function stickerCount(pack: any, DB: any): Promise<any> {
+import { db } from "@plugins/db";
+
+export async function stickerCount(pack: any): Promise<any> {
   const [pdata, mdata] = await Promise.all([
-    DB.cosmetics
+    db.cosmetics
       .find({ series_id: pack.icon }, { name: 1, id: 1, rarity: 1 }),
-    DB.items
+    db.items
       .find(
         { id: { $in: pack?.materials?.map((x: any) => x.id ?? x) ?? [] } },
         { name: 1, id: 1, rarity: 1 },

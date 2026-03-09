@@ -2,15 +2,14 @@
  * services/fanart.ts — Fanart gallery business logic, decoupled from Elysia.
  */
 
-import type { DB } from "@routes/types";
+import { db } from "@plugins/db";
 
-// ── Fanart Hearts ────────────────────────────────────────────────────────────
+// ── Fanart Hearts ────────────────────────────────────────────────────────────────
 
 export async function toggleFanartHeart(
   userId: string,
   fanartId: string,
   operation: "add" | "remove",
-  db: DB,
 ): Promise<{ ok: boolean; status: number; message: string }> {
   const fana = await db.collections.fanart.findOne({ id: fanartId });
   if (!fana) return { ok: false, status: 404, message: "Not Found" };
@@ -31,7 +30,7 @@ export async function toggleFanartHeart(
 
 // ── CRUD ─────────────────────────────────────────────────────────────────────
 
-export async function deleteFanart(fanartId: string, userId: string, db: DB) {
+export async function deleteFanart(fanartId: string, userId: string) {
   const oldData = await db.fanart.get(fanartId);
   if (!oldData)                      return { ok: false, status: 404, message: "Not Found" };
   if (oldData.author_ID !== userId)   return { ok: false, status: 403, message: "Forbidden" };
@@ -44,7 +43,6 @@ export async function updateFanart(
   field: string,
   userId: string,
   body: { value?: string; title?: string; description?: string },
-  db: DB,
 ) {
   const oldData = await db.fanart.get(fanartId);
   if (!oldData)                      return { ok: false, status: 404, message: "Not Found" };

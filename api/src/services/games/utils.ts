@@ -2,8 +2,13 @@
  * services/games.ts — Game utility logic, decoupled from Elysia.
  */
 
-import type { WordEntry } from "@routes/types";
 import { shuffle } from "utils/shuffle";
+
+export interface WordEntry {
+  word: string;
+  theme: string;
+  level: number;
+}
 
 export function filterWords(
   words: WordEntry[],

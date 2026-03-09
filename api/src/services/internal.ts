@@ -3,7 +3,7 @@
  * Extracted from services/misc.ts.
  */
 
-import type { DB } from "@routes/types";
+import { db } from "@plugins/db";
 
 /**
  * Returns the global pings document, optionally filtered to a single key.
@@ -11,7 +11,6 @@ import type { DB } from "@routes/types";
  */
 export async function getPings(
   filter: string | undefined,
-  db: DB,
 ): Promise<{ ok: boolean; status?: number; message?: string; data?: unknown }> {
   let pings = await db.globals.findOne({ id: 1, type: "pings" });
   if (filter) {
@@ -29,7 +28,6 @@ export async function upsertPing(
   cluster: string | number,
   last: string | number,
   diff: number | undefined,
-  db: DB,
 ): Promise<{ ok: boolean; status?: number; message?: string }> {
   if (!instance || !last) return { ok: false, status: 400, message: "ERROR" };
   await db.globals.updateOne(

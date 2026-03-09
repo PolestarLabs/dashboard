@@ -10,7 +10,7 @@
  *   - `logTransaction` console formatting omitted (structured logging preferred).
  */
 
-import type { DB } from "@routes/types";
+import { db } from "@plugins/db";
 
 // ── Platform identity ────────────────────────────────────────────────────────
 
@@ -169,7 +169,6 @@ export async function checkFunds(
   userId:   string | { id: string },
   amount:   number,
   currency: Currency,
-  db:       DB,
 ): Promise<boolean> {
 
   if (!userId) throw new Error(`Missing user: ${String(userId)}`);
@@ -199,7 +198,6 @@ export async function transfer(
   curr:     Currency  = "RBN",
   subtype:  string    = "TRANSFER",
   symbol:   string    = ">",
-  db:       DB,
   { allowZero = false, disableFundsCheck = false, fields = {} }: TransactionOptions = {},
 ): Promise<Transaction> {
   if (!(userFrom && userTo)) throw new Error("transfer: missing arguments");
@@ -208,7 +206,7 @@ export async function transfer(
   const uFrom = typeof userFrom === "object" ? userFrom.id : userFrom;
   const uTo   = typeof userTo   === "object" ? userTo.id   : userTo;
 
-  const hasFunds = await checkFunds(uFrom, amount, curr, db);
+  const hasFunds = await checkFunds(uFrom, amount, curr);
   if (!hasFunds && !disableFundsCheck) throw new Error("NO FUNDS");
 
   const parsedCurr: Currency = parseCurrency(curr);
@@ -241,10 +239,9 @@ export function pay(
   amt:      number,
   type:     string                = "OTHER",
   currency: Currency              = "RBN",
-  db:       DB,
   options:  TransactionOptions    = {},
 ) {
-  return transfer(user, PLATFORM_ID, amt, type, currency, "PAYMENT", "-", db, options);
+  return transfer(user, PLATFORM_ID, amt, type, currency, "PAYMENT", "-", options);
 }
 
 /**
@@ -255,10 +252,9 @@ export function receive(
   amt:      number,
   type:     string                = "OTHER",
   currency: Currency              = "RBN",
-  db:       DB,
   options:  TransactionOptions    = {},
 ) {
-  return transfer(PLATFORM_ID, user, amt, type, currency, "INCOME", "+", db, options);
+  return transfer(PLATFORM_ID, user, amt, type, currency, "INCOME", "+", options);
 }
 
 /**
@@ -272,7 +268,6 @@ export async function arbitraryAudit(
   type:   string                  = "ARBITRARY",
   pseudoCurrency: string          = "OTH",
   symbol: string                  = "!!",
-  db:     DB,
   fields: Record<string, unknown> = {},
 ): Promise<Transaction> {
   if (!from || !to) throw new Error("arbitraryAudit: missing arguments");

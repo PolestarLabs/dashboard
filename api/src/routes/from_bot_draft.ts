@@ -2,7 +2,6 @@
 
 import Elysia from "elysia";
 import { authPlugin } from "@plugins/auth";
-import { dbPlugin } from "@plugins/db";
 
 
 
@@ -10,7 +9,6 @@ import { dbPlugin } from "@plugins/db";
 
 export const questsRoutes = new Elysia({  prefix: "/", tags: ["quests","progression"] })
   .use(authPlugin)
-  .use(dbPlugin)
 
 
   // GET /quests/:questGenericID --> get the details of a quest based on its generic ID (which is the same for all users) | app-authed
@@ -81,7 +79,6 @@ export const questsRoutes = new Elysia({  prefix: "/", tags: ["quests","progress
 
 export const progressionRoutes = new Elysia({ prefix: "/progression", tags: ["progression"] })
   .use(authPlugin)
-  .use(dbPlugin)
 
   // GET /progression/:userID --> get the progression of a user | user-only (can only get own progression) | admin can get any user's progression
   .get("/:userID", ({ params }) => {
@@ -107,7 +104,6 @@ export const progressionRoutes = new Elysia({ prefix: "/progression", tags: ["pr
 
 export const systemRoutes = new Elysia({ prefix: "/system", tags: ["system"] })
   .use(authPlugin)
-  .use(dbPlugin)
 
   // GET /system/blacklist  --> get all blacklisted users | admin-only
   .get("/blacklist", () => {

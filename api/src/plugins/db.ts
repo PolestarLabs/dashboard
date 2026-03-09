@@ -1,71 +1,88 @@
 /**
- * DB plugin — connects Mongoose and exposes the DB collections decoreated on
- * every Elysia handler via `.use(dbPlugin)`.
+ * DB + Redis singletons.
  *
- * @polestarlabs/database_schema is the shared schema package (same as Express).
- * We re-use the same models; the connection URL is driven by env vars so
- * prod/alpha environments are kept strictly isolated.
+ * Import { db } and { redis } directly in routes and services:
+ *
+ *   import { db, redis } from "@plugins/db";
+ *   const user = await db.users.get(id);
+ *   const cached = await redis.get<T>(key);
+ *
+ * Call connectDB() once during app startup (server.ts) before listening.
  */
 
-import { Elysia } from "elysia";
 import initSchema from "@polestarlabs/database_schema";
-import { Schemas } from "@polestarlabs/database_schema";
-import { InventoryItem } from "@definitions/InventoryItem";
+import Redis from "ioredis";
 
+// ── Config ───────────────────────────────────────────────────────────────────
 
-const MONGO_URL =
-  process.env.MONGO_URL ??
-  process.env.MONGODB_URL ?? ""
-
-
-
+const MONGO_URL  = process.env.MONGO_URL ?? process.env.MONGODB_URL ?? "";
 const REDIS_HOST = process.env.REDIS_HOST ?? "127.0.0.1";
 const REDIS_PORT = parseInt(process.env.REDIS_PORT ?? "6379", 10);
 
-let _db: LocalSchemas;
+// ── MongoDB ──────────────────────────────────────────────────────────────────
 
-interface LocalSchemas extends Schemas {
-  // Extend the shared schema with our custom expanded types if needed
-  userInventory: {
-    get(userId: string): Promise<{ inventory: InventoryItem[] }>;
-    addItem(itemId: string, count: number, crafted?: boolean): Promise<void>;
-    removeItem(itemId: string, count: number): Promise<void>;
-  } & Schemas["userInventory"];
-  items: {
-    find(query: any): Promise<InventoryItem[]>;
-  } & Schemas["items"];
+let _db: Record<string, any> | null = null;
 
-}
-
-async function getDB(): Promise<LocalSchemas> {
-  if (_db) return _db;
-
-  // The shared schema package refers to a global `PLX` object when
-  // configuring Redis. Make sure it exists to avoid ReferenceError.
-  const _g: any = globalThis;
-  if (!_g.PLX) {
-    _g.PLX = {};
-  }
+export async function connectDB(): Promise<void> {
+  const _g = globalThis as Record<string, any>;
+  if (!_g.PLX) _g.PLX = {};
 
   _db = await initSchema(
-    {
-        url: MONGO_URL, options: { useNewUrlParser: true, useUnifiedTopology: true },
-        hook: undefined, // disable default hooks which log to console; we'll handle logging in the plugin lifecycle
-    },
-    { redis: { host: REDIS_HOST, port: REDIS_PORT } }
-  ) as LocalSchemas;
-  console.log("✅ [DB] Connected to MongoDB:", MONGO_URL!.replace(/:\/\/[^@]*@/, "://***@"));
-  return _db!;
+    { url: MONGO_URL, options: { useNewUrlParser: true, useUnifiedTopology: true }, hook: undefined },
+    { redis: { host: REDIS_HOST, port: REDIS_PORT } },
+  ) as Record<string, any>;
+
+  console.log("✅ [DB] Connected to MongoDB:", MONGO_URL.replace(/:\/\/[^@]*@/, "://***@"));
 }
 
-export const dbPlugin = new Elysia({ name: "db" })
-  .decorate("db", {} as LocalSchemas)
-  .onStart(async ({ decorator }: { decorator: Record<string, any> }) => {
-    const db = await getDB();
-    decorator.db = db;
-  });
+/**
+ * The connected database handle. Access collections directly:
+ *   db.users.get(id)
+ *   db.cosmetics.find({})
+ *
+ * Typed as Record<string, any> so collection access and chain methods
+ * work without casting. Definitions in src/definitions/ describe the
+ * API-facing shapes; this is the raw DB layer.
+ */
+export const db: Record<string, any> = new Proxy({} as Record<string, any>, {
+  get(_, prop: string) {
+    if (!_db) throw new Error("DB not initialized — call connectDB() before using db");
+    return _db[prop];
+  },
+});
 
-export { getDB };
+// ── Redis ────────────────────────────────────────────────────────────────────
 
-export default dbPlugin;
+let _redis: Redis | null = null;
+
+function getRedisClient(): Redis {
+  if (_redis) return _redis;
+  _redis = new Redis({ host: REDIS_HOST, port: REDIS_PORT, lazyConnect: true });
+  _redis.on("error", (err) => console.error("[Redis] Error:", err));
+  _redis.on("connect", () => console.log(`[Redis] Connected to ${REDIS_HOST}:${REDIS_PORT}`));
+  return _redis;
+}
+
+export function connectRedis(): void {
+  getRedisClient();
+}
+
+export const redis = {
+  async get<T = unknown>(key: string): Promise<T | null> {
+    const raw = await getRedisClient().get(key);
+    if (!raw) return null;
+    try { return JSON.parse(raw) as T; } catch { return raw as unknown as T; }
+  },
+
+  async set(key: string, value: unknown, ttl = 21_600): Promise<void> {
+    const serialised = typeof value === "string" ? value : JSON.stringify(value);
+    await getRedisClient().set(key, serialised, "EX", ttl);
+  },
+
+  async del(...keys: string[]): Promise<void> {
+    if (keys.length) await getRedisClient().del(...keys);
+  },
+};
+
+export type RedisHelper = typeof redis;
 

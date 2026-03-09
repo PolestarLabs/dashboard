@@ -3,9 +3,9 @@
  * Extracted from services/users.ts.
  */
 
-import type { DB } from "@routes/types";
+import { db } from "@plugins/db";
 
-export async function getGallerySaves(userId: string, db: DB) {
+export async function getGallerySaves(userId: string) {
   const [gallery, user] = await Promise.all([
     db.usercols.get(userId),
     db.users.get(userId, { switches: 1 }),
@@ -14,7 +14,7 @@ export async function getGallerySaves(userId: string, db: DB) {
   return gallery?.collections.boorusave ?? [];
 }
 
-export async function getGalleryFanart(userId: string, viewerId: string | undefined, db: DB) {
+export async function getGalleryFanart(userId: string, viewerId: string | undefined) {
   const query: Record<string, unknown> = { author_ID: userId };
   if (viewerId !== userId) query.publish = true;
 

@@ -3,14 +3,14 @@
  * Extracted from services/users.ts.
  */
 
+import { db } from "@plugins/db";
 import { getManyDiscordUsers } from "utils/discord";
-import type { DB } from "@routes/types";
 
-export async function getCommendsSimple(userId: string, db: DB) {
+export async function getCommendsSimple(userId: string) {
   return db.commends.parseFull(userId);
 }
 
-export async function getCommendsFull(userId: string, db: DB, redis: any) {
+export async function getCommendsFull(userId: string) {
   const userCommends = await db.commends.parseFull(userId, { _id: 0, __v: 0 });
   if (!userCommends) return null;
 
@@ -19,7 +19,7 @@ export async function getCommendsFull(userId: string, db: DB, redis: any) {
     ...userCommends.whoOut.map((u: any) => u.id).slice(0, 10),
   ])] as string[];
 
-  const userData = await getManyDiscordUsers(usersInSet, redis);
+  const userData = await getManyDiscordUsers(usersInSet);
   const whoIn  = userCommends.whoIn.sort((a: any, b: any) => b.count - a.count) || [];
   const whoOut = userCommends.whoOut.sort((a: any, b: any) => b.count - a.count) || [];
   const totalIn  = userCommends.totalIn  || 0;
@@ -30,7 +30,7 @@ export async function getCommendsFull(userId: string, db: DB, redis: any) {
   return { userData, whoIn, whoOut, totalIn, totalOut, average, normalized };
 }
 
-export async function getCommendRank(userId: string, endpoint: string, db: DB) {
+export async function getCommendRank(userId: string, endpoint: string) {
   const count = (await db.commends.get(userId))?.whoIn?.reduce(
     (a: any, b: any) => ({ count: a.count + b.count }),
   )?.count;

@@ -12,6 +12,7 @@
  *   - entry._doc spreads replaced by lean() + explicit mapping.
  */
 
+import { db } from "@plugins/db";
 import { getDiscordUser, getManyDiscordUsers } from "utils/discord";
 import {
   checkFunds, pay, transfer, arbitraryAudit,
@@ -163,7 +164,6 @@ export async function awardMarketplaceItem(
   item:   ItemDoc,
   userId: string,
   remove: boolean,
-  db:     any,
 ): Promise<boolean> {
   const operation = remove ? "$pull" : "$addToSet";
   try {
@@ -202,7 +202,7 @@ export async function awardMarketplaceItem(
  * Find an item by ObjectId or legacy id/code/icon.
  * Searches both `db.cosmetics` and `db.items`.
  */
-export async function findItem(itemId: string, db: any): Promise<ItemDoc | null> {
+export async function findItem(itemId: string): Promise<ItemDoc | null> {
   const isObjectId = /^[a-f\d]{24}$/i.test(itemId);
 
   const [cosResults, itmResults] = isObjectId
@@ -221,8 +221,8 @@ export async function findItem(itemId: string, db: any): Promise<ItemDoc | null>
 /**
  * Get an item plus its current marketplace price stats.
  */
-export async function getItemMarketDetails(itemId: string, db: any) {
-  const item = await findItem(itemId, db);
+export async function getItemMarketDetails(itemId: string) {
+  const item = await findItem(itemId);
   if (!item) return null;
 
   const marketplace: MarketplaceEntry[] = await db.marketplace
@@ -255,7 +255,6 @@ export async function userCanSell(
   userId:    string,
   payload:   { price: number; currency: Currency },
   item:      ItemDoc,
-  db:        any,
   softCheck  = false,
 ) {
   const [userData, cosmeticsData] = await Promise.all([
@@ -271,7 +270,7 @@ export async function userCanSell(
       ? (2 + Math.floor(payload.price * 0.05))
       : payload.price * 0.15;
 
-    if (!(await checkFunds(userId, listingFee, payload.currency, db)))
+    if (!(await checkFunds(userId, listingFee, payload.currency)))
       return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
 
     if (payload.currency === "SPH") {
@@ -297,7 +296,6 @@ export async function userCanBuy(
   currency: Currency,
   price:    number,
   item:     ItemDoc,
-  db:       any,
 ) {
   const cosmeticsData = await db.userInventory.get(userId);
   const invCheck      = itemInInventory(item, cosmeticsData);
@@ -305,7 +303,7 @@ export async function userCanBuy(
   if (invCheck.res && ["background", "medal", "sticker", "flair", "skin"].includes(item.type))
     return { res: false, reason: "ITEM ALREADY OWNED", status: 403 };
 
-  if (!(await checkFunds(userId, price, currency, db)))
+  if (!(await checkFunds(userId, price, currency)))
     return { res: false, reason: "NO FUNDS", status: 422 };
 
   if (!isTradeable(item))
@@ -322,8 +320,6 @@ export async function userCanBuy(
  */
 export async function getMarketplaceListings(
   query: MarketplaceListQuery,
-  redis: any,
-  db:    any,
 ) {
   const filter: Record<string, any> = {};
 
@@ -355,7 +351,7 @@ export async function getMarketplaceListings(
   const itemIds   = results.map((e) => e.item_id).filter((id) => /^[a-f\d]{24}$/i.test(id));
 
   const [users, cosmetics, goods] = await Promise.all([
-    Promise.all(authorIds.map((id) => getDiscordUser(id, redis))),
+    Promise.all(authorIds.map((id) => getDiscordUser(id))),
     db.cosmetics.find({ _id: { $in: itemIds } }).lean().catch(() => []),
     db.items.find({ _id: { $in: itemIds } }).lean().catch(() => []),
   ]);
@@ -384,17 +380,15 @@ export async function postListing(
     price:     number;
     currency:  Currency;
   },
-  redis: any,
-  db:    any,
 ): Promise<{ ok: true; entry: MarketplaceEntry } | { ok: false; status: number; message: string }> {
-  const details = await getItemMarketDetails(payload.item_id, db);
+  const details = await getItemMarketDetails(payload.item_id);
   if (!details) return { ok: false, status: 404, message: "Item not found" };
 
   const { item } = details;
   const currency = parseCurrency(payload.currency);
 
   if (payload.type === "sell") {
-    const canSell = await userCanSell(payload.author, { price: payload.price, currency }, item, db);
+    const canSell = await userCanSell(payload.author, { price: payload.price, currency }, item);
     if (!canSell.res)
       return { ok: false, status: canSell.status ?? 400, message: canSell.reason ?? "Cannot sell" };
 
@@ -406,17 +400,17 @@ export async function postListing(
     }
 
     const listingFee = currency === "SPH" ? 2 : payload.price * 0.15;
-    await pay(payload.author, listingFee, TRANSACTION_TYPES.marketplace_post, currency, db);
+    await pay(payload.author, listingFee, TRANSACTION_TYPES.marketplace_post, currency);
 
   } else if (payload.type === "buy") {
-    const canBuy = await userCanBuy(payload.author, currency, payload.price, item, db);
+    const canBuy = await userCanBuy(payload.author, currency, payload.price, item);
     if (!canBuy.res)
       return { ok: false, status: canBuy.status ?? 400, message: canBuy.reason ?? "Cannot buy" };
 
     const deposit    = Math.abs(payload.price);
     const listingFee = currency === "SPH" ? 2 : payload.price * 0.05;
-    await pay(payload.author, deposit,    TRANSACTION_TYPES.marketplace_buy,  currency, db);
-    await pay(payload.author, listingFee, TRANSACTION_TYPES.marketplace_post, currency, db);
+    await pay(payload.author, deposit,    TRANSACTION_TYPES.marketplace_buy,  currency);
+    await pay(payload.author, listingFee, TRANSACTION_TYPES.marketplace_post, currency);
 
   } else {
     return { ok: false, status: 400, message: "Invalid listing type" };
@@ -445,7 +439,6 @@ export async function postListing(
 export async function buyFromListing(
   entryId:     string,
   currentUser: { id: string },
-  db:          any,
 ): Promise<{ ok: true; receipt: any } | { ok: false; status: number; message: string }> {
   const entry: MarketplaceEntry | null = await db.marketplace
     .findOne({ id: entryId })
@@ -458,15 +451,15 @@ export async function buyFromListing(
   if (entry.author === currentUser.id) return { ok: false, status: 403, message: "Cannot buy from self" };
   if (entry.type !== "sell")           return { ok: false, status: 403, message: "Listing is not for sale" };
 
-  const details = await getItemMarketDetails(entry.item_id, db);
+  const details = await getItemMarketDetails(entry.item_id);
   if (!details) return { ok: false, status: 404, message: "Item not found" };
 
-  const canBuy = await userCanBuy(currentUser.id, entry.currency, entry.price, details.item, db);
+  const canBuy = await userCanBuy(currentUser.id, entry.currency, entry.price, details.item);
   if (!canBuy.res) return { ok: false, status: canBuy.status ?? 400, message: canBuy.reason ?? "Cannot buy" };
 
   await db.marketplace.updateOne({ id: entryId }, { $set: { lock: true } });
 
-  const sold = await awardMarketplaceItem(details.item, currentUser.id, false, db);
+  const sold = await awardMarketplaceItem(details.item, currentUser.id, false);
   if (!sold) {
     await db.marketplace.updateOne({ id: entryId }, { $set: { lock: false } });
     return { ok: false, status: 500, message: "Failed to award item" };
@@ -481,11 +474,10 @@ export async function buyFromListing(
       entry.currency,
       "TRANSFER",
       ">",
-      db,
     );
 
     const tradeCut = Math.ceil(entry.price * 0.02);
-    await pay(entry.author, tradeCut, TRANSACTION_TYPES.marketplace_sell, entry.currency, db);
+    await pay(entry.author, tradeCut, TRANSACTION_TYPES.marketplace_sell, entry.currency);
     await db.users.set(
       { id: currentUser.id },
       { $inc: { "progression.exp": Math.floor(entry.price / 12) } },
@@ -507,7 +499,6 @@ export async function buyFromListing(
 export async function sellToListing(
   entryId:     string,
   currentUser: { id: string },
-  db:          any,
 ): Promise<{ ok: true; receipt: any } | { ok: false; status: number; message: string }> {
   const entry: MarketplaceEntry | null = await db.marketplace
     .findOne({ id: entryId })
@@ -520,14 +511,13 @@ export async function sellToListing(
   if (entry.author === currentUser.id) return { ok: false, status: 403, message: "Cannot fill own listing" };
   if (entry.type !== "buy")            return { ok: false, status: 403, message: "Listing is for purchase only" };
 
-  const details = await getItemMarketDetails(entry.item_id, db);
+  const details = await getItemMarketDetails(entry.item_id);
   if (!details) return { ok: false, status: 404, message: "Item not found" };
 
   const canSell = await userCanSell(
     currentUser.id,
     { price: entry.price, currency: entry.currency },
     details.item,
-    db,
     true, // soft check — no fund check for the seller; they receive payment
   );
   if (!canSell.res)
@@ -535,8 +525,8 @@ export async function sellToListing(
 
   await db.marketplace.updateOne({ id: entryId }, { $set: { lock: true } });
 
-  const removedFromSeller  = await awardMarketplaceItem(details.item, currentUser.id, true,  db);
-  const awardedToBuyer     = await awardMarketplaceItem(details.item, entry.author,    false, db);
+  const removedFromSeller  = await awardMarketplaceItem(details.item, currentUser.id, true);
+  const awardedToBuyer     = await awardMarketplaceItem(details.item, entry.author,    false);
 
   if (!removedFromSeller || !awardedToBuyer) {
     await db.marketplace.updateOne({ id: entryId }, { $set: { lock: false } });
@@ -551,11 +541,10 @@ export async function sellToListing(
       TRANSACTION_TYPES.marketplace_sell,
       entry.currency,
       "!!",
-      db,
     );
 
     const tradeCut = Math.ceil(entry.price * 0.05);
-    await pay(currentUser.id, tradeCut, TRANSACTION_TYPES.marketplace_sell, entry.currency, db);
+    await pay(currentUser.id, tradeCut, TRANSACTION_TYPES.marketplace_sell, entry.currency);
     await db.users.set(
       currentUser.id,
       {
@@ -582,13 +571,12 @@ export async function sellToListing(
 export async function deleteListing(
   entryId: string,
   userId:  string,
-  db:      any,
 ): Promise<{ ok: true } | { ok: false; status: number; message: string }> {
   const entry: MarketplaceEntry | null = await db.marketplace.findOne({ id: entryId }).lean();
   if (!entry)                return { ok: false, status: 404, message: "Entry not found" };
   if (entry.author !== userId) return { ok: false, status: 403, message: "Not allowed" };
 
-  const details = await getItemMarketDetails(entry.item_id, db);
+  const details = await getItemMarketDetails(entry.item_id);
   if (!details) return { ok: false, status: 404, message: "Item not found" };
 
   const removed = await db.marketplace.remove({ id: entryId }).lean();
@@ -596,7 +584,7 @@ export async function deleteListing(
 
   // Restore item to author for sell listings
   if (entry.type === "sell")
-    await awardMarketplaceItem(details.item, userId, false, db);
+    await awardMarketplaceItem(details.item, userId, false);
 
   return { ok: true };
 }
@@ -608,7 +596,6 @@ export async function editListingPrice(
   entryId:  string,
   userId:   string,
   newPrice: number,
-  db:       any,
 ): Promise<{ ok: true } | { ok: false; status: number; message: string }> {
   const entry: MarketplaceEntry | null = await db.marketplace.findOne({ id: entryId }).lean();
   if (!entry)                return { ok: false, status: 404, message: "Entry not found" };

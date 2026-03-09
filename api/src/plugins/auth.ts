@@ -1,22 +1,18 @@
 /**
- * Auth plugin — bearer token authentication matching the Express API gate.
+ * Auth plugin — bearer token authentication.
  *
- * API permissions hierarchy (same as Express):
+ * API permissions hierarchy:
  *   basic < trusted < sponsor < donor < admin < first_party < master
  *
  * Usage in route handlers:
  *   .use(authPlugin)
- *   .get("/protected", ({ bearer, requireAuth }) => { requireAuth(); ... })
- *
- * Per-route guards:
- *   requireAuth()         — any valid API token
- *   requireRole("admin")  — admin or higher
+ *   .get("/protected", ({ requireAuth }) => { requireAuth(); ... })
+ *   .get("/admin-only", ({ requireRole }) => { requireRole("admin"); ... })
  */
 
 import Elysia, { status } from "elysia";
 import { bearer } from "@elysiajs/bearer";
-import { Schemas } from "@polestarlabs/database_schema";
-import dbPlugin from "./db";
+import { db } from "./db";
 
 export type ApiPermission =
   | "basic"
@@ -47,16 +43,11 @@ const PERMISSION_RANK: Record<ApiPermission, number> = {
 
 export const authPlugin = new Elysia({ name: "auth" })
   .use(bearer())
-  .use(dbPlugin)
-  .derive({ as: "global" }, async ({ bearer: token, db }) => {
-    // Resolve token → user from DB (same logic as Express passport-http-bearer)
-    const dbConn = db as Schemas;
-    const usersCollection = dbConn.users;
-
+  .derive({ as: "global" }, async ({ bearer: token }) => {
     let apiUser: ApiUser | null = null;
 
-    if (token && usersCollection?.findOne) {
-      const raw = await usersCollection.findOne({ apiKey: token }) as Record<string, unknown> | null;
+    if (token && db.users?.findOne) {
+      const raw = await db.users.findOne({ apiKey: token }) as Record<string, unknown> | null;
       if (raw) {
         const personal = raw.personal as Record<string, string> | null;
         apiUser = {
@@ -69,13 +60,11 @@ export const authPlugin = new Elysia({ name: "auth" })
       }
     }
 
-    /** Throw 401 if there is no authenticated API user and return the user. */
     function requireAuth(): ApiUser {
       if (!apiUser) throw status(401, { message: "API Token required" });
       return apiUser;
     }
 
-    /** Throw 403 if the user doesn't hold at least the given permission level. */
     function requireRole(min: ApiPermission): void {
       const user = requireAuth();
       if (PERMISSION_RANK[user.apiPermission] < PERMISSION_RANK[min]) {

@@ -62,7 +62,9 @@ export function totalRevenue(payload: any[], scale: string, activeOnly: boolean)
   return { parsed: `$ ${(total / 100).toFixed(2)}` };
 }
 
-export async function removePrimeFromServer(userId: string, serverId: string, db: any) {
+import { db } from "@plugins/db";
+
+export async function removePrimeFromServer(userId: string, serverId: string) {
   const userData = await db.users.get({ id: userId, "prime.servers": serverId });
   if (!userData) return { ok: false, error: "Server Prime sub belongs to someone else" };
   await db.users.set(userId, { $pull: { "prime.servers": serverId } });

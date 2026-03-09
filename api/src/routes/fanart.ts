@@ -5,24 +5,21 @@
 
 import Elysia from "elysia";
 import { authPlugin } from "@plugins/auth";
-import { dbPlugin } from "@plugins/db";
-import { FanartIdParams, FanartUpdateParams, FanartUpdateBody } from "@routes/_schemas";
 import { deleteFanart, updateFanart } from "@services/fanart";
 
 export const fanartRoutes = new Elysia({ prefix: "/galleries/fanart", tags: ["fanart"] })
-  .use(dbPlugin)
   .use(authPlugin)
 
-  .delete("/:id", async ({ params, requireAuth, db, set }) => {
+  .delete("/:id", async ({ params, requireAuth, set }) => {
     const apiUser = requireAuth();
-    const result = await deleteFanart(params.id, apiUser.id, db as any);
+    const result = await deleteFanart(params.id, apiUser.id);
     set.status = result.status;
     return result.message;
-  }, { params: FanartIdParams })
+  })
 
-  .put("/:id/:what", async ({ params, body, requireAuth, db, set }) => {
+  .put("/:id/:what", async ({ params, body, requireAuth, set }) => {
     const apiUser = requireAuth();
-    const result = await updateFanart(params.id, params.what, apiUser.id, body, db as any);
+    const result = await updateFanart(params.id, params.what, apiUser.id, body as Record<string, string>);
     if (!result.ok) { set.status = result.status!; return result.message; }
     return result.data;
-  }, { params: FanartUpdateParams, body: FanartUpdateBody });
+  });

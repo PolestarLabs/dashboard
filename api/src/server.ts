@@ -1,13 +1,9 @@
 /**
- * pollux-core-api — main entry point
+ * pollux-core-api — main server
  *
  * Runs: bun run src/index.ts
  * Port: API_PORT env var (default 7056)
- *
- * /api/* traffic is routed here by nginx, bypassing the Express dashboard.
- * Express continues to serve page renders on port 6055.
  */
-
 
 import { version } from "../package.json";
 
@@ -16,8 +12,7 @@ import { cors } from "@elysiajs/cors";
 import { swagger } from "@elysiajs/swagger";
 import { serverTiming } from "@elysiajs/server-timing";
 
-import { dbPlugin } from "@plugins/db";
-import { redisPlugin } from "@plugins/redis";
+import { connectDB, connectRedis } from "@plugins/db";
 import { authPlugin } from "@plugins/auth";
 
 import { usersRoutes } from "@routes/users";
@@ -44,8 +39,14 @@ import { adventureRoutes } from "@routes/games/adventure";
 const PORT = parseInt(process.env.API_PORT ?? "7056", 10);
 const IS_DEV = process.env.NODE_ENV !== "production";
 
+// ── Initialize infrastructure before building the app ────────────────────────
+
+await connectDB();
+connectRedis();
+
+// ── App ──────────────────────────────────────────────────────────────────────
+
 const app = new Elysia()
-    // ── Cross-cutting concerns ───────────────────────────────────────────────
     .use(serverTiming())
     .headers({"X-API-Version": "Pollux API v2 :: Elysia"})
     .use(
@@ -86,17 +87,12 @@ const app = new Elysia()
         })
     )
 
-    // ── Infrastructure plugins (db, redis, auth attached to app context) ─────
-    .use(dbPlugin)
-    .use(redisPlugin)
+    // ── Auth (only plugin that needs request context) ─────────────────────────
     .use(authPlugin)
 
     // ── Health ────────────────────────────────────────────────────────────────
     .get("/ping", () => ({ ok: true, pid: process.pid, ts: Date.now() }))
-    .get("/pid", () => {
-        console.log(`[PID] ${process.pid} received /pid request`);
-        String(process.pid)
-    })
+    .get("/pid", () => String(process.pid))
 
     // ── Domain routes ─────────────────────────────────────────────────────────
     .use(usersRoutes)

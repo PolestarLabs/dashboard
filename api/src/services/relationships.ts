@@ -2,13 +2,11 @@
  * services/relationships.ts — Relationship business logic, decoupled from Elysia.
  */
 
+import { db } from "@plugins/db";
 import { getManyDiscordUsers } from "utils/discord";
-import type { DB } from "@routes/types";
 
 export async function getRelationships(
   query: { id?: string; uid?: string; page?: string },
-  db: DB,
-  redis: any,
 ): Promise<{ ok: boolean; status?: number; message?: string; data?: any[] }> {
   const skip = parseInt(query.page ?? "0", 10) || 0;
   let Relationships: any[] | null = null;
@@ -34,7 +32,7 @@ export async function getRelationships(
   const involvedSet = new Set<string>(
     Relationships.flatMap((r: any) => r.users as string[]).concat(query.uid ? [query.uid] : [])
   );
-  const discordUsers = await getManyDiscordUsers([...involvedSet], redis);
+  const discordUsers = await getManyDiscordUsers([...involvedSet]);
   const discordMap = new Map(discordUsers.map((u) => [u.id, u]));
 
   const data = Relationships.map((rel: any) => ({

@@ -9,11 +9,10 @@ import type { Rarity } from "@definitions/Rarity";
 import RARITY_VALUES from "@definitions/constants/Rarity";
 import { shuffle } from "utils/shuffle";
 import { isExact } from "utils/crafting";
-import type { PotItem, MixBody, MixResponse, CreateBody, CreateResponse } from "@routes/_schemas";
+import type { PotItem, MixBody, MixResponse, CreateBody, CreateResponse } from "@definitions/Crafting";
 import { InventoryItem } from "@definitions/InventoryItem";
 
-import { getDB } from "@plugins/db";
-import { Schemas } from "@polestarlabs/database_schema";
+import { db } from "@plugins/db";
 
 // ── Internal helpers ─────────────────────────────────────────────────────────
 
@@ -44,17 +43,16 @@ export class CraftingService {
     const pot: PotItem[]  = payload.pot;
     if (!pot?.length) return { error: "No Pot" };
 
-    const DB = await getDB();
     // Resolve crafting history to detect new discoveries
     let craftingHistory: string[] = [];
     if (userId) {
-      const cosmeticsData: { inventory: InventoryItem[] } = await DB.userInventory.get(userId);
+      const cosmeticsData: { inventory: InventoryItem[] } = await db.userInventory.get(userId);
       craftingHistory = ((cosmeticsData?.inventory ?? []))
         .filter(({crafted}) => crafted && crafted > 0)
         .map((i) => i.id);
     }
 
-    const identifiedPotItems: InventoryItem[] = await DB.items.find({ id: { $in: pot.map((i) => i.id) } });
+    const identifiedPotItems: InventoryItem[] = await db.items.find({ id: { $in: pot.map((i) => i.id) } });
     if (identifiedPotItems.length !== pot.length) return { error: "Some items in the pot were not found" };
     
     const getIdentifiedItem = (item: PotItem|InventoryItem): InventoryItem => {
@@ -94,8 +92,8 @@ export class CraftingService {
     };
 
     let possible: InventoryItem[] = [];
-    const isExactMatch = (await DB.items.countDocuments(queryExact)) > 0;
-    const isBroadMatch = isExactMatch || (await DB.items.countDocuments(queryBroad)) > 0;
+    const isExactMatch = (await db.items.countDocuments(queryExact)) > 0;
+    const isBroadMatch = isExactMatch || (await db.items.countDocuments(queryBroad)) > 0;
 
     if (!isBroadMatch) {
       // Type-craft fallback — scale count by rarity weight
@@ -124,14 +122,14 @@ export class CraftingService {
         crafted: true,
       };
 
-      const isSameTypeMatch = (await DB.items.countDocuments(querySameType)) > 0;
+      const isSameTypeMatch = (await db.items.countDocuments(querySameType)) > 0;
 
       const potSorted   = [...identifiedPotItems].sort((a, b) => -rarityCompare(a, b));
       const highestRar  = getIdentifiedItem(potSorted[0]!)?.rarity as Rarity;
       const lowestRar   = getIdentifiedItem(potSorted[pot.length - 1]!)?.rarity as Rarity;
 
       if (isSameTypeMatch) {
-        possible = await DB.items.find(querySameType);
+        possible = await db.items.find(querySameType);
         possible = possible.filter((x) => {
           const ri = RARITY_VALUES.indexOf(x.rarity as Rarity);
           return (
@@ -152,7 +150,7 @@ export class CraftingService {
       }
 
       // Last resort — any item with matching types
-      possible = await DB.items.find({ "typeCraft.type": { $all: potTypeMap } });
+      possible = await db.items.find({ "typeCraft.type": { $all: potTypeMap } });
       if (!possible.length) return { possible: 0, noMoreTable: true } as any;
 
       const fallback = shuffle(possible)[0]!;
@@ -167,7 +165,7 @@ export class CraftingService {
 
     // Exact match: prefer the result that fits the pot most closely
     if (isExactMatch) {
-      possible = await DB.items.find(queryExact);
+      possible = await db.items.find(queryExact);
       if (possible.length > 1) {
         possible = [
           possible.sort((a, b) => {
@@ -201,11 +199,10 @@ export class CraftingService {
   static async craft(
     payload: CreateBody,
     userId: string,
-    DB: any,
   ): Promise<{ ok: boolean; code: number; body: CreateResponse }> {
     const { item, pot } = payload;
 
-    const itemToCraft: InventoryItem = await DB.items.get({ id: item });
+    const itemToCraft: InventoryItem = await db.items.get({ id: item });
     if (!itemToCraft?.crafted)
       return {
         ok: false, code: 403,
@@ -213,8 +210,8 @@ export class CraftingService {
       };
 
     const [userData, cosmeticsDoc] = await Promise.all([
-      DB.users.get(userId),
-      DB.userInventory.getFull(userId),
+      db.users.get(userId),
+      db.userInventory.getFull(userId),
     ]);
     if (!userData)
       return {
@@ -237,7 +234,7 @@ export class CraftingService {
     await Promise.all(materials.map((m: any) => cosmeticsDoc.removeItem(m.id, m.count)));
     await Promise.all([
       cosmeticsDoc.addItem(item, 1, true),
-      DB.users.set(userId, {
+      db.users.set(userId, {
         $inc: { "progression.craftingExp": EXP_TABLE[itemToCraft.rarity] ?? 1 },
       }),
     ]);

@@ -2,7 +2,8 @@
  * services/cosmetics.ts — Cosmetics business logic, decoupled from Elysia.
  */
 
-import type { CosmeticDoc } from "@routes/types";
+import { db } from "@plugins/db";
+import type { CosmeticDoc } from "@definitions/CosmeticDoc";
 import { objectIdFromTimestamp, isValidObjectId } from "utils/objectid";
 import { stickerCount } from "utils/cosmetics";
 
@@ -40,7 +41,7 @@ export function cleanup(item: CosmeticDoc | null): Record<string, unknown> | nul
 
 const SEARCH_ALLOWED = ["_id", "id", "rarity", "code", "event", "icon", "type", "expires", "filter", "name"] as const;
 
-export async function searchCosmetics(query: Record<string, string | undefined>, DB: any) {
+export async function searchCosmetics(query: Record<string, string | undefined>) {
   const queries: Record<string, unknown> = {};
   for (const k of SEARCH_ALLOWED) {
     const v = query[k];
@@ -60,7 +61,7 @@ export async function searchCosmetics(query: Record<string, string | undefined>,
     });
   }
 
-  let result: any[] = await DB.cosmetics
+  let result: any[] = await db.cosmetics
     .find(queries, { public: 0, meta: 0 })
     .skip(parseInt(query.skip ?? "0") || 0)
     .limit(parseInt(query.lim ?? "50") || 50)
@@ -68,8 +69,8 @@ export async function searchCosmetics(query: Record<string, string | undefined>,
     .noCache();
 
   if (result.length && query.type === "sticker") {
-    const packs: any[] = await DB.items.find({ icon: { $in: result.map((x: any) => x.series_id) } });
-    await Promise.all(packs.map((p) => stickerCount(p, DB)));
+    const packs: any[] = await db.items.find({ icon: { $in: result.map((x: any) => x.series_id) } });
+    await Promise.all(packs.map((p) => stickerCount(p)));
     result.forEach((x: any) => { x.packData = packs.find((p: any) => p.icon === x.series_id); });
   }
 
@@ -82,18 +83,18 @@ export async function searchCosmetics(query: Record<string, string | undefined>,
   return result;
 }
 
-export async function findCosmeticById(type: string, idOrCode: string, DB: any) {
+export async function findCosmeticById(type: string, idOrCode: string) {
   const isOid = isValidObjectId(idOrCode);
-  return DB.cosmetics
+  return db.cosmetics
     .findOne({ type, $or: [isOid ? { _id: idOrCode } : { id: idOrCode }, { code: idOrCode }, { icon: idOrCode }] }, { public: 0, meta: 0 });
 }
 
-export async function countCosmetics(type: string, query: { event?: string; rarity?: string }, DB: any) {
+export async function countCosmetics(type: string, query: { event?: string; rarity?: string }) {
   const searchQuery: Record<string, unknown> = {
     type,
     public: true,
     rarity: query.rarity ?? { $ne: "XR" },
     event:  query.event  ?? null,
   };
-  return DB.cosmetics.find(searchQuery).noCache().count().catch(() => "???");
+  return db.cosmetics.find(searchQuery).noCache().count().catch(() => "???");
 }

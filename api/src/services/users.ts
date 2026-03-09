@@ -5,8 +5,8 @@
  * Fanart hearts → services/fanart.ts
  */
 
+import { db } from "@plugins/db";
 import { getDiscordUser, type DiscordUser } from "utils/discord";
-import type { DB } from "@routes/types";
 
 // ── Response building ────────────────────────────────────────────────────────
 
@@ -14,7 +14,7 @@ export function parseUserdata(discordUser: DiscordUser, USR: Record<string, any>
   const response: Record<string, unknown> = {
     id:     discordUser.id,
     tag:    discordUser.id ? discordUser.username : (USR?.meta?.tag ?? null),
-    avatar: (discordUser as any).avatarURL ?? null,
+    avatar: discordUser.avatarURL ?? null,
   };
 
   if (!USR) {
@@ -51,9 +51,9 @@ export function parseUserdata(discordUser: DiscordUser, USR: Record<string, any>
   return { response, STATUS };
 }
 
-export async function parseUserAndReturn(uID: string, db: DB, redis: any) {
+export async function parseUserAndReturn(uID: string) {
   const [discordUser, USR, cosmetics] = await Promise.all([
-    getDiscordUser(uID, redis),
+    getDiscordUser(uID),
     db.users.get(uID),
     db.userInventory.get(uID),
   ]);
@@ -67,7 +67,7 @@ export async function parseUserAndReturn(uID: string, db: DB, redis: any) {
 
 const SEARCH_ALLOWED = ["_id", "id", "prime.tier", "name", "meta.tag", "personalhandle"];
 
-export async function searchUsers(query: Record<string, string | undefined>, db: DB, redis: any) {
+export async function searchUsers(query: Record<string, string | undefined>) {
   const queries: Record<string, unknown> = {};
   for (const k of SEARCH_ALLOWED) {
     const v = query[k === "_id" ? "_id" : k];
@@ -84,7 +84,7 @@ export async function searchUsers(query: Record<string, string | undefined>, db:
 
   const parsed = await Promise.all(results.map(async (USR: any) => {
     const [discordUser, cosmetics] = await Promise.all([
-      getDiscordUser(USR.id, redis),
+      getDiscordUser(USR.id),
       db.userInventory.get(USR.id),
     ]);
     if (!discordUser) return null;
@@ -97,7 +97,7 @@ export async function searchUsers(query: Record<string, string | undefined>, db:
 
 // ── Inventory / Stickers / Medals / Backgrounds ──────────────────────────────
 
-export async function getUserInventory(userId: string, db: DB) {
+export async function getUserInventory(userId: string) {
   const userWithInventory = await (db.userInventory as any)
     .findOne({ id: userId })
     .populate({ path: "itemsData", select: "id name rarity type icon code" })
@@ -111,7 +111,7 @@ export async function getUserInventory(userId: string, db: DB) {
   return userInventory;
 }
 
-export async function getUserStickers(userId: string, db: DB) {
+export async function getUserStickers(userId: string) {
   const USR = await db.userInventory.get(userId);
   if (!USR) return null;
   const stickerIds: string[] = USR.stickerInventory.filter(Boolean);
@@ -121,7 +121,7 @@ export async function getUserStickers(userId: string, db: DB) {
   return stickerMeta;
 }
 
-export async function getUserMedals(userId: string, db: DB) {
+export async function getUserMedals(userId: string) {
   const USR = await db.userInventory.get(userId);
   if (!USR) return null;
   const ids: string[] = USR.medalInventory.filter(Boolean);
@@ -129,7 +129,7 @@ export async function getUserMedals(userId: string, db: DB) {
   return db.cosmetics.find({ icon: { $in: ids } }).lean().noCache();
 }
 
-export async function getUserBackgrounds(userId: string, db: DB) {
+export async function getUserBackgrounds(userId: string) {
   const USR = await db.userInventory.get(userId);
   if (!USR) return null;
   const codes: string[] = USR.bgInventory.filter(Boolean);
