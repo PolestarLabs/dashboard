@@ -1,5 +1,5 @@
 import { Currency } from "./Currency";
-import { RarityType } from "./Rarity";
+import type { Rarity } from "./Rarity";
 
 
 export type InventoryItemType =
@@ -18,7 +18,7 @@ export type InventoryItemType =
 export interface InventoryItem {
     // Basic
     id: string;
-    rarity: RarityType;
+    rarity: Rarity;
     name: string;
     // Meta
     icon: string;
@@ -27,7 +27,7 @@ export interface InventoryItem {
     type: InventoryItemType;
     price: number;
     public: boolean;
-    crafted: boolean;
+    crafted: number;
     misc: Record<string, unknown>;
     // Market
     tradeable: boolean;
