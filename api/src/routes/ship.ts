@@ -4,7 +4,6 @@
  */
 
 import Elysia from "elysia";
-import { ShipQuery } from "@routes/_schemas";
 import { generateShipCanvas } from "@services/ship";
 
 export const shipRoutes = new Elysia({ prefix: "/generators/ship", tags: ["generators"] })
@@ -14,4 +13,4 @@ export const shipRoutes = new Elysia({ prefix: "/generators/ship", tags: ["gener
       status: 200,
       headers: { "Content-Type": "image/png" },
     });
-  }, { query: ShipQuery });
+  });
