@@ -4,53 +4,46 @@
  */
 
 import Elysia from "elysia";
-import { dbPlugin } from "@plugins/db";
-import { redisPlugin } from "@plugins/redis";
-
-import {
-  CosmeticSearchQuery, CosmeticIdParams,
-  CosmeticCountParams, CosmeticCountQuery,
-  CosmeticGenericParams,
-} from "@routes/_schemas";
-
-import {
-  cleanup, searchCosmetics, findCosmeticById, countCosmetics,
-} from "@services/cosmetics";
-
-import type { CosmeticDoc } from "@routes/types";
+import { db } from "@plugins/db";
+import { cleanup, searchCosmetics, findCosmeticById, countCosmetics } from "@services/cosmetics";
+import type { CosmeticDoc } from "@definitions/CosmeticDoc";
 
 export const cosmeticsRoutes = new Elysia({ prefix: "/cosmetics", tags: ["cosmetics"] })
-  .use(dbPlugin)
-  .use(redisPlugin)
 
-  .get("/all", async ({ db }) => {
-    const result: CosmeticDoc[] = await (db as any).cosmetics.find({});
+  // GET /cosmetics/all
+  .get("/all", async () => {
+    const result: CosmeticDoc[] = await db.cosmetics.find({});
     return result.map(cleanup);
   })
 
-  .get("/search", ({ query, db }) =>
-    searchCosmetics(query as Record<string, string | undefined>, db),
-  { query: CosmeticSearchQuery })
+  // GET /cosmetics/search
+  .get("/search", ({ query }) =>
+    searchCosmetics(query as Record<string, string | undefined>))
 
+  // TODO: PATCH /cosmetics/backgrounds/custom — requires skia-canvas worker
   .patch("/backgrounds/custom", () => ({ _stub: true, message: "Custom background upload not yet ported (requires skia-canvas worker)" }))
+  // TODO: POST /cosmetics/backgrounds/custom — requires skia-canvas worker
   .post("/backgrounds/custom",  () => ({ _stub: true, message: "Custom background upload not yet ported (requires skia-canvas worker)" }))
 
-  .get("/backgrounds/:id", async ({ params, db }) => {
-    const result = await findCosmeticById("background", params.id, db);
+  // GET /cosmetics/backgrounds/:id
+  .get("/backgrounds/:id", async ({ params }) => {
+    const result = await findCosmeticById("background", params.id);
     return cleanup(result);
-  }, { params: CosmeticIdParams })
+  })
 
-  .get("/medals/:id", async ({ params, db }) => {
-    const result = await findCosmeticById("medal", params.id, db);
+  // GET /cosmetics/medals/:id
+  .get("/medals/:id", async ({ params }) => {
+    const result = await findCosmeticById("medal", params.id);
     return cleanup(result);
-  }, { params: CosmeticIdParams })
+  })
 
-  .get("/count/:type", ({ params, query, db }) =>
-    countCosmetics(params.type, query, db),
-  { params: CosmeticCountParams, query: CosmeticCountQuery })
+  // GET /cosmetics/count/:type
+  .get("/count/:type", ({ params, query }) =>
+    countCosmetics(params.type, query))
 
-  .get("/:other/:id", async ({ params, db }) => {
-    const result = await findCosmeticById(params.other.slice(0, -1), params.id, db);
+  // GET /cosmetics/:other/:id
+  .get("/:other/:id", async ({ params }) => {
+    const result = await findCosmeticById(params.other.slice(0, -1), params.id);
     return cleanup(result);
-  }, { params: CosmeticGenericParams });
+  });
 
