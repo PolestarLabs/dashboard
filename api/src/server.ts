@@ -39,9 +39,8 @@ import { adventureRoutes } from "@routes/games/adventure";
 const PORT = parseInt(process.env.API_PORT ?? "7056", 10);
 const IS_DEV = process.env.NODE_ENV !== "production";
 
-// ── Initialize infrastructure before building the app ────────────────────────
+// ── Initialize infrastructure ────────────────────────────────────────────────
 
-await connectDB();
 connectRedis();
 
 // ── App ──────────────────────────────────────────────────────────────────────
@@ -130,8 +129,10 @@ const app = new Elysia()
         };
     });
 
-app.listen({ port: PORT, hostname: IS_DEV ? "0.0.0.0" : "127.0.0.1" }, ({ hostname, port }) => {
+// ── Start ────────────────────────────────────────────────────────────────────
 
+connectDB().then(() => {
+  app.listen({ port: PORT, hostname: IS_DEV ? "0.0.0.0" : "127.0.0.1" });
 });
 
 export type App = typeof app;

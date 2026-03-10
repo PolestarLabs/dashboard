@@ -42,8 +42,9 @@ export async function connectDB(): Promise<void> {
  *   db.cosmetics.find({})
  *
  * Strongly typed with the Schemas interface from @polestarlabs/database_schema.
+ * Index signature allows access to properties not yet in the Schemas interface.
  */
-export const db = new Proxy({} as Schemas, {
+export const db = new Proxy({} as Schemas & Record<string, any>, {
   get(_, prop: string) {
     if (!_db) throw new Error("DB not initialized — call connectDB() before using db");
     return (_db as any)[prop];
