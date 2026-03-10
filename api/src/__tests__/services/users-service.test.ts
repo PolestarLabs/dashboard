@@ -13,7 +13,7 @@ import { makeFakeDb, cursor, makeUser } from "../factories";
 const fakeRedis = { get: jest.fn(), set: jest.fn(), del: jest.fn() };
 
 // stub discord helper functions when needed
-jest.mock("@helpers/discord", () => ({
+jest.mock("utils/discord", () => ({
   getDiscordUser: jest.fn(async (id: string) => ({ id, username: `user${id}`, avatarURL: null })),
   getManyDiscordUsers: jest.fn(async (ids: string[]) => ids.map((id) => ({ id, username: `user${id}`, avatarURL: null }))),
 }));

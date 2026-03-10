@@ -5,7 +5,7 @@
 import { getRelationships } from "../../services/relationships";
 import { makeFakeDb } from "../factories";
 
-jest.mock("@helpers/discord", () => ({
+jest.mock("utils/discord", () => ({
   getManyDiscordUsers: jest.fn(async (ids: string[]) =>
     ids.map((id) => ({ id, username: `user${id}`, avatar: null, bot: false }))
   ),
