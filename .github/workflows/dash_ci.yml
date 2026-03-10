@@ -315,6 +315,9 @@ jobs:
     name: 🎈 Elysia deploy → staging
     needs: [elysia-check,build-dist]
     runs-on: self-hosted
+    environment:
+      name: staging
+      url: https://api.staging.pollux.gg/docs
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
