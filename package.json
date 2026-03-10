@@ -1,6 +1,6 @@
 {
   "name": "pollux-dash",
-  "version": "0.11.2",
+  "version": "0.11.3",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
@@ -17,7 +17,7 @@
     "@polestar/i18n": "github:PolestarLabs/pollux-i18n",
     "@polestar/progression": "github:PolestarLabs/plx-progression",
     "@polestar/timed-usage": "github:PolestarLabs/timed-usage#c5dccb85a2118a8c41636663ed7dd8bd5a0cc671",
-    "@polestarlabs/database_schema": "^0.20.6",
+    "@polestarlabs/database_schema": "^0.20.7",
     "@sentry/node": "^6.2.5",
     "axios": "^0.21.1",
     "bluebird": "^3.5.5",
