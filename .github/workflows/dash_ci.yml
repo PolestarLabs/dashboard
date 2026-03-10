@@ -333,7 +333,7 @@ jobs:
           git reset --hard pr-head
       - name: Install API deps
         run: |
-          cd api
+          cd "$DIR"/api
           # ensure git can fetch private repos
           git config --global credential.helper store
           echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
