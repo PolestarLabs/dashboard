@@ -6,6 +6,12 @@ import {
 
 import { makeFakeDb } from "../factories";
 
+jest.mock("utils/discord", () => ({
+  getManyDiscordUsers: jest.fn(async (ids: string[]) =>
+    ids.map((id) => ({ id, username: `user${id}`, avatarURL: null }))
+  ),
+}));
+
 const fakeRedis = { get: jest.fn(), set: jest.fn(), del: jest.fn() };
 
 describe("@services/commends.ts", () => {
