@@ -3,17 +3,19 @@
 export function makeUser(id: string, extras: Record<string, any> = {}) {
   return Object.assign({
     id,
-    modules: {
+    progression: {
       level: 1,
       exp: 0,
-      commend: 0,
+    },
+    currency: {
       RBN: 0,
       JDE: 0,
       SPH: 0,
-      inventory: [],
-      stickerInventory: [],
-      medalInventory: [],
-      bgInventory: [],
+    },
+    counters: {
+      commend: 0,
+    },
+    profile: {
       bgID: null,
       sticker: null,
       favcolor: null,
@@ -22,7 +24,7 @@ export function makeUser(id: string, extras: Record<string, any> = {}) {
       tagline: null,
       medals: [],
     },
-    donator: "",
+    prime: {},
     blacklisted: "",
   }, extras);
 }
