@@ -1,11 +1,4 @@
-type Profilecard = {
-    background: string;
-    sticker?: string;
-    color: string;
-    flair: string;
-    about: string;
-    tagline: string;
-    medals: string[];
-};
+import type { Profilecard } from "@polestarlabs/database_schema/types";
 
+export type { Profilecard };
 export default Profilecard;

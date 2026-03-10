@@ -1,1 +1,1 @@
-export type Rarity = "C" | "U" | "R" | "SR" | "UR" | "XR";
+export type { Rarity } from "@polestarlabs/database_schema/types";

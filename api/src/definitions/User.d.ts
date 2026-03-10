@@ -1,13 +1,9 @@
 
+export type { User, User as UserDoc } from "@polestarlabs/database_schema/types";
 
-import Profilecard, { ProfileCardDoc } from "./Profilecard";
-import Currency from "./Currency";
-import { UserInventoryItem } from "./InventoryItem";
-import type { PrimeInfo }   from "@definitions/PrimeInfo";
-import type { PrimeTier }   from "@definitions/PrimeTier";
-import type { Rarity }      from "@definitions/Rarity";
-
-
+import type { Currency } from "@polestarlabs/database_schema/types";
+import type { Profilecard } from "@polestarlabs/database_schema/types";
+import type { PrimeTier } from "@polestarlabs/database_schema/types";
 
 export type ApiUser = {
     id: string;
@@ -23,32 +19,5 @@ export type ApiUser = {
     isBlacklisted: boolean;
     inventorySize: number;
     discordDataUnavailable?: string;
-    [key in Currency]: number;
-}
-
-export type UserDoc = {
-    _id: { toString(): string };
-    id: string;
-    name: string;
-    meta: {
-        createdAt: Date;
-        lastLogin: Date;
-        lastUpdated: Date;
-        migrated?: boolean;
-        apiKey?: string;
-        apiPerms?: string;
-    };
-    currency: Record<Currency, number>;
-    progression: {
-        level: number;
-        exp: number;
-    };
-    profile: ProfileCardDoc;
-    prime?: PrimeInfo;
-    blacklisted?: boolean | string;
-    switches: Record<string>;
-    counters: Record<string>;
-    eventData: Record<string>;
-    personalHandle?: string;
-}
+} & { [K in Currency]: number };
 
