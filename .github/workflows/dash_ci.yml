@@ -331,7 +331,14 @@ jobs:
           # fetch PR head into a temporary ref, force updating in case of non-fast-forward
           git fetch origin "+${prref}:pr-head"
           git reset --hard pr-head
-
+      - name: Install API deps
+        run: |
+          cd api
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          bun install
 
       - name: Build
         run: |
