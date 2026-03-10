@@ -1,4 +1,2 @@
-import type { Rarity } from "@definitions/Rarity";
-
-const RARITY_VALUES: readonly Rarity[] = ["C", "U", "R", "SR", "UR", "XR"] as const;
-export default RARITY_VALUES;
+export { RARITY_VALUES } from "@polestarlabs/database_schema/constants";
+export { RARITY_VALUES as default } from "@polestarlabs/database_schema/constants";

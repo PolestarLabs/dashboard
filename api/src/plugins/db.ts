@@ -11,6 +11,7 @@
  */
 
 import initSchema from "@polestarlabs/database_schema";
+import type { Schemas } from "@polestarlabs/database_schema";
 import Redis from "ioredis";
 
 // ── Config ───────────────────────────────────────────────────────────────────
@@ -21,7 +22,7 @@ const REDIS_PORT = parseInt(process.env.REDIS_PORT ?? "6379", 10);
 
 // ── MongoDB ──────────────────────────────────────────────────────────────────
 
-let _db: Record<string, any> | null = null;
+let _db: Schemas | null = null;
 
 export async function connectDB(): Promise<void> {
   const _g = globalThis as Record<string, any>;
@@ -30,7 +31,7 @@ export async function connectDB(): Promise<void> {
   _db = await initSchema(
     { url: MONGO_URL, options: { useNewUrlParser: true, useUnifiedTopology: true }, hook: undefined },
     { redis: { host: REDIS_HOST, port: REDIS_PORT } },
-  ) as Record<string, any>;
+  );
 
   console.log("✅ [DB] Connected to MongoDB:", MONGO_URL.replace(/:\/\/[^@]*@/, "://***@"));
 }
@@ -40,14 +41,12 @@ export async function connectDB(): Promise<void> {
  *   db.users.get(id)
  *   db.cosmetics.find({})
  *
- * Typed as Record<string, any> so collection access and chain methods
- * work without casting. Definitions in src/definitions/ describe the
- * API-facing shapes; this is the raw DB layer.
+ * Strongly typed with the Schemas interface from @polestarlabs/database_schema.
  */
-export const db: Record<string, any> = new Proxy({} as Record<string, any>, {
+export const db = new Proxy({} as Schemas, {
   get(_, prop: string) {
     if (!_db) throw new Error("DB not initialized — call connectDB() before using db");
-    return _db[prop];
+    return (_db as any)[prop];
   },
 });
 
