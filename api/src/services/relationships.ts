@@ -8,18 +8,20 @@ import type { ServiceResponse } from "@definitions/Misc";
 
 export async function getRelationships(
   query: { id?: string; uid?: string; page?: string },
+  _db = db,
+  _extra?: any,
 ): Promise<ServiceResponse<any[]>> {
   const skip = parseInt(query.page ?? "0", 10) || 0;
   let Relationships: any[] | null = null;
 
   if (query.id) {
-    Relationships = await db.relationships
+    Relationships = await _db.relationships
       .find({ _id: query.id })
       .populate({ path: "usersData", select: "profile.featuredMarriage id profile.tagline" })
       .lean();
     if (!Relationships?.length) return { ok: false, status: 404, message: "RELATIONSHIP ID NOT FOUND" };
   } else if (query.uid) {
-    Relationships = await db.relationships
+    Relationships = await _db.relationships
       .find({ users: query.uid })
       .limit(10)
       .skip(10 * skip)
