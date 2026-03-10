@@ -37,7 +37,7 @@ block content
         
 
     .plx-relative.plx-flex.plx-flex-column.plx-flex-between(style="height:200px;overflow: hidden;")
-        .plx-dash-cover(plx-parallax="bgy: 100,400" style='filter: blur(8px) ;background-image: url(/backdrops/'+userdata.modules.bgID+'.png)').user-bg
+        .plx-dash-cover(plx-parallax="bgy: 100,400" style='filter: blur(8px) ;background-image: url(/backdrops/'+userdata.profile.background+'.png)').user-bg
         include topbar
         .plx-flex-center(class="plx-visible@s")
             include topmenu
@@ -86,9 +86,9 @@ block scripts
                 "animated-number": window.AnimatedNumber,
             },
             data: {
-                rubines: userdata.modules.RBN,
-                sapphires: userdata.modules.SPH,
-                jades: userdata.modules.JDE,
+                rubines: userdata.currency.RBN,
+                sapphires: userdata.currency.SPH,
+                jades: userdata.currency.JDE,
             }
         })
         

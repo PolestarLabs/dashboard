@@ -22,10 +22,10 @@
 
     .completionist.plx-padding-small
         h4  Completionist Status
-        +progressBar(userprofile.modules.stickerInventory.length , "stickersSize"    ,"Stickers",0)
-        +progressBar(userprofile.modules.bgInventory.length      , "backgroundsSize" ,"Backgrounds",0)
-        +progressBar(userprofile.modules.medalInventory.length   , "medalsSize"      ,"Medals",0)
-        +progressBar(userprofile.modules.achievements.length     , "achievementsSize"      ,"Achievements",0)
+        +progressBar(userprofile.inventory.stickerInventory.length , "stickersSize"    ,"Stickers",0)
+        +progressBar(userprofile.inventory.bgInventory.length      , "backgroundsSize" ,"Backgrounds",0)
+        +progressBar(userprofile.inventory.medalInventory.length   , "medalsSize"      ,"Medals",0)
+        +progressBar(userprofile.inventory.achievements.length     , "achievementsSize"      ,"Achievements",0)
 
     if !userprofile.prime && !userprofile.counters.prime_streak
         .ad-space(v-html="AS2")

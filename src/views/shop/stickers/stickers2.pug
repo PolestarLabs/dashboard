@@ -40,7 +40,7 @@ block content
                                     .stickOverview(plx-drop="mode: click; boundary: .package-listing; boundary-align: 1; pos: center ;offset:0;animation: plx-animation-slide-left-small plx-animation-fade" )
                                         button.plx-drop-close.plx-position-top-right.plx-position-small(type="button" plx-close)
                                         p.title
-                                            -let obtained = userdata?` (${thisCollection.filter(cc=> userdata.modules.stickerInventory.includes(cc.id)).length}/${thisCollection.length})`:''
+                                            -let obtained = userdata?` (${thisCollection.filter(cc=> userdata.inventory.stickerInventory.includes(cc.id)).length}/${thisCollection.length})`:''
                                             img(data-src="/images/tiers/new/"+s.rarity+".png" plx-img)
                                             span &#x2002
                                             span= s.name + obtained
@@ -48,9 +48,9 @@ block content
                                             button(plx-toggle=userdata?"target: .faded":false).plx-button.plx-button-small.plx-button-secondary Toggle Owned
                                         .in-wrapper 
                                             each stk in thisCollection
-                                                -let hasit = userdata? userdata.modules.stickerInventory.includes(stk.id)?true : false: 'not-logged-in'
+                                                -let hasit = userdata? userdata.inventory.stickerInventory.includes(stk.id)?true : false: 'not-logged-in'
 
-                                                .stickerItem(class=(userdata?hasit?'has-it':'faded':'')+(userdata?userdata.modules.sticker===stk.id?'equipped':'':'') )
+                                                .stickerItem(class=(userdata?hasit?'has-it':'faded':'')+(userdata?userdata.profile.sticker===stk.id?'equipped':'':'') )
                                                     div 
                                                         img(data-src="/build/stickers/"+stk.id+".png" plx-img ).stickerfig
                                                         p(class=hasit?"":"plx-text-muted")= stk.name

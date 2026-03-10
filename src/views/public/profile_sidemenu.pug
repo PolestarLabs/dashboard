@@ -11,7 +11,7 @@ ul.profilenav( plx-switcher="connect: #right-pages; animation: plx-animation-sli
     li      
         .commend(v-if="!commendInfo.loading")
             span Reputation: 
-            span= userprofile.modules.commend || "{{ commendInfo.whoIn.map(x=>x.count).concat([0]).reduce((a,b)=>a+b) }}"
+            span= userprofile.counters.commend || "{{ commendInfo.whoIn.map(x=>x.count).concat([0]).reduce((a,b)=>a+b) }}"
             span.favc-color
                 | &#x2003;
                 i.fas.fa-star

@@ -355,9 +355,9 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 		#medals.plx-width-1-1
 			#equipped.plx-flex-wrap.plx-flex.plx-flex-column.plx-width-1-1(class="plx-width-2-5@m")
 				//(class="plx-width-1-3@m")
-				-while (userdata.modules.medals.length < 9) userdata.modules.medals.push(0);
+				-while (userdata.profile.medals.length < 9) userdata.profile.medals.push(0);
 				.eq-container
-					each medal in userdata.modules.medals.map(md=> MDINFO.find(m=> (m.icon||m.id) == md) )
+					each medal in userdata.profile.medals.map(md=> MDINFO.find(m=> (m.icon||m.id) == md) )
 						.drop.ui-droppable.medalSlot(data-pos = it)
 							if medal
 								+Medal(medal)
@@ -368,8 +368,8 @@ div#dash( ).plx-position-relative.plx-flex.plx-flex-wrap
 					input(type='text', v-model='search' @keyup="filterMeds()")
 				div(plx-filter='target: #inventory')
 					#inventory.ui-sortable.ui-droppable
-						-const INVENTORY = MDINFO.filter(md=> userdata.modules.medalInventory.includes(md.icon || md.id) )
-						each medal in INVENTORY.filter(md=> !userdata.modules.medals.includes(md.icon))
+						-const INVENTORY = MDINFO.filter(md=> userdata.inventory.medalInventory.includes(md.icon || md.id) )
+						each medal in INVENTORY.filter(md=> !userdata.profile.medals.includes(md.icon))
 							+Medal(medal)
 					.controls
 						.equipped-panel

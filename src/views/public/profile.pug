@@ -31,12 +31,12 @@ block content
 
 
   -
-    let preFavColor =  hexToHSL(userprofile.modules.favcolor)    
+    let preFavColor =  hexToHSL(userprofile.profile.color)    
     const FAVCOLOR = HSLToHex(preFavColor.h,(preFavColor.s > 80 ? 70 : preFavColor.s-10), (preFavColor.l < 25 ? 25 : preFavColor.l) )
 
  
   style :root{--favcolor-not-so-dim: #{FAVCOLOR}77; --favcolor-dim: #{FAVCOLOR}15; --favcolor: #{FAVCOLOR}} .favc-color{color: #{FAVCOLOR}}
-  style .has-user-bg{ background-image:url('/backdrops/#{ userprofile.modules.bgID }.png')}
+  style .has-user-bg{ background-image:url('/backdrops/#{ userprofile.profile.background }.png')}
  
   .plx-animation-kenburns.background-container.has-user-bg
 
@@ -80,10 +80,10 @@ block content
             .username.plx-flex.plx-flex-start
               .name= userprofile.meta.username
               .badge
-            .tagline= userprofile.modules.tagline
+            .tagline= userprofile.profile.tagline
             .progressbar
-              -let level   = userprofile.modules.level
-              -let exp     = userprofile.modules.exp
+              -let level   = userprofile.progression.level
+              -let exp     = userprofile.progression.exp
               -let f       = 0.0427899
               -let toThis  = Math.trunc(Math.pow(level / f, 2));
               -let toNex   = Math.trunc(Math.pow((level + 1) / f, 2))
@@ -98,7 +98,7 @@ block content
             .number {{commendInfo.totalIn}} 
             .sub Reputation
           .level(plx-parallax="y:150")
-            .number= miliarize(userprofile.modules.level)
+            .number= miliarize(userprofile.progression.level)
             .sub Level
           
 
@@ -113,28 +113,28 @@ block content
           .wealth.plx-flex.plx-flex-around
               .rubines
                   span.plx-rubine.icon64.curr_icon_3
-                  span= miliarize(userprofile.modules.RBN) || 0
+                  span= miliarize(userprofile.currency.RBN) || 0
               .sapphires
                   span.plx-sapphire.icon64.curr_icon_3
-                  span= miliarize(userprofile.modules.SPH) || 0
+                  span= miliarize(userprofile.currency.SPH) || 0
               .jades
                   span.plx-jade.icon64.curr_icon_3
-                  span= miliarize(userprofile.modules.JDE) || 0
+                  span= miliarize(userprofile.currency.JDE) || 0
               .prism
                   span.plx-prism.icon64.curr_icon_3
-                  span= miliarize(userprofile.modules.PSM) || 0
+                  span= miliarize(userprofile.currency.PSM) || 0
               .tokens
                   span.plx-token.icon64.curr_icon_3
-                  span= miliarize(userprofile.modules.EVT) || 0
+                  span= miliarize(userprofile.currency.EVT) || 0
 
           .column1.plx-width-1(class="plx-width-2-3@m")
              
             .infobox.plx-flex.plx-flex-around
                   .flair
-                      img(src= `/flairs/${userprofile.modules.flairTop}.png` )
+                      img(src= `/flairs/${userprofile.profile.flair}.png` )
                   .divider
                   .about.plx-flex.plx-flex-column
-                      .text= userprofile.modules.persotext
+                      .text= userprofile.profile.about
                       .signature= userprofile.meta.username
             .profile-box.plx-relative
               
