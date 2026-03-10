@@ -52,11 +52,11 @@ export function parseUserdata(discordUser: DiscordUser, USR: Record<string, any>
   return { response, STATUS };
 }
 
-export async function parseUserAndReturn(uID: string) {
+export async function parseUserAndReturn(uID: string, _db = db) {
   const [discordUser, USR, cosmetics] = await Promise.all([
     getDiscordUser(uID),
-    db.users.get(uID),
-    db.userInventory.get(uID),
+    _db.users.get(uID),
+    _db.userInventory.get(uID),
   ]);
 
   let STATUS = 200;
@@ -68,12 +68,12 @@ export async function parseUserAndReturn(uID: string) {
 
 const SEARCH_ALLOWED = ["_id", "id", "prime.tier", "name", "meta.tag", "personalhandle"];
 
-export async function searchUsers(query: Record<string, string | undefined>) {
+export async function searchUsers(query: Record<string, string | undefined>, _db = db, _redis?: any) {
   const queries = buildSearchQuery(query, SEARCH_ALLOWED);
   if (queries.donator === "exists") queries.donator = { $exists: true };
 
   // execute the query and return plain objects so we can map over them
-  const results: any[] = await db.users.find(queries)
+  const results: any[] = await _db.users.find(queries)
     .skip(parseInt(query.skip ?? "0", 10) || 0)
     .limit(parseInt(query.lim ?? "50", 10) || 50)
     .sort({ _id: -1 })
@@ -82,7 +82,7 @@ export async function searchUsers(query: Record<string, string | undefined>) {
   const parsed = await Promise.all(results.map(async (USR: any) => {
     const [discordUser, cosmetics] = await Promise.all([
       getDiscordUser(USR.id),
-      db.userInventory.get(USR.id),
+      _db.userInventory.get(USR.id),
     ]);
     if (!discordUser) return null;
     const { response } = parseUserdata(discordUser, USR, 200, cosmetics);
@@ -94,8 +94,8 @@ export async function searchUsers(query: Record<string, string | undefined>) {
 
 // ── Inventory / Stickers / Medals / Backgrounds ──────────────────────────────
 
-export async function getUserInventory(userId: string) {
-  const userWithInventory = await (db.userInventory as any)
+export async function getUserInventory(userId: string, _db = db) {
+  const userWithInventory = await (_db.userInventory as any)
     .findOne({ id: userId })
     .populate({ path: "itemsData", select: "id name rarity type icon code" })
     .lean();
@@ -108,29 +108,29 @@ export async function getUserInventory(userId: string) {
   return userInventory;
 }
 
-export async function getUserStickers(userId: string) {
-  const USR = await db.userInventory.get(userId);
+export async function getUserStickers(userId: string, _db = db) {
+  const USR = await _db.userInventory.get(userId);
   if (!USR) return null;
   const stickerIds: string[] = USR.stickerInventory.filter(Boolean);
-  const stickerMeta: any[] = await db.cosmetics.find({ id: { $in: stickerIds } }).lean();
-  const packs: any[] = await db.items.find({ icon: { $in: stickerMeta.map((x: any) => x?.series_id) } }).lean();
+  const stickerMeta: any[] = await _db.cosmetics.find({ id: { $in: stickerIds } }).lean();
+  const packs: any[] = await _db.items.find({ icon: { $in: stickerMeta.map((x: any) => x?.series_id) } }).lean();
   stickerMeta.forEach((x: any) => { x.packData = packs.find((p: any) => p.icon === x.series_id); });
   return stickerMeta;
 }
 
-export async function getUserMedals(userId: string) {
-  const USR = await db.userInventory.get(userId);
+export async function getUserMedals(userId: string, _db = db) {
+  const USR = await _db.userInventory.get(userId);
   if (!USR) return null;
   const ids: string[] = USR.medalInventory.filter(Boolean);
   // call lean() first so we can chain noCache if available
-  return db.cosmetics.find({ icon: { $in: ids } }).lean().noCache();
+  return _db.cosmetics.find({ icon: { $in: ids } }).lean().noCache();
 }
 
-export async function getUserBackgrounds(userId: string) {
-  const USR = await db.userInventory.get(userId);
+export async function getUserBackgrounds(userId: string, _db = db) {
+  const USR = await _db.userInventory.get(userId);
   if (!USR) return null;
   const codes: string[] = USR.bgInventory.filter(Boolean);
-  return db.cosmetics.find({ code: { $in: codes } }).lean();
+  return _db.cosmetics.find({ code: { $in: codes } }).lean();
 }
 
 // ── Commends ─────────────────────────────────────────────────────────────────

@@ -5,21 +5,21 @@
 
 import { db } from "@plugins/db";
 
-export async function getGallerySaves(userId: string) {
+export async function getGallerySaves(userId: string, _db = db) {
   const [gallery, user] = await Promise.all([
-    db.usercols.get(userId),
-    db.users.get(userId, { switches: 1 }),
+    _db.usercols.get(userId),
+    _db.users.get(userId, { switches: 1 }),
   ]);
   if (user?.switches?.booruPublic === false) return { loading: true, status: "PRIVATE" };
   return gallery?.collections.boorusave ?? [];
 }
 
-export async function getGalleryFanart(userId: string, viewerId: string | undefined) {
+export async function getGalleryFanart(userId: string, viewerId: string | undefined, _db = db) {
   const query: Record<string, unknown> = { author_ID: userId };
   if (viewerId !== userId) query.publish = true;
 
   // .find() returns a query/cursor; ensure we execute it via .lean()
-  const gallery: any[] = await db.fanart.find(query).lean();
+  const gallery: any[] = await _db.fanart.find(query).lean();
   return gallery.map((item: any) => ({
     title:       item.title,
     description: item.description,
