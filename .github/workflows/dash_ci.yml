@@ -317,7 +317,7 @@ jobs:
     runs-on: self-hosted
     environment:
       name: staging
-      url: https://api.staging.pollux.gg/docs
+      url: https://api-staging.pollux.gg/docs
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
