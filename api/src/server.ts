@@ -38,6 +38,8 @@ import { adventureRoutes } from "@routes/games/adventure";
 
 const PORT = parseInt(process.env.API_PORT ?? "7056", 10);
 const IS_DEV = process.env.NODE_ENV !== "production";
+// always bind to all interfaces inside container; NODE_ENV should not restrict it
+const HOSTNAME = process.env.API_HOST || "0.0.0.0";
 
 // ── Initialize infrastructure ────────────────────────────────────────────────
 
@@ -132,7 +134,7 @@ const app = new Elysia()
 // ── Start ────────────────────────────────────────────────────────────────────
 
 connectDB().then(() => {
-  app.listen({ port: PORT, hostname: IS_DEV ? "0.0.0.0" : "127.0.0.1" });
+  app.listen({ port: PORT, hostname: HOSTNAME });
 });
 
 export type App = typeof app;

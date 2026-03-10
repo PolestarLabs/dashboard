@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+  mongo:
+    image: mongo:6
+    restart: unless-stopped
+    volumes:
+      - mongo_data:/data/db
+    ports:
+      - "27017:27017"
+
+  redis:
+    image: redis:7-alpine
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
+  api:
+    build:
+      context: .
+      dockerfile: api/Dockerfile
+    environment:
+      - MONGO_URL=mongodb://mongo:27017/pollux
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - API_PORT=7056
+    ports:
+      - "7056:7056"
+    depends_on:
+      - mongo
+      - redis
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DB_INFO=mongodb://mongo:27017/pollux
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - DASHPORT=4728
+    ports:
+      - "4728:4728"
+    depends_on:
+      - mongo
+      - redis
+
+volumes:
+  mongo_data:

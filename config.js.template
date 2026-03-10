@@ -12,7 +12,8 @@ module.exports = {
   genius: {client,secret,token},
   
   "pollux-api-token": " ",
-  mongodb: "mongodb://",
+  // allow overriding via environment to ease docker / local setups
+  mongodb: process.env.DB_INFO || "mongodb://",
   host: "https://????.pollux.gg",
   webhooks: {
     marketplace: {

@@ -225,13 +225,17 @@ setTimeout(()=>{
 
 Object.assign(PLX, GearboxClient);
 
+// allow overriding database/redis hosts via environment (docker-friendly)
+const redisHost = process.env.REDIS_HOST || "127.0.0.1";
+const redisPort = parseInt(process.env.REDIS_PORT || "6379", 10);
+
 (require('@polestarlabs/database_schema'))({
 	url: dbURL,
 	options: dbOptions,
 },{
 redis:{
-	host: "127.0.0.1",
-	port: 6379
+	host: redisHost,
+	port: redisPort
 }}).then(Connection => {
 	global.DB  = Connection;
 
