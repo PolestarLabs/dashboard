@@ -6,12 +6,12 @@
 import { db } from "@plugins/db";
 import { getManyDiscordUsers } from "utils/discord";
 
-export async function getCommendsSimple(userId: string) {
-  return db.commends.parseFull(userId);
+export async function getCommendsSimple(userId: string, _db = db) {
+  return _db.commends.parseFull(userId);
 }
 
-export async function getCommendsFull(userId: string) {
-  const userCommends = await db.commends.parseFull(userId, { _id: 0, __v: 0 });
+export async function getCommendsFull(userId: string, _db = db, _redis?: any) {
+  const userCommends = await _db.commends.parseFull(userId, { _id: 0, __v: 0 });
   if (!userCommends) return null;
 
   const usersInSet = [...new Set([
@@ -30,11 +30,11 @@ export async function getCommendsFull(userId: string) {
   return { userData, whoIn, whoOut, totalIn, totalOut, average, normalized };
 }
 
-export async function getCommendRank(userId: string, endpoint: string) {
-  const count = (await db.commends.get(userId))?.whoIn?.reduce(
+export async function getCommendRank(userId: string, endpoint: string, _db = db) {
+  const count = (await _db.commends.get(userId))?.whoIn?.reduce(
     (a: any, b: any) => ({ count: a.count + b.count }),
   )?.count;
-  const ranks: any[] = await db.commends.aggregate([
+  const ranks: any[] = await _db.commends.aggregate([
     { $addFields: { countIn: { $sum: "$whoIn.count" }, countOut: { $sum: "$whoOut.count" } } },
     { $match: { [endpoint === "in" ? "countIn" : "countOut"]: { $gt: count } } },
     { $project: { id: 1, whoOut: 1, whoIn: 1, pplIn: { $size: "$whoIn" }, pplOut: { $size: "$whoOut" } } },
