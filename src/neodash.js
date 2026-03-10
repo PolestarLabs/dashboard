@@ -14,7 +14,15 @@ global.cacheFunction = (duration) => {
 		let key = '__express__' + (req.originalUrl || req.url);
 		let cachedBody = memCache.get(key);
 		if (cachedBody) {
-			res.json(typeof cachedBody == 'string' ? JSON.parse(cachedBody) : cachedBody);
+			if (typeof cachedBody === 'string') {
+				try {
+					res.json(JSON.parse(cachedBody));
+				} catch (_) {
+					res.send(cachedBody);
+				}
+			} else {
+				res.json(cachedBody);
+			}
 			return;
 		} else {
 			// avoid wrapping send repeatedly on the same response object

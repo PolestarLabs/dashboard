@@ -75,8 +75,8 @@ router.get('/:endpoint', async (req, res)=> {
         image: `${HOST}/generators/pfpv.png?u=${userprofile.id}`,
         large: true,
         title: `${userDiscord.username}`,
-        color: userprofile.profile?.favcolor,
-        description: `${userprofile.profile?.persotext}`,
+        color: userprofile.profile?.color,
+        description: `${userprofile.profile?.about}`,
       }
     const oembedObj = {
         version: "1.0"
