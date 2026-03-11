@@ -1,3 +1,4 @@
 [submodule "api/schema"]
 	path = api/schema
 	url = https://github.com/PolestarLabs/db-schema
+	branch = refactor

@@ -10,8 +10,8 @@
  * Call connectDB() once during app startup (server.ts) before listening.
  */
 
-import initSchema from "@schema";
-import type { Schemas } from "@schema";
+import initSchema from "@schema/index.js";
+import type { Schemas } from "@schema/index.js";
 import Redis from "ioredis";
 
 // ── Config ───────────────────────────────────────────────────────────────────
