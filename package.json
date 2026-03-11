@@ -17,7 +17,7 @@
     "@polestar/i18n": "github:PolestarLabs/pollux-i18n",
     "@polestar/progression": "github:PolestarLabs/plx-progression",
     "@polestar/timed-usage": "github:PolestarLabs/timed-usage#c5dccb85a2118a8c41636663ed7dd8bd5a0cc671",
-    "@polestarlabs/database_schema": "github:PolestarLabs/db-schema#refactor",
+    "@polestarlabs/database_schema": "file:./api/schema",
     "@sentry/node": "^6.2.5",
     "axios": "^0.21.1",
     "bluebird": "^3.5.5",
