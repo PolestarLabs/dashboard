@@ -39,9 +39,9 @@ global.cacheFunction = (duration) => {
 	}
 }
 
-const config = require('../config.js');
-global.Sentry = require("@sentry/node");
-Sentry.init({ dsn: config.sentry });
+//const config = require('../config.js');
+//global.Sentry = require("@sentry/node");
+//Sentry.init({ dsn: config.sentry });
 console.log(process.env)
 global.HOST = process.env.HOST || `http://localhost:${process.env.DASHPORT || 4728}`;
 
@@ -78,7 +78,7 @@ global.compulsoryAuth = async function checkAuthTwo(req, res, next) {
 		return false;
 	}
 };
-global.MARKET_TOKEN = config["pollux-api-token"]
+global.MARKET_TOKEN = process.env.MASTER_API_TOKEN //|| config["pollux-api-token"]
 
 
 const Express = require('express');
@@ -158,7 +158,7 @@ app.post('/webhook/bsian-stripe', async (req, res) => {
 */
 // =======================================================================================
 
-const dbURL = process.env.DB_INFO || config.mongodb;
+const dbURL = process.env.DB_INFO;
 const dbOptions = { 
 	useNewUrlParser: true,
 	keepAlive: true,
@@ -171,7 +171,10 @@ const dbOptions = {
 // performed using the alpha/polaris application (ID 354285599588483082).
 // the following logic picks the appropriate client for runtime use and
 // ensures we can override the OAuth client if needed.
-const central_pollux = config.clients.find(c=>{
+const ClientsAvailable = process.env.CLIENTS 
+	? JSON.parse(process.env.CLIENTS) 
+	: require('../config.js').clients;
+const central_pollux = ClientsAvailable.find(c=>{
     if(process.env.NODE_ENV === "production"){
         return c.name==='main';
     }else{
@@ -183,8 +186,8 @@ const central_pollux = config.clients.find(c=>{
 // client (alpha) regardless of NODE_ENV. allow an override via an environment
 // variable if we ever need to switch.
 const authClient = process.env.FORCE_ALPHA_AUTH === '1'
-    ? config.clients.find(c=>c.id === '354285599588483082')
-    : config.clients.find(c=>c.id === '354285599588483082') || central_pollux;
+    ? ClientsAvailable.find(c=>c.id === '354285599588483082')
+    : ClientsAvailable.find(c=>c.id === '354285599588483082') || central_pollux;
 console.log("[auth] using OAuth client", authClient.id, authClient.name || authClient.fname);
 
 
@@ -197,16 +200,16 @@ PLX.user = central_pollux;
 
 global.polluxClients = new Map();
 
-const GearboxClient = require(BOT_PATH + '/core/utilities/Gearbox').Client;
+//const GearboxClient = require(BOT_PATH + '/core/utilities/Gearbox').Client;
 
-config.clients.forEach(async cli=>{
+ClientsAvailable.forEach(async cli=>{
 	try {
 		const newClient = new Eris.Client(cli.token,{restMode:true});
 		newClient.id = cli.id;
 		newClient.category = cli.category;
 		newClient.friendly_name = cli.fname;
 		newClient.internal_name = cli.name;
-		Object.assign(newClient, GearboxClient);
+		//Object.assign(newClient, GearboxClient);
 		const meta = {name:cli.name, fname:cli.fname, id:cli.id, category:cli.category};
 		let user = await newClient.getRESTUser(cli.id).catch(()=>({id:cli.id,username:cli.fname}));
 		polluxClients.set(cli.id, {client:newClient, user, meta});
@@ -223,8 +226,8 @@ setTimeout(()=>{
 },5000)
 
 
-Object.assign(PLX, GearboxClient);
-
+//Object.assign(PLX, GearboxClient);
+	
 // allow overriding database/redis hosts via environment (docker-friendly)
 const redisHost = process.env.REDIS_HOST || "127.0.0.1";
 const redisPort = parseInt(process.env.REDIS_PORT || "6379", 10);
@@ -311,7 +314,7 @@ mongoose.connect( dbURL, dbOptions);
 mongoose.set('strictQuery', true);
 mongoose.Promise = require('bluebird');
 Promise.promisifyAll(require("mongoose"));
-Object.assign(global,require( BOT_PATH + '/core/utilities/Gearbox' ).Global)
+//Object.assign(global,require( BOT_PATH + '/core/utilities/Gearbox' ).Global)
 
 //-- PASSPORT  
 const scopes = ['identify','email', 'guilds','connections'];
