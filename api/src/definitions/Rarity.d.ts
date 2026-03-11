@@ -1,1 +1,1 @@
-export type { Rarity } from "/api/schema/types";
+export type { Rarity } from "@schema/types";

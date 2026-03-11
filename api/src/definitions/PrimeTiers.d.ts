@@ -1,1 +1,1 @@
-export type { PrimeTier } from "/api/schema/types";
+export type { PrimeTier } from "@schema/types";

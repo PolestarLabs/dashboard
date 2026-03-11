@@ -4,9 +4,9 @@ export type {
   ItemSeries,
   ItemFilter,
   UserItem,
-} from "/api/schema/types";
+} from "@schema/types";
 
-import type { UserItem, ItemType } from "/api/schema/types";
+import type { UserItem, ItemType } from "@schema/types";
 
 /** @deprecated Use `UserItem` from the schema package instead. */
 export type UserInventoryItem = UserItem;

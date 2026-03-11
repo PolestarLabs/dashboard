@@ -1,4 +1,4 @@
-import type { Profilecard } from "/api/schema/types";
+import type { Profilecard } from "@schema/types";
 
 export type { Profilecard };
 export default Profilecard;

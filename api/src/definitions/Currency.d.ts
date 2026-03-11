@@ -1,1 +1,1 @@
-export type { Currency, CurrencyLabel } from "/api/schema/types";
+export type { Currency, CurrencyLabel } from "@schema/types";

@@ -1,6 +1,6 @@
 // database-related factory helpers for tests
 
-import { Schemas } from "/api/schema";
+import { Schemas } from "@schema";
 
 const MONGODB_DB_COLLECTION = {
     get: jest.fn(),

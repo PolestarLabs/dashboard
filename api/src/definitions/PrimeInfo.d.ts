@@ -1,1 +1,1 @@
-export type { PrimeInfo } from "/api/schema/types";
+export type { PrimeInfo } from "@schema/types";

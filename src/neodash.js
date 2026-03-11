@@ -232,7 +232,7 @@ setTimeout(()=>{
 const redisHost = process.env.REDIS_HOST || "127.0.0.1";
 const redisPort = parseInt(process.env.REDIS_PORT || "6379", 10);
 
-(require('/api/schema'))({
+(require('./api/schema'))({
 	url: dbURL,
 	options: dbOptions,
 },{

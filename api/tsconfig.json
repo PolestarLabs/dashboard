@@ -26,7 +26,8 @@
       "@helpers/*":  ["helpers/*"],
       "@definitions/*": ["definitions/*"],
       "@services/*": ["services/*"],
-      "@schemas/*":  ["schemas/*"]
+      "@schemas/*":  ["schemas/*"],
+      "@schema/*":  ["schema/*"]
     }
   },
   "include": ["src/**/*.ts"],
