@@ -20,6 +20,8 @@ jobs:
           cd "$DIR"
           git fetch origin
           git reset --hard origin/master
+          # ensure schema submodule is checked out
+          git submodule update --init --recursive
 
   deps-production:
     name: 📦 Dependencies (Production)

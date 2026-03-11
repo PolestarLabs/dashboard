@@ -27,6 +27,8 @@ jobs:
           else
             git reset --hard origin/dev
           fi
+          # make sure submodules are present for builds/deploys
+          git submodule update --init --recursive
 
   deps-staging:
     name: 📦 Dependencies (Staging)
