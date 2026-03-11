@@ -27,7 +27,8 @@
       "@definitions/*": ["definitions/*"],
       "@services/*": ["services/*"],
       "@schemas/*":  ["schemas/*"],
-      "@schema/*":  ["schema/*"]
+      "@schema":  ["../schema/index.js"],
+      "@schema/*":  ["../schema/*"]
     }
   },
   "include": ["src/**/*.ts"],

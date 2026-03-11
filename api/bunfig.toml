@@ -14,4 +14,5 @@ frozenLockfile = false
 "@definitions/*" = "src/definitions/*"
 "@services/*" = "src/services/*"
 "@schemas/*" = "src/schemas/*"
+"@schema" = "src/schema/index.js"
 "@schema/*" = "src/schema/*"
