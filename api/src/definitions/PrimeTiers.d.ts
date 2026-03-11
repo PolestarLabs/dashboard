@@ -1,1 +1,1 @@
-export type { PrimeTier } from "@polestarlabs/database_schema/types";
+export type { PrimeTier } from "/api/schema/types";

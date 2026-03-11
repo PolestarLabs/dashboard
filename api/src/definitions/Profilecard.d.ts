@@ -1,4 +1,4 @@
-import type { Profilecard } from "@polestarlabs/database_schema/types";
+import type { Profilecard } from "/api/schema/types";
 
 export type { Profilecard };
 export default Profilecard;

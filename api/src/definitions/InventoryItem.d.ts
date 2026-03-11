@@ -4,9 +4,9 @@ export type {
   ItemSeries,
   ItemFilter,
   UserItem,
-} from "@polestarlabs/database_schema/types";
+} from "/api/schema/types";
 
-import type { UserItem, ItemType } from "@polestarlabs/database_schema/types";
+import type { UserItem, ItemType } from "/api/schema/types";
 
 /** @deprecated Use `UserItem` from the schema package instead. */
 export type UserInventoryItem = UserItem;

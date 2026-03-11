@@ -1,1 +1,1 @@
-export type { Rarity } from "@polestarlabs/database_schema/types";
+export type { Rarity } from "/api/schema/types";

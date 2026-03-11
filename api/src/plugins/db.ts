@@ -10,8 +10,8 @@
  * Call connectDB() once during app startup (server.ts) before listening.
  */
 
-import initSchema from "@polestarlabs/database_schema";
-import type { Schemas } from "@polestarlabs/database_schema";
+import initSchema from "/api/schema";
+import type { Schemas } from "/api/schema";
 import Redis from "ioredis";
 
 // ── Config ───────────────────────────────────────────────────────────────────
@@ -41,7 +41,7 @@ export async function connectDB(): Promise<void> {
  *   db.users.get(id)
  *   db.cosmetics.find({})
  *
- * Strongly typed with the Schemas interface from @polestarlabs/database_schema.
+ * Strongly typed with the Schemas interface from /api/schema.
  * Index signature allows access to properties not yet in the Schemas interface.
  */
 export const db = new Proxy({} as Schemas & Record<string, any>, {

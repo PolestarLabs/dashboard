@@ -1,1 +1,1 @@
-export type { Currency, CurrencyLabel } from "@polestarlabs/database_schema/types";
+export type { Currency, CurrencyLabel } from "/api/schema/types";

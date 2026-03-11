@@ -1,1 +1,1 @@
-export type { PrimeInfo } from "@polestarlabs/database_schema/types";
+export type { PrimeInfo } from "/api/schema/types";

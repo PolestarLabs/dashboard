@@ -1,9 +1,9 @@
 
-export type { User, User as UserDoc } from "@polestarlabs/database_schema/types";
+export type { User, User as UserDoc } from "/api/schema/types";
 
-import type { Currency } from "@polestarlabs/database_schema/types";
-import type { Profilecard } from "@polestarlabs/database_schema/types";
-import type { PrimeTier } from "@polestarlabs/database_schema/types";
+import type { Currency } from "/api/schema/types";
+import type { Profilecard } from "/api/schema/types";
+import type { PrimeTier } from "/api/schema/types";
 
 export type ApiUser = {
     id: string;
