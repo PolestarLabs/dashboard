@@ -17,13 +17,22 @@ services:
 
   api:
     build:
-      context: .
-      dockerfile: api/Dockerfile
+      context: ./api
+      dockerfile: Dockerfile
+    volumes:
+      - ./api/src:/app/src
+      - ./api/scripts:/app/scripts
     environment:
-      - MONGO_URL=mongodb://mongo:27017/pollux
+      - MONGO_URL=${DB_INFO}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - API_PORT=7056
+      - MASTER_API_TOKEN=${MASTER_API_TOKEN}
+      - DB_INFO=${DB_INFO}
+      - DASHPORT=${DASHPORT}
+      - HOST=${HOST}
+      - CLIENTS=${CLIENTS}
+      - HOST=${HOST}
     ports:
       - "7056:7056"
     depends_on:
@@ -34,8 +43,12 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - ./src:/app/src 
     environment:
-      - DB_INFO=mongodb://mongo:27017/pollux
+      - DB_INFO=${DB_INFO}
+      - HOST=${HOST}
+      - CLIENTS=${CLIENTS}
       - REDIS_HOST=redis
       - REDIS_PORT=6379
       - DASHPORT=4728
