@@ -354,6 +354,7 @@ jobs:
           # fetch PR head into a temporary ref, force updating in case of non-fast-forward
           git fetch origin "+${prref}:pr-head"
           git reset --hard pr-head
+          git submodule update --init --recursive
       - name: Install API deps
         run: |
           cd "$DIR"/api
