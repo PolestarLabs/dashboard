@@ -179,7 +179,7 @@ const CRAFTING = new Vue({
     commitCraft(item, pot) {
       console.log({ pot });
       return new Promise(async (resolve) => {
-        fetch("/api/crafting/create", {
+        fetch("/api/v1/crafting/create", {
           method: "POST",
           headers: { "Content-Type": "application/json; charset=utf-8" },
           body: JSON.stringify({ pot, item }),
@@ -193,7 +193,7 @@ const CRAFTING = new Vue({
     fetchDiscovery() {
       this.discovery = { loading: true };
       if (!this.pot.length) return (this.discovery = { loading: false });
-      fetch("/api/crafting/mix", {
+      fetch("/api/v1/crafting/mix", {
         method: "POST",
         headers: { "Content-Type": "application/json; charset=utf-8" },
         body: JSON.stringify({ pot: this.pot }),
@@ -213,7 +213,7 @@ const CRAFTING = new Vue({
 });
 
 fetch(
-  "/api/user/" + userdata.id + "/inventory"
+  "/api/v1/user/" + userdata.id + "/inventory"
 ).then((r) => r.json().then((res) => (CRAFTING.inventory = res)));
 
 function notify(N) {

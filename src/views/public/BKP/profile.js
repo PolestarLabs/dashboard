@@ -21,12 +21,12 @@ function since(x){
       },
     methods:{
        bgInfo(bgID){
-          fetch("/api/cosmetics/search?code="+bgID+"&.png").then(r =>
+          fetch("/api/v1/cosmetics/search?code="+bgID+"&.png").then(r =>
             r.json().then(res => {
                 console.log(res)
                 this.bgData = res[0] || {name: "UNKNOWN", rarity: "C" };
                 if(!res[0]) return;
-                fetch("/api/marketplace?item_id="+this.bgData._id+"&.png").then(r =>
+                fetch("/api/v1/marketplace?item_id="+this.bgData._id+"&.png").then(r =>
                     r.json().then(res => {
                       const payload = {}
                       payload.entries = res.length
@@ -78,10 +78,10 @@ function since(x){
     }
   })
   
-fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
+fetch("/api/v1/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  RIGHT_COLUMN.commendInfo = res  )
 );
   
-fetch("/api/relationships?uid="+userprofile.id+"&.png").then(r =>
+fetch("/api/v1/relationships?uid="+userprofile.id+"&.png").then(r =>
     r.json().then(res =>  LEFT_COLUMN.relationships = res  )
 );

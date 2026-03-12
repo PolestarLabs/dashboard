@@ -44,12 +44,12 @@ function since(x){
       },
     methods:{
        bgInfo(bgID){
-          fetch("/api/cosmetics/backgrounds/"+bgID).then(r =>
+          fetch("/api/v1/cosmetics/backgrounds/"+bgID).then(r =>
             r.json().then(res_1 => {
                 console.log(res_1)
                 this.bgData = res_1 || {name: "UNKNOWN", rarity: "C" };
                 if(!res_1) return;
-                fetch("/api/marketplace?item_id="+this.bgData._id).then(r =>
+                fetch("/api/v1/marketplace?item_id="+this.bgData._id).then(r =>
                     r.json().then(res_2 => {
                       const payload = {}
                       payload.entries = res_2.length
@@ -149,49 +149,49 @@ function since(x){
   })
 
 
-fetch("/api/cosmetics/count/background").then(r =>
+fetch("/api/v1/cosmetics/count/background").then(r =>
   r.json().then(res => (PROFILE.backgroundsSize = res) )
 );
-fetch("/api/cosmetics/count/sticker").then(r =>
+fetch("/api/v1/cosmetics/count/sticker").then(r =>
   r.json().then(res => (PROFILE.stickersSize = res) )
 );
-fetch("/api/cosmetics/count/medal").then(r =>
+fetch("/api/v1/cosmetics/count/medal").then(r =>
   r.json().then(res => (PROFILE.medalsSize = res) )
 );
 
 
-fetch("/api/relationships?uid="+userprofile.id+"&plxdata=1").then(r =>
+fetch("/api/v1/relationships?uid="+userprofile.id+"&plxdata=1").then(r =>
     r.json().then(res =>  PROFILE.relationships = res  )
 );
 
-fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
+fetch("/api/v1/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );
-fetch("/api/user/"+userprofile.id+"/commends/in?full=1").then(r =>
+fetch("/api/v1/user/"+userprofile.id+"/commends/in?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendRank.in = res  )
 );
   
-fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
+fetch("/api/v1/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );  
 
-fetch("/api/cosmetics/stickers/"+userprofile.profile.sticker).then(r =>
+fetch("/api/v1/cosmetics/stickers/"+userprofile.profile.sticker).then(r =>
     r.json().then(res =>  PROFILE.sticker = res  )
 );
 
-fetch("/api/cosmetics/backgrounds/"+userprofile.profile.bgID).then(r =>
+fetch("/api/v1/cosmetics/backgrounds/"+userprofile.profile.bgID).then(r =>
     r.json().then(res =>  PROFILE.background = res  )
 );
 
 
 userprofile.profile.medals.forEach(async (medal,i)=>{
 
-  fetch("/api/cosmetics/search?type=medal&icon="+userprofile.profile.medals[i]).then(r =>{
+  fetch("/api/v1/cosmetics/search?type=medal&icon="+userprofile.profile.medals[i]).then(r =>{
 
     r.json().then(res => {
       PROFILE.medals[i] = res[0]
       if(!res[0]){
-        fetch("/api/achievements/"+userprofile.profile.medals[i]).then(rr =>
+        fetch("/api/v1/achievements/"+userprofile.profile.medals[i]).then(rr =>
           rr.json().then(res2 =>  {
             if(!res2) return PROFILE.medals[i] = {name:"Unknown ",type:'achievement'};
             PROFILE.medals[i] = res2[0];
