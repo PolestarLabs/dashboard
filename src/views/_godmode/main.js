@@ -21,13 +21,13 @@ const MENU = new Vue({
     },
     methods:{
         selectUser(){
-            fetch("/api/user/"+this.seluid).then(r =>
+            fetch("/api/v1/user/"+this.seluid).then(r =>
                 r.json().then(res =>  this.selectedUser = res  )
             );  
             
         },
         selectServer(){
-            fetch("/api/server/"+this.selectedServerID).then(r =>
+            fetch("/api/v1/server/"+this.selectedServerID).then(r =>
                 r.json().then(res =>  this.selectedServer = res  )
             );  
             
@@ -99,26 +99,26 @@ const MENU = new Vue({
 
   
 
-fetch("/api/cosmetics/all").then(r =>
+fetch("/api/v1/cosmetics/all").then(r =>
     r.json().then(res =>  MENU.stickers = res  )
 );
 
-fetch("/api/cosmetics/all").then(r =>
+fetch("/api/v1/cosmetics/all").then(r =>
     r.json().then(res =>  MENU.cosmetics = res  )
 );
 
-fetch("/api/cosmetics/all").then(r =>
+fetch("/api/v1/cosmetics/all").then(r =>
     r.json().then(res =>  MENU.bgs = res  )
 );
 
-fetch("/api/cosmetics/all").then(r =>
+fetch("/api/v1/cosmetics/all").then(r =>
     r.json().then(res =>  MENU.medals = res  )
 );
 
-fetch("/api/cosmetics/all").then(r =>
+fetch("/api/v1/cosmetics/all").then(r =>
     r.json().then(res =>  MENU.flairs = res  )
 );
 
-fetch("/api/items/all").then(r =>
+fetch("/api/v1/items/all").then(r =>
     r.json().then(res =>  MENU.items = res  )
 );

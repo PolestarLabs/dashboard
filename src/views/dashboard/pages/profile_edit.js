@@ -131,7 +131,7 @@ destroyed() {
     },
     createNewCustomBg(){
       if(isPremium()){
-        fetch(`/api/cosmetics/backgrounds/custom`, {
+        fetch(`/api/v1/cosmetics/backgrounds/custom`, {
           method: 'POST',
           headers: {'Content-Type':"application/json;charset=UTF-8"}
         }).then(res=>{
@@ -154,7 +154,7 @@ destroyed() {
       //let dataForm = new FormData();
       //dataForm.append(`file`, this.$refs.custombgHolder.files[0]);
       
-      await fetch(`/api/cosmetics/backgrounds/custom`, {
+      await fetch(`/api/v1/cosmetics/backgrounds/custom`, {
         method: 'PATCH',
         headers: {'Content-Type':"application/json;charset=UTF-8"},
         body: JSON.stringify({data: CANVAS.toDataURL() }),
@@ -237,7 +237,7 @@ destroyed() {
       this.favcolor.hex = color;
     },
     calculateSuggestionColors(bgID){
-      fetch(`/api/cosmetics/backgrounds/${bgID}/colors`).then(r =>
+      fetch(`/api/v1/cosmetics/backgrounds/${bgID}/colors`).then(r =>
         r.json().then(res =>  this.favcolorOptions = res )
       );
     },
@@ -532,11 +532,11 @@ async function AUTOSAVE(what,silent) {
 }
 
 
-fetch("/api/relationships?uid="+userinfo.id).then(r =>
+fetch("/api/v1/relationships?uid="+userinfo.id).then(r =>
   r.json().then(res =>  DASH.RSHP = res.map(rel=> {rel.wife = rel.usersData.find(w=>w.id!=userdata.id); delete rel.usersData; return rel} )||[]  )
 );
 
-fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
+fetch("/api/v1/items/search?type=boosterpack&all=1").then((r) =>
   r.json().then((res) => {
 
     DASH.boostersAvailable = res.map((pack) => {
@@ -545,7 +545,7 @@ fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
     });
     DASH.boostersAvailable = res;
  
-    fetch("/api/user/" + userinfo.id + "/stickers").then(
+    fetch("/api/v1/user/" + userinfo.id + "/stickers").then(
       (r) =>
         r.json().then((res2) => {
           DASH.calculateSuggestionColors(userdata.profile.bgID)
@@ -566,7 +566,7 @@ fetch("/api/items/search?type=boosterpack&all=1").then((r) =>
 );
 
 function updateUserBGs(){
-  fetch("/api/user/"+userinfo.id+"/bgs").then(r =>
+  fetch("/api/v1/user/"+userinfo.id+"/bgs").then(r =>
     r.json().then(res =>  {
  
       DASH.selectBackground = res.find((bg) => bg.code == userdata.profile.bgID) || "none";
@@ -607,7 +607,7 @@ function updateUserBGs(){
 
 updateUserBGs()
 
-fetch("/api/user/"+userinfo.id+"/medals").then(r =>
+fetch("/api/v1/user/"+userinfo.id+"/medals").then(r =>
   r.json().then(res => {
     DASH.medals = res||[];
     DASH.medalsEquipped = res.filter((m,i,a)=> userdata.profile.medals.includes(m.icon) && a.map(x=>x.icon).indexOf(m.icon)===i)

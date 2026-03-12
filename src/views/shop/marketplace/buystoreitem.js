@@ -10,7 +10,7 @@ function buyStoreItem(type,item,currency="RBN",marketOps = {}){
       onOpen: Swal.clickConfirm,    
       preConfirm: () =>
         fetch(
-          `/api/shop/${type}/${(marketOps.type=='buy'?'sell':'buy') || 'buy'}/${item}`,
+          `/api/v1/shop/${type}/${(marketOps.type=='buy'?'sell':'buy') || 'buy'}/${item}`,
           {
             method:"POST",
             headers: {'Content-Type': 'application/json'},
