@@ -13,10 +13,40 @@
 import initSchema from "@polestarlabs/database_schema";
 import type { Schemas } from "@polestarlabs/database_schema";
 import Redis from "ioredis";
+import { createRequire } from "module";
+
+// ── Mongoose 5.x compat ──────────────────────────────────────────────────────
+// database_schema bundles its own mongoose (5.x) which must have the legacy
+// URL-parser and SDAM flags set globally, or the mongodb driver emits
+// deprecation warnings.  We grab the exact mongoose instance that the package
+// will use so the global set() calls are on the right module instance, and we
+// guard on the major version so this is a no-op when the package upgrades to
+// mongoose 6+.
+(function patchBundledMongoose() {
+  try {
+    const _require = createRequire(import.meta.url);
+    // Try the nested path first (database_schema ships its own mongoose copy).
+    let _mongoose: any;
+    try {
+      _mongoose = _require("@polestarlabs/database_schema/node_modules/mongoose");
+    } catch {
+      _mongoose = _require("mongoose");
+    }
+    const major = parseInt((_mongoose as any).version?.split(".")[0] ?? "6", 10);
+    if (major < 6) {
+      _mongoose.set("useNewUrlParser",    true);
+      _mongoose.set("useUnifiedTopology", true);
+      _mongoose.set("useCreateIndex",     true);
+      _mongoose.set("useFindAndModify",   false);
+    }
+  } catch {
+    // Non-fatal: best-effort suppression
+  }
+})();
 
 // ── Config ───────────────────────────────────────────────────────────────────
 
-const MONGO_URL  = process.env.MONGO_URL ?? process.env.MONGODB_URL ?? "";
+const MONGO_URL  = process.env.MONGO_URL ?? process.env.MONGODB_URL ?? process.env.DB_INFO ?? "";
 const REDIS_HOST = process.env.REDIS_HOST ?? "127.0.0.1";
 const REDIS_PORT = parseInt(process.env.REDIS_PORT ?? "6379", 10);
 
