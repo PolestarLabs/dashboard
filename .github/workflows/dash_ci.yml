@@ -322,18 +322,24 @@ jobs:
       DIR: ${{ secrets.DASH_DIR_DEV }}
       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
+      - name: Backup current state
+        run: |
+          cd "$DIR"
+          git rev-parse HEAD > /tmp/oldrev
+          tar -czf /tmp/node_modules.tar.gz node_modules || true
       - name: Sync api folder
         run: |
           set -e
           cd "$DIR"
           git fetch origin
-          #git checkout origin/elysia -- api
-          # force checkout to discard local changes then into the current PR head.
-          # pull the PR head directly
-          prref=${{ github.event.pull_request.head.ref }}
-          # fetch PR head into a temporary ref, force updating in case of non-fast-forward
-          git fetch origin "+${prref}:pr-head"
-          git reset --hard pr-head
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # pull the PR head directly
+            prref=${{ github.event.pull_request.head.ref }}
+            git fetch origin "$prref":"pr-head"
+            git reset --hard pr-head
+          else
+            git reset --hard origin/dev
+          fi
       - name: Install API deps
         run: |
           cd "$DIR"/api
@@ -347,5 +353,17 @@ jobs:
         run: |
           cd "$DIR"/api
           bun build src/index.ts --bundle --target=bun --format=cjs --outdir=dist
-      - name: Restart api-dev
-        run: pm2 restart api-dev
+      #- name: Restart api-dev
+        #run: pm2 restart api-dev
+      - name: Run deploy script
+        run: |
+          current=$(git -C "${{ secrets.DASH_DIR_DEV }}" rev-parse HEAD)
+          /home/pollux/polaris/scripts/server-deploy.sh dashboard staging "$current"
+          
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          cd "$DIR"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1
