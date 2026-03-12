@@ -28,8 +28,11 @@ export async function connectDB(): Promise<void> {
   const _g = globalThis as Record<string, any>;
   if (!_g.PLX) _g.PLX = {};
 
+  // the MongoDB driver (v4+) enables the new parser/topology by default
+  // and complains about explicit flags; cloak them completely so the
+  // underlying schema module receives a clean options object.
   _db = await initSchema(
-    { url: MONGO_URL, options: { useNewUrlParser: true, useUnifiedTopology: true }, hook: undefined },
+    { url: MONGO_URL, options: {}, hook: undefined },
     { redis: { host: REDIS_HOST, port: REDIS_PORT } },
   );
 
