@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import RarityboxButton from './RarityboxButton.vue';
+import Gem from '../Gem/Gem.vue';
 
 const meta: Meta<typeof RarityboxButton> = {
   title: 'Stardust PLX/Raritybox Button',
@@ -41,7 +42,7 @@ export const Default: Story = {
     },
     template: `
       <RarityboxButton v-bind="args">
-        <span class="s-rarity-btn__price">Buy</span>
+        <span >Buy</span>
       </RarityboxButton>
     `,
   }),
@@ -57,7 +58,7 @@ export const SpecialAlt: Story = {
     template: `
       <RarityboxButton v-bind="args">
         <i class="fas fa-star" aria-hidden="true"></i>
-        <span class="s-rarity-btn__price">Special</span>
+        <span >Special</span>
       </RarityboxButton>
     `,
   }),
@@ -73,7 +74,7 @@ export const Sticker: Story = {
     template: `
       <RarityboxButton v-bind="args">
         <i class="fas fa-info-circle" aria-hidden="true"></i>
-        <span class="s-rarity-btn__price">PACK INFO</span>
+        <span >PACK INFO</span>
       </RarityboxButton>
     `,
   }),
@@ -89,7 +90,7 @@ export const Craft: Story = {
     template: `
       <RarityboxButton v-bind="args">
         <i class="fas fa-flask" aria-hidden="true"></i>
-        <span class="s-rarity-btn__price">CRAFT INFO</span>
+        <span >CRAFT INFO</span>
       </RarityboxButton>
     `,
   }),
@@ -98,14 +99,14 @@ export const Craft: Story = {
 export const EventWithPrice: Story = {
   args: { variant: 'event', alt: true },
   render: (args) => ({
-    components: { RarityboxButton },
+    components: { RarityboxButton, Gem },
     setup() {
       return { args };
     },
     template: `
       <RarityboxButton v-bind="args">
-        <i class="fas fa-ticket-alt" aria-hidden="true"></i>
-        <span class="s-rarity-btn__price">1 500</span>
+        <Gem v="EVT"/>
+        <span class="price">1 500</span>
       </RarityboxButton>
     `,
   }),
@@ -120,7 +121,7 @@ export const Search: Story = {
     },
     template: `
       <RarityboxButton v-bind="args">
-        <span class="s-rarity-btn__price">Search</span>
+        <span >Search</span>
       </RarityboxButton>
     `,
   }),
@@ -136,7 +137,7 @@ export const Disabled: Story = {
     template: `
       <RarityboxButton v-bind="args">
         <i class="fas fa-check" aria-hidden="true"></i>
-        <span class="s-rarity-btn__price">Obtained</span>
+        <span >Obtained</span>
       </RarityboxButton>
     `,
   }),
@@ -151,7 +152,21 @@ export const Limitless: Story = {
     },
     template: `
       <RarityboxButton v-bind="args">
-        <span class="s-rarity-btn__price">Wide label</span>
+        <span >Very Wide label</span>
+      </RarityboxButton>
+    `,
+  }),
+};
+
+export const Cash: Story = {
+  args: { variant: 'default', limitless: true },
+  render: (args) => ({
+    components: { RarityboxButton },
+    setup() { return { args }; },
+    template: `
+      <RarityboxButton v-bind="args">
+        <i class="fas fa-dollar-sign" aria-hidden="true"></i>
+        <span class="price">15<span class="cents">.00</span></span>
       </RarityboxButton>
     `,
   }),
@@ -159,16 +174,18 @@ export const Limitless: Story = {
 
 export const AllVariants: Story = {
   render: () => ({
-    components: { RarityboxButton },
+    components: { RarityboxButton, Gem },
     template: `
       <div class="flex flex-wrap gap-4 p-4 bg-base-300 rounded-lg">
-        <RarityboxButton variant="default"><span class="s-rarity-btn__price">Default</span></RarityboxButton>
-        <RarityboxButton variant="sticker" alt><i class="fas fa-box" aria-hidden="true"></i><span class="s-rarity-btn__price">Sticker</span></RarityboxButton>
-        <RarityboxButton variant="special" alt><i class="fas fa-star" aria-hidden="true"></i><span class="s-rarity-btn__price">Special</span></RarityboxButton>
-        <RarityboxButton variant="craft" alt><i class="fas fa-flask" aria-hidden="true"></i><span class="s-rarity-btn__price">Craft</span></RarityboxButton>
-        <RarityboxButton variant="advcraft" alt><i class="fas fa-vial" aria-hidden="true"></i><span class="s-rarity-btn__price">Adv. Craft</span></RarityboxButton>
-        <RarityboxButton variant="event" alt><i class="fas fa-ticket-alt" aria-hidden="true"></i><span class="s-rarity-btn__price">Event</span></RarityboxButton>
-        <RarityboxButton variant="search"><span class="s-rarity-btn__price">Search</span></RarityboxButton>
+        <RarityboxButton variant="default"><span >Default</span></RarityboxButton>
+        <RarityboxButton variant="sticker" alt><i class="fas fa-box" aria-hidden="true"></i><span >Sticker</span></RarityboxButton>
+        <RarityboxButton variant="special" alt><i class="fas fa-star" aria-hidden="true"></i><span >Special</span></RarityboxButton>
+        <RarityboxButton variant="craft" alt><i class="fas fa-flask" aria-hidden="true"></i><span >Craft</span></RarityboxButton>
+        <RarityboxButton variant="advcraft" alt><i class="fas fa-vial" aria-hidden="true"></i><span >Adv. Craft</span></RarityboxButton>
+        <RarityboxButton variant="event" alt><Gem v="EVT"/><span class="price">1 500</span></RarityboxButton>
+        <RarityboxButton variant="search"><span >Search</span></RarityboxButton>
+        <RarityboxButton variant="default" disabled><i class="fas fa-check" aria-hidden="true"></i><span >Obtained</span></RarityboxButton>
+        <RarityboxButton variant="default" limitless><span >Very Wide label</span></RarityboxButton>
       </div>
     `,
   }),
