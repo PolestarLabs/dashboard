@@ -27,3 +27,11 @@ api/tmp/*
 .github/copilot
 api/scripts/routes.md
 api/src/routes/from_bot_draft.ts
+.cursor/
+.apm/
+storybook-static/
+storybook-static-*
+storybook-static-*/**
+debug.log
+logs/
+*.log
