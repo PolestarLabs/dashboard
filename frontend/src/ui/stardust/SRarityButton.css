@@ -1,0 +1,159 @@
+/* Extracted from legacy rarityboxes.css for .raritybox .button / .shopbox .button.
+   Self-contained: only classes used by the rarity/shop button. */
+
+.s-rarity-btn {
+  --s-rarity-main: #ffba3b;
+  --s-rarity-fade: rgba(72, 35, 58, 0.82);
+  --s-rarity-glow: #2245;
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+  margin: 4px;
+  display: flex;
+  align-items: center;
+  border: solid 4px var(--s-rarity-main);
+  box-shadow: 0 0 0 3px var(--s-rarity-glow);
+  color: var(--s-rarity-main);
+  border-radius: 100px;
+  width: 185px;
+  justify-content: center;
+  background-image: radial-gradient(var(--s-rarity-main), var(--s-rarity-fade) 70%);
+  background-size: 250px 250px;
+  background-position: center 0;
+  transition: all 100ms ease;
+  height: 40px;
+  text-decoration: none;
+  font-family: Panton, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 12pt;
+}
+
+.s-rarity-btn:hover {
+  box-shadow: 0 5px 20px var(--s-rarity-dim, var(--s-rarity-main));
+  background-position: center -30px;
+}
+
+.s-rarity-btn:active {
+  box-shadow: 0 0 10px var(--s-rarity-main);
+  background-image: radial-gradient(#ffba3b, rgba(36, 36, 83, 0.7) 70%);
+  background-position: center 10px;
+  transition: all 10ms ease;
+}
+
+/* Variant: sticker (green) */
+.s-rarity-btn--sticker {
+  --s-rarity-main: #0bab4b;
+  --s-rarity-dim: #0bfb4b88;
+  --s-rarity-fade: #0b103b;
+  border-color: #0b7b4b;
+  box-shadow: 0 0 0 3px #2245;
+  background-blend-mode: multiply;
+}
+
+/* Variant: special (orange) */
+.s-rarity-btn--special {
+  --s-rarity-main: #fb8b3b;
+  --s-rarity-dim: #f11;
+  --s-rarity-fade: #ab152b;
+}
+
+/* Variant: craft (cyan) */
+.s-rarity-btn--craft {
+  --s-rarity-main: #3bd7fb;
+  --s-rarity-dim: #3134e3;
+  --s-rarity-fade: #122b77;
+}
+
+/* Variant: advcraft (blue) */
+.s-rarity-btn--advcraft {
+  --s-rarity-main: #2b74ff;
+  --s-rarity-dim: #e33131;
+  --s-rarity-fade: #1f1871;
+}
+
+/* Variant: event (pink) */
+.s-rarity-btn--event {
+  --s-rarity-main: #ff2b98;
+  --s-rarity-dim: #e33163;
+  --s-rarity-fade: #201231;
+  font-size: 26pt;
+}
+
+/* Variant: sapphires */
+.s-rarity-btn--sapphires {
+  --s-rarity-main: #3bd7fb;
+  --s-rarity-dim: #3134e3;
+  --s-rarity-fade: #122b77;
+  width: 8rem;
+  font-size: 26pt;
+}
+
+/* Variant: rubines */
+.s-rarity-btn--rubines {
+  --s-rarity-main: #fb3b3b;
+  --s-rarity-dim: #e33134;
+  --s-rarity-fade: #77122b;
+  width: 11rem;
+  font-size: 26pt;
+}
+
+/* Variant: search (accent – uses theme or fallback) */
+.s-rarity-btn--search {
+  --s-rarity-main: var(--accent-color, #f35);
+  --s-rarity-dim: var(--accent-color, #f35);
+  --s-rarity-fade: var(--accent-color-dark, #d05);
+  font-size: 26pt;
+}
+
+/* Variant: custom (--this-color from parent) */
+.s-rarity-btn--custom {
+  --s-rarity-main: var(--this-color, #ffba3b);
+  --s-rarity-dim: var(--this-dim, var(--this-color, #ffba3b));
+  --s-rarity-fade: var(--this-color-dark, var(--this-color, rgba(72, 35, 58, 0.82)));
+  font-size: 26pt;
+}
+
+/* Alt layout: icon + price spacing */
+.s-rarity-btn--alt .s-rarity-btn__price {
+  font-size: 16pt;
+  margin-left: 10px;
+}
+
+.s-rarity-btn--alt i {
+  color: inherit;
+}
+
+/* Price block */
+.s-rarity-btn__price {
+  color: white;
+  font-size: 20pt;
+  font-weight: 800;
+  font-family: Panton, system-ui, sans-serif;
+  line-height: 1.3;
+}
+
+.s-rarity-btn__price .cents {
+  font-weight: 600;
+  font-size: 10pt;
+  vertical-align: super;
+}
+
+/* Icon sizing */
+.s-rarity-btn i {
+  font-size: 12pt;
+}
+
+/* Limitless: width auto */
+.s-rarity-btn--limitless {
+  width: auto !important;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+/* Disabled */
+.s-rarity-btn--disabled,
+.s-rarity-btn[disabled] {
+  filter: saturate(0);
+  pointer-events: none;
+  opacity: 0.5;
+}
