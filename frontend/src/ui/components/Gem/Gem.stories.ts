@@ -11,7 +11,7 @@ const meta: Meta<typeof Gem> = {
   argTypes: {
     v: {
       control: { type: 'select' },
-      options: ['rubine', 'sapphire', 'jade', 'token', 'prism'],
+      options: ['RBN', 'SPH', 'JDE', 'EVT', 'PSM', 'COS'],
     },
     size: {
       control: { type: 'select' },
@@ -24,16 +24,16 @@ export default meta;
 
 type Story = StoryObj<typeof Gem>;
 
-export const Rubine24: Story = {
-  args: { v: 'rubine', size: 24 },
+export const RBN48: Story = {
+  args: { v: 'RBN', size: 48 },
 };
 
-export const Sapphire32: Story = {
-  args: { v: 'sapphire', size: 32 },
+export const SPH32: Story = {
+  args: { v: 'SPH', size: 32 },
 };
 
-export const Jade48: Story = {
-  args: { v: 'jade', size: 48 },
+export const JDE24: Story = {
+  args: { v: 'JDE', size: 24 },
 };
 
 export const AllVariants: Story = {
@@ -41,11 +41,12 @@ export const AllVariants: Story = {
     components: { Gem, Icon },
     template: `
       <div class="flex flex-row items-center gap-4">
-        <Gem v="rubine" :size="32" />
-        <Gem v="sapphire" :size="32" />
-        <Gem v="jade" :size="32" />
-        <Gem v="token" :size="32" />
-        <Gem v="prism" :size="32" />
+        <Gem v="RBN" :size="32" />
+        <Gem v="SPH" :size="32" />
+        <Gem v="JDE" :size="32" />
+        <Gem v="EVT" :size="32" />
+        <Gem v="PSM" :size="32" />
+        <Gem v="COS" :size="32" />
       </div>
     `,
   }),

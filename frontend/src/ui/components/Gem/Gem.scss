@@ -2,23 +2,27 @@
   background-size: contain;
   background-repeat: no-repeat;
 
-  &--rubine {
+  &--RBN {
     background-image: url('https://cdn.pollux.gg/images/gems/RBN.png');
   }
 
-  &--sapphire {
+  &--SPH {
     background-image: url('https://cdn.pollux.gg/images/gems/SPH.png');
   }
 
-  &--jade {
+  &--JDE {
     background-image: url('https://cdn.pollux.gg/images/gems/JDE.png');
   }
 
-  &--token {
+  &--EVT {
     background-image: url('https://cdn.pollux.gg/images/gems/EVT.png');
   }
 
-  &--prism {
+  &--PSM {
     background-image: url('https://cdn.pollux.gg/images/gems/PSM.png');
+  }
+
+  &--COS {
+    background-image: url('https://cdn.pollux.gg/images/gems/COS.png');
   }
 }

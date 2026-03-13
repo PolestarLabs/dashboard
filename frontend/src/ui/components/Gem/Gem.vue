@@ -9,11 +9,11 @@ import './Gem.scss';
 
 const props = withDefaults(
   defineProps<{
-    v?: 'rubine' | 'sapphire' | 'jade' | 'token' | 'prism';
+    v?: 'RBN' | 'SPH' | 'JDE' | 'EVT' | 'PSM' | 'COS';
     size?: 24 | 32 | 48 | 64;
   }>(),
   {
-    v: 'rubine',
+    v: 'RBN',
     size: 24,
   },
 );
