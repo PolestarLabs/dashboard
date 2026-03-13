@@ -26,6 +26,7 @@ export interface MarketplaceListing {
   name: string;
   price: number;
   type: string;
+  img?: string;
 }
 
 export interface MarketplaceListParams {

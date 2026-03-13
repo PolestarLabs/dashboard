@@ -1,0 +1,76 @@
+/* Legacy Pollux fonts: Panton + Proxima Soft
+   Copied from src/views/late-load.css so Stardust UI and
+   the new dashboard can use the same font-family names. */
+
+@font-face {
+  font-family: 'Panton';
+  src:
+    url('/fonts/panton/panton-black-webfont.woff2') format('woff2'),
+    url('https://pollux.gg/fonts/panton/panton-black-webfont.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Panton';
+  src:
+    url('/fonts/panton/panton-bold-webfont.woff2') format('woff2'),
+    url('https://pollux.gg/fonts/panton/panton-bold-webfont.woff2') format('woff2');
+  font-display: swap;
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Panton';
+  src:
+    url('/fonts/panton/panton-light-webfont.woff2') format('woff2'),
+    url('https://pollux.gg/fonts/panton/panton-light-webfont.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Panton';
+  src:
+    url('/fonts/panton/panton-regular-webfont.woff2') format('woff2'),
+    url('https://pollux.gg/fonts/panton/panton-regular-webfont.woff2') format('woff2');
+  font-display: swap;
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Panton';
+  src:
+    url('/fonts/panton/panton-thin-webfont.woff2') format('woff2'),
+    url('https://pollux.gg/fonts/panton/panton-thin-webfont.woff2') format('woff2');
+  font-display: swap;
+  font-weight: 100;
+  font-style: normal;
+}
+
+/* Proxima Soft (subset used in late-load.css) */
+
+@font-face {
+  font-family: 'Proxima Soft';
+  src:
+    url('/fonts/proximasoft/proxima-nova-soft-bold.woff'),
+    url('https://pollux.gg/fonts/proximasoft/proxima-nova-soft-bold.woff');
+  font-display: swap;
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Proxima Soft';
+  src:
+    url('/fonts/proximasoft/proxima-nova-soft-normal.woff'),
+    url('https://pollux.gg/fonts/proximasoft/proxima-nova-soft-normal.woff');
+  font-display: swap;
+  font-weight: 400;
+  font-style: normal;
+}
+

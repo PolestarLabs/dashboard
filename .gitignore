@@ -35,3 +35,4 @@ storybook-static-*/**
 debug.log
 logs/
 *.log
+stories/
