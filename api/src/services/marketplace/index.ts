@@ -60,8 +60,9 @@ export interface MarketplaceListQuery {
 
 /** Maps an item to its image path (mirrors pathAssociations in the legacy code). */
 export function getImagePath(item: ItemDoc): string {
+  console.log(item.type);
   switch (item.type) {
-    case "background":  return `/backgrounds/${item.code}.png`;
+    case "background":  return `/backdrops/${item.code}.png`;
     case "medal":       return `/medals/${item.icon}.png`;
     case "sticker":     return `/stickers/${item.id}.png`;
     case "boosterpack": return `/items/${item.icon}.png`;
@@ -353,6 +354,7 @@ export async function getMarketplaceListings(
     ...entry,
     userdata: userMap[entry.author] ?? { id: entry.author, username: "Unknown", avatar: null },
     itemdata: allItems.find((i) => String(i._id) === String(entry.item_id)) ?? null,
+    img:     getImagePath(allItems.find((i) => String(i._id) === String(entry.item_id))!),
   }));
 }
 

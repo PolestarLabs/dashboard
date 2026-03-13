@@ -58,9 +58,12 @@ export async function connectDB(): Promise<void> {
   const _g = globalThis as Record<string, any>;
   if (!_g.PLX) _g.PLX = {};
 
+  // Do not pass redis to initSchema. database_schema would create its own node-redis client
+  // and when Redis is down that client can block/hang and make the API unresponsive.
+  // Schema query cache is disabled; auth sessions use our fail-soft redis helper below.
   _db = await initSchema(
     { url: MONGO_URL, options: { useNewUrlParser: true, useUnifiedTopology: true }, hook: undefined },
-    { redis: { host: REDIS_HOST, port: REDIS_PORT } },
+    {},
   );
 
   console.log("✅ [DB] Connected to MongoDB:", MONGO_URL.replace(/:\/\/[^@]*@/, "://***@"));
@@ -84,33 +87,67 @@ export const db = new Proxy({} as Schemas & Record<string, any>, {
 // ── Redis ────────────────────────────────────────────────────────────────────
 
 let _redis: Redis | null = null;
+let redisDisabled = false;
 
 function getRedisClient(): Redis {
+  if (redisDisabled) {
+    throw new Error("Redis disabled due to previous connection failure");
+  }
   if (_redis) return _redis;
-  _redis = new Redis({ host: REDIS_HOST, port: REDIS_PORT, lazyConnect: true });
+  _redis = new Redis({
+    host: REDIS_HOST,
+    port: REDIS_PORT,
+    lazyConnect: true,
+    maxRetriesPerRequest: 1,
+    enableOfflineQueue: false,
+  });
   _redis.on("error", (err) => console.error("[Redis] Error:", err));
   _redis.on("connect", () => console.log(`[Redis] Connected to ${REDIS_HOST}:${REDIS_PORT}`));
   return _redis;
 }
 
 export function connectRedis(): void {
-  getRedisClient();
+  try {
+    getRedisClient();
+  } catch (err) {
+    redisDisabled = true;
+    console.error("[Redis] Disabled — failed to initialise client:", err);
+  }
 }
 
 export const redis = {
   async get<T = unknown>(key: string): Promise<T | null> {
-    const raw = await getRedisClient().get(key);
-    if (!raw) return null;
-    try { return JSON.parse(raw) as T; } catch { return raw as unknown as T; }
+    if (redisDisabled) return null;
+    try {
+      const raw = await getRedisClient().get(key);
+      if (!raw) return null;
+      try { return JSON.parse(raw) as T; } catch { return raw as unknown as T; }
+    } catch (err) {
+      redisDisabled = true;
+      console.error("[Redis] get() failed, disabling redis helper:", err);
+      return null;
+    }
   },
 
   async set(key: string, value: unknown, ttl = 21_600): Promise<void> {
-    const serialised = typeof value === "string" ? value : JSON.stringify(value);
-    await getRedisClient().set(key, serialised, "EX", ttl);
+    if (redisDisabled) return;
+    try {
+      const serialised = typeof value === "string" ? value : JSON.stringify(value);
+      await getRedisClient().set(key, serialised, "EX", ttl);
+    } catch (err) {
+      redisDisabled = true;
+      console.error("[Redis] set() failed, disabling redis helper:", err);
+    }
   },
 
   async del(...keys: string[]): Promise<void> {
-    if (keys.length) await getRedisClient().del(...keys);
+    if (redisDisabled || !keys.length) return;
+    try {
+      await getRedisClient().del(...keys);
+    } catch (err) {
+      redisDisabled = true;
+      console.error("[Redis] del() failed, disabling redis helper:", err);
+    }
   },
 };
 
