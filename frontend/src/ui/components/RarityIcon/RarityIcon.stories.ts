@@ -7,7 +7,7 @@ const meta: Meta<typeof RarityIcon> = {
   component: RarityIcon,
   tags: ['autodocs'],
   argTypes: {
-    variant: {
+    v: {
       control: { type: 'select' },
       options: ['UR', 'SR', 'R', 'U', 'C', 'XR'],
     },
@@ -22,24 +22,24 @@ export default meta;
 
 type Story = StoryObj<typeof RarityIcon>;
 
-export const UR: Story = { args: { variant: 'UR' } };
-export const SR: Story = { args: { variant: 'SR' } };
-export const R: Story = { args: { variant: 'R' } };
-export const U: Story = { args: { variant: 'U' } };
-export const C: Story = { args: { variant: 'C' } };
-export const XR: Story = { args: { variant: 'XR' } };
+export const UR: Story = { args: { v: 'UR' } };
+export const SR: Story = { args: { v: 'SR' } };
+export const R: Story = { args: { v: 'R' } };
+export const U: Story = { args: { v: 'U' } };
+export const C: Story = { args: { v: 'C' } };
+export const XR: Story = { args: { v: 'XR' } };
 
 export const All: Story = {
   render: () => ({
     components: { RarityIcon },
     template: `
       <div class="flex items-center gap-2">
-        <RarityIcon variant="UR" />
-        <RarityIcon variant="SR" />
-        <RarityIcon variant="R" />
-        <RarityIcon variant="U" />
-        <RarityIcon variant="C" />
-        <RarityIcon variant="XR" />
+        <RarityIcon v="UR" />
+        <RarityIcon v="SR" />
+        <RarityIcon v="R" />
+        <RarityIcon v="U" />
+        <RarityIcon v="C" />
+        <RarityIcon v="XR" />
       </div>
     `,
   }),
