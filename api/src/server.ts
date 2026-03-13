@@ -15,6 +15,7 @@ import { serverTiming } from "@elysiajs/server-timing";
 import { connectDB, connectRedis } from "@plugins/db";
 import { authPlugin } from "@plugins/auth";
 
+import { authRoutes } from "@routes/auth";
 import { usersRoutes } from "@routes/users";
 import { serversRoutes } from "@routes/servers";
 import { internalRoutes } from "@routes/internal";
@@ -51,8 +52,8 @@ const app = new Elysia()
     .use(
         cors({
             origin: IS_DEV
-                ? ["https://staging.pollux.gg","https://api-staging.pollux.gg", `http://localhost:${PORT}`]
-                : ["https://pollux.gg"],
+                ? ["https://staging.pollux.gg", "https://api-staging.pollux.gg", `http://localhost:${PORT}`, "http://localhost:5173"]
+                : ["https://pollux.gg", "https://dashboard.pollux.gg"],
             credentials: true,
         })
     )
@@ -62,6 +63,7 @@ const app = new Elysia()
             documentation: {
                 info: { title: "Pollux Core API", version },
                 tags: [
+                    { name: "auth", description: "Dashboard Discord OAuth and session" },
                     { name: "users", description: "User data and profiles" },
                     { name: "servers", description: "Server (guild) data" },
                     { name: "leaderboards", description: "XP and rank tables" },
@@ -88,6 +90,9 @@ const app = new Elysia()
 
     // ── Auth (only plugin that needs request context) ─────────────────────────
     .use(authPlugin)
+
+    // ── Auth (dashboard Discord OAuth + session) ───────────────────────
+    .use(authRoutes)
 
     // ── Health ────────────────────────────────────────────────────────────────
     .get("/ping", () => ({ ok: true, pid: process.pid, ts: Date.now() }))
@@ -132,7 +137,9 @@ const app = new Elysia()
 // ── Start ────────────────────────────────────────────────────────────────────
 
 connectDB().then(() => {
-  app.listen({ port: PORT, hostname: IS_DEV ? "0.0.0.0" : "127.0.0.1" });
+    const bind = IS_DEV ? "0.0.0.0" : "127.0.0.1";
+    console.log("Connected to MongoDB", bind);
+  app.listen({ port: PORT, hostname: bind });
 });
 
 export type App = typeof app;

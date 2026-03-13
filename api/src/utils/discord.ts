@@ -42,13 +42,14 @@ export async function getDiscordUser(id: string): Promise<DiscordUser> {
   const cacheKey = `discord:user:${id}`;
 
   const cached = await redis.get<DiscordUser>(cacheKey);
+
   if (cached) return cached;
 
   try {
     const resp = await fetch(`${DISCORD_API}/users/${id}`, {
-      headers: { Authorization: `Bot ${BOT_TOKEN}` },
+      headers: { Authorization: `${BOT_TOKEN}` },
     });
-
+    console.log("Response", resp);
     if (!resp.ok) {
       return { id, username: "Unknown", avatar: null, avatarURL: null, error: `HTTP ${resp.status}` };
     }
@@ -59,6 +60,7 @@ export async function getDiscordUser(id: string): Promise<DiscordUser> {
     await redis.set(cacheKey, user, USER_TTL);
     return user;
   } catch (err) {
+    console.error("Error fetching Discord user", err);
     return { id, username: "Unknown", avatar: null, avatarURL: null, error: String(err) };
   }
 }

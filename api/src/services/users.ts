@@ -9,13 +9,30 @@ import { db } from "@plugins/db";
 import { getDiscordUser, type DiscordUser } from "utils/discord";
 import { buildSearchQuery } from "utils/search";
 
+/** Matches UserMetaUpdate from @polestarlabs/database_schema; use that import once the schema package is updated. */
+interface UserMetaUpdate {
+  id: string;
+  username?: string;
+  global_name?: string | null;
+  discriminator?: string;
+  tag?: string;
+  avatar?: string | null;
+  displayAvatarURL?: string | null;
+}
+
 // ── Response building ────────────────────────────────────────────────────────
 
 export function parseUserdata(discordUser: DiscordUser, USR: Record<string, any> | null, STATUS: number, cosmetics?: Record<string, any> | null) {
+  const dbTag = typeof USR?.tag === "string" && USR.tag ? USR.tag : null;
+  const dbAvatar = typeof USR?.avatar === "string" && USR.avatar ? USR.avatar : null;
+  const discordAvatar = discordUser.avatarURL ?? null;
+  const avatarDiffers = dbAvatar !== discordAvatar && discordAvatar != null;
+  const avatar = avatarDiffers ? discordAvatar : (dbAvatar ?? discordAvatar);
+
   const response: Record<string, unknown> = {
     id:     discordUser.id,
-    tag:    discordUser.id ? discordUser.username : (USR?.meta?.tag ?? null),
-    avatar: discordUser.avatarURL ?? null,
+    tag:    dbTag ?? (discordUser.id ? discordUser.username : null),
+    avatar,
   };
 
   if (!USR) {
@@ -23,6 +40,7 @@ export function parseUserdata(discordUser: DiscordUser, USR: Record<string, any>
     response.isPolluxUser = false;
     response.isBot        = discordUser.bot;
   } else {
+    response.isPolluxUser = true;
     response.level     = USR.progression.level;
     response.exp       = USR.progression.exp;
     response.commends  = USR.counters?.commend;
@@ -33,11 +51,11 @@ export function parseUserdata(discordUser: DiscordUser, USR: Record<string, any>
     response.donatorTier = USR.prime?.tier;
     response.isBlacklisted = !!USR.blacklisted && USR.blacklisted !== "";
     response.profile   = {
-      background: USR.profile.bgID,
+      background: USR.profile.background,
       sticker:    USR.profile.sticker,
-      color:      USR.profile.favcolor,
-      flair:      USR.profile.flairTop,
-      about:      USR.profile.persotext,
+      color:      USR.profile.color,
+      flair:      USR.profile.flair,
+      about:      USR.profile.about,
       tagline:    USR.profile.tagline,
       medals:     USR.profile.medals,
     };
@@ -59,6 +77,19 @@ export async function parseUserAndReturn(uID: string, _db = db) {
     _db.userInventory.get(uID),
   ]);
 
+  if (USR && !discordUser.error && discordUser.avatarURL) {
+    const dbAvatar = typeof USR.avatar === "string" ? USR.avatar : null;
+    if (dbAvatar !== discordUser.avatarURL) {
+      const payload: UserMetaUpdate = {
+        id: discordUser.id,
+        username: discordUser.username,
+        displayAvatarURL: discordUser.avatarURL,
+      };
+      if (discordUser.discriminator != null) payload.discriminator = discordUser.discriminator;
+      await (_db.users as unknown as { updateMeta: (u: UserMetaUpdate) => Promise<void> }).updateMeta(payload);
+    }
+  }
+
   let STATUS = 200;
   const { response, STATUS: s } = parseUserdata(discordUser, USR, STATUS, cosmetics);
   return { status: s, body: response };
@@ -66,7 +97,7 @@ export async function parseUserAndReturn(uID: string, _db = db) {
 
 // ── Search ───────────────────────────────────────────────────────────────────
 
-const SEARCH_ALLOWED = ["_id", "id", "prime.tier", "name", "meta.tag", "personalhandle"];
+const SEARCH_ALLOWED = ["_id", "id", "prime.tier", "name", "tag", "meta.tag", "personalhandle"];
 
 export async function searchUsers(query: Record<string, string | undefined>, _db = db, _redis?: any) {
   const queries = buildSearchQuery(query, SEARCH_ALLOWED);
