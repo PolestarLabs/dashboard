@@ -1,5 +1,5 @@
 <template lang="pug">
-SCard
+Card
   h1.text-xl.font-bold.mb-4 Market
   template(v-if="loading")
     span Loading listings...
@@ -20,7 +20,7 @@ SCard
 import { onMounted, ref } from 'vue';
 import { getMarketplaceListings, type MarketplaceListing } from '@/api';
 import { cdn } from '@/utils/cdn';
-import SCard from '@/ui/stardust/SCard.vue';
+import Card from '@/ui/stardust-ui/Card/Card.vue';
 
 const listings = ref<MarketplaceListing[]>([]);
 const loading = ref(true);

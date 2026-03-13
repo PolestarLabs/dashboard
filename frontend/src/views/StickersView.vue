@@ -1,5 +1,5 @@
 <template lang="pug">
-SCard
+Card
   h1.text-xl.font-bold.mb-4 Stickers
   template(v-if="loading")
     span Loading stickers...
@@ -16,7 +16,7 @@ SCard
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
 import { searchCosmetics, type CosmeticItem } from '@/api/cosmetics';
-import SCard from '@/ui/stardust/SCard.vue';
+import Card from '@/ui/stardust-ui/Card/Card.vue';
 
 const stickers = ref<CosmeticItem[]>([]);
 const loading = ref(true);

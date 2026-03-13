@@ -1,5 +1,5 @@
 <template lang="pug">
-SCard
+Card
   h1.text-xl.font-bold.mb-2 Profile settings
   p.text-sm.text-base-content/70.mb-2
     | This page will collect profile settings such as tagline, colors, backgrounds, medals and stickers.
@@ -11,6 +11,6 @@ SCard
 </template>
 
 <script setup lang="ts">
-import SCard from '@/ui/stardust/SCard.vue';
+import Card from '@/ui/stardust-ui/Card/Card.vue';
 </script>
 

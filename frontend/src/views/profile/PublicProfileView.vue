@@ -1,5 +1,5 @@
 <template lang="pug">
-SCard
+Card
   template(v-if="loading")
     span Loading profile...
   template(v-else-if="error")
@@ -26,7 +26,7 @@ SCard
 import { onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { getPublicUser, type PublicProfile } from '@/api';
-import SCard from '@/ui/stardust/SCard.vue';
+import Card from '@/ui/stardust-ui/Card/Card.vue';
 
 const route = useRoute();
 const profile = ref<PublicProfile | null>(null);

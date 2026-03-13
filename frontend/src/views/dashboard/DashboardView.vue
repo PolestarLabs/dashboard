@@ -1,5 +1,5 @@
 <template lang="pug">
-SCard
+Card
   h1.text-2xl.font-bold.mb-4 Dashboard
   p.text-sm.text-base-content/70.mb-4
     | This is the main dashboard shell: servers, favourites, quick actions.
@@ -10,6 +10,6 @@ SCard
 </template>
 
 <script setup lang="ts">
-import SCard from '@/ui/stardust/SCard.vue';
+import Card from '@/ui/stardust-ui/Card/Card.vue';
 </script>
 

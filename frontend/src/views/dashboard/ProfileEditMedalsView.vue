@@ -1,7 +1,7 @@
 <template lang="pug">
-SCard
+Card
   h1.text-xl.font-bold.mb-4 Edit Medals (WIP)
-  SDraggableMedalGrid(
+  DraggableMedalGrid(
     v-model:equipped="equipped"
     v-model:inventory="inventory"
   )
@@ -9,8 +9,8 @@ SCard
 
 <script setup lang="ts">
 import { ref } from 'vue';
-import SCard from '@/ui/stardust/SCard.vue';
-import SDraggableMedalGrid from '@/ui/stardust/SDraggableMedalGrid.vue';
+import Card from '@/ui/stardust-ui/Card/Card.vue';
+import DraggableMedalGrid from '@/ui/components/DraggableMedalGrid/DraggableMedalGrid.vue';
 
 interface Medal {
   id: string;

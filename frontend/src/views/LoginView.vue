@@ -1,14 +1,14 @@
 <template lang="pug">
-SCard.max-w-md.mx-auto
+Card.max-w-md.mx-auto
   h1.text-xl.font-bold.mb-4 Sign in with Discord
   p.text-sm.mb-4
     | You will be redirected to the Pollux API for Discord OAuth.
-  SButton(@click="onLogin") Continue
+  Button(@click="onLogin") Continue
 </template>
 
 <script setup lang="ts">
-import SCard from '@/ui/stardust/SCard.vue';
-import SButton from '@/ui/stardust/SButton.vue';
+import Card from '@/ui/stardust-ui/Card/Card.vue';
+import Button from '@/ui/stardust-ui/Button/Button.vue';
 
 const API_BASE = import.meta.env.VITE_API_BASE ?? 'https://api-staging.pollux.gg';
 
