@@ -1,0 +1,142 @@
+@import "./pollux.css";
+@import "./noctix.css";
+@import "./cecily.css";
+@import "./australis.css";
+@import "./arsenika.css";
+@import "./borealis.css";
+@import "./lunanuli.css";
+@import "./nikoliny.css";
+@import "./selenedi.css";
+
+:root {
+	--main-pink: #F58;
+	--alt-pink: #F69;
+	--dark-pink: #F35;
+	--darkest-pink: #D05;
+	--main-purple: #A6F;
+	--alt-purple: #95F;
+	--dark-purple: #53F;
+	--darkest-purple: #50D;
+	--darkest: #0F0F1A;
+	--darker: #1b1b2b;
+	--dark: #2b2b3b;
+	--pre-dark: #3b3b4F;
+	--mid-dark: #4b4b6b;
+	--mid: #6b6b8b;
+	--mid-light: #8080A0;
+	--pre-light: #8b8b9F;
+	--light: #AAC;
+	--lighter: #CCE;
+	--lightest: #EEF;
+	--rainbow: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+	--plx-danger: #F02040;
+	--plx-green: #31e2b4;
+	--plx-dark-green: #5A8;
+	--plx-yellow: #FC2;
+	--plx-rose: #f79;
+	--plx-salmon: #F87;
+	--plx-blue: #56F;
+	--plx-nsfw: var(--plx-danger);
+	--shadow: #05050F25;
+	--box-gutter: 24px;
+	--code-main-color: #D27;
+	--code-main-border: 1px solid #472541F1;
+	--code-main-bg: #2c1d2f;
+	--code-misty-color: cadetblue;
+	--code-misty-border: 1px solid #39354a;
+	--code-misty-bg: #1d1721;
+	--main-font: 'Varela Round';
+	--second-font: 'Nunito';
+	--third-font: 'Quicksand';
+	--strong-font: 'Proxima Soft';
+	--display-font: 'Panton';
+	--mono-font: 'Share Tech Mono', monaco, monospace;
+	--select: var(--alt-purple);
+	--select-bg: var(--lightest);
+
+	/* Rarity button colors (unique to rarity icons, from legacy rarityboxes.css) */
+	--rarity-default-main: #ffba3b;
+	--rarity-default-fade: rgba(72, 35, 58, 0.82);
+	--rarity-default-glow: #2245;
+	--rarity-sticker-main: #0bab4b;
+	--rarity-sticker-dim: #0bfb4b88;
+	--rarity-sticker-fade: #0b103b;
+	--rarity-sticker-border: #0b7b4b;
+	--rarity-special-main: #fb8b3b;
+	--rarity-special-dim: #f11;
+	--rarity-special-fade: #ab152b;
+	--rarity-craft-main: #3bd7fb;
+	--rarity-craft-dim: #3134e3;
+	--rarity-craft-fade: #122b77;
+	--rarity-advcraft-main: #2b74ff;
+	--rarity-advcraft-dim: #e33131;
+	--rarity-advcraft-fade: #1f1871;
+	--rarity-event-main: #ff2b98;
+	--rarity-event-dim: #e33163;
+	--rarity-event-fade: #201231;
+	--rarity-sapphires-main: #3bd7fb;
+	--rarity-sapphires-dim: #3134e3;
+	--rarity-sapphires-fade: #122b77;
+	--rarity-rubines-main: #fb3b3b;
+	--rarity-rubines-dim: #e33134;
+	--rarity-rubines-fade: #77122b;
+
+}
+
+
+html {
+    --color-contrast: white;
+	--color-contrast-inverse: #112;
+	--color-contrast-dim: #FFFD;
+	--text-accent: white;
+	--text-accent-dim: #FFFD;
+	--text-lightest: #FFF;
+	--text-extra-bold: var(--lightest, #AAC);
+	--text-bold: var(--lighter, #AAC);
+	--text-main: var(--light, #AAC);
+	--text-faint: var(--pre-light, #668);
+	--text-dim: var(#99AA);
+	--text-dim-mid: var(--pre-light, #88a);
+	--text-inverse: var(--dark, #2b2b3b);
+	--accent-color: var(--main-pink, #f35);
+	--accent-color-mid: var(--dark-pink, #F13151);
+	--accent-color-strong: var(--dark-pink, #F13151);
+	--accent-color-dark: var(--darkest-pink, #D05);
+	--accent-color-light: var(--light-pink, rgb(241, 129, 176));
+	--secondary-color: var(--main-purple, #95F);
+	--secondary-color-alt: var(--alt-purple, rgb(231, 104, 189));
+	--mid-main: var(--light2);
+	--bg-main: var(--darker);
+	/*--bg-main: linear-gradient(190deg, var(--darker) 30%,var(--darkest));*/
+	--bg-dark: var(--dark);
+	--bg-darker: var(--darker);
+	--bg-darkest: var(--darkest);
+	--bg-opaque: #2A2A3B44;
+	--bg-inverse: var(--lightest, #EEF);
+	--bg-card: white;
+	--links: #87f;
+	--links-hover: #8Af;
+	--link-head: inherit;
+	--link-head-hover: var(--alt-pink);
+	--divider-color: var(--pre-light);
+	--heading-divider-color: var(--lighter);
+	--muted: #99AA;
+	--light-border: var(--light);
+	--dark-border: var(--dark);
+	--dark-dim: #27233775;
+	--dark-dimmer: #0d0d1796;
+	--dark-dimmest: #100c2b59;
+
+	--color-primary: var(--accent-color, #f35);
+	--color-primary-mid: var(--accent-color-mid, #F13151);
+	--color-primary-strong: var(--accent-color-strong, #F13151);
+	--color-primary-dark: var(--accent-color-dark, #D05);
+	--color-primary-light: var(--accent-color-light, #f35);
+	--color-secondary: var(--secondary-color, #95F);
+	--color-secondary-light: var(--secondary-color-light, #95F);
+	--color-secondary-mid: var(--secondary-color-mid, #C7D);
+	--color-secondary-strong: var(--secondary-color-strong, #C7D);
+	--color-secondary-dark: var(--secondary-color-dark, #95F);	
+}
+
+

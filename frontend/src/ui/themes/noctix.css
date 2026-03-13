@@ -1,0 +1,69 @@
+html.theme-noctix {
+  
+  /*
+  --color-contrast: var(--lightest);
+--color-contrast-dim: #FFF;
+
+--text-accent: var(--mid);
+--text-accent-dim:   #2235;
+
+--text-extra-bold: var(--mid-dark,#AAC);
+--text-bold: var(--mid-dark,#AAC);
+--text-main: var(--mid-light,#AAC);
+--text-faint: var(--light,#668);
+--text-dim: var(--mid-light,#99A);
+--text-dim-mid: var(--light,#88a);
+--text-inverse: var(--light,#2b2b3b);
+*/
+  
+  
+ --accent-color-light: #2B2C5B;
+--accent-color: #3B2C84;
+--accent-color-alt: #A25;
+--accent-color-mid: #39216C;
+--accent-color-strong: #3B2073;
+--accent-color-dark: #220F35;
+
+--text-main: #aaa;
+--text-accent: #aaa;
+--color-contrast: #aaa;
+
+  
+
+--secondary-color:  #8E273B;
+--secondary-color-alt:  #6A283B;
+--secondary-color-strong:  #A25;
+
+  /*
+--mid-main: var(--light2);
+*/ --bg-main: #15121B; --bg-darker: #101015; --bg-darkest: #050510; --bg-opaque: #05051030; /*
+--bg-inverse: var(--dark);
+
+--links: #87f;
+--links-hover: #8Af;
+--link-head: inherit;
+--link-head-hover: var(--alt-pink);
+
+
+--heading-divider-color: var(--lighter);
+
+--muted: #99AA;
+
+--light-border: var(--dark);
+--dark-border: var(--lighter);
+
+  */ --code-main-color: #FA5 !important; --code-main-border:  1px solid #A023 !important; 
+--code-main-bg: #151528 !important;
+
+
+--plx-green: #395;
+--plx-cyan: #358;
+  
+--plx-yellow: #975 !important;
+ 
+
+}
+
+.theme .dash-pill .sticker-pack{
+  filter: brightness(1.4) ;
+}

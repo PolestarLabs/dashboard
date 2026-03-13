@@ -1,0 +1,70 @@
+html.theme-selenedi {
+  
+  
+    --color-contrast: var(--lightest);
+  --color-contrast-dim: #FFF;
+  
+  --text-accent: var(--mid);
+  --text-accent-dim:   #2235;
+  
+  --text-extra-bold: #302433;
+  --text-bold: #413448;
+  --text-main: #6c5186;
+  --text-faint: #81409fd4;
+  --text-dim: #81409f;
+  --text-dim-mid: #8c409fe0;
+  --text-inverse: #9AAFFF;
+  
+  --mid-main: var(--light);
+  --bg-main: var(--lightest);
+  --bg-dark: var(--light);
+  --bg-darker: var(--lighter);
+  --bg-darkest: #E5E5F8;
+  
+  --dark-dim: #BEA3D0E0;
+  --dark-dimmer: #ffffffbf;
+  --dark-dimmest: #ffffff59;
+
+
+  --bg-opaque: #AAC2;
+  --bg-inverse: var(--dark);
+  
+  
+   --accent-color-light: #602c8a;
+  --accent-color: #772797;
+  --accent-color-mid: #440695;
+  --accent-color-dark: #330666;
+  
+  --secondary-color:  #e1614a;
+  --secondary-color-alt:  #d7af40;
+  
+   
+  --links: #87f;
+  --links-hover: #8Af;
+  --link-head: inherit;
+  --link-head-hover: var(--alt-pink);
+  
+  
+  --heading-divider-color: var(--lighter);
+  
+  --muted: #99AA;
+  
+  --light-border: var(--dark);
+  --dark-border: var(--lighter);
+  
+    --code-main-color: rgb(210, 170, 255) !important;
+  --code-main-border:  1px solid #4253 !important;;
+  --code-main-bg: #45424f !important;
+  
+  
+  --plx-green: #5A8;
+  --plx-cyan: #5AF;
+    
+  --plx-yellow: #EA5 !important;
+  }
+  
+  .theme .dash-pill .sticker-pack{
+    filter: brightness(1.4) ;
+  }
+  
+  
