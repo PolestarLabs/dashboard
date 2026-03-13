@@ -1,0 +1,16 @@
+.s-badge {
+  /* based on .badge from monolith.css */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 9999px;
+  background: var(--secondary-color);
+  color: var(--color-contrast);
+  font-size: 10px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  font-family: Panton, system-ui, sans-serif;
+}

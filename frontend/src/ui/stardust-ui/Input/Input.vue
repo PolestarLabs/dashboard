@@ -4,4 +4,3 @@ input.input.input-bordered.w-full(v-bind="$attrs")
 
 <script setup lang="ts">
 </script>
-

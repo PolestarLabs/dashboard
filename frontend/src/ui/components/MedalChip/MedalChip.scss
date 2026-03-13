@@ -1,0 +1,28 @@
+.s-medal-chip {
+  /* based on .medal-chip from profile.css */
+  width: 80px;
+  height: 80px;
+  border-radius: 100px;
+  position: relative;
+
+  &__rarity {
+    position: absolute;
+    top: -10px;
+    left: -10px;
+  }
+
+  &__face {
+    min-block-size: 60px;
+    background-size: contain;
+    background-repeat: no-repeat;
+  }
+
+  @media screen and (max-height: 650px) {
+    width: 60px;
+    height: 60px;
+    border-radius: 100px;
+    position: relative;
+    margin: auto;
+    padding: 3px;
+  }
+}

@@ -18,10 +18,10 @@ div.min-h-screen.bg-base-200.flex
       div.flex-none.px-4
         template(v-if="auth.isAuthenticated")
           span.mr-3 {{ auth.user?.username }}
-          SButton(size="sm" variant="ghost" @click="onLogout") Logout
+          Button(size="sm" variant="ghost" @click="onLogout") Logout
         template(v-else)
           RouterLink(to="/login")
-            SButton(size="sm") Sign in
+            Button(size="sm") Sign in
     main.p-4
       slot
 </template>
@@ -29,7 +29,7 @@ div.min-h-screen.bg-base-200.flex
 <script setup lang="ts">
 import { useRouter, RouterLink } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
-import SButton from '@/ui/stardust/SButton.vue';
+import Button from '@/ui/stardust-ui/Button/Button.vue';
 
 const auth = useAuthStore();
 const router = useRouter();

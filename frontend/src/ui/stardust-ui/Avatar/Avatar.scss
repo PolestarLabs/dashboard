@@ -1,0 +1,15 @@
+.s-avatar {
+  /* container mirrors .pxc-avatar img sizing but simplified */
+  display: inline-flex;
+
+  &__img {
+    width: 100%;
+    height: 100%;
+    border-radius: 9999px;
+    object-fit: cover;
+    box-shadow: 0 1px 1rem var(--shadow);
+    transition: all 600ms ease;
+    position: relative;
+    z-index: 1;
+  }
+}

@@ -1,9 +1,9 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
-import SRarityButton from './SRarityButton.vue';
+import RarityboxButton from './RarityboxButton.vue';
 
-const meta: Meta<typeof SRarityButton> = {
-  title: 'Stardust/SRarityButton',
-  component: SRarityButton,
+const meta: Meta<typeof RarityboxButton> = {
+  title: 'Stardust PLX/Raritybox Button',
+  component: RarityboxButton,
   tags: ['autodocs'],
   argTypes: {
     tag: { control: { type: 'select' }, options: ['button', 'a'] },
@@ -30,19 +30,19 @@ const meta: Meta<typeof SRarityButton> = {
 
 export default meta;
 
-type Story = StoryObj<typeof SRarityButton>;
+type Story = StoryObj<typeof RarityboxButton>;
 
 export const Default: Story = {
   args: { variant: 'default' },
   render: (args) => ({
-    components: { SRarityButton },
+    components: { RarityboxButton },
     setup() {
       return { args };
     },
     template: `
-      <SRarityButton v-bind="args">
+      <RarityboxButton v-bind="args">
         <span class="s-rarity-btn__price">Buy</span>
-      </SRarityButton>
+      </RarityboxButton>
     `,
   }),
 };
@@ -50,15 +50,15 @@ export const Default: Story = {
 export const SpecialAlt: Story = {
   args: { variant: 'special', alt: true },
   render: (args) => ({
-    components: { SRarityButton },
+    components: { RarityboxButton },
     setup() {
       return { args };
     },
     template: `
-      <SRarityButton v-bind="args">
+      <RarityboxButton v-bind="args">
         <i class="fas fa-star" aria-hidden="true"></i>
         <span class="s-rarity-btn__price">Special</span>
-      </SRarityButton>
+      </RarityboxButton>
     `,
   }),
 };
@@ -66,15 +66,15 @@ export const SpecialAlt: Story = {
 export const Sticker: Story = {
   args: { variant: 'sticker', alt: true },
   render: (args) => ({
-    components: { SRarityButton },
+    components: { RarityboxButton },
     setup() {
       return { args };
     },
     template: `
-      <SRarityButton v-bind="args">
+      <RarityboxButton v-bind="args">
         <i class="fas fa-info-circle" aria-hidden="true"></i>
         <span class="s-rarity-btn__price">PACK INFO</span>
-      </SRarityButton>
+      </RarityboxButton>
     `,
   }),
 };
@@ -82,15 +82,15 @@ export const Sticker: Story = {
 export const Craft: Story = {
   args: { variant: 'craft', alt: true },
   render: (args) => ({
-    components: { SRarityButton },
+    components: { RarityboxButton },
     setup() {
       return { args };
     },
     template: `
-      <SRarityButton v-bind="args">
+      <RarityboxButton v-bind="args">
         <i class="fas fa-flask" aria-hidden="true"></i>
         <span class="s-rarity-btn__price">CRAFT INFO</span>
-      </SRarityButton>
+      </RarityboxButton>
     `,
   }),
 };
@@ -98,15 +98,15 @@ export const Craft: Story = {
 export const EventWithPrice: Story = {
   args: { variant: 'event', alt: true },
   render: (args) => ({
-    components: { SRarityButton },
+    components: { RarityboxButton },
     setup() {
       return { args };
     },
     template: `
-      <SRarityButton v-bind="args">
+      <RarityboxButton v-bind="args">
         <i class="fas fa-ticket-alt" aria-hidden="true"></i>
         <span class="s-rarity-btn__price">1 500</span>
-      </SRarityButton>
+      </RarityboxButton>
     `,
   }),
 };
@@ -114,14 +114,14 @@ export const EventWithPrice: Story = {
 export const Search: Story = {
   args: { variant: 'search' },
   render: (args) => ({
-    components: { SRarityButton },
+    components: { RarityboxButton },
     setup() {
       return { args };
     },
     template: `
-      <SRarityButton v-bind="args">
+      <RarityboxButton v-bind="args">
         <span class="s-rarity-btn__price">Search</span>
-      </SRarityButton>
+      </RarityboxButton>
     `,
   }),
 };
@@ -129,15 +129,15 @@ export const Search: Story = {
 export const Disabled: Story = {
   args: { variant: 'default', disabled: true },
   render: (args) => ({
-    components: { SRarityButton },
+    components: { RarityboxButton },
     setup() {
       return { args };
     },
     template: `
-      <SRarityButton v-bind="args">
+      <RarityboxButton v-bind="args">
         <i class="fas fa-check" aria-hidden="true"></i>
         <span class="s-rarity-btn__price">Obtained</span>
-      </SRarityButton>
+      </RarityboxButton>
     `,
   }),
 };
@@ -145,30 +145,30 @@ export const Disabled: Story = {
 export const Limitless: Story = {
   args: { variant: 'default', limitless: true },
   render: (args) => ({
-    components: { SRarityButton },
+    components: { RarityboxButton },
     setup() {
       return { args };
     },
     template: `
-      <SRarityButton v-bind="args">
+      <RarityboxButton v-bind="args">
         <span class="s-rarity-btn__price">Wide label</span>
-      </SRarityButton>
+      </RarityboxButton>
     `,
   }),
 };
 
 export const AllVariants: Story = {
   render: () => ({
-    components: { SRarityButton },
+    components: { RarityboxButton },
     template: `
       <div class="flex flex-wrap gap-4 p-4 bg-base-300 rounded-lg">
-        <SRarityButton variant="default"><span class="s-rarity-btn__price">Default</span></SRarityButton>
-        <SRarityButton variant="sticker" alt><i class="fas fa-box" aria-hidden="true"></i><span class="s-rarity-btn__price">Sticker</span></SRarityButton>
-        <SRarityButton variant="special" alt><i class="fas fa-star" aria-hidden="true"></i><span class="s-rarity-btn__price">Special</span></SRarityButton>
-        <SRarityButton variant="craft" alt><i class="fas fa-flask" aria-hidden="true"></i><span class="s-rarity-btn__price">Craft</span></SRarityButton>
-        <SRarityButton variant="advcraft" alt><i class="fas fa-vial" aria-hidden="true"></i><span class="s-rarity-btn__price">Adv. Craft</span></SRarityButton>
-        <SRarityButton variant="event" alt><i class="fas fa-ticket-alt" aria-hidden="true"></i><span class="s-rarity-btn__price">Event</span></SRarityButton>
-        <SRarityButton variant="search"><span class="s-rarity-btn__price">Search</span></SRarityButton>
+        <RarityboxButton variant="default"><span class="s-rarity-btn__price">Default</span></RarityboxButton>
+        <RarityboxButton variant="sticker" alt><i class="fas fa-box" aria-hidden="true"></i><span class="s-rarity-btn__price">Sticker</span></RarityboxButton>
+        <RarityboxButton variant="special" alt><i class="fas fa-star" aria-hidden="true"></i><span class="s-rarity-btn__price">Special</span></RarityboxButton>
+        <RarityboxButton variant="craft" alt><i class="fas fa-flask" aria-hidden="true"></i><span class="s-rarity-btn__price">Craft</span></RarityboxButton>
+        <RarityboxButton variant="advcraft" alt><i class="fas fa-vial" aria-hidden="true"></i><span class="s-rarity-btn__price">Adv. Craft</span></RarityboxButton>
+        <RarityboxButton variant="event" alt><i class="fas fa-ticket-alt" aria-hidden="true"></i><span class="s-rarity-btn__price">Event</span></RarityboxButton>
+        <RarityboxButton variant="search"><span class="s-rarity-btn__price">Search</span></RarityboxButton>
       </div>
     `,
   }),

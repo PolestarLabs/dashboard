@@ -1,0 +1,145 @@
+/* Extracted from legacy rarityboxes.css for .raritybox .button / .shopbox .button.
+   Self-contained: only classes used by the rarity/shop button. */
+
+.s-rarity-btn {
+  --s-rarity-main: var(--rarity-default-main);
+  --s-rarity-fade: var(--rarity-default-fade);
+  --s-rarity-glow: var(--rarity-default-glow);
+  user-select: none;
+  cursor: pointer;
+  position: relative;
+  margin: 4px;
+  display: flex;
+  align-items: center;
+  border: solid 4px var(--s-rarity-main);
+  box-shadow: 0 0 0 3px var(--s-rarity-glow);
+  color: var(--s-rarity-main);
+  border-radius: 100px;
+  width: 185px;
+  justify-content: center;
+  background-image: radial-gradient(var(--s-rarity-main), var(--s-rarity-fade) 70%);
+  background-size: 250px 250px;
+  background-position: center 0;
+  transition: all 100ms ease;
+  height: 40px;
+  text-decoration: none;
+  font-family: Panton, system-ui, sans-serif;
+  font-weight: 600;
+  font-size: 12pt;
+
+  &:hover {
+    box-shadow: 0 5px 20px var(--s-rarity-dim, var(--s-rarity-main));
+    background-position: center -30px;
+  }
+
+  &:active {
+    box-shadow: 0 0 10px var(--s-rarity-main);
+    background-image: radial-gradient(var(--s-rarity-main), var(--s-rarity-fade) 70%);
+    background-position: center 10px;
+    transition: all 10ms ease;
+  }
+
+  &__price {
+    color: var(--color-contrast);
+    font-size: 20pt;
+    font-weight: 800;
+    font-family: Panton, system-ui, sans-serif;
+    line-height: 1.3;
+
+    .cents {
+      font-weight: 600;
+      font-size: 10pt;
+      vertical-align: super;
+    }
+  }
+
+  i {
+    font-size: 12pt;
+  }
+
+  &--sticker {
+    --s-rarity-main: var(--rarity-sticker-main);
+    --s-rarity-dim: var(--rarity-sticker-dim);
+    --s-rarity-fade: var(--rarity-sticker-fade);
+    border-color: var(--rarity-sticker-border);
+    box-shadow: 0 0 0 3px var(--rarity-default-glow);
+    background-blend-mode: multiply;
+  }
+
+  &--special {
+    --s-rarity-main: var(--rarity-special-main);
+    --s-rarity-dim: var(--rarity-special-dim);
+    --s-rarity-fade: var(--rarity-special-fade);
+  }
+
+  &--craft {
+    --s-rarity-main: var(--rarity-craft-main);
+    --s-rarity-dim: var(--rarity-craft-dim);
+    --s-rarity-fade: var(--rarity-craft-fade);
+  }
+
+  &--advcraft {
+    --s-rarity-main: var(--rarity-advcraft-main);
+    --s-rarity-dim: var(--rarity-advcraft-dim);
+    --s-rarity-fade: var(--rarity-advcraft-fade);
+  }
+
+  &--event {
+    --s-rarity-main: var(--rarity-event-main);
+    --s-rarity-dim: var(--rarity-event-dim);
+    --s-rarity-fade: var(--rarity-event-fade);
+    font-size: 26pt;
+  }
+
+  &--sapphires {
+    --s-rarity-main: var(--rarity-sapphires-main);
+    --s-rarity-dim: var(--rarity-sapphires-dim);
+    --s-rarity-fade: var(--rarity-sapphires-fade);
+    width: 8rem;
+    font-size: 26pt;
+  }
+
+  &--rubines {
+    --s-rarity-main: var(--rarity-rubines-main);
+    --s-rarity-dim: var(--rarity-rubines-dim);
+    --s-rarity-fade: var(--rarity-rubines-fade);
+    width: 11rem;
+    font-size: 26pt;
+  }
+
+  &--search {
+    --s-rarity-main: var(--accent-color);
+    --s-rarity-dim: var(--accent-color);
+    --s-rarity-fade: var(--accent-color-dark);
+    font-size: 26pt;
+  }
+
+  &--custom {
+    --s-rarity-main: var(--this-color, var(--rarity-default-main));
+    --s-rarity-dim: var(--this-dim, var(--this-color, var(--rarity-default-main)));
+    --s-rarity-fade: var(--this-color-dark, var(--this-color, var(--rarity-default-fade)));
+    font-size: 26pt;
+  }
+
+  &--alt &__price {
+    font-size: 16pt;
+    margin-left: 10px;
+  }
+
+  &--alt i {
+    color: inherit;
+  }
+
+  &--limitless {
+    width: auto !important;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  &--disabled,
+  &[disabled] {
+    filter: saturate(0);
+    pointer-events: none;
+    opacity: 0.5;
+  }
+}

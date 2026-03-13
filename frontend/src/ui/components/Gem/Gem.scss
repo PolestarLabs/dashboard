@@ -1,0 +1,24 @@
+.s-gem {
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  &--rubine {
+    background-image: url('https://cdn.pollux.gg/images/gems/RBN.png');
+  }
+
+  &--sapphire {
+    background-image: url('https://cdn.pollux.gg/images/gems/SPH.png');
+  }
+
+  &--jade {
+    background-image: url('https://cdn.pollux.gg/images/gems/JDE.png');
+  }
+
+  &--token {
+    background-image: url('https://cdn.pollux.gg/images/gems/EVT.png');
+  }
+
+  &--prism {
+    background-image: url('https://cdn.pollux.gg/images/gems/PSM.png');
+  }
+}

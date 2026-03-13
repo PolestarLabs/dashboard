@@ -6,4 +6,3 @@ div.card.bg-base-100.shadow-md
 
 <script setup lang="ts">
 </script>
-

@@ -1,0 +1,9 @@
+/* Fill the entire preview canvas with the theme background */
+html,
+body,
+.docs-story,
+#storybook-root,
+#storybook-root > div {
+  background: var(--bg-main) !important;
+  /*min-height: 100vh;*/
+}

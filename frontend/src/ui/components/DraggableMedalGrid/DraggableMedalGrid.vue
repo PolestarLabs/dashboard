@@ -50,4 +50,3 @@ const innerInventory = computed({
   set: (val) => emit('update:inventory', val),
 });
 </script>
-

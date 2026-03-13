@@ -1,0 +1,40 @@
+.s-artist-tag {
+  /* based on .img.background .artist-tag from store.css; colors from theme */
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  background: var(--darker);
+  font-size: 8pt;
+  font-weight: 500;
+  padding: 2px 4px 2px 8px;
+  color: var(--light);
+  font-family: Panton, system-ui, sans-serif;
+
+  &::after {
+    --sidewinder: 30px;
+    content: '';
+    position: absolute;
+    top: 0;
+    right: calc(-1 * var(--sidewinder) + 1px);
+    width: var(--sidewinder);
+    height: var(--sidewinder);
+    box-sizing: border-box;
+    border: solid calc(0.5 * var(--sidewinder)) var(--darker);
+    border-right-color: transparent;
+    border-top-color: transparent;
+  }
+
+  &__icon {
+    color: var(--secondary-color);
+    margin-right: 8px;
+  }
+
+  &__label a {
+    color: inherit;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

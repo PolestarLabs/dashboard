@@ -11,7 +11,7 @@ component(
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import './SRarityButton.css';
+import './RarityboxButton.scss';
 
 export type RarityButtonVariant =
   | 'default'

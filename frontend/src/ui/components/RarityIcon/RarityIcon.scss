@@ -1,0 +1,39 @@
+.s-rarity-icon {
+  /* based on .plx-rarity-icon in monolith.css */
+  z-index: 2;
+  display: inline-flex;
+  vertical-align: text-bottom;
+  margin: 2px 4px;
+  background-size: contain;
+  background-repeat: no-repeat;
+
+  &--16 { width: 16px; height: 16px; }
+  &--24 { width: 24px; height: 24px; }
+  &--32 { width: 32px; height: 32px; }
+  &--48 { width: 48px; height: 48px; }
+  &--64 { width: 64px; height: 64px; }
+
+  &--UR {
+    background-image: url('https://cdn.pollux.gg/build/tiers/mobage/UR.png');
+  }
+
+  &--SR {
+    background-image: url('https://cdn.pollux.gg/build/tiers/mobage/SR.png');
+  }
+
+  &--R {
+    background-image: url('https://cdn.pollux.gg/build/tiers/mobage/R.png');
+  }
+
+  &--U {
+    background-image: url('https://cdn.pollux.gg/build/tiers/mobage/U.png');
+  }
+
+  &--C {
+    background-image: url('https://cdn.pollux.gg/build/tiers/mobage/C.png');
+  }
+
+  &--XR {
+    background-image: url('https://cdn.pollux.gg/build/tiers/mobage/XR.png');
+  }
+}

@@ -1,6 +1,6 @@
 /* Legacy Pollux fonts: Panton + Proxima Soft
-   Copied from src/views/late-load.css so Stardust UI and
-   the new dashboard can use the same font-family names. */
+   Font files live in frontend/public/fonts/ (copied from dashboard src/public/fonts).
+   Fallback to pollux.gg CDN when /fonts/ is not available. */
 
 @font-face {
   font-family: 'Panton';

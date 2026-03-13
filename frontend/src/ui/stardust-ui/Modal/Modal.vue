@@ -14,4 +14,3 @@ import { ref } from 'vue';
 
 const dialogEl = ref<HTMLDialogElement | null>(null);
 </script>
-
