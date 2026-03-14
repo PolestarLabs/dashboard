@@ -3,7 +3,7 @@ import RarityboxCard from './RarityboxCard.vue';
 import RarityboxButton from '../RarityboxButton/RarityboxButton.vue';
 
 const meta: Meta<typeof RarityboxCard> = {
-  title: 'Stardust PLX/Raritybox Card',
+  title: 'Pollux-Specific Components/Raritybox Card',
   component: RarityboxCard,
   tags: ['autodocs'],
   argTypes: {

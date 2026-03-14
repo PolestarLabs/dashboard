@@ -3,7 +3,7 @@ import RarityIcon from './RarityIcon.vue';
 import './RarityIcon.scss';
 
 const meta: Meta<typeof RarityIcon> = {
-  title: 'Stardust PLX/Rarity Icon',
+  title: 'Pollux-Specific Components/Rarity Icon',
   component: RarityIcon,
   tags: ['autodocs'],
   argTypes: {

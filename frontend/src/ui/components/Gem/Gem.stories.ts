@@ -5,7 +5,7 @@ import '@/ui/stardust-ui/Icon/Icon.scss';
 import './Gem.scss';
 
 const meta: Meta<typeof Gem> = {
-  title: 'Stardust PLX/Gem Icon',
+  title: 'Pollux-Specific Components/Gem Icon',
   component: Gem,
   tags: ['autodocs'],
   argTypes: {

@@ -3,7 +3,7 @@ import RarityboxButton from './RarityboxButton.vue';
 import Gem from '../Gem/Gem.vue';
 
 const meta: Meta<typeof RarityboxButton> = {
-  title: 'Stardust PLX/Raritybox Button',
+  title: 'Pollux-Specific Components/Raritybox Button',
   component: RarityboxButton,
   tags: ['autodocs'],
   argTypes: {
