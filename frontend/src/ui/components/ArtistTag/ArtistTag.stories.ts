@@ -3,7 +3,7 @@ import ArtistTag from './ArtistTag.vue';
 import './ArtistTag.scss';
 
 const meta: Meta<typeof ArtistTag> = {
-  title: 'Stardust PLX/Misc/Artist Tag',
+  title: 'Pollux-Specific Components/Misc/Artist Tag',
   component: ArtistTag,
   tags: ['autodocs'],
 };
