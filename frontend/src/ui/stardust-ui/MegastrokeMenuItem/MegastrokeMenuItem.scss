@@ -1,0 +1,101 @@
+/* Based on legacy store.css .store-sidebar .menuitem, .megastroke.menuitem */
+.st-megastroke-menuitem {
+  --text-shadow: var(--plx-text-shadow, #0b0b1b);
+  --megastroke: -2px 1px 0 var(--text-shadow), 1px 1px 0 var(--text-shadow),
+    -1px -1px 0 var(--text-shadow), 1px -1px 0 var(--text-shadow),
+    -1px 1px 0 var(--text-shadow), 1px 1px 0 var(--text-shadow);
+  --arrow-width: 44px;
+
+  position: relative;
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+
+  &__link {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    font-size: 22px;
+    font-style: italic;
+    font-family: Panton, sans-serif;
+    text-align: left;
+    padding: 2px 30px;
+    height: var(--arrow-width);
+    border-radius: 0;
+    color: inherit;
+    text-decoration: none;
+    text-shadow: var(--megastroke);
+    filter: drop-shadow(-2px 2px 0 var(--text-shadow));
+    font-weight: 500;
+
+    > i {
+      padding-right: 15px;
+      color: var(--secondary-color-alt, #888);
+      font-style: normal;
+    }
+  }
+
+  &--disabled {
+    cursor: default;
+    opacity: 0.6;
+    pointer-events: none;
+    filter: saturate(0);
+  }
+
+  &:not(.st-megastroke-menuitem--active):not(.st-megastroke-menuitem--disabled) &__link:hover {
+    filter: drop-shadow(-2px 2px 0 var(--text-shadow))
+      drop-shadow(-1px 1px 0 var(--text-shadow));
+    transform: translate(1px, -1px);
+    opacity: 0.85;
+  }
+
+  &--active {
+    background-color: var(--secondary-color);
+    position: relative;
+    min-width: 0;
+    animation: st-menufill 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+
+    &::after {
+      content: "";
+      position: absolute;
+      display: block;
+      width: 0;
+      height: var(--arrow-width);
+      border: solid calc(var(--arrow-width) / 2) transparent;
+      box-sizing: border-box;
+      border-left-color: var(--secondary-color);
+      top: 0;
+      right: calc(var(--arrow-width) * -1);
+      z-index: 10;
+    }
+
+    .st-megastroke-menuitem__link {
+      font-weight: 600;
+      white-space: nowrap;
+      color: #fff;
+      filter: drop-shadow(-2px 2px 0 var(--text-shadow))
+        drop-shadow(-1px 1px 0 var(--text-shadow));
+
+      > i {
+        margin-right: 15px;
+        padding-right: 0;
+        color: var(--secondary-color-alt, #888);
+        font-style: normal;
+      }
+    }
+  }
+}
+
+@keyframes st-menufill {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}
