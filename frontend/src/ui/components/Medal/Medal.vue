@@ -27,9 +27,5 @@ const faceStyle = computed(() =>
     : {}
 );
 
-// TS shut up
-void RarityIcon;
-void rarityIconPosition;
-void faceStyle;
 </script>
 

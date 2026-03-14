@@ -6,6 +6,8 @@ const meta: Meta<typeof Input> = {
   title: 'Stardust UI/Input',
   component: Input,
   tags: ['autodocs'],
+  // We intentionally allow passing native input attrs via $attrs (min, max, minlength, pattern, etc.)
+  // Storybook's typing doesn't know about $attrs, so we cast argTypes to any to avoid TS complaints.
   argTypes: {
     type: {
       control: { type: 'select' },
@@ -24,14 +26,14 @@ const meta: Meta<typeof Input> = {
     max: { control: { type: 'number' } },
     pattern: { control: { type: 'text' } },
     title: { control: { type: 'text' } },
-  },
+  } as any,
 };
 
 export default meta;
 
-type Story = StoryObj<typeof Input>;
+type Story = StoryObj<any>;
 
-const inputRender = (initial = '') => (args: object) => ({
+const inputRender = (initial: string | number = '') => (args: object) => ({
   setup() {
     const value = ref(initial);
     return { args, value };
