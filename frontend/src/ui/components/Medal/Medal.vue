@@ -23,8 +23,13 @@ const rarityIconPosition = computed(() =>
 );
 const faceStyle = computed(() =>
   props.medal
-    ? `https://cdn.pollux.gg/medals/${props.medal}.png`
-    : '',
+    ? { backgroundImage: `url(https://cdn.pollux.gg/medals/${props.medal}.png)` }
+    : {}
 );
+
+// TS shut up
+void RarityIcon;
+void rarityIconPosition;
+void faceStyle;
 </script>
 

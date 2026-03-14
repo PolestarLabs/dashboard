@@ -23,6 +23,7 @@ export const Default: Story = {
     faceImageUrl: 'https://picsum.photos/160/180',
     backImageUrl: 'https://picsum.photos/160/180?blur=2',
     durationMs: 5000,
+    easing: [0.68, -0.55, 0.27, 1.55],
     width: 200,
     height: 220,
   },

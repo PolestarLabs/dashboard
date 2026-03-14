@@ -1,15 +1,28 @@
 .s-avatar {
-  /* container mirrors .pxc-avatar img sizing but simplified */
   display: inline-flex;
+  overflow: hidden;
 
   &__img {
     width: 100%;
     height: 100%;
-    border-radius: 9999px;
     object-fit: cover;
     box-shadow: 0 1px 1rem var(--shadow);
     transition: all 600ms ease;
     position: relative;
     z-index: 1;
+  }
+
+  &--circle &__img {
+    border-radius: 9999px;
+  }
+
+  &--rounded &__img {
+    border-radius: 12%;
+  }
+
+  &--hexagon &__img {
+    border-radius: 0;
+    /* Perfect regular hexagon, pointy top: narrower than square, all sides equal */
+    clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
   }
 }

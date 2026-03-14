@@ -76,6 +76,7 @@ const animationFrameId = ref<number | null>(null);
 
 let faceImg: HTMLImageElement | null = null;
 let backImg: HTMLImageElement | null = null;
+let easingFn = (t: number) => t;
 
 const canvasStyle = computed(() => ({
   width: `${props.width ?? 200}px`,
@@ -130,7 +131,8 @@ const drawFrame = (timestamp: number) => {
 
   const duration = props.durationMs ?? 5000;
   const progress = (timestamp % duration) / duration;
-  const angle = progress * Math.PI * 2;
+  const easedProgress = easingFn(progress);
+  const angle = (easedProgress * Math.PI * 2);
   const cos = Math.cos(angle);
   const showingBack = cos < 0;
 
@@ -153,6 +155,7 @@ const start = async () => {
   faceImg = await loadImage(props.faceImageUrl);
   backImg = await loadImage(props.backImageUrl);
   setupCanvasSize();
+  easingFn = getEasing();
 
   if (animationFrameId.value !== null) {
     cancelAnimationFrame(animationFrameId.value);

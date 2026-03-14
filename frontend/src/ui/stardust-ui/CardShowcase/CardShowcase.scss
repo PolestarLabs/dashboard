@@ -10,17 +10,21 @@
     justify-content: center;
     display: flex;
     margin: 0 auto;
+    -webkit-perspective: 400px;
     perspective: 400px;
   }
 
   &__flip {
     position: relative;
+    -webkit-transform-style: preserve-3d;
     transform-style: preserve-3d;
+    transform-origin: center;
     animation: card-showcase-spin 5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
   }
 
   &__face,
   &__back {
+    -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
     display: flex;
     justify-content: center;
@@ -29,14 +33,12 @@
 
   &__face {
     position: relative;
-    z-index: 1;
   }
 
   &__back {
     position: absolute;
     inset: 0;
     transform: rotateY(180deg);
-    z-index: 0;
   }
 
   &__face img,

@@ -76,6 +76,8 @@
   &__label {
     flex: 1 1 auto;
     min-width: 0;
+    color: var(--text-dim-mid, #4b4b5f);
+    font-weight: 500;
   }
 
   &--disabled &__track {
