@@ -1,0 +1,40 @@
+/* Based on legacy supershadows.css */
+.st-super-shadow {
+  --text-shadow: var(--line-col, #112);
+  font-family: Panton, sans-serif;
+  font-weight: 600;
+  font-size: 26px;
+}
+
+.st-super-shadow--title {
+  text-shadow: 0 -2px 0 var(--text-shadow), 0 2px 0 var(--text-shadow),
+    2px 0 0 var(--text-shadow), -2px 0 0 var(--text-shadow),
+    -4px 2px 0 var(--text-shadow), -2px 4px 0 var(--text-shadow);
+  filter: drop-shadow(0 0 1px var(--text-shadow))
+    drop-shadow(-1px 1px 0 var(--text-shadow))
+    drop-shadow(0 0 0 var(--text-shadow))
+    drop-shadow(-1px 0 0 var(--text-shadow))
+    drop-shadow(-1px 0 0 var(--text-shadow))
+    drop-shadow(-1px 0 0 var(--text-shadow))
+    drop-shadow(-1px 0 0 var(--text-shadow));
+}
+
+.st-super-shadow--text {
+  text-shadow: 0 -1px 0 var(--text-shadow), 0 1px 0 var(--text-shadow),
+    1px 0 0 var(--text-shadow), -1px 0 0 var(--text-shadow),
+    -2px 1px 0 var(--text-shadow), -1px 2px 0 var(--text-shadow);
+  filter: drop-shadow(0 0 1px var(--text-shadow))
+    drop-shadow(-1px 1px 0 var(--text-shadow))
+    drop-shadow(0 0 0 var(--text-shadow))
+    drop-shadow(-1px 0 0 var(--text-shadow));
+}
+
+.st-super-shadow--slim {
+  text-shadow: 0 -1px 0 var(--text-shadow), 0 1px 0 var(--text-shadow),
+    1px 0 0 var(--text-shadow), -1px 0 0 var(--text-shadow),
+    -1px 1px 0 var(--text-shadow), -1px 1px 0 var(--text-shadow);
+  filter: drop-shadow(0 0 1px var(--text-shadow))
+    drop-shadow(-1px 1px 0 var(--text-shadow))
+    drop-shadow(0 0 0 var(--text-shadow))
+    drop-shadow(-1px 0 0 var(--text-shadow));
+}
