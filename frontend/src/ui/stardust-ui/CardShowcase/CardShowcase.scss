@@ -1,0 +1,63 @@
+/* Generic card showcase: front/back flip animation, synced via a single rotating element. */
+
+.card-showcase {
+  height: 220px;
+  width: 200px;
+
+  &__container {
+    position: relative;
+    transform: rotate(15deg) translate(0, 15px) scale(1);
+    justify-content: center;
+    display: flex;
+    margin: 0 auto;
+    perspective: 400px;
+  }
+
+  &__flip {
+    position: relative;
+    transform-style: preserve-3d;
+    animation: card-showcase-spin 5s cubic-bezier(0.68, -0.55, 0.27, 1.55) infinite;
+  }
+
+  &__face,
+  &__back {
+    backface-visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  &__face {
+    position: relative;
+    z-index: 1;
+  }
+
+  &__back {
+    position: absolute;
+    inset: 0;
+    transform: rotateY(180deg);
+    z-index: 0;
+  }
+
+  &__face img,
+  &__back img {
+    height: 180px;
+    display: block;
+  }
+
+  &__back img {
+    transform: scaleX(-1);
+  }
+}
+
+@keyframes card-showcase-spin {
+  0% {
+    transform: rotateY(0deg);
+  }
+  50% {
+    transform: rotateY(180deg);
+  }
+  100% {
+    transform: rotateY(360deg);
+  }
+}
