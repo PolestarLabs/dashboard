@@ -1,0 +1,89 @@
+// Toggle (switch) styling from admin plx-pink-check
+.st-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  &__track {
+    display: block;
+    width: 70px;
+    height: 30px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 20px;
+    flex-shrink: 0;
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      border-radius: 15px;
+      box-sizing: border-box;
+      transition: 0.3s ease;
+    }
+
+    // Knob (unchecked: small pill on left)
+    &::before {
+      top: 3px;
+      left: 3px;
+      width: 24px;
+      height: 24px;
+      background-color: var(--accent-color);
+      opacity: 0.5;
+    }
+
+    // Track border (unchecked: full track border)
+    &::after {
+      top: 0;
+      right: 0;
+      width: 70px;
+      height: 30px;
+      border: 4px solid var(--accent-color);
+    }
+  }
+
+  &__input:checked + &__track {
+    &::before {
+      top: 0;
+      left: 0;
+      width: 70px;
+      height: 30px;
+      border: 4px solid #143240;
+      background-color: var(--accent-color);
+      opacity: 1;
+    }
+
+    &::after {
+      top: 3px;
+      right: 3px;
+      width: 24px;
+      height: 24px;
+      border-color: var(--text-lightest, #fff);
+      background-color: rgba(255, 255, 255, 0.3);
+      opacity: 1;
+    }
+  }
+
+  &__label {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &--disabled &__track {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &--disabled &__input:checked + &__track::before {
+    border-color: var(--text-lighter, #ccc);
+  }
+}
