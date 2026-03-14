@@ -4,7 +4,7 @@ import RarityboxCard from '../RarityboxCard/RarityboxCard.vue';
 import RarityboxButton from '../RarityboxButton/RarityboxButton.vue';
 
 const meta: Meta<typeof DeckSkinShowcase> = {
-  title: 'Stardust PLX/Deck Skin Showcase',
+  title: 'Pollux-Specific Components/Deck Skin Showcase',
   component: DeckSkinShowcase,
   tags: ['autodocs'],
   argTypes: {

@@ -1,17 +1,17 @@
 <template lang="pug">
 div.deck-skin-showcase
-  CardShowcase(
-    :faceImageUrl="faceImageUrl"
-    :backImageUrl="backImageUrl"
-    faceAlt="Deck face"
-    backAlt="Deck back"
-    :style="showcaseStyle"
-  )
+  div.deck-skin-showcase__scale(:style="showcaseStyle")
+    CardShowcase(
+      :faceImageUrl="faceImageUrl"
+      :backImageUrl="backImageUrl"
+      faceAlt="Deck face"
+      backAlt="Deck back"
+    )
 </template>
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import CardShowcase from '../../stardust-ui/CardShowcase/CardShowcase.vue';
+import CardShowcase from '@/ui/stardust-ui/CardShowcase/CardShowcase.vue';
 import './DeckSkinShowcase.scss';
 
 /** Front card image filename (without path): 'HQ' or 'star' (tarot). */
@@ -32,7 +32,7 @@ const props = withDefaults(
 );
 
 const computedScale = computed(
-  () => props.scale ? props.scale : props.game === 'casino' ? 1.3 : 1
+  () => props.scale ? props.scale : props.game === 'casino' ? 1.2 : 1
 );
 
 const showcaseStyle = computed(() => ({
