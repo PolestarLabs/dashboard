@@ -1,6 +1,8 @@
 import { apiClient } from './client';
 import type { CosmeticItem, CosmeticSearchParams } from './types';
 
+export type { CosmeticItem } from './types';
+
 export async function searchCosmetics(
   params: CosmeticSearchParams = {},
 ): Promise<CosmeticItem[]> {
