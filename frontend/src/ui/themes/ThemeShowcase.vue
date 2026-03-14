@@ -5,6 +5,20 @@
     </p>
 
     <section class="theme-showcase__section">
+      <h2 class="theme-showcase__heading">Typefaces</h2>
+      <div class="theme-showcase__typefaces">
+        <div class="theme-showcase__typeface">
+          <span class="theme-showcase__typeface-label">Panton</span>
+          <p class="theme-showcase__typeface-sample theme-showcase__typeface--panton">The quick brown fox jumps over the lazy dog. 0123456789</p>
+        </div>
+        <div class="theme-showcase__typeface">
+          <span class="theme-showcase__typeface-label">Proxima Soft</span>
+          <p class="theme-showcase__typeface-sample theme-showcase__typeface--proxima">The quick brown fox jumps over the lazy dog. 0123456789</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="theme-showcase__section">
       <h2 class="theme-showcase__heading">Accent</h2>
       <div class="theme-showcase__grid">
         <Swatch var-name="--accent-color" />
@@ -84,5 +98,41 @@ import Swatch from './ThemeSwatch.vue';
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   gap: 1rem;
+}
+
+.theme-showcase__typefaces {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.theme-showcase__typeface {
+  padding: 1rem;
+  background: var(--bg-dark, #2a2a3a);
+  border-radius: 6px;
+}
+
+.theme-showcase__typeface-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-faint, #888);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.theme-showcase__typeface-sample {
+  margin: 0;
+  color: var(--text-main, #ccc);
+  font-size: 1.125rem;
+  line-height: 1.5;
+}
+
+.theme-showcase__typeface--panton {
+  font-family: var(--display-font), Panton, system-ui, sans-serif;
+}
+
+.theme-showcase__typeface--proxima {
+  font-family: var(--strong-font), 'Proxima Soft', system-ui, sans-serif;
 }
 </style>
