@@ -6,7 +6,8 @@ const config: StorybookConfig = {
     "../src/ui/stardust-ui/**/*.stories.@(js|jsx|mjs|ts|tsx)",
     "../src/ui/components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
-  "addons": [
+  staticDirs: ["../public"],
+  addons: [
     "@chromatic-com/storybook",
     "@storybook/addon-a11y",
     "@storybook/addon-docs",
