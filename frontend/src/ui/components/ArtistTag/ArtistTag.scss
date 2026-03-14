@@ -9,6 +9,8 @@
   padding: 2px 4px 2px 8px;
   color: var(--light);
   font-family: Panton, system-ui, sans-serif;
+  position: absolute; 
+  bottom: 0px; left: 0px;
 
   &::after {
     --sidewinder: 30px;
@@ -29,12 +31,28 @@
     margin-right: 8px;
   }
 
-  &__label a {
+  &__label {
+    color: inherit;
+  }
+
+  &--no-background {
+    background: transparent;
+    padding: 0;
+
+    &::after {
+      display: none;
+    }
+  }
+
+  /* When root is anchor */
+  &[href] {
     color: inherit;
     text-decoration: none;
 
     &:hover {
-      text-decoration: underline;
+      .s-artist-tag__label {
+        text-decoration: underline;
+      }
     }
   }
 }
