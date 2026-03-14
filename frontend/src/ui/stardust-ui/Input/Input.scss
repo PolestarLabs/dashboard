@@ -1,0 +1,108 @@
+// Form input styling (from admin plx-pink-input)
+.st-input {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: Panton, sans-serif;
+  font-weight: 500;
+
+
+  &__control {
+    min-height: 35px;
+    padding: 4px;
+    line-height: 1.25;
+    font-size: 16px;
+    color: var(--text-dim-mid, #4b4b5f);
+    border: 3px solid var(--accent-color);
+    border-radius: 8px;
+    background: #0000;
+    transition: border-color 0.2s ease, color 0.2s ease;
+
+    &::placeholder {
+      color: var(--text-dim, #999);
+    }
+
+    &:focus {
+      outline: 0;
+      border-color: var(--secondary-color, var(--accent-color));
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &__control input,
+  &__control textarea {
+    width: 100%;
+    min-width: 0;
+    height: 35px;
+    padding: 0 8px;
+    border: none;
+    background: transparent;
+    font: inherit;
+    color: inherit;
+
+    &:focus {
+      outline: 0;
+    }
+  }
+
+  &__control textarea {
+    height: auto;
+    min-height: 60px;
+    resize: vertical;
+  }
+
+  &__label {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--text-dim-mid, #4b4b5f);
+    font-size: 1rem;
+    line-height: 1.25;
+    font-weight: 600;
+  }
+
+  &__required {
+    color: var(--plx-danger, #f24);
+    margin-left: 0.15em;
+  }
+
+  &__error {
+    flex: 1 1 100%;
+    font-size: 0.85rem;
+    color: var(--plx-danger, #f24);
+    margin-top: 0.25rem;
+  }
+
+  &--error &__control {
+    border-color: var(--plx-danger, #f24);
+  }
+
+  &--error &__control:focus {
+    border-color: var(--plx-danger, #f24);
+  }
+
+  &--inline {
+    flex-direction: row;
+    align-items: center;
+
+    .st-input__control {
+      flex: 0 0 auto;
+      min-width: 200px;
+    }
+  }
+
+  &--block .st-input__control {
+    flex: 1 1 100%;
+    min-width: 200px;
+  }
+}
+
+@media (max-width: 400px) {
+  .st-input__control {
+    max-width: 100%;
+  }
+}
