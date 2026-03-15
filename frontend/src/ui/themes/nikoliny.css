@@ -10,14 +10,14 @@ html.theme-nikoliny {
 --text-dim-mid: #40419FE0;
 --text-inverse: #9AAFFF;
 
- --accent-color-light: #d7f485;
+ --accent-color-light: #9fe2ce;
 --accent-color: #0d97fb;
 /*! --color-contrast: #950642; */
 --accent-color-mid: #4e8ad7;
---accent-color-dark: #392473;
+--accent-color-dark: #4543ad;
 
 --secondary-color:  #7d5fe6;
---secondary-color-alt:  #FFC351;
+--secondary-color-alt:  #da981f;
  
 --dark-dim: #BEA3D0E0;
 --dark-dimmer: #ffffffbf;
@@ -35,7 +35,7 @@ html.theme-nikoliny {
 
 
 
---muted: #99AA;
+--muted: #9999AAAA;
 
 --divider-color: var(--lighter);
 
