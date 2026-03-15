@@ -1,5 +1,10 @@
 /* Card: background is opposite of theme (light theme → dark card, dark theme → light card) */
 .st-card {
+  display: flex;
+  flex-direction: column;
+  min-width: 0; /* prevent overflow blowout in grid/flex contexts */
+  width: 100%;
+  max-width: 480px; /* standalone default — grid/flex parent overrides as needed */
   background-color: var(--bg-card, var(--lightest, #eef));
   color: var(--text-inverse, var(--dark, #2b2b3b));
   border-radius: 8px;
@@ -58,6 +63,7 @@
 }
 
 .st-card__body {
+  flex: 1; /* grow to fill card height — anchors footer to the bottom in grids */
   padding: 0 20px 20px;
   font-family: Proxima Soft, Panton, sans-serif;
   &:first-child {
@@ -74,10 +80,10 @@
   border-top: 1px #eef solid;
 }
 
-/* Size variants */
+/* Size variants — control density (padding / type scale); standalone max-width is advisory */
 .st-card--sm {
   border-radius: 6px;
-  max-width: 300px;
+  max-width: 320px;
   & .st-super-shadow {
     font-size: 16pt;
     letter-spacing: 0px;
@@ -113,7 +119,7 @@
 
 .st-card--lg {
   border-radius: 10px;
-  max-width: 100vh;
+  max-width: none; /* lg is a full-width panel — fills its container */
 
   .st-card__header {
     padding: 24px 28px 0;
@@ -143,15 +149,15 @@
   border: 2px solid var(--text-faint, var(--dark, #2b2b3b));
 }
 
-/* Grid layout for multiple cards */
+/* Grid layout helper — cards fill columns naturally; column count adapts to container width */
 .st-card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr));
+  align-items: stretch; /* cards in the same row share height */
   gap: 20px;
-}
 
-@media (min-width: 640px) {
-  .st-card-grid {
-    grid-template-columns: repeat(3, 1fr);
+  > .st-card {
+    max-width: none; /* grid track drives width, not the card's own cap */
+    width: 100%;
   }
 }
