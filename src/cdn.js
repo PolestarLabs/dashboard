@@ -3,6 +3,15 @@ const path = require('path');
 
 const app = Express();
 
+// Allow CORS for all asset endpoints (needed for canvas with remote images)
+app.use(function (req, res, next) {
+  res.set('Access-Control-Allow-Origin', '*');
+  res.set('Access-Control-Allow-Methods', 'GET,OPTIONS');
+  res.set('Access-Control-Allow-Headers', 'Origin,Content-Type,Accept');
+  if (req.method === 'OPTIONS') return res.sendStatus(204);
+  next();
+});
+
 const ASSETS_PATH = process.env.ASSETS_PATH || "/home/pollux/polaris/ASSETS/";
 const cacheOpts = {
   "cache": [
