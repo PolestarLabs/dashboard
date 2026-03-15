@@ -9,8 +9,8 @@
 
 
   &__control {
-    min-height: 35px;
-    padding: 4px;
+    box-sizing: border-box;
+    padding: 4px 8px;
     line-height: 1.25;
     font-size: 16px;
     color: var(--text-dim-mid, #4b4b5f);
@@ -18,6 +18,12 @@
     border-radius: 8px;
     background: #0000;
     transition: border-color 0.2s ease, color 0.2s ease;
+
+    // Single-line input: fixed 48px total (border inside) so it aligns with buttons
+    &:has(input) {
+      height: 48px;
+      max-height: 48px;
+    }
 
     &::placeholder {
       color: var(--text-dim, #999);
@@ -36,10 +42,10 @@
 
   &__control input,
   &__control textarea {
+    box-sizing: border-box;
     width: 100%;
     min-width: 0;
-    height: 35px;
-    padding: 0 8px;
+    padding: 0;
     border: none;
     background: transparent;
     font: inherit;
@@ -48,6 +54,10 @@
     &:focus {
       outline: 0;
     }
+  }
+
+  &__control input {
+    height: 100%;
   }
 
   &__control textarea {
@@ -98,6 +108,26 @@
   &--block .st-input__control {
     flex: 1 1 100%;
     min-width: 200px;
+  }
+
+  // sm: matches Button sm (32px height, 10px radius) for GlueContainer
+  &--sm &__control {
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 14px;
+
+    &:has(input) {
+      height: 32px;
+      max-height: 32px;
+    }
+
+    input {
+      padding: 0 6px;
+    }
+  }
+
+  &--sm &__label {
+    font-size: 0.9rem;
   }
 }
 

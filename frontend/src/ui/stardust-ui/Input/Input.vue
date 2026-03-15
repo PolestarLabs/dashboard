@@ -1,6 +1,6 @@
 <template lang="pug">
 .st-input(
-  :class="{ 'st-input--inline': label && inline, 'st-input--block': label && !inline, 'st-input--error': showError }"
+  :class="inputClasses"
 )
   .st-input__control
     component(
@@ -47,6 +47,8 @@ const props = withDefaults(
     multiline?: boolean;
     /** Inline layout: label and input on same row */
     inline?: boolean;
+    /** Size: sm matches Button sm (32px) for GlueContainer, md is default */
+    size?: 'sm' | 'md';
     disabled?: boolean;
     name?: string;
     /** Show required indicator (*) and pass required to native input */
@@ -54,8 +56,15 @@ const props = withDefaults(
     /** Error message shown when validation fails */
     error?: string;
   }>(),
-  { type: 'text', inline: true }
+  { type: 'text', inline: true, size: 'md' }
 );
+
+const inputClasses = computed(() => ({
+  'st-input--inline': props.label && props.inline,
+  'st-input--block': props.label && !props.inline,
+  'st-input--error': showError.value,
+  'st-input--sm': props.size === 'sm',
+}));
 
 const emit = defineEmits<{
   'update:modelValue': [value: string | number];
