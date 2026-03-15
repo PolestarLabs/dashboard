@@ -1,0 +1,200 @@
+// GlueContainer: visually glues two or more components so they look like one
+// - Single shared shadow, no radius at junctions
+
+.s-glue-container-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.35rem;
+
+  .s-glue-container__label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dim-mid, #4b4b5f);
+  }
+}
+
+.s-glue-container {
+  display: inline-flex;
+  align-items: stretch;
+  box-shadow: 0 4px 12px var(--shadow, rgba(0, 0, 0, 0.15));
+  overflow: visible;
+  border-radius: 6px;
+
+  // Single shadow for the group; children must not cast their own
+  > * {
+    box-shadow: none !important;
+  }
+}
+
+// ---- Inline: two components side by side (e.g. Input + Button, Button + Input)
+.s-glue-container--inline {
+  flex-direction: row;
+
+  // Button keeps its desired width, does not shrink
+  > .s-btn {
+    flex: 0 0 auto;
+    min-width: min-content;
+  }
+
+  // Input takes remaining space
+  > .st-input {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  > *:first-child {
+
+    // apply to button and input only if the next sibling is a button or input
+    &:has(+ .s-btn, + .st-input){
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    // Input's border is on __control, not the root; stretch control to match neighbour
+    &.st-input {
+      .st-input__control {
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        min-height: 100%;
+      }
+    }
+
+    &:not(.st-input) .st-input__control {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  > *:last-child {
+
+    &:is(.s-btn + *, .st-input + *) {
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0;
+    }
+
+    &.st-input .st-input__control {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+      min-height: 100%;
+    }
+
+    &:not(.st-input) .st-input__control {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+  }
+
+  > *:only-child {
+    border-radius: inherit;
+
+    .st-input__control {
+      border-radius: inherit;
+    }
+  }
+}
+
+// ---- Segments: multiple components in a row (e.g. several Buttons as one pill)
+.s-glue-container--segments {
+  flex-direction: row;
+
+  > .s-glue-container__pair > .s-btn,
+  > * {
+    flex: 1 1 auto;
+    min-width: 0;
+    border-radius: 0 !important;
+    &.s-btn--ghost {
+      margin: 0 -1px;    }
+  }
+
+  > .s-glue-container__pair:first-child:not(:only-child) > .s-btn,
+  > *:first-child:not(:only-child) {
+    border-top-left-radius: var(--rounded-btn) !important;
+    border-bottom-left-radius: var(--rounded-btn) !important;
+  }
+
+  > .s-glue-container__pair:last-child:not(:only-child) > .s-btn,
+  > *:last-child:not(:only-child) {
+    border-top-right-radius: var(--rounded-btn) !important;
+    border-bottom-right-radius: var(--rounded-btn) !important;
+
+  }
+  
+  > * {
+    overflow: visible;
+  }
+}
+
+// ---- Badge layout
+.s-glue-container--badge {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+
+  > .s-btn {
+    flex: 1 0 auto;
+    min-width: min-content;
+    color: inherit;
+  }
+
+  > .s-badge {
+    flex: 0 0 auto;
+    position: static;
+    transform: scale(1.4);
+    font-size: 0.6rem;
+  }
+}
+
+// Single badge: push to the very end of the line; button keeps left radius, flat on the right
+.s-glue-container--badge-single {
+  > .s-badge {
+    margin-left: -40px;
+  }
+
+  > .s-btn {
+    border-top-right-radius: 48px !important;
+    border-bottom-right-radius: 48px !important;
+    padding-right: 48px;
+  }
+}
+
+// Several badges: segment-like pill; each badge is INSIDE the button it's coupled to, overlaying it (e.g. top-right)
+
+.s-glue-container--badge-pairs {
+  position: relative;
+  flex-direction: row;
+  gap: 0;
+
+  > .s-glue-container__pair {
+    flex: 1 1 0;
+    min-width: 0;
+    position: relative;
+  }
+}
+
+.s-glue-container__pair {
+  display: flex;
+  align-items: stretch;
+  justify-content: stretch;
+  position: relative;
+
+  > .s-btn {
+    flex: 1 1 auto;
+    min-width: 0;
+    position: relative;
+  }
+
+  > .s-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    transform: scale(1.25) translate(30%, -30%);
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.3);
+    pointer-events: none;
+    flex: 0 0 auto;
+    z-index: 1;
+    background-color: var(--color-tertiary);
+  }
+}
