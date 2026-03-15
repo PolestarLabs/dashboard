@@ -26,6 +26,8 @@ const props = defineProps<{
   rotateZ?: number;
   /** Border radius applied to the canvas */
   borderRadius?: number;
+  /** Stretch the image to fill the canvas, ignoring aspect ratio */
+  stretchToFit?: boolean;
 }>();
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
@@ -86,9 +88,15 @@ let faceImg: HTMLImageElement | null = null;
 let backImg: HTMLImageElement | null = null;
 let easingFn = (t: number) => t;
 
+/** Gap between the card and the viewport edge on every side (px). */
+const MARGIN = 16;
+
+/** Computed viewport size; updated after images load in setupCanvasSize. */
+const viewportSize = ref({ width: 200, height: 280 });
+
 const canvasStyle = computed(() => ({
-  width: `${props.width ?? 200}px`,
-  height: `${props.height ?? 220}px`,
+  width: `${viewportSize.value.width}px`,
+  height: `${viewportSize.value.height}px`,
   display: 'block',
   transformStyle: 'preserve-3d',
   borderRadius: props.borderRadius != null ? `${props.borderRadius}px` : undefined,
@@ -111,13 +119,19 @@ const setupCanvasSize = () => {
   if (!canvas) return;
 
   const dpr = window.devicePixelRatio || 1;
-  const w = props.width ?? 200;
-  const h = props.height ?? 220;
 
-  canvas.width = Math.round(w * dpr);
-  canvas.height = Math.round(h * dpr);
-  canvas.style.width = `${w}px`;
-  canvas.style.height = `${h}px`;
+  // Front face natural size is the card's intrinsic size.
+  const frontW = faceImg?.naturalWidth ?? 200;
+  const frontH = faceImg?.naturalHeight ?? 280;
+
+  // Viewport: explicit props define it; omitted dimension falls back to the card's natural dimension.
+  const vW = props.width ?? frontW;
+  const vH = props.height ?? frontH;
+
+  viewportSize.value = { width: vW, height: vH };
+
+  canvas.width = Math.round(vW * dpr);
+  canvas.height = Math.round(vH * dpr);
 
   const ctx = canvas.getContext('2d');
   if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -129,10 +143,12 @@ const drawFrame = (timestamp: number) => {
   const ctx = canvas.getContext('2d');
   if (!ctx) return;
 
-  const w = canvas.width;
-  const h = canvas.height;
+  // Use logical (CSS) pixel dimensions for all drawing coordinates.
+  const dpr = window.devicePixelRatio || 1;
+  const lw = canvas.width / dpr;
+  const lh = canvas.height / dpr;
 
-  ctx.clearRect(0, 0, w, h);
+  ctx.clearRect(0, 0, lw, lh);
 
   if (!faceImg || !backImg) {
     animationFrameId.value = requestAnimationFrame(drawFrame);
@@ -160,14 +176,18 @@ const drawFrame = (timestamp: number) => {
   const cos = Math.cos(angle);
   const showingBack = cos < 0;
 
-  const img = showingBack ? backImg : faceImg;
-
-  const targetW = w * 0.9;
-  const targetH = h * 0.9;
+  // Card size: front face natural dimensions, scaled to fit within viewport minus margin.
+  const frontW = faceImg.naturalWidth;
+  const frontH = faceImg.naturalHeight;
+  const maxCardW = lw - MARGIN * 2;
+  const maxCardH = lh - MARGIN * 2;
+  const cardScale = Math.min(1, maxCardW / frontW, maxCardH / frontH);
+  const cardW = frontW * cardScale;
+  const cardH = frontH * cardScale;
 
   const radius = props.borderRadius ?? 0;
 
-  // 3D rotation to the canvas element itself
+  // 3D rotation applied to the canvas element itself.
   const angleDeg = (angle * 180) / Math.PI;
   const rotateX = props.rotateX ?? 0;
   const rotateY = props.rotateY ?? 0;
@@ -176,28 +196,42 @@ const drawFrame = (timestamp: number) => {
   canvas.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY + angleDeg}deg) rotateZ(${rotateZ}deg)`;
 
   ctx.save();
-  ctx.translate(w / 2, h / 2);
+  ctx.translate(lw / 2, lh / 2);
 
-  // Roundrect
+  // Rounded rect clip
   if (radius > 0) {
-    const rw = targetW;
-    const rh = targetH;
-    const r = Math.min(radius, rw / 2, rh / 2);
+    const r = Math.min(radius, cardW / 2, cardH / 2);
     ctx.beginPath();
-    ctx.moveTo(-rw / 2 + r, -rh / 2);
-    ctx.lineTo(rw / 2 - r, -rh / 2);
-    ctx.quadraticCurveTo(rw / 2, -rh / 2, rw / 2, -rh / 2 + r);
-    ctx.lineTo(rw / 2, rh / 2 - r);
-    ctx.quadraticCurveTo(rw / 2, rh / 2, rw / 2 - r, rh / 2);
-    ctx.lineTo(-rw / 2 + r, rh / 2);
-    ctx.quadraticCurveTo(-rw / 2, rh / 2, -rw / 2, rh / 2 - r);
-    ctx.lineTo(-rw / 2, -rh / 2 + r);
-    ctx.quadraticCurveTo(-rw / 2, -rh / 2, -rw / 2 + r, -rh / 2);
+    ctx.moveTo(-cardW / 2 + r, -cardH / 2);
+    ctx.lineTo(cardW / 2 - r, -cardH / 2);
+    ctx.quadraticCurveTo(cardW / 2, -cardH / 2, cardW / 2, -cardH / 2 + r);
+    ctx.lineTo(cardW / 2, cardH / 2 - r);
+    ctx.quadraticCurveTo(cardW / 2, cardH / 2, cardW / 2 - r, cardH / 2);
+    ctx.lineTo(-cardW / 2 + r, cardH / 2);
+    ctx.quadraticCurveTo(-cardW / 2, cardH / 2, -cardW / 2, cardH / 2 - r);
+    ctx.lineTo(-cardW / 2, -cardH / 2 + r);
+    ctx.quadraticCurveTo(-cardW / 2, -cardH / 2, -cardW / 2 + r, -cardH / 2);
     ctx.closePath();
     ctx.clip();
   }
 
-  ctx.drawImage(img, -targetW / 2, -targetH / 2, targetW, targetH);
+  const img = showingBack ? backImg : faceImg;
+
+  let drawW: number;
+  let drawH: number;
+
+  if (props.stretchToFit) {
+    // Stretch: fill the card area ignoring aspect ratio.
+    drawW = cardW;
+    drawH = cardH;
+  } else {
+    // Cover: scale to fill card area, preserving aspect ratio (crops if needed).
+    const coverScale = Math.max(cardW / img.width, cardH / img.height);
+    drawW = img.width * coverScale;
+    drawH = img.height * coverScale;
+  }
+
+  ctx.drawImage(img, -drawW / 2, -drawH / 2, drawW, drawH);
   ctx.restore();
 
   animationFrameId.value = requestAnimationFrame(drawFrame);
@@ -231,7 +265,7 @@ onBeforeUnmount(() => {
 });
 
 watch(
-  () => [props.faceImageUrl, props.backImageUrl, props.width, props.height],
+  () => [props.faceImageUrl, props.backImageUrl, props.width, props.height, props.stretchToFit],
   () => {
     start();
   }
