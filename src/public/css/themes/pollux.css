@@ -55,7 +55,7 @@
 	--text-bold: var(--lighter,#AAC);
 	--text-main: var(--light,#AAC);
 	--text-faint: var(--pre-light,#668);
-	--text-dim: var(#99AA);
+	--text-dim: var(#9999AAAA);
 	--text-dim-mid: var(--pre-light,#88a);
 	--text-inverse: var(--dark,#2b2b3b);
 	--accent-color: var(--main-pink, #f35);
@@ -79,7 +79,7 @@
 	--link-head-hover: var(--alt-pink);
 	--divider-color: var(--pre-light);
 	--heading-divider-color: var(--lighter);
-	--muted: #99AA;
+	--muted: #9999AAAA;
 	--light-border: var(--light);
 	--dark-border: var(--dark);
 	--dark-dim: #27233775;
