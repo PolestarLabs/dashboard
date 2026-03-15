@@ -1,16 +1,20 @@
 <template lang="pug">
 div(:class="classes")
-  header.s-raritybox-card__header(v-if="$slots.header")
-    slot(name="header")
-  div.s-raritybox-card__body
-    div.s-raritybox-card__image(
-      v-if="$slots.image || imageUrl"
-      :style="imageUrl && !$slots.image ? { backgroundImage: `url(${imageUrl})` } : undefined"
-    )
-      slot(name="image")
-    slot(v-if="$slots.default")
-  footer.s-raritybox-card__footer(v-if="$slots.footer")
-    slot(name="footer")
+  .s-raritybox-card__inner
+    header.s-raritybox-card__header(v-if="$slots.header")
+      slot(name="header")
+    .s-raritybox-card__content
+      div.s-raritybox-card__image(
+        v-if="$slots.image || imageUrl"
+        :style="imageUrl && !$slots.image ? { backgroundImage: `url(${imageUrl})` } : undefined"
+      )
+        slot(name="image")
+      .s-raritybox-card__body
+        slot
+      header.s-raritybox-card__sub-header(v-if="$slots['sub-header']")
+        slot(name="sub-header")
+      footer.s-raritybox-card__footer(v-if="$slots.footer")
+        slot(name="footer")
 </template>
 
 <script setup lang="ts">

@@ -1,8 +1,8 @@
 <template lang="pug">
-button(:class="classes" type="button" @click="onClick")
-  span.btn__ripple(ref="rippleRef" @animationend="onRippleEnd")
-  i.btn__icon(v-if="icon" :class="icon" :aria-hidden="true")
-  span.btn__label(v-if="label") {{ label }}
+button.s-btn(:class="classes" type="button" @click="onClick")
+  span.s-btn__ripple(ref="rippleRef" @animationend="onRippleEnd")
+  i.s-btn__icon(v-if="icon" :class="icon" :aria-hidden="true")
+  span.s-btn__label(v-if="label") {{ label }}
   slot
 </template>
 
@@ -24,15 +24,15 @@ const rippleRef = ref<HTMLElement | null>(null);
 const isRippling = ref(false);
 
 const classes = computed(() => {
-  const base = ['btn'];
+  const base: string[] = [];
   const variant = props.variant ?? 'primary';
   const size = props.size ?? 'md';
-  base.push(`btn-${variant}`);
-  if (size === 'sm') base.push('btn-sm');
-  if (size === 'lg') base.push('btn-lg');
-  if (isRippling.value) base.push('btn--rippling');
-  if (props.disabled) base.push('btn-disabled');
-  if (props.iconposition === 'right') base.push('btn-icon-right');
+  base.push(`s-btn--${variant}`);
+  if (size === 'sm') base.push('s-btn--sm');
+  if (size === 'lg') base.push('s-btn--lg');
+  if (isRippling.value) base.push('s-btn--rippling');
+  if (props.disabled) base.push('s-btn--disabled');
+  if (props.iconposition === 'right') base.push('s-btn--icon-right');
   return base.join(' ');
 });
 
