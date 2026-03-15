@@ -7,9 +7,11 @@
   max-width: 480px; /* standalone default — grid/flex parent overrides as needed */
   background-color: var(--bg-card, var(--lightest, #eef));
   color: var(--text-inverse, var(--dark, #2b2b3b));
+  font-family: Proxima Soft, Panton, sans-serif;
   border-radius: 8px;
   box-shadow: 0 4px 8px var(--shadow, rgba(0, 0, 0, 0.15));
   overflow: hidden;
+  transition: box-shadow 0.2s ease;
   & .st-super-shadow {
     font-size: 18pt;
     letter-spacing: 1px;
@@ -65,7 +67,6 @@
 .st-card__body {
   flex: 1; /* grow to fill card height — anchors footer to the bottom in grids */
   padding: 0 20px 20px;
-  font-family: Proxima Soft, Panton, sans-serif;
   &:first-child {
     margin-top: 20px;
   }
@@ -77,7 +78,7 @@
   flex-wrap: wrap;
   gap: 0.5rem;
   padding: 12px 20px 20px;
-  border-top: 1px #eef solid;
+  border-top: 1px solid var(--st-card-divider, rgba(0, 0, 0, 0.1));
 }
 
 /* Size variants — control density (padding / type scale); standalone max-width is advisory */
@@ -96,10 +97,6 @@
 
   .st-card__title {
     font-size: 1rem;
-  }
-
-  .st-card__media {
-    aspect-ratio: 16 / 10;
   }
 
   .st-card__body {
@@ -147,6 +144,56 @@
 
 .st-card--bordered {
   border: 2px solid var(--text-faint, var(--dark, #2b2b3b));
+}
+
+/* Clickable card — hover lift + keyboard focus ring + ripple */
+.st-card--clickable {
+  position: relative; /* ripple anchors to card */
+  cursor: pointer;
+  user-select: none;
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+
+  &:hover {
+    box-shadow: 0 8px 24px var(--shadow, rgba(0, 0, 0, 0.22));
+    transform: translateY(-2px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--primary-color, #5c6ef8);
+    outline-offset: 4px;
+  }
+  &:active {
+    box-shadow: 0 2px 4px var(--shadow, rgba(0, 0, 0, 0.15));
+    transform: translateY(2px);
+  }
+
+  .st-card__ripple {
+    position: absolute;
+    border-radius: 50%;
+    background: var(--color-primary, #5c6ef8);
+    opacity: 0;
+    pointer-events: none;
+    animation: st-card-ripple 0.55s ease-out forwards;
+  }
+}
+
+@keyframes st-card-ripple {
+  from {
+    transform: scale(0);
+    opacity: 0.18;
+  }
+  to {
+    transform: scale(1);
+    opacity: 0;
+  }
+}
+
+/* Flush body — removes body padding for full-bleed content */
+.st-card--flush {
+  .st-card__body {
+    padding: 0;
+    &:first-child { margin-top: 0; }
+  }
 }
 
 /* Grid layout helper — cards fill columns naturally; column count adapts to container width */

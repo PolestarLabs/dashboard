@@ -19,6 +19,7 @@
   text-transform: uppercase;
   flex-direction: row;
   flex-wrap: nowrap;
+  font-weight: 600;
   --current-color: var(--color-primary);
 
 
@@ -65,6 +66,8 @@
     min-width: 32px;
     padding: 0 16px;
     gap: 0.5rem;
+    font-size: 14px;
+    
 
     .s-btn__ripple {
       inset: -3px;

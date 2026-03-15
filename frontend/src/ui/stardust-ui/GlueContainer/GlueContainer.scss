@@ -59,11 +59,6 @@
         min-height: 100%;
       }
     }
-
-    &:not(.st-input) .st-input__control {
-      border-top-right-radius: 0;
-      border-bottom-right-radius: 0;
-    }
   }
 
   > *:last-child {
@@ -78,11 +73,6 @@
       border-bottom-left-radius: 0;
       min-height: 100%;
     }
-
-    &:not(.st-input) .st-input__control {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
-    }
   }
 
   > *:only-child {
@@ -95,6 +85,7 @@
 }
 
 // ---- Segments: multiple components in a row (e.g. several Buttons as one pill)
+.s-glue-container--badge-pairs,
 .s-glue-container--segments {
   flex-direction: row;
 
@@ -103,8 +94,10 @@
     flex: 1 1 auto;
     min-width: 0;
     border-radius: 0 !important;
+
     &.s-btn--ghost {
-      margin: 0 -1px;    }
+      margin: 0 -1px;
+    }
   }
 
   > .s-glue-container__pair:first-child:not(:only-child) > .s-btn,
@@ -117,9 +110,8 @@
   > *:last-child:not(:only-child) {
     border-top-right-radius: var(--rounded-btn) !important;
     border-bottom-right-radius: var(--rounded-btn) !important;
-
   }
-  
+
   > * {
     overflow: visible;
   }
@@ -127,8 +119,6 @@
 
 // ---- Badge layout
 .s-glue-container--badge {
-  display: inline-flex;
-  flex-direction: row;
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
@@ -164,12 +154,11 @@
 
 .s-glue-container--badge-pairs {
   position: relative;
-  flex-direction: row;
   gap: 0;
 
   > .s-glue-container__pair {
-    flex: 1 1 0;
-    min-width: 0;
+    flex: 1 1 auto;
+    min-width: 80px;
     position: relative;
   }
 }
@@ -177,7 +166,6 @@
 .s-glue-container__pair {
   display: flex;
   align-items: stretch;
-  justify-content: stretch;
   position: relative;
 
   > .s-btn {

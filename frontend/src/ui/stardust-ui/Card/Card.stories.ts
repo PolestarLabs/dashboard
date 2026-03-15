@@ -12,11 +12,16 @@ const meta: Meta<typeof Card> = {
     border: false,
     size: 'md',
     mediaAspectRatio: true,
+    clickable: false,
+    flush: false,
   },
   argTypes: {
+    as: { control: 'text', description: 'Root element or component (div, article, section, li…)' },
     border: { control: 'boolean' },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     mediaAspectRatio: { control: 'boolean', description: 'Media slot: fixed 16/10 aspect ratio (on) or natural height, top-center (off)' },
+    clickable: { control: 'boolean', description: 'Adds hover lift, pointer cursor and focus-visible ring for interactive cards' },
+    flush: { control: 'boolean', description: 'Removes body padding for full-bleed content (tables, images, code blocks)' },
   },
 };
 
@@ -210,6 +215,58 @@ export const GridOfThree: Story = {
     docs: {
       description: {
         story: 'Cards in a responsive grid. Columns fill the container via `auto-fill`; footers are anchored to the card bottom across unequal content. Use the `.st-card-grid` helper class.',
+      },
+    },
+  },
+};
+
+export const Clickable: Story = {
+  args: { size: 'md', clickable: true },
+  render: (args) => ({
+    components: { Card },
+    setup() { return { args }; },
+    template: `
+    <div style="max-width: 360px;">
+      <Card v-bind="args" tabindex="0">
+        <template #title>Clickable Card</template>
+        <p>Hover for lift. Tab to this card and check the focus-visible ring.</p>
+      </Card>
+    </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Set `clickable` when the entire card is interactive. Gets hover shadow lift, pointer cursor, and a `focus-visible` outline for keyboard navigation.',
+      },
+    },
+  },
+};
+
+export const Flush: Story = {
+  args: { size: 'md', flush: true },
+  render: (args) => ({
+    components: { Card },
+    setup() { return { args }; },
+    template: `
+    <div style="max-width: 420px;">
+      <Card v-bind="args">
+        <template #title>Flush body</template>
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+          <thead><tr style="background:rgba(0,0,0,0.07);"><th style="padding:8px 16px;text-align:left;">Name</th><th style="padding:8px 16px;text-align:right;">Value</th></tr></thead>
+          <tbody>
+            <tr style="border-top:1px solid rgba(0,0,0,0.08);"><td style="padding:8px 16px;">Alpha</td><td style="padding:8px 16px;text-align:right;">12</td></tr>
+            <tr style="border-top:1px solid rgba(0,0,0,0.08);"><td style="padding:8px 16px;">Beta</td><td style="padding:8px 16px;text-align:right;">47</td></tr>
+          </tbody>
+        </table>
+      </Card>
+    </div>
+    `,
+  }),
+  parameters: {
+    docs: {
+      description: {
+        story: 'Set `flush` to remove body padding for full-bleed content like tables, code blocks, or edge-to-edge images.',
       },
     },
   },

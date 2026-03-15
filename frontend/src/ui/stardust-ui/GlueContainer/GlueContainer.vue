@@ -11,14 +11,6 @@ import { computed, defineComponent, h, Fragment, useSlots } from 'vue';
 import Badge from '../Badge/Badge.vue';
 import './GlueContainer.scss';
 
-const props = withDefaults(
-  defineProps<{
-    /** Optional override. If not set, layout is auto-detected: badge when a Badge is in the slot, segments when 3+ children, else inline. */
-    layout?: 'inline' | 'segments' | 'badge';
-  }>(),
-  { layout: undefined }
-);
-
 const slots = useSlots();
 
 function getSlotNodes() {
@@ -35,9 +27,8 @@ function badgeCount(): number {
   return getSlotNodes().filter((vnode: any) => vnode?.type === Badge).length;
 }
 
-/** Auto-detected: badge when slot has a Badge, segments when 3+ children, else inline. Manual layout prop overrides when set. */
+/** Auto-detected: badge when slot has a Badge, segments when 3+ children, else inline. */
 const effectiveLayout = computed(() => {
-  if (props.layout != null) return props.layout;
   const nodes = getSlotNodes();
   if (slotHasBadge()) return 'badge';
   if (nodes.length >= 3) return 'segments';

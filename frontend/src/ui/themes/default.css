@@ -11,12 +11,13 @@
 @import "./selenedi.css";
 
 :root {
-	--main-pink: #F58;
+	--main-pink: #FF60A0;
 	--alt-pink: #F69;
-	--dark-pink: #F35;
-	--darkest-pink: #D05;
+	--dark-pink: #E26;
+	--mid-pink: #F04070;
+	--darkest-pink: #B26;
 	--main-purple: #A6F;
-	--alt-purple: #95F;
+	--alt-purple: #7040F8;
 	--dark-purple: #53F;
 	--darkest-purple: #50D;
 	--darkest: #0F0F1A;

@@ -38,16 +38,3 @@ html {
 color: var(--text-main);
 background-color: var(--bg-main);
 }
-
-b, strong {
-    color: var(--text-extra-bold);
-}
-
-h1, h2, h3, h4, h5, h6 {
-    color: var(--text-extra-bold);
-}
-
-p {
-    color: var(--text-main);
-}
-

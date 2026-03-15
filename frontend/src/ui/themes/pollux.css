@@ -13,7 +13,7 @@ html.theme-pollux {
 	--text-dim-mid: var(--pre-light, #88a);
 	--text-inverse: var(--dark, #2b2b3b);
 	--accent-color: var(--main-pink, #f35);
-	--accent-color-mid: var(--dark-pink, #F13151);
+	--accent-color-mid: var(--mid-pink, #F13151);
 	--accent-color-strong: var(--dark-pink, #F13151);
 	--accent-color-dark: var(--darkest-pink, #D05);
 	--secondary-color: var(--main-purple, #95F);

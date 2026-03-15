@@ -9,13 +9,6 @@ const meta: Meta<typeof GlueContainer> = {
   title: 'Stardust UI/GlueContainer',
   component: GlueContainer,
   tags: ['autodocs'],
-  argTypes: {
-    layout: {
-      control: { type: 'select' },
-      options: ['inline', 'segments', 'badge'],
-      description: 'Optional override. If not set, layout is auto-detected: badge when a Badge is in the slot, segments when 3+ children, else inline.',
-    },
-  },
 };
 
 export default meta;
@@ -50,7 +43,7 @@ export const ButtonAndInput: Story = {
     components: { GlueContainer, Input, Button },
     template: `
       <GlueContainer v-bind="args">
-        <template #label>Server prefix</template>
+        <template #label>Setting A</template>
         <Button label="Set" icon="fas fa-cog" size="sm" />
         <Input v-model="value" placeholder="+123" size="sm" />
       </GlueContainer>
