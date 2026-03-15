@@ -18,11 +18,19 @@ const props = defineProps<{
   width?: number;
   /** Height of the canvas in pixels */
   height?: number;
+  /** Rotate the canvas around X axis (degrees) */
+  rotateX?: number;
+  /** Rotate the canvas around Y axis (degrees) */
+  rotateY?: number;
+  /** Rotate the canvas around Z axis (degrees) */
+  rotateZ?: number;
+  /** Border radius applied to the canvas */
+  borderRadius?: number;
 }>();
 
 const canvasRef = ref<HTMLCanvasElement | null>(null);
 
-// Adapted from https://github.com/gre/bezier-easing (MIT)
+// Adapted from https://github.com/gre/bezier-easing
 const makeCubicBezier = (x1: number, y1: number, x2: number, y2: number) => {
   const cx = 3 * x1;
   const bx = 3 * (x2 - x1) - cx;
@@ -82,7 +90,10 @@ const canvasStyle = computed(() => ({
   width: `${props.width ?? 200}px`,
   height: `${props.height ?? 220}px`,
   display: 'block',
+  transformStyle: 'preserve-3d',
+  borderRadius: props.borderRadius != null ? `${props.borderRadius}px` : undefined,
 }));
+
 
 const loadImage = (url?: string): Promise<HTMLImageElement | null> => {
   return new Promise((resolve) => {
@@ -124,27 +135,68 @@ const drawFrame = (timestamp: number) => {
   ctx.clearRect(0, 0, w, h);
 
   if (!faceImg || !backImg) {
-    // keep trying until both images are loaded
     animationFrameId.value = requestAnimationFrame(drawFrame);
     return;
   }
 
   const duration = props.durationMs ?? 5000;
-  const progress = (timestamp % duration) / duration;
-  const easedProgress = easingFn(progress);
-  const angle = (easedProgress * Math.PI * 2);
+  const rawProgress = (timestamp % duration) / duration;
+
+  // short hold
+  const holdStart = 0.45;
+  const holdEnd = 0.45;
+
+  let angle: number;
+  if (rawProgress < holdStart) {
+    const p = rawProgress / holdStart;
+    angle = easingFn(p) * Math.PI;
+  } else if (rawProgress < holdEnd) {
+    angle = Math.PI;
+  } else {
+    const p = (rawProgress - holdEnd) / (1 - holdEnd);
+    angle = Math.PI + easingFn(p) * Math.PI;
+  }
+
   const cos = Math.cos(angle);
   const showingBack = cos < 0;
 
   const img = showingBack ? backImg : faceImg;
-  const scaleX = Math.abs(cos);
 
   const targetW = w * 0.9;
   const targetH = h * 0.9;
 
+  const radius = props.borderRadius ?? 0;
+
+  // 3D rotation to the canvas element itself
+  const angleDeg = (angle * 180) / Math.PI;
+  const rotateX = props.rotateX ?? 0;
+  const rotateY = props.rotateY ?? 0;
+  const rotateZ = props.rotateZ ?? 0;
+
+  canvas.style.transform = `perspective(600px) rotateX(${rotateX}deg) rotateY(${rotateY + angleDeg}deg) rotateZ(${rotateZ}deg)`;
+
   ctx.save();
   ctx.translate(w / 2, h / 2);
-  ctx.scale(scaleX, 1);
+
+  // Roundrect
+  if (radius > 0) {
+    const rw = targetW;
+    const rh = targetH;
+    const r = Math.min(radius, rw / 2, rh / 2);
+    ctx.beginPath();
+    ctx.moveTo(-rw / 2 + r, -rh / 2);
+    ctx.lineTo(rw / 2 - r, -rh / 2);
+    ctx.quadraticCurveTo(rw / 2, -rh / 2, rw / 2, -rh / 2 + r);
+    ctx.lineTo(rw / 2, rh / 2 - r);
+    ctx.quadraticCurveTo(rw / 2, rh / 2, rw / 2 - r, rh / 2);
+    ctx.lineTo(-rw / 2 + r, rh / 2);
+    ctx.quadraticCurveTo(-rw / 2, rh / 2, -rw / 2, rh / 2 - r);
+    ctx.lineTo(-rw / 2, -rh / 2 + r);
+    ctx.quadraticCurveTo(-rw / 2, -rh / 2, -rw / 2 + r, -rh / 2);
+    ctx.closePath();
+    ctx.clip();
+  }
+
   ctx.drawImage(img, -targetW / 2, -targetH / 2, targetW, targetH);
   ctx.restore();
 
@@ -185,3 +237,4 @@ watch(
   }
 );
 </script>
+
