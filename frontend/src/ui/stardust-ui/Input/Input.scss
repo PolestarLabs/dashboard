@@ -9,15 +9,16 @@
 
 
   &__control {
+    display: flex;
     box-sizing: border-box;
     padding: 4px 8px;
     line-height: 1.25;
-    font-size: 16px;
-    color: var(--text-dim-mid, #4b4b5f);
+    font-size: 17px;
+    color: var(--text-main, #4b4b5f);
     border: 3px solid var(--accent-color);
     border-radius: 8px;
     background: #0000;
-    transition: border-color 0.2s ease, color 0.2s ease;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
 
     // Single-line input: fixed 48px total (border inside) so it aligns with buttons
     &:has(input) {
@@ -25,16 +26,13 @@
       max-height: 48px;
     }
 
-    &::placeholder {
-      color: var(--text-dim, #999);
-    }
-
-    &:focus {
+    &:focus-within {
       outline: 0;
       border-color: var(--secondary-color, var(--accent-color));
+      box-shadow: 0 0 0 3px var(--focus-ring, rgba(92, 110, 248, 0.2));
     }
 
-    &:disabled {
+    &:has(:disabled) {
       opacity: 0.6;
       cursor: not-allowed;
     }
@@ -51,9 +49,33 @@
     font: inherit;
     color: inherit;
 
+    &::placeholder {
+      color: var(--text-dim, #999);
+    }
+
     &:focus {
       outline: 0;
     }
+  }
+
+  &__prefix,
+  &__suffix {
+    display: flex;
+    align-items: center;
+    flex: 0 0 auto;
+    color: var(--text-dim, #999);
+    font-size: 1.05rem;
+    line-height: 1;
+    opacity: .6;
+    pointer-events: none;
+  }
+
+  &__prefix {
+    padding-right: 6px;
+  }
+
+  &__suffix {
+    padding-left: 6px;
   }
 
   &__control input {
@@ -85,14 +107,23 @@
     font-size: 0.85rem;
     color: var(--plx-danger, #f24);
     margin-top: 0.25rem;
+    animation: st-input-fade-in 0.15s ease;
+  }
+
+  &__hint {
+    flex: 1 1 100%;
+    font-size: 0.82rem;
+    color: var(--text-dim, #999);
+    margin-top: 0.2rem;
   }
 
   &--error &__control {
     border-color: var(--plx-danger, #f24);
   }
 
-  &--error &__control:focus {
+  &--error &__control:focus-within {
     border-color: var(--plx-danger, #f24);
+    box-shadow: 0 0 0 3px rgba(255, 34, 68, 0.18);
   }
 
   &--inline {
@@ -110,9 +141,9 @@
     min-width: 200px;
   }
 
-  // sm: matches Button sm (32px height, 10px radius) for GlueContainer
+  // sm: matches Button sm (32px height) for GlueContainer
   &--sm &__control {
-    border-radius: 10px;
+    border-radius: 6px;
     padding: 2px 6px;
     font-size: 14px;
 
@@ -134,5 +165,16 @@
 @media (max-width: 400px) {
   .st-input__control {
     max-width: 100%;
+  }
+}
+
+@keyframes st-input-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

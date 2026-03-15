@@ -3,6 +3,8 @@
   :class="inputClasses"
 )
   .st-input__control
+    .st-input__prefix(v-if="$slots.prefix")
+      slot(name="prefix")
     component(
       :is="tag"
       ref="inputRef"
@@ -15,16 +17,19 @@
       :required="required"
       :aria-label="label || undefined"
       :aria-invalid="showError"
-      :aria-describedby="showError ? errorId : undefined"
+      :aria-describedby="ariaDescribedBy || undefined"
       v-bind="$attrs"
       @input="onInput"
       @blur="onBlur"
       @invalid="onInvalid"
     )
+    .st-input__suffix(v-if="$slots.suffix")
+      slot(name="suffix")
   label.st-input__label(v-if="label" :for="inputId")
     | {{ label }}
     span.st-input__required(v-if="required" aria-hidden="true") *
   span.st-input__error(v-if="showError" :id="errorId" role="alert") {{ error }}
+  span.st-input__hint(v-else-if="hint" :id="hintId") {{ hint }}
 </template>
 
 <script setup lang="ts">
@@ -55,6 +60,8 @@ const props = withDefaults(
     required?: boolean;
     /** Error message shown when validation fails */
     error?: string;
+    /** Helper text shown below the input when there is no error */
+    hint?: string;
   }>(),
   { type: 'text', inline: true, size: 'md' }
 );
@@ -72,6 +79,12 @@ const emit = defineEmits<{
 
 const inputId = computed(() => `st-input-${Math.random().toString(36).slice(2, 9)}`);
 const errorId = computed(() => `${inputId.value}-error`);
+const hintId = computed(() => `${inputId.value}-hint`);
+const ariaDescribedBy = computed(() => {
+  if (showError.value) return errorId.value;
+  if (props.hint) return hintId.value;
+  return null;
+});
 const tag = computed(() => (props.multiline ? 'textarea' : 'input'));
 const inputRef = ref<HTMLInputElement | HTMLTextAreaElement | null>(null);
 const shouldShowError = ref(false);
@@ -82,9 +95,10 @@ function checkValidity(): boolean {
 }
 
 const showError = computed(() => {
-  if (!props.error) return false;
-  if (!shouldShowError.value) return false;
-  return !checkValidity();
+  // External error prop: parent explicitly asserts invalid — show immediately.
+  if (props.error) return true;
+  // Native HTML5 constraint error: only surface after user interaction (blur/submit).
+  return shouldShowError.value && !checkValidity();
 });
 
 function onInput(e: Event) {

@@ -25,6 +25,7 @@ const meta: Meta<typeof Input> = {
     multiline: { control: { type: 'boolean' } },
     required: { control: { type: 'boolean' } },
     error: { control: { type: 'text' } },
+    hint: { control: { type: 'text' } },
     minlength: { control: { type: 'number' } },
     maxlength: { control: { type: 'number' } },
     min: { control: { type: 'number' } },
@@ -137,16 +138,9 @@ export const WithError: Story = {
   },
 };
 
-/** HTML5 required – submit form to see validation */
+/** HTML5 required – leave empty and tab away to see validation */
 export const Required: Story = {
-  render: (args: object) => ({
-    setup() {
-      const value = ref('');
-      return { args, value };
-    },
-    components: { Input },
-    template: '<form @submit.prevent><Input v-model="value" v-bind="args" /><button type="submit">Submit</button></form>',
-  }),
+  render: inputRender(),
   args: {
     label: 'Required field',
     placeholder: 'Cannot be empty',
@@ -154,16 +148,9 @@ export const Required: Story = {
   },
 };
 
-/** type="email" – browser validates format on submit */
+/** type="email" – blur with bad value to see validation */
 export const Email: Story = {
-  render: (args: object) => ({
-    setup() {
-      const value = ref('');
-      return { args, value };
-    },
-    components: { Input },
-    template: '<form @submit.prevent><Input v-model="value" v-bind="args" /><button type="submit">Submit</button></form>',
-  }),
+  render: inputRender(),
   args: {
     type: 'email',
     label: 'Email',
@@ -172,16 +159,9 @@ export const Email: Story = {
   },
 };
 
-/** Invalid email – try submitting to see browser validation */
+/** Invalid email pre-filled – blur to trigger validation */
 export const EmailInvalid: Story = {
-  render: (args: object) => ({
-    setup() {
-      const value = ref('notanemail');
-      return { args, value };
-    },
-    components: { Input },
-    template: '<form @submit.prevent><Input v-model="value" v-bind="args" /><button type="submit">Submit</button></form>',
-  }),
+  render: inputRender('notanemail'),
   args: {
     type: 'email',
     label: 'Email',
@@ -190,16 +170,9 @@ export const EmailInvalid: Story = {
   },
 };
 
-/** minlength/maxlength – browser validates length */
+/** minlength/maxlength – blur with short value to see validation */
 export const MinMaxLength: Story = {
-  render: (args: object) => ({
-    setup() {
-      const value = ref('');
-      return { args, value };
-    },
-    components: { Input },
-    template: '<form @submit.prevent><Input v-model="value" v-bind="args" /><button type="submit">Submit</button></form>',
-  }),
+  render: inputRender(),
   args: {
     label: 'Username (3–20 chars)',
     placeholder: 'Enter username',
@@ -209,16 +182,9 @@ export const MinMaxLength: Story = {
   },
 };
 
-/** type="number" with min/max */
+/** type="number" with min/max – blur out of range to see validation */
 export const NumberMinMax: Story = {
-  render: (args: object) => ({
-    setup() {
-      const value = ref(5);
-      return { args, value };
-    },
-    components: { Input },
-    template: '<form @submit.prevent><Input v-model="value" v-bind="args" /><button type="submit">Submit</button></form>',
-  }),
+  render: inputRender(5),
   args: {
     type: 'number',
     label: 'Level (1–100)',
@@ -229,21 +195,73 @@ export const NumberMinMax: Story = {
   },
 };
 
-/** pattern – regex validation (alphanumeric only) */
+/** pattern – blur with non-alphanumeric value to see validation */
 export const Pattern: Story = {
-  render: (args: object) => ({
-    setup() {
-      const value = ref('');
-      return { args, value };
-    },
-    components: { Input },
-    template: '<form @submit.prevent><Input v-model="value" v-bind="args" /><button type="submit">Submit</button></form>',
-  }),
+  render: inputRender(),
   args: {
     label: 'Code (letters and numbers only)',
     placeholder: 'e.g. ABC123',
     pattern: '[A-Za-z0-9]+',
     title: 'Letters and numbers only',
     required: true,
+  },
+};
+
+/** hint prop — helper text that disappears when an error is shown */
+export const WithHint: Story = {
+  render: inputRender(),
+  args: {
+    label: 'Server prefix',
+    placeholder: '+',
+    hint: 'This is used to trigger bot commands. Keep it short.',
+  },
+};
+
+/** prefix slot — icon or text before the value */
+export const WithPrefix: Story = {
+  render: (args: object) => ({
+    setup() {
+      const value = ref('');
+      return { args, value };
+    },
+    components: { Input },
+    template: `<Input v-model="value" v-bind="args"><template #prefix>🔍</template></Input>`,
+  }),
+  args: {
+    placeholder: 'Search…',
+  },
+};
+
+/** suffix slot — unit, icon or action after the value */
+export const WithSuffix: Story = {
+  render: (args: object) => ({
+    setup() {
+      const value = ref('');
+      return { args, value };
+    },
+    components: { Input },
+    template: `<Input v-model="value" v-bind="args"><template #suffix>%</template></Input>`,
+  }),
+  args: {
+    label: 'Tax rate',
+    placeholder: '0',
+    type: 'number',
+  },
+};
+
+/** Both slots combined */
+export const WithPrefixAndSuffix: Story = {
+  render: (args: object) => ({
+    setup() {
+      const value = ref('');
+      return { args, value };
+    },
+    components: { Input },
+    template: `<Input v-model="value" v-bind="args"><template #prefix>https://</template><template #suffix>.com</template></Input>`,
+  }),
+  args: {
+    label: 'Domain',
+    placeholder: 'yoursite',
+    hint: 'Enter only the subdomain part.',
   },
 };
