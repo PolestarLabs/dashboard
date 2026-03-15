@@ -1,0 +1,238 @@
+/* Ported from legacy .raritybox / .shopbox card (rarityboxes.css + store.css).
+   Card container with rarity gradient; optional header/body/footer. */
+.s-raritybox-card {
+  --borderWidth: 2px;
+  display: flex;
+  min-width: 140px;
+  flex-direction: column;
+  border: solid 1px #888;
+  background-image: radial-gradient(#99a, #404055);
+  border-radius: 5px;
+  font-family: Panton, system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  position: relative;
+  z-index: 0;
+  /* Rarity modifiers (tier gradients) */
+}
+
+.s-raritybox-card__inner {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: inherit;
+}
+
+.s-raritybox-card__content {
+  flex: 0 0 auto;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.s-raritybox-card__header {
+  background: #1b1b2fCC;
+  display: flex;
+  padding: 8px 14px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13pt;
+  text-transform: uppercase;
+  font-weight: 600;
+  flex: 0 0 50px;
+  flex-shrink: 0;
+  border-radius: 5px 5px 0 0;
+  color: white !important;
+  text-shadow: 0 1px 2px #0019;
+  z-index: 2;
+  box-shadow: 0 5px 5px #0022;
+}
+
+.s-raritybox-card__header .s-title {
+  flex: 1 1 auto;
+  text-align: center;
+}
+
+.s-raritybox-card__sub-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  background: #13132299;
+  display: flex;
+  padding: 4px 14px;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 10pt;
+  font-weight: 600;
+  color: #ccc;
+  border-bottom: 1px solid #ffffff18;
+}
+
+.s-raritybox-card__body {
+  flex: 0 0 auto;
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 48px;
+  padding: 12px 12px 24px 12px;
+}
+
+.s-raritybox-card__image {
+  flex: 0 0 auto;
+  z-index: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  overflow: hidden;
+  box-shadow: inset 0 3px 20px #1133;
+  min-height: 180px;
+}
+
+.s-raritybox-card__footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 8px;
+  padding-bottom: 16px;
+}
+
+.s-raritybox-card--U {
+  background-image: radial-gradient(#194, #0b1b3b);
+  border-color: #a4f07a;
+}
+
+.s-raritybox-card--R {
+  background-image: radial-gradient(#5cd9e6, #0b1b3b);
+  border-color: #3f81ff;
+  box-shadow: 0 0 3px #5cd9e6AA, inset 0 0 4px #5cd9e650;
+}
+
+.s-raritybox-card--SR {
+  background-image: radial-gradient(#a418ba, #0b1b3b);
+  box-shadow: 0 0 4px #a418ba, inset 0 0 5px #a418ba;
+  border-color: #cf268a;
+}
+
+.s-raritybox-card--UR {
+  z-index: unset;
+}
+
+.s-raritybox-card--UR .s-raritybox-card__header .s-title {
+  color: #ffdc73;
+}
+
+.s-raritybox-card--UR:not(.s-raritybox-card--obtained):not(.s-raritybox-card--unavailable) {
+  background-image: radial-gradient(#ffc85c, #ff8251, #66133a);
+  border-radius: 8px;
+  border: solid 3px transparent;
+  background-clip: content-box;
+}
+
+.s-raritybox-card--UR:not(.s-raritybox-card--obtained):not(.s-raritybox-card--unavailable)::after {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--borderWidth));
+  left: calc(-1 * var(--borderWidth));
+  height: calc(100% + var(--borderWidth) * 2);
+  width: calc(100% + var(--borderWidth) * 2);
+  border-radius: calc(4px + var(--borderWidth));
+  z-index: -1;
+  background-color: #fff;
+  background-image: linear-gradient(60deg, #ff3fa2, #ff343d, #69f455, #492fff);
+  background-size: 100% 100%;
+  box-shadow: 0 0 4px #f56, inset 0 0 10px #fA6;
+  animation: s-raritybox-card-ur-gradient 1.5s linear infinite;
+}
+
+.s-raritybox-card--XR {
+  z-index: unset;
+}
+
+.s-raritybox-card--XR .s-raritybox-card__header .s-title {
+  color: #ffdc33;
+  text-shadow: 0 0 10px #f35;
+}
+
+.s-raritybox-card--XR:not(.s-raritybox-card--obtained):not(.s-raritybox-card--unavailable) {
+  background-image: radial-gradient(#f2be52, #a52a43, #3b2b5b 50%, #0b0b1b);
+  background-position: 22% 70%;
+  background-size: 300% 300%;
+  border-radius: 9px;
+  border: solid var(--borderWidth) transparent;
+  background-clip: content-box;
+  box-shadow: 0 0 5px #f36A, inset 0 0 10px #f36A;
+}
+
+.s-raritybox-card--XR:not(.s-raritybox-card--obtained):not(.s-raritybox-card--unavailable)::after {
+  content: '';
+  position: absolute;
+  top: calc(-1 * var(--borderWidth));
+  left: calc(-1 * var(--borderWidth));
+  height: calc(100% + var(--borderWidth) * 2);
+  width: calc(100% + var(--borderWidth) * 2);
+  border-radius: calc(8px + var(--borderWidth));
+  z-index: -1;
+  background-color: #f00;
+  background-image: linear-gradient(60deg, #fa3, #ff343d, #ff34ad, #ff343d, #fa3);
+  background-size: 300% 300%;
+  animation: s-raritybox-card-xr-gradient 3s linear infinite;
+}
+
+.s-raritybox-card--obtained, .s-raritybox-card--unavailable {
+  background-image: radial-gradient(#888a, #101015ad);
+  border-color: #aaa;
+  box-shadow: none;
+}
+
+.s-raritybox-card--obtained .s-raritybox-card__header,
+.s-raritybox-card--obtained .s-raritybox-card__body,
+.s-raritybox-card--obtained .s-raritybox-card__image, .s-raritybox-card--unavailable .s-raritybox-card__header,
+.s-raritybox-card--unavailable .s-raritybox-card__body,
+.s-raritybox-card--unavailable .s-raritybox-card__image {
+  filter: saturate(0);
+  opacity: 0.7;
+}
+
+.s-raritybox-card--obtained .s-raritybox-card__header {
+  background: #1b1b2fDD;
+  color: #6f6 !important;
+  text-shadow: 0 0 2px #6f6D;
+  filter: none;
+}
+
+@keyframes s-raritybox-card-ur-gradient {
+  0% {
+    background-position: 0% 50%;
+    filter: hue-rotate(0);
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes s-raritybox-card-xr-gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}

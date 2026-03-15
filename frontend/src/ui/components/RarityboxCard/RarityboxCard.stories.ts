@@ -82,6 +82,13 @@ export const WithHeader: Story = {
 };
 
 export const WithHeaderAndFooter: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: 'Contents of the card bleeds into the header and footer, this is on purpose. For cases where we want contant overlay elements like a title or button, we can use the header and footer slots, but the card body is not confined to those areas. This allows for more flexible layouts and designs, such as full-bleed images or content that overlaps with the header/footer areas.',
+      },
+    },
+  },
   args: { rarity: 'UR' },
   render: (args) => ({
     components: { RarityboxCard, RarityboxButton },
@@ -94,7 +101,7 @@ export const WithHeaderAndFooter: Story = {
           <span class="s-title">UR Card</span>
         </template>
         <template #default>
-          <div style="padding: 0.5rem;">Raritybox card with header and footer.</div>
+          <div style="padding-bottom: 1rem;">Raritybox card with header and footer.</div>
         </template>
         <template #footer>
           <RarityboxButton variant="special">Action</RarityboxButton>
