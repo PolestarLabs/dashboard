@@ -1,8 +1,9 @@
 /* Deck skin wrapper: scale applied on wrapper so CardShowcase root keeps 3D context (backface works). */
 .deck-skin-showcase {
   transform: translate(0, -5px);
-  &__scale {
-    display: inline-block;
-    transform-origin: center center;
-  }
+}
+
+.deck-skin-showcase__scale {
+  display: inline-block;
+  transform-origin: center center;
 }

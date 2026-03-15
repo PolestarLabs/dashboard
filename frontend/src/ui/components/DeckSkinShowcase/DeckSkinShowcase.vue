@@ -6,12 +6,12 @@ div.deck-skin-showcase
       :backImageUrl="backImageUrl"
       :durationMs="5000"
       :easing="[0.68, -0.55, 0.27, 1.55]"
-      :width="200"
-      :height="280"
-      :rotateX="10"
+      :height="220"
+      :width="220"
+      :rotateX="20"
       :rotateY="15"
-      :rotateZ="0"
-      :borderRadius="16"
+      :rotateZ="15"
+      :borderRadius="8"
     )
 </template>
 
