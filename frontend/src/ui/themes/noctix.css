@@ -18,21 +18,21 @@ html.theme-noctix {
   
   
  --accent-color-light: #2B2C5B;
---accent-color: #3B2C84;
+--accent-color: #423292;
 --accent-color-alt: #A25;
---accent-color-mid: #39216C;
+--accent-color-mid: #41267a;
 --accent-color-strong: #3B2073;
 --accent-color-dark: #220F35;
 
---text-main: #aaa;
---text-accent: #aaa;
---color-contrast: #aaa;
+--text-main: #d3d0c6;
+--text-accent: #e9dbca;
+--color-contrast: #f0d3d2;
 
   
 
 --secondary-color:  #8E273B;
 --secondary-color-alt:  #6A283B;
---secondary-color-strong:  #A25;
+--secondary-color-strong:  rgb(161, 40, 85);
 
   /*
 --mid-main: var(--light2);
@@ -47,7 +47,7 @@ html.theme-noctix {
 
 --heading-divider-color: var(--lighter);
 
---muted: #99AA;
+--muted: #9999AAAA;
 
 --light-border: var(--dark);
 --dark-border: var(--lighter);
