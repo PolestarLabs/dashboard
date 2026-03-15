@@ -16,14 +16,18 @@ html.theme-arsenika {
   --text-dim-mid: #4187B1;
   --text-inverse: #212931AB;
   
-   --accent-color-light: #84e1f0;
-  --accent-color: #ffb541;
+   --accent-color-light: #f0d29a;
+  --accent-color: #f0a037;
   /*! --color-contrast: #950642; */
-  --accent-color-mid: #f5923a;
-  --accent-color-dark: #ffc659;
+  --accent-color-mid: #eb9347;
+  --accent-color-dark: #bd773ee8;
+  --accent-color-darker: #9c7250e8;
   
   --secondary-color:  #1aafdc;
-  --secondary-color-alt:  #2BE6D5;
+  --secondary-color-light: #38c4e5;
+  --secondary-color-mid: #2b7bb1;
+
+  --secondary-color-alt:  #35d4c7;
   
     /*! --mid-main: var(--light2); */ --bg-main: #352B52; --bg-darker: #1D1F2B; --bg-darkest: #1D212BEB; --bg-opaque: #0b0c1745; /*
   --bg-inverse: var(--dark);
@@ -36,7 +40,7 @@ html.theme-arsenika {
   
   --heading-divider-color: var(--lighter);
   
-  --muted: #99AA;
+  --muted: #9999AAAA;
   
   --light-border: var(--dark);
   */ --dark-border: #2F87A95C; --code-main-color: #2288FF !important; --code-main-border:  1px solid #000 !important; 
