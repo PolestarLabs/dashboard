@@ -1,3 +1,5 @@
+@import "./blank.css";
+
 @import "./pollux.css";
 @import "./noctix.css";
 @import "./cecily.css";
@@ -80,63 +82,30 @@
 	--rarity-rubines-main: #fb3b3b;
 	--rarity-rubines-dim: #e33134;
 	--rarity-rubines-fade: #77122b;
+	
 
 }
 
 
 html {
-    --color-contrast: white;
-	--color-contrast-inverse: #112;
-	--color-contrast-dim: #FFFD;
-	--text-accent: white;
-	--text-accent-dim: #FFFD;
-	--text-lightest: #FFF;
-	--text-extra-bold: var(--lightest, #AAC);
-	--text-bold: var(--lighter, #AAC);
-	--text-main: var(--light, #AAC);
-	--text-faint: var(--pre-light, #668);
-	--text-dim: var(#99AA);
-	--text-dim-mid: var(--pre-light, #88a);
-	--text-inverse: var(--dark, #2b2b3b);
-	--accent-color: var(--main-pink, #f35);
-	--accent-color-mid: var(--dark-pink, #F13151);
-	--accent-color-strong: var(--dark-pink, #F13151);
-	--accent-color-dark: var(--darkest-pink, #D05);
-	--accent-color-light: var(--light-pink, rgb(241, 129, 176));
-	--secondary-color: var(--main-purple, #95F);
-	--secondary-color-alt: var(--alt-purple, rgb(231, 104, 189));
-	--mid-main: var(--light2);
-	--bg-main: var(--darker);
-	/*--bg-main: linear-gradient(190deg, var(--darker) 30%,var(--darkest));*/
-	--bg-dark: var(--dark);
-	--bg-darker: var(--darker);
-	--bg-darkest: var(--darkest);
-	--bg-opaque: #2A2A3B44;
-	--bg-inverse: var(--lightest, #EEF);
-	--bg-card: white;
-	--links: #87f;
-	--links-hover: #8Af;
-	--link-head: inherit;
-	--link-head-hover: var(--alt-pink);
-	--divider-color: var(--pre-light);
-	--heading-divider-color: var(--lighter);
-	--muted: #99AA;
-	--light-border: var(--light);
-	--dark-border: var(--dark);
-	--dark-dim: #27233775;
-	--dark-dimmer: #0d0d1796;
-	--dark-dimmest: #100c2b59;
 
-	--color-primary: var(--accent-color, #f35);
-	--color-primary-mid: var(--accent-color-mid, #F13151);
-	--color-primary-strong: var(--accent-color-strong, #F13151);
-	--color-primary-dark: var(--accent-color-dark, #D05);
-	--color-primary-light: var(--accent-color-light, #f35);
-	--color-secondary: var(--secondary-color, #95F);
-	--color-secondary-light: var(--secondary-color-light, #95F);
-	--color-secondary-mid: var(--secondary-color-mid, #C7D);
-	--color-secondary-strong: var(--secondary-color-strong, #C7D);
-	--color-secondary-dark: var(--secondary-color-dark, #95F);	
+	--color-primary: var(--accent-color);
+	--color-primary-mid: var(--accent-color-mid, --accent-color-strong --accent-color-dark, --accent-color-light);
+	--color-primary-strong: var(--accent-color-strong, var(--accent-color-dark));
+	--color-primary-dark: var(--accent-color-dark, var(--accent-color-dark));
+	--color-primary-light: var(--accent-color-light, var(--accent-color));
+	--color-primary-lighter: var(--accent-color-lighter, var(--accent-color-light));
+	--color-primary-lightest: var(--accent-color-lightest, var(--accent-color-lighter));
+
+	--color-secondary: var(--secondary-color);
+	--color-secondary-alt: var(--secondary-color-alt);
+	--color-secondary-light: var(--secondary-color-light, var(--secondary-color-alt));
+	--color-secondary-mid: var(--secondary-color-mid, var(--secondary-color-alt));
+	--color-secondary-strong: var(--secondary-color-strong, var(--secondary-color-alt));
+	--color-secondary-dark: var(--secondary-color-dark, var(--secondary-color-alt));	
+	--color-secondary-darker: var(--secondary-color-darker, var(--secondary-color-strong));	
+
+	--color-tertiary: var(--tertiary-color, var(--color-secondary-alt));
 }
 
 

@@ -36,7 +36,7 @@ html.theme-selenedi {
   --accent-color-dark: #330666;
   
   --secondary-color:  #e1614a;
-  --secondary-color-alt:  #d7af40;
+  --secondary-color-alt:  #e7ae44;
   
    
   --links: #87f;
@@ -47,7 +47,7 @@ html.theme-selenedi {
   
   --heading-divider-color: var(--lighter);
   
-  --muted: #99AA;
+  --muted: #9999AAAA;
   
   --light-border: var(--dark);
   --dark-border: var(--lighter);

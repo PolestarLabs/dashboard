@@ -16,13 +16,17 @@ html.theme-australis {
   --text-dim-mid: #8C755ED4;
   --text-inverse: #213121AA;
   
-   --accent-color-light: #d7f485;
+   --accent-color-light: #c6dd86;
   --accent-color: #7bbd69;
   /*! --color-contrast: #950642; */
   --accent-color-mid: #46a45e;
   --accent-color-dark: #52aa4f;
   
   --secondary-color:  #E14A66;
+  --secondary-color-light: #e96981;
+  --secondary-color-mid: #ca2846;
+  --secondary-color-strong: #a8283f;
+  --secondary-color-dark: #a03347;
   --secondary-color-alt:  #D7406C;
   
     /*! --mid-main: var(--light2); */ --bg-main: #29343C; --bg-darker: #1D252B; --bg-darkest: #1D212BEB; --bg-opaque: #090b1345; /*
@@ -36,7 +40,7 @@ html.theme-australis {
   
   --heading-divider-color: var(--lighter);
   
-  --muted: #99AA;
+  --muted: #9999AAAA;
   
   --light-border: var(--dark);
   */ --dark-border: #D7406C55; --code-main-color: #F35 !important; --code-main-border:  1px solid #000 !important; 
