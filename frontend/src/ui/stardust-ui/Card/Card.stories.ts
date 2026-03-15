@@ -178,20 +178,30 @@ export const WithMediaAndButtons: Story = {
 
 export const GridOfThree: Story = {
   render: () => ({
-    components: { Card },
+    components: { Card, Button },
     template: `
     <div class="st-card-grid">
-      <Card size="sm">
-        <template #title>First</template>
-        <p>Content for the first card in the grid.</p>
+      <Card>
+        <template #title>Short Content</template>
+        <p>Brief body.</p>
+        <template #buttons>
+          <Button size="sm" variant="primary">Action</Button>
+        </template>
       </Card>
-      <Card size="sm">
-        <template #title>Second</template>
-        <p>Content for the second card.</p>
+      <Card>
+        <template #title>Longer Content</template>
+        <p>This card has more body copy to demonstrate that footers align to the card bottom across the row regardless of content length.</p>
+        <template #buttons>
+          <Button size="sm" variant="primary">Action</Button>
+        </template>
       </Card>
-      <Card size="sm">
-        <template #title>Third</template>
-        <p>Content for the third card.</p>
+      <Card>
+        <template #title>Third Card</template>
+        <p>All three footers sit at the same baseline even with varying content heights.</p>
+        <template #buttons>
+          <Button size="sm" variant="ghost">Cancel</Button>
+          <Button size="sm" variant="primary">Confirm</Button>
+        </template>
       </Card>
     </div>
     `,
@@ -199,7 +209,7 @@ export const GridOfThree: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Three small cards in a responsive grid. Use the `.st-card-grid` class.',
+        story: 'Cards in a responsive grid. Columns fill the container via `auto-fill`; footers are anchored to the card bottom across unequal content. Use the `.st-card-grid` helper class.',
       },
     },
   },

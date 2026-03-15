@@ -30,7 +30,7 @@ export const InButton: Story = {
       return { args };
     },
     template: `
-      <button class="btn btn-primary relative">
+      <button class="s-btn s-btn--primary relative">
         Notifications
         <span class="absolute -top-2 -right-2">
           <Badge v-bind="args" />

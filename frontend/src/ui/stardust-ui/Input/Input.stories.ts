@@ -16,6 +16,11 @@ const meta: Meta<typeof Input> = {
     placeholder: { control: { type: 'text' } },
     label: { control: { type: 'text' } },
     inline: { control: { type: 'boolean' } },
+    size: {
+      control: { type: 'select' },
+      options: ['sm', 'md'],
+      description: 'sm matches Button sm (32px) for GlueContainer',
+    },
     disabled: { control: { type: 'boolean' } },
     multiline: { control: { type: 'boolean' } },
     required: { control: { type: 'boolean' } },
@@ -46,6 +51,15 @@ export const Default: Story = {
   render: inputRender(),
   args: {
     placeholder: 'Enter text...',
+  },
+};
+
+/** Small size (32px height) – matches Button sm for GlueContainer */
+export const Small: Story = {
+  render: inputRender(),
+  args: {
+    placeholder: 'Placeholder',
+    size: 'sm',
   },
 };
 
