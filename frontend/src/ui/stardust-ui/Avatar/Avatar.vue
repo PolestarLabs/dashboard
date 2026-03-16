@@ -1,6 +1,6 @@
 <template lang="pug">
 div.s-avatar(:class="[rootClass,(status ? `s-avatar--${status}` : '')]" :style="sizeStyle")
-  .s-avatar__img-wrapper
+  .s-avatar__img-wrapper( :class="((status||customStatus) ? `s-avatar__img--status` : '')")
     img.s-avatar__img(
       v-if="src && !imgError"
       :src="src"
@@ -70,9 +70,9 @@ const statusColor = computed(() => {
 });
 
 const PIP_POS: Record<string, { cx: string; cy: string }> = {
-  circle:  { cx: '80%', cy: '80%' },
+  circle:  { cx: '80.5%', cy: '80.5%' },
   rounded: { cx: '87%', cy: '87%' },
-  hexagon: { cx: '85%', cy: '74%' },
+  hexagon: { cx: '83%', cy: '73%' },
 };
 
 const sizeStyle = computed(() => {
