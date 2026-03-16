@@ -1,7 +1,8 @@
 <template lang="pug">
-button.s-btn(:class="classes" type="button" @click="onClick")
+button.s-btn(:class="classes" type="button" :disabled="disabled || undefined" :aria-disabled="disabled || undefined" @click="onClick")
   span.s-btn__ripple(ref="rippleRef" @animationend="onRippleEnd")
-  i.s-btn__icon(v-if="icon" :class="icon" :aria-hidden="true")
+  span.s-btn__spinner(v-if="loading" aria-hidden="true")
+  i.s-btn__icon(v-if="icon && !loading" :class="icon" :aria-hidden="true")
   span.s-btn__label(v-if="label") {{ label }}
   slot
 </template>
@@ -17,6 +18,7 @@ const props = defineProps<{
   icon?: string;
   label?: string;
   disabled?: boolean;
+  loading?: boolean;
   iconposition?: 'left' | 'right';
 }>();
 
@@ -31,13 +33,14 @@ const classes = computed(() => {
   if (size === 'sm') base.push('s-btn--sm');
   if (size === 'lg') base.push('s-btn--lg');
   if (isRippling.value) base.push('s-btn--rippling');
-  if (props.disabled) base.push('s-btn--disabled');
+  if (props.disabled || props.loading) base.push('s-btn--disabled');
+  if (props.loading) base.push('s-btn--loading');
   if (props.iconposition === 'right') base.push('s-btn--icon-right');
   return base.join(' ');
 });
 
 function onClick(e: MouseEvent) {
-  if (props.disabled) return;
+  if (props.disabled || props.loading) return;
   isRippling.value = true;
 }
 
