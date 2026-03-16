@@ -1,0 +1,65 @@
+.st-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+
+  /* ── Heights ──────────────────────────────────── */
+  --_h: 8px;
+  &--sm { --_h: 4px; }
+  &--md { --_h: 8px; }
+  &--lg { --_h: 14px; }
+
+  /* ── Fill colour ──────────────────────────────── */
+  --_fill: var(--accent-color, #f48);
+  &--success { --_fill: var(--plx-green,   #3ecb7f); }
+  &--danger  { --_fill: var(--plx-danger,  #e05260); }
+  &--warning { --_fill: var(--plx-yellow,  #f0a500); }
+
+  /* ── Track ────────────────────────────────────── */
+  &__track {
+    position: relative;
+    flex: 1;
+    height: var(--_h);
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--text-dim, #888) 20%, transparent);
+    overflow: hidden;
+  }
+
+  /* ── Fill ─────────────────────────────────────── */
+  &__fill {
+    height: 100%;
+    border-radius: 9999px;
+    background: var(--_fill);
+    transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+    will-change: width;
+  }
+
+  /* ── Indeterminate ────────────────────────────── */
+  &__indeterminate-bar {
+    position: absolute;
+    inset-block: 0;
+    left: -40%;
+    width: 40%;
+    border-radius: 9999px;
+    background: var(--_fill);
+    animation: st-progress-slide 1.4s ease-in-out infinite;
+  }
+
+  /* ── Value label ──────────────────────────────── */
+  &__label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim, #888);
+    min-width: 2.8ch;
+    text-align: right;
+    line-height: 1;
+    white-space: nowrap;
+  }
+}
+
+@keyframes st-progress-slide {
+  0%   { left: -40%; width: 40%; }
+  50%  { left: 60%;  width: 55%; }
+  100% { left: 120%; width: 40%; }
+}
