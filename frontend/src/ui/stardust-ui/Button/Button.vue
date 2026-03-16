@@ -12,7 +12,10 @@ import { computed, ref } from 'vue';
 import './Button.scss';
 
 const props = defineProps<{
-  variant?: 'primary' | 'secondary' | 'ghost';
+  /** Semantic theme (sets color theme) */
+  theme?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
+  /** Visual variant */
+  variant?: 'solid' | 'ghost' | 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
   size?: 'sm' | 'md' | 'lg';
   /** Font Awesome icon class(es), e.g. "fas fa-check" or "far fa-star" */
   icon?: string;
@@ -25,11 +28,30 @@ const props = defineProps<{
 const rippleRef = ref<HTMLElement | null>(null);
 const isRippling = ref(false);
 
+const computedTheme = computed(() => {
+  const themeKeys = ['primary', 'secondary', 'danger', 'success', 'warning', 'info'] as const;
+
+  if (props.theme) return props.theme;
+  if (props.variant && themeKeys.includes(props.variant as any)) {
+    return props.variant as (typeof themeKeys)[number];
+  }
+  return 'primary';
+});
+
+const computedVariant = computed(() => {
+  if (props.variant === 'ghost' || props.variant === 'solid') return props.variant;
+  return 'solid';
+});
+
 const classes = computed(() => {
   const base: string[] = [];
-  const variant = props.variant ?? 'primary';
+  const theme = computedTheme.value;
+  const variant = computedVariant.value;
   const size = props.size ?? 'md';
+
+  base.push(`s-btn--${theme}`);
   base.push(`s-btn--${variant}`);
+
   if (size === 'sm') base.push('s-btn--sm');
   if (size === 'lg') base.push('s-btn--lg');
   if (isRippling.value) base.push('s-btn--rippling');
