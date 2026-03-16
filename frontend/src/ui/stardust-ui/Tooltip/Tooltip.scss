@@ -1,0 +1,72 @@
+/* Trigger wrapper — must be inline-ish so it wraps the slot tightly */
+.st-tooltip-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+/* Floating tooltip bubble — rendered via Teleport into <body> */
+.st-tooltip {
+  position: absolute;
+  z-index: 9999;
+  max-width: 260px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  background: var(--text-inverse, #1a1b2e);
+  color: var(--text-main, #eee);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.4;
+  pointer-events: none;
+  white-space: pre-wrap;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+
+  /* ── Arrow ────────────────────────────────────── */
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 5px solid transparent;
+  }
+
+  &--top::before {
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: var(--text-inverse, #1a1b2e);
+  }
+
+  &--bottom::before {
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: var(--text-inverse, #1a1b2e);
+  }
+
+  &--left::before {
+    left: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: var(--text-inverse, #1a1b2e);
+  }
+
+  &--right::before {
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: var(--text-inverse, #1a1b2e);
+  }
+}
+
+/* ── Fade transition ──────────────────────────────── */
+.st-tooltip-fade-enter-active,
+.st-tooltip-fade-leave-active {
+  transition: opacity 0.14s ease, transform 0.14s ease;
+}
+.st-tooltip-fade-enter-from,
+.st-tooltip-fade-leave-to {
+  opacity: 0;
+  transform: scale(0.94);
+}
