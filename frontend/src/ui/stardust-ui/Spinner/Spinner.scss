@@ -1,0 +1,51 @@
+.st-spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  /* ── Size presets ─────────────────────────────── */
+  --_sz:   32px;
+  --_bw:   3px;
+
+  &--xs { --_sz: 14px; --_bw: 2px; }
+  &--sm { --_sz: 20px; --_bw: 2.5px; }
+  &--md { --_sz: 32px; --_bw: 3px; }
+  &--lg { --_sz: 48px; --_bw: 4px; }
+  &--xl { --_sz: 64px; --_bw: 5px; }
+
+  /* ── Colour variants ──────────────────────────── */
+  --_color: currentColor;
+
+  &--primary   { --_color: var(--accent-color,    #f48); }
+  &--secondary { --_color: var(--secondary-color, #95f); }
+  &--white     { --_color: #fff; }
+
+  /* ── Ring element ─────────────────────────────── */
+  &__ring {
+    display: block;
+    width:  var(--_sz);
+    height: var(--_sz);
+    border-radius: 50%;
+    border: var(--_bw) solid color-mix(in srgb, var(--_color) 20%, transparent);
+    border-top-color: var(--_color);
+    animation: st-spinner-spin 0.75s linear infinite;
+  }
+
+  /* ── SR-only helper ───────────────────────────── */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+}
+
+@keyframes st-spinner-spin {
+  to { transform: rotate(360deg); }
+}
