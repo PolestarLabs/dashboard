@@ -134,7 +134,7 @@
     }
 
     .s-btn__icon {
-      transform: scale(2);
+      transform: scale(1.8) translateY(.5px);
     }
 
     .s-btn__label {
@@ -233,8 +233,8 @@
     }
 
     &:hover {
-      // 50% opaque on normal hover color
-      background-color: color-mix(in srgb, var(--current-color) 12%, transparent);  
+      /* 50% opaque on normal hover color */
+      background-color: color-mix(in srgb, var(--current-color) 12%, transparent);
       border-color: var(--current-color);
       > .s-btn__label,
       > .s-btn__icon {
@@ -242,10 +242,53 @@
       }
     }
     &:active {
-      background-color: color-mix(in srgb, var(--current-color) 62%, transparent);  
+      background-color: color-mix(in srgb, var(--current-color) 62%, transparent);
       color: var(--color-contrast);
     }
 
+  }
+
+  &--fancy {
+      /* Fancy variant helpers */
+  --fancy-light: rgba(255, 221, 255, 0.566);
+  --fancy-mid-light: rgba(189, 240, 255, 0.426);
+  --fancy-mid: rgba(50, 50, 255, 0.458);
+  --fancy-dark: rgba(141, 0, 165, 0.228);
+  --fancy-dark-dim: rgba(17, 0, 255, 0.073);
+  color: white !important;
+  
+    background: linear-gradient(135deg,var(--fancy-light) , var(--fancy-dark) 15%),
+      radial-gradient(circle at top left, var(--fancy-light), transparent 40%),
+      radial-gradient(circle at bottom right, var(--fancy-mid), transparent 60%),
+      var(--current-color);
+    background-size: 200% 200%;
+    border: 2px solid var(--fancy-mid-light);
+    box-shadow: 0 0 0 1px var(--fancy-dark), 0 10px 30px  var(--fancy-dark-dim);
+    color: var(--color-contrast);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, box-shadow 0.20s ease-in;
+    animation: fancy-bg 5s ease-in-out infinite;
+    filter: saturate(1.2);
+
+    &> .s-btn__icon,
+    &> .s-btn__label {
+      text-shadow: 0 0 5px var(--fancy-dark), 0 0 10px var(--fancy-mid);
+    }
+
+    &:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 3px 20px -5px var(--current-color), 0 14px 45px  var(--fancy-dark-dim);
+      //box-shadow: 0 0 0 1px var(--fancy-dark), 0 14px 45px  var(--fancy-dark-dim);
+    }
+
+    &:active {
+      transform: translateY(0);
+      box-shadow: 0 0 0 1px var(--fancy-dark), 0 6px 20px var(--fancy-dark-dim);
+    }
+  }
+
+  @keyframes fancy-bg {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
   }
 
   &--solid {

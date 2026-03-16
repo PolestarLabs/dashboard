@@ -11,11 +11,11 @@ const meta: Meta<typeof Button> = {
       options: ['primary', 'secondary', 'danger', 'success', 'warning', 'info'],
     },
     variant: {
-      control: { type: 'select' },
-      options: ['solid', 'ghost'],
+      control: { type: 'radio' },
+      options: ['solid', 'ghost', 'fancy'],
     },
     size: {
-      control: { type: 'select' },
+      control: { type: 'radio' },
       options: ['sm', 'md', 'lg'],
     },
     disabled: {
@@ -36,7 +36,7 @@ export default meta;
 
 type Story = StoryObj<typeof Button>;
 
-export const PrimaryWithIcon: Story = {
+export const SolidWithIcon: Story = {
   args: {
     theme: 'primary',
     variant: 'solid',
@@ -47,20 +47,12 @@ export const PrimaryWithIcon: Story = {
   },
 };
 
-export const Secondary: Story = {
-  args: {
-    theme: 'secondary',
-    variant: 'solid',
-    size: 'md',
-    label: 'Za Warudo',
-  },
-};
 
-export const GhostSmall: Story = {
+
+export const Ghost: Story = {
   args: {
     theme: 'primary',
     variant: 'ghost',
-    size: 'sm',
     iconposition: 'left',
     icon: 'fas fa-ghost',
     label: 'Ghost',
@@ -77,6 +69,17 @@ export const WithIconOnRight: Story = {
     label: 'Next',
   },
 };
+
+export const Fancy: Story = {
+  args: {
+    theme: 'primary',
+    variant: 'fancy',
+    size: 'md',
+    icon: 'fas fa-wand-magic-sparkles',
+    label: 'Fancy',
+  },
+};
+
 
 export const ThemeVariants: Story = {
   render: (args) => ({
@@ -179,14 +182,7 @@ export const ThemeVariants: Story = {
                 v-bind="args"
                 size="sm"
                 :theme="theme"
-                :icon="
-                  theme === 'success' ? 'fas fa-check' :
-                  theme === 'warning' ? 'fas fa-exclamation-triangle' :
-                  theme === 'danger' ? 'fas fa-times' :
-                  theme === 'info' ? 'fas fa-info-circle' :
-                  theme === 'secondary' ? 'fas fa-cog' :
-                  'fas fa-star'
-                "
+                :icon="iconFor(theme)"
                 iconposition="left"
                 :label="theme"
               />
@@ -198,6 +194,38 @@ export const ThemeVariants: Story = {
                 :key="theme + '-sm'"
                 v-bind="args"
                 size="sm"
+                :theme="theme"
+                :icon="iconFor(theme)"
+                iconposition="left"
+                :label="theme"
+              />
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-weight: 700; margin-bottom: 0.5rem;">Fancy</div>
+          <div style="display: flex; gap: 0.75rem; flex-wrap: wrap; align-items: flex-start;">
+            <!-- first row: primary + secondary -->
+            <div style="display: flex; gap: 0.75rem;">
+              <Button
+                v-for="theme in ['primary', 'secondary']"
+                :key="theme + '-fancy'"
+                v-bind="args"
+                variant="fancy"
+                :theme="theme"
+                :icon="iconFor(theme)"
+                iconposition="left"
+                :label="theme"
+              />
+            </div>
+            <!-- second row: remaining themes -->
+            <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+              <Button
+                v-for="theme in ['danger', 'success', 'warning', 'info']"
+                :key="theme + '-fancy'"
+                v-bind="args"
+                variant="fancy"
                 :theme="theme"
                 :icon="iconFor(theme)"
                 iconposition="left"

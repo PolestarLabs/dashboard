@@ -15,7 +15,7 @@ const props = defineProps<{
   /** Semantic theme (sets color theme) */
   theme?: 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
   /** Visual variant */
-  variant?: 'solid' | 'ghost' | 'primary' | 'secondary' | 'danger' | 'success' | 'warning' | 'info';
+  variant?: 'solid' | 'ghost' | 'fancy';
   size?: 'sm' | 'md' | 'lg';
   /** Font Awesome icon class(es), e.g. "fas fa-check" or "far fa-star" */
   icon?: string;
@@ -39,7 +39,7 @@ const computedTheme = computed(() => {
 });
 
 const computedVariant = computed(() => {
-  if (props.variant === 'ghost' || props.variant === 'solid') return props.variant;
+  if (props.variant === 'ghost' || props.variant === 'solid' || props.variant === 'fancy') return props.variant;
   return 'solid';
 });
 
