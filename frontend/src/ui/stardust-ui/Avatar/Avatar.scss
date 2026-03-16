@@ -2,10 +2,9 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
+  overflow: visible;
   position: relative;
   flex-shrink: 0;
-  background: var(--avatar-bg, var(--accent-color, #5c6ef8));
   color: var(--avatar-fg, #fff);
   font-family: Panton, system-ui, sans-serif;
   font-weight: 700;
@@ -21,31 +20,71 @@
     z-index: 1;
   }
 
-  // Shown when src is absent or broken
-  &__initials {
-    font-size: 40%;
-    line-height: 1;
-    letter-spacing: 0.04em;
-    pointer-events: none;
-  }
-
   // Status indicator pip
   &__status {
     position: absolute;
-    bottom: 5%;
-    right: 5%;
-    width: 22%;
-    height: 22%;
-    min-width: 8px;
-    min-height: 8px;
-    border-radius: 50%;
-    border: 2px solid var(--bg-main, var(--bg-card, #fff));
+    bottom: 0;
+    right: 0;
+    transform: translate(40%, 40%);
     z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    height: 30%;
+    min-width: 10px;
+    min-height: 10px;
+    line-height: 1;
+    color: var(--current-color) !important;
+    & > i {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+    }
 
-    &--online  { background: #22c55e; }
-    &--idle    { background: #f59e0b; }
-    &--dnd     { background: #ef4444; }
-    &--offline { background: #6b7280; }
+    &--custom  { /* --current-color injected via inline style */ }
+    &--online  {
+       --current-color: #22c55e; 
+        text-shadow: 0 0 15px #22c55e;
+        &::after {
+          content: '';
+          display: block;
+          position: absolute;
+          width: 35%;
+          height: 35%;
+          background: #FFFA;
+          border-radius: 50%;
+          transform: scale(0);
+          animation: pulse 2s infinite;
+          z-index: 4;
+        }
+      }
+    &--idle    { --current-color: #f59e0b; }
+    &--dnd     { --current-color: #ef4444; }
+    &--offline { --current-color: #6b7280; }
+    
+  }
+
+  &--dnd .s-avatar__img-wrapper::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, #ef444400 40%, #ed3d3dAA);
+    z-index: 3;
+  }
+  
+  &--dnd img {
+    filter: grayscale(30%) contrast(90%);  
+  }
+  &--idle img {
+    filter: grayscale(30%) contrast(90%);  
+  }
+  &--offline img {
+    filter: grayscale(100%) contrast(90%);  
   }
 
   // Shape modifiers
@@ -53,12 +92,59 @@
   &--rounded { border-radius: 22%; }
   &--hexagon {
     border-radius: 0;
-    clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
   }
+  &__img-wrapper {
+    width: 100%;
+    height: 100%;
+    border-radius: inherit;
+    overflow: hidden;
+    position: relative;
+  }
+  &--circle  &__img-wrapper { border-radius: 9999px; }
+  &--circle  &__status { transform: translate(-0%, -0%); }
+  &--rounded &__img-wrapper { border-radius: 22%; }
+  &--rounded &__status { transform: translate(20%, 20%); }
+  &--hexagon &__img-wrapper {
+    border-radius: 0;
+    clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+    z-index: 1;
+  }
+  // Border ring via ::before — shared radial mask punches hole at pip location
+  &--circle::before,
+  &--rounded::before {
+    content: '';
+    position: absolute;
+    top: -10%;
+    left: -10%;
+    inset: calc(-2 * var(--status-border-width, 0px));
+    border-radius: inherit;
+    border: var(--status-border-width, 0px) solid var(--status-border-color, transparent);
+    pointer-events: none;
+    opacity: 0.4;
+    z-index: 3;
+    mask-image: radial-gradient(
+      circle at var(--pip-cx, 85%) var(--pip-cy, 85%),
+      transparent 13%,
+        black 12%
+      );
+  }
+  &--hexagon::before {
+    content: '';
+    position: absolute;
+    inset: calc(2 * var(--status-border-width, 0px) * -1);
 
-  &--circle  &__img { border-radius: 9999px; }
-  &--rounded &__img { border-radius: 22%; }
-  &--hexagon &__img { border-radius: 0; }
+  clip-path: polygon(93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%, 50% 0%, 50% 3%, 10% 27%, 10% 73%, 50% 97%, 90% 74%, 90% 27%, 50% 3%, 50% 0%, 93% 25%);
+   background: var(--status-border-color, transparent);
+    pointer-events: none;
+    opacity: 0.5;
+    z-index: 0;
+    mask-image: radial-gradient(
+      circle at var(--pip-cx, 85%) var(--pip-cy, 85%),
+      transparent 13%,
+      black 12%
+    );
+  }
+  &--hexagon &__status { transform: translate(10%, -30%); }
 
   // Semantic size presets
   &--xs { font-size: 10px; }
@@ -66,4 +152,23 @@
   &--md { font-size: 14px; }
   &--lg { font-size: 20px; }
   &--xl { font-size: 28px; }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    opacity: 1;
+  }
+  40% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.5);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(.8);
+    opacity: .5;
+  }
 }
