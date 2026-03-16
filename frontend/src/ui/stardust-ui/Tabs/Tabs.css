@@ -1,0 +1,87 @@
+@charset "UTF-8";
+.st-tabs {
+  display: flex;
+  flex-direction: column;
+  /* ── Tab list ─────────────────────────────────── */
+  /* ── Individual tab button ────────────────────── */
+  /* ── Panel ────────────────────────────────────── */
+}
+
+.st-tabs__list {
+  display: flex;
+  flex-wrap: wrap;
+  border-bottom: 1px solid color-mix(in srgb, var(--text-dim, #888) 22%, transparent);
+  padding: 0;
+  margin: 0 0 4px;
+  gap: 0;
+}
+
+.st-tabs__tab {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  /* mirrors .plx-tab-dash li a — top/side padding, small bottom gap for the border */
+  padding: 8px 18px 10px;
+  background: none;
+  border: 0;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  /* overlap list border */
+  font: inherit;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim, #888);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.18s, border-color 0.18s;
+  outline: none;
+  /* ── Active — mirrors .plx-tab-dash .plx-active a ── */
+  /* icon inside the tab */
+}
+
+.st-tabs__tab:hover:not(:disabled) {
+  color: var(--text-main, #eee);
+  border-bottom-color: color-mix(in srgb, var(--accent-color, #f48) 50%, transparent);
+}
+
+.st-tabs__tab:focus-visible {
+  box-shadow: 0 0 0 3px var(--focus-ring, rgba(92, 110, 248, 0.4));
+  border-radius: 3px 3px 0 0;
+  z-index: 1;
+}
+
+.st-tabs__tab:disabled {
+  opacity: 0.38;
+  cursor: not-allowed;
+}
+
+.st-tabs__tab i, .st-tabs__tab [class*="fa-"] {
+  font-size: 1em;
+  line-height: 1rem;
+  flex-shrink: 0;
+  color: var(--accent-color, #f48);
+}
+
+.st-tabs__tab--active {
+  color: var(--accent-color, #a45fda);
+  font-weight: 800;
+  border-bottom-color: var(--accent-color, #f48);
+}
+
+.st-tabs__tab--active i, .st-tabs__tab--active [class*="fa-"] {
+  color: var(--secondary-color);
+}
+
+.st-tabs__panel {
+  outline: none;
+  padding: 20px 0;
+}
+
+.st-tabs__panel:focus-visible {
+  box-shadow: inset 0 0 0 2px var(--focus-ring, rgba(92, 110, 248, 0.4));
+  border-radius: 4px;
+}

@@ -1,16 +1,15 @@
 .st-tabs {
   display: flex;
   flex-direction: column;
-  gap: 0;
 
   /* ── Tab list ─────────────────────────────────── */
   &__list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0;
-    border-bottom: 2px solid color-mix(in srgb, var(--text-dim, #888) 20%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--text-dim, #888) 22%, transparent);
     padding: 0;
-    margin: 0;
+    margin: 0 0 4px;
+    gap: 0;
   }
 
   /* ── Individual tab button ────────────────────── */
@@ -18,41 +17,58 @@
     position: relative;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 10px 18px;
+    gap: 7px;
+    /* mirrors .plx-tab-dash li a — top/side padding, small bottom gap for the border */
+    padding: 8px 18px 10px;
     background: none;
     border: 0;
     border-bottom: 2px solid transparent;
-    margin-bottom: -2px;       /* sits on top of list border */
+    margin-bottom: -1px;     /* overlap list border */
     font: inherit;
-    font-size: 0.9rem;
-    font-weight: 500;
+    font-family: 'Quicksand', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
     color: var(--text-dim, #888);
     cursor: pointer;
     white-space: nowrap;
     transition: color 0.18s, border-color 0.18s;
-    border-radius: 4px 4px 0 0;
     outline: none;
 
     &:hover:not(:disabled) {
       color: var(--text-main, #eee);
+      border-bottom-color: color-mix(in srgb, var(--accent-color, #f48) 50%, transparent);
     }
 
     &:focus-visible {
       box-shadow: 0 0 0 3px var(--focus-ring, rgba(92, 110, 248, 0.4));
+      border-radius: 3px 3px 0 0;
       z-index: 1;
     }
 
     &:disabled {
-      opacity: 0.4;
+      opacity: 0.38;
       cursor: not-allowed;
     }
 
-    /* Active indicator */
-    &--active {
+    /* ── Active — mirrors .plx-tab-dash .plx-active a ── */
+    /* icon inside the tab */
+    i, [class*="fa-"] {
+      font-size: 1em;
+      line-height: 1rem;
+      flex-shrink: 0;
       color: var(--accent-color, #f48);
+    }
+
+    &--active {
+      color: var(--accent-color, rgb(164, 95, 218));
+      font-weight: 800;
       border-bottom-color: var(--accent-color, #f48);
-      font-weight: 600;
+      i, [class*="fa-"] {
+        color: var(--secondary-color);
+      }
+
     }
   }
 

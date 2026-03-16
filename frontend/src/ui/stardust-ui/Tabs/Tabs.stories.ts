@@ -23,9 +23,9 @@ export default meta;
 type Story = StoryObj<typeof Tabs>;
 
 const DEMO_TABS = [
-  { key: 'overview', label: 'Overview' },
-  { key: 'stats',    label: 'Stats' },
-  { key: 'settings', label: 'Settings' },
+  { key: 'overview', label: 'Overview',  icon: 'fas fa-house' },
+  { key: 'stats',    label: 'Stats',     icon: 'fas fa-chart-bar' },
+  { key: 'settings', label: 'Settings',  icon: 'fas fa-gear' },
 ];
 
 export const Default: Story = {
@@ -50,9 +50,9 @@ export const WithDisabledTab: Story = {
     setup() {
       const active = ref('overview');
       const tabs = [
-        { key: 'overview', label: 'Overview' },
-        { key: 'beta',     label: 'Beta',     disabled: true },
-        { key: 'settings', label: 'Settings' },
+        { key: 'overview', label: 'Overview', icon: 'fas fa-house' },
+        { key: 'beta',     label: 'Beta',     icon: 'fas fa-flask',  disabled: true },
+        { key: 'settings', label: 'Settings', icon: 'fas fa-gear' },
       ];
       return { active, tabs };
     },
@@ -60,6 +60,29 @@ export const WithDisabledTab: Story = {
       <Tabs v-model="active" :tabs="tabs">
         <template #overview><p style="color:var(--text-main,#eee)">Overview content.</p></template>
         <template #settings><p style="color:var(--text-main,#eee)">Settings content.</p></template>
+      </Tabs>`,
+  }),
+};
+
+export const WithIcons: Story = {
+  render: () => ({
+    components: { Tabs },
+    setup() {
+      const active = ref('profile');
+      const tabs = [
+        { key: 'profile',   label: 'Profile',   icon: 'fas fa-user' },
+        { key: 'inventory', label: 'Inventory',  icon: 'fas fa-box-open' },
+        { key: 'stats',     label: 'Stats',      icon: 'fas fa-chart-bar' },
+        { key: 'settings',  label: 'Settings',   icon: 'fas fa-cog' },
+      ];
+      return { active, tabs };
+    },
+    template: `
+      <Tabs v-model="active" :tabs="tabs">
+        <template #profile><p style="color:var(--text-main,#eee)">Profile panel content.</p></template>
+        <template #inventory><p style="color:var(--text-main,#eee)">Inventory panel content.</p></template>
+        <template #stats><p style="color:var(--text-main,#eee)">Stats panel content.</p></template>
+        <template #settings><p style="color:var(--text-main,#eee)">Settings panel content.</p></template>
       </Tabs>`,
   }),
 };
