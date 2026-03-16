@@ -1,0 +1,53 @@
+.s-badge {
+  /* based on .badge from monolith.css */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 6px;
+  border-radius: 9999px;
+  background: var(--badge-bg, var(--secondary-color));
+  color: var(--badge-fg, var(--color-contrast));
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.5;
+  box-sizing: border-box;
+  font-family: Panton, system-ui, sans-serif;
+  white-space: nowrap;
+}
+
+.s-badge--dot {
+  min-width: 8px;
+  width: 8px;
+  height: 8px;
+  padding: 0;
+}
+
+.s-badge--default {
+  --badge-bg: var(--secondary-color);
+}
+
+.s-badge--primary {
+  --badge-bg: var(--color-primary, var(--accent-color));
+}
+
+.s-badge--success {
+  --badge-bg: #22c55e;
+  --badge-fg: #fff;
+}
+
+.s-badge--warning {
+  --badge-bg: #f59e0b;
+  --badge-fg: #1a1a1a;
+}
+
+.s-badge--danger {
+  --badge-bg: var(--plx-danger, #f24);
+  --badge-fg: #fff;
+}
+
+.s-badge--info {
+  --badge-bg: #3b82f6;
+  --badge-fg: #fff;
+}

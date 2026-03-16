@@ -7,10 +7,27 @@
   height: 18px;
   padding: 0 6px;
   border-radius: 9999px;
-  background: var(--secondary-color);
-  color: var(--color-contrast);
+  background: var(--badge-bg, var(--secondary-color));
+  color: var(--badge-fg, var(--color-contrast));
   font-size: 10px;
+  font-weight: 700;
   line-height: 1.5;
   box-sizing: border-box;
   font-family: Panton, system-ui, sans-serif;
+  white-space: nowrap;
+
+  &--dot {
+    min-width: 8px;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+  }
+
+  // Semantic variants
+  &--default { --badge-bg: var(--secondary-color); }
+  &--primary  { --badge-bg: var(--color-primary, var(--accent-color)); }
+  &--success  { --badge-bg: #22c55e; --badge-fg: #fff; }
+  &--warning  { --badge-bg: #f59e0b; --badge-fg: #1a1a1a; }
+  &--danger   { --badge-bg: var(--plx-danger, #f24); --badge-fg: #fff; }
+  &--info     { --badge-bg: #3b82f6; --badge-fg: #fff; }
 }
