@@ -4,6 +4,7 @@
 
   /* ── Tab list ─────────────────────────────────── */
   &__list {
+    position: relative;           /* anchor for the sliding indicator */
     display: flex;
     flex-wrap: wrap;
     border-bottom: 1px solid color-mix(in srgb, var(--text-dim, #888) 22%, transparent);
@@ -18,12 +19,9 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    /* mirrors .plx-tab-dash li a — top/side padding, small bottom gap for the border */
     padding: 8px 18px 10px;
     background: none;
     border: 0;
-    border-bottom: 2px solid transparent;
-    margin-bottom: -1px;     /* overlap list border */
     font: inherit;
     font-family: 'Quicksand', sans-serif;
     font-size: 0.875rem;
@@ -33,12 +31,11 @@
     color: var(--text-dim, #888);
     cursor: pointer;
     white-space: nowrap;
-    transition: color 0.18s, border-color 0.18s;
+    transition: color 0.22s;
     outline: none;
 
     &:hover:not(:disabled) {
       color: var(--text-main, #eee);
-      border-bottom-color: color-mix(in srgb, var(--accent-color, #f48) 50%, transparent);
     }
 
     &:focus-visible {
@@ -52,23 +49,37 @@
       cursor: not-allowed;
     }
 
-    /* ── Active — mirrors .plx-tab-dash .plx-active a ── */
-    /* icon inside the tab */
     i, [class*="fa-"] {
       font-size: 1em;
-      line-height: 1rem;
+      line-height: 1;
       flex-shrink: 0;
       color: var(--accent-color, #f48);
     }
 
     &--active {
-      color: var(--accent-color, rgb(164, 95, 218));
+      color: var(--accent-color, #f48);
       font-weight: 800;
-      border-bottom-color: var(--accent-color, #f48);
+
       i, [class*="fa-"] {
         color: var(--secondary-color);
       }
+    }
+  }
 
+  /* ── Sliding indicator ────────────────────────── */
+  &__indicator {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background: var(--accent-color, #f48);
+    border-radius: 2px 2px 0 0;
+    pointer-events: none;
+    /* snap on first render, animate after mount */
+    transition: none;
+
+    &--ready {
+      transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1),
+                  width 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     }
   }
 

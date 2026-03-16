@@ -1,6 +1,6 @@
 <template lang="pug">
 div.st-tabs
-  div.st-tabs__list(role="tablist" :aria-label="label")
+  div.st-tabs__list(ref="listEl" role="tablist" :aria-label="label")
     button.st-tabs__tab(
       v-for="tab in tabs"
       :key="tab.key"
@@ -16,6 +16,7 @@ div.st-tabs
     )
       span(v-if="tab.icon" :class="tab.icon" aria-hidden="true")
       | {{ tab.label }}
+    div.st-tabs__indicator(:class="{ 'st-tabs__indicator--ready': ready }" :style="indicatorStyle")
 
   div.st-tabs__panels
     template(v-for="tab in tabs" :key="tab.key")
@@ -30,7 +31,7 @@ div.st-tabs
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 import './Tabs.scss';
 
 export interface TabItem {
@@ -51,10 +52,40 @@ const props = withDefaults(
 
 const emit = defineEmits<{ 'update:modelValue': [key: string | number] }>();
 
-// Unique ID to avoid collision when multiple Tabs instances are on the same page
 const uid = Math.random().toString(36).slice(2, 7);
 
-const enabledKeys = computed(() => props.tabs.filter((t) => !t.disabled).map((t) => t.key));
+const listEl = ref<HTMLElement | null>(null);
+const indicatorStyle = ref({ left: '0px', width: '0px' });
+const ready = ref(false);
+
+function updateIndicator() {
+  const list = listEl.value;
+  if (!list) return;
+  const tab = list.querySelector<HTMLElement>(`#st-tab-${uid}-${props.modelValue}`);
+  if (!tab) return;
+  const listRect = list.getBoundingClientRect();
+  const tabRect = tab.getBoundingClientRect();
+  indicatorStyle.value = {
+    left: `${tabRect.left - listRect.left}px`,
+    width: `${tabRect.width}px`,
+  };
+}
+
+onMounted(async () => {
+  await nextTick();
+  updateIndicator();
+  ready.value = true;
+});
+
+watch(() => props.modelValue, async () => {
+  await nextTick();
+  updateIndicator();
+});
+
+const enabledKeys = ref(props.tabs.filter((t) => !t.disabled).map((t) => t.key));
+watch(() => props.tabs, (tabs) => {
+  enabledKeys.value = tabs.filter((t) => !t.disabled).map((t) => t.key);
+}, { deep: true });
 
 function select(key: string | number) {
   if (key !== props.modelValue) emit('update:modelValue', key);
@@ -74,7 +105,6 @@ function onKeydown(e: KeyboardEvent, currentKey: string | number) {
     e.preventDefault();
     const nextKey = enabledKeys.value[next];
     select(nextKey);
-    // Move DOM focus to the newly activated tab
     const el = document.getElementById(`st-tab-${uid}-${nextKey}`);
     el?.focus();
   }
