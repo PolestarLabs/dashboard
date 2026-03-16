@@ -1,6 +1,15 @@
 .s-avatar {
   display: inline-flex;
+  align-items: center;
+  justify-content: center;
   overflow: hidden;
+  position: relative;
+  flex-shrink: 0;
+  background: var(--avatar-bg, var(--accent-color, #5c6ef8));
+  color: var(--avatar-fg, #fff);
+  font-family: Panton, system-ui, sans-serif;
+  font-weight: 700;
+  user-select: none;
 
   &__img {
     width: 100%;
@@ -12,17 +21,49 @@
     z-index: 1;
   }
 
-  &--circle &__img {
-    border-radius: 9999px;
+  // Shown when src is absent or broken
+  &__initials {
+    font-size: 40%;
+    line-height: 1;
+    letter-spacing: 0.04em;
+    pointer-events: none;
   }
 
-  &--rounded &__img {
-    border-radius: 12%;
+  // Status indicator pip
+  &__status {
+    position: absolute;
+    bottom: 5%;
+    right: 5%;
+    width: 22%;
+    height: 22%;
+    min-width: 8px;
+    min-height: 8px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-main, var(--bg-card, #fff));
+    z-index: 2;
+
+    &--online  { background: #22c55e; }
+    &--idle    { background: #f59e0b; }
+    &--dnd     { background: #ef4444; }
+    &--offline { background: #6b7280; }
   }
 
-  &--hexagon &__img {
+  // Shape modifiers
+  &--circle  { border-radius: 9999px; }
+  &--rounded { border-radius: 22%; }
+  &--hexagon {
     border-radius: 0;
-    /* Perfect regular hexagon, pointy top: narrower than square, all sides equal */
     clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
   }
+
+  &--circle  &__img { border-radius: 9999px; }
+  &--rounded &__img { border-radius: 22%; }
+  &--hexagon &__img { border-radius: 0; }
+
+  // Semantic size presets
+  &--xs { font-size: 10px; }
+  &--sm { font-size: 12px; }
+  &--md { font-size: 14px; }
+  &--lg { font-size: 20px; }
+  &--xl { font-size: 28px; }
 }
