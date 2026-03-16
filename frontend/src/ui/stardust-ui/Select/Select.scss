@@ -13,28 +13,29 @@
   &__native {
     display: block;
     width: 100%;
-    min-height: 38px;
+    min-height: 48px;
     padding: 0.5em 2.25em 0.5em 1em;
     font-family: inherit;
     font-size: 1rem;
     line-height: 1.5;
     color: var(--text-dim-mid, #4b4b5f);
     border: 3px solid var(--accent-color);
-    border-radius: 4px;
+    border-radius: 8px;
     background-color: #0000;
     cursor: pointer;
     appearance: none;
-    // Down chevron (SVG) – single clean arrow
+    box-shadow: none;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    // Down chevron
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234b4b5f' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
     background-position: right 0.75em center;
     background-size: 12px;
     background-repeat: no-repeat;
-    transition: border-color 0.2s ease;
 
     &:focus {
       outline: 0;
       border-color: var(--secondary-color, var(--accent-color));
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%234b4b5f' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+      box-shadow: 0 0 0 3px var(--focus-ring, rgba(92, 110, 248, 0.2));
     }
 
     &:disabled {
@@ -48,7 +49,31 @@
     min-width: 0;
   }
 
+  &__error {
+    flex: 1 1 100%;
+    font-size: 0.82rem;
+    color: var(--plx-danger, #f24);
+    margin-top: 2px;
+  }
+
   &--block &__control {
     flex: 1 1 100%;
+  }
+
+  // sm variant — matches Input sm
+  &--sm &__native {
+    min-height: 32px;
+    font-size: 0.875rem;
+    border-radius: 6px;
+    border-width: 2px;
+  }
+
+  // Error state
+  &--error &__native {
+    border-color: var(--plx-danger, #f24);
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba(255, 34, 68, 0.18);
+    }
   }
 }

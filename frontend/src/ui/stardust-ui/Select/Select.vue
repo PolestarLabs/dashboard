@@ -1,6 +1,6 @@
 <template lang="pug">
 .st-select(
-  :class="{ 'st-select--inline': label && inline, 'st-select--block': label && !inline }"
+  :class="{ 'st-select--inline': label && inline, 'st-select--block': label && !inline, [`st-select--${size}`]: true, 'st-select--error': !!error }"
 )
   .st-select__control
     select.st-select__native(
@@ -9,6 +9,7 @@
       :disabled="disabled"
       :name="name"
       :aria-label="label || undefined"
+      :aria-invalid="!!error || undefined"
       v-bind="$attrs"
       @change="onChange"
     )
@@ -25,6 +26,7 @@
         ) {{ opt.label }}
       slot(v-else)
   label.st-select__label(v-if="label" :for="inputId") {{ label }}
+  .st-select__error(v-if="error" role="alert") {{ error }}
 </template>
 
 <script setup lang="ts">
@@ -51,8 +53,12 @@ const props = withDefaults(
     inline?: boolean;
     disabled?: boolean;
     name?: string;
+    /** Input size — matches Input component */
+    size?: 'sm' | 'md';
+    /** Error message — when set the control is styled in error state */
+    error?: string;
   }>(),
-  { inline: true }
+  { inline: true, size: 'md' }
 );
 
 const emit = defineEmits<{
