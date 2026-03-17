@@ -38,6 +38,9 @@ const preview: Preview = {
     }),
   ],
   parameters: {
+    options: {
+      storySort:{order: ['Extras', 'Folders','Components']},
+    },
     controls: {
       matchers: {
        color: /(background|color)$/i,
