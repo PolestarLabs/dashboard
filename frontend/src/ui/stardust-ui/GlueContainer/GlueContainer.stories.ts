@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
 import GlueContainer from './GlueContainer.vue';
-import Input from '../Input/Input.vue';
+import Input from '../Form Elements/Input/Input.vue';
 import Button from '../Button/Button.vue';
 import Badge from '../Badge/Badge.vue';
 

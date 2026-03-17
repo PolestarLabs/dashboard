@@ -3,6 +3,7 @@ import { defineComponent } from 'vue';
 import Swal from 'sweetalert2';
 import { useAlert } from './useAlert';
 import Button from '../Button/Button.vue';
+import { themes } from 'storybook/theming';
 
 // The Alert system is a composable (programmatic API), not a rendered component.
 // Stories render a trigger panel so the Storybook user can click and see dialogs.
@@ -10,6 +11,11 @@ import Button from '../Button/Button.vue';
 const AlertDemo = defineComponent({
   name: 'AlertDemo',
   components: { Button },
+  parameters: {
+    docs: {
+      theme: themes.dark,
+    },
+  },
   setup() {
     const { alert, success, error, warning, info, confirm, ask, deleteConfirm, withLoader, fire } =
       useAlert();

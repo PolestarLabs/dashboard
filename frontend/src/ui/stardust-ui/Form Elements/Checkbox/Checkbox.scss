@@ -1,0 +1,124 @@
+input[type='checkbox']{   height: 0; width: 0; }
+
+.st-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  user-select: none;
+  vertical-align: middle;
+
+
+  &--disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+    filter: grayscale(80%);
+  }
+
+  &__input {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    pointer-events: none;
+  }
+
+  &__control {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--accent-color);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+
+  &__check {
+    width: 10px;
+    height: 10px;
+    transform: scale(0);
+    opacity: 0;
+    background-color: var(--secondary-color);
+    border-radius: 2px;
+    transition: transform 0.2s ease, opacity 0.2s ease;
+    & > i {
+        position: absolute;
+        width: 2px;
+        height: 6px;
+        top: -4px;
+        left: 0px;
+        opacity: 0;
+        color: white;
+
+        transform-origin: 0% 200%;
+    }
+  }
+  &__input {
+    &:checked + &__control {
+      border-color: var(--accent-color);
+      background: rgba(0, 0, 0, 0.14);
+    }
+
+    &:checked + &__control .st-checkbox__check {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    &:focus-visible + &__control {
+      outline: none;
+      box-shadow: 0 0 0 3px var(--focus-ring, rgba(92, 110, 248, 0.35));
+    }
+
+    &:checked  ~ .st-checkbox__label {
+      color: var(--text-main, #eee);
+      font-weight: 600;
+    }
+
+    &:checked ~ .st-checkbox__control > .st-checkbox__check  > i  {
+      animation: checkbox-check 0.3s ease forwards;
+    }
+
+    &:checked ~ .st-checkbox__control > .st-checkbox__check  > i {
+      opacity: 1;
+    }
+  } 
+
+  &__input:checked + &__control .st-checkbox__check {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &:hover:not(:has(.st-checkbox__input:checked)) .st-checkbox__control > .st-checkbox__check {
+    opacity: 0.3;
+    transform: scale(.6);
+  }
+
+  &__label {
+    flex: 1 1 auto;
+    min-width: 0;
+    color: var(--text-dim-mid, #4b4b5f);
+    font-weight: 500;
+  }
+}
+ 
+@keyframes checkbox-check{
+  0%{
+    width: 0;
+    height: 0;
+    border-color: #212121;
+    transform: scale(0,0);
+  }
+  33%{
+    width: .2em;
+    height: 0;
+    transform: scale(1,0) ;
+  }
+  100%{    
+    width: .2em;
+    height: .5em;    
+    border-color: #212121;
+    transform: scale(1,1) ;
+  }
+}

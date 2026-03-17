@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import Toggle from './Toggle.vue';
 
 const meta: Meta<typeof Toggle> = {
-  title: 'Stardust UI/Toggle',
+  title: 'Stardust UI/Form Elements/Toggle',
   component: Toggle,
   tags: ['autodocs'],
   argTypes: {

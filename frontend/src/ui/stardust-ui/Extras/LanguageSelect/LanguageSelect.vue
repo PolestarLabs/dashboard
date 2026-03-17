@@ -14,8 +14,8 @@ DropdownSelectPlus(
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import DropdownSelectPlus from '../DropdownSelectPlus/DropdownSelectPlus.vue';
-import type { DropdownSelectPlusOption } from '../DropdownSelectPlus/DropdownSelectPlus.vue';
+import DropdownSelectPlus from '../../DropdownSelectPlus/DropdownSelectPlus.vue';
+import type { DropdownSelectPlusOption } from '../../DropdownSelectPlus/DropdownSelectPlus.vue';
 
 defineOptions({ inheritAttrs: false });
 

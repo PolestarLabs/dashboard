@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import Button from './Button.vue';
 
 const meta: Meta<typeof Button> = {
-  title: 'Stardust UI/Basic Button',
+  title: 'Stardust UI/Button',
   component: Button,
   tags: ['autodocs'],
   argTypes: { 

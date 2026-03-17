@@ -92,7 +92,16 @@ export const CustomStatus: Story = {
 - \`.s-avatar__img-wrapper.s-avatar__img--status\` for status-aware styling.
 - \`.s-avatar__status\` for badge icon styling, opacity, outline, etc.
 - CSS vars like \`--current-color\`, \`--status-border-color\`, and \`--status-border-width\` can be used to tweak the border appearance.
+
+Example (dark code block):
+
+\`\`\`css
+.s-avatar__img-wrapper {
+  background-image: radial-gradient(circle at 60% 40%, #7c3aed, #2563eb);
+}
+\`\`\`
 `,
+
       },
     },
   },

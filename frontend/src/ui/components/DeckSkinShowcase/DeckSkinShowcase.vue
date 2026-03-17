@@ -17,7 +17,7 @@ div.deck-skin-showcase
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import CardShowcaseCanvas from '@/ui/stardust-ui/CardShowcase/CardShowcaseCanvas.vue';
+import CardShowcaseCanvas from '@/ui/stardust-ui/Extras/CardShowcase/CardShowcaseCanvas.vue';
 import './DeckSkinShowcase.scss';
 
 /** Front card image filename (without path): 'HQ' or 'star' (tarot). */

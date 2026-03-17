@@ -11,7 +11,7 @@ const sampleOptions: SelectOption[] = [
 ];
 
 const meta: Meta<typeof Select> = {
-  title: 'Stardust UI/Select',
+  title: 'Stardust UI/Form Elements/Select',
   component: Select,
   tags: ['autodocs'],
   argTypes: {

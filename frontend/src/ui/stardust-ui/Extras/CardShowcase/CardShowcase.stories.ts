@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import CardShowcase from './CardShowcase.vue';
 
 const meta: Meta<typeof CardShowcase> = {
-  title: 'Stardust UI/Misc/Card Showcase',
+  title: 'Stardust UI/Extras/Card Showcase',
   component: CardShowcase,
   tags: ['autodocs'],
   argTypes: {

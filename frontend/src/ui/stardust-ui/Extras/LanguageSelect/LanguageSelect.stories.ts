@@ -4,7 +4,7 @@ import type { LanguageOption } from './LanguageSelect.vue';
 import LanguageSelect from './LanguageSelect.vue';
 
 const meta: Meta<typeof LanguageSelect> = {
-  title: 'Stardust UI/Language Select',
+  title: 'Stardust UI/Extras/Language Select',
   component: LanguageSelect,
 
   tags: ['autodocs'],
