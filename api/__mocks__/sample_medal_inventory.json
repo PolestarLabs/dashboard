@@ -1,0 +1,4168 @@
+[
+  {
+    "_id": "5b85bd3828995dd29c07c9b0",
+    "name": "Beachy Ball",
+    "icon": "beachball18",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice summer",
+    "rarity": "C",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "FLW",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9b1",
+    "name": "Crabby",
+    "icon": "crabby",
+    "category": "animals",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice summer",
+    "rarity": "U",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "FLW",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9b2",
+    "name": "Dolphin Splash",
+    "icon": "dolphin",
+    "category": "animals",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice summer",
+    "rarity": "R",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "FLW",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9b3",
+    "name": "Ice Cream Pot",
+    "icon": "icecream2",
+    "category": "food",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice summer",
+    "rarity": "SR",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "FLW",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9b4",
+    "name": "Parasol",
+    "icon": "parasol",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice summer",
+    "rarity": "C",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "FLW",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9b5",
+    "name": "Rubber Ring",
+    "icon": "rubbering",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice summer",
+    "rarity": "U",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "FLW",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9b6",
+    "name": "Snorkel",
+    "icon": "snorkel",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice summer",
+    "rarity": "C",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "FLW",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9b7",
+    "name": "Sonne",
+    "icon": "sonne",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice summer",
+    "rarity": "C",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "FLW",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9b8",
+    "name": "Squirt Gun",
+    "icon": "watergun",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice summer",
+    "rarity": "R",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "FLW",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9b9",
+    "name": "Cecily",
+    "icon": "ceciround",
+    "category": "mascots",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice summer",
+    "rarity": "UR",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "FLW",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9ba",
+    "name": "Beanie",
+    "icon": "beanie",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice winter",
+    "rarity": "C",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "SFK",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9bb",
+    "name": "Coffee",
+    "icon": "coffee",
+    "category": "food",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice winter",
+    "rarity": "R",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "SFK",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9bd",
+    "name": "Pengu",
+    "icon": "pengu",
+    "category": "animals",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice winter",
+    "rarity": "U",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "SFK",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9be",
+    "name": "Snowglobe",
+    "icon": "snowglobe",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice winter",
+    "rarity": "U",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "SFK",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9bf",
+    "name": "Snowman",
+    "icon": "snowman",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice winter",
+    "rarity": "C",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "SFK",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9c0",
+    "name": "Southpole",
+    "icon": "southpole",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice winter",
+    "rarity": "R",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "SFK",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9c1",
+    "name": "Cocoa",
+    "icon": "cocoa",
+    "category": "food",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice winter",
+    "rarity": "SR",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "SFK",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9c2",
+    "name": "Leaves",
+    "icon": "leaves",
+    "category": "things",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice winter",
+    "rarity": "C",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "SFK",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b85bd3828995dd29c07c9c3",
+    "name": "Nikoliny",
+    "icon": "nikyround",
+    "category": "mascots",
+    "buyable": false,
+    "droppable": true,
+    "type": "medal",
+    "tags": "event solstice winter",
+    "rarity": "UR",
+    "event": "solstice18",
+    "howto": "Part of Solstice 2018 Event",
+    "public": true,
+    "filter": "SFK",
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5b9794fcb84cd7210051f4bd",
+    "name": "ATARI",
+    "icon": "atari",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "console atari oldschool",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5b97961fb84cd7210051f4be",
+    "name": "SEGA",
+    "icon": "sega",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "console games brands sega oldschool",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5b9796f0b84cd7210051f4bf",
+    "name": "F35 Lightning II - Joint Strike Fighter",
+    "icon": "f35jointstrike",
+    "category": "things",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "aviation military badge",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5b979914b84cd7210051f4c1",
+    "name": "Yamaha",
+    "icon": "yamaha",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "logo automobile music",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5b97a1a8b84cd7210051f50d",
+    "name": "UFP Starfleet",
+    "icon": "starfleet",
+    "category": "TV",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "tv series star_trek",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5b97a1d2b84cd7210051f516",
+    "name": "Tesla Motors",
+    "icon": "teslamotors",
+    "category": "Brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "automobile logo",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5b97cddf43514f60e357c4f2",
+    "name": "Clockwork Collector",
+    "icon": "10daily",
+    "category": "Achievements",
+    "buyable": false,
+    "droppable": false,
+    "type": "medal",
+    "tags": "pollux meta achievements",
+    "rarity": "U",
+    "howto": "Get 10 Dailies",
+    "public": false,
+    "BUNDLE": "achievs",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5bc8a8e4fa0f0f20c02512d8",
+    "name": "Task Force 108 : Warwolf",
+    "icon": "warwolfsquad",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "game ace_combat assault_horizon",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fcf1",
+    "name": "Bones",
+    "icon": "pweenmedal1-byramywafaa",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "C",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fcf2",
+    "name": "Dracula",
+    "icon": "pweenmedal7-byramywafaa",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "C",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fcf4",
+    "name": "Pierced Heart",
+    "icon": "pweenmedal5-byramywafaa",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "U",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fcf7",
+    "name": "Pumpkin",
+    "icon": "pweenmedal2-byramywafaa",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "C",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fcf8",
+    "name": "Broom",
+    "icon": "pweenmedal9-byramywafaa",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "C",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fcf9",
+    "name": "Vamplips",
+    "icon": "pweenmedal8-byramywafaa",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "C",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fd00",
+    "name": "Blackat",
+    "icon": "pweenmedal14-byramywafaa",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "C",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fd16",
+    "name": "Dracula's Castle",
+    "icon": "pweenmedal26",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "U",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fd17",
+    "name": "Pumpkin",
+    "icon": "pweenmedal27",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "U",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fd1a",
+    "name": "Treatbag",
+    "icon": "pweenmedal30",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "R",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5bda8b9862c9c0d3d3a7fd1c",
+    "name": "Noctix",
+    "icon": "pweennox",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "event halloween",
+    "rarity": "UR",
+    "event": "halloween18",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "Halloween 18",
+    "meta": {
+      "legacy": true
+    },
+    "filter": "halloween"
+  },
+  {
+    "_id": "5a6dfd654f467b0415367244",
+    "name": "Beyblade",
+    "icon": "beyblade",
+    "category": "anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367245",
+    "name": "Brazil Flag",
+    "icon": "brazil",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "south america",
+    "rarity": "C",
+    "public": true,
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367246",
+    "name": "Burger",
+    "icon": "burger",
+    "category": "food",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "fast-food",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367247",
+    "name": "Counter Strike",
+    "icon": "counterstrike",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "fps csgo",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367248",
+    "name": "Dark Magician Girl",
+    "icon": "darkmagirl",
+    "category": "pins",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "yu-gi-oh yugioh",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367249",
+    "name": "Fruki Guaraná",
+    "icon": "fruki",
+    "category": "food",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "soda brazil",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536724a",
+    "name": "Gardevoir",
+    "icon": "gardevoir",
+    "category": "pokemon",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536724b",
+    "name": "Germany Flag",
+    "icon": "germany",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536724c",
+    "name": "Hatsune Miku",
+    "icon": "miku",
+    "category": "anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "vocaloid",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536724d",
+    "name": "Heroes of the Storm",
+    "icon": "heroes",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "moba blizzard",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536724e",
+    "name": "Hylian Shield",
+    "icon": "hyruleshield",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "rpg nintendo zelda",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536724f",
+    "name": "Japan Flag",
+    "icon": "japan",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "asia",
+    "rarity": "SR",
+    "public": true,
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367250",
+    "name": "League of Legends",
+    "icon": "league",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "moba",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367252",
+    "name": "Nintendo 3DS",
+    "icon": "n3ds",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "console nintendo",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367254",
+    "name": "Overwatch",
+    "icon": "overwatch",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "fps blizzard",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367255",
+    "name": "Patreon",
+    "icon": "patreon",
+    "category": "exclusive",
+    "buyable": false,
+    "droppable": false,
+    "howto": "Become a Patron with 1$ or more at %site% ~",
+    "type": "medal",
+    "tags": "brands",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367256",
+    "name": "Pikachu",
+    "icon": "pikachu",
+    "category": "pokemon",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367257",
+    "name": "Pokéball",
+    "icon": "pokeball",
+    "category": "pokemon",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "icons",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367258",
+    "name": "Pollux Mansion",
+    "icon": "pollux",
+    "category": "exclusive",
+    "buyable": false,
+    "droppable": false,
+    "howto": "Be an active member at Pollux's official Server~",
+    "type": "medal",
+    "tags": "",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367259",
+    "name": "Portugal Flag",
+    "icon": "portugal",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe",
+    "rarity": "C",
+    "public": true,
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536725a",
+    "name": "StarCraft II",
+    "icon": "starcraft",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "rts blizzard",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536725b",
+    "name": "Super Nintendo",
+    "icon": "snes",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "console nintendo",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536725c",
+    "name": "Twitch.tv",
+    "icon": "twitch",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "sites",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536725d",
+    "name": "Umbreon",
+    "icon": "umbreon",
+    "category": "pokemon",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536725e",
+    "name": "WoW: Alliance",
+    "icon": "alliancewow",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "alliance warcraft",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536725f",
+    "name": "Adobe",
+    "icon": "adobe",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "software design",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367260",
+    "name": "Argentina Flag",
+    "icon": "argentina",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "south_america",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367261",
+    "name": "Canada Flag",
+    "icon": "canada",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "north_america",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367262",
+    "name": "Czech Republic Flag",
+    "icon": "czech",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe central_europe",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367264",
+    "name": "D.Va Bunny",
+    "icon": "dva_logo",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "overwatch",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367265",
+    "name": "Firefox",
+    "icon": "firefox",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "software browser",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367266",
+    "name": "WoW: Horde",
+    "icon": "hordewow",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "warcraft horde",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367267",
+    "name": "World of Warcraft",
+    "icon": "wow",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "mmo",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367268",
+    "name": "Venezuela Flag",
+    "icon": "venezuela",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "south_america",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367269",
+    "name": "United Kingdom Flag",
+    "icon": "ukingdom",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "not_europe britain",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536726a",
+    "name": "Ubuntu",
+    "icon": "ubuntu",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "software os system",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536726b",
+    "name": "Steam",
+    "icon": "steam",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "software service",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536726c",
+    "name": "SNES Buttons",
+    "icon": "snesround",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "nintendo",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536726d",
+    "name": "Piece of Ham",
+    "icon": "schink",
+    "category": "food",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "meat",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536726e",
+    "name": "American Flag",
+    "icon": "murica",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "north_america",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536726f",
+    "name": "Romania Flag",
+    "icon": "romania",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe eastern_europe",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367270",
+    "name": "Malaysia Flag",
+    "icon": "malay",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "asia south_asia",
+    "rarity": "U",
+    "public": true,
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367271",
+    "name": "Italy Flag",
+    "icon": "italy",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe mediterranean",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367272",
+    "name": "France Flag",
+    "icon": "france",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe west",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367273",
+    "name": "Chibi Pumpkin ",
+    "icon": "chibipumpkin",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "event": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b0415367274",
+    "name": "Black Cat",
+    "icon": "blackat",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "event": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b0415367275",
+    "name": "Chibi Spider",
+    "icon": "chibispider",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "event": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b0415367276",
+    "name": "Who you're gonna call",
+    "icon": "gbusters",
+    "category": "movies",
+    "buyable": true,
+    "droppable": false,
+    "event": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b0415367277",
+    "name": "Ghostling",
+    "icon": "ghostling",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "event": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b0415367278",
+    "name": "Pollux Halloween 2017",
+    "icon": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "category": "event",
+    "buyable": false,
+    "droppable": false,
+    "event": "halloween_2017",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "XR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b0415367279",
+    "name": "Jack Skellington Pin",
+    "icon": "jackskell1",
+    "category": "movies",
+    "buyable": true,
+    "droppable": false,
+    "event": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b041536727a",
+    "name": "Pentagram",
+    "icon": "pentagram",
+    "category": "symbols",
+    "buyable": true,
+    "droppable": false,
+    "event": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b041536727b",
+    "name": "Your Ordinary Pumpkin",
+    "icon": "pumpkin",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "event": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b041536727c",
+    "name": "Yet Another Pumpkin",
+    "icon": "pumpkin2",
+    "category": "event",
+    "buyable": true,
+    "droppable": false,
+    "event": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b041536727d",
+    "name": "Soul Eater Shinigami",
+    "icon": "shinigami_sl_eater",
+    "category": "anime",
+    "buyable": true,
+    "droppable": false,
+    "event": "halloween_2017",
+    "howto": "Get it by collecting candies or from Event Lootboxes. More info at the<a href='http://pollux.fun/events/halloween'>Halloween Event Page</a>",
+    "type": "medal",
+    "tags": "halloween event",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b0415367280",
+    "name": "Finland Flag",
+    "icon": "finland",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe nordic",
+    "rarity": "SR",
+    "public": true,
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367282",
+    "name": "Flag of USSR",
+    "icon": "ussr",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "eurasia asia europe soviet",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367283",
+    "name": "Norway Flag",
+    "icon": "norway",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe nordic",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367285",
+    "name": "BMW Logo",
+    "icon": "bmw",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "automobile",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367287",
+    "name": "DareDevil",
+    "icon": "daredev",
+    "category": "anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "anime icon symbol logo",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367288",
+    "name": "Naruto: Leaf",
+    "icon": "narutoleaf",
+    "category": "anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "anime icon symbol logo",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367289",
+    "name": "Mitsubishi",
+    "icon": "mitsu",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "automobile",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536728a",
+    "name": "Mercedes Logo",
+    "icon": "mercedes",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "automobile",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536728b",
+    "name": "Fairy Tail",
+    "icon": "ftail",
+    "category": "anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "anime icon symbol logo",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536728c",
+    "name": "One Piece 1",
+    "icon": "opc1",
+    "category": "anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "anime icon symbol logo",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536728d",
+    "name": "One Piece 2",
+    "icon": "opc2",
+    "category": "anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "anime icon symbol logo",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536728e",
+    "name": "Volkswagen",
+    "icon": "volks",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "automobile",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536728f",
+    "name": "Soul Eater",
+    "icon": "seater",
+    "category": "anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "anime icon symbol logo",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367291",
+    "name": "Dragon Ball Z - Goku",
+    "icon": "gokudbz",
+    "category": "anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "anime icon symbol logo",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367292",
+    "name": "Windows Setup",
+    "icon": "winstall",
+    "category": "icons",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "software os system",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367293",
+    "name": "The Coco Froot",
+    "icon": "cocofroot",
+    "category": "misc",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "pollux random",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367294",
+    "name": "Coca Cola",
+    "icon": "coke",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "soda beverage",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367295",
+    "name": "Pepsi",
+    "icon": "pepsi",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "soda beverage",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367298",
+    "name": "Sq Rainbowdash",
+    "icon": "raibowdshsq",
+    "category": "cartoon",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "mlp tv",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b0415367299",
+    "name": "Umbrella Corp.",
+    "icon": "umbrella",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "resident_evil biohazard",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536729a",
+    "name": "Giant Dad",
+    "icon": "gdad",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "dark_souls meme",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536729b",
+    "name": "Chao",
+    "icon": "chao",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "sonic",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536729c",
+    "name": "Mortal Kombad Tier 1",
+    "icon": "mortalk1",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "multitier fighting",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b041536729f",
+    "name": "Need for Speed",
+    "icon": "needfspeed",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "racing",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b04153672a0",
+    "name": "Swedish Meatball",
+    "icon": "meatball",
+    "category": "food",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "meme pollux internal sweden food",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b04153672a1",
+    "name": "Smash Bros.",
+    "icon": "ssb",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "fighting nintendo",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a6dfd654f467b04153672a2",
+    "name": "EarthBound Present Box",
+    "icon": "eb_present",
+    "category": "games",
+    "buyable": false,
+    "droppable": false,
+    "event": "christmas_2017",
+    "type": "medal",
+    "tags": "items",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b04153672a6",
+    "name": "Christmas Muffet",
+    "icon": "xmasmuffet",
+    "category": "games",
+    "buyable": false,
+    "droppable": false,
+    "event": "christmas_2017",
+    "type": "medal",
+    "tags": "undertale",
+    "rarity": "SR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b04153672a7",
+    "name": "Christmas Ball Green",
+    "icon": "xmasball_g",
+    "category": "event",
+    "buyable": false,
+    "droppable": false,
+    "event": "christmas_2017",
+    "type": "medal",
+    "tags": "items",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b04153672aa",
+    "name": "Christmas Sock",
+    "icon": "xmasock",
+    "category": "event",
+    "buyable": false,
+    "droppable": false,
+    "event": "christmas_2017",
+    "type": "medal",
+    "tags": "sock",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b04153672ab",
+    "name": "Christmas Tree",
+    "icon": "xmastree",
+    "category": "event",
+    "buyable": false,
+    "droppable": false,
+    "event": "christmas_2017",
+    "type": "medal",
+    "tags": "tree",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b04153672ac",
+    "name": "SB's Christmas Elf",
+    "icon": "xxelf",
+    "category": "event",
+    "buyable": false,
+    "droppable": false,
+    "event": "christmas_2017",
+    "type": "medal",
+    "tags": "elf",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b04153672ad",
+    "name": "SB's Gingerman Ninja",
+    "icon": "xxgingerninja",
+    "category": "event",
+    "buyable": false,
+    "droppable": false,
+    "event": "christmas_2017",
+    "type": "medal",
+    "tags": "",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b04153672ae",
+    "name": "SB's Nutcracker",
+    "icon": "xxnutcracker",
+    "category": "event",
+    "buyable": false,
+    "droppable": false,
+    "event": "christmas_2017",
+    "type": "medal",
+    "tags": "",
+    "rarity": "R",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a6dfd654f467b04153672af",
+    "name": "SB's Santa Claus",
+    "icon": "xxsanta",
+    "category": "event",
+    "buyable": false,
+    "droppable": false,
+    "event": "christmas_2017",
+    "type": "medal",
+    "tags": "santa",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    }
+  },
+  {
+    "_id": "5a9210687c8ac12de577d856",
+    "name": "Pantsu",
+    "icon": "pantsu",
+    "category": "items",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "panties anime underwear ecchi",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d859",
+    "name": "Pizza",
+    "icon": "pizza",
+    "category": "food",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "italy fast_food fat",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d85a",
+    "name": "Zelda Heart Container",
+    "icon": "zeldaheartcontainer",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "tloz nintendo zelda",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d85b",
+    "name": "NASA",
+    "icon": "nasa",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "space science organization",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d85c",
+    "name": "Hentai Haven",
+    "icon": "hentaiheaven",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "web service nsfw anime",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d85d",
+    "name": "Riograndense Republic Flag",
+    "icon": "repriograndense",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "south_america",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d85e",
+    "name": "South Korea Flag",
+    "icon": "southkorea",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "asia",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d865",
+    "name": "Puffle Multicolor",
+    "icon": "pufflemulticolor",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "club penguin rare pet",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d866",
+    "name": "Neptune´s Power",
+    "icon": "power",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "icon button hdn",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d868",
+    "name": "ESA",
+    "icon": "esa",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "european space organisation",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d869",
+    "name": "Mario Luma",
+    "icon": "marioluma",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "Mario Luma",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d86b",
+    "name": "Son Goku Pin",
+    "icon": "songoku",
+    "category": "pins",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "dbz dragon_ball",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d86d",
+    "name": "Spain Flag",
+    "icon": "spain",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d870",
+    "name": "Tea",
+    "icon": "tea",
+    "category": "food",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "drink",
+    "rarity": "SR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d872",
+    "name": "Isle Delfino",
+    "icon": "isledelfino",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "nintendo mario sunshine",
+    "rarity": "SR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d873",
+    "name": "Phantom Thieves",
+    "icon": "phanttieves",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "persona persona5 p5",
+    "rarity": "SR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d875",
+    "name": "FBI",
+    "icon": "fbi",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "federal organization",
+    "rarity": "SR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d876",
+    "name": "Mew",
+    "icon": "mew",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "pokemon legendary",
+    "rarity": "SR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d878",
+    "name": "Cup of Noodles",
+    "icon": "cupnoodle",
+    "category": "food",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "fast food noodles",
+    "rarity": "SR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d87a",
+    "name": "Russia Flag",
+    "icon": "russia",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe",
+    "rarity": "SR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d87b",
+    "name": "Uganda Flag",
+    "icon": "uganda",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "africa",
+    "rarity": "SR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d87d",
+    "name": "Millennium Eye",
+    "icon": "millenniumeye",
+    "category": "anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "Yugioh eye pegasus relic",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d87f",
+    "name": "Starbucks",
+    "icon": "starbucks",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "hipsters coffee company",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d881",
+    "name": "Pixel Link",
+    "icon": "pixellink",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "nintendo zelda",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d88b",
+    "name": "Turkey Flag",
+    "icon": "turkey",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "central_asia",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d88e",
+    "name": "Minecraft",
+    "icon": "minecraft",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "sandbox mine mojang",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d88f",
+    "name": "Mario Sun Coin",
+    "icon": "mariosuncoin",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "gcn sunshine special coin",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d890",
+    "name": "Plants vs Zombies Walnut",
+    "icon": "plantsvszombieswalnut",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "pvz character",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d891",
+    "name": "Glasses",
+    "icon": "glasses",
+    "category": "items",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "pollux glasses sass",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d892",
+    "name": "Sakura",
+    "icon": "sakura",
+    "category": "misc",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "culture japan icon",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d894",
+    "name": "Pixel Navi",
+    "icon": "navitloz",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "fairy zelda nintendo",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d895",
+    "name": "Google play",
+    "icon": "googleplay",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "play store service mobile",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d896",
+    "name": "Google+",
+    "icon": "flatgoogle",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "web service social",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d897",
+    "name": "Facebook",
+    "icon": "facebook",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "web service social",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d898",
+    "name": "Origin",
+    "icon": "origin",
+    "category": "brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "software game service",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d899",
+    "name": "Aisaka Taiga Pin",
+    "icon": "taigaaisaka",
+    "category": "pins",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "anime girl",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d89a",
+    "name": "Minoriku Shieda Pin",
+    "icon": "minorikushieda",
+    "category": "pins",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "anime girl",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d89b",
+    "name": "Bulgaria Flag",
+    "icon": "bulgaria",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d89c",
+    "name": "Chile Flag",
+    "icon": "chile",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "south_america",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9210687c8ac12de577d89d",
+    "name": "Peru Flag",
+    "icon": "peru",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "south_america",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "event": null
+  },
+  {
+    "_id": "5a9ba94f45cd0fe69eece440",
+    "name": "Skype",
+    "icon": "skype",
+    "category": "Brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "voice chat software",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9ba94f45cd0fe69eece441",
+    "name": "Cytus II : Neko",
+    "icon": "cytusneko",
+    "category": "Games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "neko logo from cytus_ll",
+    "rarity": "C",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9ba94f45cd0fe69eece442",
+    "name": "You Tube",
+    "icon": "youtube",
+    "category": "Brands",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "video service website",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9ba94f45cd0fe69eece444",
+    "name": "Kawaii Rice Ball",
+    "icon": "kawaiiriceball",
+    "category": "Anime",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "cute anime food",
+    "rarity": "UR",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9ba94f45cd0fe69eece446",
+    "name": "Diamond",
+    "icon": "diamond",
+    "category": "Item",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "precious gem",
+    "rarity": "U",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5a9e2ee9dc0ae32d18b81eb1",
+    "name": "Cytus II : Neko2",
+    "icon": "cytusneko",
+    "category": "Games",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "exclusive": "277391723322408960",
+    "tags": "neko logo from cytus_ll",
+    "rarity": "C",
+    "public": false,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b740",
+    "name": "2ne1",
+    "icon": "2ne1",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop girl group",
+    "rarity": "C",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b741",
+    "name": "4minute",
+    "icon": "4minute",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop girl group",
+    "rarity": "R",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b742",
+    "name": "Big Bang",
+    "icon": "bigbang",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop boy group",
+    "rarity": "R",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b743",
+    "name": "BTS",
+    "icon": "bts",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop boy group",
+    "rarity": "U",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b744",
+    "name": "EXID",
+    "icon": "exid",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop girl group",
+    "rarity": "C",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b746",
+    "name": "Gfriend",
+    "icon": "gfriend",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop girl group",
+    "rarity": "U",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b747",
+    "name": "Got7",
+    "icon": "got7",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop boy group",
+    "rarity": "C",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b748",
+    "name": "Mamamoo",
+    "icon": "mamamoo",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop girl group",
+    "rarity": "C",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b749",
+    "name": "Red Velvet",
+    "icon": "redvelvet",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop girl group",
+    "rarity": "U",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b74a",
+    "name": "Seventeen",
+    "icon": "seventeen",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop boy group",
+    "rarity": "UR",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b74b",
+    "name": "SNSD",
+    "icon": "snsd",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop girl group",
+    "rarity": "R",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aa5a7de9abb9c312676b74d",
+    "name": "Twice",
+    "icon": "twice",
+    "category": "K-Pop",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "kpop girl group",
+    "rarity": "U",
+    "BUNDLE": "kpop",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aad8a644cc08ba6e664fde4",
+    "name": "RAW",
+    "icon": "raw",
+    "category": "WrestlingLogos",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "promotions, wwe",
+    "exclusive": "323399715842424835",
+    "rarity": "C",
+    "public": false,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aad8a644cc08ba6e664fdef",
+    "name": "Haitch Face",
+    "icon": "haitch",
+    "category": "IWD",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "iwd, wwe",
+    "exclusive": "323399715842424835",
+    "rarity": "R",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aaf46b32f93a1848434c904",
+    "name": "Confederacy of Independent Systems",
+    "icon": "swcis",
+    "category": "movies",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "starwars cinema sci-fi",
+    "rarity": "C",
+    "BUNDLE": "starwars",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aaf46b32f93a1848434c905",
+    "name": "Clone Trooper",
+    "icon": "clonetrooper",
+    "category": "movies",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "starwars cinema sci-fi",
+    "rarity": "U",
+    "BUNDLE": "starwars",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aaf46b32f93a1848434c906",
+    "name": "Storm Trooper",
+    "icon": "stormtrooper",
+    "category": "movies",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "starwars cinema sci-fi",
+    "rarity": "C",
+    "BUNDLE": "starwars",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aaf46b32f93a1848434c909",
+    "name": "Star Wars - Imperial Forces",
+    "icon": "swempire",
+    "category": "movies",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "starwars cinema sci-fi",
+    "rarity": "UR",
+    "BUNDLE": "starwars",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aaf46b32f93a1848434c90b",
+    "name": "Mandalorian",
+    "icon": "swmandalorian",
+    "category": "movies",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "starwars cinema sci-fi",
+    "rarity": "U",
+    "BUNDLE": "starwars",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aaf46b32f93a1848434c90c",
+    "name": "Rebel Alliance",
+    "icon": "swrebel",
+    "category": "movies",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "starwars cinema sci-fi",
+    "rarity": "UR",
+    "BUNDLE": "starwars",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aaf46b32f93a1848434c90d",
+    "name": "Star Wars - Republic",
+    "icon": "swrepublic",
+    "category": "movies",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "starwars cinema sci-fi",
+    "rarity": "SR",
+    "BUNDLE": "starwars",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe3691",
+    "name": "Assassins Creed : Creed Emblem",
+    "icon": "ac_creed_emblem",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "assassins creed ubisoft",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe3692",
+    "name": "Assassins Creed : Egypt",
+    "icon": "ac_origins_egypt",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "assassins creed ubisoft",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe3693",
+    "name": "Assassins Creed : Ottoman",
+    "icon": "ac_otoman",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "assassins creed ubisoft",
+    "rarity": "SR",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe3697",
+    "name": "Castlevania : Ecclesia Gnostica",
+    "icon": "castlevaniaecclesia",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "castlevania order of ecclesia konami",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe369a",
+    "name": "Diablo III Diablo",
+    "icon": "diablo7",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "rpg blizzard diablo",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe369e",
+    "name": "Doki Doki Literature Club 1",
+    "icon": "dokimedal1",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "visual novel anime",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36a1",
+    "name": "Doki Doki Literature Club Natsuki",
+    "icon": "dokimedal4",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "visual novel anime",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36a5",
+    "name": "DotA 2",
+    "icon": "dota2",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "moba valve dota",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36a9",
+    "name": "Dragon's Crown : Crest 4",
+    "icon": "dragons_crown4",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "arcade rpg dnd",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36aa",
+    "name": "Dragon's Crown : Crest 5",
+    "icon": "dragons_crown5",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "arcade rpg dnd",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36ac",
+    "name": "Darkstalkers Huitzil",
+    "icon": "dstalkers2",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "fighting arcade dark stalkers",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36af",
+    "name": "Darkstalkers RRHood",
+    "icon": "dstalkers5",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "fighting arcade dark stalkers",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36b1",
+    "name": "Darkstalkers Anakaris",
+    "icon": "dstalkers7",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "fighting arcade dark stalkers",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36b3",
+    "name": "FF Cactuar",
+    "icon": "ff1",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "square enix rpg fantasy",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36b5",
+    "name": "FF Chocobo Pixel",
+    "icon": "ff3",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "square enix rpg fantasy retro pixel",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36b6",
+    "name": "Final Fantasy VII Logo",
+    "icon": "finalfantasyvii",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "square enix rpg fantasy",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36bd",
+    "name": "Kritika",
+    "icon": "kritika",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "app game rpg",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36c3",
+    "name": "Metroid Logo",
+    "icon": "metroid1",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "nintendo metroid ",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36c5",
+    "name": "Samus Aran Helmet",
+    "icon": "metroid3",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "nintendo samus aran metroid suit",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36cb",
+    "name": "Pacman",
+    "icon": "pacman",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "pacman retro",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36cc",
+    "name": "Pacman Blinky",
+    "icon": "pacman_blinky",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "pacman retro",
+    "rarity": "SR",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36cd",
+    "name": "Pacman Clyde",
+    "icon": "pacman_clyde",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "pacman retro",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36ce",
+    "name": "Pacman Inky",
+    "icon": "pacman_inky",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "pacman retro",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36cf",
+    "name": "Pacman Pinky",
+    "icon": "pacman_pinky",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "pacman retro",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36d4",
+    "name": "Resident Evil 6 Logo",
+    "icon": "re6cov",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "resident evil",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36d5",
+    "name": "Splatoon Inkling",
+    "icon": "splatoon1",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "nintendo squid splatoon inkling",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36de",
+    "name": "We Happy Few Folk",
+    "icon": "wehappyfew1",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "we_happy_few folk",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36e0",
+    "name": "We Happy Few Guard",
+    "icon": "wehappyfew3",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "we_happy_few guard",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36e1",
+    "name": "The Witcher Logo",
+    "icon": "witcherclaws",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "witcher logo",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36e5",
+    "name": "The Legend of Zelda :  Midna",
+    "icon": "zeldamidna",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "zelda twilight midna",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5acd581031227da4dcfe36e6",
+    "name": "The Legend of Zelda :  Ocarina",
+    "icon": "zeldaocarina",
+    "category": "games",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "zelda ocarina item",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "BUNDLE": "vidya",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aee197fa48b6bd290b89524",
+    "name": "Hungary Flag",
+    "icon": "hungary",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aee197fa48b6bd290b89525",
+    "name": "India Flag",
+    "icon": "india",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "asia",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aee197fa48b6bd290b89529",
+    "name": "Nicaragua Flag",
+    "icon": "nicaragua",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "america central_america",
+    "rarity": "U",
+    "howto": "",
+    "public": true,
+    "event": null
+  },
+  {
+    "_id": "5aee197fa48b6bd290b8952e",
+    "name": "Saudi Arabia Flag",
+    "icon": "saudiarabia",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "middle_east asia",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aee197fa48b6bd290b8952f",
+    "name": "Serbia Flag",
+    "icon": "serbia",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe",
+    "rarity": "C",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aee197fa48b6bd290b89530",
+    "name": "South Africa Flag",
+    "icon": "southafrica",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "africa",
+    "rarity": "R",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5aee197fa48b6bd290b89532",
+    "name": "Vatican City Flag",
+    "icon": "vatican",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "europe",
+    "rarity": "UR",
+    "howto": "",
+    "public": true,
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5af0499ea48b6bd290b89536",
+    "name": "May 9th Star",
+    "icon": "may9m1",
+    "category": "special",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "special holiday russia",
+    "rarity": "UR",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "m9",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5af0499ea48b6bd290b89537",
+    "name": "May 9th Coat of Arms",
+    "icon": "may9m2",
+    "category": "special",
+    "buyable": true,
+    "droppable": false,
+    "type": "medal",
+    "tags": "special holiday russia",
+    "rarity": "UR",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "m9",
+    "meta": {
+      "legacy": true
+    },
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ecfef",
+    "name": "Japan",
+    "icon": "japan",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "UR",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ecffd",
+    "name": "Bulgaria",
+    "icon": "bulgaria",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "U",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed00e",
+    "name": "Nicaragua",
+    "icon": "nicaragua",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "U",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed01e",
+    "name": "Brazil",
+    "icon": "brazil",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "SR",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed024",
+    "name": "Riograndense Republic",
+    "icon": "repriograndense",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "SR",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed026",
+    "name": "India",
+    "icon": "india",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "SR",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed02e",
+    "name": "Norway",
+    "icon": "norway",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "SR",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed038",
+    "name": "Argentina",
+    "icon": "argentina",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "R",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed03c",
+    "name": "Canada",
+    "icon": "canada",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "R",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed045",
+    "name": "Finland",
+    "icon": "finland",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "R",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed04a",
+    "name": "Italy",
+    "icon": "italy",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "R",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed053",
+    "name": "Peru",
+    "icon": "peru",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "R",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed055",
+    "name": "Romania",
+    "icon": "romania",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "R",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  },
+  {
+    "_id": "5ccaf233f126010c759ed0cb",
+    "name": "Portugal",
+    "icon": "portugal",
+    "category": "flags",
+    "buyable": true,
+    "droppable": true,
+    "type": "medal",
+    "tags": "country flag",
+    "rarity": "C",
+    "howto": "",
+    "public": false,
+    "BUNDLE": "World Flags 2.0",
+    "event": null
+  }
+]

@@ -1,0 +1,33 @@
+{
+  "id": "88120564400553984",
+  "tag": "Unknown",
+  "avatar": null,
+  "level": 6,
+  "exp": 21147,
+  "commends": {
+    "last": 1643168254475,
+    "lastStreak": null
+  },
+  "RBN": 1642,
+  "JDE": 7417048,
+  "SPH": 25122,
+  "isDonator": true,
+  "donatorTier": "carbon",
+  "isBlacklisted": false,
+  "profile": {
+    "sticker": null,
+    "tagline": "wawa",
+    "medals": [
+      "opc2",
+      "chao",
+      "norway",
+      "finalfantasyvii",
+      "mew",
+      "pacman_inky",
+      "cytusneko",
+      "xmastree",
+      "finland"
+    ]
+  },
+  "inventorySize": 5240
+}
