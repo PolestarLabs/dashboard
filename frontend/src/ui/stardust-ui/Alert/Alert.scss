@@ -7,20 +7,18 @@
 
 // ─── Variables ───────────────────────────────────────────────────────────────
 
-$swal2-secondary:      var(--secondary-color, #AA66FF);
-$swal2-bg:             var(--bg-darker, #20202B);
-$swal2-text:           #545454;
-$swal2-border:         #d9d9d9;
-$swal2-placeholder:    #ccc;
-$swal2-overlay:        rgba(0, 0, 0, 0.4);
+$swal2-secondary: var(--secondary-color, #aa66ff);
+$swal2-bg: var(--bg-darker, #20202b);
+$swal2-text: #545454;
+$swal2-border: #d9d9d9;
+$swal2-placeholder: #ccc;
+$swal2-overlay: rgba(0, 0, 0, 0.4);
 
 // unused but kept for reference
-$swal2-error-color:    #f27474;
-$swal2-info-color:     #3fc3ee;
-$swal2-warning-color:  #F9B95F;
+$swal2-error-color: #f27474;
+$swal2-info-color: #3fc3ee;
+$swal2-warning-color: #f9b95f;
 $swal2-question-color: #87adbd;
-
-
 
 // ─── Mixins ──────────────────────────────────────────────────────────────────
 @mixin user-select-none {
@@ -61,11 +59,21 @@ $swal2-question-color: #87adbd;
 }
 
 @mixin placeholder {
-  &::-webkit-input-placeholder { @content; }
-  &::-moz-placeholder           { @content; }
-  &:-ms-input-placeholder       { @content; }
-  &::-ms-input-placeholder      { @content; }
-  &::placeholder                { @content; }
+  &::-webkit-input-placeholder {
+    @content;
+  }
+  &::-moz-placeholder {
+    @content;
+  }
+  &:-ms-input-placeholder {
+    @content;
+  }
+  &::-ms-input-placeholder {
+    @content;
+  }
+  &::placeholder {
+    @content;
+  }
 }
 
 // =============================================================================
@@ -82,38 +90,107 @@ $swal2-question-color: #87adbd;
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  padding: .625em;
+  padding: 0.625em;
   overflow-x: hidden;
   background-color: transparent;
   -webkit-overflow-scrolling: touch;
+
+  .plx-swal-popup--icon-left {
+    display: grid !important;
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 1.5rem;
+    padding-left: 8rem;
+
+    .swal2-header {
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      width: 100%;
+    }
+
+    .plx-swal-icon {
+      position: absolute;
+      top: 0;
+      margin: 0.2rem;
+      width: 7.6rem;
+      max-height: 94%;
+      flex-shrink: 0;
+    }
+    .swal2-actions {
+      margin-top: 0.16rem;
+      align-items: flex-end;
+      justify-content: flex-end;
+
+      width: 100%;
+    }
+    .plx-swal-title {
+      margin-top: 0;
+    }
+
+    .plx-swal-body {
+      margin: 0.4rem;
+    }
+    .plx-swal-close {
+      top: 0.75rem;
+      right: 0.75rem;
+      transform: scale(1.5);
+    }
+  }
 
   &.swal2-backdrop-show {
     background: rgba(0, 0, 0, 0.65) !important;
     backdrop-filter: blur(4px);
   }
 
-  &.swal2-top             { align-items: flex-start; }
+  &.swal2-top {
+    align-items: flex-start;
+  }
   &.swal2-top-left,
-  &.swal2-top-start       { align-items: flex-start;  justify-content: flex-start; }
+  &.swal2-top-start {
+    align-items: flex-start;
+    justify-content: flex-start;
+  }
   &.swal2-top-end,
-  &.swal2-top-right       { align-items: flex-start;  justify-content: flex-end; }
-  &.swal2-center          { align-items: center; }
+  &.swal2-top-right {
+    align-items: flex-start;
+    justify-content: flex-end;
+  }
+  &.swal2-center {
+    align-items: center;
+  }
   &.swal2-center-left,
-  &.swal2-center-start    { align-items: center; justify-content: flex-start; }
+  &.swal2-center-start {
+    align-items: center;
+    justify-content: flex-start;
+  }
   &.swal2-center-end,
-  &.swal2-center-right    { align-items: center; justify-content: flex-end; }
-  &.swal2-bottom          { align-items: flex-end; }
+  &.swal2-center-right {
+    align-items: center;
+    justify-content: flex-end;
+  }
+  &.swal2-bottom {
+    align-items: flex-end;
+  }
   &.swal2-bottom-left,
-  &.swal2-bottom-start    { align-items: flex-end; justify-content: flex-start; }
+  &.swal2-bottom-start {
+    align-items: flex-end;
+    justify-content: flex-start;
+  }
   &.swal2-bottom-end,
-  &.swal2-bottom-right    { align-items: flex-end; justify-content: flex-end; }
+  &.swal2-bottom-right {
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
 
   &.swal2-bottom-end,
   &.swal2-bottom-left,
   &.swal2-bottom-right,
   &.swal2-bottom-start,
   &.swal2-bottom {
-    > :first-child { margin-top: auto; }
+    > :first-child {
+      margin-top: auto;
+    }
   }
 
   &.swal2-grow-fullscreen > .swal2-modal {
@@ -136,21 +213,27 @@ $swal2-question-color: #87adbd;
 
     &.swal2-bottom,
     &.swal2-center,
-    &.swal2-top { align-items: center; }
+    &.swal2-top {
+      align-items: center;
+    }
 
     &.swal2-bottom-left,
     &.swal2-bottom-start,
     &.swal2-center-left,
     &.swal2-center-start,
     &.swal2-top-left,
-    &.swal2-top-start { align-items: flex-start; }
+    &.swal2-top-start {
+      align-items: flex-start;
+    }
 
     &.swal2-bottom-end,
     &.swal2-bottom-right,
     &.swal2-center-end,
     &.swal2-center-right,
     &.swal2-top-end,
-    &.swal2-top-right { align-items: flex-end; }
+    &.swal2-top-right {
+      align-items: flex-end;
+    }
 
     > .swal2-modal {
       display: flex !important;
@@ -160,12 +243,25 @@ $swal2-question-color: #87adbd;
     }
   }
 
-  &:not(.swal2-top):not(.swal2-top-start):not(.swal2-top-end):not(.swal2-top-left):not(.swal2-top-right):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-center-left):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-start):not(.swal2-bottom-end):not(.swal2-bottom-left):not(.swal2-bottom-right):not(.swal2-grow-fullscreen) > .swal2-modal {
+  &:not(.swal2-top):not(.swal2-top-start):not(.swal2-top-end):not(
+      .swal2-top-left
+    ):not(.swal2-top-right):not(.swal2-center-start):not(.swal2-center-end):not(
+      .swal2-center-left
+    ):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-start):not(
+      .swal2-bottom-end
+    ):not(.swal2-bottom-left):not(.swal2-bottom-right):not(
+      .swal2-grow-fullscreen
+    )
+    > .swal2-modal {
     margin: auto;
   }
 
-  &.swal2-fade    { transition: background-color .1s; }
-  &.swal2-shown   { background-color: $swal2-overlay; }
+  &.swal2-fade {
+    transition: background-color 0.1s;
+  }
+  &.swal2-shown {
+    background-color: $swal2-overlay;
+  }
 }
 
 // =============================================================================
@@ -173,28 +269,37 @@ $swal2-question-color: #87adbd;
 // =============================================================================
 
 .plx-swal-popup {
-  display: none;
+  display: flex !important;
   position: relative;
   box-sizing: border-box;
   flex-direction: column;
   justify-content: center;
+  align-items: center;
   background: var(--bg-darker, var(--darker, #1e1e2e));
   color: var(--text-main, #c9ccd1);
   border-radius: 16px;
   padding: 2rem 2rem 1.5rem;
-  font-family: 'Quicksand', system-ui, sans-serif;
+  font-family: "Quicksand", system-ui, sans-serif;
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.45),
     0 0 0 1px rgba(255, 255, 255, 0.06);
   max-width: 480px;
   width: 100%;
+  &.swal2-actions {
+    margin-top: 0.16rem;
+    direction: rtl;
+  }
 
-  &.swal2-show {
+  &.swal2-show:not(.animate__animated) {
     display: flex;
     animation: var(--swal2-show-animation) !important;
   }
-  &.swal2-hide { animation: var(--swal2-hide-animation) !important; }
-  &.swal2-loading { overflow-y: hidden; }
+  &.swal2-hide:not(.animate__animated) {
+    animation: var(--swal2-hide-animation) !important;
+  }
+  &.swal2-loading {
+    overflow-y: hidden;
+  }
 }
 
 // ---- Title ------------------------------------------------------------------
@@ -250,10 +355,10 @@ $swal2-question-color: #87adbd;
   z-index: 1;
   flex-wrap: wrap;
   align-items: center;
-  justify-content: flex-start;
+  justify-content: center;
   width: 100%;
-  gap: 0.6rem;
-  margin-top: 1.5rem;
+  gap: 1rem;
+  margin-top: 1.8rem;
   padding: 0;
 
   &:not(.swal2-loading) {
@@ -271,9 +376,9 @@ $swal2-question-color: #87adbd;
       box-sizing: border-box;
       width: 2.5em;
       height: 2.5em;
-      margin: .46875em;
+      margin: 0.46875em;
       padding: 0;
-      border: .49em solid transparent;
+      border: 0.49em solid transparent;
       border-radius: 100%;
       border-color: transparent;
       background: transparent !important;
@@ -300,76 +405,6 @@ $swal2-question-color: #87adbd;
   }
 }
 
-// ---- Shared button base — mirrors .s-btn from Button.vue --------------------
-.plx-swal-btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  margin: 0.3125em;
-  padding: 0.625em 2em;
-  min-width: 140px;
-  border: none;
-  border-radius: 12px;
-  font-family: 'Quicksand', system-ui, sans-serif;
-  font-size: 0.95rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  cursor: url(/cur/pointer.png), pointer;
-  transition: background-color 0.15s ease, color 0.15s ease, transform 0.1s ease, opacity 0.15s ease;
-  outline: 0;
-
-  &:hover:not(:disabled) {
-    opacity: 0.9;
-    background-image: linear-gradient(#0dcE, #0dcF);
-  }
-
-  &:active:not(:disabled) {
-    transform: scale(0.97);
-    background-image: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2));
-  }
-
-  &:focus-visible {
-    outline: 3px solid var(--focus-ring, rgba(92, 110, 248, 0.35));
-    outline-offset: 2px;
-  }
-  &:focus:not(:focus-visible) { outline: none; }
-
-  &:disabled,
-  &[disabled] {
-    opacity: 0.7;
-    cursor: not-allowed;
-    pointer-events: none;
-  }
-
-  // ---- Confirm (primary action) — secondary/purple from the theme
-  &--confirm {
-    background: var(--secondary-color, var(--main-purple, #a6f));
-    color: #fff;
-  }
-
-  // ---- Cancel (secondary action) — ghost / outlined in danger
-  &--cancel {
-    background: transparent;
-    color: var(--plx-danger, #f02040);
-    border: 2px solid var(--plx-danger, #f02040);
-  }
-
-  // ---- Deny (tertiary action)
-  &--deny {
-    background: var(--bg-dark, rgba(255, 255, 255, 0.07));
-    color: var(--text-dim, #9999aa);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-  }
-
-  // ---- Danger confirm — used by deleteConfirm()
-  &--danger {
-    background: var(--plx-danger, #f02040);
-    color: #fff;
-  }
-}
-
 // ---- Custom icon slot (Vue icons from Alert/Icons mounted via useAlert) --------
 .plx-swal-icon {
   display: flex;
@@ -385,7 +420,7 @@ $swal2-question-color: #87adbd;
   @include user-select-none;
 
   &.swal2-icon-show {
-    animation: plx-swal-icon-pulse 450ms cubic-bezier(0,.92,.98,1.46)
+    animation: plx-swal-icon-pulse 450ms cubic-bezier(0, 0.92, 0.98, 1.46);
   }
 
   [data-plx-icon-mount] {
@@ -428,7 +463,9 @@ $swal2-question-color: #87adbd;
   font-family: Panton, var(--display-font, system-ui), sans-serif;
   font-size: 1rem;
 
-  &::placeholder { color: var(--text-dim, #888); }
+  &::placeholder {
+    color: var(--text-dim, #888);
+  }
   &:focus {
     outline: none;
     border-color: var(--secondary-color, #a6f);
@@ -438,31 +475,65 @@ $swal2-question-color: #87adbd;
 
 // ---- Loader (showLoaderOnConfirm) -------------------------------------------
 .swal2-loader {
-  border-color: var(--secondary-color, #a6f) transparent var(--secondary-color, #a6f) transparent;
+  border-color: var(--secondary-color, #a6f) transparent
+    var(--secondary-color, #a6f) transparent;
 }
 
 // =============================================================================
 // 3. Keyframes (SweetAlert2 animations)
 // =============================================================================
 @keyframes swal2-show {
-  0%   { transform: scale(.7); opacity: 0; }
-  45%  { transform: scale(1.05); }
-  80%  { transform: scale(.95); }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.7);
+    opacity: 0;
+  }
+  45% {
+    transform: scale(1.05);
+  }
+  80% {
+    transform: scale(0.95);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes plx-swal-icon-pulse {
-  0%   { transform: scale(0.80); }
-  55%  { transform: scale(1.28); }
-  100% { transform: scale(1); }
+  0% {
+    transform: scale(1);
+    opacity: 0;
+  }
+  11% {
+    transform: scale(0.8);
+    opacity: 0.2;
+  }
+  55% {
+    transform: scale(2.18);
+    opacity: 0.5;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes swal2-hide {
-  0%   { transform: scale(1); opacity: 1; }
-  100% { transform: scale(.5); opacity: 0; }
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
 }
 
 @keyframes swal2-rotate-loading {
-  0%   { transform: rotate(0); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }

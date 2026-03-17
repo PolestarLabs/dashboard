@@ -8,10 +8,10 @@ import QuestionIcon from './Icons/Question.vue';
 import SuccessIcon from './Icons/Success.vue';
 import WarningIcon from './Icons/Warning.vue';
 
-export type AlertVariant = 'info' | 'success' | 'warning' | 'danger';
+export type AlertVariant = 'info' | 'success' | 'warning' | 'danger' | 'question';
 
 /** Variants that have a custom icon in Alert/Icons (includes 'question' for confirm-style dialogs). */
-export type AlertIconVariant = AlertVariant | 'question';
+export type AlertIconVariant = AlertVariant;
 
 const VARIANT_ICONS: Record<AlertIconVariant, Component> = {
   success: SuccessIcon,
@@ -42,9 +42,9 @@ const DEFAULTS: SweetAlertOptions = {
     htmlContainer: 'plx-swal-body',
     icon:          'plx-swal-icon',
     actions:       'plx-swal-actions',
-    confirmButton: 'plx-swal-btn plx-swal-btn--confirm',
-    cancelButton:  'plx-swal-btn plx-swal-btn--cancel',
-    denyButton:    'plx-swal-btn plx-swal-btn--deny',
+    confirmButton: 's-btn s-btn--primary',
+    cancelButton:  's-btn s-btn--danger s-btn--ghost',
+    denyButton:    's-btn s-btn--secondary ',
     closeButton:   'plx-swal-close',
   },
   buttonsStyling: false,
@@ -59,13 +59,24 @@ export type PlxAlertFireOptions = SweetAlertOptions & {
 };
 
 export function useAlert() {
+
+
+
   /** Low-level escape hatch — passes straight to Swal.fire() with project defaults merged in.
    *  Pass iconVariant to show a custom icon from Alert/Icons instead of vanilla Swal. */
   function fire(opts: PlxAlertFireOptions): Promise<SweetAlertResult> {
-    const { iconVariant, ...swalOpts } = opts;
+    let { iconVariant, ...swalOpts } = opts;
+
+    if (swalOpts.icon){
+      const icon = swalOpts.icon as string;
+      delete swalOpts.icon;
+      iconVariant = icon as AlertIconVariant;
+    }
+
     if (iconVariant) {
       const base: SweetAlertOptions = {
         ...swalOpts,
+        customClass: { ...DEFAULTS.customClass, ...swalOpts.customClass },
         iconHtml: ICON_HTML,
         didOpen: (modal) => {
           mountIcon(modal as HTMLElement, iconVariant);
@@ -152,6 +163,7 @@ export function useAlert() {
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it',
       cancelButtonText: 'Cancel',
+      showClass: { popup: 'animate__animated animate__fadeInLeft' },
       customClass: {
         ...DEFAULTS.customClass,
         confirmButton: 'plx-swal-btn plx-swal-btn--danger',
