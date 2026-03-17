@@ -1,0 +1,125 @@
+.st-accordion {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &__item {
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    overflow: hidden;
+
+    & + & {
+      margin-top: 16px;
+    }
+
+    &--disabled {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    &--open {
+      background: rgba(255, 255, 255, 0.07);
+
+      .st-accordion__icon::after {
+        transform: rotate(90deg) scaleY(0);
+        opacity: 0;
+      }
+
+      .st-accordion__panel {
+        grid-template-rows: 1fr;
+      }
+
+      .st-accordion__panel-inner {
+        padding-top: 0.625rem;
+        padding-bottom: 0.875rem;
+      }
+    }
+  }
+
+  &__header {
+    margin: 0;
+  }
+
+  &__trigger {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 0;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    cursor: pointer;
+    font: inherit;
+    text-align: left;
+    color: var(--text-main, #eee);
+    outline: none;
+    transition: background 160ms;
+
+    &:hover:not(:disabled) {
+      background: rgba(255, 255, 255, 0.06);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--accent-color, #7c8cf8);
+      outline-offset: -2px;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  &__title {
+    flex: 1;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  &__icon {
+    position: relative;
+    flex-shrink: 0;
+    width: 0.875rem;
+    height: 0.875rem;
+    color: var(--text-dim, #888);
+
+    &::before,
+    &::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      margin: auto;
+      background: currentColor;
+      border-radius: 1px;
+      transition: transform 220ms ease, opacity 220ms ease;
+    }
+
+    // horizontal bar — always visible
+    &::before {
+      width: 100%;
+      height: 2px;
+    }
+
+    // vertical bar — fades & collapses when open (becomes minus)
+    &::after {
+      width: 2px;
+      height: 100%;
+    }
+  }
+
+  // Panel uses grid-template-rows trick for smooth height animation
+  // No max-height hack, no Vue <transition> needed
+  &__panel {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 240ms ease;
+  }
+
+  &__panel-inner {
+    overflow: hidden;
+    padding: 0 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    transition: padding-top 240ms ease, padding-bottom 240ms ease;
+  }
+}
