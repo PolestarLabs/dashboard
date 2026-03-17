@@ -17,7 +17,7 @@ export default meta;
 
 type Story = StoryObj<typeof Avatar>;
 
-const sampleSrc = 'https://i.pinimg.com/736x/2c/44/c8/2c44c8604aa20501c797c7d8f14f9536.jpg';
+const sampleSrc = 'https://i.pinimg.com/1200x/a8/7f/ad/a87fadb9807850d1f25e1f97572ddbf6.jpg';
 
 export const Default: Story = {
   args: { src: sampleSrc, size: 150, shape: 'circle' },
@@ -64,14 +64,15 @@ export const StatusBorder: Story = {
 };
 
 
+
 export const CustomStatus: Story = {
   render: () => ({
     components: { Avatar },
     setup() {
       const examples = [
-        { shape: 'hexagon', color: '#a855f7', iconClass: 'fas fa-gamepad' },
+        { shape: 'rounded', color: '#a855f7', iconClass: 'fas fa-gamepad' },
         { shape: 'circle', color: '#3b82f6', iconClass: 'fas fa-music' },
-        { shape: 'rounded', color: '#f97316', iconClass: 'fas fa-fire' },
+        { shape: 'hexagon', color: '#f97316', iconClass: 'fas fa-fire' },
       ];
       return { src: sampleSrc, examples };
     },
@@ -80,7 +81,21 @@ export const CustomStatus: Story = {
         <Avatar v-for="(cs, i) in examples" :key="i" :src="src" :size="100" :shape="cs.shape" :customStatus="cs" :border="true" />
       </div>
     `,
+
   }),
+  parameters: {
+    docs: {
+      description: {
+        story: `Control the icon and color. You can also override internal classes to tweak how the avatar image, gradient, and border behave:
+
+- \`.s-avatar__img-wrapper\` for background images/gradients (supports \`background-image\` values).
+- \`.s-avatar__img-wrapper.s-avatar__img--status\` for status-aware styling.
+- \`.s-avatar__status\` for badge icon styling, opacity, outline, etc.
+- CSS vars like \`--current-color\`, \`--status-border-color\`, and \`--status-border-width\` can be used to tweak the border appearance.
+`,
+      },
+    },
+  },
 };
 
 export const Sizes: Story = {
