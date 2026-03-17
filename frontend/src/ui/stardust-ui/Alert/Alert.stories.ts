@@ -110,22 +110,6 @@ const AlertDemo = defineComponent({
         @click="info('Heads up', 'Here is some useful information for you.')"
       />
       <Button
-        label="Custom alert"
-        icon="fas fa-bell"
-        variant="secondary"
-        theme="primary"
-        size="sm"
-        @click="triggerAlert"
-      />
-      <Button
-        label="Custom alert (left icon)"
-        icon="fas fa-bell"
-        variant="secondary"
-        theme="primary"
-        size="sm"
-        @click="triggerAlertLeftIcon"
-      />
-      <Button
         label="Confirm (boolean)"
         icon="fas fa-question"
         theme="info"
@@ -165,29 +149,12 @@ const AlertDemoIconLeft = defineComponent({
   components: { Button },
   setup() {
     const { fire } = useAlert();
-
-    const baseCustomClass = {
-      popup: 'plx-swal-popup',
-      title: 'plx-swal-title',
-      htmlContainer: 'plx-swal-body',
-      icon: 'swal2-icon plx-swal-icon',
-      actions: 'plx-swal-actions',
-      confirmButton: 'plx-swal-btn plx-swal-btn--confirm',
-      cancelButton: 'plx-swal-btn plx-swal-btn--cancel',
-      denyButton: 'plx-swal-btn plx-swal-btn--deny',
-      closeButton: 'plx-swal-close',
-    };
-
-    const leftCustomClass = {
-      ...baseCustomClass,
-      popup: 'plx-swal-popup plx-swal-popup--icon-left',
-    };
-
     
     function fireLeft(opts: any) {
       return fire({
         ...opts,
-        customClass: { ...leftCustomClass, ...(opts.customClass ?? {}) },
+        compact: true,
+        bgAnimation: true,
       });
     }
 

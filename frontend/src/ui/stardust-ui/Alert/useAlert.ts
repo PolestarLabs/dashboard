@@ -1,94 +1,77 @@
-import { createApp, type Component } from 'vue';
 import Swal, { type SweetAlertOptions, type SweetAlertResult } from 'sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
 import './Alert.scss';
-import ErrorIcon from './Icons/Error.vue';
-import InformationIcon from './Icons/Information.vue';
-import QuestionIcon from './Icons/Question.vue';
-import SuccessIcon from './Icons/Success.vue';
-import WarningIcon from './Icons/Warning.vue';
 
-export type AlertVariant = 'info' | 'success' | 'warning' | 'danger' | 'question';
-
-/** Variants that have a custom icon in Alert/Icons (includes 'question' for confirm-style dialogs). */
-export type AlertIconVariant = AlertVariant;
-
-const VARIANT_ICONS: Record<AlertIconVariant, Component> = {
-  success: SuccessIcon,
-  danger:  ErrorIcon,
-  warning: WarningIcon,
-  info:    InformationIcon,
-  question: QuestionIcon,
-};
-
-const ICON_MOUNT_MARKER = 'data-plx-icon-mount';
-const ICON_HTML = `<div ${ICON_MOUNT_MARKER}></div>`;
-
-function mountIcon(modal: HTMLElement, variant: AlertIconVariant): void {
-  const slot = modal.querySelector(`.plx-swal-icon [${ICON_MOUNT_MARKER}]`);
-  if (!slot || !(slot instanceof HTMLElement)) return;
-  const IconComponent = VARIANT_ICONS[variant];
-  if (!IconComponent) return;
-  const app = createApp(IconComponent);
-  app.mount(slot);
-}
-
-/** Shared baseline applied to every Swal.fire() call. `buttonsStyling: false`
- *  hands full control to our SCSS — matching the Stardust Button component. */
-const DEFAULTS: SweetAlertOptions = {
-  customClass: {
-    popup:         'plx-swal-popup',
-    title:         'plx-swal-title',
-    htmlContainer: 'plx-swal-body',
-    icon:          'plx-swal-icon',
-    actions:       'plx-swal-actions',
-    confirmButton: 's-btn s-btn--primary',
-    cancelButton:  's-btn s-btn--danger s-btn--ghost',
-    denyButton:    's-btn s-btn--secondary ',
-    closeButton:   'plx-swal-close',
-  },
-  buttonsStyling: false,
-  showCloseButton: true,
-  allowOutsideClick: true,
-};
-
-/** Options for fire(). Extends SweetAlertOptions with optional custom icon variant. */
-export type PlxAlertFireOptions = SweetAlertOptions & {
-  /** Use a custom Vue icon from Alert/Icons. When set, vanilla Swal icon is not used. */
-  iconVariant?: AlertIconVariant;
-};
+import { AlertVariant, PlxAlertFireOptions } from './AlertTypes';
+import { DEFAULTS } from './alertDefaults';
+import { attachBgAnimationHandlers, mergeClassNames } from './alertUtils';
+import { ICON_HTML, mountIcon, normalizeIconVariant } from './alertIcons';
 
 export function useAlert() {
-
-
-
-  /** Low-level escape hatch — passes straight to Swal.fire() with project defaults merged in.
-   *  Pass iconVariant to show a custom icon from Alert/Icons instead of vanilla Swal. */
+  /**
+   * Low-level escape hatch — passes straight to Swal.fire() with project defaults merged in.
+   * Pass iconVariant to show a custom icon from Alert/Icons instead of vanilla Swal.
+   */
   function fire(opts: PlxAlertFireOptions): Promise<SweetAlertResult> {
-    let { iconVariant, ...swalOpts } = opts;
+    let { iconVariant, compact, bgAnimation = true, ...swalOpts } = opts;
 
-    if (swalOpts.icon){
-      const icon = swalOpts.icon as string;
+    if (swalOpts.icon) {
+      const iconString = Array.isArray(swalOpts.icon) ? swalOpts.icon[0] : swalOpts.icon;
+      iconVariant = normalizeIconVariant(iconString);
       delete swalOpts.icon;
-      iconVariant = icon as AlertIconVariant;
     }
 
+    const baseCustomClass = {
+      ...DEFAULTS.customClass,
+      ...swalOpts.customClass,
+    };
+
+    const customClass = compact
+      ? {
+          ...baseCustomClass,
+          popup: mergeClassNames(baseCustomClass.popup, 'plx-swal-popup--icon-left'),
+          confirmButton: mergeClassNames(baseCustomClass.confirmButton, 's-btn--sm'),
+          cancelButton: mergeClassNames(baseCustomClass.cancelButton, 's-btn--sm'),
+          denyButton: mergeClassNames(baseCustomClass.denyButton, 's-btn--sm'),
+        }
+      : baseCustomClass;
+
+    const base: SweetAlertOptions = {
+      ...swalOpts,
+      customClass,
+    };
+
+    const mergedOpts = { ...DEFAULTS, ...base } as SweetAlertOptions;
+
+    if (compact) {
+      mergedOpts.allowOutsideClick = true;
+    }
+
+    if (bgAnimation) {
+      attachBgAnimationHandlers(mergedOpts);
+    }
+
+    const originalDidOpen = mergedOpts.didOpen;
+    const originalWillClose = mergedOpts.willClose;
+
     if (iconVariant) {
-      const base: SweetAlertOptions = {
-        ...swalOpts,
-        customClass: { ...DEFAULTS.customClass, ...swalOpts.customClass },
+      return Swal.fire({
+        ...mergedOpts,
         iconHtml: ICON_HTML,
         didOpen: (modal) => {
           mountIcon(modal as HTMLElement, iconVariant);
-          swalOpts.didOpen?.(modal);
+          originalDidOpen?.(modal);
         },
-      };
-      return Swal.fire({ ...DEFAULTS, ...base } as SweetAlertOptions);
+        willClose: (modal) => {
+          originalWillClose?.(modal);
+        },
+      } as SweetAlertOptions);
     }
-    return Swal.fire({ ...DEFAULTS, ...swalOpts } as SweetAlertOptions);
+
+    return Swal.fire(mergedOpts);
   }
 
-  /** Single-button informational alert. Uses custom Vue icons from Alert/Icons. */
+  /** Single-button informational alert. */
   function alert(
     title: string,
     text?: string,
@@ -136,7 +119,7 @@ export function useAlert() {
 
   /** Preset: error / danger */
   function error(title: string, text?: string): Promise<SweetAlertResult> {
-    return alert(title, text, 'danger');
+    return alert(title, text, 'error');
   }
 
   /** Preset: warning */
@@ -149,7 +132,7 @@ export function useAlert() {
     return alert(title, text, 'info');
   }
 
-  /** Delete-confirmation shortcut — pre-configured with danger styling and Error icon.
+  /** Delete-confirmation shortcut — pre-configured with error styling and Error icon.
    *  Mirrors the pattern used heavily in the legacy adm_menus.js / boorusave.pug. */
   function deleteConfirm(
     title = 'Are you sure?',
@@ -159,14 +142,15 @@ export function useAlert() {
       title,
       text,
       iconHtml: ICON_HTML,
-      didOpen: (modal) => mountIcon(modal as HTMLElement, 'danger'),
+      didOpen: (modal) => mountIcon(modal as HTMLElement, 'question'),
       showCancelButton: true,
       confirmButtonText: 'Yes, delete it',
       cancelButtonText: 'Cancel',
-      showClass: { popup: 'animate__animated animate__fadeInLeft' },
+      showClass: { popup: 'animate__animated animate__fadeInLeft'  },
+      hideClass: { popup: 'animate__animated animate__fadeOutRight' }, 
       customClass: {
         ...DEFAULTS.customClass,
-        confirmButton: 'plx-swal-btn plx-swal-btn--danger',
+        confirmButton: 's-btn s-btn--danger',
       },
       allowOutsideClick: () => !Swal.isLoading(),
     });

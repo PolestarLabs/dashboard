@@ -1,3 +1,6 @@
+@use "sweetalert2/dist/sweetalert2.min.css";
+@use "./Stardust.scss";
+
 // =============================================================================
 // SweetAlert2 — Pollux / Stardust-UI Theme Override
 // Applied via customClass on every plxAlert call (see useAlert.ts).
@@ -62,15 +65,19 @@ $swal2-question-color: #87adbd;
   &::-webkit-input-placeholder {
     @content;
   }
+
   &::-moz-placeholder {
     @content;
   }
+
   &:-ms-input-placeholder {
     @content;
   }
+
   &::-ms-input-placeholder {
     @content;
   }
+
   &::placeholder {
     @content;
   }
@@ -79,6 +86,62 @@ $swal2-question-color: #87adbd;
 // =============================================================================
 // 1. Backdrop & container (base layout + theme z-index/backdrop)
 // =============================================================================
+
+// Minimal animate.css subset (used by showClass: { popup: 'animate__animated animate__fadeInLeft' })
+// We don't depend on the full external library, only the specific animation class.
+.animate__animated {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+}
+
+.animate__fadeInLeft {
+  animation-name: animate__fadeInLeft;
+}
+
+.animate__fadeOutLeft {
+  animation-name: animate__fadeOutLeft;
+}
+
+.animate__fadeOutRight {
+  animation-name: animate__fadeOutRight;
+}
+
+@keyframes animate__fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes animate__fadeOutLeft {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0);
+  }
+}
+
+@keyframes animate__fadeOutRight {
+  from {
+    opacity: 1;
+    transform: none;
+  }
+
+  to {
+    opacity: 0;
+    transform: translate3d(100%, 0, 0);
+  }
+}
+
 .swal2-container {
   display: flex;
   position: fixed;
@@ -112,11 +175,12 @@ $swal2-question-color: #87adbd;
     .plx-swal-icon {
       position: absolute;
       top: 0;
-      margin: 0.2rem;
-      width: 7.6rem;
-      max-height: 94%;
+      margin: 0.8rem;
+      width: 7rem;
+
       flex-shrink: 0;
     }
+
     .swal2-actions {
       margin-top: 0.16rem;
       align-items: flex-end;
@@ -124,6 +188,7 @@ $swal2-question-color: #87adbd;
 
       width: 100%;
     }
+
     .plx-swal-title {
       margin-top: 0;
     }
@@ -131,6 +196,7 @@ $swal2-question-color: #87adbd;
     .plx-swal-body {
       margin: 0.4rem;
     }
+
     .plx-swal-close {
       top: 0.75rem;
       right: 0.75rem;
@@ -139,44 +205,60 @@ $swal2-question-color: #87adbd;
   }
 
   &.swal2-backdrop-show {
-    background: rgba(0, 0, 0, 0.65) !important;
+    background: linear-gradient(
+      to bottom,
+      rgba(0, 0, 0, 0.90) 0%,
+      rgba(0, 0, 0, 0.75) 30%,
+      rgba(0, 0, 0, 0.55) 70%,
+      rgba(0, 0, 0, 0.75) 100%,
+    );
+
     backdrop-filter: blur(4px);
+
   }
 
   &.swal2-top {
     align-items: flex-start;
   }
+
   &.swal2-top-left,
   &.swal2-top-start {
     align-items: flex-start;
     justify-content: flex-start;
   }
+
   &.swal2-top-end,
   &.swal2-top-right {
     align-items: flex-start;
     justify-content: flex-end;
   }
+
   &.swal2-center {
     align-items: center;
   }
+
   &.swal2-center-left,
   &.swal2-center-start {
     align-items: center;
     justify-content: flex-start;
   }
+
   &.swal2-center-end,
   &.swal2-center-right {
     align-items: center;
     justify-content: flex-end;
   }
+
   &.swal2-bottom {
     align-items: flex-end;
   }
+
   &.swal2-bottom-left,
   &.swal2-bottom-start {
     align-items: flex-end;
     justify-content: flex-start;
   }
+
   &.swal2-bottom-end,
   &.swal2-bottom-right {
     align-items: flex-end;
@@ -193,14 +275,14 @@ $swal2-question-color: #87adbd;
     }
   }
 
-  &.swal2-grow-fullscreen > .swal2-modal {
+  &.swal2-grow-fullscreen>.swal2-modal {
     display: flex !important;
     flex: 1;
     align-self: stretch;
     justify-content: center;
   }
 
-  &.swal2-grow-row > .swal2-modal {
+  &.swal2-grow-row>.swal2-modal {
     display: flex !important;
     flex: 1;
     align-content: center;
@@ -235,7 +317,7 @@ $swal2-question-color: #87adbd;
       align-items: flex-end;
     }
 
-    > .swal2-modal {
+    >.swal2-modal {
       display: flex !important;
       flex: 1;
       align-content: center;
@@ -243,22 +325,14 @@ $swal2-question-color: #87adbd;
     }
   }
 
-  &:not(.swal2-top):not(.swal2-top-start):not(.swal2-top-end):not(
-      .swal2-top-left
-    ):not(.swal2-top-right):not(.swal2-center-start):not(.swal2-center-end):not(
-      .swal2-center-left
-    ):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-start):not(
-      .swal2-bottom-end
-    ):not(.swal2-bottom-left):not(.swal2-bottom-right):not(
-      .swal2-grow-fullscreen
-    )
-    > .swal2-modal {
+  &:not(.swal2-top):not(.swal2-top-start):not(.swal2-top-end):not(.swal2-top-left):not(.swal2-top-right):not(.swal2-center-start):not(.swal2-center-end):not(.swal2-center-left):not(.swal2-center-right):not(.swal2-bottom):not(.swal2-bottom-start):not(.swal2-bottom-end):not(.swal2-bottom-left):not(.swal2-bottom-right):not(.swal2-grow-fullscreen)>.swal2-modal {
     margin: auto;
   }
 
   &.swal2-fade {
     transition: background-color 0.1s;
   }
+
   &.swal2-shown {
     background-color: $swal2-overlay;
   }
@@ -285,18 +359,20 @@ $swal2-question-color: #87adbd;
     0 0 0 1px rgba(255, 255, 255, 0.06);
   max-width: 480px;
   width: 100%;
+
   &.swal2-actions {
     margin-top: 0.16rem;
     direction: rtl;
   }
 
   &.swal2-show:not(.animate__animated) {
-    display: flex;
     animation: var(--swal2-show-animation) !important;
   }
+
   &.swal2-hide:not(.animate__animated) {
     animation: var(--swal2-hide-animation) !important;
   }
+
   &.swal2-loading {
     overflow-y: hidden;
   }
@@ -340,10 +416,12 @@ $swal2-question-color: #87adbd;
   &:hover {
     color: var(--text-main, #c9ccd1);
   }
+
   &:focus-visible {
     outline: 2px solid var(--focus-ring, rgba(92, 110, 248, 0.5));
     border-radius: 4px;
   }
+
   &:focus:not(:focus-visible) {
     outline: none;
   }
@@ -362,6 +440,7 @@ $swal2-question-color: #87adbd;
   padding: 0;
 
   &:not(.swal2-loading) {
+
     .plx-swal-btn[disabled],
     .plx-swal-btn[disabled]:hover {
       opacity: 0.7;
@@ -369,6 +448,7 @@ $swal2-question-color: #87adbd;
   }
 
   &.swal2-loading {
+
     .plx-swal-btn--confirm,
     .swal2-styled.swal2-confirm {
       @include user-select-none;
@@ -385,11 +465,13 @@ $swal2-question-color: #87adbd;
       color: transparent;
       cursor: default;
     }
+
     .plx-swal-btn--cancel,
     .swal2-styled.swal2-cancel {
       margin-right: 30px;
       margin-left: 30px;
     }
+
     :not(.swal2-styled):not(.plx-swal-btn).swal2-confirm::after {
       @include animation(swal2-rotate-loading 1.5s linear 0s infinite normal);
       content: "";
@@ -466,6 +548,7 @@ $swal2-question-color: #87adbd;
   &::placeholder {
     color: var(--text-dim, #888);
   }
+
   &:focus {
     outline: none;
     border-color: var(--secondary-color, #a6f);
@@ -475,8 +558,7 @@ $swal2-question-color: #87adbd;
 
 // ---- Loader (showLoaderOnConfirm) -------------------------------------------
 .swal2-loader {
-  border-color: var(--secondary-color, #a6f) transparent
-    var(--secondary-color, #a6f) transparent;
+  border-color: var(--secondary-color, #a6f) transparent var(--secondary-color, #a6f) transparent;
 }
 
 // =============================================================================
@@ -484,15 +566,33 @@ $swal2-question-color: #87adbd;
 // =============================================================================
 @keyframes swal2-show {
   0% {
-    transform: scale(0.7);
+    transform: scale(0.8) translateY(10%);
     opacity: 0;
   }
-  45% {
-    transform: scale(1.05);
+
+  50% {
+    transform: scale(1);
   }
+
+  100% {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+@keyframes swal2-elastic {
+  0% {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+
+  45% {
+    transform: scale(1.03);
+  }
+
   80% {
     transform: scale(0.95);
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -504,14 +604,17 @@ $swal2-question-color: #87adbd;
     transform: scale(1);
     opacity: 0;
   }
+
   11% {
     transform: scale(0.8);
     opacity: 0.2;
   }
+
   55% {
     transform: scale(2.18);
     opacity: 0.5;
   }
+
   100% {
     transform: scale(1);
     opacity: 1;
@@ -523,8 +626,9 @@ $swal2-question-color: #87adbd;
     transform: scale(1);
     opacity: 1;
   }
+
   100% {
-    transform: scale(0.5);
+    transform: scale(0.7);
     opacity: 0;
   }
 }
@@ -533,7 +637,10 @@ $swal2-question-color: #87adbd;
   0% {
     transform: rotate(0);
   }
+
   100% {
     transform: rotate(360deg);
   }
 }
+
+
