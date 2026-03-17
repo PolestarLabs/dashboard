@@ -8,6 +8,10 @@ const sampleOptions: SearchableSelectPlusOption[] = [
   { value: 'cherry', label: 'Cherry', tags: 'fruit red', rarity: 'R' },
   { value: 'date', label: 'Date', tags: 'fruit brown', rarity: 'U' },
   { value: 'elderberry', label: 'Elderberry', tags: 'fruit purple', rarity: 'SR' },
+  { value: 'fig', label: 'Fig', tags: 'fruit purple', rarity: 'R' },
+  { value: 'grape', label: 'Grape', tags: 'fruit green', rarity: 'U' },
+  { value: 'honeydew', label: 'Honeydew', tags: 'fruit green', rarity: 'SR' },
+  { value: 'kiwi', label: 'Kiwi', tags: 'fruit green', rarity: 'U' },
 ];
 
 const meta: Meta<typeof SearchableSelectPlus> = {
@@ -18,6 +22,7 @@ const meta: Meta<typeof SearchableSelectPlus> = {
   argTypes: {
     options: { control: false },
     filter: { control: false },
+    columns: { control: { type: 'number', min: 1, max: 3, step: 1 } },
   },
 };
 
@@ -77,5 +82,30 @@ export const WithCustomOptionTemplate: Story = {
   }),
   args: {
     listMaxHeight: '30vh',
+  },
+};
+
+export const ThreeColumnPersistentMenu: Story = {
+  render: (args) => ({
+    setup() {
+      const value = ref(sampleOptions[0].value);
+      return { args, value, sampleOptions };
+    },
+    components: { SearchableSelectPlus },
+    template: `
+      <SearchableSelectPlus
+        v-model="value"
+        :options="sampleOptions"
+        placeholder="Search fruits..."
+        label="Fruit"
+        v-bind="args"
+      />
+      <p style="margin-top: 1rem; font-size: 0.9rem;">Selected: {{ value }}</p>
+    `,
+  }),
+  args: {
+    listMaxHeight: '40vh',
+    columns: 3,
+    closeOnOutsideClick: false,
   },
 };

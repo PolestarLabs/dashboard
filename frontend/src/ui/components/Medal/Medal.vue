@@ -1,9 +1,13 @@
 <template lang="pug">
 div.s-medal-chip
   div.s-medal-chip__rarity(:class="rarityIconPosition" v-if="rarity")
-    RarityIcon :rarity="rarity"
+    RarityIcon(:v="rarity")
   div.s-medal-chip__face(:style="faceStyle")
-    img(:src="`https://cdn.pollux.gg/medals/${medal}.png`")
+    img.s-medal-chip__img(
+      :src="`https://cdn.pollux.gg/medals/${medal}.png`"
+      :alt="medal || 'medal'"
+      draggable="false"
+    )
 </template>
 
 <script setup lang="ts">

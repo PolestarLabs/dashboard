@@ -1,7 +1,8 @@
 <template lang="pug">
 .st-searchable-select(
   ref="rootRef"
-  :class="{ 'st-searchable-select--open': open, 'st-searchable-select--disabled': disabled, 'st-searchable-select--columns': columnLayout }"
+  :class="rootClasses"
+  :style="rootStyle"
 )
   label.st-searchable-select__label(v-if="label" :for="triggerId") {{ label }}
   .st-searchable-select__trigger-wrap(
@@ -33,7 +34,7 @@
           @keydown.down.prevent="focusNextOption"
           @keydown.up.prevent="focusPrevOption"
           @keydown.enter.prevent="selectFocused"
-          @keydown.escape="open = false"
+          @keydown.escape.prevent="handleEscape"
         )
         span.st-searchable-select__chevron(aria-hidden="true")
   ul.st-searchable-select__list(
@@ -51,7 +52,7 @@
       :ref="(el) => setFocusedRef(el, opt, idx)"
       role="option"
       :aria-selected="isSelected(opt)"
-      :class="{ 'st-searchable-select__option--selected': isSelected(opt), 'st-searchable-select__option--focused': focusedIndex === idx }"
+      :class="getOptionClasses(opt, idx)"
       @click="select(opt)"
       @mouseenter="focusedIndex = idx"
     )
@@ -87,6 +88,10 @@ const props = withDefaults(
     listMaxHeight?: string;
     /** Grid of options (e.g. 2 columns for bg picker) */
     columnLayout?: boolean;
+    /** Number of columns for option grid (1-3). Overrides columnLayout when provided. */
+    columns?: number;
+    /** Close menu when clicking outside; set false to keep open until selection. */
+    closeOnOutsideClick?: boolean;
     triggerAriaLabel?: string;
   }>(),
   {
@@ -96,6 +101,8 @@ const props = withDefaults(
     placeholder: 'Type to search...',
     listMaxHeight: '40vh',
     columnLayout: false,
+    columns: undefined,
+    closeOnOutsideClick: true,
     triggerAriaLabel: 'Select option',
   }
 );
@@ -110,6 +117,20 @@ const searchInputRef = ref<HTMLInputElement | null>(null);
 const open = ref(false);
 const searchQuery = ref('');
 const focusedIndex = ref(0);
+const resolvedColumns = computed(() => {
+  const raw = props.columns ?? (props.columnLayout ? 2 : 1);
+  if (!Number.isFinite(raw)) return 1;
+  return Math.max(1, Math.min(3, Math.floor(raw)));
+});
+const hasColumnLayout = computed(() => resolvedColumns.value > 1);
+const rootClasses = computed(() => ({
+  'st-searchable-select--open': open.value,
+  'st-searchable-select--disabled': props.disabled,
+  'st-searchable-select--columns': hasColumnLayout.value,
+}));
+const rootStyle = computed(() => ({
+  '--st-searchable-select-columns': String(resolvedColumns.value),
+}));
 
 function getOptionValue(opt: SearchableSelectPlusOption): string | number {
   const k = props.valueKey;
@@ -126,6 +147,13 @@ const currentValue = computed(() => props.modelValue);
 
 function isSelected(opt: SearchableSelectPlusOption): boolean {
   return String(getOptionValue(opt)).toLowerCase() === String(currentValue.value ?? '').toLowerCase();
+}
+
+function getOptionClasses(opt: SearchableSelectPlusOption, idx: number) {
+  return {
+    'st-searchable-select__option--selected': isSelected(opt),
+    'st-searchable-select__option--focused': focusedIndex.value === idx,
+  };
 }
 
 const defaultFilter = (opts: SearchableSelectPlusOption[], query: string) => {
@@ -193,7 +221,13 @@ function selectFocused() {
   if (opts[focusedIndex.value]) select(opts[focusedIndex.value]);
 }
 
+function handleEscape() {
+  if (!props.closeOnOutsideClick) return;
+  open.value = false;
+}
+
 function onDocumentClick(e: MouseEvent) {
+  if (!props.closeOnOutsideClick) return;
   if (rootRef.value && !rootRef.value.contains(e.target as Node)) {
     open.value = false;
   }
@@ -202,6 +236,7 @@ function onDocumentClick(e: MouseEvent) {
 function onKeydown(e: KeyboardEvent) {
   if (!open.value) return;
   if (e.key === 'Escape') {
+    if (!props.closeOnOutsideClick) return;
     open.value = false;
     (e.target as HTMLElement).blur();
   }
