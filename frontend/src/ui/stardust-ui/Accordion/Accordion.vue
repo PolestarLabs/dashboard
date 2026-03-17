@@ -1,5 +1,5 @@
 <template lang="pug">
-div.st-accordion
+div.st-accordion(:class="accordionClass")
   template(v-for="item in items" :key="item.key")
     .st-accordion__item(
       :class="{ 'st-accordion__item--disabled': item.disabled, 'st-accordion__item--open': isOpen(item.key) }"
@@ -12,7 +12,9 @@ div.st-accordion
           :disabled="item.disabled"
           @click="toggle(item.key)"
         )
-          span.st-accordion__title {{ item.title }}
+          span.st-accordion__title
+            slot(name="title-icon" :item="item")
+            | {{ item.title }}
           span.st-accordion__icon(aria-hidden="true")
       .st-accordion__panel(
         role="region"
@@ -34,6 +36,8 @@ export interface AccordionItem {
   disabled?: boolean;
 }
 
+type AccordionVariant = 'default' | 'ghost' | 'solid';
+
 const props = withDefaults(
   defineProps<{
     /** Bound value (v-model) */
@@ -44,9 +48,16 @@ const props = withDefaults(
     multiple?: boolean;
     /** Allow collapsing an open section by clicking it again */
     collapsible?: boolean;
+    /** Styling variant */
+    variant?: AccordionVariant;
   }>(),
-  { multiple: false, collapsible: true },
+  { multiple: false, collapsible: true, variant: 'default' },
 );
+
+const accordionClass = computed(() => ({
+  'st-accordion--ghost': props.variant === 'ghost',
+  'st-accordion--solid': props.variant === 'solid',
+}));
 
 const emit = defineEmits<{
   'update:modelValue': [string | number | Array<string | number> | null];
