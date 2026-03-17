@@ -13,7 +13,7 @@ export function useAlert() {
    * Pass iconVariant to show a custom icon from Alert/Icons instead of vanilla Swal.
    */
   function fire(opts: PlxAlertFireOptions): Promise<SweetAlertResult> {
-    let { iconVariant, compact, bgAnimation = true, ...swalOpts } = opts;
+    let { iconVariant, compact, bgAnimation = true, noBackdrop = false, ...swalOpts } = opts;
 
     if (swalOpts.icon) {
       const iconString = Array.isArray(swalOpts.icon) ? swalOpts.icon[0] : swalOpts.icon;
@@ -36,9 +36,16 @@ export function useAlert() {
         }
       : baseCustomClass;
 
+    const finalCustomClass = noBackdrop
+      ? {
+          ...customClass,
+          container: mergeClassNames(customClass.container, 'plx-swal-no-backdrop'),
+        }
+      : customClass;
+
     const base: SweetAlertOptions = {
       ...swalOpts,
-      customClass,
+      customClass: finalCustomClass,
     };
 
     const mergedOpts = { ...DEFAULTS, ...base } as SweetAlertOptions;

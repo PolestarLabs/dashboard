@@ -13,4 +13,6 @@ export type PlxAlertFireOptions = SweetAlertOptions & {
   compact?: boolean;
   /** Inject a starfield backdrop into the Swal container (adds HTML + CSS). */
   bgAnimation?: boolean;
+  /** Disable the dark overlay backdrop (so the popup appears on top of the page without background dimming). */
+  noBackdrop?: boolean;
 };

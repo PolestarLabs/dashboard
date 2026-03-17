@@ -58,6 +58,15 @@ const AlertDemo = defineComponent({
       });
     }
 
+    async function triggerNoBackground() {
+      await fire({
+        title: 'No Background',
+        text: 'This pops up without the dark backdrop overlay.',
+        iconVariant: 'info',
+        noBackdrop: true,
+      });
+    }
+
     return {
       alert,
       success,
@@ -73,6 +82,7 @@ const AlertDemo = defineComponent({
       triggerAsk,
       triggerDeleteConfirm,
       triggerCustom,
+      triggerNoBackground,
     };
   },
   template: `
@@ -139,6 +149,14 @@ const AlertDemo = defineComponent({
         variant="ghost"
         size="sm"
         @click="triggerCustom"
+      />
+      <Button
+        label="No background"
+        icon="fas fa-eye"
+        theme="secondary"
+        variant="ghost"
+        size="sm"
+        @click="triggerNoBackground"
       />
     </div>
   `,
