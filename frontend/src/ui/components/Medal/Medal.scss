@@ -1,36 +1,24 @@
 .s-medal-chip {
-  /* based on .medal-chip from profile.css */
-  width: 80px;
-  height: 80px;
-  border-radius: 100px;
+  width: 100%;
+  height: 100%;
+  min-width: 48px;
+  min-height: 48px;
+  border-radius: 50%;
   position: relative;
 
   &__rarity {
     position: absolute;
     z-index: 1;
-    &.top-left {
-      top: -10px;
-      left: -10px;
-    }
-    &.top-right {
-      top: -10px;
-      right: -10px;
-    }
-    &.bottom-left {
-      bottom: -10px;
-      left: -10px;
-    }
-    &.bottom-right {
-      bottom: -10px;
-      right: -10px;
-    }
+
+    &.top-left     { top: -8px; left: -8px; }
+    &.top-right    { top: -8px; right: -8px; }
+    &.bottom-left  { bottom: -8px; left: -8px; }
+    &.bottom-right { bottom: -8px; right: -8px; }
   }
 
   &__face {
     width: 100%;
     height: 100%;
-    min-block-size: 60px;
-    min-inline-size: 60px;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center;
@@ -44,14 +32,5 @@
     height: 100%;
     object-fit: contain;
     display: block;
-  }
-
-  @media screen and (max-height: 650px) {
-    width: 60px;
-    height: 60px;
-    border-radius: 100px;
-    position: relative;
-    margin: auto;
-    padding: 3px;
   }
 }

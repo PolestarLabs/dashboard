@@ -9,86 +9,94 @@
         :medal="dragState.medal.id || dragState.medal.icon"
         :rarity="dragState.medal.rarity"
       )
+
   .st-profile-medalpicker__equipped
-    h3.st-profile-medalpicker__heading Equipped
-    .st-profile-medalpicker__eq-container
-      .st-profile-medalpicker__slot-inner-wrap(
+    .st-profile-medalpicker__section-header
+      h3.st-profile-medalpicker__heading Equipped
+      span.st-profile-medalpicker__count {{ equippedCount }}/{{ SLOT_COUNT }}
+    .st-profile-medalpicker__grid(:data-dragging="dragState.active || undefined")
+      .st-profile-medalpicker__slot(
         v-for="idx in SLOT_COUNT"
-        :key="'slot-' + idx"
+        :key="`slot-${idx}`"
         :class="slotClasses(idx - 1)"
         :data-drop-slot="idx - 1"
       )
-        .st-profile-medalpicker__slot-inner(
+        .st-profile-medalpicker__slot-medal(
           v-if="equippedState[idx - 1]"
           :class="{ 'st-profile-medalpicker__dragging-source': isDraggingThis('equipped', idx - 1) }"
-          :data-drag-source="'equipped'"
-          :data-drag-index="idx - 1"
           @pointerdown.prevent="onPointerDown('equipped', idx - 1, $event)"
         )
           Medal(
             :medal="equippedState[idx - 1]?.id || equippedState[idx - 1]?.icon"
             :rarity="equippedState[idx - 1]?.rarity"
           )
-  .st-profile-medalpicker__filter
-    .st-profile-medalpicker__controls
-      .st-profile-medalpicker__panel
-        button.st-profile-medalpicker__btn(@click="randomFill" type="button")
+        .st-profile-medalpicker__slot-empty(v-else)
+
+  .st-profile-medalpicker__sidebar
+    .st-profile-medalpicker__toolbar
+      .st-profile-medalpicker__actions
+        button.st-profile-medalpicker__action-btn(@click="randomFill" type="button")
           i.fas.fa-dice
-          span RANDOM
-        button.st-profile-medalpicker__btn.st-profile-medalpicker__btn--danger(@click="reset" type="button")
+          span Random
+        button.st-profile-medalpicker__action-btn.st-profile-medalpicker__action-btn--danger(@click="reset" type="button")
           i.fas.fa-fire-alt
-          span RESET
-      .st-profile-medalpicker__tier
-        button.st-profile-medalpicker__tier-btn(
+          span Reset
+      .st-profile-medalpicker__filters
+        button.st-profile-medalpicker__filter-btn(
           type="button"
-          title="ALL"
-          :class="{ 'st-profile-medalpicker__tier-btn--active': filterRarity === null && filterCategory === null }"
+          title="All"
+          :class="{ 'st-profile-medalpicker__filter-btn--active': filterRarity === null && filterCategory === null }"
           @click="setFilter(null, null)"
         )
           span.st-profile-medalpicker__tier-icon.st-profile-medalpicker__tier-icon--all
-        button.st-profile-medalpicker__tier-btn(
+        button.st-profile-medalpicker__filter-btn(
           type="button"
           title="Achievements"
-          :class="{ 'st-profile-medalpicker__tier-btn--active': filterCategory === 'achievements' }"
+          :class="{ 'st-profile-medalpicker__filter-btn--active': filterCategory === 'achievements' }"
           @click="setFilter(null, 'achievements')"
         )
           span.st-profile-medalpicker__tier-icon.st-profile-medalpicker__tier-icon--achiev
-        span.st-profile-medalpicker__tier-sep |
-        button.st-profile-medalpicker__tier-btn(
+        span.st-profile-medalpicker__filter-sep
+        button.st-profile-medalpicker__filter-btn(
           v-for="r in rarityTiers"
           :key="r"
           type="button"
           :title="r"
-          :class="{ 'st-profile-medalpicker__tier-btn--active': filterRarity === r }"
+          :class="{ 'st-profile-medalpicker__filter-btn--active': filterRarity === r }"
           @click="setFilter(r, null)"
         )
-          RarityIcon(:v="r" :size="24")
+          RarityIcon(:v="r" :size="22")
+
     .st-profile-medalpicker__search
+      i.fas.fa-search.st-profile-medalpicker__search-icon
       input.st-profile-medalpicker__search-input(
         v-model="searchQuery"
         type="text"
         placeholder="Search medals..."
       )
-    .st-profile-medalpicker__inventory
-      .st-profile-medalpicker__inventory-list.st-profile-medalpicker__inventory-inner(
-        :class="{ 'st-profile-medalpicker__inventory-list--active': dragState.hoverTarget === 'inventory' }"
-        data-drop-inventory
+
+    .st-profile-medalpicker__section-header.st-profile-medalpicker__section-header--inventory
+      span.st-profile-medalpicker__heading Inventory
+      span.st-profile-medalpicker__count {{ visibleInventoryCount }}
+
+    .st-profile-medalpicker__inventory(
+      :class="{ 'st-profile-medalpicker__inventory--drop-active': dragState.hoverTarget === 'inventory' }"
+      data-drop-inventory
+    )
+      .st-profile-medalpicker__chip(
+        v-for="(element, idx) in inventoryState"
+        :key="element.medalId"
+        v-show="isVisible(element)"
+        :class="{ 'st-profile-medalpicker__dragging-source': isDraggingThis('inventory', idx) }"
+        @pointerdown.prevent="onPointerDown('inventory', idx, $event)"
       )
-        .st-profile-medalpicker__chip(
-          v-for="(element, idx) in inventoryState"
-          :key="element.medalId"
-          v-show="isVisible(element)"
-          :class="{ 'st-profile-medalpicker__dragging-source': isDraggingThis('inventory', idx) }"
-          :data-drag-source="'inventory'"
-          :data-drag-index="idx"
-          @pointerdown.prevent="onPointerDown('inventory', idx, $event)"
+        Medal(
+          :medal="element.id || element.icon"
+          :rarity="element.rarity"
         )
-          Medal(
-            :medal="element.id || element.icon"
-            :rarity="element.rarity"
-          )
       .st-profile-medalpicker__empty(v-if="visibleInventoryCount === 0")
-        | No medals found for current filters.
+        i.fas.fa-search
+        span No medals match the current filters.
 </template>
 
 <script setup lang="ts">
@@ -145,7 +153,8 @@ function normalizeMedal(input: MedalInput): MedalItem | null {
   return { id: input, icon: input, name: input, rarity: 'C', category: 'unknown' };
 }
 
-// ── State ──
+// ── State ──────────────────────────────────────────────
+
 const equippedState = ref<(MedalUi | null)[]>(Array.from({ length: SLOT_COUNT }, () => null));
 const inventoryState = ref<MedalUi[]>([]);
 const searchQuery = ref('');
@@ -153,7 +162,10 @@ const filterRarity = ref<string | null>(null);
 const filterCategory = ref<string | null>(null);
 const rootEl = ref<HTMLElement | null>(null);
 
-// ── Drag state (reactive object, not scattered refs) ──
+const equippedCount = computed(() => equippedState.value.filter(Boolean).length);
+
+// ── Drag state ─────────────────────────────────────────
+
 const dragState = reactive({
   active: false,
   source: null as 'equipped' | 'inventory' | null,
@@ -172,7 +184,8 @@ const dragPreviewStyle = computed(() => ({
   top: `${dragState.clientY - dragState.shiftY}px`,
 }));
 
-// ── Filters ──
+// ── Filters ────────────────────────────────────────────
+
 function isVisible(m: MedalUi): boolean {
   if (searchQuery.value.trim()) {
     const q = searchQuery.value.trim().toLowerCase();
@@ -182,6 +195,7 @@ function isVisible(m: MedalUi): boolean {
   if (filterCategory.value && (m.category || '').toLowerCase() !== filterCategory.value) return false;
   return true;
 }
+
 const visibleInventoryCount = computed(() => inventoryState.value.filter(isVisible).length);
 
 function setFilter(rarity: string | null, category: string | null) {
@@ -189,7 +203,8 @@ function setFilter(rarity: string | null, category: string | null) {
   filterCategory.value = category;
 }
 
-// ── Helpers ──
+// ── Helpers ────────────────────────────────────────────
+
 function dedupeById(list: MedalUi[]): MedalUi[] {
   const map = new Map<string, MedalUi>();
   for (const m of list) map.set(m.medalId, m);
@@ -213,19 +228,20 @@ function emitState() {
   emit('update:inventory', inventoryState.value.map(stripUi));
 }
 
-// ── Template helpers ──
+// ── Template helpers ───────────────────────────────────
+
 function isDraggingThis(source: string, index: number): boolean {
   return dragState.active && dragState.source === source && dragState.index === index;
 }
 
 function slotClasses(slotIndex: number) {
   return {
-    'st-profile-medalpicker__slot-inner-wrap--active':
+    'st-profile-medalpicker__slot--drop-target':
       dragState.active && dragState.hoverTarget === 'slot' && dragState.hoverSlotIndex === slotIndex,
   };
 }
 
-// ── Pointer-based drag system ──
+// ── Pointer-based drag ─────────────────────────────────
 
 function onPointerDown(source: 'equipped' | 'inventory', index: number, event: PointerEvent) {
   const medal = source === 'equipped' ? equippedState.value[index] : inventoryState.value[index];
@@ -252,14 +268,12 @@ function onPointerDown(source: 'equipped' | 'inventory', index: number, event: P
 
 function onPointerMove(event: PointerEvent) {
   if (!dragState.active) return;
-
   dragState.clientX = event.clientX;
   dragState.clientY = event.clientY;
-
   detectDropTarget(event.clientX, event.clientY);
 }
 
-function onPointerUp(_event: PointerEvent) {
+function onPointerUp() {
   document.removeEventListener('pointermove', onPointerMove);
   document.removeEventListener('pointerup', onPointerUp);
   document.removeEventListener('pointercancel', onPointerUp);
@@ -281,7 +295,6 @@ function onPointerUp(_event: PointerEvent) {
 function detectDropTarget(clientX: number, clientY: number) {
   if (!rootEl.value) return;
 
-  // check equipped slots
   const slots = Array.from(rootEl.value.querySelectorAll<HTMLElement>('[data-drop-slot]'));
   for (const slot of slots) {
     const rect = slot.getBoundingClientRect();
@@ -292,7 +305,6 @@ function detectDropTarget(clientX: number, clientY: number) {
     }
   }
 
-  // check inventory area
   const inv = rootEl.value.querySelector<HTMLElement>('[data-drop-inventory]');
   if (inv) {
     const rect = inv.getBoundingClientRect();
@@ -306,6 +318,8 @@ function detectDropTarget(clientX: number, clientY: number) {
   dragState.hoverTarget = null;
   dragState.hoverSlotIndex = -1;
 }
+
+// ── Drop logic ─────────────────────────────────────────
 
 function performDropOnSlot(slotIndex: number) {
   const src = dragState.source!;
@@ -365,7 +379,8 @@ onBeforeUnmount(() => {
   document.removeEventListener('pointercancel', onPointerUp);
 });
 
-// ── Actions ──
+// ── Actions ────────────────────────────────────────────
+
 function reset() {
   resetDragState();
   const all = dedupeById([
@@ -398,7 +413,8 @@ function randomFill() {
   emitState();
 }
 
-// ── Init from props ──
+// ── Init ───────────────────────────────────────────────
+
 function initFromProps() {
   const equipped = Array.from({ length: SLOT_COUNT }, (_, i) =>
     normalizeMedal(props.equipped[i] ?? null)

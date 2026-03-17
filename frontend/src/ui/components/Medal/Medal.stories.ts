@@ -36,9 +36,7 @@ export const Basic: Story = {
     setup() {
       return { args };
     },
-    template: `
-      <Medal v-bind="args" />
-    `,
+    template: '<div style="width: 80px; height: 80px;"><Medal v-bind="args" /></div>',
   }),
 };
 
