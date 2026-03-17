@@ -1,0 +1,236 @@
+// ProfileEdit ColorPicker – circle-friendly horizontal layout (matches profile.css #colorpicker)
+.st-profile-colorpicker {
+  position: relative;
+  padding: 12px 20px 15px;
+  margin: 20px 10px;
+  min-width: 40%;
+  border-left: solid 5px var(--favcolor, #85f);
+  border-radius: 5px 8px 8px 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: auto;
+
+  &__bg-slot {
+    display: block;
+    position: absolute;
+    z-index: -1;
+    right: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 0 6px 6px 0;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+
+    &--dim {
+      background: var(--favcolor-dim, rgba(133, 85, 255, 0.33));
+      opacity: 0.1;
+    }
+  }
+
+  &__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  &__info {
+    flex: 1 1 auto;
+  }
+
+  &__title {
+    opacity: 0.7;
+    font-size: 1rem;
+    font-weight: 600;
+  }
+
+  &__name {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 18pt;
+    width: 100%;
+    @media (min-width: 768px) {
+      width: 33.333%;
+      margin-bottom: 0;
+    }
+  }
+
+  &__expandable {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex: 1 1 auto;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  &__picker-wrap {
+    margin: auto;
+  }
+
+  &__picker {
+    position: relative;
+    display: flex;
+    align-items: center;
+    background: var(--bg-dark, #3b3b4b);
+    border-radius: 100px;
+  }
+
+  &__chrome {
+    width: 240px;
+    height: 80px;
+    margin-left: 5px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    box-sizing: border-box;
+    border: none;
+    background: none;
+  }
+
+  &__saturation-wrap {
+    position: relative;
+    width: 72px;
+    height: 72px;
+    flex: 0 0 72px;
+    border-radius: 100px;
+    cursor: crosshair;
+    touch-action: none;
+  }
+
+  &__saturation-pointer {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    margin-left: -7px;
+    margin-top: -7px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+  }
+
+  &__hue-strip {
+    position: relative;
+    width: 120px;
+    height: 12px;
+    border-radius: 6px;
+    background: linear-gradient(
+      to right,
+      #ff0000,
+      #fffd00,
+      #00ff00,
+      #00ffff,
+      #0000ff,
+      #ff00ff,
+      #ff0000
+    );
+    cursor: pointer;
+    touch-action: none;
+  }
+
+  &__hue-pointer {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+    pointer-events: none;
+  }
+
+  &__swatch {
+    flex: 0 0 auto;
+    width: 80px;
+    height: 80px;
+    border: 4px solid var(--bg-dark, #3b3b4b);
+    border-radius: 100px;
+    cursor: pointer;
+    transition: border-color 0.2s, opacity 0.2s, box-shadow 0.2s;
+
+    &:hover {
+      border-color: #fff;
+      opacity: 0.9;
+      box-shadow: 0 0 1px rgba(0, 0, 0, 0.3);
+    }
+  }
+
+  &__suggestions {
+    flex: 0 0 50%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  &__suggestions-title {
+    width: 100%;
+    margin-bottom: 4px;
+    font-size: 0.9rem;
+    opacity: 0.8;
+  }
+
+  &__swatches {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  &__swatch-btn {
+    width: 40px;
+    height: 40px;
+    border: none;
+    border-radius: 5px;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    }
+  }
+}
+
+// Pop transition (same as profile.css)
+.pop-enter-active,
+.pop-leave-active {
+  transition: transform 0.5s, height 0.5s, opacity 0.3s, width 0.5s;
+  transition-timing-function: cubic-bezier(0.8, 0.3, 0.25, 1);
+  transform: scale(1);
+  transform-origin: left;
+}
+
+.pop-enter-from,
+.pop-leave-to {
+  opacity: 0;
+  transform: scale(0);
+  width: 0 !important;
+  overflow: hidden;
+}
+
+@media screen and (max-width: 1200px) {
+  .st-profile-colorpicker__expandable {
+    flex-direction: column;
+  }
+
+  .st-profile-colorpicker__suggestions {
+    margin-top: 10px;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .st-profile-colorpicker {
+    max-width: 260px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}

@@ -1,0 +1,185 @@
+// Clone of DropdownSelectPlus with search + column layout (profile #select-bg style)
+.st-searchable-select {
+  position: relative;
+  display: inline-block;
+  min-width: 200px;
+  max-width: 100%;
+
+  &__label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dim-mid, #4b4b5f);
+  }
+
+  &__trigger-wrap {
+    position: relative;
+  }
+
+  &__trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 48px;
+    padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.4;
+    text-align: left;
+    color: var(--text-dim-mid, #4b4b5f);
+    background: var(--bg-main, #fff);
+    border: 2px solid rgba(60, 60, 60, 0.26);
+    border-radius: 8px;
+    cursor: pointer;
+    appearance: none;
+    transition: border-radius 0.5s ease, border-color 0.2s ease;
+
+    &:focus-within,
+    &:focus {
+      outline: 0;
+      border-color: var(--accent-color, #f35);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    &--search {
+      cursor: default;
+      border-radius: 8px 8px 0 0;
+      border-bottom-color: transparent;
+    }
+  }
+
+  &__placeholder {
+    color: var(--text-dim, #999);
+  }
+
+  &__search {
+    flex: 1 1 auto;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+    font-size: inherit;
+    color: inherit;
+
+    &::placeholder {
+      color: var(--text-dim, #999);
+    }
+  }
+
+  &__chevron {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 6px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%234b4b5f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.2s ease;
+    pointer-events: none;
+  }
+
+  &--open &__chevron {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  &__name {
+    font-weight: 600;
+  }
+
+  &__list {
+    position: absolute;
+    top: calc(100% - 1px);
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--bg-main, #fff);
+    border: 2px solid rgba(60, 60, 60, 0.26);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 40vh;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+
+  &__list-header {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    color: var(--text-dim, #666);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    transition: background 0.15s ease, color 0.15s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover,
+    &--focused {
+      background: var(--accent-color, #f35);
+      color: #fff;
+    }
+
+    &--selected {
+      color: var(--accent-color, #f35);
+      font-weight: 600;
+    }
+
+    &--selected:hover,
+    &--selected.st-searchable-select__option--focused {
+      color: #fff;
+    }
+  }
+
+  &--columns &__list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    justify-content: space-around;
+    padding: 8px;
+  }
+
+  &--columns &__option {
+    flex: 1 0 50%;
+    min-height: 100px;
+    min-width: 180px;
+    max-width: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 4px;
+    border-radius: 4px;
+    border: none;
+    border-bottom: none;
+
+    &:nth-child(4n - 2),
+    &:nth-child(4n - 1) {
+      background: rgba(170, 170, 255, 0.08);
+    }
+  }
+
+  &--disabled &__trigger {
+    cursor: not-allowed;
+  }
+}

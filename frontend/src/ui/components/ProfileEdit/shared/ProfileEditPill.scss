@@ -1,0 +1,50 @@
+.st-profile-pill {
+  padding: 12px 20px 15px;
+  margin: 20px 10px;
+  min-width: 40%;
+  border-left: solid 5px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  border-radius: 5px 8px 8px 5px;
+}
+
+.st-profile-pill__bg-slot {
+  display: block;
+  position: absolute;
+  z-index: -1;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0 6px 6px 0;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.st-profile-pill__backblur {
+  background-color: var(--bg-darkest);
+  backdrop-filter: blur(6px);
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: 0 5px 5px 0;
+  z-index: -1;
+  box-shadow: inset 0 0 15px rgba(255, 255, 255, 0.1);
+}
+
+.st-profile-pill__content {
+  display: flex;
+  flex-direction: column;
+  min-height: inherit;
+}
+
+@media screen and (max-width: 800px) {
+  .st-profile-pill {
+    margin: 20px 10px;
+    padding: 6px 10px 8px;
+  }
+}

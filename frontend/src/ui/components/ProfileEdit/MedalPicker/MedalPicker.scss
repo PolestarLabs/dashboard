@@ -1,0 +1,237 @@
+// Medal Picker – 3x3 equipped grid + inventory + reset/random/filter (profile #medals)
+.st-profile-medalpicker {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1200px;
+  margin: auto;
+  text-align: center;
+  gap: 1rem;
+}
+
+.st-profile-medalpicker__equipped {
+  margin: 0 auto;
+  flex: 1 1 auto;
+  min-width: 280px;
+}
+
+.st-profile-medalpicker__heading {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+.st-profile-medalpicker__eq-container {
+  width: 300px;
+  height: 300px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+}
+
+.st-profile-medalpicker__slot-inner-wrap {
+  width: 80px;
+  height: 80px;
+  margin: auto;
+  border-radius: 100%;
+  background: rgba(100, 100, 150, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  padding: 0;
+  min-height: 80px;
+
+  &.sortable-drag {
+    opacity: 0.9;
+  }
+}
+
+.st-profile-medalpicker__slot-inner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.st-profile-medalpicker__filter {
+  flex: 1 1 auto;
+  max-width: 900px;
+  min-width: 280px;
+}
+
+.st-profile-medalpicker__controls {
+  border-top: solid 1px rgba(204, 204, 255, 0.3);
+  border-bottom: solid 1px rgba(204, 204, 255, 0.3);
+  margin: 16px auto 8px;
+  padding: 8px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.st-profile-medalpicker__panel {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.st-profile-medalpicker__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 6px 12px;
+  border: none;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 0.9rem;
+  cursor: pointer;
+  background: var(--bg-darker, #2a2a3a);
+  color: var(--text-dim-mid, #ccc);
+
+  &:hover {
+    background: var(--bg-dark, #3b3b4b);
+    color: #fff;
+  }
+
+  &--danger {
+    color: var(--plx-danger, #e55);
+  }
+}
+
+.st-profile-medalpicker__tier {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.st-profile-medalpicker__tier-btn {
+  padding: 4px;
+  border: none;
+  border-radius: 4px;
+  background: transparent;
+  cursor: pointer;
+
+  &:hover .st-profile-medalpicker__tier-icon,
+  &:hover .s-rarity-icon {
+    filter: brightness(1.5) drop-shadow(0 0 5px rgba(255, 255, 255, 0.3));
+  }
+
+  &--active {
+    outline: 2px solid var(--accent-color, #f35);
+    outline-offset: 2px;
+  }
+}
+
+.st-profile-medalpicker__tier-icon {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+
+  &--all {
+    background-image: url('/images/tiers/all.png');
+  }
+
+  &--achiev {
+    background-image: url('/images/tiers/achiev.png');
+  }
+
+  &--C { background-image: url('/images/tiers/C.png'); }
+  &--U { background-image: url('/images/tiers/U.png'); }
+  &--R { background-image: url('/images/tiers/R.png'); }
+  &--SR { background-image: url('/images/tiers/SR.png'); }
+  &--UR { background-image: url('/images/tiers/UR.png'); }
+  &--XR { background-image: url('/images/tiers/XR.png'); }
+}
+
+.st-profile-medalpicker__tier .s-rarity-icon {
+  margin: 0;
+}
+
+.st-profile-medalpicker__tier-sep {
+  margin: 0 4px;
+  opacity: 0.6;
+}
+
+.st-profile-medalpicker__search {
+  width: 100%;
+  margin: 8px auto;
+}
+
+.st-profile-medalpicker__search-input {
+  width: 80%;
+  max-width: 300px;
+  padding: 6px 12px;
+  border-radius: 5px;
+  border: 1px solid rgba(60, 60, 60, 0.3);
+  font-family: inherit;
+  font-size: 1rem;
+  background: var(--bg-darker, #2a2a3a);
+  color: var(--text-main, #eee);
+}
+
+.st-profile-medalpicker__inventory {
+  display: flex;
+  flex-wrap: wrap;
+  overflow-y: auto;
+  background: var(--bg-darkest, #1a1a2e);
+  border-radius: 8px;
+  margin: 0 20px;
+  padding: 10px;
+  max-height: 400px;
+  min-height: 300px;
+  justify-content: flex-start;
+  align-content: flex-start;
+  gap: 8px;
+}
+
+.st-profile-medalpicker__inventory-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.st-profile-medalpicker__chip {
+  width: 60px;
+  height: 60px;
+  filter: drop-shadow(0 1px 5px rgba(10, 10, 30, 0.3));
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .st-profile-medalpicker__controls,
+  .st-profile-medalpicker__filter {
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 400px) {
+  .st-profile-medalpicker__eq-container {
+    width: 240px;
+    height: 240px;
+  }
+
+  .st-profile-medalpicker__slot-inner-wrap {
+    width: 64px;
+    height: 64px;
+    min-height: 64px;
+  }
+
+  .st-profile-medalpicker__chip {
+    width: 60px;
+    height: 60px;
+  }
+}

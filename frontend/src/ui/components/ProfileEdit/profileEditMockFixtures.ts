@@ -1,0 +1,125 @@
+import type { BackgroundOption } from './BackgroundPicker/BackgroundPicker.vue';
+import type { MedalItem } from './MedalPicker/MedalPicker.vue';
+import type { PackOption, StickerOption } from './StickerSelect/StickerSelect.vue';
+
+export const sampleUserProfile = {
+  id: '88120564400553984',
+  profile: {
+    medals: ['opc2', 'chao', 'norway', 'finalfantasyvii', 'mew', 'pacman_inky', 'cytusneko', 'xmastree', 'finland'],
+  },
+} as const;
+
+export const sampleBackgrounds: BackgroundOption[] = [
+  {
+    id: 'brazil218',
+    code: '624f8cb0131927cde08c9317592db0dd',
+    name: 'Brazil by 大馬場十三 - World Cup',
+    rarity: 'SR',
+    tags: 'world cup soccer fifa gijinka',
+    ownedIndex: 0,
+    releaseIndex: 1000,
+    rarIndex: 3,
+    img: 'https://cdn.pollux.gg/backdrops/624f8cb0131927cde08c9317592db0dd.png',
+    value: '624f8cb0131927cde08c9317592db0dd',
+    label: 'Brazil by 大馬場十三 - World Cup',
+  },
+  {
+    id: 'costarica218',
+    code: 'f76d61d70fcd63f6022af7576cbd4064',
+    name: 'Costa Rica by 大馬場十三 - World Cup',
+    rarity: 'R',
+    tags: 'world cup soccer fifa gijinka',
+    ownedIndex: 1,
+    releaseIndex: 2000,
+    rarIndex: 2,
+    img: 'https://cdn.pollux.gg/backdrops/f76d61d70fcd63f6022af7576cbd4064.png',
+    value: 'f76d61d70fcd63f6022af7576cbd4064',
+    label: 'Costa Rica by 大馬場十三 - World Cup',
+  },
+  {
+    id: 'germany218',
+    code: 'd54b7396f047812769fbb31f41636457',
+    name: 'Germany by 大馬場十三 - World Cup',
+    rarity: 'SR',
+    tags: 'world cup soccer fifa gijinka',
+    ownedIndex: 2,
+    releaseIndex: 3000,
+    rarIndex: 3,
+    img: 'https://cdn.pollux.gg/backdrops/d54b7396f047812769fbb31f41636457.png',
+    value: 'd54b7396f047812769fbb31f41636457',
+    label: 'Germany by 大馬場十三 - World Cup',
+  },
+  {
+    id: 'russia218',
+    code: '48e32f99615bde59225e1277985c01b8',
+    name: 'Russia by 大馬場十三 - World Cup',
+    rarity: 'UR',
+    tags: 'world cup soccer fifa gijinka',
+    ownedIndex: 3,
+    releaseIndex: 4000,
+    rarIndex: 4,
+    img: 'https://cdn.pollux.gg/backdrops/48e32f99615bde59225e1277985c01b8.png',
+    value: '48e32f99615bde59225e1277985c01b8',
+    label: 'Russia by 大馬場十三 - World Cup',
+  },
+];
+
+export const sampleStickers: StickerOption[] = [
+  { id: 'porupix', name: 'Pollux Pixel', series_id: 'plx18', rarity: 'XR', value: 'porupix', label: 'Pollux Pixel' },
+  { id: 'porubarcode', name: 'Pollux Barcode', series_id: 'plx18', rarity: 'XR', value: 'porubarcode', label: 'Pollux Barcode' },
+  { id: 'daianpanmercy', name: 'Mercy by Daianpan', series_id: 'daianwatch', rarity: 'UR', value: 'daianpanmercy', label: 'Mercy by Daianpan' },
+  { id: 'daianpanzenyatta', name: 'Zennyata by Daianpan', series_id: 'daianwatch', rarity: 'C', value: 'daianpanzenyatta', label: 'Zennyata by Daianpan' },
+  { id: 'cecystick', name: 'Cecily Sticker', series_id: 'events', rarity: 'UR', value: 'cecystick', label: 'Cecily Sticker' },
+  { id: 'austristick', name: 'Australis Sticker', series_id: 'events', rarity: 'SR', value: 'austristick', label: 'Australis Sticker' },
+];
+
+export const sampleStickerPacks: PackOption[] = [
+  {
+    id: 'plx18_booster',
+    code: 'bpk_PLX18',
+    icon: 'plx18',
+    name: 'Pollux Special Collection 2018',
+    rarity: 'XR',
+    size: 2,
+    droppable: false,
+    value: 'plx18_booster',
+    label: 'Pollux Special Collection 2018',
+  },
+  {
+    id: 'daianwatch_booster',
+    code: 'bpk_DWT',
+    icon: 'daianwatch',
+    name: 'Overwatch by Daianpan',
+    rarity: 'SR',
+    size: 2,
+    droppable: false,
+    value: 'daianwatch_booster',
+    label: 'Overwatch by Daianpan',
+  },
+  {
+    id: 'events_booster',
+    code: 'bpk_events',
+    icon: 'events',
+    name: 'Solstice Event 2018',
+    rarity: 'UR',
+    size: 2,
+    droppable: true,
+    value: 'events_booster',
+    label: 'Solstice Event 2018',
+  },
+];
+
+export const sampleMedals: MedalItem[] = [
+  { id: 'opc2', icon: 'opc2', name: 'One Piece 2', rarity: 'U', category: 'anime' },
+  { id: 'chao', icon: 'chao', name: 'Chao', rarity: 'C', category: 'games' },
+  { id: 'norway', icon: 'norway', name: 'Norway Flag', rarity: 'U', category: 'flags' },
+  { id: 'finalfantasyvii', icon: 'finalfantasyvii', name: 'Final Fantasy VII Logo', rarity: 'R', category: 'games' },
+  { id: 'mew', icon: 'mew', name: 'Mew', rarity: 'SR', category: 'games' },
+  { id: 'pacman_inky', icon: 'pacman_inky', name: 'Pacman Inky', rarity: 'U', category: 'games' },
+  { id: 'cytusneko', icon: 'cytusneko', name: 'Cytus II : Neko', rarity: 'C', category: 'achievements' },
+  { id: 'xmastree', icon: 'xmastree', name: 'Christmas Tree', rarity: 'C', category: 'achievements' },
+  { id: 'finland', icon: 'finland', name: 'Finland Flag', rarity: 'SR', category: 'flags' },
+  { id: 'umbrella', icon: 'umbrella', name: 'Umbrella Corp.', rarity: 'R', category: 'games' },
+  { id: 'gdad', icon: 'gdad', name: 'Giant Dad', rarity: 'SR', category: 'games' },
+  { id: 'seater', icon: 'seater', name: 'Soul Eater', rarity: 'SR', category: 'anime' },
+];

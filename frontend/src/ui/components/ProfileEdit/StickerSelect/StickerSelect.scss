@@ -1,0 +1,149 @@
+// Sticker Select – shared ProfileEditPill shell + two searchable pickers
+.st-profile-sticker {
+  min-height: 280px;
+
+  &__info {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  &__c1 {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  &__c2 {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 33.333%;
+    min-height: 200px;
+
+    @media (max-width: 768px) {
+      position: relative;
+      width: 100%;
+      min-height: 0;
+    }
+  }
+
+  &__title {
+    opacity: 0.7;
+    margin-bottom: 0.5rem;
+  }
+
+  &__help {
+    font-size: 0.85rem;
+    color: var(--text-dim, #888);
+    margin-bottom: 4px;
+  }
+
+  &__selects {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__search {
+    max-width: 280px;
+  }
+
+  &__sticker-row {
+    margin-top: 8px;
+  }
+
+  &__sel-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  &__opt {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+
+    &--sticker {
+      flex-direction: column;
+      text-align: center;
+    }
+  }
+
+  &__pack-icon,
+  &__sticker-icon {
+    width: 60px;
+    height: 60px;
+    flex-shrink: 0;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: drop-shadow(1px 2px 5px rgba(34, 34, 51, 0.3));
+  }
+
+  &__sticker-icon {
+    width: 80px;
+    height: 80px;
+    margin: 10px auto 5px;
+  }
+
+  &__opt-name {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+  }
+
+  &__pack-float {
+    height: 280px;
+    width: 180px;
+    transform: rotate(15deg) translateX(18px);
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: -40px;
+    filter: brightness(0.6);
+    transition: filter 400ms ease;
+
+    &:hover {
+      filter: brightness(1);
+    }
+  }
+
+  &__sticker-thumb {
+    height: 150px;
+    width: 150px;
+    transform: rotate(-5deg) translateX(-30px);
+    filter: drop-shadow(1px 2px 10px rgba(34, 34, 51, 0.3));
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: absolute;
+    top: 120px;
+    right: 20px;
+  }
+
+  &__card {
+    background: var(--bg-main, #fff);
+    padding: 10px 20px 20px;
+    border-radius: 8px;
+    color: var(--text-bold, #2b2b3b);
+    margin-top: 8px;
+  }
+
+  &__pak-title {
+    font-weight: 700;
+    margin-bottom: 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  &__pak-size,
+  &__pak-droppable {
+    font-size: 0.9rem;
+  }
+  @media (max-width: 768px) {
+    min-height: 220px;
+  }
+}
