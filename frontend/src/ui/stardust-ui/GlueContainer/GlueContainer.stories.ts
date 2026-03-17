@@ -117,7 +117,7 @@ export const Segments: Story = {
       <GlueContainer v-bind="args">
         <Button label="One" variant="primary" />
         <Button label="Two" variant="secondary" />
-        <Button label="Three" variant="primary" />
+        <Button label="Three" variant="fancy" />
         <Button label="Four" variant="ghost" />
       </GlueContainer>
     `,
@@ -145,6 +145,12 @@ export const SegmentWithIcons: Story = {
         <Button icon="fab fa-linux" label="One" variant="secondary" />
         <Button icon="fab fa-apple" label="Two" variant="secondary" />
         <Button icon="fab fa-windows" label="Three" variant="secondary" />
+      </GlueContainer>
+      <br /><br />
+      <GlueContainer v-bind="args">
+        <Button icon="fab fa-linux" label="One" variant="fancy" />
+        <Button icon="fab fa-apple" label="Two" variant="fancy" theme="secondary" />
+        <Button icon="fab fa-windows" label="Three" variant="fancy" theme="danger" />
       </GlueContainer>
     `,
   }),

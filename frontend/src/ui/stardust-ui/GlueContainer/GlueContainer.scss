@@ -6,6 +6,7 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 0.35rem;
+  --rounded-btn: 6px;
 
   .s-glue-container__label {
     font-size: 0.9rem;
@@ -19,7 +20,7 @@
   align-items: stretch;
   box-shadow: 0 4px 12px var(--shadow, rgba(0, 0, 0, 0.15));
   overflow: visible;
-  border-radius: 6px;
+  border-radius: var(--rounded-btn);
 
   // Single shadow for the group; children must not cast their own
   > * {
@@ -115,6 +116,11 @@
   > * {
     overflow: visible;
   }
+
+  & .s-btn--fancy {
+    margin: 0 -1px;
+    transform: scale(1) translate(0); // avoid movement
+  }
 }
 
 // ---- Badge layout
@@ -122,6 +128,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
+  color: var(--color-contrast, #e8e8ff);
 
   > .s-btn {
     flex: 1 0 auto;
