@@ -1,118 +1,46 @@
-// Master color variable map (generated for reference).
+// =============================================================================
+// _master-colors.scss
+// Design System Color Reference Map
+// =============================================================================
 //
-// Step 1: Usage-level semantic variables (map to palette tokens).
-//   These are the names you should use in components.
+// Maps SCSS variables to their CSS custom property counterparts.
+// @use or @forward this file to reference color tokens via SCSS.
 //
-// Step 2: Palette tokens (actual color values, or theme CSS vars).
-//   These aim to cover every color used in the frontend (outside of themes)
-//   and cluster very-similar colors together.
+// LAYERS
+//   Layer 0  - Global Palette  (:root)        immutable; theme-independent
+//   Layer 1  - App Semantic Tokens  (html)    look & feel; theme-overridden
+//   Layer 2  - Domain/Component Tokens (html) component defaults
+//
+// SHADE VARIANTS (all accent-family colors)
+//   <color>         main value
+//   <color>-light   lighter / pastel variant
+//   <color>-mid     between main and dark
+//   <color>-dark    darker / more saturated
+//   <color>-dim     blended against bg-color  (opacity ~0.8 baked in)
+//   <color>-opaque  semi-transparent overlay  (opacity ~0.4)
+//
+// "on-*" tokens
+//   Foreground (text / icon) color intended to sit ON a given background.
+//   e.g. $on-accent -> text/icon on top of $accent-color / --color-primary
 
-// ----------------------------------------
-// Step 1 - Usage / semantic tokens
-// ----------------------------------------
-// Example:
-// $tab-selected-icon: $color-secondary;
-// $badge-success: $color-success;
-// $button-primary: $color-accent;
+// =============================================================================
+// LAYER 0 - Global palette SCSS shortcuts
+// =============================================================================
 
-// Add your own semantic aliases here.
+// Neutral scale
+$color-darkest:   var(--darkest);
+$color-darker:    var(--darker);
+$color-dark:      var(--dark);
+$color-pre-dark:  var(--pre-dark);
+$color-mid-dark:  var(--mid-dark);
+$color-mid:       var(--mid);
+$color-mid-light: var(--mid-light);
+$color-pre-light: var(--pre-light);
+$color-light:     var(--light);
+$color-lighter:   var(--lighter);
+$color-lightest:  var(--lightest);
 
-// Common semantic tokens (based on UI component patterns)
-$background-main         : $bg-main;
-$background-surface      : $bg-dark;
-$background-alt          : $bg-opaque;
-$background-inverse      : $bg-inverse;
-
-$text-primary            : $text-main;
-$text-secondary          : $text-dim;
-$text-muted              : $muted;
-$text-link               : $links;
-$text-link-hover         : $links-hover;
-$text-inverse            : $text-inverse;
-
-$border-default          : $color-13;
-$border-muted            : $color-15;
-$border-strong           : $color-00;
-
-$button-primary          : $accent-color;
-$button-secondary        : $secondary-color;
-$button-success          : $plx-success;
-$button-warning          : $plx-warning;
-$button-danger           : $plx-danger;
-$button-info             : $plx-info;
-
-$badge-success           : $plx-success;
-$badge-warning           : $plx-warning;
-$badge-danger            : $plx-danger;
-$badge-info              : $plx-info;
-
-$icon-default            : $text-main;
-$icon-muted              : $text-dim;
-
-$card-bg                 : $bg-dark;
-$card-border             : $color-13;
-
-$input-bg                : $bg-main;
-$input-border            : $color-13;
-$input-text              : $text-main;
-
-$modal-backdrop          : $color-translucent-06;
-$modal-bg                : $bg-dark;
-
-$accordion-bg            : $color-translucent-01;
-$accordion-open-bg       : $color-translucent-02;
-$accordion-hover-bg      : $color-translucent-03;
-$accordion-panel-border  : $color-translucent-04;
-
-
-// ----------------------------------------
-// Step 2 - Palette (base) tokens
-// ----------------------------------------
-// CSS variables referenced in frontend code (from themes).
-// If a color is defined via var(--something), keep the same name here.
-
-$color-contrast-inverse : var(--color-contrast-inverse);
-$color-contrast-dim     : var(--color-contrast-dim);
-$text-accent-dim        : var(--text-accent-dim);
-$text-lightest          : var(--text-lightest);
-$text-extra-bold        : var(--text-extra-bold);
-$text-bold              : var(--text-bold);
-$text-main              : var(--text-main);
-$text-faint             : var(--text-faint);
-$text-dim               : var(--text-dim);
-$text-dim-mid           : var(--text-dim-mid);
-$text-inverse           : var(--text-inverse);
-$accent-color           : var(--accent-color);
-$accent-color-mid       : var(--accent-color-mid);
-$accent-color-strong    : var(--accent-color-strong);
-$accent-color-dark      : var(--accent-color-dark);
-$secondary-color        : var(--secondary-color);
-$secondary-color-alt    : var(--secondary-color-alt);
-$tertiary-color         : var(--tertiary-color);
-$mid-main               : var(--mid-main);
-$bg-main                : var(--bg-main);
-$bg-dark                : var(--bg-dark);
-$bg-opaque              : var(--bg-opaque);
-$bg-inverse             : var(--bg-inverse);
-$links                  : var(--links);
-$links-hover            : var(--links-hover);
-$muted                  : var(--muted);
-$dark-dim               : var(--dark-dim);
-$dark-dimmer            : var(--dark-dimmer);
-$dark-dimmest           : var(--dark-dimmest);
-$plx-green              : var(--plx-green);
-$plx-cyan               : var(--plx-cyan);
-$plx-yellow             : var(--plx-yellow);
-$plx-danger             : var(--plx-danger);
-$plx-success            : var(--plx-success);
-$plx-warning            : var(--plx-warning);
-$plx-info               : var(--plx-info);
-$text-shadow            : var(--text-shadow);
-$line-col               : var(--line-col);
-$avatar-fg              : var(--avatar-fg);
-
-
-// Literal values (clustered by similarity).
+// Raw fixed palette (literal hex; always the same regardless of theme)
 $color-00: #000000;
 $color-01: #0b0b1b;
 $color-02: #111827;
@@ -135,19 +63,19 @@ $color-18: #d9d9d9;
 $color-19: #eeeeee;
 $color-20: #ffffff;
 
-$color-accent-01: #3b82f6;
-$color-accent-02: #a855f7;
-$color-accent-03: #2563eb;
-$color-accent-04: #7c3aed;
-$color-accent-05: #f97316;
-$color-accent-06: #f59e0b;
-$color-accent-07: #22c55e;
-$color-accent-08: #ef4444;
-$color-accent-09: #f35;
-$color-accent-10: #95f;
-$color-accent-11: #f02040;
-$color-accent-12: #b559d1;
+// Layer-0 status colors (immutable)
+$plx-success: var(--plx-success);  // #31e2b4
+$plx-warning: var(--plx-warning);  // #FC2
+$plx-danger:  var(--plx-danger);   // #F02040
+$plx-info:    var(--plx-info);     // #56F
+$plx-neutral: var(--plx-neutral);  // #9999AA
 
+// Legacy aliases kept for back-compat
+$plx-green:   var(--plx-green);
+$plx-cyan:    var(--plx-cyan);
+$plx-yellow:  var(--plx-yellow);
+
+// Translucent utilities
 $color-translucent-01: #8080d016;
 $color-translucent-02: #8080f026;
 $color-translucent-03: #7c7c7c0f;
@@ -161,4 +89,184 @@ $color-translucent-10: #f59e0bbb;
 $color-translucent-11: #ed3d3dcc;
 $color-translucent-12: #100c2b59;
 
-// End of master color map
+
+// =============================================================================
+// LAYER 1 - App Semantic Tokens (CSS vars set per theme)
+// =============================================================================
+
+// Accent / Primary
+$accent-color:            var(--accent-color);
+$accent-color-light:      var(--color-primary-light);
+$accent-color-mid:        var(--color-primary-mid);
+$accent-color-strong:     var(--color-primary-strong);
+$accent-color-dark:       var(--color-primary-dark);
+$accent-color-lighter:    var(--color-primary-lighter);
+$accent-color-lightest:   var(--color-primary-lightest);
+$accent-color-dim:        var(--color-primary-dim);
+$accent-color-opaque:     var(--color-primary-opaque);
+$on-accent:               var(--on-accent);
+
+// Secondary
+$secondary-color:         var(--secondary-color);
+$secondary-color-alt:     var(--color-secondary-alt);
+$secondary-color-light:   var(--color-secondary-light);
+$secondary-color-mid:     var(--color-secondary-mid);
+$secondary-color-strong:  var(--color-secondary-strong);
+$secondary-color-dark:    var(--color-secondary-dark);
+$secondary-color-darker:  var(--color-secondary-darker);
+$secondary-color-dim:     var(--color-secondary-dim);
+$secondary-color-opaque:  var(--color-secondary-opaque);
+$on-secondary:            var(--on-secondary);
+
+// Tertiary
+$tertiary-color:          var(--color-tertiary);
+$tertiary-color-light:    var(--color-tertiary-light);
+$tertiary-color-dark:     var(--color-tertiary-dark);
+$tertiary-color-dim:      var(--color-tertiary-dim);
+$tertiary-color-opaque:   var(--color-tertiary-opaque);
+$on-tertiary:             var(--on-tertiary);
+
+// Status
+$color-success:           var(--color-success);
+$color-success-light:     var(--color-success-light);
+$color-success-dark:      var(--color-success-dark);
+$color-success-dim:       var(--color-success-dim);
+$color-success-opaque:    var(--color-success-opaque);
+$on-success:              var(--on-success);
+
+$color-warn:              var(--color-warn);
+$color-warn-light:        var(--color-warn-light);
+$color-warn-dark:         var(--color-warn-dark);
+$color-warn-dim:          var(--color-warn-dim);
+$color-warn-opaque:       var(--color-warn-opaque);
+$on-warn:                 var(--on-warn);
+
+$color-danger:            var(--color-danger);
+$color-danger-light:      var(--color-danger-light);
+$color-danger-dark:       var(--color-danger-dark);
+$color-danger-dim:        var(--color-danger-dim);
+$color-danger-opaque:     var(--color-danger-opaque);
+$on-danger:               var(--on-danger);
+
+$color-info:              var(--color-info);
+$color-info-light:        var(--color-info-light);
+$color-info-dark:         var(--color-info-dark);
+$color-info-dim:          var(--color-info-dim);
+$color-info-opaque:       var(--color-info-opaque);
+$on-info:                 var(--on-info);
+
+$color-neutral:           var(--color-neutral);
+$color-neutral-light:     var(--color-neutral-light);
+$color-neutral-dark:      var(--color-neutral-dark);
+$color-neutral-dim:       var(--color-neutral-dim);
+$color-neutral-opaque:    var(--color-neutral-opaque);
+$on-neutral:              var(--on-neutral);
+
+// Background
+$bg-color:     var(--bg-color);       // canonical alias for --bg-main
+$bg-contrast:  var(--bg-contrast);    // canonical alias for --bg-dark
+$bg-main:      var(--bg-main);        // raw theme var kept for back-compat
+$bg-dark:      var(--bg-dark);
+$bg-opaque:    var(--bg-opaque);
+$bg-inverse:   var(--bg-inverse);
+
+// Text
+$text-main:           var(--text-main);
+$text-main-bold:      var(--text-main-bold);
+$text-contrast:       var(--text-contrast);
+$text-contrast-bold:  var(--text-contrast-bold);
+$text-bold:           var(--text-bold);
+$text-dim:            var(--text-dim);
+$text-dim-mid:        var(--text-dim-mid);
+$text-faint:          var(--text-faint);
+$text-extra-bold:     var(--text-extra-bold);
+$text-lightest:       var(--text-lightest);
+$text-inverse:        var(--text-inverse);
+$text-accent:         var(--text-accent);
+$text-accent-dim:     var(--text-accent-dim);
+$muted:               var(--muted);
+
+// Links
+$text-link:           var(--text-link);
+$text-link-contrast:  var(--text-link-contrast);
+$text-link-visited:   var(--text-link-visited);
+$links:               var(--links);        // back-compat
+$links-hover:         var(--links-hover);  // back-compat
+
+// Borders / dividers
+$border-default:  var(--border-default);
+$border-muted:    var(--border-muted);
+$border-strong:   var(--border-strong);
+$divider:         var(--divider);
+
+// Elevation
+$surface-dim:     var(--surface-dim);
+$surface-dimmer:  var(--surface-dimmer);
+$surface-dimmest: var(--surface-dimmest);
+
+// Back-compat elevation aliases
+$dark-dim:        var(--surface-dim);
+$dark-dimmer:     var(--surface-dimmer);
+$dark-dimmest:    var(--surface-dimmest);
+
+// Contrast helpers
+$color-contrast:         var(--color-contrast);
+$color-contrast-dim:     var(--color-contrast-dim);
+$color-contrast-inverse: var(--color-contrast-inverse);
+
+
+// =============================================================================
+// LAYER 2 - Domain / Component Semantic Tokens (SCSS convenience aliases)
+// =============================================================================
+
+// Buttons
+$btn-primary-bg:    var(--btn-primary-bg);
+$btn-primary-fg:    var(--btn-primary-fg);
+$btn-secondary-bg:  var(--btn-secondary-bg);
+$btn-secondary-fg:  var(--btn-secondary-fg);
+$btn-success-bg:    var(--btn-success-bg);
+$btn-warn-bg:       var(--btn-warn-bg);
+$btn-danger-bg:     var(--btn-danger-bg);
+$btn-info-bg:       var(--btn-info-bg);
+$btn-neutral-bg:    var(--btn-neutral-bg);
+
+// Badges
+$badge-primary-bg:  var(--badge-primary-bg);
+$badge-primary-fg:  var(--badge-primary-fg);
+$badge-success-bg:  var(--badge-success-bg);
+$badge-success-fg:  var(--badge-success-fg);
+$badge-warn-bg:     var(--badge-warn-bg);
+$badge-warn-fg:     var(--badge-warn-fg);
+$badge-danger-bg:   var(--badge-danger-bg);
+$badge-danger-fg:   var(--badge-danger-fg);
+$badge-info-bg:     var(--badge-info-bg);
+$badge-info-fg:     var(--badge-info-fg);
+$badge-neutral-bg:  var(--badge-neutral-bg);
+$badge-neutral-fg:  var(--badge-neutral-fg);
+
+// Cards
+$card-bg:     var(--card-bg);
+$card-border: var(--card-border);
+$card-shadow: var(--card-shadow);
+
+// Inputs
+$input-bg:           var(--input-bg);
+$input-border:       var(--input-border);
+$input-border-focus: var(--input-border-focus);
+$input-text:         var(--input-text);
+$input-placeholder:  var(--input-placeholder);
+
+// Modals
+$modal-backdrop: var(--modal-backdrop);
+$modal-bg:       var(--modal-bg);
+
+// Accordions
+$accordion-bg:       var(--accordion-bg);
+$accordion-open-bg:  var(--accordion-open-bg);
+$accordion-hover-bg: var(--accordion-hover-bg);
+$accordion-border:   var(--accordion-border);
+
+// Icons
+$icon-default: var(--icon-default);
+$icon-muted:   var(--icon-muted);
+$icon-accent:  var(--icon-accent);

@@ -10,103 +10,288 @@
 @import "./nikoliny.css";
 @import "./selenedi.css";
 
+/* ================================================================
+   LAYER 0 - Global Palette  (immutable; never theme-overridden)
+   Raw color atoms the rest of the system borrows from.
+   ================================================================ */
 :root {
-	--main-pink: #FF60A0;
-	--alt-pink: #F69;
-	--dark-pink: #E26;
-	--mid-pink: #F04070;
-	--darkest-pink: #B26;
-	--main-purple: #A6F;
-	--alt-purple: #7040F8;
-	--dark-purple: #53F;
-	--darkest-purple: #50D;
-	--darkest: #0F0F1A;
-	--darker: #1b1b2b;
-	--dark: #2b2b3b;
-	--pre-dark: #3b3b4F;
-	--mid-dark: #4b4b6b;
-	--mid: #6b6b8b;
-	--mid-light: #8080A0;
-	--pre-light: #8b8b9F;
-	--light: #AAC;
-	--lighter: #CCE;
-	--lightest: #EEF;
-	--rainbow: linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
-	--plx-danger: #F02040;
-	--plx-green: #31e2b4;
-	--plx-dark-green: #5A8;
-	--plx-yellow: #FC2;
-	--plx-rose: #f79;
-	--plx-salmon: #F87;
-	--plx-blue: #56F;
-	--plx-nsfw: var(--plx-danger);
-	--shadow: #05050F25;
-	--box-gutter: 24px;
-	--code-main-color: #D27;
-	--code-main-border: 1px solid #472541F1;
-	--code-main-bg: #2c1d2f;
-	--code-misty-color: cadetblue;
-	--code-misty-border: 1px solid #39354a;
-	--code-misty-bg: #1d1721;
-	--main-font: 'Varela Round';
-	--second-font: 'Nunito';
-	--third-font: 'Quicksand';
-	--strong-font: 'Proxima Soft';
-	--display-font: 'Panton';
-	--mono-font: 'Share Tech Mono', monaco, monospace;
-	--select: var(--alt-purple);
-	--select-bg: var(--lightest);
 
-	/* Rarity button colors (unique to rarity icons, from legacy rarityboxes.css) */
-	--rarity-default-main: #ffba3b;
-	--rarity-default-fade: rgba(72, 35, 58, 0.82);
-	--rarity-default-glow: #2245;
-	--rarity-sticker-main: #0bab4b;
-	--rarity-sticker-dim: #0bfb4b88;
-	--rarity-sticker-fade: #0b103b;
-	--rarity-sticker-border: #0b7b4b;
-	--rarity-special-main: #fb8b3b;
-	--rarity-special-dim: #f11;
-	--rarity-special-fade: #ab152b;
-	--rarity-craft-main: #3bd7fb;
-	--rarity-craft-dim: #3134e3;
-	--rarity-craft-fade: #122b77;
-	--rarity-advcraft-main: #2b74ff;
-	--rarity-advcraft-dim: #e33131;
-	--rarity-advcraft-fade: #1f1871;
-	--rarity-event-main: #ff2b98;
-	--rarity-event-dim: #e33163;
-	--rarity-event-fade: #201231;
-	--rarity-sapphires-main: #3bd7fb;
-	--rarity-sapphires-dim: #3134e3;
-	--rarity-sapphires-fade: #122b77;
-	--rarity-rubines-main: #fb3b3b;
-	--rarity-rubines-dim: #e33134;
-	--rarity-rubines-fade: #77122b;
-	
+  /* Generic off-brand colors */
+  --main-off:       #44D;
+  --main-off-v:     #229;
+  --sec-off:        #DD4;
+  --sec-off-v:      #992;
 
+  /* Brand hues */
+  --main-pink:      #FF60A0;
+  --alt-pink:       #F69;
+  --dark-pink:      #E26;
+  --mid-pink:       #F04070;
+  --darkest-pink:   #B26;
+  --main-purple:    #A6F;
+  --alt-purple:     #7040F8;
+  --dark-purple:    #53F;
+  --darkest-purple: #50D;
+
+  /* Neutral scale */
+  --darkest:   #0F0F1A;
+  --darker:    #1b1b2b;
+  --dark:      #2b2b3b;
+  --pre-dark:  #3b3b4F;
+  --mid-dark:  #4b4b6b;
+  --mid:       #6b6b8b;
+  --mid-light: #8080A0;
+  --pre-light: #8b8b9F;
+  --light:     #AAC;
+  --lighter:   #CCE;
+  --lightest:  #EEF;
+
+  /* Fixed status colors - stable across ALL themes */
+  --plx-success:    #2ED292;
+  --plx-warning:    #FAC020;
+  --plx-danger:     #F02545;
+  --plx-info:       #5566F0;
+  --plx-neutral:    #88B;
+
+  /* Legacy color aliases */
+  --plx-green:      var(--plx-success);
+  --plx-dark-green: #5A8;
+  --plx-yellow:     var(--plx-warning);
+  --plx-cyan:       #5AF;
+  --plx-rose:       #f79;
+  --plx-salmon:     #F87;
+  --plx-blue:       var(--plx-info);
+  --plx-nsfw:       var(--plx-danger);
+
+  /* Specials */
+  --rainbow:    linear-gradient(124deg, #ff2400, #e81d1d, #e8b71d, #e3e81d, #1de840, #1ddde8, #2b1de8, #dd00f3, #dd00f3);
+  --shadow:     #05050F25;
+  --box-gutter: 24px;
+
+  /* Code blocks */
+  --code-main-color:   #D27;
+  --code-main-border:  1px solid #472541F1;
+  --code-main-bg:      #2c1d2f;
+  --code-misty-color:  cadetblue;
+  --code-misty-border: 1px solid #39354a;
+  --code-misty-bg:     #1d1721;
+
+  /* Typography */
+  --main-font:    'Quicksand';
+  --second-font:  'Nunito';
+  --third-font:   'Varela Round';
+  --strong-font:  'Proxima Soft'; /* Buttons - CTAs */
+  --display-font: 'Panton';       /* Titles */
+  --mono-font:    'Share Tech Mono', monaco, monospace;
+
+  /* Misc */
+  --select:    var(--alt-purple);
+  --select-bg: var(--lightest);
+  --true-white:var(--lightest);
+
+  /* Rarity tokens */
+  --rarity-default-main:   #ffba3b;
+  --rarity-default-fade:   rgba(72, 35, 58, 0.82);
+  --rarity-default-glow:   #2245;
+  --rarity-sticker-main:   #0bab4b;
+  --rarity-sticker-dim:    #0bfb4b88;
+  --rarity-sticker-fade:   #0b103b;
+  --rarity-sticker-border: #0b7b4b;
+  --rarity-special-main:   #fb8b3b;
+  --rarity-special-dim:    #f11;
+  --rarity-special-fade:   #ab152b;
+  --rarity-craft-main:     #3bd7fb;
+  --rarity-craft-dim:      #3134e3;
+  --rarity-craft-fade:     #122b77;
+  --rarity-advcraft-main:  #2b74ff;
+  --rarity-advcraft-dim:   #e33131;
+  --rarity-advcraft-fade:  #1f1871;
+  --rarity-event-main:     #ff2b98;
+  --rarity-event-dim:      #e33163;
+  --rarity-event-fade:     #201231;
+  --rarity-sapphires-main: #3bd7fb;
+  --rarity-sapphires-dim:  #3134e3;
+  --rarity-sapphires-fade: #122b77;
+  --rarity-rubines-main:   #fb3b3b;
+  --rarity-rubines-dim:    #e33134;
+  --rarity-rubines-fade:   #77122b;
+
+  --luma:   #ffd3acAA;
+  --umbra:  #111049AA;
 }
 
+/* ================================================================
+   LAYER 1 - Main Application Semantic Tokens
+   Governs the full look-and-feel of the application.
+   Each theme (html.theme-*) overrides raw inputs such as
+   --accent-color, --bg-main, --text-main, etc.
 
+   Shade variant strategy for accent colors:
+     1. Curated:  theme sets --accent-color-light / -mid / -dark / -dim / -opaque
+     2. Computed: color-mix() fallback used when absent (CSS Color Level 5)
+
+   "on-*" tokens: foreground (text/icon) placed ON top of the named background.
+   ================================================================ */
 html {
 
-	--color-primary: var(--accent-color);
-	--color-primary-mid: var(--accent-color-mid, --accent-color-strong --accent-color-dark, --accent-color-light);
-	--color-primary-strong: var(--accent-color-strong, var(--accent-color-dark));
-	--color-primary-dark: var(--accent-color-dark, var(--accent-color-dark));
-	--color-primary-light: var(--accent-color-light, var(--accent-color));
-	--color-primary-lighter: var(--accent-color-lighter, var(--accent-color-light));
-	--color-primary-lightest: var(--accent-color-lightest, var(--accent-color-lighter));
+  /* Accent / Primary */
+  --color-primary:          var(--accent-color);
+  --color-primary-light:    var(--accent-color-light,    color-mix(in srgb, var(--accent-color) 60%, var(--luma)));
+  --color-primary-mid:      var(--accent-color-mid,      var(--accent-color));
+  --color-primary-strong:   var(--accent-color-strong,   var(--accent-color-dark, var(--accent-color)));
+  --color-primary-dark:     var(--accent-color-dark,     color-mix(in srgb, var(--accent-color) 70%, var(--umbra)));
+  --color-primary-lighter:  var(--accent-color-lighter,  var(--color-primary-light));
+  --color-primary-lightest: var(--accent-color-lightest, var(--color-primary-lighter));
+  --color-primary-dim:      var(--accent-color-dim,      color-mix(in srgb, var(--accent-color) 80%, var(--bg-main, #1b1b2b)));
+  --color-primary-opaque:   var(--accent-color-opaque,   color-mix(in srgb, var(--accent-color) 40%, transparent));
+  --on-accent:              var(--on-accent-color, var(--lightest));
 
-	--color-secondary: var(--secondary-color);
-	--color-secondary-alt: var(--secondary-color-alt);
-	--color-secondary-light: var(--secondary-color-light, var(--secondary-color-alt));
-	--color-secondary-mid: var(--secondary-color-mid, var(--secondary-color-alt));
-	--color-secondary-strong: var(--secondary-color-strong, var(--secondary-color-alt));
-	--color-secondary-dark: var(--secondary-color-dark, var(--secondary-color-alt));	
-	--color-secondary-darker: var(--secondary-color-darker, var(--secondary-color-strong));	
+  /* Secondary */
+  --color-secondary:        var(--secondary-color);
+  --color-secondary-alt:    var(--secondary-color-alt);
+  --color-secondary-light:  var(--secondary-color-light,  var(--secondary-color-alt));
+  --color-secondary-mid:    var(--secondary-color-mid,    var(--secondary-color-alt));
+  --color-secondary-strong: var(--secondary-color-strong, var(--secondary-color-alt));
+  --color-secondary-dark:   var(--secondary-color-dark,   var(--secondary-color-alt));
+  --color-secondary-darker: var(--secondary-color-darker, var(--color-secondary-strong));
+  --color-secondary-dim:    var(--secondary-color-dim,    color-mix(in srgb, var(--secondary-color) 80%, var(--bg-main, #1b1b2b)));
+  --color-secondary-opaque: var(--secondary-color-opaque, color-mix(in srgb, var(--secondary-color) 40%, transparent));
+  --on-secondary:           var(--on-secondary-color, var(--lightest));
 
-	--color-tertiary: var(--tertiary-color, var(--color-secondary-alt));
+  /* Tertiary (defaults to secondary-alt when absent) */
+  --color-tertiary:         var(--tertiary-color,         var(--color-secondary-alt));
+  --color-tertiary-light:   var(--tertiary-color-light,   color-mix(in srgb, var(--color-tertiary) 60%, var(--luma)));
+  --color-tertiary-dark:    var(--tertiary-color-dark,    color-mix(in srgb, var(--color-tertiary) 70%, var(--umbra)));
+  --color-tertiary-dim:     var(--tertiary-color-dim,     color-mix(in srgb, var(--color-tertiary) 80%, var(--bg-main, #1b1b2b)));
+  --color-tertiary-opaque:  var(--tertiary-color-opaque,  color-mix(in srgb, var(--color-tertiary) 40%, transparent));
+  --on-tertiary:            var(--on-tertiary-color, var(--lightest));
+
+  /* Status: Success */
+  --color-success:          var(--theme-success,         var(--plx-success));
+  --color-success-light:    var(--theme-success-light,   color-mix(in srgb, var(--color-success) 60%, var(--luma)));
+  --color-success-dark:     var(--theme-success-dark,    color-mix(in srgb, var(--color-success) 70%, var(--umbra)));
+  --color-success-dim:      var(--theme-success-dim,     color-mix(in srgb, var(--color-success) 80%, var(--bg-main, #1b1b2b)));
+  --color-success-opaque:   var(--theme-success-opaque,  color-mix(in srgb, var(--color-success) 40%, transparent));
+  --on-success:             var(--on-success-color, var(--lightest));
+
+  /* Status: Warn */
+  --color-warn:             var(--theme-warn,            var(--plx-warning));
+  --color-warn-light:       var(--theme-warn-light,      color-mix(in srgb, var(--color-warn) 60%, var(--luma)));
+  --color-warn-dark:        var(--theme-warn-dark,       color-mix(in srgb, var(--color-warn) 70%, var(--umbra)));
+  --color-warn-dim:         var(--theme-warn-dim,        color-mix(in srgb, var(--color-warn) 80%, var(--bg-main, #1b1b2b)));
+  --color-warn-opaque:      var(--theme-warn-opaque,     color-mix(in srgb, var(--color-warn) 40%, transparent));
+  --on-warn:                var(--on-warn-color, var(--darkest));
+
+  /* Status: Danger */
+  --color-danger:           var(--theme-danger,          var(--plx-danger));
+  --color-danger-light:     var(--theme-danger-light,    color-mix(in srgb, var(--color-danger) 60%, var(--luma)));
+  --color-danger-dark:      var(--theme-danger-dark,     color-mix(in srgb, var(--color-danger) 70%, var(--umbra)));
+  --color-danger-dim:       var(--theme-danger-dim,      color-mix(in srgb, var(--color-danger) 80%, var(--bg-main, #1b1b2b)));
+  --color-danger-opaque:    var(--theme-danger-opaque,   color-mix(in srgb, var(--color-danger) 40%, transparent));
+  --on-danger:              var(--on-danger-color, var(--lightest));
+
+  /* Status: Info */
+  --color-info:             var(--theme-info,            var(--plx-info));
+  --color-info-light:       var(--theme-info-light,      color-mix(in srgb, var(--color-info) 60%, var(--luma)));
+  --color-info-dark:        var(--theme-info-dark,       color-mix(in srgb, var(--color-info) 70%, var(--umbra)));
+  --color-info-dim:         var(--theme-info-dim,        color-mix(in srgb, var(--color-info) 80%, var(--bg-main, #1b1b2b)));
+  --color-info-opaque:      var(--theme-info-opaque,     color-mix(in srgb, var(--color-info) 40%, transparent));
+  --on-info:                var(--on-info-color, var(--lightest));
+
+  /* Status: Neutral */
+  --color-neutral:          var(--theme-neutral,         var(--plx-neutral));
+  --color-neutral-light:    var(--theme-neutral-light,   color-mix(in srgb, var(--color-neutral) 60%, var(--luma)));
+  --color-neutral-dark:     var(--theme-neutral-dark,    color-mix(in srgb, var(--color-neutral) 70%, var(--umbra)));
+  --color-neutral-dim:      var(--theme-neutral-dim,     color-mix(in srgb, var(--color-neutral) 80%, var(--bg-main, #1b1b2b)));
+  --color-neutral-opaque:   var(--theme-neutral-opaque,  color-mix(in srgb, var(--color-neutral) 40%, transparent));
+  --on-neutral:             var(--on-neutral-color, var(--lightest));
+
+  /* Background */
+  --bg-color:    var(--bg-main);   /* canonical; governs dark / light mode    */
+  --bg-contrast: var(--bg-dark);  /* surface / card / raised layer           */
+  --bg-surface:  var(--bg-dark);  /* surface / card / raised layer           */
+
+  /* Text */
+  --text-main-bold:     var(--text-extra-bold, var(--text-bold));
+  --text-contrast:      var(--text-on-contrast,      var(--text-main));
+  --text-contrast-bold: var(--text-on-contrast-bold, var(--text-bold));
+
+  /* Links */
+  --text-link:          var(--links);
+  --text-link-contrast: var(--links-on-contrast,  var(--links));
+  --text-link-visited:  var(--links-visited,       color-mix(in srgb, var(--links) 70%, var(--bg-main, #1b1b2b)));
+
+  /* Borders / dividers */
+  --border-default: var(--dark-border,  var(--dark));
+  --border-muted:   var(--muted,        #9999AAAA);
+  --border-strong:  var(--light-border, var(--light));
+  --divider:        var(--divider-color, var(--pre-light));
+
+  /* Elevation overlays */
+  --surface-dim:     var(--dark-dim,     #27233775);
+  --surface-dimmer:  var(--dark-dimmer,  #0d0d1796);
+  --surface-dimmest: var(--dark-dimmest, #100c2b59);
 }
 
+/* ================================================================
+   LAYER 2 - Domain / Component Semantic Tokens
+   Stable component-level defaults pointing to Layer 1 values.
+   ================================================================ */
+html {
+  /* Buttons */
+  --btn-primary-bg:   var(--color-primary);
+  --btn-primary-fg:   var(--on-accent);
+  --btn-secondary-bg: var(--color-secondary);
+  --btn-secondary-fg: var(--on-secondary);
+  --btn-success-bg:   var(--color-success);
+  --btn-success-fg:   var(--on-success);
+  --btn-warn-bg:      var(--color-warn);
+  --btn-warn-fg:      var(--on-warn);
+  --btn-danger-bg:    var(--color-danger);
+  --btn-danger-fg:    var(--on-danger);
+  --btn-info-bg:      var(--color-info);
+  --btn-info-fg:      var(--on-info);
+  --btn-neutral-bg:   var(--color-neutral);
+  --btn-neutral-fg:   var(--on-neutral);
 
+  /* Badges */
+  --badge-primary-bg: var(--color-primary-opaque);
+  --badge-primary-fg: var(--color-primary-light);
+  --badge-success-bg: var(--color-success-opaque);
+  --badge-success-fg: var(--color-success-light);
+  --badge-warn-bg:    var(--color-warn-opaque);
+  --badge-warn-fg:    var(--color-warn-dark);
+  --badge-danger-bg:  var(--color-danger-opaque);
+  --badge-danger-fg:  var(--color-danger-light);
+  --badge-info-bg:    var(--color-info-opaque);
+  --badge-info-fg:    var(--color-info-light);
+  --badge-neutral-bg: var(--color-neutral-opaque);
+  --badge-neutral-fg: var(--color-neutral-light);
+
+  /* Cards / surfaces */
+  --card-bg:     var(--bg-contrast);
+  --card-border: var(--border-default);
+  --card-shadow: var(--surface-dim);
+
+  /* Form inputs */
+  --input-bg:           var(--bg-color);
+  --input-border:       var(--border-default);
+  --input-border-focus: var(--color-primary);
+  --input-text:         var(--text-main);
+  --input-placeholder:  var(--muted, #9999AAAA);
+
+  /* Modals / overlays */
+  --modal-backdrop: var(--surface-dimmer);
+  --modal-bg:       var(--bg-contrast);
+
+  /* Accordions */
+  --accordion-bg:       color-mix(in srgb, var(--color-primary) 8%, transparent);
+  --accordion-open-bg:  color-mix(in srgb, var(--color-primary) 15%, transparent);
+  --accordion-hover-bg: color-mix(in srgb, var(--muted, grey) 6%, transparent);
+  --accordion-border:   color-mix(in srgb, var(--color-primary) 20%, transparent);
+
+  /* Icons */
+  --icon-default: var(--text-main);
+  --icon-muted:   var(--text-dim);
+  --icon-accent:  var(--color-primary);
+}
