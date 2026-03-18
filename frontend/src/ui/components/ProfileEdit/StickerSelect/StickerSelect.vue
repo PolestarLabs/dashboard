@@ -69,8 +69,8 @@ ProfileEditPill.st-profile-sticker(
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import SearchableSelectPlus from '../SearchableSelectPlus/SearchableSelectPlus.vue';
-import type { SearchableSelectPlusOption } from '../SearchableSelectPlus/SearchableSelectPlus.vue';
+import SearchableSelectPlus from '../../../stardust-ui/Select/SearchableSelect.vue';
+import type { SelectOption as SearchableSelectPlusOption } from '../../../stardust-ui/Select/Select.vue';
 import ProfileEditPill from '../shared/ProfileEditPill.vue';
 import RarityIcon from '../../RarityIcon/RarityIcon.vue';
 import './StickerSelect.scss';

@@ -1,5 +1,5 @@
 <template lang="pug">
-DropdownSelectPlus(
+DropdownSelect(
   v-model="modelValue"
   :options="dropdownOptions"
   :placeholder="placeholder || 'Choose language...'"
@@ -14,8 +14,8 @@ DropdownSelectPlus(
 
 <script setup lang="ts">
 import { computed } from 'vue';
-import DropdownSelectPlus from '../../DropdownSelectPlus/DropdownSelectPlus.vue';
-import type { DropdownSelectPlusOption } from '../../DropdownSelectPlus/DropdownSelectPlus.vue';
+import DropdownSelect from '../../Select/DropdownSelect.vue';
+import type { DropdownSelectOption } from '../../Select/DropdownSelect.vue';
 
 defineOptions({ inheritAttrs: false });
 
@@ -68,14 +68,14 @@ const props = withDefaults(
     languages?: LanguageOption[];
     placeholder?: string;
     label?: string;
-    size?: 'default' | 'large';
+    size?: 'sm' | 'md' | 'lg';
     lightBackground?: boolean;
     /** Base URL for flag images when using flag (e.g. "/build/guessing/guessflags/") */
     flagBaseUrl?: string;
     disabled?: boolean;
     listMaxHeight?: string;
   }>(),
-  { size: 'default', flagBaseUrl: 'https://cdn.pollux.gg/build/guessing/guessflags/', listMaxHeight: '40vh' }
+  { size: 'md', flagBaseUrl: 'https://cdn.pollux.gg/build/guessing/guessflags/', listMaxHeight: '40vh' }
 );
 
 const emit = defineEmits<{
@@ -106,8 +106,8 @@ const normalizedLanguages = computed<LanguageOption[]>(() =>
   })
 );
 
-/** Options in the format expected by DropdownSelectPlus */
-const dropdownOptions = computed<DropdownSelectPlusOption[]>(() =>
+/** Options in the format expected by DropdownSelect */
+const dropdownOptions = computed<DropdownSelectOption[]>(() =>
   normalizedLanguages.value.map((opt) => ({
     value: opt.value,
     label: opt.label,

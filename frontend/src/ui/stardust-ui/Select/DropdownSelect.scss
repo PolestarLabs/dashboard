@@ -1,0 +1,213 @@
+@import 'select-tokens';
+
+.st-dropdown-select {
+  @include sel-root;
+  min-width: 280px;
+  max-width: 320px;
+
+  // ── Variants ──
+  &--ghost {
+    @include sel-variant-ghost;
+  }
+
+  &--ghost#{&}--open {
+    @include sel-variant-ghost-open;
+  }
+
+  // ── Sizes ──
+  &--sm {
+    @include sel-size-sm;
+  }
+
+  // ── Label ──
+  &__label {
+    @include sel-label;
+  }
+
+  // ── Trigger ──
+  &__trigger {
+    @include sel-trigger;
+  }
+
+  &--ghost &__trigger {
+    @include sel-trigger-ghost-focus;
+  }
+
+  &--open &__trigger {
+    @include sel-trigger-open;
+  }
+
+  // ── Image ──
+  &__image {
+    flex-shrink: 0;
+    width: 32px;
+    height: 24px;
+    object-fit: cover;
+    border-radius: 2px;
+    margin-right: 0.4rem;
+  }
+
+  // ── Text column ──
+  &__text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    flex: 1 1 auto;
+    min-width: 0;
+    gap: 0.15em;
+  }
+
+  &__name {
+    @include sel-name;
+  }
+
+  &__desc {
+    @include sel-desc;
+  }
+
+  &__trigger &__desc {
+    max-width: 120px;
+  }
+
+  // ── Placeholder ──
+  &__placeholder {
+    @include sel-placeholder;
+  }
+
+  // ── Chevron ──
+  &__chevron {
+    @include sel-chevron;
+  }
+
+  &--open &__chevron {
+    @include sel-chevron-open;
+  }
+
+  // ── List ──
+  &__list {
+    @include sel-list;
+  }
+
+  // ── Options ──
+  &__option {
+    @include sel-option;
+    gap: 0.5rem;
+
+    &:hover {
+      @include sel-option-hover;
+
+      .st-dropdown-select__desc {
+        color: rgba(255, 255, 255, 0.85);
+      }
+    }
+
+    &--selected {
+      @include sel-option-selected;
+    }
+
+    &--selected:hover {
+      @include sel-option-selected-hover;
+    }
+  }
+
+  // ── Light background modifier ──
+  &--light {
+    .st-dropdown-select__label {
+      color: #2d2d3a;
+    }
+
+    .st-dropdown-select__trigger {
+      background: #fff;
+      color: #2d2d3a;
+    }
+
+    .st-dropdown-select__trigger .st-dropdown-select__desc,
+    .st-dropdown-select__placeholder {
+      color: #666;
+    }
+
+    .st-dropdown-select__chevron {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%232d2d3a' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+    }
+
+    .st-dropdown-select__list {
+      background: #fff;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .st-dropdown-select__option {
+      color: #2d2d3a;
+      border-bottom-color: rgba(0, 0, 0, 0.08);
+    }
+
+    .st-dropdown-select__option .st-dropdown-select__desc {
+      color: #666;
+    }
+
+    .st-dropdown-select__option--selected {
+      color: var(--accent-color, #f35);
+    }
+
+    .st-dropdown-select__option:hover {
+      background: var(--accent-color, #f35);
+      color: #fff;
+
+      .st-dropdown-select__desc {
+        color: rgba(255, 255, 255, 0.85);
+      }
+    }
+  }
+
+  // ── Large size ──
+  &--lg {
+    min-width: 300px;
+    max-width: 400px;
+
+    .st-dropdown-select__label {
+      font-size: 1rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .st-dropdown-select__trigger {
+      min-height: 60px;
+      padding: 0.75rem 2.75rem 0.75rem 1rem;
+      font-size: 1.125rem;
+    }
+
+    .st-dropdown-select__chevron {
+      right: 1rem;
+      width: 12px;
+      height: 8px;
+    }
+
+    .st-dropdown-select__image {
+      width: 50px;
+      height: 42px;
+      border-radius: 4px;
+    }
+
+    .st-dropdown-select__trigger .st-dropdown-select__desc {
+      max-width: 160px;
+    }
+
+    .st-dropdown-select__list {
+      border-radius: 0 0 10px 10px;
+    }
+
+    .st-dropdown-select__option {
+      padding: 0.75rem 1rem;
+      font-size: 1.05rem;
+    }
+
+    .st-dropdown-select__option .st-dropdown-select__desc {
+      font-size: 0.85em;
+    }
+  }
+
+  // ── Disabled ──
+  &--disabled &__trigger {
+    cursor: not-allowed;
+    filter: grayscale(60%);
+  }
+}

@@ -1,0 +1,257 @@
+// ─── Stardust UI / Select ─── Shared design tokens & mixins ─────────
+//
+// Variants:
+//   solid → accent border always (DropdownSelect, classic Select)
+//   ghost → muted border, accent on focus/open (SearchableSelect, MultiSelect)
+//
+// All mixins use CSS custom properties --_bw / --_bc set at root level.
+// ─────────────────────────────────────────────────────────────────────
+
+// ── Shared layout constants ──
+$_sel-radius: 8px;
+$_sel-radius-sm: 6px;
+
+// ── Chevron inline SVG ──
+$_sel-chevron-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%234b4b5f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  ROOT
+// ═════════════════════════════════════════════════════════════════════
+@mixin sel-root {
+  position: relative;
+  display: inline-block;
+  min-width: 200px;
+  max-width: 100%;
+
+  // Solid defaults
+  --_bw: 3px;
+  --_bc: var(--accent-color, #f35);
+  --_radius: #{$_sel-radius};
+  --_min-h: 48px;
+  --_font: 1rem;
+}
+
+@mixin sel-variant-ghost {
+  --_bw: 2px;
+  --_bc: rgba(60, 60, 60, 0.26);
+}
+
+@mixin sel-variant-ghost-open {
+  --_bc: var(--accent-color, #f35);
+}
+
+@mixin sel-size-sm {
+  --_radius: #{$_sel-radius-sm};
+  --_min-h: 34px;
+  --_font: 0.875rem;
+}
+
+@mixin sel-error-root {
+  --_bc: var(--plx-danger, #f24);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  LABEL
+// ═════════════════════════════════════════════════════════════════════
+@mixin sel-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--text-dim-mid, #4b4b5f);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  TRIGGER
+// ═════════════════════════════════════════════════════════════════════
+@mixin sel-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: var(--_min-h);
+  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+  font-family: inherit;
+  font-size: var(--_font);
+  line-height: 1.4;
+  text-align: left;
+  color: var(--text-dim-mid, #4b4b5f);
+  background: var(--bg-main, #fff);
+  border: var(--_bw) solid var(--_bc);
+  border-radius: var(--_radius);
+  cursor: pointer;
+  appearance: none;
+  transition:
+    border-color 0.2s ease,
+    border-radius 0.3s ease;
+
+  &:focus,
+  &:focus-within {
+    outline: 0;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--focus-ring, rgba(92, 110, 248, 0.2));
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+// Ghost: accent on focus when closed
+@mixin sel-trigger-ghost-focus {
+  &:focus,
+  &:focus-within {
+    border-color: var(--accent-color, #f35);
+  }
+}
+
+@mixin sel-trigger-open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: transparent;
+}
+
+// Error: keep danger color even on focus
+@mixin sel-trigger-error-focus {
+  &:focus,
+  &:focus-within {
+    border-color: var(--plx-danger, #f24);
+  }
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  CHEVRON
+// ═════════════════════════════════════════════════════════════════════
+@mixin sel-chevron {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 6px;
+  background-image: $_sel-chevron-svg;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  transition: transform 0.2s ease;
+  pointer-events: none;
+}
+
+@mixin sel-chevron-open {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  DROPDOWN LIST
+// ═════════════════════════════════════════════════════════════════════
+@mixin sel-list {
+  position: absolute;
+  top: calc(100% - var(--_bw));
+  left: 0;
+  right: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--bg-main, #fff);
+  border: var(--_bw) solid var(--_bc);
+  border-top: none;
+  border-radius: 0 0 var(--_radius) var(--_radius);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-height: 40vh;
+  overflow-y: auto;
+  z-index: 1000;
+}
+
+@mixin sel-list-header {
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: var(--text-dim, #666);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  OPTION
+// ═════════════════════════════════════════════════════════════════════
+@mixin sel-option {
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 0.75rem;
+  cursor: pointer;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+@mixin sel-option-hover {
+  background: var(--accent-color, #f35);
+  color: #fff;
+}
+
+@mixin sel-option-selected {
+  color: var(--accent-color, #f35);
+  font-weight: 600;
+}
+
+@mixin sel-option-selected-hover {
+  color: #fff;
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  MISC
+// ═════════════════════════════════════════════════════════════════════
+@mixin sel-placeholder {
+  color: var(--text-dim, #999);
+}
+
+@mixin sel-search-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: none;
+  font-family: inherit;
+  font-size: inherit;
+  color: inherit;
+
+  &::placeholder {
+    color: var(--text-dim, #999);
+  }
+}
+
+@mixin sel-error-msg {
+  font-size: 0.82rem;
+  color: var(--plx-danger, #f24);
+  margin-top: 2px;
+}
+
+@mixin sel-name {
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+@mixin sel-desc {
+  display: block;
+  font-size: 0.8em;
+  font-weight: normal;
+  color: var(--text-dim, #888);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}

@@ -1,0 +1,98 @@
+@import 'select-tokens';
+
+.st-select {
+  @include sel-root;
+
+  // ── Variants ──
+  &--ghost {
+    @include sel-variant-ghost;
+  }
+
+  &--ghost#{&}--open {
+    @include sel-variant-ghost-open;
+  }
+
+  // ── Sizes ──
+  &--sm {
+    @include sel-size-sm;
+  }
+
+  // ── Error ──
+  &--error {
+    @include sel-error-root;
+  }
+
+  // ── Label ──
+  &__label {
+    @include sel-label;
+  }
+
+  // ── Trigger ──
+  &__trigger {
+    @include sel-trigger;
+  }
+
+  &--ghost &__trigger {
+    @include sel-trigger-ghost-focus;
+  }
+
+  &--error &__trigger {
+    @include sel-trigger-error-focus;
+  }
+
+  &--open &__trigger {
+    @include sel-trigger-open;
+  }
+
+  // ── Name / placeholder ──
+  &__name {
+    @include sel-name;
+  }
+
+  &__placeholder {
+    @include sel-placeholder;
+  }
+
+  // ── Chevron ──
+  &__chevron {
+    @include sel-chevron;
+  }
+
+  &--open &__chevron {
+    @include sel-chevron-open;
+  }
+
+  // ── List ──
+  &__list {
+    @include sel-list;
+  }
+
+  // ── Options ──
+  &__option {
+    @include sel-option;
+
+    &:hover,
+    &--focused {
+      @include sel-option-hover;
+    }
+
+    &--selected {
+      @include sel-option-selected;
+    }
+
+    &--selected:hover,
+    &--selected#{&}--focused {
+      @include sel-option-selected-hover;
+    }
+  }
+
+  // ── Error message ──
+  &__error {
+    @include sel-error-msg;
+  }
+
+  // ── Disabled ──
+  &--disabled &__trigger {
+    cursor: not-allowed;
+  }
+}

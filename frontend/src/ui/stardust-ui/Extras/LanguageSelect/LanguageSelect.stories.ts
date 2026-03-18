@@ -11,7 +11,7 @@ const meta: Meta<typeof LanguageSelect> = {
   parameters: {
     docs: {
       description: {
-        component: 'Expands off the [DropdownSelectPlus](/docs/stardust-ui-dropdown-select-plus--docs) component.',
+        component: 'Expands off the [DropdownSelect](/docs/stardust-ui-select-dropdown-select--docs) component.',
       },
     },
     layout: 'centered',
@@ -22,7 +22,7 @@ const meta: Meta<typeof LanguageSelect> = {
       control: false,
       table: { type: { summary: 'LanguageOption[]' } },
     },
-    size: { control: { type: 'select' }, options: ['default', 'large'] },
+    size: { control: { type: 'select' }, options: ['sm', 'md', 'lg'] },
     lightBackground: { control: { type: 'boolean' } },
     placeholder: { control: { type: 'text' } },
     label: { control: { type: 'text' } },
@@ -93,7 +93,7 @@ export const Large: Story = {
     template: '<LanguageSelect v-model="selected" v-bind="args" />',
   }),
   args: {
-    size: 'large',
+    size: 'lg',
     label: 'Language',
   },
 };
