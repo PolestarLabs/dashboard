@@ -1,0 +1,288 @@
+// MultiSelectPlus – multiselect variant of SearchableSelectPlus
+.st-multiselect {
+  position: relative;
+  display: inline-block;
+  min-width: 200px;
+  max-width: 100%;
+
+  &__label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dim-mid, #4b4b5f);
+  }
+
+  &__trigger-wrap {
+    position: relative;
+  }
+
+  &__trigger {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    min-height: 48px;
+    padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+    font-family: inherit;
+    font-size: 1rem;
+    line-height: 1.4;
+    text-align: left;
+    color: var(--text-dim-mid, #4b4b5f);
+    background: var(--bg-main, #fff);
+    border: 2px solid rgba(60, 60, 60, 0.26);
+    border-radius: 8px;
+    cursor: pointer;
+    appearance: none;
+    transition: border-radius 0.5s ease, border-color 0.2s ease;
+
+    &:focus-within,
+    &:focus {
+      outline: 0;
+      border-color: var(--accent-color, #f35);
+    }
+
+    &:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+  }
+
+  &--open &__trigger {
+    border-radius: 8px 8px 0 0;
+    border-bottom-color: transparent;
+  }
+
+  &__placeholder {
+    color: var(--text-dim, #999);
+  }
+
+  // --- Tags in trigger ---
+  &__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+    min-width: 0;
+    flex: 1 1 auto;
+  }
+
+  &__tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 2px 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #fff;
+    background: var(--accent-color, #f35);
+    border-radius: 4px;
+    white-space: nowrap;
+    max-width: 140px;
+
+    &--overflow {
+      background: rgba(60, 60, 60, 0.25);
+      color: var(--text-dim-mid, #4b4b5f);
+      cursor: default;
+    }
+  }
+
+  &__tag-label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__tag-remove {
+    cursor: pointer;
+    font-size: 1rem;
+    line-height: 1;
+    opacity: 0.8;
+    transition: opacity 0.15s ease;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // --- Chevron ---
+  &__chevron {
+    position: absolute;
+    right: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 6px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%234b4b5f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    transition: transform 0.2s ease;
+    pointer-events: none;
+  }
+
+  &--open &__chevron {
+    transform: translateY(-50%) rotate(180deg);
+  }
+
+  // --- Search box below trigger ---
+  &__search-wrap {
+    border: 2px solid rgba(60, 60, 60, 0.26);
+    border-top: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    background: var(--bg-main, #fff);
+    padding: 0.35rem 0.75rem;
+  }
+
+  &__search {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: none;
+    font-family: inherit;
+    font-size: 0.9rem;
+    color: inherit;
+
+    &::placeholder {
+      color: var(--text-dim, #999);
+    }
+  }
+
+  // --- Dropdown list ---
+  &__name {
+    font-weight: 600;
+  }
+
+  &__list {
+    position: absolute;
+    top: calc(100% - 1px);
+    left: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    background: var(--bg-main, #fff);
+    border: 2px solid rgba(60, 60, 60, 0.26);
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    max-height: 40vh;
+    overflow-y: auto;
+    z-index: 1000;
+  }
+
+  &__list-header {
+    padding: 8px 12px;
+    font-size: 0.85rem;
+    color: var(--text-dim, #666);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  }
+
+  // --- Checkbox indicator ---
+  &__check {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    border: 2px solid rgba(60, 60, 60, 0.35);
+    border-radius: 4px;
+    transition: background 0.15s ease, border-color 0.15s ease;
+
+    &--active {
+      background: var(--accent-color, #f35);
+      border-color: var(--accent-color, #f35);
+
+      &::after {
+        content: '';
+        display: block;
+        width: 5px;
+        height: 9px;
+        border: solid #fff;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg) translateY(-1px);
+      }
+    }
+  }
+
+  // --- Options ---
+  &__option {
+    display: flex;
+    align-items: center;
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    transition: background 0.15s ease, color 0.15s ease;
+    user-select: none;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover,
+    &--focused {
+      background: var(--accent-color, #f35);
+      color: #fff;
+
+      .st-multiselect__check {
+        border-color: #fff;
+      }
+
+      .st-multiselect__check--active {
+        background: #fff;
+        border-color: #fff;
+
+        &::after {
+          border-color: var(--accent-color, #f35);
+        }
+      }
+    }
+
+    &--selected {
+      color: var(--accent-color, #f35);
+      font-weight: 600;
+    }
+
+    &--selected:hover,
+    &--selected.st-multiselect__option--focused {
+      color: #fff;
+    }
+
+    &--disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  }
+
+  // --- Column layout ---
+  &--columns &__list {
+    display: grid;
+    grid-template-columns: repeat(var(--st-multiselect-columns, 2), minmax(0, 1fr));
+    align-items: stretch;
+    padding: 8px;
+    gap: 8px;
+  }
+
+  &--columns &__option {
+    min-height: 100px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border-radius: 4px;
+    border: none;
+    border-bottom: none;
+    min-width: 0;
+  }
+
+  &--columns &__list-header {
+    grid-column: 1 / -1;
+  }
+
+  &--disabled &__trigger {
+    cursor: not-allowed;
+  }
+}

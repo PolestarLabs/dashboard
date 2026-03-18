@@ -4,6 +4,7 @@ const config: StorybookConfig = {
   stories: [
     "../src/ui/themes/**/*.stories.@(js|jsx|mjs|ts|tsx)",
     "../src/ui/stardust-ui/**/*.stories.@(js|jsx|mjs|ts|tsx)",
+    "../src/ui/gravity/**/*.stories.@(js|jsx|mjs|ts|tsx)",
     "../src/ui/components/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
   staticDirs: ["../public"],

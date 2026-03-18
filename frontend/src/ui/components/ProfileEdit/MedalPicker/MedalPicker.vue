@@ -111,6 +111,7 @@ export interface MedalItem {
   name: string;
   rarity?: string;
   category?: string;
+  tags?: string;
 }
 
 type MedalInput = MedalItem | string | null;
