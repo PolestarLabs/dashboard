@@ -1,0 +1,164 @@
+// Master color variable map (generated for reference).
+//
+// Step 1: Usage-level semantic variables (map to palette tokens).
+//   These are the names you should use in components.
+//
+// Step 2: Palette tokens (actual color values, or theme CSS vars).
+//   These aim to cover every color used in the frontend (outside of themes)
+//   and cluster very-similar colors together.
+
+// ----------------------------------------
+// Step 1 - Usage / semantic tokens
+// ----------------------------------------
+// Example:
+// $tab-selected-icon: $color-secondary;
+// $badge-success: $color-success;
+// $button-primary: $color-accent;
+
+// Add your own semantic aliases here.
+
+// Common semantic tokens (based on UI component patterns)
+$background-main         : $bg-main;
+$background-surface      : $bg-dark;
+$background-alt          : $bg-opaque;
+$background-inverse      : $bg-inverse;
+
+$text-primary            : $text-main;
+$text-secondary          : $text-dim;
+$text-muted              : $muted;
+$text-link               : $links;
+$text-link-hover         : $links-hover;
+$text-inverse            : $text-inverse;
+
+$border-default          : $color-13;
+$border-muted            : $color-15;
+$border-strong           : $color-00;
+
+$button-primary          : $accent-color;
+$button-secondary        : $secondary-color;
+$button-success          : $plx-success;
+$button-warning          : $plx-warning;
+$button-danger           : $plx-danger;
+$button-info             : $plx-info;
+
+$badge-success           : $plx-success;
+$badge-warning           : $plx-warning;
+$badge-danger            : $plx-danger;
+$badge-info              : $plx-info;
+
+$icon-default            : $text-main;
+$icon-muted              : $text-dim;
+
+$card-bg                 : $bg-dark;
+$card-border             : $color-13;
+
+$input-bg                : $bg-main;
+$input-border            : $color-13;
+$input-text              : $text-main;
+
+$modal-backdrop          : $color-translucent-06;
+$modal-bg                : $bg-dark;
+
+$accordion-bg            : $color-translucent-01;
+$accordion-open-bg       : $color-translucent-02;
+$accordion-hover-bg      : $color-translucent-03;
+$accordion-panel-border  : $color-translucent-04;
+
+
+// ----------------------------------------
+// Step 2 - Palette (base) tokens
+// ----------------------------------------
+// CSS variables referenced in frontend code (from themes).
+// If a color is defined via var(--something), keep the same name here.
+
+$color-contrast-inverse : var(--color-contrast-inverse);
+$color-contrast-dim     : var(--color-contrast-dim);
+$text-accent-dim        : var(--text-accent-dim);
+$text-lightest          : var(--text-lightest);
+$text-extra-bold        : var(--text-extra-bold);
+$text-bold              : var(--text-bold);
+$text-main              : var(--text-main);
+$text-faint             : var(--text-faint);
+$text-dim               : var(--text-dim);
+$text-dim-mid           : var(--text-dim-mid);
+$text-inverse           : var(--text-inverse);
+$accent-color           : var(--accent-color);
+$accent-color-mid       : var(--accent-color-mid);
+$accent-color-strong    : var(--accent-color-strong);
+$accent-color-dark      : var(--accent-color-dark);
+$secondary-color        : var(--secondary-color);
+$secondary-color-alt    : var(--secondary-color-alt);
+$tertiary-color         : var(--tertiary-color);
+$mid-main               : var(--mid-main);
+$bg-main                : var(--bg-main);
+$bg-dark                : var(--bg-dark);
+$bg-opaque              : var(--bg-opaque);
+$bg-inverse             : var(--bg-inverse);
+$links                  : var(--links);
+$links-hover            : var(--links-hover);
+$muted                  : var(--muted);
+$dark-dim               : var(--dark-dim);
+$dark-dimmer            : var(--dark-dimmer);
+$dark-dimmest           : var(--dark-dimmest);
+$plx-green              : var(--plx-green);
+$plx-cyan               : var(--plx-cyan);
+$plx-yellow             : var(--plx-yellow);
+$plx-danger             : var(--plx-danger);
+$plx-success            : var(--plx-success);
+$plx-warning            : var(--plx-warning);
+$plx-info               : var(--plx-info);
+$text-shadow            : var(--text-shadow);
+$line-col               : var(--line-col);
+$avatar-fg              : var(--avatar-fg);
+
+
+// Literal values (clustered by similarity).
+$color-00: #000000;
+$color-01: #0b0b1b;
+$color-02: #111827;
+$color-03: #1a1a2e;
+$color-04: #212121;
+$color-05: #272337;
+$color-06: #2b2b3b;
+$color-07: #2a2a3a;
+$color-08: #303030;
+$color-09: #3b3b4b;
+$color-10: #4b4b5f;
+$color-11: #545454;
+$color-12: #6b7280;
+$color-13: #7c7c7c;
+$color-14: #888888;
+$color-15: #999999;
+$color-16: #aaaaaa;
+$color-17: #c9ccd1;
+$color-18: #d9d9d9;
+$color-19: #eeeeee;
+$color-20: #ffffff;
+
+$color-accent-01: #3b82f6;
+$color-accent-02: #a855f7;
+$color-accent-03: #2563eb;
+$color-accent-04: #7c3aed;
+$color-accent-05: #f97316;
+$color-accent-06: #f59e0b;
+$color-accent-07: #22c55e;
+$color-accent-08: #ef4444;
+$color-accent-09: #f35;
+$color-accent-10: #95f;
+$color-accent-11: #f02040;
+$color-accent-12: #b559d1;
+
+$color-translucent-01: #8080d016;
+$color-translucent-02: #8080f026;
+$color-translucent-03: #7c7c7c0f;
+$color-translucent-04: #88f3;
+$color-translucent-05: #88f1;
+$color-translucent-06: #2a2a3b44;
+$color-translucent-07: #ef444400;
+$color-translucent-08: #ef44441a;
+$color-translucent-09: #f59e0b00;
+$color-translucent-10: #f59e0bbb;
+$color-translucent-11: #ed3d3dcc;
+$color-translucent-12: #100c2b59;
+
+// End of master color map
