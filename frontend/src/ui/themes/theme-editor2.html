@@ -1,0 +1,1610 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Theme Editor</title>
+  <link rel="stylesheet" href="./default.css" id="default-css" />
+  <style>
+    /* ─────────────────────────────────────────────────────────────
+       Editor chrome — intentionally NOT using theme tokens so the
+       editor UI stays readable regardless of which theme is loaded
+       ───────────────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Fallback btn hover/active vars so preview swatches resolve on <html> */
+      --color-lume:  #ffd6a6;
+      --color-shade: #1c2651;
+      --btn-primary:        var(--color-primary);
+      --btn-primary-light:  color-mix(in srgb, var(--btn-primary)   85%, var(--color-lume)  45%);
+      --btn-primary-strong: color-mix(in srgb, var(--btn-primary)   75%, var(--color-shade) 45%);
+      --btn-primary-hover:  var(--btn-primary-light);
+      --btn-primary-active: var(--btn-primary-strong);
+
+      --btn-secondary:        var(--color-secondary);
+      --btn-secondary-light:  color-mix(in srgb, var(--btn-secondary)   85%, var(--color-lume)  45%);
+      --btn-secondary-strong: color-mix(in srgb, var(--btn-secondary)   75%, var(--color-shade) 45%);
+      --btn-secondary-hover:  var(--btn-secondary-light);
+      --btn-secondary-active: var(--btn-secondary-strong);
+
+      --btn-success:        var(--color-success);
+      --btn-success-light:  color-mix(in srgb, var(--btn-success)   85%, var(--color-lume)  45%);
+      --btn-success-strong: color-mix(in srgb, var(--btn-success)   75%, var(--color-shade) 45%);
+      --btn-success-hover:  var(--btn-success-light);
+      --btn-success-active: var(--btn-success-strong);
+
+      --btn-warn:        var(--color-warn);
+      --btn-warn-light:  color-mix(in srgb, var(--btn-warn)   85%, var(--color-lume)  45%);
+      --btn-warn-strong: color-mix(in srgb, var(--btn-warn)   75%, var(--color-shade) 45%);
+      --btn-warn-hover:  var(--btn-warn-light);
+      --btn-warn-active: var(--btn-warn-strong);
+
+      --btn-danger:        var(--color-danger);
+      --btn-danger-light:  color-mix(in srgb, var(--btn-danger)   85%, var(--color-lume)  45%);
+      --btn-danger-strong: color-mix(in srgb, var(--btn-danger)   75%, var(--color-shade) 45%);
+      --btn-danger-hover:  var(--btn-danger-light);
+      --btn-danger-active: var(--btn-danger-strong);
+
+      --btn-info:        var(--color-info);
+      --btn-info-light:  color-mix(in srgb, var(--btn-info)   85%, var(--color-lume)  45%);
+      --btn-info-strong: color-mix(in srgb, var(--btn-info)   75%, var(--color-shade) 45%);
+      --btn-info-hover:  var(--btn-info-light);
+      --btn-info-active: var(--btn-info-strong);
+    }
+
+    html, body { height: 100%; }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      background: #111118 !important;
+      color: #ccc !important;
+      min-height: 100vh;
+    }
+
+    /* ═══════════════════════════════════════════
+       TOP TOOLBAR
+       ═══════════════════════════════════════════ */
+    .toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px;
+      background: #0e0e16;
+      border-bottom: 1px solid #2a2a3a;
+      flex-wrap: wrap;
+    }
+    .toolbar h1 { font-size: 16px; font-weight: 700; color: #fff; flex: 1 0 auto; }
+    .toolbar label { font-size: 11px; color: #888; white-space: nowrap; }
+    .toolbar select, .toolbar input[type="text"] {
+      background: #1e1e2e;
+      border: 1px solid #3a3a50;
+      color: #eee;
+      border-radius: 6px;
+      padding: 5px 9px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .toolbar select:focus, .toolbar input[type="text"]:focus { outline: 2px solid #7b7bff; }
+    .btn {
+      padding: 6px 13px;
+      border-radius: 6px;
+      border: none;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: opacity .15s;
+      white-space: nowrap;
+    }
+    .btn:hover { opacity: .82; }
+    .btn-accent  { background: #7b7bff; color: #fff; }
+    .btn-export  { background: #31e2b4; color: #0d0d1b; }
+    .btn-reset   { background: #30304a; color: #bbb; }
+
+    /* ═══════════════════════════════════════════
+       MAIN LAYOUT — editor left / preview right
+       ═══════════════════════════════════════════ */
+    .editor-layout {
+      display: flex;
+      align-items: flex-start;
+      min-height: calc(100vh - 45px);
+    }
+
+    /* ── Left: scrollable editor panel ── */
+    .editor-panel {
+      flex: 1 1 600px;
+      min-width: 0;
+      padding: 20px 20px 40px;
+      overflow-y: auto;
+      background: #111118 !important;
+      color: #ccc !important;
+    }
+
+    /* ── Right: sticky preview ── */
+    .preview-panel {
+      flex: 0 0 360px;
+      width: 360px;
+      min-width: 300px;
+      position: sticky;
+      top: 45px;
+      height: calc(100vh - 45px);
+      overflow-y: auto;
+      background: var(--bg-color, #1b1b2b);
+      border-left: 1px solid #2a2a3a;
+      padding: 16px;
+      scrollbar-width: thin;
+      scrollbar-color: #3a3a5a transparent;
+    }
+    .preview-panel::-webkit-scrollbar { width: 5px; }
+    .preview-panel::-webkit-scrollbar-thumb { background: #3a3a5a; border-radius: 3px; }
+
+    /* ─────────────────────────────────────────────────────────────
+       SECTION LABEL
+       ───────────────────────────────────────────────────────────── */
+    .section-title {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #555577;
+      margin: 22px 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #2a2a3a;
+    }
+
+    /* ═══════════════════════════════════════════
+       PALETTE CARD
+       ═══════════════════════════════════════════ */
+    .palette-card {
+      background: #1a1a28;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #2a2a3a;
+    }
+
+    .swatch-row { display: flex; }
+
+    .swatch {
+      flex: 1;
+      min-height: 88px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      cursor: pointer;
+      transition: filter .15s;
+    }
+    .swatch:hover { filter: brightness(1.1); }
+    .swatch.on-row { min-height: 64px; }
+
+    .swatch-label {
+      font-size: 11px;
+      font-weight: 600;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .swatch.on-row .swatch-label {
+      justify-content: center;
+      text-align: center;
+      width: 100%;
+    }
+    .swatch-against {
+      position: absolute;
+      top: 8px; left: 10px; right: 10px;
+      height: 24px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .swatch-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 6px;
+    }
+    .swatch-index {
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: rgba(0,0,0,.45);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 10px; font-weight: 700;
+      flex-shrink: 0;
+    }
+    .swatch-hex {
+      font-size: 10px;
+      font-family: monospace;
+      background: rgba(0,0,0,.35);
+      padding: 1px 5px;
+      border-radius: 3px;
+    }
+    .swatch-picker {
+      position: absolute; inset: 0;
+      opacity: 0; cursor: pointer;
+      width: 100%; height: 100%;
+    }
+
+    .palette-row-label {
+      padding: 5px 12px 3px;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #44446688;
+      background: rgba(0,0,0,.2);
+      border-top: 1px solid #2a2a3a;
+    }
+    .palette-row-label:first-child { border-top: none; }
+
+    /* ═══════════════════════════════════════════
+       TOKEN GRID
+       ═══════════════════════════════════════════ */
+    .token-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(240px, 1fr));
+      gap: 6px;
+    }
+    @media (max-width: 980px) {
+      .token-grid { grid-template-columns: repeat(2, minmax(240px, 1fr)); }
+    }
+    @media (max-width: 620px) {
+      .token-grid { grid-template-columns: repeat(1, minmax(240px, 1fr)); }
+    }
+
+    .token-group-header {
+      grid-column: 1 / -1;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: #44446688;
+      margin-top: 8px;
+      padding: 4px 0 2px;
+      border-top: 1px solid #202030;
+    }
+    .token-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #1a1a28;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      padding: 6px 8px;
+      transition: border-color .12s;
+    }
+    .token-row:hover { border-color: #35355599; }
+    .token-row.overridden { border-color: #7b7bff55; background: #1e1e3a; }
+    .token-row.removed    { border-color: #ff444433; opacity: .6; }
+
+    .token-swatch-mini {
+      width: 26px; height: 26px;
+      border-radius: 5px;
+      flex-shrink: 0;
+      border: 1px solid #ffffff18;
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .token-swatch-mini input[type="color"] {
+      position: absolute; inset: -4px;
+      width: calc(100% + 8px); height: calc(100% + 8px);
+      opacity: 0; cursor: pointer; border: none; padding: 0;
+    }
+    .token-name {
+      font-size: 10px;
+      font-family: monospace;
+      color: #8888bb;
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .token-value {
+      font-size: 10px;
+      font-family: monospace;
+      color: #aaa;
+      min-width: 82px;
+      width: auto;
+      flex-shrink: 0;
+    }
+    .token-value input[type="text"] {
+      background: transparent; border: none; color: inherit; font: inherit;
+      width: 100%; outline: none; padding: 0;
+    }
+    .token-value input[type="text"]:focus { color: #fff; }
+
+    .token-dropdown { position: relative; }
+    .token-dropdown-toggle {
+      width: 100%;
+      padding: 4px 8px;
+      border-radius: 7px;
+      border: 1px solid rgba(255,255,255,.1);
+      background: rgba(0,0,0,.25);
+      color: #ddd;
+      font-size: 11px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 6px;
+      cursor: pointer;
+    }
+    .token-dropdown-toggle:hover { background: rgba(255,255,255,.06); }
+
+    .token-dropdown-toggle .color-box {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,.2);
+      flex-shrink: 0;
+    }
+
+    .token-dropdown-menu {
+      position: absolute;
+      top: calc(100% + 6px);
+      left: 0;
+      width: max(220px, 280px);
+      max-height: 250px;
+      overflow: auto;
+      border-radius: 10px;
+      padding: 6px 0;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(10,10,18,.95);
+      box-shadow: 0 10px 24px rgba(0,0,0,.55);
+      z-index: 120;
+    }
+
+    .token-dropdown-option {
+      padding: 6px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #ddd;
+      cursor: pointer;
+    }
+
+    .token-dropdown-option:hover { background: rgba(255,255,255,.06); }
+    .token-dropdown-option.selected { background: rgba(123,123,255,.18); }
+
+    .token-dropdown-option .color-box {
+      width: 12px;
+      height: 12px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,.2);
+      flex-shrink: 0;
+    }
+
+    .token-actions {
+      display: flex;
+      gap: 2px;
+      flex-shrink: 0;
+    }
+    .token-btn {
+      background: transparent;
+      border: none;
+      color: #555577;
+      font-size: 12px;
+      cursor: pointer;
+      width: 22px; height: 22px;
+      border-radius: 4px;
+      display: flex; align-items: center; justify-content: center;
+      transition: color .12s, background .12s;
+      padding: 0;
+    }
+    .token-btn:hover { background: rgba(255,255,255,.08); color: #aaa; }
+    .token-btn.reset-btn:hover { color: #7b7bff; }
+    .token-btn.remove-btn:hover { color: #ff5555; }
+
+    /* ═══════════════════════════════════════════
+       RIGHT PREVIEW PANEL — component showcase
+       ═══════════════════════════════════════════ */
+    .pv-section { margin-bottom: 18px; }
+    .pv-title {
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #44446699;
+      margin-bottom: 8px;
+      padding-bottom: 5px;
+      border-bottom: 1px solid rgba(255,255,255,.05);
+    }
+
+    /* Typography */
+    .pv-type-scale .t-xbold  { color: var(--text-main-bold,  var(--text-bold)); font-weight: 800; font-size: 14px; }
+    .pv-type-scale .t-bold   { color: var(--text-bold);       font-weight: 700; font-size: 13px; }
+    .pv-type-scale .t-main   { color: var(--text-main);       font-size: 13px; }
+    .pv-type-scale .t-dim    { color: var(--text-dim);        font-size: 12px; }
+    .pv-type-scale .t-faint  { color: var(--text-faint);      font-size: 11px; }
+    .pv-type-scale .t-accent { color: var(--color-primary);   font-size: 12px; font-weight: 600; }
+    .pv-type-scale > div { padding: 1px 0; }
+
+    /* Links */
+    #pv-links a { font-size: 13px; margin-right: 10px; text-decoration: none; }
+
+    /* Buttons */
+    .pv-btns { display: flex; flex-wrap: wrap; gap: 6px; }
+    .pv-btn {
+      padding: 7px 14px; border-radius: 7px; border: none;
+      font-size: 12px; font-weight: 600; cursor: pointer;
+      transition: background .15s;
+    }
+    .pv-btn-primary   { background: var(--btn-primary-bg,   var(--color-primary));   color: var(--btn-primary-fg,   var(--on-accent)); }
+    .pv-btn-secondary { background: var(--btn-secondary-bg, var(--color-secondary)); color: var(--btn-secondary-fg, var(--on-secondary)); }
+    .pv-btn-success   { background: var(--btn-success-bg,   var(--color-success));   color: var(--btn-success-fg,   var(--on-success)); }
+    .pv-btn-warn      { background: var(--btn-warn-bg,      var(--color-warn));      color: var(--btn-warn-fg,      var(--on-warn)); }
+    .pv-btn-danger    { background: var(--btn-danger-bg,    var(--color-danger));    color: var(--btn-danger-fg,    var(--on-danger)); }
+    .pv-btn-info      { background: var(--btn-info-bg,      var(--color-info));      color: var(--btn-info-fg,      var(--on-info)); }
+
+    .pv-btn-primary:hover    { background: var(--btn-primary-hover); }
+    .pv-btn-primary:active   { background: var(--btn-primary-active); }
+    .pv-btn-secondary:hover  { background: var(--btn-secondary-hover); }
+    .pv-btn-secondary:active { background: var(--btn-secondary-active); }
+    .pv-btn-success:hover    { background: var(--btn-success-hover); }
+    .pv-btn-success:active   { background: var(--btn-success-active); }
+    .pv-btn-warn:hover       { background: var(--btn-warn-hover); }
+    .pv-btn-warn:active      { background: var(--btn-warn-active); }
+    .pv-btn-danger:hover     { background: var(--btn-danger-hover); }
+    .pv-btn-danger:active    { background: var(--btn-danger-active); }
+    .pv-btn-info:hover       { background: var(--btn-info-hover); }
+    .pv-btn-info:active      { background: var(--btn-info-active); }
+
+    /* Button state swatches */
+    .pv-btn-states { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
+    .pv-state-cell { display: flex; flex-direction: column; gap: 3px; }
+    .pv-state-label { font-size: 9px; color: #555577; text-align: center; }
+    .pv-state-swatches { display: flex; gap: 3px; }
+    .pv-state-swatch {
+      flex: 1; height: 22px; border-radius: 4px;
+      font-size: 8px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(255,255,255,.1);
+      position: relative;
+    }
+    .pv-state-swatch.computed::after {
+      content: '*'; position: absolute; top: -3px; right: -3px;
+      color: #ff4d4d; font-size: 9px; line-height: 1;
+    }
+
+    /* Badges */
+    .pv-badges { display: flex; flex-wrap: wrap; gap: 5px; }
+    .pv-badge { padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+    .pv-bd-primary { background: var(--badge-primary-bg); color: var(--badge-primary-fg); }
+    .pv-bd-success { background: var(--badge-success-bg); color: var(--badge-success-fg); }
+    .pv-bd-warn    { background: var(--badge-warn-bg);    color: var(--badge-warn-fg); }
+    .pv-bd-danger  { background: var(--badge-danger-bg);  color: var(--badge-danger-fg); }
+    .pv-bd-info    { background: var(--badge-info-bg);    color: var(--badge-info-fg); }
+    .pv-bd-neutral { background: var(--badge-neutral-bg); color: var(--badge-neutral-fg); }
+
+    /* Status pills */
+    .pv-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+    .pv-pill { padding: 4px 10px; border-radius: 999px; font-size: 11px; font-weight: 600; }
+
+    /* Card */
+    .pv-card {
+      background: var(--card-bg, var(--bg-contrast));
+      border: 1px solid var(--card-border, var(--border-default));
+      border-radius: 9px; padding: 12px 14px;
+    }
+    .pv-card-head { font-size: 13px; font-weight: 700; color: var(--text-bold); margin-bottom: 5px; }
+    .pv-card-body { font-size: 12px; color: var(--text-main); line-height: 1.5; margin-bottom: 10px; }
+    .pv-card-foot {
+      display: flex; gap: 6px; align-items: center;
+      padding-top: 8px;
+      border-top: 1px solid var(--divider, var(--border-default));
+    }
+    .pv-card-dim   { font-size: 11px; color: var(--text-dim); flex: 1; }
+    .pv-card-accent { font-size: 11px; color: var(--color-primary); font-weight: 600; }
+
+    /* Inputs */
+    .pv-input {
+      width: 100%; padding: 7px 10px;
+      background: var(--input-bg, var(--bg-color));
+      border: 1px solid var(--input-border, var(--border-default));
+      border-radius: 6px;
+      color: var(--input-text, var(--text-main));
+      font-size: 12px; margin-bottom: 6px; outline: none;
+      transition: border-color .15s;
+      font-family: inherit;
+    }
+    .pv-input:focus {
+      border-color: var(--input-border-focus, var(--color-primary));
+      box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #7b7bff) 15%, transparent);
+    }
+    .pv-input::placeholder { color: var(--input-placeholder, var(--text-faint)); }
+    .pv-input:disabled { opacity: .45; cursor: not-allowed; }
+
+    .pv-select {
+      width: 100%; padding: 6px 10px;
+      background: var(--input-bg, var(--bg-color));
+      border: 1px solid var(--input-border, var(--border-default));
+      border-radius: 6px;
+      color: var(--input-text, var(--text-main));
+      font-size: 12px; margin-bottom: 6px; outline: none; cursor: pointer;
+      font-family: inherit;
+    }
+    .pv-select:focus { border-color: var(--input-border-focus, var(--color-primary)); }
+
+    .pv-cb-row {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 5px;
+    }
+    .pv-cb-row input { accent-color: var(--color-primary); width: 14px; height: 14px; }
+    .pv-cb-label { font-size: 12px; color: var(--text-main); }
+
+    /* Divider */
+    .pv-divider { border: none; border-top: 1px solid var(--divider, var(--border-default)); margin: 8px 0; }
+
+    /* Accordion */
+    .pv-accordion {
+      border: 1px solid var(--accordion-border, rgba(255,255,255,.1));
+      border-radius: 8px; overflow: hidden;
+    }
+    .pv-accordion-item { border-top: 1px solid var(--accordion-border, rgba(255,255,255,.08)); }
+    .pv-accordion-item:first-child { border-top: none; }
+    .pv-accordion-head {
+      padding: 9px 12px; font-size: 12px; font-weight: 600;
+      color: var(--text-bold);
+      background: var(--accordion-bg, rgba(255,255,255,.04));
+      cursor: pointer;
+      display: flex; justify-content: space-between; align-items: center;
+      transition: background .15s;
+    }
+    .pv-accordion-head:hover { background: var(--accordion-hover-bg, rgba(255,255,255,.08)); }
+    .pv-accordion-item.open .pv-accordion-head { background: var(--accordion-open-bg, rgba(255,255,255,.1)); }
+    .pv-accordion-body {
+      display: none; padding: 10px 12px;
+      font-size: 12px; color: var(--text-main); line-height: 1.5;
+    }
+    .pv-accordion-item.open .pv-accordion-body { display: block; }
+    .pv-accordion-chevron { transition: transform .18s; font-size: 10px; color: var(--color-primary); }
+    .pv-accordion-item.open .pv-accordion-chevron { transform: rotate(90deg); }
+
+    /* Modal mini-preview */
+    .pv-modal-wrap {
+      background: var(--modal-backdrop, rgba(0,0,0,.65));
+      border-radius: 8px; padding: 16px 12px;
+    }
+    .pv-modal-inner {
+      background: var(--modal-bg, var(--bg-contrast));
+      border: 1px solid var(--card-border, var(--border-default));
+      border-radius: 9px; overflow: hidden;
+    }
+    .pv-modal-head {
+      padding: 8px 12px;
+      border-bottom: 1px solid var(--divider, var(--border-default));
+      font-size: 12px; font-weight: 700; color: var(--text-bold);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .pv-modal-x { font-size: 14px; color: var(--text-dim); cursor: pointer; background: none; border: none; }
+    .pv-modal-body { padding: 10px 12px; font-size: 12px; color: var(--text-main); line-height: 1.5; }
+    .pv-modal-foot {
+      padding: 8px 12px;
+      border-top: 1px solid var(--divider, var(--border-default));
+      display: flex; gap: 6px; justify-content: flex-end;
+    }
+
+    /* Elevation */
+    .pv-overlay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
+    .pv-overlay-cell {
+      border-radius: 6px; padding: 12px 8px;
+      font-size: 10px; font-weight: 600; text-align: center; color: #fff;
+    }
+
+    /* White BG contrast */
+    .pv-white-bg { background: #fff; border-radius: 8px; padding: 10px; }
+    .pv-white-bg p { font-size: 12px; color: #333; margin-bottom: 6px; }
+    .tiny-pill-row { display: flex; flex-wrap: wrap; gap: 5px; }
+    .tiny-pill { padding: 3px 8px; border-radius: 999px; font-size: 10px; font-weight: 700; }
+
+    /* ═══════════════════════════════════════════
+       EXPORT MODAL
+       ═══════════════════════════════════════════ */
+    .modal-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,.72); z-index: 9999;
+      align-items: center; justify-content: center;
+    }
+    .modal-overlay.open { display: flex; }
+    .modal {
+      background: #1a1a28; border: 1px solid #2a2a3a; border-radius: 12px;
+      width: min(680px, 95vw); max-height: 80vh;
+      display: flex; flex-direction: column; overflow: hidden;
+    }
+    .modal-header {
+      padding: 14px 18px; border-bottom: 1px solid #2a2a3a;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .modal-header h2 { font-size: 15px; font-weight: 700; color: #fff; flex: 1; }
+    .modal-body { padding: 14px 18px; overflow-y: auto; flex: 1; }
+    .modal-footer {
+      padding: 10px 18px; border-top: 1px solid #2a2a3a;
+      display: flex; gap: 8px; justify-content: flex-end;
+    }
+    .css-output {
+      width: 100%; background: #0a0a16; border: 1px solid #2a2a3a; border-radius: 8px;
+      color: #a8e6cf; font-family: monospace; font-size: 12px; padding: 12px;
+      min-height: 200px; resize: vertical; white-space: pre; overflow: auto;
+    }
+    .copy-notice { font-size: 11px; color: #31e2b4; opacity: 0; transition: opacity .3s; }
+    .copy-notice.show { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     TOP TOOLBAR
+     ═══════════════════════════════════════════════════════════ -->
+<div class="toolbar">
+  <h1>🎨 Theme Editor</h1>
+
+  <div style="display:flex;align-items:center;gap:5px;">
+    <label for="theme-select">Base theme</label>
+    <select id="theme-select">
+      <option value="">— blank —</option>
+      <option value="pollux" selected>pollux</option>
+      <option value="noctix">noctix</option>
+      <option value="cecily">cecily</option>
+      <option value="australis">australis</option>
+      <option value="arsenika">arsenika</option>
+      <option value="borealis">borealis</option>
+      <option value="lunanuli">lunanuli</option>
+      <option value="nikoliny">nikoliny</option>
+      <option value="selenedi">selenedi</option>
+    </select>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:5px;">
+    <label for="theme-name-input">Export as</label>
+    <input type="text" id="theme-name-input" value="my-theme" placeholder="theme-name" style="width:110px;" />
+  </div>
+
+  <button class="btn btn-reset"  id="btn-reset">↺ Reset</button>
+  <button class="btn btn-export" id="btn-export">⬇ Export CSS</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════════
+     MAIN LAYOUT
+     ═══════════════════════════════════════════════════════════ -->
+<div class="editor-layout">
+
+  <!-- ══ LEFT: palette + token editor ══ -->
+  <div class="editor-panel">
+
+    <div class="section-title">Color Palette</div>
+    <div class="palette-card" id="palette-card">
+
+      <div class="palette-row-label">Accent &amp; Secondary</div>
+      <div class="swatch-row">
+        <div class="swatch" data-var="--accent-color" data-on-text="white">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Primary</div>
+          <div class="swatch-bottom"><div class="swatch-index">1</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--accent-color-dark" data-on-text="white">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Primary Variant</div>
+          <div class="swatch-bottom"><div class="swatch-index">2</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--secondary-color" data-on-text="white">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Secondary</div>
+          <div class="swatch-bottom"><div class="swatch-index">3</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--secondary-color-alt" data-on-text="white">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Sec. Variant</div>
+          <div class="swatch-bottom"><div class="swatch-index">4</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--tertiary-color" data-on-text="white">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Tertiary</div>
+          <div class="swatch-bottom"><div class="swatch-index">5</div><div class="swatch-hex"></div></div>
+        </div>
+      </div>
+
+      <div class="palette-row-label">Backgrounds &amp; Surfaces</div>
+      <div class="swatch-row">
+        <div class="swatch" data-var="--bg-main" data-on-text="--text-main">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Background</div>
+          <div class="swatch-bottom"><div class="swatch-index">6</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--bg-dark" data-on-text="--text-main">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Surface</div>
+          <div class="swatch-bottom"><div class="swatch-index">7</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--bg-darker" data-on-text="--text-main">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Surface +</div>
+          <div class="swatch-bottom"><div class="swatch-index">8</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--bg-darkest" data-on-text="--text-main">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Deepest</div>
+          <div class="swatch-bottom"><div class="swatch-index">9</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--bg-inverse" data-on-text="auto">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Inverse</div>
+          <div class="swatch-bottom"><div class="swatch-index">10</div><div class="swatch-hex"></div></div>
+        </div>
+      </div>
+
+      <div class="palette-row-label">On-color tokens</div>
+      <div class="swatch-row">
+        <div class="swatch on-row" data-var="--on-accent-color" data-fallback-var="--on-accent" data-against-var="--accent-color" data-on-text="auto">
+          <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
+          <div class="swatch-label">On Primary</div>
+          <div class="swatch-bottom"><div class="swatch-index">11</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch on-row" data-var="--on-secondary-color" data-fallback-var="--on-secondary" data-against-var="--secondary-color" data-on-text="auto">
+          <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
+          <div class="swatch-label">On Secondary</div>
+          <div class="swatch-bottom"><div class="swatch-index">12</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch on-row" data-var="--text-main" data-fallback-var="--text-main" data-against-var="--bg-main" data-on-text="auto">
+          <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
+          <div class="swatch-label">On BG</div>
+          <div class="swatch-bottom"><div class="swatch-index">13</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch on-row" data-var="--text-contrast" data-fallback-var="--text-contrast" data-against-var="--bg-dark" data-on-text="auto">
+          <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
+          <div class="swatch-label">On Surface</div>
+          <div class="swatch-bottom"><div class="swatch-index">14</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch on-row" data-var="--on-tertiary-color" data-fallback-var="--on-tertiary" data-against-var="--tertiary-color" data-on-text="auto">
+          <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
+          <div class="swatch-label">On Tertiary</div>
+          <div class="swatch-bottom"><div class="swatch-index">15</div><div class="swatch-hex"></div></div>
+        </div>
+      </div>
+
+      <div class="palette-row-label">Status colors</div>
+      <div class="swatch-row">
+        <div class="swatch" data-var="--theme-success" data-fallback-var="--plx-success" data-on-text="white">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Success</div>
+          <div class="swatch-bottom"><div class="swatch-index">16</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--theme-warn" data-fallback-var="--plx-warning" data-on-text="black">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Warn</div>
+          <div class="swatch-bottom"><div class="swatch-index">17</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--theme-danger" data-fallback-var="--plx-danger" data-on-text="white">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Danger</div>
+          <div class="swatch-bottom"><div class="swatch-index">18</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--theme-info" data-fallback-var="--plx-info" data-on-text="white">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Info</div>
+          <div class="swatch-bottom"><div class="swatch-index">19</div><div class="swatch-hex"></div></div>
+        </div>
+        <div class="swatch" data-var="--theme-neutral" data-fallback-var="--plx-neutral" data-on-text="black">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Neutral</div>
+          <div class="swatch-bottom"><div class="swatch-index">20</div><div class="swatch-hex"></div></div>
+        </div>
+      </div>
+
+    </div><!-- /palette-card -->
+
+    <div class="section-title">All Theme Tokens</div>
+    <div class="token-grid" id="token-grid"></div>
+
+  </div><!-- /editor-panel -->
+
+  <!-- ══ RIGHT: sticky component preview ══ -->
+  <div class="preview-panel" id="preview-panel">
+
+    <div class="pv-section">
+      <div class="pv-title">Typography</div>
+      <div class="pv-type-scale">
+        <div class="t-xbold">Extra-bold heading</div>
+        <div class="t-bold">Bold heading text</div>
+        <div class="t-main">Main body — the quick brown fox jumps over the lazy dog.</div>
+        <div class="t-dim">Dimmed / muted secondary text</div>
+        <div class="t-faint">Faint helper / caption text</div>
+        <div class="t-accent">Accent-colored label</div>
+      </div>
+    </div>
+
+    <hr class="pv-divider" />
+
+    <div class="pv-section">
+      <div class="pv-title">Links</div>
+      <div id="pv-links">
+        <a href="#" class="pv-link-normal">Normal link</a>
+        <a href="#" class="pv-link-hover">Hover link</a>
+        <a href="#" class="pv-link-visited">Visited link</a>
+      </div>
+    </div>
+
+    <hr class="pv-divider" />
+
+    <div class="pv-section">
+      <div class="pv-title">Buttons — hover &amp; click me</div>
+      <div class="pv-btns">
+        <button class="pv-btn pv-btn-primary">Primary</button>
+        <button class="pv-btn pv-btn-secondary">Secondary</button>
+        <button class="pv-btn pv-btn-success">Success</button>
+        <button class="pv-btn pv-btn-warn">Warning</button>
+        <button class="pv-btn pv-btn-danger">Danger</button>
+        <button class="pv-btn pv-btn-info">Info</button>
+      </div>
+    </div>
+
+    <div class="pv-section">
+      <div class="pv-title">Hover / pressed states &nbsp;<span style="color:#ff4d4d;font-size:8px;font-weight:700;letter-spacing:0">* = computed</span></div>
+      <div class="pv-btn-states" id="pv-btn-states"></div>
+    </div>
+
+    <hr class="pv-divider" />
+
+    <div class="pv-section">
+      <div class="pv-title">Badges</div>
+      <div class="pv-badges">
+        <span class="pv-badge pv-bd-primary">Primary</span>
+        <span class="pv-badge pv-bd-success">Success</span>
+        <span class="pv-badge pv-bd-warn">Warning</span>
+        <span class="pv-badge pv-bd-danger">Danger</span>
+        <span class="pv-badge pv-bd-info">Info</span>
+        <span class="pv-badge pv-bd-neutral">Neutral</span>
+      </div>
+    </div>
+
+    <div class="pv-section">
+      <div class="pv-title">Status pills</div>
+      <div class="pv-pills">
+        <span class="pv-pill" style="background:var(--color-success);color:var(--on-success)">Success</span>
+        <span class="pv-pill" style="background:var(--color-warn);color:var(--on-warn)">Warn</span>
+        <span class="pv-pill" style="background:var(--color-danger);color:var(--on-danger)">Danger</span>
+        <span class="pv-pill" style="background:var(--color-info);color:var(--on-info)">Info</span>
+        <span class="pv-pill" style="background:var(--color-neutral);color:var(--on-neutral)">Neutral</span>
+      </div>
+    </div>
+
+    <hr class="pv-divider" />
+
+    <div class="pv-section">
+      <div class="pv-title">Card</div>
+      <div class="pv-card">
+        <div class="pv-card-head">Card heading</div>
+        <div class="pv-card-body">Uses <code style="color:var(--color-primary);font-size:11px">--card-bg</code> + <code style="color:var(--color-primary);font-size:11px">--card-border</code>. Body text in <code style="color:var(--text-dim);font-size:11px">--text-main</code>.</div>
+        <div class="pv-card-foot">
+          <span class="pv-card-dim">2 min read</span>
+          <span class="pv-card-accent">Read more →</span>
+        </div>
+      </div>
+    </div>
+
+    <hr class="pv-divider" />
+
+    <div class="pv-section">
+      <div class="pv-title">Form Inputs</div>
+      <input class="pv-input" type="text" placeholder="Text input placeholder…" />
+      <input class="pv-input" type="text" value="Prefilled value" />
+      <input class="pv-input" type="text" placeholder="Disabled" disabled />
+      <select class="pv-select">
+        <option>Select option one</option>
+        <option>Select option two</option>
+      </select>
+      <div class="pv-cb-row"><input type="checkbox" id="cb1" checked /><label class="pv-cb-label" for="cb1">Checkbox checked</label></div>
+      <div class="pv-cb-row"><input type="checkbox" id="cb2" /><label class="pv-cb-label" for="cb2">Checkbox unchecked</label></div>
+      <div class="pv-cb-row"><input type="radio" id="r1" name="pvr" checked /><label class="pv-cb-label" for="r1">Radio selected</label></div>
+      <div class="pv-cb-row"><input type="radio" id="r2" name="pvr" /><label class="pv-cb-label" for="r2">Radio unselected</label></div>
+    </div>
+
+    <hr class="pv-divider" />
+
+    <div class="pv-section">
+      <div class="pv-title">Accordion</div>
+      <div class="pv-accordion">
+        <div class="pv-accordion-item open">
+          <div class="pv-accordion-head"><span>Open section</span><span class="pv-accordion-chevron">▶</span></div>
+          <div class="pv-accordion-body">Expanded using <code style="color:var(--color-primary);font-size:11px">--accordion-open-bg</code>.</div>
+        </div>
+        <div class="pv-accordion-item">
+          <div class="pv-accordion-head"><span>Closed section</span><span class="pv-accordion-chevron">▶</span></div>
+          <div class="pv-accordion-body">Content revealed when opened.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="pv-divider" />
+
+    <div class="pv-section">
+      <div class="pv-title">Modal (preview)</div>
+      <div class="pv-modal-wrap">
+        <div class="pv-modal-inner">
+          <div class="pv-modal-head"><span>Modal title</span><button class="pv-modal-x">✕</button></div>
+          <div class="pv-modal-body">Modal uses <code style="color:var(--color-primary);font-size:11px">--modal-bg</code> over <code style="color:var(--text-dim);font-size:11px">--modal-backdrop</code>.</div>
+          <div class="pv-modal-foot">
+            <button class="pv-btn pv-btn-primary" style="font-size:11px;padding:5px 10px">Confirm</button>
+            <button class="pv-btn" style="font-size:11px;padding:5px 10px;background:var(--card-bg);color:var(--text-dim);border:1px solid var(--border-default)">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="pv-divider" />
+
+    <div class="pv-section">
+      <div class="pv-title">Elevation overlays</div>
+      <div class="pv-overlay-grid">
+        <div class="pv-overlay-cell" style="background:var(--surface-dim)">Dim</div>
+        <div class="pv-overlay-cell" style="background:var(--surface-dimmer)">Dimmer</div>
+        <div class="pv-overlay-cell" style="background:var(--surface-dimmest)">Dimmest</div>
+      </div>
+    </div>
+
+    <hr class="pv-divider" />
+
+    <div class="pv-section">
+      <div class="pv-title">White background contrast</div>
+      <div class="pv-white-bg">
+        <p>Chips on #ffffff — legibility check</p>
+        <div class="tiny-pill-row">
+          <span class="tiny-pill" data-var="--color-primary"   data-on-var="--on-accent">Accent</span>
+          <span class="tiny-pill" data-var="--color-success"   data-on-var="--on-success">Success</span>
+          <span class="tiny-pill" data-var="--color-warn"      data-on-var="--on-warn">Warn</span>
+          <span class="tiny-pill" data-var="--color-danger"    data-on-var="--on-danger">Danger</span>
+          <span class="tiny-pill" data-var="--color-info"      data-on-var="--on-info">Info</span>
+          <span class="tiny-pill" data-var="--color-neutral"   data-on-var="--on-neutral">Neutral</span>
+          <span class="tiny-pill" data-var="--color-secondary" data-on-var="--on-secondary">Secondary</span>
+          <span class="tiny-pill" data-var="--color-tertiary"  data-on-var="--on-tertiary">Tertiary</span>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /preview-panel -->
+</div><!-- /editor-layout -->
+
+
+<!-- ═══════════════════════════════════════════════════════════
+     EXPORT MODAL
+     ═══════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="export-modal">
+  <div class="modal">
+    <div class="modal-header">
+      <h2 id="modal-title">Export Theme CSS</h2>
+      <button class="btn btn-reset" id="btn-close-modal">✕</button>
+    </div>
+    <div class="modal-body">
+      <textarea class="css-output" id="css-output" spellcheck="false" readonly></textarea>
+    </div>
+    <div class="modal-footer">
+      <span class="copy-notice" id="copy-notice">Copied!</span>
+      <button class="btn btn-accent" id="btn-copy">Copy</button>
+      <button class="btn btn-export" id="btn-download">Download .css</button>
+      <button class="btn btn-reset"  id="btn-close-modal2">Close</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   Theme Editor – core logic
+   ═══════════════════════════════════════════════════════════════════ */
+
+const THEME_TOKENS = [
+  { var: '--luma',                   label: 'Luma',              group: 'Shadows' },
+  { var: '--umbra',                  label: 'Umbra',             group: 'Shadows' },
+  { var: '--accent-color',           label: 'Accent',            group: 'Primary' },
+  { var: '--accent-color-light',     label: 'Accent light',      group: 'Primary' },
+  { var: '--accent-color-mid',       label: 'Accent mid',        group: 'Primary' },
+  { var: '--accent-color-strong',    label: 'Accent strong',     group: 'Primary' },
+  { var: '--accent-color-dark',      label: 'Accent dark',       group: 'Primary' },
+  { var: '--accent-color-dim',       label: 'Accent dim',        group: 'Primary' },
+  { var: '--accent-color-opaque',    label: 'Accent opaque',     group: 'Primary' },
+  { var: '--on-accent-color',        label: 'On accent',         group: 'Primary' },
+  { var: '--secondary-color',        label: 'Secondary',         group: 'Secondary' },
+  { var: '--secondary-color-alt',    label: 'Secondary alt',     group: 'Secondary' },
+  { var: '--secondary-color-light',  label: 'Secondary light',   group: 'Secondary' },
+  { var: '--secondary-color-mid',    label: 'Secondary mid',     group: 'Secondary' },
+  { var: '--secondary-color-strong', label: 'Secondary strong',  group: 'Secondary' },
+  { var: '--secondary-color-dark',   label: 'Secondary dark',    group: 'Secondary' },
+  { var: '--secondary-color-dim',    label: 'Secondary dim',     group: 'Secondary' },
+  { var: '--on-secondary-color',     label: 'On secondary',      group: 'Secondary' },
+  { var: '--tertiary-color',         label: 'Tertiary',          group: 'Tertiary' },
+  { var: '--on-tertiary-color',      label: 'On tertiary',       group: 'Tertiary' },
+  { var: '--bg-main',                label: 'Bg main',           group: 'Background' },
+  { var: '--bg-dark',                label: 'Bg dark',           group: 'Background' },
+  { var: '--bg-darker',              label: 'Bg darker',         group: 'Background' },
+  { var: '--bg-darkest',             label: 'Bg darkest',        group: 'Background' },
+  { var: '--bg-opaque',              label: 'Bg opaque',         group: 'Background' },
+  { var: '--bg-inverse',             label: 'Bg inverse',        group: 'Background' },
+  { var: '--text-main',              label: 'Text main',         group: 'Text' },
+  { var: '--text-bold',              label: 'Text bold',         group: 'Text' },
+  { var: '--text-extra-bold',        label: 'Text extra-bold',   group: 'Text' },
+  { var: '--text-faint',             label: 'Text faint',        group: 'Text' },
+  { var: '--text-dim',               label: 'Text dim',          group: 'Text' },
+  { var: '--text-dim-mid',           label: 'Text dim-mid',      group: 'Text' },
+  { var: '--text-accent',            label: 'Text accent',       group: 'Text' },
+  { var: '--text-accent-dim',        label: 'Text accent-dim',   group: 'Text' },
+  { var: '--text-inverse',           label: 'Text inverse',      group: 'Text' },
+  { var: '--text-lightest',          label: 'Text lightest',     group: 'Text' },
+  { var: '--color-contrast',         label: 'Contrast',          group: 'Text' },
+  { var: '--color-contrast-dim',     label: 'Contrast dim',      group: 'Text' },
+  { var: '--color-contrast-inverse', label: 'Contrast inv.',     group: 'Text' },
+  { var: '--links',                  label: 'Links',             group: 'Links' },
+  { var: '--links-hover',            label: 'Links hover',       group: 'Links' },
+  { var: '--links-visited',          label: 'Links visited',     group: 'Links' },
+  { var: '--dark-border',            label: 'Border dark',       group: 'Borders' },
+  { var: '--light-border',           label: 'Border light',      group: 'Borders' },
+  { var: '--muted',                  label: 'Muted',             group: 'Borders' },
+  { var: '--divider-color',          label: 'Divider',           group: 'Borders' },
+  { var: '--dark-dim',               label: 'Dim overlay',       group: 'Elevation' },
+  { var: '--dark-dimmer',            label: 'Dimmer overlay',    group: 'Elevation' },
+  { var: '--dark-dimmest',           label: 'Dimmest overlay',   group: 'Elevation' },
+  { var: '--theme-success',          label: 'Success',           group: 'Status' },
+  { var: '--theme-warn',             label: 'Warn',              group: 'Status' },
+  { var: '--theme-danger',           label: 'Danger',            group: 'Status' },
+  { var: '--theme-info',             label: 'Info',              group: 'Status' },
+  { var: '--theme-neutral',          label: 'Neutral',           group: 'Status' },
+  { var: '--on-success-color',       label: 'On success',        group: 'Status' },
+  { var: '--on-warn-color',          label: 'On warn',           group: 'Status' },
+  { var: '--on-danger-color',        label: 'On danger',         group: 'Status' },
+  { var: '--on-info-color',          label: 'On info',           group: 'Status' },
+
+  // Layer 2 - Component/semantic tokens
+  { var: '--btn-primary-bg',   label: 'Btn primary bg',   group: 'Components', default: 'var(--color-primary)' },
+  { var: '--btn-primary-fg',   label: 'Btn primary fg',   group: 'Components', default: 'var(--on-accent)' },
+  { var: '--btn-secondary-bg', label: 'Btn secondary bg', group: 'Components', default: 'var(--color-secondary)' },
+  { var: '--btn-secondary-fg', label: 'Btn secondary fg', group: 'Components', default: 'var(--on-secondary)' },
+  { var: '--btn-success-bg',   label: 'Btn success bg',   group: 'Components', default: 'var(--color-success)' },
+  { var: '--btn-success-fg',   label: 'Btn success fg',   group: 'Components', default: 'var(--on-success)' },
+  { var: '--btn-warn-bg',      label: 'Btn warn bg',      group: 'Components', default: 'var(--color-warn)' },
+  { var: '--btn-warn-fg',      label: 'Btn warn fg',      group: 'Components', default: 'var(--on-warn)' },
+  { var: '--btn-danger-bg',    label: 'Btn danger bg',    group: 'Components', default: 'var(--color-danger)' },
+  { var: '--btn-danger-fg',    label: 'Btn danger fg',    group: 'Components', default: 'var(--on-danger)' },
+  { var: '--btn-info-bg',      label: 'Btn info bg',      group: 'Components', default: 'var(--color-info)' },
+  { var: '--btn-info-fg',      label: 'Btn info fg',      group: 'Components', default: 'var(--on-info)' },
+  { var: '--btn-neutral-bg',   label: 'Btn neutral bg',   group: 'Components', default: 'var(--color-neutral)' },
+  { var: '--btn-neutral-fg',   label: 'Btn neutral fg',   group: 'Components', default: 'var(--on-neutral)' },
+  { var: '--card-bg',          label: 'Card bg',          group: 'Components', default: 'var(--bg-contrast)' },
+  { var: '--card-border',      label: 'Card border',      group: 'Components', default: 'var(--border-default)' },
+  { var: '--card-shadow',      label: 'Card shadow',      group: 'Components', default: 'var(--surface-dim)' },
+  { var: '--input-bg',         label: 'Input bg',         group: 'Components', default: 'var(--bg-color)' },
+  { var: '--input-border',     label: 'Input border',     group: 'Components', default: 'var(--border-default)' },
+  { var: '--input-border-focus', label: 'Input border focus', group: 'Components', default: 'var(--color-primary)' },
+  { var: '--input-text',       label: 'Input text',       group: 'Components', default: 'var(--text-main)' },
+  { var: '--input-placeholder', label: 'Input placeholder', group: 'Components', default: 'var(--muted)' },
+  { var: '--modal-backdrop',   label: 'Modal backdrop',   group: 'Components', default: 'var(--surface-dimmer)' },
+  { var: '--modal-bg',         label: 'Modal bg',         group: 'Components', default: 'var(--bg-contrast)' },
+  { var: '--accordion-bg',     label: 'Accordion bg',     group: 'Components', default: 'color-mix(in srgb, var(--color-primary) 8%, transparent)' },
+  { var: '--accordion-open-bg',label: 'Accordion open bg',group: 'Components', default: 'color-mix(in srgb, var(--color-primary) 15%, transparent)' },
+  { var: '--accordion-hover-bg',label: 'Accordion hover bg', group: 'Components', default: 'color-mix(in srgb, var(--muted, grey) 6%, transparent)' },
+  { var: '--accordion-border', label: 'Accordion border', group: 'Components', default: 'color-mix(in srgb, var(--color-primary) 20%, transparent)' },
+  { var: '--icon-default',     label: 'Icon default',     group: 'Components', default: 'var(--text-main)' },
+  { var: '--icon-muted',       label: 'Icon muted',       group: 'Components', default: 'var(--text-dim)' },
+  { var: '--icon-accent',      label: 'Icon accent',      group: 'Components', default: 'var(--color-primary)' },
+];
+
+const THEME_TOKEN_MAP = new Map(THEME_TOKENS.map(t => [t.var, t]));
+const BASE_TOKEN_OPTIONS = THEME_TOKENS.filter(t => t.group !== 'Components');
+
+const BTN_STATES = [
+  { label: 'Primary',   hover: '--btn-primary-hover',   active: '--btn-primary-active'   },
+  { label: 'Secondary', hover: '--btn-secondary-hover', active: '--btn-secondary-active' },
+  { label: 'Success',   hover: '--btn-success-hover',   active: '--btn-success-active'   },
+  { label: 'Warn',      hover: '--btn-warn-hover',       active: '--btn-warn-active'     },
+  { label: 'Danger',    hover: '--btn-danger-hover',    active: '--btn-danger-active'    },
+  { label: 'Info',      hover: '--btn-info-hover',      active: '--btn-info-active'      },
+];
+
+const overrides = new Map();
+
+// ── Helpers ────────────────────────────────────────────────────────
+
+function resolveVar(v) {
+  return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+}
+
+function toHex(css) {
+  if (!css) return null;
+  css = css.trim();
+  if (/^#[0-9a-f]{3,8}$/i.test(css)) {
+    let h = css.slice(1);
+    if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    if (h.length === 4) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+    if (h.length === 8) h = h.slice(0,6);
+    return '#' + h;
+  }
+  const m = css.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i)
+         || css.match(/rgba?\(\s*(\d+)\s+(\d+)\s+(\d+)/i);
+  if (m) return '#' + [m[1],m[2],m[3]].map(n => (+n).toString(16).padStart(2,'0')).join('');
+  const tmp = document.createElement('div');
+  tmp.style.cssText = 'display:none;color:' + css;
+  document.body.appendChild(tmp);
+  const comp = getComputedStyle(tmp).color;
+  document.body.removeChild(tmp);
+  const m2 = comp.match(/rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)/i);
+  if (m2) return '#' + [m2[1],m2[2],m2[3]].map(n => (+n).toString(16).padStart(2,'0')).join('');
+  return null;
+}
+
+function contrastText(hex) {
+  if (!hex || hex.length < 7) return '#ffffff';
+  const r = parseInt(hex.slice(1,3),16)/255;
+  const g = parseInt(hex.slice(3,5),16)/255;
+  const b = parseInt(hex.slice(5,7),16)/255;
+  return (0.2126*r + 0.7152*g + 0.0722*b) > 0.4 ? '#000000' : '#ffffff';
+}
+
+function applyThemeClass(name) {
+  document.documentElement.className =
+    document.documentElement.className.replace(/\btheme-\S+\b/g,'').trim();
+  if (name) document.documentElement.classList.add('theme-' + name);
+}
+
+// ── Palette swatches ───────────────────────────────────────────────
+
+function refreshSwatch(el) {
+  const v = el.dataset.var;
+  let raw = resolveVar(v);
+  if (!raw && el.dataset.fallbackVar) raw = resolveVar(el.dataset.fallbackVar);
+  const hex = toHex(raw);
+  const display = hex || raw || 'transparent';
+  el.style.background = display;
+
+  const on = el.dataset.onText;
+  if (el.classList.contains('on-row')) {
+    // Show the swatch as the "against" background and render the actual on-token color as text.
+    const againstRaw = resolveVar(el.dataset.againstVar) || 'transparent';
+    const againstHex = toHex(againstRaw) || againstRaw;
+    //el.style.background = againstHex;
+
+    const onRaw = resolveVar(el.dataset.var);
+    const onHex = toHex(onRaw) || onRaw || '#ffffff';
+    el.style.color = onHex;
+
+    // Apply a small glow/shadow when the on-text is very close to the background.
+    const idealContrast = contrastText(againstHex);
+    if (idealContrast !== onHex) {
+      const glow = idealContrast === '#ffffff' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)';
+      el.style.textShadow = `0 0 2px ${glow}`;
+    } else {
+      el.style.textShadow = '';
+    }
+  } else if (on === 'auto') {
+    el.style.color = contrastText(hex || '#808080');
+  } else if (on && on.startsWith('--')) {
+    el.style.color = toHex(resolveVar(on)) || '#fff';
+  } else {
+    el.style.color = on || '#fff';
+  }
+
+  const hexEl = el.querySelector('.swatch-hex');
+  if (hexEl) {
+    hexEl.textContent = hex ? hex.toUpperCase() : (raw || '—');
+    hexEl.style.color = contrastText(hex || '#808080');
+  }
+  const av = el.dataset.againstVar;
+  if (av) {
+    const rail = el.querySelector('.swatch-against');
+    if (rail) rail.style.background = toHex(resolveVar(av)) || 'transparent';
+  }
+  const picker = el.querySelector('.swatch-picker');
+  if (picker && hex) picker.value = hex;
+}
+
+function refreshAllSwatches() {
+  document.querySelectorAll('.swatch[data-var]').forEach(refreshSwatch);
+}
+
+// ── Tiny pills ────────────────────────────────────────────────────
+
+function refreshTinyPills() {
+  document.querySelectorAll('.tiny-pill[data-var]').forEach(el => {
+    const raw = resolveVar(el.dataset.var);
+    const hex = toHex(raw);
+    el.style.background = hex || raw || 'transparent';
+    const ov = el.dataset.onVar;
+    el.style.color = ov ? (toHex(resolveVar(ov)) || contrastText(hex)) : contrastText(hex);
+  });
+}
+
+// ── Link colours ──────────────────────────────────────────────────
+
+function updateLinkStyles() {
+  const link  = resolveVar('--text-link');
+  const hover = resolveVar('--text-link-contrast');
+  const vis   = resolveVar('--text-link-visited');
+  const id = 'te-link-styles';
+  let s = document.getElementById(id);
+  if (!s) { s = document.createElement('style'); s.id = id; document.head.appendChild(s); }
+  s.textContent = `
+    #pv-links .pv-link-normal  { color: ${link  || 'var(--text-link)'}; }
+    #pv-links .pv-link-hover   { color: ${hover || 'var(--text-link-contrast)'}; text-decoration: underline; }
+    #pv-links .pv-link-visited { color: ${vis   || 'var(--text-link-visited)'}; }
+  `;
+}
+
+// ── themeDefinesVar ───────────────────────────────────────────────
+
+function themeDefinesVar(varName) {
+  const theme = document.getElementById('theme-select').value;
+  if (!theme) return false;
+  const sel = `html.theme-${theme}`;
+  for (const sheet of document.styleSheets) {
+    let rules; try { rules = sheet.cssRules; } catch { continue; }
+    if (!rules) continue;
+    for (const rule of rules) {
+      if (rule.type !== 1) continue;
+      if (rule.selectorText.split(',').map(s=>s.trim()).includes(sel))
+        if (rule.style?.getPropertyValue(varName)) return true;
+    }
+  }
+  return false;
+}
+
+// ── Button state swatches ─────────────────────────────────────────
+
+function buildBtnStates() {
+  const c = document.getElementById('pv-btn-states');
+  c.innerHTML = '';
+  BTN_STATES.forEach(s => {
+    const cell = document.createElement('div');
+    cell.className = 'pv-state-cell';
+    cell.innerHTML = `<div class="pv-state-label">${s.label}</div>
+      <div class="pv-state-swatches">
+        <div class="pv-state-swatch" data-var="${s.hover}">H</div>
+        <div class="pv-state-swatch" data-var="${s.active}">P</div>
+      </div>`;
+    c.appendChild(cell);
+  });
+}
+
+function refreshBtnStates() {
+  document.querySelectorAll('.pv-state-swatch[data-var]').forEach(el => {
+    const raw = resolveVar(el.dataset.var);
+    const hex = toHex(raw);
+    el.style.background = hex || raw || 'transparent';
+    el.style.color = contrastText(hex || '#808080');
+    el.classList.toggle('computed', !themeDefinesVar(el.dataset.var));
+  });
+}
+
+// ── Preview panel background ──────────────────────────────────────
+
+function syncPreviewBg() {
+  const panel = document.getElementById('preview-panel');
+  const raw = resolveVar('--bg-color') || resolveVar('--bg-main');
+  panel.style.background = raw || '';
+}
+
+// ── Token helpers ───────────────────────────────────────────────────
+
+function extractVarRef(val) {
+  if (!val || typeof val !== 'string') return null;
+  const m = val.match(/var\(\s*(--[\w-]+)\s*(?:,.*)?\)/);
+  return m ? m[1] : null;
+}
+
+function createTokenRow(tok) {
+  const row = document.createElement('div');
+  row.className = 'token-row';
+  row.dataset.var = tok.var;
+
+  const sw = document.createElement('div');
+  sw.className = 'token-swatch-mini';
+  const cp = document.createElement('input'); cp.type = 'color';
+  sw.appendChild(cp);
+  row.appendChild(sw);
+
+  const name = document.createElement('div');
+  name.className = 'token-name'; name.title = tok.var; name.textContent = tok.var;
+  row.appendChild(name);
+
+  const valWrap = document.createElement('div'); valWrap.className = 'token-value';
+
+  const isComponent = tok.group === 'Components';
+  let valInput = null;
+  let dropdown = null;
+
+  if (isComponent) {
+    dropdown = document.createElement('div');
+    dropdown.className = 'token-dropdown';
+
+    const toggle = document.createElement('button');
+    toggle.type = 'button';
+    toggle.className = 'token-dropdown-toggle';
+    toggle.innerHTML = '<span class="color-box"></span><span class="dropdown-label"></span><span class="dropdown-arrow">▾</span>';
+
+    const menu = document.createElement('div');
+    menu.className = 'token-dropdown-menu';
+    menu.hidden = true;
+
+    BASE_TOKEN_OPTIONS.forEach(optTok => {
+      const opt = document.createElement('div');
+      opt.className = 'token-dropdown-option';
+      opt.dataset.var = optTok.var;
+
+      const swatch = document.createElement('span');
+      swatch.className = 'color-box';
+      opt.appendChild(swatch);
+
+      const label = document.createElement('span');
+      label.textContent = optTok.label;
+      opt.appendChild(label);
+
+      opt.addEventListener('click', () => {
+        const selected = opt.dataset.var;
+        syncToDOM(`var(${selected})`);
+        menu.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+      });
+
+      menu.appendChild(opt);
+    });
+
+    toggle.addEventListener('click', () => {
+      const open = !menu.hidden;
+      menu.hidden = open;
+      toggle.setAttribute('aria-expanded', String(!open));
+    });
+
+    document.addEventListener('click', e => {
+      if (!dropdown.contains(e.target)) {
+        menu.hidden = true;
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+    });
+
+    dropdown.appendChild(toggle);
+    dropdown.appendChild(menu);
+    valWrap.appendChild(dropdown);
+  } else {
+    valInput = document.createElement('input'); valInput.type = 'text'; valInput.spellcheck = false;
+    valWrap.appendChild(valInput);
+  }
+
+  row.appendChild(valWrap);
+
+  const actions = document.createElement('div'); actions.className = 'token-actions';
+  const resetBtn = document.createElement('button');
+  resetBtn.className = 'token-btn reset-btn'; resetBtn.title = 'Reset to theme cascade'; resetBtn.textContent = '↻';
+  const removeBtn = document.createElement('button');
+  removeBtn.className = 'token-btn remove-btn'; removeBtn.title = 'Remove — revert to default'; removeBtn.textContent = '×';
+  actions.appendChild(resetBtn); actions.appendChild(removeBtn);
+  row.appendChild(actions);
+
+  function syncToDOM(val) {
+    document.documentElement.style.setProperty(tok.var, val);
+    overrides.set(tok.var, val);
+    row.classList.add('overridden'); row.classList.remove('removed');
+    refreshTokenRow(row, tok.var);
+    requestAnimationFrame(fullRefresh);
+  }
+
+  resetBtn.addEventListener('click', () => {
+    document.documentElement.style.removeProperty(tok.var);
+    overrides.delete(tok.var);
+    row.classList.remove('overridden','removed');
+    refreshTokenRow(row, tok.var);
+    requestAnimationFrame(fullRefresh);
+  });
+
+  removeBtn.addEventListener('click', () => {
+    document.documentElement.style.setProperty(tok.var, 'revert');
+    overrides.set(tok.var, 'revert');
+    row.classList.add('removed'); row.classList.remove('overridden');
+    refreshTokenRow(row, tok.var);
+    requestAnimationFrame(fullRefresh);
+  });
+
+  cp.addEventListener('input',  () => syncToDOM(cp.value));
+  if (valInput) {
+    valInput.addEventListener('change',  () => syncToDOM(valInput.value.trim()));
+    valInput.addEventListener('keydown', e => { if (e.key === 'Enter') syncToDOM(valInput.value.trim()); });
+  }
+
+  return row;
+}
+
+function buildTokenGrid() {
+  const grid = document.getElementById('token-grid');
+  grid.innerHTML = '';
+  let lastGroup = '';
+
+  THEME_TOKENS.forEach(tok => {
+    if (tok.group !== lastGroup) {
+      lastGroup = tok.group;
+      const hdr = document.createElement('div');
+      hdr.className = 'token-group-header';
+      hdr.textContent = tok.group;
+      grid.appendChild(hdr);
+    }
+
+    grid.appendChild(createTokenRow(tok));
+  });
+}
+
+function refreshTokenRow(row, varName) {
+  const meta = THEME_TOKEN_MAP.get(varName);
+  const raw = resolveVar(varName);
+  const hex = toHex(raw);
+  const display = hex || raw || 'transparent';
+  const sw = row.querySelector('.token-swatch-mini');
+  if (sw) sw.style.background = display;
+
+  const cp = row.querySelector('input[type="color"]');
+  const derived = meta && meta.default && !overrides.has(varName);
+  if (cp) {
+    if (hex) cp.value = hex;
+    cp.disabled = !!derived;
+    cp.style.opacity = derived ? 0.4 : 1;
+    cp.title = derived ? 'Derived token (edit base variables instead)' : '';
+  }
+
+  const vi = row.querySelector('.token-value input');
+  if (vi && document.activeElement !== vi) {
+    vi.value = overrides.has(varName)
+      ? (raw || '')
+      : (meta?.default || raw || '');
+  }
+
+  const dropdown = row.querySelector('.token-dropdown');
+  if (dropdown) {
+    const toggle = dropdown.querySelector('.token-dropdown-toggle');
+    const box = toggle?.querySelector('.color-box');
+    const label = toggle?.querySelector('.dropdown-label');
+    const menu = dropdown.querySelector('.token-dropdown-menu');
+
+    const rawOverride = overrides.get(varName) || meta?.default || '';
+    const boundVar = extractVarRef(rawOverride);
+    const boundMeta = THEME_TOKEN_MAP.get(boundVar);
+
+    if (label) label.textContent = boundMeta?.label || boundVar || varName;
+    const resolved = boundVar ? resolveVar(boundVar) : raw;
+    if (box) box.style.background = toHex(resolved) || resolved || 'transparent';
+
+    if (menu) {
+      menu.querySelectorAll('.token-dropdown-option').forEach(opt => {
+        const optBox = opt.querySelector('.color-box');
+        const optVar = opt.dataset.var;
+        const optColor = resolveVar(optVar);
+        if (optBox) optBox.style.background = toHex(optColor) || optColor || 'transparent';
+        opt.classList.toggle('selected', optVar === boundVar);
+      });
+    }
+  }
+}
+
+function refreshAllTokenRows() {
+  document.querySelectorAll('.token-row[data-var]').forEach(r => refreshTokenRow(r, r.dataset.var));
+}
+
+// ── Palette picker wiring ──────────────────────────────────────────
+
+function wirePalettePickers() {
+  document.querySelectorAll('.swatch[data-var]').forEach(el => {
+    const picker = el.querySelector('.swatch-picker');
+    if (!picker) return;
+    picker.addEventListener('input', () => {
+      document.documentElement.style.setProperty(el.dataset.var, picker.value);
+      overrides.set(el.dataset.var, picker.value);
+      requestAnimationFrame(fullRefresh);
+    });
+  });
+}
+
+// ── Export ─────────────────────────────────────────────────────────
+
+function buildCSSOutput() {
+  const name = document.getElementById('theme-name-input').value.trim() || 'my-theme';
+  const lines = [`html.theme-${name} {`];
+  if (overrides.size === 0) {
+    THEME_TOKENS.forEach(t => {
+      const meta = THEME_TOKEN_MAP.get(t.var);
+      const val = meta?.default ?? resolveVar(t.var);
+      if (val) lines.push(`  ${t.var}: ${val};`);
+    });
+  } else {
+    overrides.forEach((v,k) => lines.push(`  ${k}: ${v};`));
+  }
+  lines.push('}');
+  return lines.join('\n');
+}
+
+// ── Master refresh ─────────────────────────────────────────────────
+
+function fullRefresh() {
+  requestAnimationFrame(() => {
+    refreshAllSwatches();
+    refreshTinyPills();
+    refreshBtnStates();
+    updateLinkStyles();
+    syncPreviewBg();
+    refreshAllTokenRows();
+    refreshComponentTokenRow();
+  });
+}
+
+// ── Accordion ─────────────────────────────────────────────────────
+
+document.querySelectorAll('.pv-accordion-head').forEach(head => {
+  head.addEventListener('click', () => head.closest('.pv-accordion-item').classList.toggle('open'));
+});
+
+// ── Init ───────────────────────────────────────────────────────────
+
+buildBtnStates();
+buildTokenGrid();
+wirePalettePickers();
+
+const themeSelect = document.getElementById('theme-select');
+applyThemeClass(themeSelect.value);
+setTimeout(fullRefresh, 60);
+
+themeSelect.addEventListener('change', () => {
+  overrides.clear();
+  document.documentElement.removeAttribute('style');
+  applyThemeClass(themeSelect.value);
+  const ni = document.getElementById('theme-name-input');
+  if (themeSelect.value) ni.value = themeSelect.value + '-custom';
+  document.querySelectorAll('.token-row').forEach(r => r.classList.remove('overridden','removed'));
+  setTimeout(fullRefresh, 60);
+});
+
+document.getElementById('btn-reset').addEventListener('click', () => {
+  overrides.clear();
+  document.documentElement.removeAttribute('style');
+  document.querySelectorAll('.token-row').forEach(r => r.classList.remove('overridden','removed'));
+  setTimeout(fullRefresh, 30);
+});
+
+document.getElementById('btn-export').addEventListener('click', () => {
+  document.getElementById('css-output').value = buildCSSOutput();
+  document.getElementById('modal-title').textContent =
+    'Export – ' + (document.getElementById('theme-name-input').value || 'my-theme') + '.css';
+  document.getElementById('export-modal').classList.add('open');
+});
+
+['btn-close-modal','btn-close-modal2'].forEach(id => {
+  document.getElementById(id).addEventListener('click', () =>
+    document.getElementById('export-modal').classList.remove('open'));
+});
+document.getElementById('export-modal').addEventListener('click', e => {
+  if (e.target === document.getElementById('export-modal'))
+    document.getElementById('export-modal').classList.remove('open');
+});
+document.getElementById('btn-copy').addEventListener('click', () => {
+  navigator.clipboard.writeText(document.getElementById('css-output').value).then(() => {
+    const n = document.getElementById('copy-notice');
+    n.classList.add('show'); setTimeout(() => n.classList.remove('show'), 2000);
+  });
+});
+document.getElementById('btn-download').addEventListener('click', () => {
+  const name = (document.getElementById('theme-name-input').value || 'my-theme').trim();
+  const blob = new Blob([document.getElementById('css-output').value], { type:'text/css' });
+  const a = Object.assign(document.createElement('a'), { href: URL.createObjectURL(blob), download: `${name}.css` });
+  a.click(); URL.revokeObjectURL(a.href);
+});
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') document.getElementById('export-modal').classList.remove('open');
+});
+</script>
+</body>
+</html>
