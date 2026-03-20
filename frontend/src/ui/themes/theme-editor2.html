@@ -139,6 +139,7 @@
       background: var(--bg-main, #1b1b2b);
       border-left: 1px solid #2a2a3a;
       padding: 16px;
+      color: var(--on-main);
       scrollbar-width: thin;
       scrollbar-color: #3a3a5a transparent;
     }
@@ -545,18 +546,18 @@
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: var(--on-dim, #555577);
+      color: var(--accent-color-dim);
       margin-bottom: 8px;
       padding-bottom: 5px;
       border-bottom: 1px solid rgba(255,255,255,.05);
     }
 
     /* Typography */
-    .pv-type-scale .t-xbold  { color: var(--on-strong,  var(--on-bold)); font-weight: 800; font-size: 14px; }
-    .pv-type-scale .t-bold   { color: var(--on-bold);       font-weight: 700; font-size: 13px; }
+    .pv-type-scale .t-xbold  { color: var(--on-main--bold,  var(--on-main--bold)); font-weight: 800; font-size: 14px; }
+    .pv-type-scale .t-bold   { color: var(--on-main--bold);       font-weight: 700; font-size: 13px; }
     .pv-type-scale .t-main   { color: var(--on-main);       font-size: 13px; }
-    .pv-type-scale .t-dim    { color: var(--on-dim);        font-size: 12px; }
-    .pv-type-scale .t-faint  { color: var(--on-faint);      font-size: 11px; }
+    .pv-type-scale .t-dim    { color: var(--on-main--dim);        font-size: 12px; }
+    .pv-type-scale .t-faint  { color: var(--on-main--faint);      font-size: 11px; }
     .pv-type-scale .t-accent { color: var(--color-primary);   font-size: 12px; font-weight: 600; }
     .pv-type-scale > div { padding: 1px 0; }
 
@@ -652,7 +653,7 @@
       border-color: var(--input-border-focus, var(--color-primary));
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #7b7bff) 15%, transparent);
     }
-    .pv-input::placeholder { color: var(--input-placeholder, var(--on-faint)); }
+    .pv-input::placeholder { color: var(--input-placeholder, var(--on-main--faint)); }
     .pv-input:disabled { opacity: .45; cursor: not-allowed; }
 
     .pv-select {
@@ -684,7 +685,7 @@
     .pv-accordion-item:first-child { border-top: none; }
     .pv-accordion-head {
       padding: 9px 12px; font-size: 12px; font-weight: 600;
-      color: var(--on-bold);
+      color: var(--on-main--bold);
       background: var(--accordion-bg, rgba(255,255,255,.04));
       cursor: pointer;
       display: flex; justify-content: space-between; align-items: center;
@@ -716,7 +717,7 @@
       font-size: 12px; font-weight: 700; color: var(--on-surface);
       display: flex; justify-content: space-between; align-items: center;
     }
-    .pv-modal-x { font-size: 14px; color: var(--on-dim); cursor: pointer; background: none; border: none; }
+    .pv-modal-x { font-size: 14px; color: var(--on-main--dim); cursor: pointer; background: none; border: none; }
     .pv-modal-body { padding: 10px 12px; font-size: 12px; color: var(--on-surface); line-height: 1.5; }
     .pv-modal-foot {
       padding: 8px 12px;
@@ -728,7 +729,7 @@
     .pv-overlay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .pv-overlay-cell {
       border-radius: 6px; padding: 12px 8px;
-      font-size: 10px; font-weight: 600; text-align: center; color: var(--on-dim);
+      font-size: 10px; font-weight: 600; text-align: center; color: var(--on-main--dim);
     }
 
     /* White BG contrast */
@@ -1087,10 +1088,10 @@
       <div class="pv-modal-wrap">
         <div class="pv-modal-inner">
           <div class="pv-modal-head"><span>Modal title</span><button class="pv-modal-x">✕</button></div>
-          <div class="pv-modal-body">Modal uses <code style="color:var(--color-primary);font-size:11px">--modal-bg</code> over <code style="color:var(--on-dim);font-size:11px">--modal-backdrop</code>.</div>
+          <div class="pv-modal-body">Modal uses <code style="color:var(--color-primary);font-size:11px">--modal-bg</code> over <code style="color:var(--on-main--dim);font-size:11px">--modal-backdrop</code>.</div>
           <div class="pv-modal-foot">
             <button class="pv-btn pv-btn-primary" style="font-size:11px;padding:5px 10px">Confirm</button>
-            <button class="pv-btn" style="font-size:11px;padding:5px 10px;background:var(--card-bg);color:var(--on-dim);border:1px solid var(--border-default)">Cancel</button>
+            <button class="pv-btn" style="font-size:11px;padding:5px 10px;background:var(--card-bg);color:var(--on-main--dim);border:1px solid var(--border-default)">Cancel</button>
           </div>
         </div>
       </div>
@@ -1184,9 +1185,9 @@ const THEME_TOKENS = [
   { var: '--bg-contrast',            label: 'CONTRAST',          group: 'Background' },
   { var: '--bg-opaque',              label: 'OPAQUE',            group: 'Background', derived: true, semanticVar: '--bg-opaque' },
      
+  { var: '--on-main',                label: 'Text on main',         group: 'Text' },
   { var: '--on-accent',        label: 'Text on accent',         group: 'Text' },
   { var: '--on-secondary',     label: 'Text on secondary',      group: 'Text' },
-  { var: '--on-main',                label: 'Text on main',         group: 'Text' },
   { var: '--on-surface',      label: 'Text on surface',       group: 'Text' },
   { var: '--on-contrast',          label: 'Text on-Contrast',  group: 'Text' },
   { var: '--on-white',             label: 'Text on-White',     group: 'Text' },
@@ -1257,7 +1258,7 @@ const THEME_TOKENS = [
   { var: '--accordion-hover-bg',label: 'Accordion hover bg', group: 'Components', default: 'color-mix(in srgb, var(--muted, grey) 6%, transparent)' },
   { var: '--accordion-border', label: 'Accordion border', group: 'Components', default: 'color-mix(in srgb, var(--color-primary) 20%, transparent)' },
   { var: '--icon-default',     label: 'Icon default',     group: 'Components', default: 'var(--color-secondary)' },
-  { var: '--icon-muted',       label: 'Icon muted',       group: 'Components', default: 'var(--on-dim)' },
+  { var: '--icon-muted',       label: 'Icon muted',       group: 'Components', default: 'var(--on-main--dim)' },
   { var: '--icon-accent',      label: 'Icon accent',      group: 'Components', default: 'var(--color-primary)' },
 ];
 
