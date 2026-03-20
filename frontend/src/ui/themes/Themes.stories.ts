@@ -38,7 +38,7 @@ export const ComponentPreview: Story = {
     template: `
       <div style="padding: 2rem; display: flex; flex-direction: column; gap: 1.5rem;">
         <div>
-          <h3 style="margin: 0 0 0.5rem; color: var(--text-main); font-size: 0.9rem;">Tags</h3>
+          <h3 style="margin: 0 0 0.5rem; color: var(--on-main); font-size: 0.9rem;">Tags</h3>
           <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
             <TagPill color="default">Default</TagPill>
             <TagPill color="accent">Accent</TagPill>
@@ -48,11 +48,11 @@ export const ComponentPreview: Story = {
           </div>
         </div>
         <div>
-          <h3 style="margin: 0 0 0.5rem; color: var(--text-main); font-size: 0.9rem;">Badge</h3>
+          <h3 style="margin: 0 0 0.5rem; color: var(--on-main); font-size: 0.9rem;">Badge</h3>
           <Badge>3</Badge>
         </div>
         <div>
-          <h3 style="margin: 0 0 0.5rem; color: var(--text-main); font-size: 0.9rem;">Artist tag</h3>
+          <h3 style="margin: 0 0 0.5rem; color: var(--on-main); font-size: 0.9rem;">Artist tag</h3>
           <ArtistTag>Artist Name</ArtistTag>
         </div>
       </div>

@@ -216,7 +216,7 @@ html {
   --bg-inverse:  var(--lightest);                                  /* themes override directly */
 
   /* On-main (foreground placed on main background) */
-  --on-main:            var(--on-bg);
+  --on-main:            var(--on-main);
   --on-main--bold:      var(--lightest);
   --on-main--strong:    var(--lightest);
   --on-main--faint:     var(--mid-light);
@@ -225,7 +225,7 @@ html {
   --on-main--inverse:   var(--darkest);
 
   /* On-surface / on-contrast */
-  --on-surface:         var(--on-bg);
+  --on-surface:         var(--on-main);
   --on-contrast:        var(--darkest);
 
 
@@ -238,7 +238,7 @@ html {
   --contrast-dimmest:var(--dark-dimmest, #100c2b59);
 
   /* back-compat */
-  --text-main:          var(--on-bg);
+  --text-main:          var(--on-main);
   --text-bold:          var(--on-main--bold);
   --text-dim:           var(--on-main--dim);
   --text-faint:         var(--on-main--faint);
@@ -314,7 +314,7 @@ html {
   --input-bg:           var(--bg);
   --input-border:       var(--border-default);
   --input-border-focus: var(--color-primary);
-  --input-text:         var(--on-bg);
+  --input-text:         var(--on-main);
   --input-placeholder:  var(--muted, #9999AAAA);
 
   /* Modals / overlays */
@@ -328,13 +328,13 @@ html {
   --accordion-border:   color-mix(in srgb, var(--color-primary) 20%, transparent);
 
   /* Icons */
-  --icon-default: var(--on-bg);
+  --icon-default: var(--on-main);
   --icon-muted:   var(--on-dim);
   --icon-accent:  var(--color-primary);
 
   /* Compatibility alias normalization (legacy or wrong var names) */
   --on-main:              var(--on-bg, var(--on-main));
-  --on-main:            var(--on-main, var(--on-bg));
+  --on-main:            var(--on-main, var(--on-main));
   --on-bg--bold:        var(--on-bg--bold, var(--on-main--bold), var(--on-bold));
   --on-bg--strong:      var(--on-bg--strong, var(--on-main--strong), var(--on-strong));
   --on-bg--faint:       var(--on-bg--faint, var(--on-main--faint), var(--on-faint));
