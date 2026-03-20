@@ -1,24 +1,24 @@
 html.theme-australis {
   
     /*
-    --color-contrast: var(--lightest);
-  --color-contrast-dim: #FFF;
+    --bg-contrast: var(--lightest);
+  --bg-contrast-dim: #FFF;
   
-  --text-accent: var(--mid);
-  --text-accent-dim:   #2235;
+  --on-tint: var(--mid);
+  --on-tint-dim:   #2235;
   */
     
-  --text-extra-bold: #FFF;
-  --text-bold: #FFFE;
-  --text-main: #FEDC;
-  --text-faint: #FEDA;
-  --text-dim: #BD9974;
-  --text-dim-mid: #8C755ED4;
-  --text-inverse: #213121AA;
+  --on-strong: #FFF;
+  --on-bold: #FFFE;
+  --on-bg: #FEDC;
+  --on-faint: #FEDA;
+  --on-dim: #BD9974;
+  --on-dim-mid: #8C755ED4;
+  --on-inverse: #213121AA;
   
    --accent-color-light: #c6dd86;
   --accent-color: #7bbd69;
-  /*! --color-contrast: #950642; */
+  /*! --bg-contrast: #950642; */
   --accent-color-mid: #46a45e;
   --accent-color-dark: #52aa4f;
   
@@ -29,7 +29,7 @@ html.theme-australis {
   --secondary-color-dark: #a03347;
   --secondary-color-alt:  #D7406C;
   
-    /*! --mid-main: var(--light2); */ --bg-main: #29343C; --bg-darker: #1D252B; --bg-darkest: #1D212BEB; --bg-opaque: #090b1345; /*
+    /*! --mid-main: var(--light2); */ --bg: #29343C; --bg-darker: #1D252B; --bg-darkest: #1D212BEB; --bg-opaque: #090b1345; /*
   --bg-inverse: var(--dark);
   
   --links: #87f;

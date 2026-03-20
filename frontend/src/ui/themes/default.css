@@ -142,7 +142,7 @@ html {
   --color-primary-dark:     var(--accent-color-dark,     color-mix(in srgb, var(--accent-color) 70%, var(--umbra)));
   --color-primary-lighter:  var(--accent-color-lighter,  var(--color-primary-light));
   --color-primary-lightest: var(--accent-color-lightest, var(--color-primary-lighter));
-  --color-primary-dim:      var(--accent-color-dim,      color-mix(in srgb, var(--accent-color) 80%, var(--bg-main, #1b1b2b)));
+  --color-primary-dim:      var(--accent-color-dim,      color-mix(in srgb, var(--accent-color) 80%, var(--bg, #1b1b2b)));
   --color-primary-opaque:   var(--accent-color-opaque,   color-mix(in srgb, var(--accent-color) 40%, transparent));
   --on-accent:              var(--on-accent-color, var(--lightest));
 
@@ -154,7 +154,7 @@ html {
   --color-secondary-strong: var(--secondary-color-strong, var(--secondary-color-alt));
   --color-secondary-dark:   var(--secondary-color-dark,   var(--secondary-color-alt));
   --color-secondary-darker: var(--secondary-color-darker, var(--color-secondary-strong));
-  --color-secondary-dim:    var(--secondary-color-dim,    color-mix(in srgb, var(--secondary-color) 80%, var(--bg-main, #1b1b2b)));
+  --color-secondary-dim:    var(--secondary-color-dim,    color-mix(in srgb, var(--secondary-color) 80%, var(--bg, #1b1b2b)));
   --color-secondary-opaque: var(--secondary-color-opaque, color-mix(in srgb, var(--secondary-color) 40%, transparent));
   --on-secondary:           var(--on-secondary-color, var(--lightest));
 
@@ -162,7 +162,7 @@ html {
   --color-tertiary:         var(--tertiary-color,         var(--color-secondary-alt));
   --color-tertiary-light:   var(--tertiary-color-light,   color-mix(in srgb, var(--color-tertiary) 60%, var(--luma)));
   --color-tertiary-dark:    var(--tertiary-color-dark,    color-mix(in srgb, var(--color-tertiary) 70%, var(--umbra)));
-  --color-tertiary-dim:     var(--tertiary-color-dim,     color-mix(in srgb, var(--color-tertiary) 80%, var(--bg-main, #1b1b2b)));
+  --color-tertiary-dim:     var(--tertiary-color-dim,     color-mix(in srgb, var(--color-tertiary) 80%, var(--bg, #1b1b2b)));
   --color-tertiary-opaque:  var(--tertiary-color-opaque,  color-mix(in srgb, var(--color-tertiary) 40%, transparent));
   --on-tertiary:            var(--on-secondary);
 
@@ -170,7 +170,7 @@ html {
   --color-success:          var(--theme-success,         var(--plx-success));
   --color-success-light:    var(--theme-success-light,   color-mix(in srgb, var(--color-success) 60%, var(--luma)));
   --color-success-dark:     var(--theme-success-dark,    color-mix(in srgb, var(--color-success) 70%, var(--umbra)));
-  --color-success-dim:      var(--theme-success-dim,     color-mix(in srgb, var(--color-success) 80%, var(--bg-main, #1b1b2b)));
+  --color-success-dim:      var(--theme-success-dim,     color-mix(in srgb, var(--color-success) 80%, var(--bg, #1b1b2b)));
   --color-success-opaque:   var(--theme-success-opaque,  color-mix(in srgb, var(--color-success) 40%, transparent));
   --on-success:             var(--on-success-color, var(--lightest));
 
@@ -178,7 +178,7 @@ html {
   --color-warn:             var(--theme-warn,            var(--plx-warning));
   --color-warn-light:       var(--theme-warn-light,      color-mix(in srgb, var(--color-warn) 60%, var(--luma)));
   --color-warn-dark:        var(--theme-warn-dark,       color-mix(in srgb, var(--color-warn) 70%, var(--umbra)));
-  --color-warn-dim:         var(--theme-warn-dim,        color-mix(in srgb, var(--color-warn) 80%, var(--bg-main, #1b1b2b)));
+  --color-warn-dim:         var(--theme-warn-dim,        color-mix(in srgb, var(--color-warn) 80%, var(--bg, #1b1b2b)));
   --color-warn-opaque:      var(--theme-warn-opaque,     color-mix(in srgb, var(--color-warn) 40%, transparent));
   --on-warn:                var(--on-warn-color, var(--darkest));
 
@@ -186,7 +186,7 @@ html {
   --color-danger:           var(--theme-danger,          var(--plx-danger));
   --color-danger-light:     var(--theme-danger-light,    color-mix(in srgb, var(--color-danger) 60%, var(--luma)));
   --color-danger-dark:      var(--theme-danger-dark,     color-mix(in srgb, var(--color-danger) 70%, var(--umbra)));
-  --color-danger-dim:       var(--theme-danger-dim,      color-mix(in srgb, var(--color-danger) 80%, var(--bg-main, #1b1b2b)));
+  --color-danger-dim:       var(--theme-danger-dim,      color-mix(in srgb, var(--color-danger) 80%, var(--bg, #1b1b2b)));
   --color-danger-opaque:    var(--theme-danger-opaque,   color-mix(in srgb, var(--color-danger) 40%, transparent));
   --on-danger:              var(--on-danger-color, var(--lightest));
 
@@ -194,7 +194,7 @@ html {
   --color-info:             var(--theme-info,            var(--plx-info));
   --color-info-light:       var(--theme-info-light,      color-mix(in srgb, var(--color-info) 60%, var(--luma)));
   --color-info-dark:        var(--theme-info-dark,       color-mix(in srgb, var(--color-info) 70%, var(--umbra)));
-  --color-info-dim:         var(--theme-info-dim,        color-mix(in srgb, var(--color-info) 80%, var(--bg-main, #1b1b2b)));
+  --color-info-dim:         var(--theme-info-dim,        color-mix(in srgb, var(--color-info) 80%, var(--bg, #1b1b2b)));
   --color-info-opaque:      var(--theme-info-opaque,     color-mix(in srgb, var(--color-info) 40%, transparent));
   --on-info:                var(--on-info-color, var(--lightest));
 
@@ -202,32 +202,63 @@ html {
   --color-neutral:          var(--theme-neutral,         var(--plx-neutral));
   --color-neutral-light:    var(--theme-neutral-light,   color-mix(in srgb, var(--color-neutral) 60%, var(--luma)));
   --color-neutral-dark:     var(--theme-neutral-dark,    color-mix(in srgb, var(--color-neutral) 70%, var(--umbra)));
-  --color-neutral-dim:      var(--theme-neutral-dim,     color-mix(in srgb, var(--color-neutral) 80%, var(--bg-main, #1b1b2b)));
+  --color-neutral-dim:      var(--theme-neutral-dim,     color-mix(in srgb, var(--color-neutral) 80%, var(--bg, #1b1b2b)));
   --color-neutral-opaque:   var(--theme-neutral-opaque,  color-mix(in srgb, var(--color-neutral) 40%, transparent));
   --on-neutral:             var(--on-neutral-color, var(--lightest));
 
   /* Background */
-  --bg-color:         var(--bg-main);   /* canonical; governs dark / light mode    */
-  --bg-contrast:      var(--lightest);  /* contrast surfaces - separate from surface */
-  --bg-surface:       var(--dark);      /* surface / card / raised layer           */
-  --bg-surface-alt:   var(--pre-dark);    /* surface / card / raised layer           */
-  --bg-deep:          var(--darkest);
+  --bg:          #1b1b2b;             /* canonical; themes override directly       */
+  --bg-contrast:    var(--lightest);     /* contrast surface                          */
+  --bg-surface:     var(--dark);         /* elevated surface / card                   */
+  --bg-surface-alt: var(--pre-dark);     /* alt elevated surface                      */
+  --bg-deep:        var(--darkest);      /* deepest background layer                  */
+  --bg-opaque:   color-mix(in srgb, var(--bg) 80%, transparent);  /* themes override directly */
+  --bg-inverse:  var(--lightest);                                  /* themes override directly */
+  /* back-compat */
+  --bg-main:           var(--bg);
+  --bg-color:          var(--bg);
 
-  /* Text */
-  --text-main-bold:     var(--text-extra-bold, var(--text-bold));
-  --text-surface:       var(--on-surface,     var(--text-main));
-  --text-contrast:      var(--on-contrast,      var(--darkest));
-  --text-contrast-bold: var(--on-contrast-bold, var(--darkest));
+  /* On-background (foreground placed on --bg) */
+  --on-bg:              var(--lighter);
+  --on-bold:         var(--lightest);
+  --on-strong:       var(--lightest);
+  --on-faint:        var(--mid-light);
+  --on-dim:          var(--mid);
+  --on-dim-mid:      var(--pre-light);
+  --on-tint:       var(--color-primary);
+  --on-tint-dim:   color-mix(in srgb, var(--on-tint) 80%, transparent);
+  --on-lightest:     var(--lightest);
+  --on-inverse:      var(--darkest);
 
+  /* On-surface / on-contrast */
+  --on-surface:         var(--on-bg);
+  --on-contrast:        var(--darkest);
+  --on-contrast-bold:   var(--darkest);
+  --on-contrast-dim:    var(--dark-dim, #27233775);
+
+  /* Elevation overlays (theme-overridable intermediates) */
   --contrast-dim:    var(--dark-dim,     #27233775);
   --contrast-dimmer: var(--dark-dimmer,  #0d0d1796);
   --contrast-dimmest:var(--dark-dimmest, #100c2b59);
-  --text-contrast-dim:  var(--contrast-dim,  var(--text-dim));
+
+  /* back-compat */
+  --text-main:          var(--on-bg);
+  --text-bold:          var(--on-bold);
+  --text-dim:           var(--on-dim);
+  --text-faint:         var(--on-faint);
+  --text-main-bold:     var(--on-strong);
+  --text-contrast:      var(--on-contrast);
+  --text-contrast-bold: var(--on-contrast-bold);
+  --text-contrast-dim:  var(--on-contrast-dim);
 
   /* Links */
-  --text-link:          var(--links);
-  --text-link-contrast: var(--links-on-contrast,  var(--links));
-  --text-link-visited:  var(--links-visited,       color-mix(in srgb, var(--links) 70%, var(--bg-main, #1b1b2b)));
+  --color-link:          var(--links);
+  --color-link-contrast: var(--links-on-contrast,  var(--color-link));
+  --color-link-visited:  var(--links-visited,       color-mix(in srgb, var(--color-link) 70%, var(--bg, #1b1b2b)));
+  /* back-compat */
+  --text-link:           var(--color-link);
+  --text-link-contrast:  var(--color-link-contrast);
+  --text-link-visited:   var(--color-link-visited);
 
   /* Borders / dividers */
   --border-default: var(--dark-border,  var(--dark));
@@ -284,10 +315,10 @@ html {
   --card-shadow: var(--surface-dim);
 
   /* Form inputs */
-  --input-bg:           var(--bg-color);
+  --input-bg:           var(--bg);
   --input-border:       var(--border-default);
   --input-border-focus: var(--color-primary);
-  --input-text:         var(--text-main);
+  --input-text:         var(--on-bg);
   --input-placeholder:  var(--muted, #9999AAAA);
 
   /* Modals / overlays */
@@ -301,8 +332,8 @@ html {
   --accordion-border:   color-mix(in srgb, var(--color-primary) 20%, transparent);
 
   /* Icons */
-  --icon-default: var(--text-main);
-  --icon-muted:   var(--text-dim);
+  --icon-default: var(--on-bg);
+  --icon-muted:   var(--on-dim);
   --icon-accent:  var(--color-primary);
 
 }

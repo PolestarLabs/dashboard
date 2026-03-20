@@ -1,18 +1,18 @@
 html.theme-noctix {
   /*
-  --color-contrast: var(--lightest);
---color-contrast-dim: #FFF;
+  --bg-contrast: var(--lightest);
+--bg-contrast-dim: #FFF;
 
---text-accent: var(--mid);
---text-accent-dim:   #2235;
+--on-tint: var(--mid);
+--on-tint-dim:   #2235;
 
---text-extra-bold: var(--mid-dark,#AAC);
---text-bold: var(--mid-dark,#AAC);
---text-main: var(--mid-light,#AAC);
---text-faint: var(--light,#668);
---text-dim: var(--mid-light,#99A);
---text-dim-mid: var(--light,#88a);
---text-inverse: var(--light,#2b2b3b);
+--on-strong: var(--mid-dark,#AAC);
+--on-bold: var(--mid-dark,#AAC);
+--on-bg: var(--mid-light,#AAC);
+--on-faint: var(--light,#668);
+--on-dim: var(--mid-light,#99A);
+--on-dim-mid: var(--light,#88a);
+--on-inverse: var(--light,#2b2b3b);
 */
 
   --accent-color-light: #2b2c5b;
@@ -22,8 +22,8 @@ html.theme-noctix {
   --accent-color-strong: #3b2073;
   --accent-color-dark: #220f35;
 
-  --text-main: #d3d0c6;
-  --text-accent: #e9dbca;
+  --on-bg: #d3d0c6;
+  --on-tint: #e9dbca;
   --bg-contrast: #f5dcdb;
   --on-contrast: #512931;
 
@@ -34,7 +34,7 @@ html.theme-noctix {
   /*
 --mid-main: var(--light2);
 */
-  --bg-main: #15121b;
+  --bg: #15121b;
   --bg-darker: #101015;
   --bg-darkest: #050510;
   --bg-opaque: #05051030; /*

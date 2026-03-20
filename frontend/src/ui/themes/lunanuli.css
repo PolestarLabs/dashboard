@@ -1,19 +1,19 @@
 html.theme-lunanuli {
   
     /*
-    --color-contrast: var(--lightest);
-  --color-contrast-dim: #FFF;
+    --bg-contrast: var(--lightest);
+  --bg-contrast-dim: #FFF;
   
-  --text-accent: var(--mid);
-  --text-accent-dim:   #2235;
+  --on-tint: var(--mid);
+  --on-tint-dim:   #2235;
   
-  --text-extra-bold: var(--mid-dark,#AAC);
-  --text-bold: var(--mid-dark,#AAC);
-  --text-main: var(--mid-light,#AAC);
-  --text-faint: var(--light,#668);
-  --text-dim: var(--mid-light,#99A);
-  --text-dim-mid: var(--light,#88a);
-  --text-inverse: var(--light,#2b2b3b);
+  --on-strong: var(--mid-dark,#AAC);
+  --on-bold: var(--mid-dark,#AAC);
+  --on-bg: var(--mid-light,#AAC);
+  --on-faint: var(--light,#668);
+  --on-dim: var(--mid-light,#99A);
+  --on-dim-mid: var(--light,#88a);
+  --on-inverse: var(--light,#2b2b3b);
   */
     
  
@@ -26,7 +26,7 @@ html.theme-lunanuli {
   --secondary-color-alt:  #b559d1;
     /*
   --mid-main: var(--light2);
-  */ --bg-main: #1f171a; --bg-darker: #1d1818; --bg-darkest: #140909; --bg-opaque: #10050530; /*
+  */ --bg: #1f171a; --bg-darker: #1d1818; --bg-darkest: #140909; --bg-opaque: #10050530; /*
   --bg-inverse: var(--dark);
   
   --links: #87f;

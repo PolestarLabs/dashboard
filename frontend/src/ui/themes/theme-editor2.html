@@ -134,7 +134,7 @@
       top: 45px;
       height: calc(100vh - 45px);
       overflow-y: auto;
-      background: var(--bg-color, #1b1b2b);
+      background: var(--bg, #1b1b2b);
       border-left: 1px solid #2a2a3a;
       padding: 16px;
       scrollbar-width: thin;
@@ -450,18 +450,18 @@
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: var(--text-dim, #555577);
+      color: var(--on-dim, #555577);
       margin-bottom: 8px;
       padding-bottom: 5px;
       border-bottom: 1px solid rgba(255,255,255,.05);
     }
 
     /* Typography */
-    .pv-type-scale .t-xbold  { color: var(--text-main-bold,  var(--text-bold)); font-weight: 800; font-size: 14px; }
-    .pv-type-scale .t-bold   { color: var(--text-bold);       font-weight: 700; font-size: 13px; }
-    .pv-type-scale .t-main   { color: var(--text-main);       font-size: 13px; }
-    .pv-type-scale .t-dim    { color: var(--text-dim);        font-size: 12px; }
-    .pv-type-scale .t-faint  { color: var(--text-faint);      font-size: 11px; }
+    .pv-type-scale .t-xbold  { color: var(--on-strong,  var(--on-bold)); font-weight: 800; font-size: 14px; }
+    .pv-type-scale .t-bold   { color: var(--on-bold);       font-weight: 700; font-size: 13px; }
+    .pv-type-scale .t-main   { color: var(--on-bg);       font-size: 13px; }
+    .pv-type-scale .t-dim    { color: var(--on-dim);        font-size: 12px; }
+    .pv-type-scale .t-faint  { color: var(--on-faint);      font-size: 11px; }
     .pv-type-scale .t-accent { color: var(--color-primary);   font-size: 12px; font-weight: 600; }
     .pv-type-scale > div { padding: 1px 0; }
 
@@ -532,23 +532,23 @@
       border: 1px solid var(--card-border, var(--border-default));
       border-radius: 9px; padding: 12px 14px;
     }
-    .pv-card-head { font-size: 13px; font-weight: 700; color: var(--text-contrast); margin-bottom: 5px; }
-    .pv-card-body { font-size: 12px; color: var(--card-text, var(--text-main)); line-height: 1.5; margin-bottom: 10px; }
+    .pv-card-head { font-size: 13px; font-weight: 700; color: var(--on-contrast); margin-bottom: 5px; }
+    .pv-card-body { font-size: 12px; color: var(--card-text, var(--on-bg)); line-height: 1.5; margin-bottom: 10px; }
     .pv-card-foot {
       display: flex; gap: 6px; align-items: center;
       padding-top: 8px;
       border-top: 1px solid var(--divider, var(--border-default));
     }
-    .pv-card-dim   { font-size: 11px; color: var(--text-contrast-dim); flex: 1; }
+    .pv-card-dim   { font-size: 11px; color: var(--on-contrast-dim); flex: 1; }
     .pv-card-accent { font-size: 11px; color: var(--color-primary); font-weight: 600; }
 
     /* Inputs */
     .pv-input {
       width: 100%; padding: 7px 10px;
-      background: var(--input-bg, var(--bg-color));
+      background: var(--input-bg, var(--bg));
       border: 1px solid var(--input-border, var(--border-default));
       border-radius: 6px;
-      color: var(--input-text, var(--text-main));
+      color: var(--input-text, var(--on-bg));
       font-size: 12px; margin-bottom: 6px; outline: none;
       transition: border-color .15s;
       font-family: inherit;
@@ -557,15 +557,15 @@
       border-color: var(--input-border-focus, var(--color-primary));
       box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary, #7b7bff) 15%, transparent);
     }
-    .pv-input::placeholder { color: var(--input-placeholder, var(--text-faint)); }
+    .pv-input::placeholder { color: var(--input-placeholder, var(--on-faint)); }
     .pv-input:disabled { opacity: .45; cursor: not-allowed; }
 
     .pv-select {
       width: 100%; padding: 6px 10px;
-      background: var(--input-bg, var(--bg-color));
+      background: var(--input-bg, var(--bg));
       border: 1px solid var(--input-border, var(--border-default));
       border-radius: 6px;
-      color: var(--input-text, var(--text-main));
+      color: var(--input-text, var(--on-bg));
       font-size: 12px; margin-bottom: 6px; outline: none; cursor: pointer;
       font-family: inherit;
     }
@@ -575,7 +575,7 @@
       display: flex; align-items: center; gap: 8px; margin-bottom: 5px;
     }
     .pv-cb-row input { accent-color: var(--color-primary); width: 14px; height: 14px; }
-    .pv-cb-label { font-size: 12px; color: var(--text-main); }
+    .pv-cb-label { font-size: 12px; color: var(--on-bg); }
 
     /* Divider */
     .pv-divider { border: none; border-top: 1px solid var(--divider, var(--border-default)); margin: 8px 0; }
@@ -589,7 +589,7 @@
     .pv-accordion-item:first-child { border-top: none; }
     .pv-accordion-head {
       padding: 9px 12px; font-size: 12px; font-weight: 600;
-      color: var(--text-bold);
+      color: var(--on-bold);
       background: var(--accordion-bg, rgba(255,255,255,.04));
       cursor: pointer;
       display: flex; justify-content: space-between; align-items: center;
@@ -599,7 +599,7 @@
     .pv-accordion-item.open .pv-accordion-head { background: var(--accordion-open-bg, rgba(255,255,255,.1)); }
     .pv-accordion-body {
       display: none; padding: 10px 12px;
-      font-size: 12px; color: var(--text-main); line-height: 1.5;
+      font-size: 12px; color: var(--on-bg); line-height: 1.5;
     }
     .pv-accordion-item.open .pv-accordion-body { display: block; }
     .pv-accordion-chevron { transition: transform .18s; font-size: 10px; color: var(--color-primary); }
@@ -618,11 +618,11 @@
     .pv-modal-head {
       padding: 8px 12px;
       border-bottom: 1px solid var(--divider, var(--border-default));
-      font-size: 12px; font-weight: 700; color: var(--text-surface);
+      font-size: 12px; font-weight: 700; color: var(--on-surface);
       display: flex; justify-content: space-between; align-items: center;
     }
-    .pv-modal-x { font-size: 14px; color: var(--text-dim); cursor: pointer; background: none; border: none; }
-    .pv-modal-body { padding: 10px 12px; font-size: 12px; color: var(--text-surface); line-height: 1.5; }
+    .pv-modal-x { font-size: 14px; color: var(--on-dim); cursor: pointer; background: none; border: none; }
+    .pv-modal-body { padding: 10px 12px; font-size: 12px; color: var(--on-surface); line-height: 1.5; }
     .pv-modal-foot {
       padding: 8px 12px;
       border-top: 1px solid var(--divider, var(--border-default));
@@ -633,7 +633,7 @@
     .pv-overlay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .pv-overlay-cell {
       border-radius: 6px; padding: 12px 8px;
-      font-size: 10px; font-weight: 600; text-align: center; color: var(--text-dim);
+      font-size: 10px; font-weight: 600; text-align: center; color: var(--on-dim);
     }
 
     /* White BG contrast */
@@ -752,18 +752,18 @@
 
       <div class="palette-row-label">Backgrounds &amp; Surfaces</div>
       <div class="swatch-row">
-        <div class="swatch" data-var="--bg-main" data-on-text="--text-main">
+        <div class="swatch" data-var="--bg" data-on-text="--on-bg">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Background</div>
           <div class="swatch-bottom"><div class="swatch-index">6</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--bg-surface" data-on-text="--text-main">
+        <div class="swatch" data-var="--bg-surface" data-on-text="--on-bg">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Surface</div>
           <p style="opacity: .5; font-size: 12px; color: var(--on-surface);">This swatch is used for surfaces. It should be distinguishable from the main background while still maintaining harmony.</p>
           <div class="swatch-bottom"><div class="swatch-index">7</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--bg-surface-alt" data-on-text="--text-main">
+        <div class="swatch" data-var="--bg-surface-alt" data-on-text="--on-bg">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Surface +</div>
           <p style="opacity: .5; font-size: 12px; color: var(--on-surface);">This swatch is an alternative surface color. It can be used for raised elements or cards.</p>
@@ -777,10 +777,10 @@
           <div class="swatch-bottom"><div class="swatch-index">10</div><div class="swatch-hex"></div></div>
           
         </div>
-        <div class="swatch" data-var="--bg-deep" data-on-text="--text-main">
+        <div class="swatch" data-var="--bg-deep" data-on-text="--on-bg">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Deepest</div>
-          <p style="opacity: .5; font-size: 12px; color: var(--text-main);">This swatch is a step beyond the main background. It can be set to the same color.</p>
+          <p style="opacity: .5; font-size: 12px; color: var(--on-bg);">This swatch is a step beyond the main background. It can be set to the same color.</p>
           
           <div class="swatch-bottom"><div class="swatch-index">9</div><div class="swatch-hex"></div></div>
         </div>
@@ -801,17 +801,17 @@
           <div class="swatch-label">On Sec -  / -  On Tert</div>
           <div class="swatch-bottom"><div class="swatch-index">12</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch on-row" data-var="--text-main" data-fallback-var="--text-main" data-against-var="--bg-main" data-on-text="auto">
+        <div class="swatch on-row" data-var="--on-bg" data-fallback-var="--on-bg" data-against-var="--bg" data-on-text="auto">
           <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
           <div class="swatch-label">On BG</div>
           <div class="swatch-bottom"><div class="swatch-index">13</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch on-row" data-var="--text-surface" data-fallback-var="--on-surface" data-against-var="--bg-surface" data-on-text="auto">
+        <div class="swatch on-row" data-var="--on-surface" data-fallback-var="--on-surface" data-against-var="--bg-surface" data-on-text="auto">
           <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
           <div class="swatch-label">On Surface</div>
           <div class="swatch-bottom"><div class="swatch-index">14</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch on-row" data-var="--text-contrast" data-fallback-var="--on-contrast" data-against-var="--bg-contrast" data-on-text="auto">
+        <div class="swatch on-row" data-var="--on-contrast" data-fallback-var="--on-contrast" data-against-var="--bg-contrast" data-on-text="auto">
           <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
           <div class="swatch-label">On Contrast</div>
           <div class="swatch-bottom"><div class="swatch-index">15</div><div class="swatch-hex"></div></div>
@@ -980,10 +980,10 @@
       <div class="pv-modal-wrap">
         <div class="pv-modal-inner">
           <div class="pv-modal-head"><span>Modal title</span><button class="pv-modal-x">✕</button></div>
-          <div class="pv-modal-body">Modal uses <code style="color:var(--color-primary);font-size:11px">--modal-bg</code> over <code style="color:var(--text-dim);font-size:11px">--modal-backdrop</code>.</div>
+          <div class="pv-modal-body">Modal uses <code style="color:var(--color-primary);font-size:11px">--modal-bg</code> over <code style="color:var(--on-dim);font-size:11px">--modal-backdrop</code>.</div>
           <div class="pv-modal-foot">
             <button class="pv-btn pv-btn-primary" style="font-size:11px;padding:5px 10px">Confirm</button>
-            <button class="pv-btn" style="font-size:11px;padding:5px 10px;background:var(--card-bg);color:var(--text-dim);border:1px solid var(--border-default)">Cancel</button>
+            <button class="pv-btn" style="font-size:11px;padding:5px 10px;background:var(--card-bg);color:var(--on-dim);border:1px solid var(--border-default)">Cancel</button>
           </div>
         </div>
       </div>
@@ -1069,27 +1069,27 @@ const THEME_TOKENS = [
   { var: '--secondary-color-dark',   label: 'SECONDARY DARK',    group: 'Secondary' },
   { var: '--secondary-color-dim',    label: 'SECONDARY DIM',     group: 'Secondary' },
   //{ var: '--on-secondary-color',     label: 'On secondary',      group: 'Secondary' },
-  { var: '--bg-main',                label: 'BACKGROUND',        group: 'Background' },
+  { var: '--bg',                label: 'BACKGROUND',        group: 'Background' },
   { var: '--bg-surface',             label: 'SURFACE',           group: 'Background' },
   { var: '--bg-surface-alt',         label: 'SURFACE +',         group: 'Background' },
   { var: '--bg-deep',                label: 'DEEPEST',           group: 'Background' },
   { var: '--bg-opaque',              label: 'OPAQUE',            group: 'Background' },
   { var: '--bg-contrast',            label: 'CONTRAST',          group: 'Background' },
   
-  { var: '--text-main',              label: 'Text main',         group: 'Text' },
-  { var: '--text-bold',              label: 'Text bold',         group: 'Text' },
-  { var: '--text-extra-bold',        label: 'Text extra-bold',   group: 'Text' },
-  { var: '--text-faint',             label: 'Text faint',        group: 'Text' },
-  { var: '--text-dim',               label: 'Text dim',          group: 'Text' },
-  //{ var: '--text-dim-mid',           label: 'Text dim-mid',      group: 'Text' },
-  { var: '--text-accent',            label: 'Text accent',       group: 'Text' },
-  { var: '--text-accent-dim',        label: 'Text accent-dim',   group: 'Text' },
+  { var: '--on-bg',              label: 'Text main',         group: 'Text' },
+  { var: '--on-bold',              label: 'Text bold',         group: 'Text' },
+  { var: '--on-strong',        label: 'Text extra-bold',   group: 'Text' },
+  { var: '--on-faint',             label: 'Text faint',        group: 'Text' },
+  { var: '--on-dim',               label: 'Text dim',          group: 'Text' },
+  //{ var: '--on-dim-mid',           label: 'Text dim-mid',      group: 'Text' },
+  { var: '--on-tint',            label: 'Text accent',       group: 'Text' },
+  { var: '--on-tint-dim',        label: 'Text accent-dim',   group: 'Text' },
  // { var: '--on-surface',             label: 'On surface',        group: 'Text' },
-  { var: '--text-contrast',          label: 'Text contrast',     group: 'Text' },
-  { var: '--text-lightest',          label: 'Text lightest',     group: 'Text' },
-  { var: '--text-contrast',          label: 'Contrast',          group: 'Text' },
-  { var: '--text-contrast-dim',      label: 'Contrast dim',      group: 'Text' },
-  { var: '--text-contrast-inverse',  label: 'Contrast alt',      group: 'Text' },
+  { var: '--on-contrast',          label: 'Text contrast',     group: 'Text' },
+  { var: '--on-lightest',          label: 'Text lightest',     group: 'Text' },
+  { var: '--on-contrast',          label: 'Contrast',          group: 'Text' },
+  { var: '--on-contrast-dim',      label: 'Contrast dim',      group: 'Text' },
+  { var: '--bg-contrast-inverse',  label: 'Contrast alt',      group: 'Text' },
 
   { var: '--links',                  label: 'Links',             group: 'Links' },
   { var: '--links-hover',            label: 'Links hover',       group: 'Links' },
@@ -1135,13 +1135,13 @@ const THEME_TOKENS = [
   { var: '--btn-neutral-bg',   label: 'Btn neutral bg',   group: 'Components', default: 'var(--color-neutral)' },
   { var: '--btn-neutral-fg',   label: 'Btn neutral fg',   group: 'Components', default: 'var(--on-neutral)' },
   { var: '--card-bg',          label: 'Card bg',          group: 'Components', default: 'var(--bg-contrast)' },
-  { var: '--card-text',        label: 'Card text',        group: 'Components', default: 'var(--text-main)' },
+  { var: '--card-text',        label: 'Card text',        group: 'Components', default: 'var(--on-bg)' },
   { var: '--card-border',      label: 'Card border',      group: 'Components', default: 'var(--border-default)' },
   { var: '--card-shadow',      label: 'Card shadow',      group: 'Components', default: 'var(--surface-dim)' },
-  { var: '--input-bg',         label: 'Input bg',         group: 'Components', default: 'var(--bg-color)' },
+  { var: '--input-bg',         label: 'Input bg',         group: 'Components', default: 'var(--bg)' },
   { var: '--input-border',     label: 'Input border',     group: 'Components', default: 'var(--border-default)' },
   { var: '--input-border-focus', label: 'Input border focus', group: 'Components', default: 'var(--color-primary)' },
-  { var: '--input-text',       label: 'Input text',       group: 'Components', default: 'var(--text-main)' },
+  { var: '--input-text',       label: 'Input text',       group: 'Components', default: 'var(--on-bg)' },
   { var: '--input-placeholder', label: 'Input placeholder', group: 'Components', default: 'var(--muted)' },
   { var: '--modal-backdrop',   label: 'Modal backdrop',   group: 'Components', default: 'var(--surface-dimmer)' },
   { var: '--modal-bg',         label: 'Modal bg',         group: 'Components', default: 'var(--bg-contrast)' },
@@ -1149,8 +1149,8 @@ const THEME_TOKENS = [
   { var: '--accordion-open-bg',label: 'Accordion open bg',group: 'Components', default: 'color-mix(in srgb, var(--color-primary) 15%, transparent)' },
   { var: '--accordion-hover-bg',label: 'Accordion hover bg', group: 'Components', default: 'color-mix(in srgb, var(--muted, grey) 6%, transparent)' },
   { var: '--accordion-border', label: 'Accordion border', group: 'Components', default: 'color-mix(in srgb, var(--color-primary) 20%, transparent)' },
-  { var: '--icon-default',     label: 'Icon default',     group: 'Components', default: 'var(--text-main)' },
-  { var: '--icon-muted',       label: 'Icon muted',       group: 'Components', default: 'var(--text-dim)' },
+  { var: '--icon-default',     label: 'Icon default',     group: 'Components', default: 'var(--on-bg)' },
+  { var: '--icon-muted',       label: 'Icon muted',       group: 'Components', default: 'var(--on-dim)' },
   { var: '--icon-accent',      label: 'Icon accent',      group: 'Components', default: 'var(--color-primary)' },
 ];
 
@@ -1277,16 +1277,16 @@ function refreshTinyPills() {
 // ── Link colours ──────────────────────────────────────────────────
 
 function updateLinkStyles() {
-  const link  = resolveVar('--text-link');
-  const hover = resolveVar('--text-link-contrast');
-  const vis   = resolveVar('--text-link-visited');
+  const link  = resolveVar('--color-link');
+  const hover = resolveVar('--color-link-contrast');
+  const vis   = resolveVar('--color-link-visited');
   const id = 'te-link-styles';
   let s = document.getElementById(id);
   if (!s) { s = document.createElement('style'); s.id = id; document.head.appendChild(s); }
   s.textContent = `
-    #pv-links .pv-link-normal, .pv-link-normal  { color: ${link  || 'var(--text-link)'}; }
-    #pv-links .pv-link-hover   { color: ${hover || 'var(--text-link-contrast)'}; text-decoration: underline; }
-    #pv-links .pv-link-visited { color: ${vis   || 'var(--text-link-visited)'}; }
+    #pv-links .pv-link-normal, .pv-link-normal  { color: ${link  || 'var(--color-link)'}; }
+    #pv-links .pv-link-hover   { color: ${hover || 'var(--color-link-contrast)'}; text-decoration: underline; }
+    #pv-links .pv-link-visited { color: ${vis   || 'var(--color-link-visited)'}; }
   `;
 }
 
@@ -1339,7 +1339,7 @@ function refreshBtnStates() {
 
 function syncPreviewBg() {
   const panel = document.getElementById('preview-panel');
-  const raw = resolveVar('--bg-color') || resolveVar('--bg-main');
+  const raw = resolveVar('--bg');
   panel.style.background = raw || '';
 }
 
