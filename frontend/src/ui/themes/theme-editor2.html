@@ -118,7 +118,9 @@
     /* ── Left: scrollable editor panel ── */
     .editor-panel {
       flex: 1 1 600px;
-      min-width: 0;
+      min-width: 600px;
+      max-width: 1000px;
+      margin: 0 auto;
       padding: 20px 20px 40px;
       overflow-y: auto;
       background: #111118 !important;
@@ -134,7 +136,7 @@
       top: 45px;
       height: calc(100vh - 45px);
       overflow-y: auto;
-      background: var(--bg, #1b1b2b);
+      background: var(--bg-main, #1b1b2b);
       border-left: 1px solid #2a2a3a;
       padding: 16px;
       scrollbar-width: thin;
@@ -246,6 +248,17 @@
       padding: 1px 5px;
       border-radius: 3px;
     }
+    .swatch-descript {
+      opacity: .5;
+      font-size: 12px;
+      color: var(--on-surface);
+      margin-top: 6px;
+      line-height: 1.3;
+      pointer-events: none;
+    }
+    .swatch-descript--secondary { color: var(--on-secondary); }
+    .swatch-descript--contrast  { color: var(--on-contrast); }
+    .swatch-descript--bg        { color: var(--on-main); }
     .swatch-picker {
       position: absolute; inset: 0;
       opacity: 0; cursor: pointer;
@@ -290,6 +303,87 @@
       padding: 4px 0 2px;
       border-top: 1px solid #202030;
     }
+
+    .token-computed-hex {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      flex-shrink: 0;
+    }
+    .token-computed-swatch {
+      width: 18px;
+      height: 18px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,.14);
+      flex-shrink: 0;
+    }
+    .token-computed-value {
+      font-size: 10px;
+      font-family: monospace;
+      color: #7777aa;
+      letter-spacing: .02em;
+    }
+
+    .token-group-body {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(240px, 1fr));
+      gap: 6px;
+    }
+    .token-group-body.collapsed { display: none; }
+    @media (max-width: 980px) { .token-group-body { grid-template-columns: repeat(2, minmax(240px, 1fr)); } }
+    @media (max-width: 620px) { .token-group-body { grid-template-columns: repeat(1, minmax(240px, 1fr)); } }
+
+    .token-group-header.collapsible {
+      cursor: pointer;
+      user-select: none;
+      transition: color .12s;
+    }
+    .token-group-header.collapsible:hover { color: #8888bb88; }
+    .auto-calc-section { margin-top: 26px; }
+
+    .auto-calc-section-header {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: #555577;
+      margin: 0 0 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      user-select: none;
+      transition: color .15s;
+    }
+    .auto-calc-section-header:hover { color: #8888bb; }
+    .auto-calc-section-header::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #2a2a3a;
+    }
+    .auto-calc-badge {
+      font-size: 9px;
+      background: rgba(123,123,255,.08);
+      color: #7b7bff99;
+      border: 1px solid rgba(123,123,255,.16);
+      border-radius: 3px;
+      padding: 1px 5px;
+      letter-spacing: 0;
+      text-transform: none;
+      font-weight: 600;
+      font-family: system-ui, sans-serif;
+      flex-shrink: 0;
+    }
+    .auto-calc-chevron {
+      font-size: 8px;
+      flex-shrink: 0;
+      transition: transform .18s;
+    }
+    .auto-calc-section.open .auto-calc-chevron { transform: rotate(90deg); }
+    .auto-calc-body { display: none; }
+    .auto-calc-section.open .auto-calc-body { display: block; }
     .token-row {
       display: flex;
       align-items: center;
@@ -302,6 +396,7 @@
     }
     .token-row:hover { border-color: #35355599; }
     .token-row.overridden { border-color: #7b7bff55; background: #1e1e3a; }
+    .token-row.not-set { opacity: .326; }
     .token-row.removed    { border-color: #ff444433; opacity: .6; }
 
     .token-swatch-mini {
@@ -459,7 +554,7 @@
     /* Typography */
     .pv-type-scale .t-xbold  { color: var(--on-strong,  var(--on-bold)); font-weight: 800; font-size: 14px; }
     .pv-type-scale .t-bold   { color: var(--on-bold);       font-weight: 700; font-size: 13px; }
-    .pv-type-scale .t-main   { color: var(--on-bg);       font-size: 13px; }
+    .pv-type-scale .t-main   { color: var(--on-main);       font-size: 13px; }
     .pv-type-scale .t-dim    { color: var(--on-dim);        font-size: 12px; }
     .pv-type-scale .t-faint  { color: var(--on-faint);      font-size: 11px; }
     .pv-type-scale .t-accent { color: var(--color-primary);   font-size: 12px; font-weight: 600; }
@@ -533,7 +628,7 @@
       border-radius: 9px; padding: 12px 14px;
     }
     .pv-card-head { font-size: 13px; font-weight: 700; color: var(--on-contrast); margin-bottom: 5px; }
-    .pv-card-body { font-size: 12px; color: var(--card-text, var(--on-bg)); line-height: 1.5; margin-bottom: 10px; }
+    .pv-card-body { font-size: 12px; color: var(--card-text, var(--on-main)); line-height: 1.5; margin-bottom: 10px; }
     .pv-card-foot {
       display: flex; gap: 6px; align-items: center;
       padding-top: 8px;
@@ -545,10 +640,10 @@
     /* Inputs */
     .pv-input {
       width: 100%; padding: 7px 10px;
-      background: var(--input-bg, var(--bg));
+      background: var(--input-bg, var(--bg-main));
       border: 1px solid var(--input-border, var(--border-default));
       border-radius: 6px;
-      color: var(--input-text, var(--on-bg));
+      color: var(--input-text, var(--on-main));
       font-size: 12px; margin-bottom: 6px; outline: none;
       transition: border-color .15s;
       font-family: inherit;
@@ -562,10 +657,10 @@
 
     .pv-select {
       width: 100%; padding: 6px 10px;
-      background: var(--input-bg, var(--bg));
+      background: var(--input-bg, var(--bg-main));
       border: 1px solid var(--input-border, var(--border-default));
       border-radius: 6px;
-      color: var(--input-text, var(--on-bg));
+      color: var(--input-text, var(--on-main));
       font-size: 12px; margin-bottom: 6px; outline: none; cursor: pointer;
       font-family: inherit;
     }
@@ -575,7 +670,7 @@
       display: flex; align-items: center; gap: 8px; margin-bottom: 5px;
     }
     .pv-cb-row input { accent-color: var(--color-primary); width: 14px; height: 14px; }
-    .pv-cb-label { font-size: 12px; color: var(--on-bg); }
+.pv-cb-label { font-size: 12px; color: var(--on-main); }
 
     /* Divider */
     .pv-divider { border: none; border-top: 1px solid var(--divider, var(--border-default)); margin: 8px 0; }
@@ -599,7 +694,7 @@
     .pv-accordion-item.open .pv-accordion-head { background: var(--accordion-open-bg, rgba(255,255,255,.1)); }
     .pv-accordion-body {
       display: none; padding: 10px 12px;
-      font-size: 12px; color: var(--on-bg); line-height: 1.5;
+      font-size: 12px; color: var(--on-main); line-height: 1.5;
     }
     .pv-accordion-item.open .pv-accordion-body { display: block; }
     .pv-accordion-chevron { transition: transform .18s; font-size: 10px; color: var(--color-primary); }
@@ -745,42 +840,42 @@
         <div class="swatch" data-var="--tertiary-color" data-on-text="white">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Tertiary (optional)</div>
-          <p style="opacity: .5; font-size: 10px; color: var(--on-secondary);">This swatch is optional and can be used as an additional accent color. It MUST be 100% compatible with the Secondary color's foreground colors. </p>
+          <p class="swatch-descript swatch-descript--secondary">This swatch is optional and can be used as an additional accent color. It MUST be 100% compatible with the Secondary color's foreground colors. </p>
           <div class="swatch-bottom"><div class="swatch-index">5</div><div class="swatch-hex"></div></div>
         </div>
       </div>
 
       <div class="palette-row-label">Backgrounds &amp; Surfaces</div>
       <div class="swatch-row">
-        <div class="swatch" data-var="--bg" data-on-text="--on-bg">
+        <div class="swatch" data-var="--bg-main" data-on-text="--on-main">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Background</div>
           <div class="swatch-bottom"><div class="swatch-index">6</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--bg-surface" data-on-text="--on-bg">
+        <div class="swatch" data-var="--bg-surface" data-on-text="--on-main">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Surface</div>
-          <p style="opacity: .5; font-size: 12px; color: var(--on-surface);">This swatch is used for surfaces. It should be distinguishable from the main background while still maintaining harmony.</p>
+          <p class="swatch-descript">This swatch is used for surfaces. It should be distinguishable from the main background while still maintaining harmony.</p>
           <div class="swatch-bottom"><div class="swatch-index">7</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--bg-surface-alt" data-on-text="--on-bg">
+        <div class="swatch" data-var="--bg-surface-alt" data-on-text="--on-main">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Surface +</div>
-          <p style="opacity: .5; font-size: 12px; color: var(--on-surface);">This swatch is an alternative surface color. It can be used for raised elements or cards.</p>
+          <p class="swatch-descript">This swatch is an alternative surface color. It can be used for raised elements or cards.</p>
           
           <div class="swatch-bottom"><div class="swatch-index">8</div><div class="swatch-hex"></div></div>
         </div>
         <div class="swatch" data-var="--bg-contrast" data-on-text="auto">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Contrast</div>
-          <p style="opacity: .5; font-size: 12px; color: var(--on-contrast);">This swatch is used for contrast surfaces. It should provide a clear distinction from the main background.</p>
+          <p class="swatch-descript swatch-descript--contrast">This swatch is used for contrast surfaces. It should provide a clear distinction from the main background.</p>
           <div class="swatch-bottom"><div class="swatch-index">10</div><div class="swatch-hex"></div></div>
           
         </div>
-        <div class="swatch" data-var="--bg-deep" data-on-text="--on-bg">
+        <div class="swatch" data-var="--bg-deep" data-on-text="--on-main">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Deepest</div>
-          <p style="opacity: .5; font-size: 12px; color: var(--on-bg);">This swatch is a step beyond the main background. It can be set to the same color.</p>
+          <p class="swatch-descript swatch-descript--bg">This swatch is a step beyond the main background. It can be set to the same color.</p>
           
           <div class="swatch-bottom"><div class="swatch-index">9</div><div class="swatch-hex"></div></div>
         </div>
@@ -801,7 +896,7 @@
           <div class="swatch-label">On Sec -  / -  On Tert</div>
           <div class="swatch-bottom"><div class="swatch-index">12</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch on-row" data-var="--on-bg" data-fallback-var="--on-bg" data-against-var="--bg" data-on-text="auto">
+        <div class="swatch on-row" data-var="--on-main" data-fallback-var="--on-main" data-against-var="--bg-main" data-on-text="auto">
           <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
           <div class="swatch-label">On BG</div>
           <div class="swatch-bottom"><div class="swatch-index">13</div><div class="swatch-hex"></div></div>
@@ -851,6 +946,18 @@
 
     <div class="section-title">All Theme Tokens</div>
     <div class="token-grid" id="token-grid"></div>
+
+    <!-- Auto-calculated variables (shades, elevation, derived) -->
+    <div id="auto-calc-section" class="auto-calc-section">
+      <div class="auto-calc-section-header" id="auto-calc-header">
+        <span class="auto-calc-chevron">▶</span>
+        Auto-calculated Variables
+        <span class="auto-calc-badge">pre-baked · expand to fine-tune</span>
+      </div>
+      <div class="auto-calc-body">
+        <div class="token-grid" id="auto-calc-token-grid"></div>
+      </div>
+    </div>
 
   </div><!-- /editor-panel -->
 
@@ -1051,43 +1158,43 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 const THEME_TOKENS = [
-
+  
   { var: '--accent-color',           label: 'ACCENT',            group: 'Primary' },
-  { var: '--accent-color-mid',       label: 'ACCENT MID',        group: 'Primary' },
-  { var: '--accent-color-light',     label: 'ACCENT LIGHT',      group: 'Primary' },
-  { var: '--accent-color-strong',    label: 'ACCENT STRONG',     group: 'Primary' },
-  { var: '--accent-color-dark',      label: 'ACCENT DARK',       group: 'Primary' },
-  { var: '--accent-color-dim',       label: 'ACCENT DIM',        group: 'Primary' },
-  { var: '--accent-color-opaque',    label: 'ACCENT OPAQUE',     group: 'Primary' },
-  //{ var: '--on-accent-color',        label: 'On accent',         group: 'Primary' },
   { var: '--secondary-color',        label: 'SECONDARY',         group: 'Secondary' },
   { var: '--secondary-color-alt',    label: 'SECONDARY ALT',     group: 'Secondary' },
   { var: '--tertiary-color',         label: 'TERTIARY',          group: 'Secondary' },
-  { var: '--secondary-color-light',  label: 'SECONDARY LIGHT',   group: 'Secondary' },
-  { var: '--secondary-color-mid',    label: 'SECONDARY MID',     group: 'Secondary' },
-  { var: '--secondary-color-strong', label: 'SECONDARY STRONG',  group: 'Secondary' },
-  { var: '--secondary-color-dark',   label: 'SECONDARY DARK',    group: 'Secondary' },
-  { var: '--secondary-color-dim',    label: 'SECONDARY DIM',     group: 'Secondary' },
-  //{ var: '--on-secondary-color',     label: 'On secondary',      group: 'Secondary' },
-  { var: '--bg',                label: 'BACKGROUND',        group: 'Background' },
+  
+  { var: '--accent-color-mid',       label: 'ACCENT MID',        group: 'Primary',    derived: true, semanticVar: '--color-primary-mid' },
+  { var: '--accent-color-light',     label: 'ACCENT LIGHT',      group: 'Primary',    derived: true, semanticVar: '--color-primary-light' },
+  { var: '--accent-color-strong',    label: 'ACCENT STRONG',     group: 'Primary',    derived: true, semanticVar: '--color-primary-strong' },
+  { var: '--accent-color-dark',      label: 'ACCENT DARK',       group: 'Primary',    derived: true, semanticVar: '--color-primary-dark' },
+  { var: '--accent-color-dim',       label: 'ACCENT DIM',        group: 'Primary',    derived: true, semanticVar: '--color-primary-dim' },
+  { var: '--accent-color-opaque',    label: 'ACCENT OPAQUE',     group: 'Primary',    derived: true, semanticVar: '--color-primary-opaque' },
+
+  { var: '--secondary-color-light',  label: 'SECONDARY LIGHT',   group: 'Secondary',  derived: true, semanticVar: '--color-secondary-light' },
+  { var: '--secondary-color-mid',    label: 'SECONDARY MID',     group: 'Secondary',  derived: true, semanticVar: '--color-secondary-mid' },
+  { var: '--secondary-color-strong', label: 'SECONDARY STRONG',  group: 'Secondary',  derived: true, semanticVar: '--color-secondary-strong' },
+  { var: '--secondary-color-dark',   label: 'SECONDARY DARK',    group: 'Secondary',  derived: true, semanticVar: '--color-secondary-dark' },
+  { var: '--secondary-color-dim',    label: 'SECONDARY DIM',     group: 'Secondary',  derived: true, semanticVar: '--color-secondary-dim' },
+  
+  { var: '--bg-main',                     label: 'BACKGROUND',        group: 'Background' },
   { var: '--bg-surface',             label: 'SURFACE',           group: 'Background' },
   { var: '--bg-surface-alt',         label: 'SURFACE +',         group: 'Background' },
   { var: '--bg-deep',                label: 'DEEPEST',           group: 'Background' },
-  { var: '--bg-opaque',              label: 'OPAQUE',            group: 'Background' },
   { var: '--bg-contrast',            label: 'CONTRAST',          group: 'Background' },
+  { var: '--bg-opaque',              label: 'OPAQUE',            group: 'Background', derived: true, semanticVar: '--bg-opaque' },
+     
+  { var: '--on-accent',        label: 'Text on accent',         group: 'Text' },
+  { var: '--on-secondary',     label: 'Text on secondary',      group: 'Text' },
+  { var: '--on-main',                label: 'Text on main',         group: 'Text' },
+  { var: '--on-surface',      label: 'Text on surface',       group: 'Text' },
+  { var: '--on-contrast',          label: 'Text on-Contrast',  group: 'Text' },
+  { var: '--on-white',             label: 'Text on-White',     group: 'Text' },
   
-  { var: '--on-bg',              label: 'Text main',         group: 'Text' },
-  { var: '--on-bold',              label: 'Text bold',         group: 'Text' },
-  { var: '--on-strong',        label: 'Text extra-bold',   group: 'Text' },
-  { var: '--on-faint',             label: 'Text faint',        group: 'Text' },
-  { var: '--on-dim',               label: 'Text dim',          group: 'Text' },
-  //{ var: '--on-dim-mid',           label: 'Text dim-mid',      group: 'Text' },
-  { var: '--on-tint',            label: 'Text accent',       group: 'Text' },
-  { var: '--on-tint-dim',        label: 'Text accent-dim',   group: 'Text' },
- // { var: '--on-surface',             label: 'On surface',        group: 'Text' },
-  { var: '--on-contrast',          label: 'Text contrast',     group: 'Text' },
-  { var: '--on-lightest',          label: 'Text lightest',     group: 'Text' },
-  { var: '--on-contrast',          label: 'Contrast',          group: 'Text' },
+  { var: '--on-main--bold',              label: 'Text on main: bold',         group: 'Text' },
+  { var: '--on-main--strong',            label: 'Text on main: extra-bold',   group: 'Text' },
+  { var: '--on-main--faint',             label: 'Text on main: faint',        group: 'Text' },
+  { var: '--on-main--dim',               label: 'Text on main: dim',          group: 'Text' },
   { var: '--on-contrast-dim',      label: 'Contrast dim',      group: 'Text' },
   { var: '--bg-contrast-inverse',  label: 'Contrast alt',      group: 'Text' },
 
@@ -1100,9 +1207,9 @@ const THEME_TOKENS = [
   { var: '--muted',                  label: 'Muted',             group: 'Borders' },
   { var: '--divider-color',          label: 'Divider',           group: 'Borders' },
   
-  { var: '--dark-dim',               label: 'Dim overlay',       group: 'Elevation' },
-  { var: '--dark-dimmer',            label: 'Dimmer overlay',    group: 'Elevation' },
-  { var: '--dark-dimmest',           label: 'Dimmest overlay',   group: 'Elevation' },
+  { var: '--dark-dim',               label: 'Dim overlay',       group: 'Elevation',  derived: true, semanticVar: '--surface-dim' },
+  { var: '--dark-dimmer',            label: 'Dimmer overlay',    group: 'Elevation',  derived: true, semanticVar: '--surface-dimmer' },
+  { var: '--dark-dimmest',           label: 'Dimmest overlay',   group: 'Elevation',  derived: true, semanticVar: '--surface-dimmest' },
   
   { var: '--theme-success',          label: 'Success',           group: 'Status' },
   { var: '--theme-warn',             label: 'Warn',              group: 'Status' },
@@ -1110,10 +1217,10 @@ const THEME_TOKENS = [
   { var: '--theme-info',             label: 'Info',              group: 'Status' },
   { var: '--theme-neutral',          label: 'Neutral',           group: 'Status' },
   
-  { var: '--on-success-color',       label: 'On success',        group: 'Status' },
-  { var: '--on-warn-color',          label: 'On warn',           group: 'Status' },
-  { var: '--on-danger-color',        label: 'On danger',         group: 'Status' },
-  { var: '--on-info-color',          label: 'On info',           group: 'Status' },
+  { var: '--on-success',       label: 'On success',        group: 'Status' },
+  { var: '--on-warn',          label: 'On warn',           group: 'Status' },
+  { var: '--on-danger',        label: 'On danger',         group: 'Status' },
+  { var: '--on-info',          label: 'On info',           group: 'Status' },
 
   { var: '--luma',                   label: 'Luma',              group: 'Shadows' },
   { var: '--umbra',                  label: 'Umbra',             group: 'Shadows' },
@@ -1135,13 +1242,13 @@ const THEME_TOKENS = [
   { var: '--btn-neutral-bg',   label: 'Btn neutral bg',   group: 'Components', default: 'var(--color-neutral)' },
   { var: '--btn-neutral-fg',   label: 'Btn neutral fg',   group: 'Components', default: 'var(--on-neutral)' },
   { var: '--card-bg',          label: 'Card bg',          group: 'Components', default: 'var(--bg-contrast)' },
-  { var: '--card-text',        label: 'Card text',        group: 'Components', default: 'var(--on-bg)' },
+  { var: '--card-text',        label: 'Card text',        group: 'Components', default: 'var(--on-main)' },
   { var: '--card-border',      label: 'Card border',      group: 'Components', default: 'var(--border-default)' },
   { var: '--card-shadow',      label: 'Card shadow',      group: 'Components', default: 'var(--surface-dim)' },
-  { var: '--input-bg',         label: 'Input bg',         group: 'Components', default: 'var(--bg)' },
+  { var: '--input-bg',         label: 'Input bg',         group: 'Components', default: 'var(--bg-main)' },
   { var: '--input-border',     label: 'Input border',     group: 'Components', default: 'var(--border-default)' },
   { var: '--input-border-focus', label: 'Input border focus', group: 'Components', default: 'var(--color-primary)' },
-  { var: '--input-text',       label: 'Input text',       group: 'Components', default: 'var(--on-bg)' },
+  { var: '--input-text',       label: 'Input text',       group: 'Components', default: 'var(--on-main)' },
   { var: '--input-placeholder', label: 'Input placeholder', group: 'Components', default: 'var(--muted)' },
   { var: '--modal-backdrop',   label: 'Modal backdrop',   group: 'Components', default: 'var(--surface-dimmer)' },
   { var: '--modal-bg',         label: 'Modal bg',         group: 'Components', default: 'var(--bg-contrast)' },
@@ -1149,7 +1256,7 @@ const THEME_TOKENS = [
   { var: '--accordion-open-bg',label: 'Accordion open bg',group: 'Components', default: 'color-mix(in srgb, var(--color-primary) 15%, transparent)' },
   { var: '--accordion-hover-bg',label: 'Accordion hover bg', group: 'Components', default: 'color-mix(in srgb, var(--muted, grey) 6%, transparent)' },
   { var: '--accordion-border', label: 'Accordion border', group: 'Components', default: 'color-mix(in srgb, var(--color-primary) 20%, transparent)' },
-  { var: '--icon-default',     label: 'Icon default',     group: 'Components', default: 'var(--on-bg)' },
+  { var: '--icon-default',     label: 'Icon default',     group: 'Components', default: 'var(--color-secondary)' },
   { var: '--icon-muted',       label: 'Icon muted',       group: 'Components', default: 'var(--on-dim)' },
   { var: '--icon-accent',      label: 'Icon accent',      group: 'Components', default: 'var(--color-primary)' },
 ];
@@ -1172,6 +1279,38 @@ const overrides = new Map();
 
 function resolveVar(v) {
   return getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+}
+
+// Force the browser to fully resolve a CSS var including color-mix(), nested vars, alpha.
+// Falls back to semanticVar (the semantic token that uses this as a fallback slot).
+function resolveVarToColor(varName, semanticVar) {
+  const candidates = [varName, semanticVar].filter(Boolean);
+  for (const v of [...new Set(candidates)]) {
+    const tmp = document.createElement('div');
+    tmp.style.cssText = `position:fixed;width:1px;height:1px;left:-9999px;top:-9999px;pointer-events:none;background:var(${v})`;
+    document.body.appendChild(tmp);
+    const bg = getComputedStyle(tmp).backgroundColor;
+    document.body.removeChild(tmp);
+    if (bg && bg !== 'rgba(0, 0, 0, 0)') return bg;
+  }
+  return null;
+}
+
+// Converts computed rgba/rgb string to #RRGGBB or #RRGGBBAA
+function rgbaToDisplayHex(rgba) {
+  if (!rgba) return null;
+  const m = rgba.match(/rgba?\(\s*([\d.]+)\s*,\s*([\d.]+)\s*,\s*([\d.]+)(?:\s*[,/]\s*([\d.]+%?))?\s*\)/);
+  if (!m) return null;
+  const r = Math.round(parseFloat(m[1]));
+  const g = Math.round(parseFloat(m[2]));
+  const b = Math.round(parseFloat(m[3]));
+  const aRaw = m[4];
+  const a = aRaw === undefined ? 1 : (aRaw.endsWith('%') ? parseFloat(aRaw) / 100 : parseFloat(aRaw));
+  const hex6 = '#' + [r, g, b].map(n => n.toString(16).padStart(2, '0')).join('');
+  if (a < 0.999) {
+    return hex6 + Math.round(a * 255).toString(16).padStart(2, '0');
+  }
+  return hex6;
 }
 
 function toHex(css) {
@@ -1292,6 +1431,11 @@ function updateLinkStyles() {
 
 // ── themeDefinesVar ───────────────────────────────────────────────
 
+const legacyMapping = {
+  '--bg-main': '--bg',
+  '--on-main': '--on-bg',
+};
+
 function themeDefinesVar(varName) {
   const theme = document.getElementById('theme-select').value;
   if (!theme) return false;
@@ -1301,8 +1445,11 @@ function themeDefinesVar(varName) {
     if (!rules) continue;
     for (const rule of rules) {
       if (rule.type !== 1) continue;
-      if (rule.selectorText.split(',').map(s=>s.trim()).includes(sel))
-        if (rule.style?.getPropertyValue(varName)) return true;
+      if (!rule.selectorText.split(',').map(s => s.trim()).includes(sel)) continue;
+
+      if (rule.style?.getPropertyValue(varName)) return true;
+      const legacyVar = legacyMapping[varName];
+      if (legacyVar && rule.style?.getPropertyValue(legacyVar)) return true;
     }
   }
   return false;
@@ -1339,7 +1486,7 @@ function refreshBtnStates() {
 
 function syncPreviewBg() {
   const panel = document.getElementById('preview-panel');
-  const raw = resolveVar('--bg');
+  const raw = resolveVar('--bg-main');
   panel.style.background = raw || '';
 }
 
@@ -1355,6 +1502,7 @@ function createTokenRow(tok) {
   const row = document.createElement('div');
   row.className = 'token-row';
   row.dataset.var = tok.var;
+  if (tok.derived) row.dataset.derived = 'true';
 
   const sw = document.createElement('div');
   sw.className = 'token-swatch-mini';
@@ -1444,6 +1592,14 @@ function createTokenRow(tok) {
 
   row.appendChild(valWrap);
 
+  // For derived (pre-baked) tokens, show the resolved computed hex chip
+  if (tok.derived) {
+    const hexChip = document.createElement('div');
+    hexChip.className = 'token-computed-hex';
+    hexChip.innerHTML = '<div class="token-computed-swatch"></div><span class="token-computed-value">—</span>';
+    row.appendChild(hexChip);
+  }
+
   const actions = document.createElement('div'); actions.className = 'token-actions';
   const resetBtn = document.createElement('button');
   resetBtn.className = 'token-btn reset-btn'; resetBtn.title = 'Reset to theme cascade'; resetBtn.textContent = '↻';
@@ -1489,8 +1645,53 @@ function buildTokenGrid() {
   const grid = document.getElementById('token-grid');
   grid.innerHTML = '';
   let lastGroup = '';
+  let currentBody = null;
+
+  const COLLAPSIBLE_GROUPS = new Set(['Components']);
 
   THEME_TOKENS.forEach(tok => {
+    if (tok.derived) return; // shown in auto-calc section below
+    if (tok.group !== lastGroup) {
+      lastGroup = tok.group;
+      const hdr = document.createElement('div');
+      hdr.className = 'token-group-header';
+
+      if (COLLAPSIBLE_GROUPS.has(tok.group)) {
+        hdr.classList.add('collapsible');
+        const chevron = document.createElement('span');
+        chevron.className = 'auto-calc-chevron';
+        chevron.textContent = '\u25b6';
+        hdr.appendChild(chevron);
+        hdr.appendChild(document.createTextNode(' ' + tok.group));
+
+        const body = document.createElement('div');
+        body.className = 'token-group-body collapsed';
+        currentBody = body;
+
+        hdr.addEventListener('click', () => {
+          const isCollapsed = body.classList.toggle('collapsed');
+          chevron.style.transform = isCollapsed ? '' : 'rotate(90deg)';
+        });
+
+        grid.appendChild(hdr);
+        grid.appendChild(body);
+      } else {
+        hdr.textContent = tok.group;
+        currentBody = null;
+        grid.appendChild(hdr);
+      }
+    }
+    (currentBody || grid).appendChild(createTokenRow(tok));
+  });
+}
+
+function buildAutoCalcGrid() {
+  const grid = document.getElementById('auto-calc-token-grid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  let lastGroup = '';
+
+  THEME_TOKENS.filter(t => t.derived).forEach(tok => {
     if (tok.group !== lastGroup) {
       lastGroup = tok.group;
       const hdr = document.createElement('div');
@@ -1498,7 +1699,6 @@ function buildTokenGrid() {
       hdr.textContent = tok.group;
       grid.appendChild(hdr);
     }
-
     grid.appendChild(createTokenRow(tok));
   });
 }
@@ -1509,7 +1709,13 @@ function refreshTokenRow(row, varName) {
   const hex = toHex(raw);
   const display = hex || raw || 'transparent';
   const sw = row.querySelector('.token-swatch-mini');
-  if (sw) sw.style.background = display;
+
+  const effectivelySet = overrides.has(varName) || themeDefinesVar(varName);
+  const hasValue = !!raw && raw.trim() !== '' && raw.trim() !== 'transparent';
+  const notSet = !effectivelySet && !hasValue;
+  row.classList.toggle('not-set', notSet && !row.classList.contains('removed'));
+
+  if (sw) sw.style.background = notSet ? 'transparent' : display;
 
   const cp = row.querySelector('input[type="color"]');
   const derived = meta && meta.default && !overrides.has(varName);
@@ -1525,6 +1731,21 @@ function refreshTokenRow(row, varName) {
     vi.value = overrides.has(varName)
       ? (raw || '')
       : (meta?.default || raw || '');
+  }
+
+  // Update computed hex chip for derived tokens
+  const hexChip = row.querySelector('.token-computed-hex');
+  if (hexChip) {
+    const chipSwatch = hexChip.querySelector('.token-computed-swatch');
+    const chipValue  = hexChip.querySelector('.token-computed-value');
+    // Resolve via the browser so color-mix(), var() fallbacks, and alpha all work
+    const computedColor = resolveVarToColor(varName, meta?.semanticVar);
+    const displayHex = computedColor ? rgbaToDisplayHex(computedColor) : null;
+    if (chipSwatch) chipSwatch.style.background = computedColor || 'transparent';
+    if (chipValue)  chipValue.textContent = displayHex ? displayHex.toUpperCase() : '—';
+    // Sync the main mini-swatch and color-picker to the browser-resolved value too
+    if (sw && computedColor)   sw.style.background = computedColor;
+    if (cp && displayHex && displayHex.length <= 7) cp.value = displayHex;
   }
 
   const dropdown = row.querySelector('.token-dropdown');
@@ -1614,7 +1835,12 @@ document.querySelectorAll('.pv-accordion-head').forEach(head => {
 
 buildBtnStates();
 buildTokenGrid();
+buildAutoCalcGrid();
 wirePalettePickers();
+
+document.getElementById('auto-calc-header').addEventListener('click', () => {
+  document.getElementById('auto-calc-section').classList.toggle('open');
+});
 
 const themeSelect = document.getElementById('theme-select');
 applyThemeClass(themeSelect.value);
