@@ -68,7 +68,7 @@ onUnmounted(() => {
 
 .theme-swatch__label {
   font-size: 0.75rem;
-  color: var(--text-faint, #888);
+  color: var(--on-faint, #888);
 }
 
 .theme-swatch__label code {

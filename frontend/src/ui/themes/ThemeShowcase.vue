@@ -38,19 +38,19 @@
     <section class="theme-showcase__section">
       <h2 class="theme-showcase__heading">Backgrounds</h2>
       <div class="theme-showcase__grid">
-        <Swatch var-name="--bg-main" />
-        <Swatch var-name="--bg-dark" />
-        <Swatch var-name="--bg-darker" />
-        <Swatch var-name="--bg-darkest" />
+        <Swatch var-name="--bg" />
+        <Swatch var-name="--bg-surface" />
+        <Swatch var-name="--bg-surface-alt" />
+        <Swatch var-name="--bg-deep" />
       </div>
     </section>
 
     <section class="theme-showcase__section">
       <h2 class="theme-showcase__heading">Text</h2>
       <div class="theme-showcase__grid">
-        <Swatch var-name="--text-main" />
-        <Swatch var-name="--text-faint" />
-        <Swatch var-name="--color-contrast" />
+        <Swatch var-name="--on-bg" />
+        <Swatch var-name="--on-faint" />
+        <Swatch var-name="--bg-contrast" />
       </div>
     </section>
 
@@ -79,13 +79,13 @@ import Swatch from './ThemeSwatch.vue';
 
 .theme-showcase__hint {
   margin-bottom: 2rem;
-  color: var(--text-faint, #888);
+  color: var(--on-faint, #888);
   font-size: 0.9rem;
 }
 
 .theme-showcase__heading {
   margin: 0 0 1rem;
-  color: var(--text-main, #ccc);
+  color: var(--on-bg, #ccc);
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -108,14 +108,14 @@ import Swatch from './ThemeSwatch.vue';
 
 .theme-showcase__typeface {
   padding: 1rem;
-  background: var(--bg-dark, #2a2a3a);
+  background: var(--bg-surface, #2a2a3a);
   border-radius: 6px;
 }
 
 .theme-showcase__typeface-label {
   display: block;
   margin-bottom: 0.5rem;
-  color: var(--text-faint, #888);
+  color: var(--on-faint, #888);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -123,7 +123,7 @@ import Swatch from './ThemeSwatch.vue';
 
 .theme-showcase__typeface-sample {
   margin: 0;
-  color: var(--text-main, #ccc);
+  color: var(--on-bg, #ccc);
   font-size: 1.125rem;
   line-height: 1.5;
 }
