@@ -159,13 +159,26 @@ $color-neutral-opaque:    var(--color-neutral-opaque);
 $on-neutral:              var(--on-neutral);
 
 // Background
-$bg:             var(--bg);        // canonical main background
+$bg-main:        var(--bg-main);        // canonical main background
 $bg-contrast:    var(--bg-contrast);   // contrast surface
 $bg-surface:     var(--bg-surface);    // elevated surface / card
 $bg-surface-alt: var(--bg-surface-alt);// alt elevated surface
 $bg-deep:        var(--bg-deep);       // deepest background layer
 $bg-opaque:      var(--bg-opaque);  // semi-transparent bg overlay
 $bg-inverse:     var(--bg-inverse); // inverted background
+
+$on-main:          var(--on-main);       // text/icon on main bg
+$on-main--bold:    var(--on-main--bold);
+$on-main--strong:  var(--on-main--strong);
+$on-main--faint:   var(--on-main--faint);
+$on-main--dim:     var(--on-main--dim);
+$on-main--dim-mid: var(--on-main--dim-mid);
+$on-main--inverse: var(--on-main--inverse);
+$on-surface:     var(--on-surface); // text/icon on surface
+$on-contrast:    var(--on-contrast);
+$on-inverse:     var(--on-main--inverse);
+
+
 
 // Links
 $color-link:          var(--color-link);
@@ -265,46 +278,35 @@ $color-surface-alt:var(--bg-surface-alt);
 $color-deep:       var(--bg-deep);
 $color-bg-opaque:  var(--bg-opaque);
 $color-bg-inverse: var(--bg-inverse);
-// On-background (text / icons on --bg)
-$on-bg:               var(--on-bg);
-$on-bold:         var(--on-bold);
-$on-strong:       var(--on-strong);
-$on-faint:        var(--on-faint);
-$on-dim:          var(--on-dim);
-$on-dim-mid:      var(--on-dim-mid);
-$on-tint:         var(--on-tint);
-$on-tint-dim:     var(--on-tint-dim);
-$on-lightest:     var(--on-lightest);
-$on-inverse:      var(--on-inverse);
-$on-surface:          var(--on-surface);
+// On-contrast (text / icons on contrast surfaces)
 $on-contrast:         var(--on-contrast);
 $on-contrast-bold:    var(--on-contrast-bold);
 $on-contrast-dim:     var(--on-contrast-dim);
 $muted:               var(--muted);
-// back-compat
+// back-compat text-* aliases → on-main--*
 $text-main:           var(--on-bg);
-$text-main-bold:      var(--on-strong);
+$text-main-bold:      var(--on-main--strong);
 $text-contrast:       var(--on-contrast);
 $text-contrast-bold:  var(--on-contrast-bold);
-$text-bold:           var(--on-bold);
-$text-dim:            var(--on-dim);
-$text-dim-mid:        var(--on-dim-mid);
-$text-faint:          var(--on-faint);
-$text-extra-bold:     var(--on-strong);
-$text-lightest:       var(--on-lightest);
-$text-inverse:        var(--on-inverse);
-$text-accent:         var(--on-tint);
-$text-accent-dim:     var(--on-tint-dim);
-// back-compat $on-bg-* aliases
-$on-bg-bold:       var(--on-bold);
-$on-bg-strong:     var(--on-strong);
-$on-bg-faint:      var(--on-faint);
-$on-bg-dim:        var(--on-dim);
-$on-bg-dim-mid:    var(--on-dim-mid);
-$on-bg-accent:     var(--on-tint);
-$on-bg-accent-dim: var(--on-tint-dim);
-$on-bg-lightest:   var(--on-lightest);
-$on-bg-inverse:    var(--on-inverse);
+$text-bold:           var(--on-main--bold);
+$text-dim:            var(--on-main--dim);
+$text-dim-mid:        var(--on-main--dim-mid);
+$text-faint:          var(--on-main--faint);
+$text-extra-bold:     var(--on-main--strong);
+$text-lightest:       var(--lightest);
+$text-inverse:        var(--on-main--inverse);
+$text-accent:         var(--color-primary);
+$text-accent-dim:     var(--color-primary-dim);
+// back-compat $on-bg-* aliases → on-main--*
+$on-bg-bold:       var(--on-main--bold);
+$on-bg-strong:     var(--on-main--strong);
+$on-bg-faint:      var(--on-main--faint);
+$on-bg-dim:        var(--on-main--dim);
+$on-bg-dim-mid:    var(--on-main--dim-mid);
+$on-bg-accent:     var(--color-primary);
+$on-bg-accent-dim: var(--color-primary-dim);
+$on-bg-lightest:   var(--lightest);
+$on-bg-inverse:    var(--on-main--inverse);
 
 // back-compat
 $text-link:           var(--color-link);
