@@ -22,7 +22,8 @@ html.theme-pollux {
 	--mid-main: var(--light2);
 	--bg-main: var(--darker);
 	
-	/*--bg-main: linear-gradient(190deg, var(--darker) 30%,var(--darkest));*/
+	/*--bg-main: linear-gradient(190deg, var(--darker) 30%,var(--darkest))
+	*/
 
 	--bg-opaque: #2A2A3B44;
 	--bg-inverse: var(--lightest, #EEF);

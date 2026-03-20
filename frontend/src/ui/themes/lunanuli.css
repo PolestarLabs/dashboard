@@ -26,7 +26,11 @@ html.theme-lunanuli {
   --secondary-color-alt:  #b559d1;
     /*
   --mid-main: var(--light2);
-  */ --bg-main: #1f171a; --bg-darker: #1d1818; --bg-darkest: #140909; --bg-opaque: #10050530; /*
+  */ --bg-main: #1f171a
+  --bg-darker: #1d1818;
+  --bg-darkest: #140909;
+  --bg-opaque: #10050530;
+  /*
   --bg-inverse: var(--dark);
   
   --links: #87f;
@@ -41,7 +45,8 @@ html.theme-lunanuli {
   
   --light-border: var(--dark);
   
-  */ --code-main-color: #FA5 !important; --code-main-border:  1px solid #A023 !important; 
+  */ --code-main-color: #FA5 !important
+  --code-main-border:  1px solid #A023 !important;
   --code-main-bg: #151528 !important;
   --dark-border: rgba(180, 133, 86, 0.3);
   

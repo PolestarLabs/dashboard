@@ -8,7 +8,8 @@ html.theme-arsenika {
   --on-tint-dim:   #2235;
   */
     
-  /*! --on-main--strong: #FFF; */
+  /*! --on-main--strong: #FFF
+  */
   --on-main--bold: #FFF0CD;
   --on-main: #FFF5DE;
   --on-main--faint: #FFCEB1F7;
@@ -18,7 +19,8 @@ html.theme-arsenika {
   
    --accent-color-light: #f0d29a;
   --accent-color: #f0a037;
-  /*! --bg-contrast: #950642; */
+  /*! --bg-contrast: #950642
+  */
   --accent-color-mid: #eb9347;
   --accent-color-dark: #bd773ee8;
   --accent-color-darker: #9c7250e8;
@@ -29,7 +31,12 @@ html.theme-arsenika {
 
   --secondary-color-alt:  #35d4c7;
   
-    /*! --mid-main: var(--light2); */ --bg-main: #352B52; --bg-darker: #1D1F2B; --bg-darkest: #1D212BEB; --bg-opaque: #0b0c1745; /*
+    /*! --mid-main: var(--light2)
+    */ --bg-main: #352B52
+    --bg-darker: #1D1F2B;
+    --bg-darkest: #1D212BEB;
+    --bg-opaque: #0b0c1745;
+    /*
   --bg-inverse: var(--dark);
   
   --links: #87f;
@@ -43,14 +50,19 @@ html.theme-arsenika {
   --muted: #9999AAAA;
   
   --light-border: var(--dark);
-  */ --dark-border: #2F87A95C; --code-main-color: #2288FF !important; --code-main-border:  1px solid #000 !important; 
+  */ --dark-border: #2F87A95C
+  --code-main-color: #2288FF !important;
+  --code-main-border:  1px solid #000 !important;
   --code-main-bg: #322 !important;
   
   
-  /*! --plx-green: #395; */
-  /*! --plx-cyan: #358; */
+  /*! --plx-green: #395
+  */
+  /*! --plx-cyan: #358
+  */
     
-  /*! --plx-yellow: #975 !important; */
+  /*! --plx-yellow: #975 !important
+  */
    
   
   }

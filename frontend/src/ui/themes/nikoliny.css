@@ -1,31 +1,39 @@
 html.theme-nikoliny {
-  
-  --bg-contrast: var(--lightest); --bg-contrast-dim: #FFF; --on-tint: #564D91; --on-tint-dim:   #4d4d8e54;
-  
---on-main--strong: #242533;
---on-main--bold: #343548;
---on-bg: #515c86;
---on-main--faint: #40419FD4;
---on-main--dim: #40419F;
---on-main--dim-mid: #40419FE0;
---on-main--inverse: #9AAFFF;
+  --bg-contrast: var(--lightest);
+  --bg-contrast-dim: #fff;
+  --on-tint: #564d91;
+  --on-tint-dim: #4d4d8e54;
 
- --accent-color-light: #9fe2ce;
---accent-color: #0d97fb;
-/*! --bg-contrast: #950642; */
---accent-color-mid: #4e8ad7;
---accent-color-dark: #4543ad;
+  --on-main--strong: #242533;
+  --on-main--bold: #343548;
+  --on-bg: #515c86;
+  --on-main--faint: #40419fd4;
+  --on-main--dim: #40419f;
+  --on-main--dim-mid: #40419fe0;
+  --on-main--inverse: #9aafff;
 
---secondary-color:  #7d5fe6;
---secondary-color-alt:  #da981f;
- 
---dark-dim: #BEA3D0E0;
---dark-dimmer: #ffffffbf;
---dark-dimmest: #ffffff59;
+  --accent-color-light: #9fe2ce;
+  --accent-color: #0d97fb;
+  /*! --bg-contrast: #950642
+  */
+  --accent-color-mid: #4e8ad7;
+  --accent-color-dark: #4543ad;
 
+  --secondary-color: #7d5fe6;
+  --secondary-color-alt: #da981f;
 
-  /*! --mid-main: var(--light2); */
-   --bg-main: #f2feff; --bg-surface: #dee2f0;--bg-surface-alt: #BCC3DB; --bg-deep: #8F8FBD; --bg-opaque: #494a911c; /*
+  --dark-dim: #bea3d0e0;
+  --dark-dimmer: #ffffffbf;
+  --dark-dimmest: #ffffff59;
+
+  /*! --mid-main: var(--light2)
+  */
+  --bg-main: #f2feff;
+  --bg-surface: #dee2f0;
+  --bg-surface-alt: #bcc3db;
+  --bg-deep: #8f8fbd;
+  --bg-opaque: #494a911c;
+  /*
 --bg-inverse: var(--dark);
 
 --links: #87f;
@@ -39,24 +47,22 @@ html.theme-nikoliny {
 
 --divider-color: var(--lighter);
 
-*/ --dark-border: #8E412F5C;  --code-main-color: #AAF !important;
---code-main-border:  1px solid #4253 !important;;
---code-main-bg: #557 !important;
+*/
+  --dark-border: #8e412f5c;
+  --code-main-color: #aaf !important;
+  --code-main-border: 1px solid #4253 !important;
+  --code-main-bg: #557 !important;
 
+  --plx-green: #5a8;
+  --plx-cyan: #5af;
 
---plx-green: #5A8;
---plx-cyan: #5AF;
-  
---plx-yellow: #EA5 !important;
-
-
+  --plx-yellow: #ea5 !important;
 
   --tertiary-color: #f0b056;
   --on-surface: #535f8d;
   --on-contrast: #151523;
 }
 
-.theme .dash-pill .sticker-pack{
+.theme .dash-pill .sticker-pack {
   filter: brightness(1) !important ;
 }
-
