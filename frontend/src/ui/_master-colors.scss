@@ -70,10 +70,6 @@ $plx-danger:  var(--plx-danger);   // #F02040
 $plx-info:    var(--plx-info);     // #56F
 $plx-neutral: var(--plx-neutral);  // #9999AA
 
-// Legacy aliases kept for back-compat
-$plx-green:   var(--plx-green);
-$plx-cyan:    var(--plx-cyan);
-$plx-yellow:  var(--plx-yellow);
 
 // Translucent utilities
 $color-translucent-01: #8080d016;
@@ -163,35 +159,18 @@ $color-neutral-opaque:    var(--color-neutral-opaque);
 $on-neutral:              var(--on-neutral);
 
 // Background
-$bg-color:     var(--bg-color);       // canonical alias for --bg-main
-$bg-contrast:  var(--bg-contrast);    // canonical alias for --bg-dark
-$bg-main:      var(--bg-main);        // raw theme var kept for back-compat
-$bg-dark:      var(--bg-dark);
-$bg-opaque:    var(--bg-opaque);
-$bg-inverse:   var(--bg-inverse);
-
-// Text
-$text-main:           var(--text-main);
-$text-main-bold:      var(--text-main-bold);
-$text-contrast:       var(--text-contrast);
-$text-contrast-bold:  var(--text-contrast-bold);
-$text-bold:           var(--text-bold);
-$text-dim:            var(--text-dim);
-$text-dim-mid:        var(--text-dim-mid);
-$text-faint:          var(--text-faint);
-$text-extra-bold:     var(--text-extra-bold);
-$text-lightest:       var(--text-lightest);
-$text-inverse:        var(--text-inverse);
-$text-accent:         var(--text-accent);
-$text-accent-dim:     var(--text-accent-dim);
-$muted:               var(--muted);
+$bg:             var(--bg);        // canonical main background
+$bg-contrast:    var(--bg-contrast);   // contrast surface
+$bg-surface:     var(--bg-surface);    // elevated surface / card
+$bg-surface-alt: var(--bg-surface-alt);// alt elevated surface
+$bg-deep:        var(--bg-deep);       // deepest background layer
+$bg-opaque:      var(--bg-opaque);  // semi-transparent bg overlay
+$bg-inverse:     var(--bg-inverse); // inverted background
 
 // Links
-$text-link:           var(--text-link);
-$text-link-contrast:  var(--text-link-contrast);
-$text-link-visited:   var(--text-link-visited);
-$links:               var(--links);        // back-compat
-$links-hover:         var(--links-hover);  // back-compat
+$color-link:          var(--color-link);
+$color-link-contrast: var(--color-link-contrast);
+$color-link-visited:  var(--color-link-visited);
 
 // Borders / dividers
 $border-default:  var(--border-default);
@@ -204,15 +183,10 @@ $surface-dim:     var(--surface-dim);
 $surface-dimmer:  var(--surface-dimmer);
 $surface-dimmest: var(--surface-dimmest);
 
-// Back-compat elevation aliases
-$dark-dim:        var(--surface-dim);
-$dark-dimmer:     var(--surface-dimmer);
-$dark-dimmest:    var(--surface-dimmest);
 
 // Contrast helpers
-$color-contrast:         var(--color-contrast);
-$color-contrast-dim:     var(--color-contrast-dim);
-$color-contrast-inverse: var(--color-contrast-inverse);
+$bg-contrast-dim:        var(--bg-contrast-dim);
+$bg-contrast-inverse:    var(--bg-contrast-inverse);
 
 
 // =============================================================================
@@ -270,3 +244,76 @@ $accordion-border:   var(--accordion-border);
 $icon-default: var(--icon-default);
 $icon-muted:   var(--icon-muted);
 $icon-accent:  var(--icon-accent);
+
+// ============================================================================
+// BACK-COMPAT FLAGGED VARS (moved from inline sections)
+// ============================================================================
+
+// Legacy aliases kept for back-compat
+$plx-green:   var(--plx-green);
+$plx-cyan:    var(--plx-cyan);
+$plx-yellow:  var(--plx-yellow);
+
+// back-compat
+$bg-color:         var(--bg);
+$bg-main:          var(--bg);
+$bg-dark:          var(--bg-surface);
+$color-bg:         var(--bg);
+$color-contrast:   var(--bg-contrast);
+$color-surface:    var(--bg-surface);
+$color-surface-alt:var(--bg-surface-alt);
+$color-deep:       var(--bg-deep);
+$color-bg-opaque:  var(--bg-opaque);
+$color-bg-inverse: var(--bg-inverse);
+// On-background (text / icons on --bg)
+$on-bg:               var(--on-bg);
+$on-bold:         var(--on-bold);
+$on-strong:       var(--on-strong);
+$on-faint:        var(--on-faint);
+$on-dim:          var(--on-dim);
+$on-dim-mid:      var(--on-dim-mid);
+$on-tint:         var(--on-tint);
+$on-tint-dim:     var(--on-tint-dim);
+$on-lightest:     var(--on-lightest);
+$on-inverse:      var(--on-inverse);
+$on-surface:          var(--on-surface);
+$on-contrast:         var(--on-contrast);
+$on-contrast-bold:    var(--on-contrast-bold);
+$on-contrast-dim:     var(--on-contrast-dim);
+$muted:               var(--muted);
+// back-compat
+$text-main:           var(--on-bg);
+$text-main-bold:      var(--on-strong);
+$text-contrast:       var(--on-contrast);
+$text-contrast-bold:  var(--on-contrast-bold);
+$text-bold:           var(--on-bold);
+$text-dim:            var(--on-dim);
+$text-dim-mid:        var(--on-dim-mid);
+$text-faint:          var(--on-faint);
+$text-extra-bold:     var(--on-strong);
+$text-lightest:       var(--on-lightest);
+$text-inverse:        var(--on-inverse);
+$text-accent:         var(--on-tint);
+$text-accent-dim:     var(--on-tint-dim);
+// back-compat $on-bg-* aliases
+$on-bg-bold:       var(--on-bold);
+$on-bg-strong:     var(--on-strong);
+$on-bg-faint:      var(--on-faint);
+$on-bg-dim:        var(--on-dim);
+$on-bg-dim-mid:    var(--on-dim-mid);
+$on-bg-accent:     var(--on-tint);
+$on-bg-accent-dim: var(--on-tint-dim);
+$on-bg-lightest:   var(--on-lightest);
+$on-bg-inverse:    var(--on-inverse);
+
+// back-compat
+$text-link:           var(--color-link);
+$text-link-contrast:  var(--color-link-contrast);
+$text-link-visited:   var(--color-link-visited);
+$links:               var(--links);        // raw theme var
+$links-hover:         var(--links-hover);  // raw theme var
+
+// Back-compat elevation aliases
+$dark-dim:        var(--surface-dim);
+$dark-dimmer:     var(--surface-dimmer);
+$dark-dimmest:    var(--surface-dimmest);
