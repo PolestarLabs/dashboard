@@ -22,7 +22,7 @@
     flex: 1;
     height: var(--_h);
     border-radius: 9999px;
-    background: color-mix(in srgb, var(--text-dim, #888) 20%, transparent);
+    background: color-mix(in srgb, var(--on-main--dim, #888) 20%, transparent);
     overflow: hidden;
   }
 
@@ -50,7 +50,7 @@
   &__label {
     font-size: 0.75rem;
     font-weight: 600;
-    color: var(--text-dim, #888);
+    color: var(--on-main--dim, #888);
     min-width: 2.8ch;
     text-align: right;
     line-height: 1;

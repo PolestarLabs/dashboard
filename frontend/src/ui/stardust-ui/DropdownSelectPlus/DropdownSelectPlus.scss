@@ -10,7 +10,7 @@
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--text-dim-mid, #4b4b5f);
+    color: var(--on-main--dim-mid, #4b4b5f);
   }
 
   &__trigger {
@@ -25,7 +25,7 @@
     font-size: 1rem;
     line-height: 1.4;
     text-align: left;
-    color: var(--text-dim-mid, #4b4b5f);
+    color: var(--on-main--dim-mid, #4b4b5f);
     background: var(--bg-main, #fff);
     border: 3px solid var(--accent-color, #f35);
     border-radius: 8px;
@@ -92,7 +92,7 @@
     display: block;
     font-size: 0.8em;
     font-weight: normal;
-    color: var(--text-dim, #888);
+    color: var(--on-main--dim, #888);
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -104,7 +104,7 @@
   }
 
   &__placeholder {
-    color: var(--text-dim, #999);
+    color: var(--on-main--dim, #999);
   }
 
   &__list {

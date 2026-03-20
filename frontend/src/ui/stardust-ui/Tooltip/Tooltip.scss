@@ -13,8 +13,8 @@
   max-width: 260px;
   padding: 6px 10px;
   border-radius: 6px;
-  background: var(--text-inverse, #1a1b2e);
-  color: var(--text-main, #eee);
+  background: var(--bg-deep, #1a1b2e);
+  color: var(--on-main, #eee);
   font-size: 0.8rem;
   font-weight: 500;
   line-height: 1.4;
@@ -35,28 +35,28 @@
     top: 100%;
     left: 50%;
     transform: translateX(-50%);
-    border-top-color: var(--text-inverse, #1a1b2e);
+    border-top-color: var(--bg-deep, #1a1b2e);
   }
 
   &--bottom::before {
     bottom: 100%;
     left: 50%;
     transform: translateX(-50%);
-    border-bottom-color: var(--text-inverse, #1a1b2e);
+    border-bottom-color: var(--bg-deep, #1a1b2e);
   }
 
   &--left::before {
     left: 100%;
     top: 50%;
     transform: translateY(-50%);
-    border-left-color: var(--text-inverse, #1a1b2e);
+    border-left-color: var(--bg-deep, #1a1b2e);
   }
 
   &--right::before {
     right: 100%;
     top: 50%;
     transform: translateY(-50%);
-    border-right-color: var(--text-inverse, #1a1b2e);
+    border-right-color: var(--bg-deep, #1a1b2e);
   }
 }
 

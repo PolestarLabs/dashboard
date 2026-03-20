@@ -73,7 +73,7 @@
       right: 3px;
       width: 20px;
       height: 20px;
-      border-color: var(--text-lightest, #fff);
+      border-color: var(--lightest, #fff);
       background-color: rgba(255, 255, 255, 0.3);
       opacity: 1;
     }
@@ -82,7 +82,7 @@
   &__label {
     flex: 1 1 auto;
     min-width: 0;
-    color: var(--text-dim-mid, #4b4b5f);
+    color: var(--on-main--dim-mid, #4b4b5f);
     font-weight: 500;
   }
 
@@ -92,6 +92,6 @@
   }
 
   &--disabled &__input:checked + &__track::before {
-    border-color: var(--text-lighter, #ccc);
+    border-color: var(--lighter, #ccc);
   }
 }

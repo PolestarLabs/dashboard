@@ -1,17 +1,3 @@
-$accordion-bg: #8080D016;
-$accordion-open-bg: #8080F026;
-$accordion-hover-bg: #7c7c7c0f;
-$accordion-panel-border: 1px solid #ffffff0f;
-$accordion-text: var(--text-main, #eee);
-$accordion-text-dim: var(--text-dim, #888);
-$accordion-accent: var(--accent-color, #7c8cf8);
-$accordion-ghost-border: 1px solid #88F3;
-$accordion-ghost-open-bg: #88F1;
-$accordion-solid-header-bg: var(--color-secondary);
-$accordion-solid-header-bg-hover: var(--color-secondary-mid);
-$accordion-solid-text: var(--text-lightest, #fff);
-$accordion-solid-open-bg: #AAD4;
-
 .st-accordion {
   margin: 0;
   padding: 0;
@@ -19,7 +5,7 @@ $accordion-solid-open-bg: #AAD4;
 
   &__item {
     border-radius: 8px;
-    background: $accordion-bg;
+    background: rgba(255, 255, 255, 0.04);
     overflow: hidden;
 
     & + & {
@@ -32,7 +18,7 @@ $accordion-solid-open-bg: #AAD4;
     }
 
     &--open {
-      background: $accordion-open-bg;
+      background: rgba(255, 255, 255, 0.07);
 
       .st-accordion__icon::after {
         transform: rotate(90deg) scaleY(0);
@@ -66,16 +52,16 @@ $accordion-solid-open-bg: #AAD4;
     cursor: pointer;
     font: inherit;
     text-align: left;
-    color: $accordion-text;
+    color: var(--on-main, #eee);
     outline: none;
     transition: background 160ms;
 
     &:hover:not(:disabled) {
-      background: $accordion-hover-bg;
+      background: rgba(255, 255, 255, 0.06);
     }
 
     &:focus-visible {
-      outline: 2px solid $accordion-accent;
+      outline: 2px solid var(--accent-color, #7c8cf8);
       outline-offset: -2px;
     }
 
@@ -89,15 +75,6 @@ $accordion-solid-open-bg: #AAD4;
     font-size: 1.1rem;
     font-weight: 600;
     line-height: 1.4;
-    letter-spacing: 1px;
-    font-family: Panton, -apple-system, BlinkMacSystemFont, sans-serif;
-
-    > [class*="fa"] {
-      margin-right: 0.6rem;
-      display: inline-flex;
-      align-items: center;
-      color: $accordion-accent;
-    }
   }
 
   &__icon {
@@ -105,7 +82,7 @@ $accordion-solid-open-bg: #AAD4;
     flex-shrink: 0;
     width: 0.875rem;
     height: 0.875rem;
-    color: $accordion-text-dim;
+    color: var(--on-main--dim, #888);
 
     &::before,
     &::after {
@@ -142,41 +119,7 @@ $accordion-solid-open-bg: #AAD4;
   &__panel-inner {
     overflow: hidden;
     padding: 0 1rem;
-    border-top: $accordion-panel-border;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
     transition: padding-top 240ms ease, padding-bottom 240ms ease;
-  }
-
-  &--ghost {
-    .st-accordion__item {
-      background: transparent;
-      border: $accordion-ghost-border;
-    }
-
-    .st-accordion__item--open {
-      background: $accordion-ghost-open-bg;
-    }
-  }
-
-  &--solid {
-    .st-accordion__header  {
-      background: $accordion-solid-header-bg;
-      & .st-accordion__icon,
-      & .st-accordion__title{
-        color: $accordion-solid-text;
-      }
-      :hover {
-        background: $accordion-solid-header-bg-hover;
-      }
-    }
-
-    .st-accordion__item--open {
-      .st-accordion__header {
-        background: $accordion-solid-header-bg-hover;
-        :hover {
-          background: $accordion-solid-header-bg;
-        }
-      }
-      background: $accordion-solid-open-bg;
-    }
   }
 }

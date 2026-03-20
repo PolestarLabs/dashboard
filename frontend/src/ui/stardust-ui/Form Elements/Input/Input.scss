@@ -14,7 +14,7 @@
     padding: 4px 8px;
     line-height: 1.25;
     font-size: 17px;
-    color: var(--text-main, #4b4b5f);
+    color: var(--on-main, #4b4b5f);
     border: 3px solid var(--accent-color);
     border-radius: 8px;
     background: #0000;
@@ -50,7 +50,7 @@
     color: inherit;
 
     &::placeholder {
-      color: var(--text-dim, #999);
+      color: var(--on-main--dim, #999);
     }
 
     &:focus {
@@ -63,7 +63,7 @@
     display: flex;
     align-items: center;
     flex: 0 0 auto;
-    color: var(--text-dim, #999);
+    color: var(--on-main--dim, #999);
     font-size: 1.05rem;
     line-height: 1;
     opacity: .6;
@@ -91,7 +91,7 @@
   &__label {
     flex: 1 1 auto;
     min-width: 0;
-    color: var(--text-dim-mid, #4b4b5f);
+    color: var(--on-main--dim-mid, #4b4b5f);
     font-size: 1rem;
     line-height: 1.25;
     font-weight: 600;
@@ -113,7 +113,7 @@
   &__hint {
     flex: 1 1 100%;
     font-size: 0.82rem;
-    color: var(--text-dim, #999);
+    color: var(--on-main--dim, #999);
     margin-top: 0.2rem;
   }
 

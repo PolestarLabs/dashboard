@@ -12,31 +12,31 @@
 
   &--default {
     background: var(--secondary-color);
-    color: var(--color-contrast);
+    color: var(--on-accent);
   }
 
   &--accent {
     background: var(--accent-color);
-    color: var(--color-contrast);
+    color: var(--on-accent);
   }
 
   &--success {
     background: var(--plx-green);
-    color: var(--color-contrast);
+    color: var(--on-accent);
   }
 
   &--warning {
     background: var(--plx-yellow);
-    color: var(--color-contrast-inverse);
+    color: var(--on-warn);
   }
 
   &--error {
     background: var(--plx-danger);
-    color: var(--color-contrast);
+    color: var(--on-accent);
   }
 
   &--neutral {
     background: var(--mid);
-    color: var(--color-contrast);
+    color: var(--on-accent);
   }
 }

@@ -144,7 +144,7 @@
 
   &--primary {
     background-color: var(--btn-primary);
-    color: var(--color-contrast);
+    color: var(--on-accent);
     --current-color: var(--btn-primary);
 
     &:hover {
@@ -157,7 +157,7 @@
 
   &--secondary {
     background-color: var(--btn-secondary);
-    color: var(--color-contrast);
+    color: var(--on-accent);
     --current-color: var(--btn-secondary);
     
     &:hover {
@@ -170,7 +170,7 @@
 
   &--danger {
     background-color: var(--btn-danger);
-    color: var(--color-contrast);
+    color: var(--on-accent);
     --current-color: var(--btn-danger);
 
     &:hover {
@@ -183,7 +183,7 @@
 
   &--success {
     background-color: var(--btn-success);
-    color: var(--color-contrast);
+    color: var(--on-accent);
     --current-color: var(--btn-success);
 
     &:hover {
@@ -196,7 +196,7 @@
 
   &--warning {
     background-color: var(--btn-warning);
-    color: var(--color-contrast);
+    color: var(--on-accent);
     --current-color: var(--btn-warning);
 
     &:hover {
@@ -209,7 +209,7 @@
 
   &--info {
     background-color: var(--btn-info);
-    color: var(--color-contrast);
+    color: var(--on-accent);
     --current-color: var(--btn-info);
 
     &:hover {
@@ -226,7 +226,7 @@
     border: 2px solid var(--current-color);
     
     > .s-btn__icon {
-      color: color-mix(in srgb, var(--current-color) 50%, var(--color-contrast));
+      color: color-mix(in srgb, var(--current-color) 50%, var(--on-accent));
     }
     > .s-btn__label {
       color: var(--current-color);
@@ -238,12 +238,12 @@
       border-color: var(--current-color);
       > .s-btn__label,
       > .s-btn__icon {
-        color: var(--color-contrast);
+        color: var(--on-accent);
       }
     }
     &:active {
       background-color: color-mix(in srgb, var(--current-color) 62%, transparent);
-      color: var(--color-contrast);
+      color: var(--on-accent);
     }
 
   }
@@ -264,7 +264,7 @@
     background-size: 200% 200%;
     border: 2px solid var(--fancy-mid-light);
     box-shadow: 0 0 0 1px var(--fancy-dark), 0 10px 30px  var(--fancy-dark-dim);
-    color: var(--color-contrast);
+    color: var(--on-accent);
     transition: transform 0.15s ease, box-shadow 0.15s ease, box-shadow 0.20s ease-in;
     animation: fancy-bg 5s ease-in-out infinite;
     filter: saturate(1.2);

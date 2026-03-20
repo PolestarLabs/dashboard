@@ -357,7 +357,7 @@ $swal2-question-color: #87adbd;
   justify-content: center;
   align-items: center;
   background: var(--bg-darker, var(--darker, #1e1e2e));
-  color: var(--text-main, #c9ccd1);
+  color: var(--on-main, #c9ccd1);
   border-radius: 16px;
   padding: 2rem 2rem 1.5rem;
   font-family: "Quicksand", system-ui, sans-serif;
@@ -387,7 +387,7 @@ $swal2-question-color: #87adbd;
 
 // ---- Title ------------------------------------------------------------------
 .plx-swal-title {
-  color: var(--text-accent, var(--text-main));
+  color: var(--color-primary, var(--on-main));
   font-size: 1.35rem;
   font-weight: 700;
   text-align: left;
@@ -397,7 +397,7 @@ $swal2-question-color: #87adbd;
 
 // ---- Body text / HTML container ---------------------------------------------
 .plx-swal-body {
-  color: var(--text-dim-mid, #8a8aaa);
+  color: var(--on-main--dim-mid, #8a8aaa);
   font-size: 0.95rem;
   line-height: 1.6;
   text-align: left;
@@ -411,7 +411,7 @@ $swal2-question-color: #87adbd;
   z-index: 2;
   top: 1rem;
   right: 1rem;
-  color: var(--text-dim, #666688);
+  color: var(--on-main--dim, #666688);
   font-size: 1.4rem;
   line-height: 1;
   padding: 0;
@@ -421,7 +421,7 @@ $swal2-question-color: #87adbd;
   transition: color 0.15s ease;
 
   &:hover {
-    color: var(--text-main, #c9ccd1);
+    color: var(--on-main, #c9ccd1);
   }
 
   &:focus-visible {
@@ -545,15 +545,15 @@ $swal2-question-color: #87adbd;
 .swal2-textarea,
 .swal2-select,
 .swal2-file {
-  background: var(--bg-dark, rgba(255, 255, 255, 0.06));
+  background: var(--bg-surface, rgba(255, 255, 255, 0.06));
   border: 2px solid var(--accent-color, #f35);
   border-radius: 8px;
-  color: var(--text-main, #c9ccd1);
+  color: var(--on-main, #c9ccd1);
   font-family: Panton, var(--display-font, system-ui), sans-serif;
   font-size: 1rem;
 
   &::placeholder {
-    color: var(--text-dim, #888);
+    color: var(--on-main--dim, #888);
   }
 
   &:focus {

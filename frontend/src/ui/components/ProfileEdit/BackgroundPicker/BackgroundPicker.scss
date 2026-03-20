@@ -30,7 +30,7 @@
         opacity: 0.7;
 
         &.mistyblue {
-          color: var(--text-dim-mid, #7a8);
+          color: var(--on-main--dim-mid, #7a8);
         }
       }
     }
@@ -69,10 +69,10 @@
     font-size: 0.9rem;
     cursor: pointer;
     background: var(--bg-darker, #2a2a3a);
-    color: var(--text-dim-mid, #ccc);
+    color: var(--on-main--dim-mid, #ccc);
 
     &:hover {
-      background: var(--bg-dark, #3b3b4b);
+      background: var(--bg-surface, #3b3b4b);
       color: #fff;
     }
 

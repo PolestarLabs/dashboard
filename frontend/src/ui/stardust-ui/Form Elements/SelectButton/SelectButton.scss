@@ -7,7 +7,7 @@
   &__label {
     flex: 1 1 100%;
     font-weight: 500;
-    color: var(--text-dim-mid, #4b4b5f);
+    color: var(--on-main--dim-mid, #4b4b5f);
   }
 
   &__options {
@@ -27,7 +27,7 @@
     border-radius: 8px;
     padding: 0.45rem 0.8rem;
     background: rgba(255, 255, 255, 0.05);
-    color: var(--text-dim-mid, #4b4b5f);
+    color: var(--on-main--dim-mid, #4b4b5f);
     cursor: pointer;
     font-weight: 500;
     transition: background 0.2s ease, transform 0.12s ease, color 0.2s ease;
@@ -50,7 +50,7 @@
 
   &__option--selected {
     background: var(--accent-color);
-    color: var(--text-lightest, #fff);
+    color: var(--lightest, #fff);
     box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.2);
   }
 

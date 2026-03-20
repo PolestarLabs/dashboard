@@ -35,7 +35,7 @@
 
   &__help {
     font-size: 0.85rem;
-    color: var(--text-dim, #888);
+    color: var(--on-main--dim, #888);
     margin-bottom: 4px;
   }
 
@@ -127,7 +127,7 @@
     background: var(--bg-main, #fff);
     padding: 10px 20px 20px;
     border-radius: 8px;
-    color: var(--text-bold, #2b2b3b);
+    color: var(--on-main--bold, #2b2b3b);
     margin-top: 8px;
   }
 

@@ -10,7 +10,7 @@
     margin-bottom: 0.5rem;
     font-size: 0.9rem;
     font-weight: 600;
-    color: var(--text-dim-mid, #4b4b5f);
+    color: var(--on-main--dim-mid, #4b4b5f);
   }
 
   &__trigger-wrap {
@@ -29,7 +29,7 @@
     font-size: 1rem;
     line-height: 1.4;
     text-align: left;
-    color: var(--text-dim-mid, #4b4b5f);
+    color: var(--on-main--dim-mid, #4b4b5f);
     background: var(--bg-main, #fff);
     border: 2px solid rgba(60, 60, 60, 0.26);
     border-radius: 8px;
@@ -56,7 +56,7 @@
   }
 
   &__placeholder {
-    color: var(--text-dim, #999);
+    color: var(--on-main--dim, #999);
   }
 
   &__search {
@@ -70,7 +70,7 @@
     color: inherit;
 
     &::placeholder {
-      color: var(--text-dim, #999);
+      color: var(--on-main--dim, #999);
     }
   }
 
@@ -118,7 +118,7 @@
   &__list-header {
     padding: 8px 12px;
     font-size: 0.85rem;
-    color: var(--text-dim, #666);
+    color: var(--on-main--dim, #666);
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
   }
 
