@@ -23,7 +23,7 @@
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.15s ease, color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
-  --current-color: var(--btn-primary);
+  --current-color: var(--btn-primary, var(--color-primary));
 
   --color-lume: #ffd6a6;
   --color-shade: #1c2651; 
@@ -144,7 +144,7 @@
 
   &--primary {
     background-color: var(--btn-primary);
-    color: var(--on-accent);
+    color: var(--on-primary);
     --current-color: var(--btn-primary);
 
     &:hover {
@@ -170,7 +170,7 @@
 
   &--danger {
     background-color: var(--btn-danger);
-    color: var(--on-danger, var(--on-accent));
+    color: var(--on-danger, var(--on-primary));
     --current-color: var(--btn-danger);
 
     &:hover {
@@ -183,7 +183,7 @@
 
   &--success {
     background-color: var(--btn-success);
-    color: var(--on-success, var(--on-accent));
+    color: var(--on-success, var(--on-primary));
     --current-color: var(--btn-success);
 
     &:hover {
@@ -196,7 +196,7 @@
 
   &--warning {
     background-color: var(--btn-warning);
-    color: var(--on-warning, var(--on-accent));
+    color: var(--on-warning, var(--on-primary));
     --current-color: var(--btn-warning);
 
     &:hover {
@@ -209,7 +209,7 @@
 
   &--info {
     background-color: var(--btn-info);
-    color: var(--on-info, var(--on-accent));
+    color: var(--on-info, var(--on-primary));
     --current-color: var(--btn-info);
 
     &:hover {
@@ -226,7 +226,7 @@
     border: 2px solid var(--current-color);
     
     > .s-btn__icon {
-      color: color-mix(in srgb, var(--current-color) 50%, var(--on-accent));
+      color: color-mix(in srgb, var(--current-color) 50%, var(--on-primary));
     }
     > .s-btn__label {
       color: var(--current-color);
@@ -238,12 +238,12 @@
       border-color: var(--current-color);
       > .s-btn__label,
       > .s-btn__icon {
-        color: var(--on-accent);
+        color: var(--on-primary);
       }
     }
     &:active {
       background-color: color-mix(in srgb, var(--current-color) 62%, transparent);
-      color: var(--on-accent);
+      color: var(--on-primary);
     }
 
   }
@@ -264,7 +264,7 @@
     background-size: 200% 200%;
     border: 2px solid var(--fancy-mid-light);
     box-shadow: 0 0 0 1px var(--fancy-dark), 0 10px 30px  var(--fancy-dark-dim);
-    color: var(--on-accent);
+    color: var(--on-primary);
     transition: transform 0.15s ease, box-shadow 0.15s ease, box-shadow 0.20s ease-in;
     animation: fancy-bg 5s ease-in-out infinite;
     filter: saturate(1.2);

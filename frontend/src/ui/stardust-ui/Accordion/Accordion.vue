@@ -73,25 +73,40 @@ const openKeys = computed< Array<string | number> >({
   },
 });
 
+function keyToString(key: string | number) {
+  return String(key);
+}
+
 function isOpen(key: string | number) {
-  return openKeys.value.includes(key);
+  const normalized = keyToString(key);
+  return openKeys.value.some((k) => keyToString(k) === normalized);
+}
+
+function getItemByKey(key: string | number) {
+  const normalized = keyToString(key);
+  return props.items.find((it) => keyToString(it.key) === normalized);
 }
 
 function toggle(key: string | number) {
-  const item = props.items.find((it) => it.key === key);
+  const item = getItemByKey(key);
   if (item?.disabled) return;
 
+  const normalized = keyToString(key);
   const currentlyOpen = isOpen(key);
+
   if (currentlyOpen) {
     if (!props.collapsible) return;
-    openKeys.value = openKeys.value.filter((k) => k !== key);
+    openKeys.value = openKeys.value.filter((k) => keyToString(k) !== normalized);
     return;
   }
 
   if (props.multiple) {
-    openKeys.value = [...openKeys.value, key];
+    // avoid duplicates when clicking existing open item via string/number variant
+    const next = openKeys.value.filter((k) => keyToString(k) !== normalized);
+    openKeys.value = [...next, item?.key ?? key];
   } else {
-    openKeys.value = [key];
+    openKeys.value = [item?.key ?? key];
   }
 }
+
 </script>

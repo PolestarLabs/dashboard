@@ -32,6 +32,7 @@ const preview: Preview = {
         lunanuli: 'theme-lunanuli',
         nikoliny: 'theme-nikoliny',
         selenedi: 'theme-selenedi',
+        boring_corporate: 'theme-boring_corporate',
       },
       defaultTheme: 'pollux',
       parentSelector: 'html',

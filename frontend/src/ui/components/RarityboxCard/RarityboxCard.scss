@@ -14,6 +14,7 @@
   letter-spacing: 0.5px;
   position: relative;
   z-index: 0;
+  color: var(--lightest, #eef);
 
   // Inner wrapper clips overflowing content without affecting the root's ::after
   // pseudo-element used by UR/XR animated gradient borders.

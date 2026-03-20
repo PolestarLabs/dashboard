@@ -8,18 +8,18 @@ html.theme-pollux {
 	--on-main: var(--lighter);
 	--on-main--strong: var(--lightest, #AAC);
 	--on-main--bold: var(--lighter, #AAC);
-	--on-bg: var(--light, #AAC);
+	--on-main: var(--light, #AAC);
 	--on-main--faint: var(--pre-light, #668);
 	--on-main--dim: #9999AAAA;
 	--on-main--dim-mid: var(--pre-light, #88a);
 	--on-main--inverse: var(--dark, #2b2b3b);
-	--accent-color: var(--main-pink, #f35);
-	--accent-color-mid: var(--mid-pink, #F13151);
-	--accent-color-strong: var(--dark-pink, #F13151);
-	--accent-color-dark: var(--darkest-pink, #D05);
-	--secondary-color: var(--main-purple, #95F);
-	--secondary-color-alt: var(--alt-purple, #C7D);
-	--tertiary-color: var(--plx-blue, rgb(85, 125, 255));
+	--color-primary: var(--main-pink, #f35);
+	--color-primary-mid: var(--mid-pink, #F13151);
+	--color-primary-strong: var(--dark-pink, #F13151);
+	--color-primary-dark: var(--darkest-pink, #D05);
+	--color-secondary: var(--main-purple, #95F);
+	--color-secondary-alt: var(--alt-purple, #C7D);
+	--color-tertiary: var(--plx-blue, rgb(85, 125, 255));
 	--mid-main: var(--light2);
 	--bg-main: var(--darker);
 

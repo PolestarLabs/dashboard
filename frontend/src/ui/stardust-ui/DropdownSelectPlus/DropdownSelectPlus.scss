@@ -27,7 +27,7 @@
     text-align: left;
     color: var(--on-main--dim-mid, #4b4b5f);
     background: var(--bg-main, #fff);
-    border: 3px solid var(--accent-color, #f35);
+    border: 3px solid var(--color-primary, #f35);
     border-radius: 8px;
     cursor: pointer;
     appearance: none;
@@ -35,7 +35,7 @@
 
     &:focus {
       outline: 0;
-      border-color: var(--secondary-color, var(--accent-color, #f35));
+      border-color: var(--color-secondary, var(--color-primary, #f35));
     }
 
     &:disabled {
@@ -116,7 +116,7 @@
     padding: 0;
     list-style: none;
     background: var(--bg-main, #fff);
-    border: 3px solid var(--accent-color, #f35);
+    border: 3px solid var(--color-primary, #f35);
     border-top: none;
     border-radius: 0 0 8px 8px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -139,7 +139,7 @@
     }
 
     &:hover {
-      background: var(--accent-color, #f35);
+      background: var(--color-primary, #f35);
       color: #fff;
 
       .st-dropdown-select-plus__desc {
@@ -148,7 +148,7 @@
     }
 
     &--selected {
-      color: var(--accent-color, #f35);
+      color: var(--color-primary, #f35);
       font-weight: 600;
     }
 
@@ -169,7 +169,7 @@
     .st-dropdown-select-plus__trigger {
       background: #fff;
       color: #2d2d3a;
-      border-color: var(--accent-color, #f35);
+      border-color: var(--color-primary, #f35);
     }
 
     .st-dropdown-select-plus__trigger .st-dropdown-select-plus__desc,
@@ -183,7 +183,7 @@
 
     .st-dropdown-select-plus__list {
       background: #fff;
-      border-color: var(--accent-color, #f35);
+      border-color: var(--color-primary, #f35);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
@@ -197,11 +197,11 @@
     }
 
     .st-dropdown-select-plus__option--selected {
-      color: var(--accent-color, #f35);
+      color: var(--color-primary, #f35);
     }
 
     .st-dropdown-select-plus__option:hover {
-      background: var(--accent-color, #f35);
+      background: var(--color-primary, #f35);
       color: #fff;
 
       .st-dropdown-select-plus__desc {

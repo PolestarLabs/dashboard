@@ -10,7 +10,8 @@
     "storybook": "storybook dev -p 6006 --host 0.0.0.0",
     "build-storybook": "storybook build --output-dir dist",
     "test": "vitest run",
-    "test:themes": "vitest run src/ui/themes/theme-validator.test.ts"
+    "test:themes": "vitest run src/ui/themes/theme-validator.test.ts",
+    "dedupe:themes": "node src/ui/themes/dedupe-theme-vars.js"
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^6.6.0",

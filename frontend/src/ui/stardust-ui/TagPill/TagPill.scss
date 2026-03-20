@@ -11,18 +11,18 @@
   font-weight: 500;
 
   &--default {
-    background: var(--secondary-color);
+    background: var(--color-secondary);
     color: var(--on-secondary );
   }
 
   &--accent {
-    background: var(--accent-color);
-    color: var(--on-accent);
+    background: var(--color-primary);
+    color: var(--on-primary);
   }
 
   &--success {
     background: var(--plx-green);
-    color: var(--on-accent);
+    color: var(--on-primary);
   }
 
   &--warning {
@@ -32,11 +32,11 @@
 
   &--error {
     background: var(--plx-danger);
-    color: var(--on-accent);
+    color: var(--on-primary);
   }
 
   &--neutral {
     background: var(--mid);
-    color: var(--on-accent);
+    color: var(--on-primary);
   }
 }

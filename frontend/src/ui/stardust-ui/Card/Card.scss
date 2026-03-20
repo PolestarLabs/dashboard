@@ -5,7 +5,7 @@
   min-width: 0; /* prevent overflow blowout in grid/flex contexts */
   width: 100%;
   max-width: 480px; /* standalone default — grid/flex parent overrides as needed */
-  background-color: var(--bg-card, var(--lightest, #eef));
+  background-color: var(--bg-card, var(--bg-contrast, #eef));
   color: var(--on-contrast, var(--dark, #2b2b3b));
   font-family: Proxima Soft, Panton, sans-serif;
   border-radius: 8px;
@@ -159,7 +159,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--primary-color, #5c6ef8);
+    outline: 2px solid var(--color-primary, #5c6ef8);
     outline-offset: 4px;
   }
   &:active {

@@ -59,23 +59,23 @@
   font-size: 1em;
   line-height: 1;
   flex-shrink: 0;
-  color: var(--accent-color, #f48);
+  color: var(--color-primary, #f48);
 }
 
 .st-tabs__tab--active {
-  color: var(--accent-color, #f48);
+  color: var(--color-primary, #f48);
   font-weight: 800;
 }
 
 .st-tabs__tab--active i, .st-tabs__tab--active [class*="fa-"] {
-  color: var(--secondary-color);
+  color: var(--color-secondary);
 }
 
 .st-tabs__indicator {
   position: absolute;
   bottom: 0;
   height: 2px;
-  background: var(--accent-color, #f48);
+  background: var(--color-primary, #f48);
   border-radius: 2px 2px 0 0;
   pointer-events: none;
   /* snap on first render, animate after mount */

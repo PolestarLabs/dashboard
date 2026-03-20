@@ -1,6 +1,6 @@
 <template lang="pug">
 ProfileEditPill.st-profile-sticker(
-  :accent-color="accentColor"
+  :color-primary="accentColor"
   :background-image="selectedPack ? packImageUrl(selectedPack) : ''"
   background-size="200%"
 )

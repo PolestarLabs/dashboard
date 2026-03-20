@@ -18,7 +18,7 @@ $mp-surface: rgba(22, 22, 42, 0.92);
 $mp-surface-raised: rgba(30, 30, 55, 0.95);
 $mp-border-subtle: rgba(200, 200, 255, 0.06);
 $mp-border-focus: rgba(200, 200, 255, 0.15);
-$mp-accent: var(--accent-color, #f58);
+$mp-accent: var(--color-primary, #f58);
 $mp-accent-dim: rgba(245, 88, 136, 0.18);
 $mp-accent-glow: rgba(245, 88, 136, 0.3);
 $mp-danger: var(--plx-danger, #f02040);

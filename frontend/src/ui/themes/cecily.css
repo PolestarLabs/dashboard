@@ -11,21 +11,21 @@ html.theme-cecily {
   /*! --on-main--strong: #FFF
   */
   --on-main--bold: #FFDE;
-  --on-main: #FEDC;
+  
   --on-main--faint: #FEDA;
   --on-main--dim: #BD9974;
   --on-main--dim-mid: #8C755ED4;
   --on-main--inverse: #213121AA;
   
-   --accent-color-light: #d7f485;
-  --accent-color: #ff7741;
+   --color-primary-light: #d7f485;
+  --color-primary: #ff7741;
   /*! --bg-contrast: #950642
   */
-  --accent-color-mid: #f0744e;
-  --accent-color-dark: #974b3a;
+  --color-primary-mid: #f0744e;
+
   
-  --secondary-color:  #269959;
-  --secondary-color-alt:  #1F5E3A;
+  --color-secondary:  #269959;
+  --color-secondary-alt:  #1F5E3A;
   
   /*! --mid-main: var(--light2)
   */
@@ -72,8 +72,8 @@ html.theme-cecily {
   --links-visited: #4a8b93;
   --theme-success: #60b10e;
   --theme-warn: #fbd233;
-  --accent-color: #fa864e;
-  --secondary-color: #259a60;
+  --color-primary: #fa864e;
+  --color-secondary: #259a60;
   --theme-info: #4549f5;
   
   }

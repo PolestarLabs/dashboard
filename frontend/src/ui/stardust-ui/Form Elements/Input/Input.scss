@@ -15,7 +15,7 @@
     line-height: 1.25;
     font-size: 17px;
     color: var(--on-main, #4b4b5f);
-    border: 3px solid var(--accent-color);
+    border: 3px solid var(--color-primary);
     border-radius: 8px;
     background: #0000;
     transition: border-color 0.2s ease, box-shadow 0.2s ease, color 0.2s ease;
@@ -28,7 +28,7 @@
 
     &:focus-within {
       outline: 0;
-      border-color: var(--secondary-color, var(--accent-color));
+      border-color: var(--color-secondary, var(--color-primary));
       box-shadow: 0 0 0 3px var(--focus-ring, rgba(92, 110, 248, 0.2));
     }
 

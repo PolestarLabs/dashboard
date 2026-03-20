@@ -9,7 +9,7 @@ component.st-card(:is="as" :class="cardClasses" @pointerdown="spawnRipple")
     div.st-card__title
       SuperShadow(
         variant="slim"
-        :style="{ color: 'var(--secondary-color)' }"
+        :style="{ color: 'var(--color-secondary)' }"
         :lineCol="'var(--bg-main)'"
       )
         slot(name="title")

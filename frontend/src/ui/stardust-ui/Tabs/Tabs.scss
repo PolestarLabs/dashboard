@@ -53,15 +53,15 @@
       font-size: 1em;
       line-height: 1;
       flex-shrink: 0;
-      color: var(--accent-color, #f48);
+      color: var(--color-primary, #f48);
     }
 
     &--active {
-      color: var(--accent-color, #f48);
+      color: var(--color-primary, #f48);
       font-weight: 800;
 
       i, [class*="fa-"] {
-        color: var(--secondary-color);
+        color: var(--color-secondary);
       }
     }
   }
@@ -71,7 +71,7 @@
     position: absolute;
     bottom: 0;
     height: 2px;
-    background: var(--accent-color, #f48);
+    background: var(--color-primary, #f48);
     border-radius: 2px 2px 0 0;
     pointer-events: none;
     /* snap on first render, animate after mount */

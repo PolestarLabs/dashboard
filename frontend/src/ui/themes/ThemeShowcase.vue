@@ -21,17 +21,17 @@
     <section class="theme-showcase__section">
       <h2 class="theme-showcase__heading">Accent</h2>
       <div class="theme-showcase__grid">
-        <Swatch var-name="--accent-color" />
-        <Swatch var-name="--accent-color-mid" />
-        <Swatch var-name="--accent-color-dark" />
+        <Swatch var-name="--color-primary" />
+        <Swatch var-name="--color-primary-mid" />
+        <Swatch var-name="--color-primary-dark" />
       </div>
     </section>
 
     <section class="theme-showcase__section">
       <h2 class="theme-showcase__heading">Secondary</h2>
       <div class="theme-showcase__grid">
-        <Swatch var-name="--secondary-color" />
-        <Swatch var-name="--secondary-color-alt" />
+        <Swatch var-name="--color-secondary" />
+        <Swatch var-name="--color-secondary-alt" />
       </div>
     </section>
 
@@ -48,7 +48,7 @@
     <section class="theme-showcase__section">
       <h2 class="theme-showcase__heading">Text</h2>
       <div class="theme-showcase__grid">
-        <Swatch var-name="--on-bg" />
+        <Swatch var-name="--on-main" />
         <Swatch var-name="--on-faint" />
         <Swatch var-name="--bg-contrast" />
       </div>
@@ -85,7 +85,7 @@ import Swatch from './ThemeSwatch.vue';
 
 .theme-showcase__heading {
   margin: 0 0 1rem;
-  color: var(--on-bg, #ccc);
+  color: var(--on-main, #ccc);
   font-size: 1.1rem;
   font-weight: 600;
 }
@@ -123,7 +123,7 @@ import Swatch from './ThemeSwatch.vue';
 
 .theme-showcase__typeface-sample {
   margin: 0;
-  color: var(--on-bg, #ccc);
+  color: var(--on-main, #ccc);
   font-size: 1.125rem;
   line-height: 1.5;
 }

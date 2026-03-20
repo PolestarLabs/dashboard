@@ -17,8 +17,8 @@
   /* ── Colour variants ──────────────────────────── */
   --_color: currentColor;
 
-  &--primary   { --_color: var(--accent-color,    #f48); }
-  &--secondary { --_color: var(--secondary-color, #95f); }
+  &--primary   { --_color: var(--color-primary,    #f48); }
+  &--secondary { --_color: var(--color-secondary, #95f); }
   &--white     { --_color: #fff; }
 
   /* ── Ring element ─────────────────────────────── */

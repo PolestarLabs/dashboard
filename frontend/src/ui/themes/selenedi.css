@@ -1,7 +1,7 @@
 html.theme-selenedi {
   
   
-    --bg-contrast: var(--lightest);
+    
   --bg-contrast-dim: #FFF;
   
   --on-tint: var(--mid);
@@ -17,9 +17,9 @@ html.theme-selenedi {
   
   --mid-main: var(--light);
   --bg-main: var(--lightest);
-  --bg-surface: var(--light);
+  
   --bg-surface-alt: var(--lighter);
-  --bg-deep: #E5E5F8;
+  
   
   --dark-dim: #BEA3D0E0;
   --dark-dimmer: #ffffffbf;
@@ -30,13 +30,13 @@ html.theme-selenedi {
   --bg-inverse: var(--dark);
   
   
-   --accent-color-light: #602c8a;
-  --accent-color: #772797;
-  --accent-color-mid: #440695;
-  --accent-color-dark: #330666;
+   --color-primary-light: #602c8a;
+  --color-primary: #772797;
+  --color-primary-mid: #440695;
+  --color-primary-dark: #330666;
   
-  --secondary-color:  #e1614a;
-  --secondary-color-alt:  #e7ae44;
+  --color-secondary:  #e1614a;
+  --color-secondary-alt:  #e7ae44;
   
    
   --links: #87f;
@@ -61,7 +61,9 @@ html.theme-selenedi {
   --plx-cyan: #5AF;
     
   --plx-yellow: #EA5 !important;
-
+  --bg-surface: #f0e6fb;
+  --bg-deep: #b1afdc;
+  --bg-contrast: #f4f4ff;
   
   }
   

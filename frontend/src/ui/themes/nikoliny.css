@@ -6,21 +6,21 @@ html.theme-nikoliny {
 
   --on-main--strong: #242533;
   --on-main--bold: #343548;
-  --on-bg: #515c86;
+  --on-main: #515c86;
   --on-main--faint: #40419fd4;
   --on-main--dim: #40419f;
   --on-main--dim-mid: #40419fe0;
   --on-main--inverse: #9aafff;
 
-  --accent-color-light: #9fe2ce;
-  --accent-color: #0d97fb;
+  --color-primary-light: #9fe2ce;
+  --color-primary: #0d97fb;
   /*! --bg-contrast: #950642
   */
-  --accent-color-mid: #4e8ad7;
-  --accent-color-dark: #4543ad;
+  --color-primary-mid: #4e8ad7;
+  --color-primary-dark: #4543ad;
 
-  --secondary-color: #7d5fe6;
-  --secondary-color-alt: #da981f;
+  --color-secondary: #7d5fe6;
+  --color-secondary-alt: #da981f;
 
   --dark-dim: #bea3d0e0;
   --dark-dimmer: #ffffffbf;
@@ -59,7 +59,7 @@ html.theme-nikoliny {
 
   --plx-yellow: #ea5 !important;
 
-  --tertiary-color: #f0b056;
+  --color-tertiary: #f0b056;
 
   --on-contrast: #151523;
     --on-surface: #54608d;

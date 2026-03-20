@@ -27,7 +27,7 @@ input[type='checkbox']{   height: 0; width: 0; }
     position: relative;
     width: 20px;
     height: 20px;
-    border: 2px solid var(--accent-color);
+    border: 2px solid var(--color-primary);
     border-radius: 6px;
     display: flex;
     align-items: center;
@@ -40,7 +40,7 @@ input[type='checkbox']{   height: 0; width: 0; }
     height: 10px;
     transform: scale(0);
     opacity: 0;
-    background-color: var(--secondary-color);
+    background-color: var(--color-secondary);
     border-radius: 2px;
     transition: transform 0.2s ease, opacity 0.2s ease;
     & > i {
@@ -57,7 +57,7 @@ input[type='checkbox']{   height: 0; width: 0; }
   }
   &__input {
     &:checked + &__control {
-      border-color: var(--accent-color);
+      border-color: var(--color-primary);
       background: rgba(0, 0, 0, 0.14);
     }
 

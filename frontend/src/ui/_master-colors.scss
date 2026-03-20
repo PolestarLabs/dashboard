@@ -21,7 +21,7 @@
 //
 // "on-*" tokens
 //   Foreground (text / icon) color intended to sit ON a given background.
-//   e.g. $on-accent -> text/icon on top of $accent-color / --color-primary
+//   e.g. $on-primary -> text/icon on top of $color-primary / --color-primary
 
 // =============================================================================
 // LAYER 0 - Global palette SCSS shortcuts
@@ -91,35 +91,35 @@ $color-translucent-12: #100c2b59;
 // =============================================================================
 
 // Accent / Primary
-$accent-color:            var(--accent-color);
-$accent-color-light:      var(--color-primary-light);
-$accent-color-mid:        var(--color-primary-mid);
-$accent-color-strong:     var(--color-primary-strong);
-$accent-color-dark:       var(--color-primary-dark);
-$accent-color-lighter:    var(--color-primary-lighter);
-$accent-color-lightest:   var(--color-primary-lightest);
-$accent-color-dim:        var(--color-primary-dim);
-$accent-color-opaque:     var(--color-primary-opaque);
-$on-accent:               var(--on-accent);
+$color-primary:            var(--color-primary);
+$color-primary-light:      var(--color-primary-light);
+$color-primary-mid:        var(--color-primary-mid);
+$color-primary-strong:     var(--color-primary-strong);
+$color-primary-dark:       var(--color-primary-dark);
+$color-primary-lighter:    var(--color-primary-lighter);
+$color-primary-lightest:   var(--color-primary-lightest);
+$color-primary-dim:        var(--color-primary-dim);
+$color-primary-opaque:     var(--color-primary-opaque);
+$on-primary:               var(--on-primary);
 
 // Secondary
-$secondary-color:         var(--secondary-color);
-$secondary-color-alt:     var(--color-secondary-alt);
-$secondary-color-light:   var(--color-secondary-light);
-$secondary-color-mid:     var(--color-secondary-mid);
-$secondary-color-strong:  var(--color-secondary-strong);
-$secondary-color-dark:    var(--color-secondary-dark);
-$secondary-color-darker:  var(--color-secondary-darker);
-$secondary-color-dim:     var(--color-secondary-dim);
-$secondary-color-opaque:  var(--color-secondary-opaque);
+$color-secondary:         var(--color-secondary);
+$color-secondary-alt:     var(--color-secondary-alt);
+$color-secondary-light:   var(--color-secondary-light);
+$color-secondary-mid:     var(--color-secondary-mid);
+$color-secondary-strong:  var(--color-secondary-strong);
+$color-secondary-dark:    var(--color-secondary-dark);
+$color-secondary-darker:  var(--color-secondary-darker);
+$color-secondary-dim:     var(--color-secondary-dim);
+$color-secondary-opaque:  var(--color-secondary-opaque);
 $on-secondary:            var(--on-secondary);
 
 // Tertiary
-$tertiary-color:          var(--color-tertiary);
-$tertiary-color-light:    var(--color-tertiary-light);
-$tertiary-color-dark:     var(--color-tertiary-dark);
-$tertiary-color-dim:      var(--color-tertiary-dim);
-$tertiary-color-opaque:   var(--color-tertiary-opaque);
+$color-tertiary:          var(--color-tertiary);
+$color-tertiary-light:    var(--color-tertiary-light);
+$color-tertiary-dark:     var(--color-tertiary-dark);
+$color-tertiary-dim:      var(--color-tertiary-dim);
+$color-tertiary-opaque:   var(--color-tertiary-opaque);
 $on-tertiary:             var(--on-tertiary);
 
 // Status
@@ -207,29 +207,29 @@ $bg-contrast-inverse:    var(--bg-contrast-inverse);
 // =============================================================================
 
 // Buttons
-$btn-primary-bg:    var(--btn-primary-bg);
-$btn-primary-fg:    var(--btn-primary-fg);
-$btn-secondary-bg:  var(--btn-secondary-bg);
-$btn-secondary-fg:  var(--btn-secondary-fg);
-$btn-success-bg:    var(--btn-success-bg);
-$btn-warn-bg:       var(--btn-warn-bg);
-$btn-danger-bg:     var(--btn-danger-bg);
-$btn-info-bg:       var(--btn-info-bg);
-$btn-neutral-bg:    var(--btn-neutral-bg);
+$btn-primary-bg:    var(--btn-primary-bg, var(--color-primary));
+$btn-primary-fg:    var(--btn-primary-fg, var(--on-primary));
+$btn-secondary-bg:  var(--btn-secondary-bg, var(--color-secondary));
+$btn-secondary-fg:  var(--btn-secondary-fg, var(--on-secondary));
+$btn-success-bg:    var(--btn-success-bg, var(--color-success));
+$btn-warn-bg:       var(--btn-warn-bg, var(--color-warn));
+$btn-danger-bg:     var(--btn-danger-bg, var(--color-danger));
+$btn-info-bg:       var(--btn-info-bg, var(--color-info));
+$btn-neutral-bg:    var(--btn-neutral-bg, var(--color-neutral));
 
 // Badges
-$badge-primary-bg:  var(--badge-primary-bg);
-$badge-primary-fg:  var(--badge-primary-fg);
-$badge-success-bg:  var(--badge-success-bg);
-$badge-success-fg:  var(--badge-success-fg);
-$badge-warn-bg:     var(--badge-warn-bg);
-$badge-warn-fg:     var(--badge-warn-fg);
-$badge-danger-bg:   var(--badge-danger-bg);
-$badge-danger-fg:   var(--badge-danger-fg);
-$badge-info-bg:     var(--badge-info-bg);
-$badge-info-fg:     var(--badge-info-fg);
-$badge-neutral-bg:  var(--badge-neutral-bg);
-$badge-neutral-fg:  var(--badge-neutral-fg);
+$badge-primary-bg:  var(--badge-primary-bg, var(--color-primary));
+$badge-primary-fg:  var(--badge-primary-fg, var(--on-primary));
+$badge-success-bg:  var(--badge-success-bg, var(--color-success));
+$badge-success-fg:  var(--badge-success-fg, var(--on-success));
+$badge-warn-bg:     var(--badge-warn-bg, var(--color-warn));
+$badge-warn-fg:     var(--badge-warn-fg, var(--on-warn));
+$badge-danger-bg:   var(--badge-danger-bg, var(--color-danger));
+$badge-danger-fg:   var(--badge-danger-fg, var(--on-danger));
+$badge-info-bg:     var(--badge-info-bg, var(--color-info));
+$badge-info-fg:     var(--badge-info-fg, var(--on-info));
+$badge-neutral-bg:  var(--badge-neutral-bg, var(--color-neutral));
+$badge-neutral-fg:  var(--badge-neutral-fg, var(--on-neutral));
 
 // Cards
 $card-bg:     var(--card-bg);
@@ -256,7 +256,7 @@ $accordion-border:   var(--accordion-border);
 // Icons
 $icon-default: var(--icon-default);
 $icon-muted:   var(--icon-muted);
-$icon-accent:  var(--icon-accent);
+$icon-primary:  var(--icon-primary);
 
 // ============================================================================
 // BACK-COMPAT FLAGGED VARS (moved from inline sections)
@@ -284,7 +284,7 @@ $on-contrast-bold:    var(--on-contrast-bold);
 $on-contrast-dim:     var(--on-contrast-dim);
 $muted:               var(--muted);
 // back-compat text-* aliases → on-main--*
-$text-main:           var(--on-bg);
+$text-main:           var(--on-main);
 $text-main-bold:      var(--on-main--strong);
 $text-contrast:       var(--on-contrast);
 $text-contrast-bold:  var(--on-contrast-bold);

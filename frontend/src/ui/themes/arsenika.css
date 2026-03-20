@@ -17,24 +17,24 @@ html.theme-arsenika {
   --on-main--dim-mid: #4187B1;
   --on-main--inverse: #212931AB;
   
-   --accent-color-light: #f0d29a;
-  --accent-color: #f0a037;
+   --color-primary-light: #f0d29a;
+  --color-primary: #f0a037;
   /*! --bg-contrast: #950642
   */
-  --accent-color-mid: #eb9347;
-  --accent-color-dark: #bd773ee8;
-  --accent-color-darker: #9c7250e8;
+  --color-primary-mid: #eb9347;
+  --color-primary-dark: #bd773ee8;
+  --color-primary-darker: #9c7250e8;
   
-  --secondary-color:  #1aafdc;
-  --secondary-color-light: #38c4e5;
-  --secondary-color-mid: #2b7bb1;
+  --color-secondary:  #1aafdc;
+  --color-secondary-light: #38c4e5;
+  --color-secondary-mid: #2b7bb1;
 
-  --secondary-color-alt:  #35d4c7;
+  --color-secondary-alt:  #35d4c7;
   
     /*! --mid-main: var(--light2)*/
     --bg-main: #352B52;
     --bg-darker: #1D1F2B;
-    --bg-deep: #1D212BEB;
+  --bg-deep: #1a1320;
     --bg-opaque: #0b0c1745;
     --bg-inverse: var(--dark);
     

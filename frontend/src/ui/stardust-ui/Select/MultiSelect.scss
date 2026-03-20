@@ -68,7 +68,7 @@
     font-weight: 600;
     line-height: 1.4;
     color: #fff;
-    background: var(--accent-color, #f35);
+    background: var(--color-primary, #f35);
     border-radius: 4px;
     white-space: nowrap;
     max-width: 140px;
@@ -144,8 +144,8 @@
     transition: background 0.15s ease, border-color 0.15s ease;
 
     &--active {
-      background: var(--accent-color, #f35);
-      border-color: var(--accent-color, #f35);
+      background: var(--color-primary, #f35);
+      border-color: var(--color-primary, #f35);
 
       &::after {
         content: '';
@@ -177,7 +177,7 @@
         border-color: #fff;
 
         &::after {
-          border-color: var(--accent-color, #f35);
+          border-color: var(--color-primary, #f35);
         }
       }
     }

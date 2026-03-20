@@ -35,7 +35,7 @@
 
     > i {
       padding-right: 15px;
-      color: var(--secondary-color-alt, #888);
+      color: var(--color-secondary-alt, #888);
       font-style: normal;
     }
   }
@@ -55,7 +55,7 @@
   }
 
   &--active {
-    background-color: var(--secondary-color);
+    background-color: var(--color-secondary);
     position: relative;
     min-width: 0;
     animation: st-menufill 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
@@ -68,7 +68,7 @@
       height: var(--arrow-width);
       border: solid calc(var(--arrow-width) / 2) transparent;
       box-sizing: border-box;
-      border-left-color: var(--secondary-color);
+      border-left-color: var(--color-secondary);
       top: 0;
       right: calc(var(--arrow-width) * -1);
       z-index: 10;
@@ -84,7 +84,7 @@
       > i {
         margin-right: 15px;
         padding-right: 0;
-        color: var(--secondary-color-alt, #888);
+        color: var(--color-secondary-alt, #888);
         font-style: normal;
       }
     }

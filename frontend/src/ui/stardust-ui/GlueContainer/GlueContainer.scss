@@ -128,7 +128,7 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0.5rem;
-  color: var(--on-accent, #e8e8ff);
+  color: var(--on-primary, #e8e8ff);
 
   > .s-btn {
     flex: 1 0 auto;
@@ -179,7 +179,7 @@
     flex: 1 1 auto;
     min-width: 0;
     position: relative;
-    color: var(--on-accent);
+    color: var(--on-primary);
   }
 
   > .s-badge {

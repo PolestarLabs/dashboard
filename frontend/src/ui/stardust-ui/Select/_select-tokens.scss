@@ -26,7 +26,7 @@ $_sel-chevron-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
 
   // Solid defaults
   --_bw: 3px;
-  --_bc: var(--accent-color, #f35);
+  --_bc: var(--color-primary, #f35);
   --_radius: #{$_sel-radius};
   --_min-h: 48px;
   --_font: 1rem;
@@ -38,7 +38,7 @@ $_sel-chevron-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
 }
 
 @mixin sel-variant-ghost-open {
-  --_bc: var(--accent-color, #f35);
+  --_bc: var(--color-primary, #f35);
 }
 
 @mixin sel-size-sm {
@@ -108,7 +108,7 @@ $_sel-chevron-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
 @mixin sel-trigger-ghost-focus {
   &:focus,
   &:focus-within {
-    border-color: var(--accent-color, #f35);
+    border-color: var(--color-primary, #f35);
   }
 }
 
@@ -198,12 +198,12 @@ $_sel-chevron-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
 }
 
 @mixin sel-option-hover {
-  background: var(--accent-color, #f35);
+  background: var(--color-primary, #f35);
   color: #fff;
 }
 
 @mixin sel-option-selected {
-  color: var(--accent-color, #f35);
+  color: var(--color-primary, #f35);
   font-weight: 600;
 }
 

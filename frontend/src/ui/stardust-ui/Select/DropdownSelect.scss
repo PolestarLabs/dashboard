@@ -146,11 +146,11 @@
     }
 
     .st-dropdown-select__option--selected {
-      color: var(--accent-color, #f35);
+      color: var(--color-primary, #f35);
     }
 
     .st-dropdown-select__option:hover {
-      background: var(--accent-color, #f35);
+      background: var(--color-primary, #f35);
       color: #fff;
 
       .st-dropdown-select__desc {

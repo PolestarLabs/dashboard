@@ -49,12 +49,27 @@
     return pref || 'default'; 
   }
  
+ function setHtmlThemeClass(theme){
+    const root = document.documentElement
+    [...root.classList]
+      .filter((cls) => cls.startsWith('theme-'))
+      .forEach((cls) => root.classList.remove(cls))
+    root.classList.add(`theme-${theme}`)
+ }
+ 
  function enableTheme(theme='default'){
     localStorage.setItem('plx-theme',theme)
-    if(userdata) fetch(`/api/telemetry/theme/${theme}?user=${userdata.id}`);
-    $('.plxtheme').remove()
-    $('head').append(`<link class='plxtheme' rel='stylesheet' href='/css/themes/${theme}.css'>`)
+    if(userdata) fetch(`/api/telemetry/theme/${theme}?user=${userdata.id}`)
+
+    setHtmlThemeClass(theme)
+
     $('.plx-theme-button').removeAttr('style')
     $('.plx-theme-button.theme-'+theme).css({'opacity':1})
-     
+
+    $('.plxtheme').remove()
+
+    // default theme is the base; do not append it on top (prevents an extra default layer from overriding custom themes)
+    if (theme !== 'default') {
+      $('head').append(`<link class='plxtheme' rel='stylesheet' href='/css/themes/${theme}.css'>`)
+    }
  }

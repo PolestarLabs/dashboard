@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Theme Editor</title>
-  <link rel="stylesheet" href="./default.css" id="default-css" />
+  <link rel="stylesheet" href="./__default.css" id="default-css" />
   <style>
     /* ─────────────────────────────────────────────────────────────
        Editor chrome — intentionally NOT using theme tokens so the
@@ -546,7 +546,7 @@
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: var(--accent-color-dim);
+      color: var(--color-primary-dim);
       margin-bottom: 8px;
       padding-bottom: 5px;
       border-bottom: 1px solid rgba(255,255,255,.05);
@@ -571,7 +571,7 @@
       font-size: 12px; font-weight: 600; cursor: pointer;
       transition: background .15s;
     }
-    .pv-btn-primary   { background: var(--btn-primary-bg,   var(--color-primary));   color: var(--btn-primary-fg,   var(--on-accent)); }
+    .pv-btn-primary   { background: var(--btn-primary-bg,   var(--color-primary));   color: var(--btn-primary-fg,   var(--on-primary)); }
     .pv-btn-secondary { background: var(--btn-secondary-bg, var(--color-secondary)); color: var(--btn-secondary-fg, var(--on-secondary)); }
     .pv-btn-success   { background: var(--btn-success-bg,   var(--color-success));   color: var(--btn-success-fg,   var(--on-success)); }
     .pv-btn-warn      { background: var(--btn-warn-bg,      var(--color-warn));      color: var(--btn-warn-fg,      var(--on-warn)); }
@@ -670,7 +670,7 @@
     .pv-cb-row {
       display: flex; align-items: center; gap: 8px; margin-bottom: 5px;
     }
-    .pv-cb-row input { accent-color: var(--color-primary); width: 14px; height: 14px; }
+    .pv-cb-row input { color-primary: var(--color-primary); width: 14px; height: 14px; }
 .pv-cb-label { font-size: 12px; color: var(--on-main); }
 
     /* Divider */
@@ -818,27 +818,27 @@
 
       <div class="palette-row-label">Accent &amp; Secondary</div>
       <div class="swatch-row">
-        <div class="swatch" data-var="--accent-color" data-on-text="white">
+        <div class="swatch" data-var="--color-primary" data-on-text="white">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Primary</div>
           <div class="swatch-bottom"><div class="swatch-index">1</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--accent-color-dark" data-on-text="white">
+        <div class="swatch" data-var="--color-primary-dark" data-on-text="white">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Primary Variant</div>
           <div class="swatch-bottom"><div class="swatch-index">2</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--secondary-color" data-on-text="white">
+        <div class="swatch" data-var="--color-secondary" data-on-text="white">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Secondary</div>
           <div class="swatch-bottom"><div class="swatch-index">3</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--secondary-color-alt" data-on-text="white">
+        <div class="swatch" data-var="--color-secondary-alt" data-on-text="white">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Sec. Variant</div>
           <div class="swatch-bottom"><div class="swatch-index">4</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--tertiary-color" data-on-text="white">
+        <div class="swatch" data-var="--color-tertiary" data-on-text="white">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Tertiary (optional)</div>
           <p class="swatch-descript swatch-descript--secondary">This swatch is optional and can be used as an additional accent color. It MUST be 100% compatible with the Secondary color's foreground colors. </p>
@@ -875,8 +875,8 @@
         </div>
         <div class="swatch" data-var="--bg-deep" data-on-text="--on-main">
           <input type="color" class="swatch-picker" />
-          <div class="swatch-label">Deepest</div>
-          <p class="swatch-descript swatch-descript--bg">This swatch is a step beyond the main background. It can be set to the same color.</p>
+          <div class="swatch-label">Deep</div>
+          <p class="swatch-descript swatch-descript--bg">This swatch is a step beyond the main background. Useful for "valley" depths.</p>
           
           <div class="swatch-bottom"><div class="swatch-index">9</div><div class="swatch-hex"></div></div>
         </div>
@@ -885,12 +885,12 @@
 
       <div class="palette-row-label">On-color tokens</div>
       <div class="swatch-row">
-        <div class="swatch on-row" data-var="--on-accent-color" data-fallback-var="--on-accent" data-against-var="--accent-color" data-on-text="auto">
+        <div class="swatch on-row" data-var="--on-color-primary" data-fallback-var="--on-primary" data-against-var="--color-primary" data-on-text="auto">
           <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
           <div class="swatch-label">On Primary</div>
           <div class="swatch-bottom"><div class="swatch-index">11</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch on-row two-against" data-var="--on-secondary-color" data-fallback-var="--on-secondary" data-against-var="--secondary-color|--tertiary-color" data-on-text="auto">
+        <div class="swatch on-row two-against" data-var="--on-color-secondary" data-fallback-var="--on-secondary" data-against-var="--color-secondary|--color-tertiary" data-on-text="auto">
           <input type="color" class="swatch-picker" />
           <div class="swatch-against swatch-against--secondary"></div>
           <div class="swatch-against swatch-against--tertiary"></div>
@@ -973,7 +973,7 @@
         <div class="t-main">Main body — the quick brown fox jumps over the lazy dog.</div>
         <div class="t-dim">Dimmed / muted secondary text</div>
         <div class="t-faint">Faint helper / caption text</div>
-        <div class="t-accent">Accent-colored label</div>
+        <div class="t-accent">color-primaryed label</div>
         <p>Lorem <span class="t-bold">ipsum</span> dolor sit amet, <span class="t-bold">consectetur</span> adipiscing elit. Donec <a href="#" class="pv-link-normal">vehicula</a> cursus metus, a efficitur nisl.</p>
        
       </div>
@@ -1115,7 +1115,7 @@
       <div class="pv-white-bg">
         <p>Chips on #ffffff — legibility check</p>
         <div class="tiny-pill-row">
-          <span class="tiny-pill" data-var="--color-primary"   data-on-var="--on-accent">Accent</span>
+          <span class="tiny-pill" data-var="--color-primary"   data-on-var="--on-primary">Accent</span>
           <span class="tiny-pill" data-var="--color-success"   data-on-var="--on-success">Success</span>
           <span class="tiny-pill" data-var="--color-warn"      data-on-var="--on-warn">Warn</span>
           <span class="tiny-pill" data-var="--color-danger"    data-on-var="--on-danger">Danger</span>
@@ -1160,23 +1160,23 @@
 
 const THEME_TOKENS = [
   
-  { var: '--accent-color',           label: 'ACCENT',            group: 'Primary' },
-  { var: '--secondary-color',        label: 'SECONDARY',         group: 'Secondary' },
-  { var: '--secondary-color-alt',    label: 'SECONDARY ALT',     group: 'Secondary' },
-  { var: '--tertiary-color',         label: 'TERTIARY',          group: 'Secondary' },
+  { var: '--color-primary',           label: 'ACCENT',            group: 'Primary' },
+  { var: '--color-secondary',        label: 'SECONDARY',         group: 'Secondary' },
+  { var: '--color-secondary-alt',    label: 'SECONDARY ALT',     group: 'Secondary' },
+  { var: '--color-tertiary',         label: 'TERTIARY',          group: 'Secondary' },
   
-  { var: '--accent-color-mid',       label: 'ACCENT MID',        group: 'Primary',    derived: true, semanticVar: '--color-primary-mid' },
-  { var: '--accent-color-light',     label: 'ACCENT LIGHT',      group: 'Primary',    derived: true, semanticVar: '--color-primary-light' },
-  { var: '--accent-color-strong',    label: 'ACCENT STRONG',     group: 'Primary',    derived: true, semanticVar: '--color-primary-strong' },
-  { var: '--accent-color-dark',      label: 'ACCENT DARK',       group: 'Primary',    derived: true, semanticVar: '--color-primary-dark' },
-  { var: '--accent-color-dim',       label: 'ACCENT DIM',        group: 'Primary',    derived: true, semanticVar: '--color-primary-dim' },
-  { var: '--accent-color-opaque',    label: 'ACCENT OPAQUE',     group: 'Primary',    derived: true, semanticVar: '--color-primary-opaque' },
+  { var: '--color-primary-mid',       label: 'ACCENT MID',        group: 'Primary',    derived: true, semanticVar: '--color-primary-mid' },
+  { var: '--color-primary-light',     label: 'ACCENT LIGHT',      group: 'Primary',    derived: true, semanticVar: '--color-primary-light' },
+  { var: '--color-primary-strong',    label: 'ACCENT STRONG',     group: 'Primary',    derived: true, semanticVar: '--color-primary-strong' },
+  { var: '--color-primary-dark',      label: 'ACCENT DARK',       group: 'Primary',    derived: true, semanticVar: '--color-primary-dark' },
+  { var: '--color-primary-dim',       label: 'ACCENT DIM',        group: 'Primary',    derived: true, semanticVar: '--color-primary-dim' },
+  { var: '--color-primary-opaque',    label: 'ACCENT OPAQUE',     group: 'Primary',    derived: true, semanticVar: '--color-primary-opaque' },
 
-  { var: '--secondary-color-light',  label: 'SECONDARY LIGHT',   group: 'Secondary',  derived: true, semanticVar: '--color-secondary-light' },
-  { var: '--secondary-color-mid',    label: 'SECONDARY MID',     group: 'Secondary',  derived: true, semanticVar: '--color-secondary-mid' },
-  { var: '--secondary-color-strong', label: 'SECONDARY STRONG',  group: 'Secondary',  derived: true, semanticVar: '--color-secondary-strong' },
-  { var: '--secondary-color-dark',   label: 'SECONDARY DARK',    group: 'Secondary',  derived: true, semanticVar: '--color-secondary-dark' },
-  { var: '--secondary-color-dim',    label: 'SECONDARY DIM',     group: 'Secondary',  derived: true, semanticVar: '--color-secondary-dim' },
+  { var: '--color-secondary-light',  label: 'SECONDARY LIGHT',   group: 'Secondary',  derived: true, semanticVar: '--color-secondary-light' },
+  { var: '--color-secondary-mid',    label: 'SECONDARY MID',     group: 'Secondary',  derived: true, semanticVar: '--color-secondary-mid' },
+  { var: '--color-secondary-strong', label: 'SECONDARY STRONG',  group: 'Secondary',  derived: true, semanticVar: '--color-secondary-strong' },
+  { var: '--color-secondary-dark',   label: 'SECONDARY DARK',    group: 'Secondary',  derived: true, semanticVar: '--color-secondary-dark' },
+  { var: '--color-secondary-dim',    label: 'SECONDARY DIM',     group: 'Secondary',  derived: true, semanticVar: '--color-secondary-dim' },
   
   { var: '--bg-main',                     label: 'BACKGROUND',        group: 'Background' },
   { var: '--bg-surface',             label: 'SURFACE',           group: 'Background' },
@@ -1186,7 +1186,7 @@ const THEME_TOKENS = [
   { var: '--bg-opaque',              label: 'OPAQUE',            group: 'Background', derived: true, semanticVar: '--bg-opaque' },
      
   { var: '--on-main',                label: 'Text on main',         group: 'Text' },
-  { var: '--on-accent',        label: 'Text on accent',         group: 'Text' },
+  { var: '--on-primary',        label: 'Text on accent',         group: 'Text' },
   { var: '--on-secondary',     label: 'Text on secondary',      group: 'Text' },
   { var: '--on-surface',      label: 'Text on surface',       group: 'Text' },
   { var: '--on-contrast',          label: 'Text on-Contrast',  group: 'Text' },
@@ -1229,7 +1229,7 @@ const THEME_TOKENS = [
 
   // Layer 2 - Component/semantic tokens
   { var: '--btn-primary-bg',   label: 'Btn primary bg',   group: 'Components', default: 'var(--color-primary)' },
-  { var: '--btn-primary-fg',   label: 'Btn primary fg',   group: 'Components', default: 'var(--on-accent)' },
+  { var: '--btn-primary-fg',   label: 'Btn primary fg',   group: 'Components', default: 'var(--on-primary)' },
   { var: '--btn-secondary-bg', label: 'Btn secondary bg', group: 'Components', default: 'var(--color-secondary)' },
   { var: '--btn-secondary-fg', label: 'Btn secondary fg', group: 'Components', default: 'var(--on-secondary)' },
   { var: '--btn-success-bg',   label: 'Btn success bg',   group: 'Components', default: 'var(--color-success)' },
@@ -1259,7 +1259,7 @@ const THEME_TOKENS = [
   { var: '--accordion-border', label: 'Accordion border', group: 'Components', default: 'color-mix(in srgb, var(--color-primary) 20%, transparent)' },
   { var: '--icon-default',     label: 'Icon default',     group: 'Components', default: 'var(--color-secondary)' },
   { var: '--icon-muted',       label: 'Icon muted',       group: 'Components', default: 'var(--on-main--dim)' },
-  { var: '--icon-accent',      label: 'Icon accent',      group: 'Components', default: 'var(--color-primary)' },
+  { var: '--icon-primary',      label: 'Icon accent',      group: 'Components', default: 'var(--color-primary)' },
 ];
 
 const THEME_TOKEN_MAP = new Map(THEME_TOKENS.map(t => [t.var, t]));
@@ -1434,7 +1434,7 @@ function updateLinkStyles() {
 
 const legacyMapping = {
   '--bg-main': '--bg',
-  '--on-main': '--on-bg',
+  '--on-main': '--on-main',
 };
 
 function themeDefinesVar(varName) {

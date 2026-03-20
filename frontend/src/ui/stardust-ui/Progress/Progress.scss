@@ -11,7 +11,7 @@
   &--lg { --_h: 14px; }
 
   /* ── Fill colour ──────────────────────────────── */
-  --_fill: var(--accent-color, #f48);
+  --_fill: var(--color-primary, #f48);
   &--success { --_fill: var(--plx-green,   #3ecb7f); }
   &--danger  { --_fill: var(--plx-danger,  #e05260); }
   &--warning { --_fill: var(--plx-yellow,  #f0a500); }

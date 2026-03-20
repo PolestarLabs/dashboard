@@ -4,7 +4,7 @@ import { describe, it, expect } from 'vitest';
 
 const themesDir = path.join(process.cwd(), 'src/ui/themes');
 const themeEditorFile = path.join(themesDir, 'theme-editor2.html');
-const defaultThemeFile = path.join(themesDir, 'default.css');
+const defaultThemeFile = path.join(themesDir, '__default.css');
 
 function stripComments(css: string) {
   return css.replace(/\/\*[\s\S]*?\*\//g, '');
@@ -122,7 +122,7 @@ const legacyVars = new Set<string>([
   '--bg-darker',
   '--bg-contrast-dim',
 
-  '--on-bg',
+  '--on-main',
   '--on-tint',
   '--on-tint-dim',
   '--mid-main',
@@ -130,8 +130,8 @@ const legacyVars = new Set<string>([
   '--link-head-hover',
   '--heading-divider-color',
   '--on-lightest',
-  '--accent-color-darker',
-  '--accent-color-alt',
+  '--color-primary-darker',
+  '--color-primary-alt',
   '--bg-card',
   '--bg',
 ]);
@@ -158,7 +158,7 @@ const derivedVars = new Set<string>([...derivedFromEditor, ...additionalDerived]
 describe('theme CSS validation', () => {
   const themeFiles = fs
     .readdirSync(themesDir)
-    .filter((n) => n.endsWith('.css') && n !== 'default.css');
+    .filter((n) => n.endsWith('.css') && n !== '__default.css');
 
   it('all theme variables exist in canonical variables (no made-up variables)', () => {
     const unknownVarsPerFile: Record<string, string[]> = {};
@@ -201,7 +201,7 @@ describe('theme CSS validation', () => {
     themeFiles.forEach((file) => {
       const themeVars = extractVariables(fs.readFileSync(path.join(themesDir, file), 'utf-8'));
       const bg = selectColor(themeVars, ['--bg', '--bg-main']);
-      const on = selectColor(themeVars, ['--on-bg', '--on-main']);
+      const on = selectColor(themeVars, ['--on-main', '--on-main']);
       if (!bg || !on) return;
 
       const bgRgb = parseCssColor(bg);

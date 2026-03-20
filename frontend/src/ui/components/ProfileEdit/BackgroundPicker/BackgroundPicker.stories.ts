@@ -25,7 +25,7 @@ export const Default: Story = {
       return { args, value, sortBy };
     },
     components: { BackgroundPicker },
-    template: '<BackgroundPicker v-model="value" :sort-by="sortBy" :options="args.options" :accent-color="args.accentColor" @sort="sortBy = $event" />',
+    template: '<BackgroundPicker v-model="value" :sort-by="sortBy" :options="args.options" :color-primary="args.accentColor" @sort="sortBy = $event" />',
   }),
   args: {
     options: sampleBackgrounds,

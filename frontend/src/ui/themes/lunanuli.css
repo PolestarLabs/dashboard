@@ -17,13 +17,13 @@ html.theme-lunanuli {
   */
     
  
-  --accent-color-light: #32b0b9;
-  --accent-color: #278f97;
-  --accent-color-mid: #067895;
-  --accent-color-dark: #08637a;
+  --color-primary-light: #32b0b9;
+  --color-primary: #278f97;
+  --color-primary-mid: #067895;
+  --color-primary-dark: #08637a;
   
-  --secondary-color:  #e1a54a;
-  --secondary-color-alt:  #b559d1;
+  --color-secondary:  #e1a54a;
+  --color-secondary-alt:  #b559d1;
     /*
   --mid-main: var(--light2);
   */ --bg-main: #1f171a;

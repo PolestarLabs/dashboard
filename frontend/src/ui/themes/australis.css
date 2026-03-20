@@ -16,25 +16,25 @@ html.theme-australis {
   --on-main--dim-mid: #8C755ED4;
   --on-main--inverse: #213121AA;
   
-   --accent-color-light: #c6dd86;
-  --accent-color: #7bbd69;
+   --color-primary-light: #c6dd86;
+  --color-primary: #7bbd69;
   /*! --bg-contrast: #950642
   */
-  --accent-color-mid: #46a45e;
-  --accent-color-dark: #52aa4f;
+  --color-primary-mid: #46a45e;
+  --color-primary-dark: #52aa4f;
   
-  --secondary-color:  #E14A66;
-  --secondary-color-light: #e96981;
-  --secondary-color-mid: #ca2846;
-  --secondary-color-strong: #a8283f;
-  --secondary-color-dark: #a03347;
-  --secondary-color-alt:  #D7406C;
+  --color-secondary:  #E14A66;
+  --color-secondary-light: #e96981;
+  --color-secondary-mid: #ca2846;
+  --color-secondary-strong: #a8283f;
+  --color-secondary-dark: #a03347;
+  --color-secondary-alt:  #D7406C;
   
     /*! --mid-main: var(--light2)
     */ 
     --bg-main: #29343C;
     --bg-darker: #1D252B;
-    --bg-deep: #1D212BEB;
+   --bg-deep: #181f29;
     --bg-opaque: #090b1345;
     /*
   --bg-inverse: var(--dark);

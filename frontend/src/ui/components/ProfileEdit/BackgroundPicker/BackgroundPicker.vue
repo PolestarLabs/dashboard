@@ -1,6 +1,6 @@
 <template lang="pug">
 ProfileEditPill.st-profile-bgpicker(
-  :accent-color="accentColor"
+  :color-primary="accentColor"
   :background-image="selectedBg ? getBackgroundImage(selectedBg) : ''"
 )
   .st-profile-bgpicker__info

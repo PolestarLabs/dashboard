@@ -10,8 +10,8 @@
 
 // ─── Variables ───────────────────────────────────────────────────────────────
 
-$swal2-secondary: var(--secondary-color, #aa66ff);
-$swal2-bg: var(--bg-darker, #20202b);
+$swal2-secondary: var(--color-secondary, #aa66ff);
+$swal2-bg: var(--bg-surface, #20202b);
 $swal2-text: #545454;
 $swal2-border: #d9d9d9;
 $swal2-placeholder: #ccc;
@@ -356,7 +356,7 @@ $swal2-question-color: #87adbd;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: var(--bg-darker, var(--darker, #1e1e2e));
+  background: var(--bg-surface, var(--darker, #1e1e2e));
   color: var(--on-main, #c9ccd1);
   border-radius: 16px;
   padding: 2rem 2rem 1.5rem;
@@ -397,7 +397,7 @@ $swal2-question-color: #87adbd;
 
 // ---- Body text / HTML container ---------------------------------------------
 .plx-swal-body {
-  color: var(--on-main--dim-mid, #8a8aaa);
+  color: var(--on-main--dim-mid, var(--on-main));
   font-size: 0.95rem;
   line-height: 1.6;
   text-align: left;
@@ -411,7 +411,7 @@ $swal2-question-color: #87adbd;
   z-index: 2;
   top: 1rem;
   right: 1rem;
-  color: var(--on-main--dim, #666688);
+  color: var(--on-main--dim, var(--on-main));
   font-size: 1.4rem;
   line-height: 1;
   padding: 0;
@@ -546,7 +546,7 @@ $swal2-question-color: #87adbd;
 .swal2-select,
 .swal2-file {
   background: var(--bg-surface, rgba(255, 255, 255, 0.06));
-  border: 2px solid var(--accent-color, #f35);
+  border: 2px solid var(--color-primary, #f35);
   border-radius: 8px;
   color: var(--on-main, #c9ccd1);
   font-family: Panton, var(--display-font, system-ui), sans-serif;
@@ -558,14 +558,14 @@ $swal2-question-color: #87adbd;
 
   &:focus {
     outline: none;
-    border-color: var(--secondary-color, #a6f);
+    border-color: var(--color-secondary, #a6f);
     box-shadow: 0 0 0 3px var(--focus-ring, rgba(92, 110, 248, 0.2));
   }
 }
 
 // ---- Loader (showLoaderOnConfirm) -------------------------------------------
 .swal2-loader {
-  border-color: var(--secondary-color, #a6f) transparent var(--secondary-color, #a6f) transparent;
+  border-color: var(--color-secondary, #a6f) transparent var(--color-secondary, #a6f) transparent;
 }
 
 // =============================================================================

@@ -40,7 +40,7 @@
     &:focus-within,
     &:focus {
       outline: 0;
-      border-color: var(--accent-color, #f35);
+      border-color: var(--color-primary, #f35);
     }
 
     &:disabled {
@@ -136,12 +136,12 @@
 
     &:hover,
     &--focused {
-      background: var(--accent-color, #f35);
+      background: var(--color-primary, #f35);
       color: #fff;
     }
 
     &--selected {
-      color: var(--accent-color, #f35);
+      color: var(--color-primary, #f35);
       font-weight: 600;
     }
 
