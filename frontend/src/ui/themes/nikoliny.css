@@ -25,7 +25,7 @@ html.theme-nikoliny {
 
 
   /*! --mid-main: var(--light2); */
-   --bg-main: #f2feff; --bg-dark: #dee2f0;--bg-darker: #BCC3DB; --bg-darkest: #8F8FBD; --bg-opaque: #494a911c; /*
+   --bg-main: #f2feff; --bg-surface: #dee2f0;--bg-surface-alt: #BCC3DB; --bg-deep: #8F8FBD; --bg-opaque: #494a911c; /*
 --bg-inverse: var(--dark);
 
 --links: #87f;
@@ -50,6 +50,10 @@ html.theme-nikoliny {
 --plx-yellow: #EA5 !important;
 
 
+
+  --tertiary-color: #f0b056;
+  --on-surface: #535f8d;
+  --on-contrast: #151523;
 }
 
 .theme .dash-pill .sticker-pack{

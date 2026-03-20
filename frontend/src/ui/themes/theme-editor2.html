@@ -11,6 +11,7 @@
        editor UI stays readable regardless of which theme is loaded
        ───────────────────────────────────────────────────────────── */
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+ 
 
     :root {
       /* Fallback btn hover/active vars so preview swatches resolve on <html> */
@@ -190,7 +191,7 @@
     .swatch.on-row { min-height: 64px; }
 
     .swatch-label {
-      font-size: 11px;
+      font-size: 14px;
       font-weight: 600;
       line-height: 1.3;
       position: relative;
@@ -212,6 +213,17 @@
       border: 1px solid rgba(255,255,255,0.12);
       pointer-events: none;
       z-index: 0;
+    }
+
+    /* Support UI showing two “against” colors (secondary + tertiary) in one swatch */
+    .swatch.two-against .swatch-against {
+      width: calc(50% - 10px);
+      left: 10px;
+      right: auto;
+    }
+    .swatch.two-against .swatch-against--tertiary {
+      left: auto;
+      right: 10px;
     }
     .swatch-bottom {
       display: flex;
@@ -370,6 +382,23 @@
       z-index: 120;
     }
 
+    .token-dropdown-search {
+      width: calc(100% - 14px);
+      margin: 6px 7px;
+      padding: 5px 8px;
+      border-radius: 6px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.25);
+      color: #ddd;
+      font-size: 11px;
+    }
+
+    .token-dropdown-search:focus {
+      outline: none;
+      border-color: rgba(123,123,255,.6);
+      background: rgba(0,0,0,.35);
+    }
+
     .token-dropdown-option {
       padding: 6px 10px;
       display: flex;
@@ -421,7 +450,7 @@
       font-weight: 700;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: #44446699;
+      color: var(--text-dim, #555577);
       margin-bottom: 8px;
       padding-bottom: 5px;
       border-bottom: 1px solid rgba(255,255,255,.05);
@@ -503,14 +532,14 @@
       border: 1px solid var(--card-border, var(--border-default));
       border-radius: 9px; padding: 12px 14px;
     }
-    .pv-card-head { font-size: 13px; font-weight: 700; color: var(--text-bold); margin-bottom: 5px; }
-    .pv-card-body { font-size: 12px; color: var(--text-main); line-height: 1.5; margin-bottom: 10px; }
+    .pv-card-head { font-size: 13px; font-weight: 700; color: var(--text-contrast); margin-bottom: 5px; }
+    .pv-card-body { font-size: 12px; color: var(--card-text, var(--text-main)); line-height: 1.5; margin-bottom: 10px; }
     .pv-card-foot {
       display: flex; gap: 6px; align-items: center;
       padding-top: 8px;
       border-top: 1px solid var(--divider, var(--border-default));
     }
-    .pv-card-dim   { font-size: 11px; color: var(--text-dim); flex: 1; }
+    .pv-card-dim   { font-size: 11px; color: var(--text-contrast-dim); flex: 1; }
     .pv-card-accent { font-size: 11px; color: var(--color-primary); font-weight: 600; }
 
     /* Inputs */
@@ -589,11 +618,11 @@
     .pv-modal-head {
       padding: 8px 12px;
       border-bottom: 1px solid var(--divider, var(--border-default));
-      font-size: 12px; font-weight: 700; color: var(--text-bold);
+      font-size: 12px; font-weight: 700; color: var(--text-surface);
       display: flex; justify-content: space-between; align-items: center;
     }
     .pv-modal-x { font-size: 14px; color: var(--text-dim); cursor: pointer; background: none; border: none; }
-    .pv-modal-body { padding: 10px 12px; font-size: 12px; color: var(--text-main); line-height: 1.5; }
+    .pv-modal-body { padding: 10px 12px; font-size: 12px; color: var(--text-surface); line-height: 1.5; }
     .pv-modal-foot {
       padding: 8px 12px;
       border-top: 1px solid var(--divider, var(--border-default));
@@ -604,7 +633,7 @@
     .pv-overlay-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
     .pv-overlay-cell {
       border-radius: 6px; padding: 12px 8px;
-      font-size: 10px; font-weight: 600; text-align: center; color: #fff;
+      font-size: 10px; font-weight: 600; text-align: center; color: var(--text-dim);
     }
 
     /* White BG contrast */
@@ -667,6 +696,7 @@
       <option value="lunanuli">lunanuli</option>
       <option value="nikoliny">nikoliny</option>
       <option value="selenedi">selenedi</option>
+    
     </select>
   </div>
 
@@ -714,7 +744,8 @@
         </div>
         <div class="swatch" data-var="--tertiary-color" data-on-text="white">
           <input type="color" class="swatch-picker" />
-          <div class="swatch-label">Tertiary</div>
+          <div class="swatch-label">Tertiary (optional)</div>
+          <p style="opacity: .5; font-size: 10px; color: var(--on-secondary);">This swatch is optional and can be used as an additional accent color. It MUST be 100% compatible with the Secondary color's foreground colors. </p>
           <div class="swatch-bottom"><div class="swatch-index">5</div><div class="swatch-hex"></div></div>
         </div>
       </div>
@@ -726,26 +757,34 @@
           <div class="swatch-label">Background</div>
           <div class="swatch-bottom"><div class="swatch-index">6</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--bg-dark" data-on-text="--text-main">
+        <div class="swatch" data-var="--bg-surface" data-on-text="--text-main">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Surface</div>
+          <p style="opacity: .5; font-size: 12px; color: var(--on-surface);">This swatch is used for surfaces. It should be distinguishable from the main background while still maintaining harmony.</p>
           <div class="swatch-bottom"><div class="swatch-index">7</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--bg-darker" data-on-text="--text-main">
+        <div class="swatch" data-var="--bg-surface-alt" data-on-text="--text-main">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Surface +</div>
+          <p style="opacity: .5; font-size: 12px; color: var(--on-surface);">This swatch is an alternative surface color. It can be used for raised elements or cards.</p>
+          
           <div class="swatch-bottom"><div class="swatch-index">8</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--bg-darkest" data-on-text="--text-main">
+        <div class="swatch" data-var="--bg-contrast" data-on-text="auto">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-label">Contrast</div>
+          <p style="opacity: .5; font-size: 12px; color: var(--on-contrast);">This swatch is used for contrast surfaces. It should provide a clear distinction from the main background.</p>
+          <div class="swatch-bottom"><div class="swatch-index">10</div><div class="swatch-hex"></div></div>
+          
+        </div>
+        <div class="swatch" data-var="--bg-deep" data-on-text="--text-main">
           <input type="color" class="swatch-picker" />
           <div class="swatch-label">Deepest</div>
+          <p style="opacity: .5; font-size: 12px; color: var(--text-main);">This swatch is a step beyond the main background. It can be set to the same color.</p>
+          
           <div class="swatch-bottom"><div class="swatch-index">9</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch" data-var="--bg-inverse" data-on-text="auto">
-          <input type="color" class="swatch-picker" />
-          <div class="swatch-label">Inverse</div>
-          <div class="swatch-bottom"><div class="swatch-index">10</div><div class="swatch-hex"></div></div>
-        </div>
+
       </div>
 
       <div class="palette-row-label">On-color tokens</div>
@@ -755,9 +794,11 @@
           <div class="swatch-label">On Primary</div>
           <div class="swatch-bottom"><div class="swatch-index">11</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch on-row" data-var="--on-secondary-color" data-fallback-var="--on-secondary" data-against-var="--secondary-color" data-on-text="auto">
-          <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
-          <div class="swatch-label">On Secondary</div>
+        <div class="swatch on-row two-against" data-var="--on-secondary-color" data-fallback-var="--on-secondary" data-against-var="--secondary-color|--tertiary-color" data-on-text="auto">
+          <input type="color" class="swatch-picker" />
+          <div class="swatch-against swatch-against--secondary"></div>
+          <div class="swatch-against swatch-against--tertiary"></div>
+          <div class="swatch-label">On Sec -  / -  On Tert</div>
           <div class="swatch-bottom"><div class="swatch-index">12</div><div class="swatch-hex"></div></div>
         </div>
         <div class="swatch on-row" data-var="--text-main" data-fallback-var="--text-main" data-against-var="--bg-main" data-on-text="auto">
@@ -765,14 +806,14 @@
           <div class="swatch-label">On BG</div>
           <div class="swatch-bottom"><div class="swatch-index">13</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch on-row" data-var="--text-contrast" data-fallback-var="--text-contrast" data-against-var="--bg-dark" data-on-text="auto">
+        <div class="swatch on-row" data-var="--text-surface" data-fallback-var="--on-surface" data-against-var="--bg-surface" data-on-text="auto">
           <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
           <div class="swatch-label">On Surface</div>
           <div class="swatch-bottom"><div class="swatch-index">14</div><div class="swatch-hex"></div></div>
         </div>
-        <div class="swatch on-row" data-var="--on-tertiary-color" data-fallback-var="--on-tertiary" data-against-var="--tertiary-color" data-on-text="auto">
+        <div class="swatch on-row" data-var="--text-contrast" data-fallback-var="--on-contrast" data-against-var="--bg-contrast" data-on-text="auto">
           <input type="color" class="swatch-picker" /><div class="swatch-against"></div>
-          <div class="swatch-label">On Tertiary</div>
+          <div class="swatch-label">On Contrast</div>
           <div class="swatch-bottom"><div class="swatch-index">15</div><div class="swatch-hex"></div></div>
         </div>
       </div>
@@ -825,6 +866,8 @@
         <div class="t-dim">Dimmed / muted secondary text</div>
         <div class="t-faint">Faint helper / caption text</div>
         <div class="t-accent">Accent-colored label</div>
+        <p>Lorem <span class="t-bold">ipsum</span> dolor sit amet, <span class="t-bold">consectetur</span> adipiscing elit. Donec <a href="#" class="pv-link-normal">vehicula</a> cursus metus, a efficitur nisl.</p>
+       
       </div>
     </div>
 
@@ -889,7 +932,7 @@
       <div class="pv-title">Card</div>
       <div class="pv-card">
         <div class="pv-card-head">Card heading</div>
-        <div class="pv-card-body">Uses <code style="color:var(--color-primary);font-size:11px">--card-bg</code> + <code style="color:var(--color-primary);font-size:11px">--card-border</code>. Body text in <code style="color:var(--text-dim);font-size:11px">--text-main</code>.</div>
+        <div class="pv-card-body">Uses <code style="color:var(--color-primary);font-size:11px">--card-bg</code> + <code style="color:var(--color-primary);font-size:11px">--card-border</code>. Body text in <code style="color:var(--color-primary);font-size:11px">--card-text</code>.</div>
         <div class="pv-card-foot">
           <span class="pv-card-dim">2 min read</span>
           <span class="pv-card-accent">Read more →</span>
@@ -971,7 +1014,7 @@
           <span class="tiny-pill" data-var="--color-info"      data-on-var="--on-info">Info</span>
           <span class="tiny-pill" data-var="--color-neutral"   data-on-var="--on-neutral">Neutral</span>
           <span class="tiny-pill" data-var="--color-secondary" data-on-var="--on-secondary">Secondary</span>
-          <span class="tiny-pill" data-var="--color-tertiary"  data-on-var="--on-tertiary">Tertiary</span>
+          <span class="tiny-pill" data-var="--color-tertiary"  data-on-var="--on-secondary">Tertiary</span>
         </div>
       </div>
     </div>
@@ -1008,64 +1051,73 @@
    ═══════════════════════════════════════════════════════════════════ */
 
 const THEME_TOKENS = [
-  { var: '--luma',                   label: 'Luma',              group: 'Shadows' },
-  { var: '--umbra',                  label: 'Umbra',             group: 'Shadows' },
-  { var: '--accent-color',           label: 'Accent',            group: 'Primary' },
-  { var: '--accent-color-light',     label: 'Accent light',      group: 'Primary' },
-  { var: '--accent-color-mid',       label: 'Accent mid',        group: 'Primary' },
-  { var: '--accent-color-strong',    label: 'Accent strong',     group: 'Primary' },
-  { var: '--accent-color-dark',      label: 'Accent dark',       group: 'Primary' },
-  { var: '--accent-color-dim',       label: 'Accent dim',        group: 'Primary' },
-  { var: '--accent-color-opaque',    label: 'Accent opaque',     group: 'Primary' },
-  { var: '--on-accent-color',        label: 'On accent',         group: 'Primary' },
-  { var: '--secondary-color',        label: 'Secondary',         group: 'Secondary' },
-  { var: '--secondary-color-alt',    label: 'Secondary alt',     group: 'Secondary' },
-  { var: '--secondary-color-light',  label: 'Secondary light',   group: 'Secondary' },
-  { var: '--secondary-color-mid',    label: 'Secondary mid',     group: 'Secondary' },
-  { var: '--secondary-color-strong', label: 'Secondary strong',  group: 'Secondary' },
-  { var: '--secondary-color-dark',   label: 'Secondary dark',    group: 'Secondary' },
-  { var: '--secondary-color-dim',    label: 'Secondary dim',     group: 'Secondary' },
-  { var: '--on-secondary-color',     label: 'On secondary',      group: 'Secondary' },
-  { var: '--tertiary-color',         label: 'Tertiary',          group: 'Tertiary' },
-  { var: '--on-tertiary-color',      label: 'On tertiary',       group: 'Tertiary' },
-  { var: '--bg-main',                label: 'Bg main',           group: 'Background' },
-  { var: '--bg-dark',                label: 'Bg dark',           group: 'Background' },
-  { var: '--bg-darker',              label: 'Bg darker',         group: 'Background' },
-  { var: '--bg-darkest',             label: 'Bg darkest',        group: 'Background' },
-  { var: '--bg-opaque',              label: 'Bg opaque',         group: 'Background' },
-  { var: '--bg-inverse',             label: 'Bg inverse',        group: 'Background' },
+
+  { var: '--accent-color',           label: 'ACCENT',            group: 'Primary' },
+  { var: '--accent-color-mid',       label: 'ACCENT MID',        group: 'Primary' },
+  { var: '--accent-color-light',     label: 'ACCENT LIGHT',      group: 'Primary' },
+  { var: '--accent-color-strong',    label: 'ACCENT STRONG',     group: 'Primary' },
+  { var: '--accent-color-dark',      label: 'ACCENT DARK',       group: 'Primary' },
+  { var: '--accent-color-dim',       label: 'ACCENT DIM',        group: 'Primary' },
+  { var: '--accent-color-opaque',    label: 'ACCENT OPAQUE',     group: 'Primary' },
+  //{ var: '--on-accent-color',        label: 'On accent',         group: 'Primary' },
+  { var: '--secondary-color',        label: 'SECONDARY',         group: 'Secondary' },
+  { var: '--secondary-color-alt',    label: 'SECONDARY ALT',     group: 'Secondary' },
+  { var: '--tertiary-color',         label: 'TERTIARY',          group: 'Secondary' },
+  { var: '--secondary-color-light',  label: 'SECONDARY LIGHT',   group: 'Secondary' },
+  { var: '--secondary-color-mid',    label: 'SECONDARY MID',     group: 'Secondary' },
+  { var: '--secondary-color-strong', label: 'SECONDARY STRONG',  group: 'Secondary' },
+  { var: '--secondary-color-dark',   label: 'SECONDARY DARK',    group: 'Secondary' },
+  { var: '--secondary-color-dim',    label: 'SECONDARY DIM',     group: 'Secondary' },
+  //{ var: '--on-secondary-color',     label: 'On secondary',      group: 'Secondary' },
+  { var: '--bg-main',                label: 'BACKGROUND',        group: 'Background' },
+  { var: '--bg-surface',             label: 'SURFACE',           group: 'Background' },
+  { var: '--bg-surface-alt',         label: 'SURFACE +',         group: 'Background' },
+  { var: '--bg-deep',                label: 'DEEPEST',           group: 'Background' },
+  { var: '--bg-opaque',              label: 'OPAQUE',            group: 'Background' },
+  { var: '--bg-contrast',            label: 'CONTRAST',          group: 'Background' },
+  
   { var: '--text-main',              label: 'Text main',         group: 'Text' },
   { var: '--text-bold',              label: 'Text bold',         group: 'Text' },
   { var: '--text-extra-bold',        label: 'Text extra-bold',   group: 'Text' },
   { var: '--text-faint',             label: 'Text faint',        group: 'Text' },
   { var: '--text-dim',               label: 'Text dim',          group: 'Text' },
-  { var: '--text-dim-mid',           label: 'Text dim-mid',      group: 'Text' },
+  //{ var: '--text-dim-mid',           label: 'Text dim-mid',      group: 'Text' },
   { var: '--text-accent',            label: 'Text accent',       group: 'Text' },
   { var: '--text-accent-dim',        label: 'Text accent-dim',   group: 'Text' },
-  { var: '--text-inverse',           label: 'Text inverse',      group: 'Text' },
+ // { var: '--on-surface',             label: 'On surface',        group: 'Text' },
+  { var: '--text-contrast',          label: 'Text contrast',     group: 'Text' },
   { var: '--text-lightest',          label: 'Text lightest',     group: 'Text' },
-  { var: '--color-contrast',         label: 'Contrast',          group: 'Text' },
-  { var: '--color-contrast-dim',     label: 'Contrast dim',      group: 'Text' },
-  { var: '--color-contrast-inverse', label: 'Contrast inv.',     group: 'Text' },
+  { var: '--text-contrast',          label: 'Contrast',          group: 'Text' },
+  { var: '--text-contrast-dim',      label: 'Contrast dim',      group: 'Text' },
+  { var: '--text-contrast-inverse',  label: 'Contrast alt',      group: 'Text' },
+
   { var: '--links',                  label: 'Links',             group: 'Links' },
   { var: '--links-hover',            label: 'Links hover',       group: 'Links' },
   { var: '--links-visited',          label: 'Links visited',     group: 'Links' },
+
   { var: '--dark-border',            label: 'Border dark',       group: 'Borders' },
   { var: '--light-border',           label: 'Border light',      group: 'Borders' },
   { var: '--muted',                  label: 'Muted',             group: 'Borders' },
   { var: '--divider-color',          label: 'Divider',           group: 'Borders' },
+  
   { var: '--dark-dim',               label: 'Dim overlay',       group: 'Elevation' },
   { var: '--dark-dimmer',            label: 'Dimmer overlay',    group: 'Elevation' },
   { var: '--dark-dimmest',           label: 'Dimmest overlay',   group: 'Elevation' },
+  
   { var: '--theme-success',          label: 'Success',           group: 'Status' },
   { var: '--theme-warn',             label: 'Warn',              group: 'Status' },
   { var: '--theme-danger',           label: 'Danger',            group: 'Status' },
   { var: '--theme-info',             label: 'Info',              group: 'Status' },
   { var: '--theme-neutral',          label: 'Neutral',           group: 'Status' },
+  
   { var: '--on-success-color',       label: 'On success',        group: 'Status' },
   { var: '--on-warn-color',          label: 'On warn',           group: 'Status' },
   { var: '--on-danger-color',        label: 'On danger',         group: 'Status' },
   { var: '--on-info-color',          label: 'On info',           group: 'Status' },
+
+  { var: '--luma',                   label: 'Luma',              group: 'Shadows' },
+  { var: '--umbra',                  label: 'Umbra',             group: 'Shadows' },
+
 
   // Layer 2 - Component/semantic tokens
   { var: '--btn-primary-bg',   label: 'Btn primary bg',   group: 'Components', default: 'var(--color-primary)' },
@@ -1083,6 +1135,7 @@ const THEME_TOKENS = [
   { var: '--btn-neutral-bg',   label: 'Btn neutral bg',   group: 'Components', default: 'var(--color-neutral)' },
   { var: '--btn-neutral-fg',   label: 'Btn neutral fg',   group: 'Components', default: 'var(--on-neutral)' },
   { var: '--card-bg',          label: 'Card bg',          group: 'Components', default: 'var(--bg-contrast)' },
+  { var: '--card-text',        label: 'Card text',        group: 'Components', default: 'var(--text-main)' },
   { var: '--card-border',      label: 'Card border',      group: 'Components', default: 'var(--border-default)' },
   { var: '--card-shadow',      label: 'Card shadow',      group: 'Components', default: 'var(--surface-dim)' },
   { var: '--input-bg',         label: 'Input bg',         group: 'Components', default: 'var(--bg-color)' },
@@ -1170,23 +1223,15 @@ function refreshSwatch(el) {
 
   const on = el.dataset.onText;
   if (el.classList.contains('on-row')) {
-    // Show the swatch as the "against" background and render the actual on-token color as text.
-    const againstRaw = resolveVar(el.dataset.againstVar) || 'transparent';
-    const againstHex = toHex(againstRaw) || againstRaw;
-    //el.style.background = againstHex;
-
+    // Show the swatch as the "on" color, and show the background(s) in the small pill(s).
     const onRaw = resolveVar(el.dataset.var);
     const onHex = toHex(onRaw) || onRaw || '#ffffff';
+    el.style.background = onHex;
     el.style.color = onHex;
 
-    // Apply a small glow/shadow when the on-text is very close to the background.
-    const idealContrast = contrastText(againstHex);
-    if (idealContrast !== onHex) {
-      const glow = idealContrast === '#ffffff' ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.7)';
-      el.style.textShadow = `0 0 2px ${glow}`;
-    } else {
-      el.style.textShadow = '';
-    }
+    // Add a subtle outline so the on-color remains readable even when the token is light/dark.
+    const outline = contrastText(onHex);
+    el.style.textShadow = `0 0 0.75px ${outline}`;
   } else if (on === 'auto') {
     el.style.color = contrastText(hex || '#808080');
   } else if (on && on.startsWith('--')) {
@@ -1202,8 +1247,12 @@ function refreshSwatch(el) {
   }
   const av = el.dataset.againstVar;
   if (av) {
-    const rail = el.querySelector('.swatch-against');
-    if (rail) rail.style.background = toHex(resolveVar(av)) || 'transparent';
+    const vars = av.split('|').map(s => s.trim()).filter(Boolean);
+    const rails = el.querySelectorAll('.swatch-against');
+    rails.forEach((rail, idx) => {
+      const varName = vars[idx];
+      rail.style.background = varName ? (toHex(resolveVar(varName)) || 'transparent') : 'transparent';
+    });
   }
   const picker = el.querySelector('.swatch-picker');
   if (picker && hex) picker.value = hex;
@@ -1235,7 +1284,7 @@ function updateLinkStyles() {
   let s = document.getElementById(id);
   if (!s) { s = document.createElement('style'); s.id = id; document.head.appendChild(s); }
   s.textContent = `
-    #pv-links .pv-link-normal  { color: ${link  || 'var(--text-link)'}; }
+    #pv-links .pv-link-normal, .pv-link-normal  { color: ${link  || 'var(--text-link)'}; }
     #pv-links .pv-link-hover   { color: ${hover || 'var(--text-link-contrast)'}; text-decoration: underline; }
     #pv-links .pv-link-visited { color: ${vis   || 'var(--text-link-visited)'}; }
   `;
@@ -1335,6 +1384,19 @@ function createTokenRow(tok) {
     const menu = document.createElement('div');
     menu.className = 'token-dropdown-menu';
     menu.hidden = true;
+
+    const search = document.createElement('input');
+    search.type = 'text';
+    search.className = 'token-dropdown-search';
+    search.placeholder = 'Search...';
+    search.addEventListener('input', () => {
+      const query = search.value.trim().toLowerCase();
+      menu.querySelectorAll('.token-dropdown-option').forEach(opt => {
+        const label = opt.textContent.toLowerCase();
+        opt.style.display = (!query || label.includes(query)) ? '' : 'none';
+      });
+    });
+    menu.appendChild(search);
 
     BASE_TOKEN_OPTIONS.forEach(optTok => {
       const opt = document.createElement('div');

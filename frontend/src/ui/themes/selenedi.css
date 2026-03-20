@@ -17,9 +17,10 @@ html.theme-selenedi {
   
   --mid-main: var(--light);
   --bg-main: var(--lightest);
-  --bg-dark: var(--light);
-  --bg-darker: var(--lighter);
-  --bg-darkest: #E5E5F8;
+  --bg-surface: var(--light);
+  --bg-surface-alt: var(--lighter);
+  --bg-deep: #E5E5F8;
+  --bg-contrast: #E5E5F8;
   
   --dark-dim: #BEA3D0E0;
   --dark-dimmer: #ffffffbf;
@@ -61,6 +62,8 @@ html.theme-selenedi {
   --plx-cyan: #5AF;
     
   --plx-yellow: #EA5 !important;
+
+  
   }
   
   .theme .dash-pill .sticker-pack{

@@ -1,0 +1,43 @@
+:root {
+  /* Generic off-brand colors */
+  --main-off: #44d;
+  --main-off-v: #229;
+  --sec-off: #dd4;
+  --sec-off-v: #992;
+
+  /* Brand hues */
+  --main-pink: #ff60a0;
+  --alt-pink: #f69;
+  --dark-pink: #e26;
+  --mid-pink: #f04070;
+  --darkest-pink: #b26;
+  --main-purple: #a6f;
+  --alt-purple: #7040f8;
+  --dark-purple: #53f;
+  --darkest-purple: #50d;
+
+  /* Neutral scale */
+  --darkest: #0f0f0f;
+  --darker: #1b1b1b;
+  --dark: #2b2b2b;
+  --pre-dark: #3b3b3b;
+  --mid-dark: #4b4b4b;
+  --mid: #6b6b6b;
+  --mid-light: #808080;
+  --pre-light: #8b8b8b;
+  --light: #aaa;
+  --lighter: #ccc;
+  --lightest: #eee;
+
+  /* Fixed status colors - stable across ALL themes */
+  --plx-success: #0f0;
+  --plx-warning: #ff0;
+  --plx-danger: #f00;
+  --plx-info: #00f;
+  --plx-neutral: #aaa;
+
+  /* Misc */
+  --select: var(--alt-purple);
+  --select-bg: var(--lightest);
+  --true-white: var(--lightest);
+}

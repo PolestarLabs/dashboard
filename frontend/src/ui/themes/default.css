@@ -164,7 +164,7 @@ html {
   --color-tertiary-dark:    var(--tertiary-color-dark,    color-mix(in srgb, var(--color-tertiary) 70%, var(--umbra)));
   --color-tertiary-dim:     var(--tertiary-color-dim,     color-mix(in srgb, var(--color-tertiary) 80%, var(--bg-main, #1b1b2b)));
   --color-tertiary-opaque:  var(--tertiary-color-opaque,  color-mix(in srgb, var(--color-tertiary) 40%, transparent));
-  --on-tertiary:            var(--on-tertiary-color, var(--lightest));
+  --on-tertiary:            var(--on-secondary);
 
   /* Status: Success */
   --color-success:          var(--theme-success,         var(--plx-success));
@@ -207,14 +207,22 @@ html {
   --on-neutral:             var(--on-neutral-color, var(--lightest));
 
   /* Background */
-  --bg-color:    var(--bg-main);   /* canonical; governs dark / light mode    */
-  --bg-contrast: var(--bg-dark);  /* surface / card / raised layer           */
-  --bg-surface:  var(--bg-dark);  /* surface / card / raised layer           */
+  --bg-color:         var(--bg-main);   /* canonical; governs dark / light mode    */
+  --bg-contrast:      var(--lightest);  /* contrast surfaces - separate from surface */
+  --bg-surface:       var(--dark);      /* surface / card / raised layer           */
+  --bg-surface-alt:   var(--pre-dark);    /* surface / card / raised layer           */
+  --bg-deep:          var(--darkest);
 
   /* Text */
   --text-main-bold:     var(--text-extra-bold, var(--text-bold));
-  --text-contrast:      var(--text-on-contrast,      var(--text-main));
-  --text-contrast-bold: var(--text-on-contrast-bold, var(--text-bold));
+  --text-surface:       var(--on-surface,     var(--text-main));
+  --text-contrast:      var(--on-contrast,      var(--darkest));
+  --text-contrast-bold: var(--on-contrast-bold, var(--darkest));
+
+  --contrast-dim:    var(--dark-dim,     #27233775);
+  --contrast-dimmer: var(--dark-dimmer,  #0d0d1796);
+  --contrast-dimmest:var(--dark-dimmest, #100c2b59);
+  --text-contrast-dim:  var(--contrast-dim,  var(--text-dim));
 
   /* Links */
   --text-link:          var(--links);
@@ -225,12 +233,13 @@ html {
   --border-default: var(--dark-border,  var(--dark));
   --border-muted:   var(--muted,        #9999AAAA);
   --border-strong:  var(--light-border, var(--light));
-  --divider:        var(--divider-color, var(--pre-light));
+  --divider:        var(--divider-color, #8b8bAF35);
 
   /* Elevation overlays */
   --surface-dim:     var(--dark-dim,     #27233775);
   --surface-dimmer:  var(--dark-dimmer,  #0d0d1796);
   --surface-dimmest: var(--dark-dimmest, #100c2b59);
+
 }
 
 /* ================================================================
@@ -270,6 +279,7 @@ html {
 
   /* Cards / surfaces */
   --card-bg:     var(--bg-contrast);
+  --card-text:   var(--on-contrast);
   --card-border: var(--border-default);
   --card-shadow: var(--surface-dim);
 
@@ -281,8 +291,8 @@ html {
   --input-placeholder:  var(--muted, #9999AAAA);
 
   /* Modals / overlays */
-  --modal-backdrop: var(--surface-dimmer);
-  --modal-bg:       var(--bg-contrast);
+  --modal-backdrop: var(--darkest);
+  --modal-bg:       var(--bg-surface);
 
   /* Accordions */
   --accordion-bg:       color-mix(in srgb, var(--color-primary) 8%, transparent);
@@ -294,4 +304,5 @@ html {
   --icon-default: var(--text-main);
   --icon-muted:   var(--text-dim);
   --icon-accent:  var(--color-primary);
+
 }
