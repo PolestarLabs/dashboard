@@ -8,13 +8,13 @@ html.theme-arsenika {
   --on-tint-dim:   #2235;
   */
     
-  /*! --on-strong: #FFF; */
-  --on-bold: #FFF0CD;
-  --on-bg: #FFF5DE;
-  --on-faint: #FFCEB1F7;
-  --on-dim: #FFC499;
-  --on-dim-mid: #4187B1;
-  --on-inverse: #212931AB;
+  /*! --on-main--strong: #FFF; */
+  --on-main--bold: #FFF0CD;
+  --on-main: #FFF5DE;
+  --on-main--faint: #FFCEB1F7;
+  --on-main--dim: #FFC499;
+  --on-main--dim-mid: #4187B1;
+  --on-main--inverse: #212931AB;
   
    --accent-color-light: #f0d29a;
   --accent-color: #f0a037;
@@ -29,7 +29,7 @@ html.theme-arsenika {
 
   --secondary-color-alt:  #35d4c7;
   
-    /*! --mid-main: var(--light2); */ --bg: #352B52; --bg-darker: #1D1F2B; --bg-darkest: #1D212BEB; --bg-opaque: #0b0c1745; /*
+    /*! --mid-main: var(--light2); */ --bg-main: #352B52; --bg-darker: #1D1F2B; --bg-darkest: #1D212BEB; --bg-opaque: #0b0c1745; /*
   --bg-inverse: var(--dark);
   
   --links: #87f;

@@ -5,16 +5,16 @@ html.theme-borealis {
   --on-tint: var(--mid);
   --on-tint-dim: #2235;
 
-  --on-strong: rgb(63, 63, 82);
-  --on-bold: rgb(93, 93, 126);
-  --on-bg: rgb(123, 123, 150);
-  --on-faint: #668;
-  --on-dim: #99a;
-  --on-dim-mid: #88a;
-  --on-inverse: #2b2b3b;
+  --on-main--strong: rgb(63, 63, 82);
+  --on-main--bold: rgb(93, 93, 126);
+  --on-main: rgb(123, 123, 150);
+  --on-main--faint: #668;
+  --on-main--dim: #99a;
+  --on-main--dim-mid: #88a;
+  --on-main--inverse: #2b2b3b;
 
   --mid-main: var(--light);
-  --bg: var(--lightest);
+  --bg-main: var(--lightest);
   --bg-surface: var(--light);
   --bg-surface-alt: var(--lighter);
   --bg-deep: #e5e5f8;

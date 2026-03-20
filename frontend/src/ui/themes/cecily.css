@@ -8,13 +8,13 @@ html.theme-cecily {
   --on-tint-dim:   #2235;
   */
     
-  /*! --on-strong: #FFF; */
-  --on-bold: #FFDE;
-  --on-bg: #FEDC;
-  --on-faint: #FEDA;
-  --on-dim: #BD9974;
-  --on-dim-mid: #8C755ED4;
-  --on-inverse: #213121AA;
+  /*! --on-main--strong: #FFF; */
+  --on-main--bold: #FFDE;
+  --on-main: #FEDC;
+  --on-main--faint: #FEDA;
+  --on-main--dim: #BD9974;
+  --on-main--dim-mid: #8C755ED4;
+  --on-main--inverse: #213121AA;
   
    --accent-color-light: #d7f485;
   --accent-color: #ff7741;
@@ -25,7 +25,7 @@ html.theme-cecily {
   --secondary-color:  #269959;
   --secondary-color-alt:  #1F5E3A;
   
-    /*! --mid-main: var(--light2); */ --bg: #261F1E; --bg-darker: #2B1E1D; --bg-darkest: #2B221DEB; --bg-opaque: #170b0b45; /*
+    /*! --mid-main: var(--light2); */ --bg-main: #261F1E; --bg-darker: #2B1E1D; --bg-darkest: #2B221DEB; --bg-opaque: #170b0b45; /*
   --bg-inverse: var(--dark);
   
   --links: #87f;
@@ -47,7 +47,20 @@ html.theme-cecily {
   /*! --plx-cyan: #358; */
     
   /*! --plx-yellow: #975 !important; */
-   
+     --bg-surface: #644439;
+  --bg-surface-alt: #7c4643;
+  --bg-deep: #171211;
+  --umbra: #231212;
+  --luma: #a2e7ee;
+  --on-contrast: #20332e;
+    --links: #7ccf7a;
+  --links-hover: #caebc5;
+  --links-visited: #4a8b93;
+  --theme-success: #60b10e;
+  --theme-warn: #fbd233;
+  --accent-color: #fa864e;
+  --secondary-color: #259a60;
+  --theme-info: #4549f5;
   
   }
   

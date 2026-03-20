@@ -2,13 +2,13 @@ html.theme-nikoliny {
   
   --bg-contrast: var(--lightest); --bg-contrast-dim: #FFF; --on-tint: #564D91; --on-tint-dim:   #4d4d8e54;
   
---on-strong: #242533;
---on-bold: #343548;
+--on-main--strong: #242533;
+--on-main--bold: #343548;
 --on-bg: #515c86;
---on-faint: #40419FD4;
---on-dim: #40419F;
---on-dim-mid: #40419FE0;
---on-inverse: #9AAFFF;
+--on-main--faint: #40419FD4;
+--on-main--dim: #40419F;
+--on-main--dim-mid: #40419FE0;
+--on-main--inverse: #9AAFFF;
 
  --accent-color-light: #9fe2ce;
 --accent-color: #0d97fb;
@@ -25,7 +25,7 @@ html.theme-nikoliny {
 
 
   /*! --mid-main: var(--light2); */
-   --bg: #f2feff; --bg-surface: #dee2f0;--bg-surface-alt: #BCC3DB; --bg-deep: #8F8FBD; --bg-opaque: #494a911c; /*
+   --bg-main: #f2feff; --bg-surface: #dee2f0;--bg-surface-alt: #BCC3DB; --bg-deep: #8F8FBD; --bg-opaque: #494a911c; /*
 --bg-inverse: var(--dark);
 
 --links: #87f;

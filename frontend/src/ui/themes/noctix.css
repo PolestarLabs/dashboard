@@ -6,13 +6,13 @@ html.theme-noctix {
 --on-tint: var(--mid);
 --on-tint-dim:   #2235;
 
---on-strong: var(--mid-dark,#AAC);
---on-bold: var(--mid-dark,#AAC);
+--on-main--strong: var(--mid-dark,#AAC);
+--on-main--bold: var(--mid-dark,#AAC);
 --on-bg: var(--mid-light,#AAC);
---on-faint: var(--light,#668);
---on-dim: var(--mid-light,#99A);
---on-dim-mid: var(--light,#88a);
---on-inverse: var(--light,#2b2b3b);
+--on-main--faint: var(--light,#668);
+--on-main--dim: var(--mid-light,#99A);
+--on-main--dim-mid: var(--light,#88a);
+--on-main--inverse: var(--light,#2b2b3b);
 */
 
   --accent-color-light: #2b2c5b;
@@ -22,7 +22,7 @@ html.theme-noctix {
   --accent-color-strong: #3b2073;
   --accent-color-dark: #220f35;
 
-  --on-bg: #d3d0c6;
+  --on-main: #d3d0c6;
   --on-tint: #e9dbca;
   --bg-contrast: #f5dcdb;
   --on-contrast: #512931;
@@ -34,7 +34,7 @@ html.theme-noctix {
   /*
 --mid-main: var(--light2);
 */
-  --bg: #15121b;
+  --bg-main: #15121b;
   --bg-darker: #101015;
   --bg-darkest: #050510;
   --bg-opaque: #05051030; /*

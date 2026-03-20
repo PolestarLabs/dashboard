@@ -5,13 +5,13 @@ html.theme-pollux {
 	--on-tint: white;
 	--on-tint-dim: #FFFD;
 	--on-lightest: #FFF;
-	--on-strong: var(--lightest, #AAC);
-	--on-bold: var(--lighter, #AAC);
+	--on-main--strong: var(--lightest, #AAC);
+	--on-main--bold: var(--lighter, #AAC);
 	--on-bg: var(--light, #AAC);
-	--on-faint: var(--pre-light, #668);
-	--on-dim: #9999AAAA;
-	--on-dim-mid: var(--pre-light, #88a);
-	--on-inverse: var(--dark, #2b2b3b);
+	--on-main--faint: var(--pre-light, #668);
+	--on-main--dim: #9999AAAA;
+	--on-main--dim-mid: var(--pre-light, #88a);
+	--on-main--inverse: var(--dark, #2b2b3b);
 	--accent-color: var(--main-pink, #f35);
 	--accent-color-mid: var(--mid-pink, #F13151);
 	--accent-color-strong: var(--dark-pink, #F13151);
@@ -20,13 +20,13 @@ html.theme-pollux {
 	--secondary-color-alt: var(--alt-purple, #C7D);
 	--tertiary-color: var(--plx-blue, rgb(85, 125, 255));
 	--mid-main: var(--light2);
-	--bg: var(--darker);
+	--bg-main: var(--darker);
 	
-	/*--bg: linear-gradient(190deg, var(--darker) 30%,var(--darkest));*/
+	/*--bg-main: linear-gradient(190deg, var(--darker) 30%,var(--darkest));*/
 
 	--bg-opaque: #2A2A3B44;
 	--bg-inverse: var(--lightest, #EEF);
-	--bg-card: white;
+	--card-bg: white;
 	--links: #87f;
 	--links-hover: #8Af;
 	--link-head: inherit;

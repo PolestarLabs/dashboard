@@ -8,13 +8,13 @@ html.theme-australis {
   --on-tint-dim:   #2235;
   */
     
-  --on-strong: #FFF;
-  --on-bold: #FFFE;
-  --on-bg: #FEDC;
-  --on-faint: #FEDA;
-  --on-dim: #BD9974;
-  --on-dim-mid: #8C755ED4;
-  --on-inverse: #213121AA;
+  --on-main--strong: #FFF;
+  --on-main--bold: #FFFE;
+  --on-main: #FEDC;
+  --on-main--faint: #FEDA;
+  --on-main--dim: #BD9974;
+  --on-main--dim-mid: #8C755ED4;
+  --on-main--inverse: #213121AA;
   
    --accent-color-light: #c6dd86;
   --accent-color: #7bbd69;
@@ -29,7 +29,7 @@ html.theme-australis {
   --secondary-color-dark: #a03347;
   --secondary-color-alt:  #D7406C;
   
-    /*! --mid-main: var(--light2); */ --bg: #29343C; --bg-darker: #1D252B; --bg-darkest: #1D212BEB; --bg-opaque: #090b1345; /*
+    /*! --mid-main: var(--light2); */ --bg-main: #29343C; --bg-darker: #1D252B; --bg-darkest: #1D212BEB; --bg-opaque: #090b1345; /*
   --bg-inverse: var(--dark);
   
   --links: #87f;

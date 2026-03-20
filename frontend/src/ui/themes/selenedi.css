@@ -7,16 +7,16 @@ html.theme-selenedi {
   --on-tint: var(--mid);
   --on-tint-dim:   #2235;
   
-  --on-strong: #302433;
-  --on-bold: #413448;
-  --on-bg: #6c5186;
-  --on-faint: #81409fd4;
-  --on-dim: #81409f;
-  --on-dim-mid: #8c409fe0;
-  --on-inverse: #9AAFFF;
+  --on-main--strong: #302433;
+  --on-main--bold: #413448;
+  --on-main: #6c5186;
+  --on-main--faint: #81409fd4;
+  --on-main--dim: #81409f;
+  --on-main--dim-mid: #8c409fe0;
+  --on-main--inverse: #9AAFFF;
   
   --mid-main: var(--light);
-  --bg: var(--lightest);
+  --bg-main: var(--lightest);
   --bg-surface: var(--light);
   --bg-surface-alt: var(--lighter);
   --bg-deep: #E5E5F8;
