@@ -33,6 +33,7 @@ html.theme-nikoliny {
   --bg-surface-alt: #bcc3db;
   --bg-deep: #8f8fbd;
   --bg-opaque: #494a911c;
+  
   /*
 --bg-inverse: var(--dark);
 
@@ -59,8 +60,10 @@ html.theme-nikoliny {
   --plx-yellow: #ea5 !important;
 
   --tertiary-color: #f0b056;
-  --on-surface: #535f8d;
+
   --on-contrast: #151523;
+    --on-surface: #54608d;
+  --on-main: #28598e;
 }
 
 .theme .dash-pill .sticker-pack {

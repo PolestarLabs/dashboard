@@ -31,7 +31,8 @@ html.theme-australis {
   --secondary-color-alt:  #D7406C;
   
     /*! --mid-main: var(--light2)
-    */ --bg-main: #29343C
+    */ 
+    --bg-main: #29343C;
     --bg-darker: #1D252B;
     --bg-darkest: #1D212BEB;
     --bg-opaque: #090b1345;

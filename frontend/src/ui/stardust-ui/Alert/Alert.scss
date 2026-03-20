@@ -387,7 +387,7 @@ $swal2-question-color: #87adbd;
 
 // ---- Title ------------------------------------------------------------------
 .plx-swal-title {
-  color: var(--color-primary, var(--on-main));
+  color: var(--on-main--bold, var(--on-main));
   font-size: 1.35rem;
   font-weight: 700;
   text-align: left;

@@ -5,6 +5,7 @@ html.theme-pollux {
 	--on-tint: white;
 	--on-tint-dim: #FFFD;
 	--on-lightest: #FFF;
+	--on-main: var(--lighter);
 	--on-main--strong: var(--lightest, #AAC);
 	--on-main--bold: var(--lighter, #AAC);
 	--on-bg: var(--light, #AAC);
@@ -21,7 +22,7 @@ html.theme-pollux {
 	--tertiary-color: var(--plx-blue, rgb(85, 125, 255));
 	--mid-main: var(--light2);
 	--bg-main: var(--darker);
-	
+
 	/*--bg-main: linear-gradient(190deg, var(--darker) 30%,var(--darkest))
 	*/
 
@@ -41,14 +42,13 @@ html.theme-pollux {
 	--dark-dimmest: #100c2b59;
 
 
-/* EDITS */
---theme-success: #33c18b;
+	/* EDITS */
+	--theme-success: #33c18b;
 
-  --on-contrast: #3e3e7e;
+	--on-contrast: #3e3e7e;
 
-  
+
 
 
 
 }
-

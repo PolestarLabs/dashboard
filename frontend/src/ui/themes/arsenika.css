@@ -31,16 +31,16 @@ html.theme-arsenika {
 
   --secondary-color-alt:  #35d4c7;
   
-    /*! --mid-main: var(--light2)
-    */ --bg-main: #352B52
+    /*! --mid-main: var(--light2)*/
+    --bg-main: #352B52;
     --bg-darker: #1D1F2B;
     --bg-darkest: #1D212BEB;
     --bg-opaque: #0b0c1745;
+    --bg-inverse: var(--dark);
+    
+    --links: #87f;
+    --links-hover: #8Af;
     /*
-  --bg-inverse: var(--dark);
-  
-  --links: #87f;
-  --links-hover: #8Af;
   --link-head: inherit;
   --link-head-hover: var(--alt-pink);
   

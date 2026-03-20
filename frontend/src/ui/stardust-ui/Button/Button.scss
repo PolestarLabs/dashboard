@@ -157,7 +157,7 @@
 
   &--secondary {
     background-color: var(--btn-secondary);
-    color: var(--on-accent);
+    color: var(--on-secondary, var(--on-primary));
     --current-color: var(--btn-secondary);
     
     &:hover {
@@ -170,7 +170,7 @@
 
   &--danger {
     background-color: var(--btn-danger);
-    color: var(--on-accent);
+    color: var(--on-danger, var(--on-accent));
     --current-color: var(--btn-danger);
 
     &:hover {
@@ -183,7 +183,7 @@
 
   &--success {
     background-color: var(--btn-success);
-    color: var(--on-accent);
+    color: var(--on-success, var(--on-accent));
     --current-color: var(--btn-success);
 
     &:hover {
@@ -196,7 +196,7 @@
 
   &--warning {
     background-color: var(--btn-warning);
-    color: var(--on-accent);
+    color: var(--on-warning, var(--on-accent));
     --current-color: var(--btn-warning);
 
     &:hover {
@@ -209,7 +209,7 @@
 
   &--info {
     background-color: var(--btn-info);
-    color: var(--on-accent);
+    color: var(--on-info, var(--on-accent));
     --current-color: var(--btn-info);
 
     &:hover {

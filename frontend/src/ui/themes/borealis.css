@@ -59,6 +59,13 @@ html.theme-borealis {
   --plx-cyan: #5af;
 
   --plx-yellow: #ea5 !important;
+    --bg-surface: #e0e3fc;
+  --bg-main: #e6e9ff;
+  --theme-neutral: #5e89d0;
+  --dark-dim: #c4dde6;
+  --dark-dimmer: #dae2f1;
+  --umbra: #0d0c34;
+  --luma: #4e684a;
 }
 
 .theme .dash-pill .sticker-pack {
