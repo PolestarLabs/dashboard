@@ -118,7 +118,7 @@ const allowedVarSet = new Set<string>([...defaultVars.keys(), ...editorTokens.ma
 
 const legacyVars = new Set<string>([
 
-  '--bg-darkest',
+  '--bg-deep',
   '--bg-darker',
   '--bg-contrast-dim',
 

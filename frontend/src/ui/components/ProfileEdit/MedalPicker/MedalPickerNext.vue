@@ -104,7 +104,7 @@ GravityProvider
                   :class="{ 'st-profile-medalpicker__dragging-source': dragging && !isPreview }"
                   :style="{ opacity: isPreview ? 1 : (dragging ? 0.9 : 1) }"
                 )
-                  Medal(:medal="item.icon || item.id  " :rarity="item.rarity" :position="bottom-right" :size="sm")
+                  Medal(:medal="item.icon || item.id" :rarity="item.rarity" position="bottom-right" size="sm")
           template(#empty)
             .st-profile-medalpicker__empty
               i.fas.fa-search

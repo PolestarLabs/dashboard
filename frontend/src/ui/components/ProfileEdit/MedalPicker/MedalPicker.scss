@@ -312,7 +312,7 @@ $mp-danger: var(--plx-danger, #f02040);
   padding: 7px 12px 7px 30px;
   border: 1px solid $mp-border-subtle;
   border-radius: $mp-radius-sm;
-  background: var(--bg-darkest, #0f0f1a);
+  background: var(--bg-deep, #0f0f1a);
   color: var(--on-main, #aac);
   font: inherit;
   font-size: 0.85rem;
@@ -337,7 +337,7 @@ $mp-danger: var(--plx-danger, #f02040);
   padding: 7px 10px;
   border: 1px solid $mp-border-subtle;
   border-radius: $mp-radius-sm;
-  background: var(--bg-darkest, #0f0f1a);
+  background: var(--bg-deep, #0f0f1a);
   color: var(--on-main, #aac);
   font: inherit;
   font-size: 0.85rem;
@@ -362,7 +362,7 @@ $mp-danger: var(--plx-danger, #f02040);
   max-height: 380px;
   overflow-y: auto;
   border-radius: $mp-radius-md;
-  background: var(--bg-darkest, #0f0f1a);
+  background: var(--bg-deep, #0f0f1a);
   border: 1px solid $mp-border-subtle;
   transition:
     border-color $mp-duration $mp-ease,
