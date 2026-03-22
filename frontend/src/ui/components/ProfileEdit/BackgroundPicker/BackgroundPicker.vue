@@ -24,7 +24,7 @@ ProfileEditPill.st-profile-bgpicker(
         @click="emit('sort', s.value)"
       ) {{ s.label }}
     #select-bg.st-profile-bgpicker__select
-      SearchableSelectPlus.st-profile-bgpicker__searchable(
+      SearchableSelect.st-profile-bgpicker__searchable(
         v-model="innerValue"
         :options="sortedOptions"
         value-key="code"
@@ -50,13 +50,13 @@ ProfileEditPill.st-profile-bgpicker(
 
 <script setup lang="ts">
 import { ref, computed, watch } from 'vue';
-import SearchableSelectPlus from '../SearchableSelectPlus/SearchableSelectPlus.vue';
-import type { SearchableSelectPlusOption } from '../SearchableSelectPlus/SearchableSelectPlus.vue';
+import SearchableSelect from '@/ui/stardust-ui/Select/SearchableSelect.vue';
+import type { SelectOption } from '@/ui/stardust-ui/Select/Select.vue';
 import ProfileEditPill from '../shared/ProfileEditPill.vue';
 import RarityIcon from '../../RarityIcon/RarityIcon.vue';
 import './BackgroundPicker.scss';
 
-export interface BackgroundOption extends SearchableSelectPlusOption {
+export interface BackgroundOption extends SelectOption {
   code: string;
   name: string;
   img: string;

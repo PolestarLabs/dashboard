@@ -1,11 +1,10 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
-import MedalPickerNext from './MedalPickerNext.vue';
-import type { MedalItem } from './MedalPicker.vue';
+import MedalPickerNext, { MedalItem } from './MedalPickerNext.vue';
 import { sampleMedals } from '../profileEditMockFixtures';
 
 const meta: Meta<typeof MedalPickerNext> = {
-  title: 'ProfileEdit/MedalPickerNext',
+  title: 'Pollux-specific Components/Profile Editor/MedalPicker',
   component: MedalPickerNext,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },

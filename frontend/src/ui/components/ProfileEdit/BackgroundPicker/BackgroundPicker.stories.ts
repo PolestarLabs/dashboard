@@ -4,7 +4,7 @@ import BackgroundPicker from './BackgroundPicker.vue';
 import { sampleBackgrounds } from '../profileEditMockFixtures';
 
 const meta: Meta<typeof BackgroundPicker> = {
-  title: 'ProfileEdit/BackgroundPicker',
+  title: 'Pollux-specific Components/Profile Editor/BackgroundPicker',
   component: BackgroundPicker,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },

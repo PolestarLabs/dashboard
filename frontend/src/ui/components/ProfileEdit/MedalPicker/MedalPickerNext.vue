@@ -49,14 +49,16 @@ GravityProvider
             :class="{ 'st-profile-medalpicker__filter-btn--active': filterRarity === null && filterCategory === null }"
             @click="setFilter(null, null)"
           )
-            span.st-profile-medalpicker__tier-icon.st-profile-medalpicker__tier-icon--all
+            Tooltip(star="top" :content="'Show all medals'")
+              span.st-profile-medalpicker__tier-icon.st-profile-medalpicker__tier-icon--all All
           button.st-profile-medalpicker__filter-btn(
             type="button"
             title="Achievements"
             :class="{ 'st-profile-medalpicker__filter-btn--active': filterCategory === 'achievements' }"
             @click="setFilter(null, 'achievements')"
           )
-            span.st-profile-medalpicker__tier-icon.st-profile-medalpicker__tier-icon--achiev
+            Tooltip(star="top" :content="'Show achievement medals'")
+              span.st-profile-medalpicker__tier-icon.st-profile-medalpicker__tier-icon--achiev ⭐
           span.st-profile-medalpicker__filter-sep
           button.st-profile-medalpicker__filter-btn(
             v-for="r in rarityTiers"
@@ -75,9 +77,17 @@ GravityProvider
           type="text"
           placeholder="Search medals..."
         )
-        select.st-profile-medalpicker__tag-select(v-model="selectedTag")
-          option(:value="null") All tags
-          option(v-for="tag in tagOptions" :key="tag" :value="tag") {{ tag }}
+        MultiSelect.st-profile-medalpicker__tag-select(
+          v-model="selectedTags"
+          :options="tagOptionsSelect"
+          placeholder="Filter tags..."
+          :maxVisibleTags="1"
+          listMaxHeight="18vh"
+          triggerAriaLabel="Filter tags"
+          :closeOnOutsideClick="true"
+          :disabled="tagOptions.length === 0"
+          size="sm"
+        )
 
       .st-profile-medalpicker__section-header.st-profile-medalpicker__section-header--inventory
         span.st-profile-medalpicker__heading Inventory
@@ -124,6 +134,8 @@ import {
 } from 'gravity-dnd';
 import Medal from '../../Medal/Medal.vue';
 import RarityIcon from '../../RarityIcon/RarityIcon.vue';
+import MultiSelect from '@/ui/stardust-ui/Select/MultiSelect.vue';
+import Tooltip from '@/ui/stardust-ui/Tooltip/Tooltip.vue';
 import './MedalPicker.scss';
 
 export interface MedalItem {
@@ -195,13 +207,18 @@ watch(searchQuery, (val) => {
 });
 const filterRarity = ref<string | null>(null);
 const filterCategory = ref<string | null>(null);
-const selectedTag = ref<string | null>(null);
+const selectedTags = ref<string[]>([]);
 
 const equippedCount = computed(() => equippedState.value.filter(Boolean).length);
 
 const tagOptions = computed(() => {
   const tags = new Set<string>();
-  for (const m of inventoryState.value) {
+  const sourceMedals = [
+    ...inventoryState.value,
+    ...equippedState.value.filter((m): m is MedalUi => Boolean(m)),
+  ];
+
+  for (const m of sourceMedals) {
     const raw = m.tags;
     if (!raw) continue;
     const list = Array.isArray(raw) ? raw : `${raw}`.split(/\s+/);
@@ -210,8 +227,13 @@ const tagOptions = computed(() => {
       if (clean) tags.add(clean);
     }
   }
+
   return Array.from(tags).sort((a, b) => a.localeCompare(b, undefined, { sensitivity: 'base' }));
 });
+
+const tagOptionsSelect = computed(() =>
+  tagOptions.value.map((tag) => ({ value: tag, label: tag }))
+);
 
 function isVisible(m: MedalUi): boolean {
   if (debouncedSearch.value.trim()) {
@@ -220,11 +242,17 @@ function isVisible(m: MedalUi): boolean {
   }
   if (filterRarity.value && m.rarity !== filterRarity.value) return false;
   if (filterCategory.value && (m.category || '').toLowerCase() !== filterCategory.value) return false;
-  if (selectedTag.value) {
+
+  if (selectedTags.value.length > 0) {
     const raw = m.tags;
     const tags = Array.isArray(raw) ? raw : `${raw}`.split(/\s+/);
-    const hasTag = tags.some((t) => t.trim().toLowerCase() === selectedTag.value?.toLowerCase());
-    if (!hasTag) return false;
+    const normalizedTagSet = new Set(tags.map((t) => t.trim().toLowerCase()));
+    const selectedNormalized = selectedTags.value
+      .map((s) => s.trim().toLowerCase())
+      .filter((s) => !!s);
+    if (selectedNormalized.length > 0 && !selectedNormalized.some((sel) => normalizedTagSet.has(sel))) {
+      return false;
+    }
   }
   return true;
 }
