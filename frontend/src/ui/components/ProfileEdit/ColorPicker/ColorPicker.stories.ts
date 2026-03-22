@@ -3,7 +3,7 @@ import { ref } from 'vue';
 import ColorPicker from './ColorPicker.vue';
 
 const meta: Meta<typeof ColorPicker> = {
-  title: 'ProfileEdit/ColorPicker',
+  title: 'Pollux-specific Components/Profile Editor/ColorPicker',
   component: ColorPicker,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
