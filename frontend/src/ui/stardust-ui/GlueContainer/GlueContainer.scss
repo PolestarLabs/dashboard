@@ -38,16 +38,20 @@
     min-width: min-content;
   }
 
-  // Input takes remaining space
-  > .st-input {
+  // Input / Select takes remaining space
+  > .st-input,
+  > .st-select,
+  > .st-dropdown-select,
+  > .st-searchable-select,
+  > .st-multiselect {
     flex: 1 1 0;
     min-width: 0;
   }
 
   > *:first-child {
 
-    // apply to button and input only if the next sibling is a button or input
-    &:has(+ .s-btn, + .st-input){
+    // apply to button and input/select only if the next sibling is a button or input/select
+    &:has(+ .s-btn, + .st-input, + .st-select, + .st-dropdown-select, + .st-searchable-select, + .st-multiselect){
       border-top-right-radius: 0;
       border-bottom-right-radius: 0;
     }
@@ -60,19 +64,41 @@
         min-height: 100%;
       }
     }
+
+    &.st-select,
+    &.st-dropdown-select,
+    &.st-searchable-select,
+    &.st-multiselect {
+       margin-right: -2px; // hide double border
+       > button {
+        border-top-right-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
+        min-height: 100%;       
+      }
+    }
   }
 
   > *:last-child {
 
-    &:is(.s-btn + *, .st-input + *) {
+    &:is(.s-btn + *, .st-input + *, .st-select + *, .st-dropdown-select + *, .st-searchable-select + *, .st-multiselect + *) {
       border-top-left-radius: 0 !important;
-      border-bottom-left-radius: 0;
+      border-bottom-left-radius: 0 !important;
     }
 
     &.st-input .st-input__control {
-      border-top-left-radius: 0;
-      border-bottom-left-radius: 0;
+      border-top-left-radius: 0 !important;
+      border-bottom-left-radius: 0 !important;
       min-height: 100%;
+    }
+
+    &.st-select,
+    &.st-dropdown-select,
+    &.st-searchable-select,
+    &.st-multiselect {
+      > button {
+        border-top-left-radius: 0 !important;
+        border-bottom-left-radius: 0 !important;
+      }
     }
   }
 

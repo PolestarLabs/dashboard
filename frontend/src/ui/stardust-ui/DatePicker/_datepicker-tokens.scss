@@ -1,0 +1,679 @@
+// ─── Stardust UI / DatePicker ─── Shared design tokens & mixins ─────
+//
+// Variants:
+//   solid → accent border always
+//   ghost → muted border, accent on focus/open
+//
+// Reuses the same --_bw / --_bc / --_radius / --_min-h / --_font
+// convention as _select-tokens.scss.
+// ─────────────────────────────────────────────────────────────────────
+
+@use '../../_master-colors' as *;
+
+// ── Layout constants ──
+$_dp-radius:    8px;
+$_dp-radius-sm: 6px;
+
+// ── Calendar SVG ──
+$_dp-chevron-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%234b4b5f' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+
+$_dp-calendar-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' viewBox='0 0 16 16'%3E%3Cpath stroke='%234b4b5f' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.4' d='M5 1v2m6-2v2M2 6h12M3 3h10a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z'/%3E%3C/svg%3E");
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  ROOT
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-root {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+  min-width: 280px; // matches calendar popup width
+  max-width: 100%;
+  font-family: inherit;
+
+  --_bw: 3px;
+  --_bc: var(--color-primary );
+  --_radius: #{$_dp-radius};
+  --_min-h: 48px;
+  --_font: 1rem;
+}
+
+@mixin dp-variant-ghost {
+  --_bw: 2px;
+  --_bc: rgba(60, 60, 60, 0.26);
+}
+
+@mixin dp-variant-ghost-open {
+  --_bc: var(--color-primary );
+}
+
+@mixin dp-size-sm {
+  --_radius: #{$_dp-radius-sm};
+  --_min-h: 32px;
+  --_font: 0.875rem;
+}
+
+@mixin dp-error-root {
+  --_bc: var(--plx-danger, #f24);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  LABEL
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--on-main--dim-mid, #4b4b5f);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  TRIGGER
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-trigger {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  width: 100%;
+  min-height: var(--_min-h);
+  padding: 0.5rem 2.25rem 0.5rem 0.75rem;
+  font-family: inherit;
+  font-size: var(--_font);
+  line-height: 1.4;
+  text-align: left;
+  color: var(--on-main, #ccc);
+  background: var(--bg-main, #fff);
+  border: var(--_bw) solid var(--_bc);
+  border-radius: var(--_radius);
+  cursor: pointer;
+  appearance: none;
+  transition:
+    border-color 0.2s ease,
+    border-radius 0.3s ease;
+
+  &:focus,
+  &:focus-within {
+    outline: 0;
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 3px var(--focus-ring, rgba(92, 110, 248, 0.2));
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+@mixin dp-trigger-ghost-focus {
+  &:focus,
+  &:focus-within {
+    border-color: var(--color-secondary );
+  }
+}
+
+@mixin dp-trigger-open {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-color: transparent;
+}
+
+@mixin dp-trigger-error-focus {
+  &:focus,
+  &:focus-within {
+    border-color: var(--plx-danger, #f24);
+  }
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  CALENDAR ICON (replaces chevron on datepicker)
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-icon {
+  position: absolute;
+  right: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 16px;
+  height: 16px;
+  background-image: $_dp-calendar-svg;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  pointer-events: none;
+  opacity: 0.7;
+  transition: opacity 0.2s ease;
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  PLACEHOLDER
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-placeholder {
+  color: var(--on-main--dim, #999);
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  POPUP (calendar panel)
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-popup {
+  position: absolute;
+  top: calc(100% - var(--_bw));
+  left: 0;
+  width: 100%;
+  min-width: 280px;
+  background: var(--bg-main, #1b1b2b);
+  border: var(--_bw) solid var(--_bc);
+  border-top: none;
+  border-radius: 0 0 var(--_radius) var(--_radius);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  z-index: 1000;
+  overflow: hidden;
+  padding: 0.5rem;
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  NAVIGATION ROW (month/year header)
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0.125rem 0.5rem;
+  user-select: none;
+}
+
+@mixin dp-nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--on-main--dim, #888);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: color-mix(in srgb, var(--color-secondary ) 18%, transparent);
+    color: var(--color-secondary );
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-secondary );
+    outline-offset: -2px;
+  }
+}
+
+@mixin dp-nav-title {
+  // Styled as a button for year-picker toggle
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--on-main, #ccc);
+  letter-spacing: 0.02em;
+  text-align: center;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35em;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: color-mix(in srgb, var(--color-secondary ) 12%, transparent);
+    color: var(--color-secondary );
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-secondary );
+    outline-offset: -2px;
+  }
+}
+
+@mixin dp-nav-caret {
+  font-size: 0.6rem;
+  opacity: 0.55;
+  transition: transform 0.2s ease;
+  margin-left: 0.1em;
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  WEEKDAY HEADER
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  padding: 0 0 0.25rem;
+}
+
+@mixin dp-weekday {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--on-main--dim, #888);
+  padding: 0.125rem 0;
+  user-select: none;
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  DAY GRID
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-year-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 4px;
+  padding: 0.5rem 0.125rem;
+  // Match approximate height of weekdays + 6-row day grid
+  min-height: 232px;
+  align-content: start;
+}
+
+@mixin dp-year-cell {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.88rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--on-main, #ccc);
+  cursor: pointer;
+  padding: 0.5rem 0.25rem;
+  text-align: center;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: color-mix(in srgb, var(--color-secondary ) 15%, transparent);
+    color: var(--color-primary );
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--color-primary );
+    outline-offset: -2px;
+  }
+}
+
+@mixin dp-year-cell-active {
+  background: var(--color-secondary );
+  color: #fff;
+
+  &:hover {
+    background: color-mix(in srgb, var(--color-secondary ) 82%, #fff);
+    color: #fff;
+  }
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  DAY GRID
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+@mixin dp-day {
+    font-family: Panton ;
+
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  aspect-ratio: 1;
+  font-size: 0.85rem;
+  font-weight: 400;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--on-main, #ccc);
+  cursor: pointer;
+  padding: 0;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.25s ease,
+    border-radius 0.3s ease;
+  outline: none;
+  user-select: none;
+  // Isolation ensures ::before (range bar) z-index is contained within this stacking context
+  isolation: isolate;
+  --dp-range-delay: 0ms;
+
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-secondary ) 15%, transparent);
+    color: var(--on-main--bold, #eee);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-secondary );
+  }
+}
+
+@mixin dp-day-outside {
+  color: var(--on-main--dim, #888);
+  opacity: 0.35;
+
+  &:hover:not(:disabled) {
+    opacity: 0.6;
+  }
+}
+
+@mixin dp-day-disabled {
+  color: var(--on-main--dim, #888);
+  opacity: 0.2;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+@mixin dp-day-today {
+  color: var(--color-secondary );
+  font-weight: 800;
+
+  // Dot indicator below the number
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--color-secondary );
+    animation: dp-today-pulse 2.5s ease-in-out infinite;
+  }
+}
+
+@mixin dp-day-selected {
+  background: var(--color-secondary );
+  color: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  transform: scale(1.12);
+  box-shadow:
+    0 0 14px 4px color-mix(in srgb, var(--color-secondary ) 40%, transparent),
+    0 0 4px 1px color-mix(in srgb, var(--color-secondary ) 25%, transparent);
+
+  &::after {
+    display: none; // hide today dot when selected
+  }
+
+  &:hover {
+    background: var(--color-primary-mid);
+    color: #fff;
+    box-shadow:
+      0 0 18px 6px color-mix(in srgb, var(--color-secondary ) 50%, transparent),
+      0 0 6px 2px color-mix(in srgb, var(--color-secondary ) 30%, transparent);
+  }
+}
+
+
+@mixin dp-day-range-start {
+  background: var(--color-secondary);
+  color: #fff;
+  border-radius: 50% 0 0 10%;
+  font-weight: 600;
+  //transition-delay: calc( var(--dp-range-delay) + 10ms);
+  animation:
+    dp-range-chip-bg-in 0.24s ease-out var(--dp-range-delay) both,
+    dp-range-anchor-in 0.22s ease-out var(--dp-range-delay) both,
+    dp-range-chip-pulse 0.34s ease-out calc(var(--dp-range-delay) + 40ms) both;
+  // Bar extending to the right (bridging to the next cell)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0%;
+    height: 100%;
+    right: -3px;
+    left: 50%;
+    background: color-mix(in srgb, var(--color-secondary) 100%, transparent);
+    border-radius: 20%;
+    z-index: -1;
+    opacity: 0;
+    transform: scaleX(0.84);
+    transform-origin: left center;
+    animation: dp-range-fill-in 0.24s ease-out var(--dp-range-delay) forwards;
+  }
+  // Suppress today dot
+  &::after { display: none; }
+
+  &:hover:not(:disabled):not([aria-selected="true"]) {
+    background: color-mix(in srgb, var(--color-secondary) 82%, #fff);
+    color: #fff;
+    border-radius:  50% 20% 20% 50% ;
+  }
+
+  &:not(:has(~ .st-datepicker__day--range-end[aria-selected="true"])) {
+    border-radius: 50% 20% 20% 50% !important;
+  }
+
+}
+
+@mixin dp-day-range-end {
+  background: var(--color-secondary);
+  color: #fff;
+  border-radius: 0 10% 50% 0;
+  //transition-delay: calc( var(--dp-range-delay) + 10ms);
+  animation:
+    dp-range-chip-bg-in 0.24s ease-out var(--dp-range-delay) both,
+    dp-range-anchor-in 0.22s ease-out var(--dp-range-delay) both,
+    dp-range-chip-pulse 0.34s ease-out calc(var(--dp-range-delay) + 40ms) both;
+  // Bar extending to the left (bridging from previous cell)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0%;
+    height: 100%;
+    left: -3px;
+    right: 50%;
+    background: color-mix(in srgb, var(--color-secondary) 100%, transparent);
+    border-radius: 20%;
+    z-index: -1;
+    opacity: 0;
+    transform: scaleX(0.84);
+    transform-origin: right center;
+    animation: dp-range-fill-in 0.24s ease-out var(--dp-range-delay) forwards;
+  }
+  &::after { display: none; }
+
+  &:hover:not(:disabled):not([aria-selected="true"]) {
+    background: color-mix(in srgb, var(--color-secondary) 82%, #fff);
+    border-radius: 20% 50% 50% 20%;
+    color: #fff;
+  }
+  &:not(.st-datepicker__day--range-start[aria-selected="true"] ~ &)  {
+    border-radius: 50% !important;
+  }
+}
+
+@mixin dp-day-in-range {
+  background: color-mix(in srgb, var(--color-secondary) 90%, transparent);
+  border-radius: 8px;
+  color: var(--on-primary, #EEF);
+  animation:
+    dp-range-body-bg-in 0.2s ease-out var(--dp-range-delay) both,
+    dp-range-anchor-in 0.18s ease-out var(--dp-range-delay) both;
+  // Full-width bar across the cell (bridges gaps on both sides)
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0%;
+    bottom: 14%;
+    left: -10%;
+    height: 100%;
+    right: -10%;
+    background: color-mix(in srgb, var(--color-secondary) 100%, transparent);
+    z-index: -1;
+    opacity: 0;
+    transform: scaleX(0.92);
+    transform-origin: center;
+    animation: dp-range-fill-in 0.2s ease-out var(--dp-range-delay) forwards;
+  }
+  &:hover:not(:disabled) {
+    background: color-mix(in srgb, var(--color-secondary) 12%, transparent);
+    border-radius: 0;
+  }
+}
+
+@mixin dp-day-in-range-hover {
+  background: transparent;
+  border-radius: 0;
+  &::before {
+    content: '';
+    position: absolute;
+    top: 14%;
+    bottom: 14%;
+    left: -3px;
+    right: -3px;
+    background: color-mix(in srgb, var(--color-secondary) 10%, transparent);
+    z-index: -1;
+    opacity: 0;
+    transform: scaleX(0.96);
+    transform-origin: center;
+    animation: dp-range-fill-in 0.18s ease-out var(--dp-range-delay) forwards;
+  }
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  FOOTER (Today button)
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-footer {
+  display: flex;
+  justify-content: center;
+  padding: 0.375rem 0 0.125rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+  margin-top: 0.25rem;
+}
+
+@mixin dp-today-btn {
+  border: none;
+  background: transparent;
+  color: var(--color-secondary );
+  font-family: 'Quicksand', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  padding: 0.3rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+
+  &:hover {
+    background: color-mix(in srgb, var(--color-secondary ) 15%, transparent);
+  }
+
+  &:focus-visible {
+    box-shadow: 0 0 0 2px var(--color-secondary );
+    outline: none;
+  }
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  ERROR MESSAGE
+// ═════════════════════════════════════════════════════════════════════
+@mixin dp-error-msg {
+  font-size: 0.82rem;
+  color: var(--plx-danger, #f24);
+  margin-top: 2px;
+}
+
+
+// ═════════════════════════════════════════════════════════════════════
+//  KEYFRAMES
+// ═════════════════════════════════════════════════════════════════════
+
+// Today-dot pulse
+@keyframes dp-today-pulse {
+  0%, 100% { opacity: 1; transform: translateX(-50%) scale(1); }
+  50%      { opacity: 0.4; transform: translateX(-50%) scale(1.8); }
+}
+
+// Month slide transitions
+@keyframes dp-slide-left {
+  from { transform: translateX(8%);  opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
+}
+
+@keyframes dp-slide-right {
+  from { transform: translateX(-8%); opacity: 0; }
+  to   { transform: translateX(0);   opacity: 1; }
+}
+
+@keyframes dp-range-anchor-in {
+  from {
+    opacity: 0.42;
+    transform: scale(0.84);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes dp-range-fill-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes dp-range-chip-bg-in {
+  from {
+    background-color: color-mix(in srgb, var(--color-secondary) 0%, transparent);
+    color: var(--on-main, #ccc);
+    filter: saturate(1.35) brightness(1.1);
+  }
+  to {
+    background-color: var(--color-secondary);
+    color: #fff;
+    filter: saturate(1) brightness(1);
+  }
+}
+
+@keyframes dp-range-chip-pulse {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-secondary) 45%, transparent);
+  }
+  60% {
+    box-shadow: 0 0 0 8px color-mix(in srgb, var(--color-secondary) 0%, transparent);
+  }
+  100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-secondary) 0%, transparent);
+  }
+}
+
+@keyframes dp-range-body-bg-in {
+  from {
+    background-color: color-mix(in srgb, var(--color-secondary) 0%, transparent);
+  }
+  to {
+    background-color: color-mix(in srgb, var(--color-secondary) 90%, transparent);
+  }
+}

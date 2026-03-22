@@ -1,0 +1,198 @@
+@import './datepicker-tokens';
+
+.st-datepicker {
+
+  @include dp-root;
+  & .st-dp-day {
+    z-index: 1;
+  }
+
+  // ── Variants ──
+  &--ghost {
+    @include dp-variant-ghost;
+  }
+
+  &--ghost#{&}--open {
+    @include dp-variant-ghost-open;
+  }
+
+  // ── Sizes ──
+  &--sm {
+    @include dp-size-sm;
+  }
+
+  // ── Error ──
+  &--error {
+    @include dp-error-root;
+  }
+
+  // ── Label ──
+  &__label {
+    @include dp-label;
+  }
+
+  // ── Trigger ──
+  &__trigger {
+    @include dp-trigger;
+  }
+
+  &--ghost &__trigger {
+    @include dp-trigger-ghost-focus;
+  }
+
+  &--error &__trigger {
+    @include dp-trigger-error-focus;
+  }
+
+  &--open &__trigger {
+    @include dp-trigger-open;
+  }
+
+  // ── Value / Placeholder ──
+  &__value {
+    font-weight: 600;
+    line-height: 1.2;
+  }
+
+  &__placeholder {
+    @include dp-placeholder;
+  }
+
+  // ── Calendar icon ──
+  &__icon {
+    @include dp-icon;
+  }
+
+  &--open &__icon {
+    opacity: 1;
+  }
+
+  // ── Popup ──
+  &__popup {
+    @include dp-popup;
+  }
+
+  // ── Navigation ──
+  &__nav {
+    @include dp-nav;
+  }
+
+  &__nav-btn {
+    @include dp-nav-btn;
+  }
+
+  &__nav-title {
+    @include dp-nav-title;
+  }
+
+  &__nav-caret {
+    @include dp-nav-caret;
+  }
+
+  // ── Year picker grid ──
+  &__year-grid {
+    @include dp-year-grid;
+  }
+
+  &__year-cell {
+    @include dp-year-cell;
+
+    &--active {
+      @include dp-year-cell-active;
+    }
+  }
+
+  // ── Weekday headers ──
+  &__weekdays {
+    @include dp-weekdays;
+  }
+
+  &__weekday {
+    @include dp-weekday;
+  }
+
+  // ── Day grid ──
+  &__grid-wrap {
+    overflow: hidden;
+    position: relative;
+  }
+
+  &__grid {
+    @include dp-grid;
+
+    &--slide-left {
+      animation: dp-slide-left 0.22s ease-out;
+    }
+
+    &--slide-right {
+      animation: dp-slide-right 0.22s ease-out;
+    }
+  }
+
+  // ── Day cells ──
+  &__day {
+    @include dp-day;
+
+    &--outside {
+      @include dp-day-outside;
+    }
+
+    &--disabled {
+      @include dp-day-disabled;
+    }
+
+    &--today {
+      @include dp-day-today;
+    }
+
+    &--selected {
+      @include dp-day-selected;
+    }
+
+    // Range states
+    &--range-start {
+      @include dp-day-range-start;
+    }
+
+    &--range-end {
+      @include dp-day-range-end;
+    }
+
+    &--in-range {
+      @include dp-day-in-range;
+    }
+
+    &--in-range-hover {
+      @include dp-day-in-range-hover;
+    }
+
+    // Same-day range (start === end): suppress bars, show only circle
+    &--range-start#{&}--range-end {
+      &::before { display: none; }
+    }
+
+    // Selected + today combo: keep orb, suppress dot
+    &--selected#{&}--today {
+      @include dp-day-selected;
+    }
+  }
+
+  // ── Footer ──
+  &__footer {
+    @include dp-footer;
+  }
+
+  &__today-btn {
+    @include dp-today-btn;
+  }
+
+  // ── Error message ──
+  &__error {
+    @include dp-error-msg;
+  }
+
+  // ── Disabled root ──
+  &--disabled &__trigger {
+    cursor: not-allowed;
+  }
+}

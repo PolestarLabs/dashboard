@@ -14,13 +14,13 @@ $mp-slot-size: 80px;
 $mp-chip-size: 56px;
 $mp-grid-gap: 12px;
 
-$mp-surface: rgba(22, 22, 42, 0.92);
-$mp-surface-raised: rgba(30, 30, 55, 0.95);
+$mp-surface: var(--bg-surface, #2b2b3b);
+$mp-surface-raised: var(--bg-surface-alt, rgba(30, 30, 55, 0.95));
 $mp-border-subtle: rgba(200, 200, 255, 0.06);
 $mp-border-focus: rgba(200, 200, 255, 0.15);
-$mp-accent: var(--color-primary, #f58);
-$mp-accent-dim: rgba(245, 88, 136, 0.18);
-$mp-accent-glow: rgba(245, 88, 136, 0.3);
+$mp-accent: var(--color-primary);
+$mp-accent-dim: color-mix(in srgb, var(--color-primary) 20%, rgba(63, 70, 134, 0.2));
+$mp-accent-glow: color-mix(in srgb, var(--color-primary) 20%, #FFF3);
 $mp-danger: var(--plx-danger, #f02040);
 
 // ── Root ───────────────────────────────────────────────────────────────────
@@ -249,8 +249,14 @@ $mp-danger: var(--plx-danger, #f02040);
   cursor: pointer;
   transition:
     border-color $mp-duration $mp-ease,
+    transform .5s $mp-ease,
     background-color $mp-duration $mp-ease;
 
+  & > .s-rarity-icon {
+    transition:
+      transform $mp-duration $mp-ease,
+      filter $mp-duration $mp-ease;
+  }
   &:hover {
     background: rgba(200, 200, 255, 0.05);
   }
@@ -263,6 +269,10 @@ $mp-danger: var(--plx-danger, #f02040);
   &--active {
     border-color: $mp-accent;
     background: $mp-accent-dim;
+    transform: scale(.8);
+    & > .s-rarity-icon {
+       transform: scale(1.2);
+     }
   }
 }
 
@@ -296,7 +306,7 @@ $mp-danger: var(--plx-danger, #f02040);
   display: flex;
   align-items: center;
   gap: 8px;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
 }
 
 .st-profile-medalpicker__search-icon {
@@ -308,7 +318,7 @@ $mp-danger: var(--plx-danger, #f02040);
 }
 
 .st-profile-medalpicker__search-input {
-  flex: 1 1 auto;
+  flex: 1 0 50%;
   padding: 7px 12px 7px 30px;
   border: 1px solid $mp-border-subtle;
   border-radius: $mp-radius-sm;
@@ -330,36 +340,31 @@ $mp-danger: var(--plx-danger, #f02040);
 }
 
 .st-profile-medalpicker__tag-select {
-  flex: 0 0 auto;
+  flex: 0 1 auto;
   min-width: 140px;
   max-width: 210px;
-  margin-left: 10px;
-  padding: 7px 10px;
-  border: 1px solid $mp-border-subtle;
-  border-radius: $mp-radius-sm;
-  background: var(--bg-deep, #0f0f1a);
-  color: var(--on-main, #aac);
-  font: inherit;
-  font-size: 0.85rem;
-  cursor: pointer;
-  transition: border-color $mp-duration $mp-ease, background-color $mp-duration $mp-ease;
-
-  &:focus {
-    outline: none;
-    border-color: $mp-accent;
+  & .st-multiselect__tags {
+    flex-wrap: nowrap;
   }
 }
 
 // ── Inventory ──────────────────────────────────────────────────────────────
 
 .st-profile-medalpicker__inventory {
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: 6px;
+  > * {
+    position: absolute;
+    > * {
+      align-content: flex-start;
+      justify-content: space-evenly;
+      gap: 12px;
+      
+    }
+  }
+
+  position: relative;
   padding: 10px;
   min-height: 240px;
-  max-height: 380px;
+  height: 380px;
   overflow-y: auto;
   border-radius: $mp-radius-md;
   background: var(--bg-deep, #0f0f1a);
