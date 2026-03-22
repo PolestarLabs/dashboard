@@ -9,7 +9,7 @@ type MedalItem = {
 };
 
 const meta: Meta<typeof DraggableMedalGrid> = {
-  title: 'ProfileEdit/DraggableMedalGrid',
+  title: 'Pollux-specific Components/Profile Editor/DraggableMedalGrid',
   component: DraggableMedalGrid,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
