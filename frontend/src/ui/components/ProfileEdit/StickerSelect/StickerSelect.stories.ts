@@ -4,7 +4,7 @@ import StickerSelect from './StickerSelect.vue';
 import { sampleStickerPacks, sampleStickers } from '../profileEditMockFixtures';
 
 const meta: Meta<typeof StickerSelect> = {
-  title: 'ProfileEdit/StickerSelect',
+  title: 'Pollux-specific Components/Profile Editor/StickerSelect',
   component: StickerSelect,
   tags: ['autodocs'],
   parameters: { layout: 'centered' },
