@@ -1,0 +1,242 @@
+/* ═══════════════════════════════════════════════════════════════
+   Stardust UI — Offcanvas
+   Ported from legacy plx-offcanvas / plx-offcanvas-reveal / plx-offcanvas-overlay
+   ═══════════════════════════════════════════════════════════════ */
+
+// ── Design tokens ────────────────────────────────────────────────
+:root {
+  --s-offcanvas-width: 270px;
+  --s-offcanvas-width-lg: 350px;
+  --s-offcanvas-bg: var(--color-surface, #202031);
+  --s-offcanvas-padding: 20px;
+  --s-offcanvas-padding-lg: 40px;
+  --s-offcanvas-overlay-bg: rgba(11, 11, 15, 0.63);
+  --s-offcanvas-z: 1000;
+  --s-offcanvas-close-size: 28px;
+  --s-offcanvas-duration: 0.3s;
+  --s-offcanvas-ease: cubic-bezier(0.52, 0.01, 0.22, 0.99);
+}
+
+@media (min-width: 960px) {
+  :root {
+    --s-offcanvas-width: var(--s-offcanvas-width-lg);
+    --s-offcanvas-padding: var(--s-offcanvas-padding-lg);
+  }
+}
+
+// ── Root layer ───────────────────────────────────────────────────
+.s-offcanvas {
+  position: fixed;
+  inset: 0;
+  z-index: var(--s-offcanvas-z);
+  display: flex;
+  justify-content: flex-end;
+  pointer-events: none; // allow clicks to pass through when closed
+  visibility: hidden;
+
+  &--visible {
+    pointer-events: auto;
+    visibility: visible;
+  }
+
+  &--flip {
+    justify-content: flex-start;
+  }
+}
+
+// ── Overlay ──────────────────────────────────────────────────────
+.s-offcanvas__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--s-offcanvas-overlay-bg);
+  pointer-events: auto;
+  touch-action: none;
+}
+
+// ── Panel (the sidebar bar) ──────────────────────────────────────
+.s-offcanvas__panel {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  width: var(--s-offcanvas-width);
+  max-width: 100%;
+  height: 100%;
+  padding: var(--s-offcanvas-padding);
+  box-sizing: border-box;
+  background: var(--s-offcanvas-bg);
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  pointer-events: auto;
+  outline: none;
+}
+
+// ── Close button ─────────────────────────────────────────────────
+.s-offcanvas__close {
+  position: absolute;
+  z-index: 1;
+  top: 20px;
+  right: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--s-offcanvas-close-size);
+  height: var(--s-offcanvas-close-size);
+  padding: 0;
+  background: transparent;
+  border: none;
+  color: inherit;
+  font-size: 1rem;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    opacity: 1;
+  }
+}
+
+// ── Body slot ────────────────────────────────────────────────────
+.s-offcanvas__body {
+  flex: 1 1 auto;
+}
+
+// ═══════════════════════════════════════════════════════════════
+// Transitions
+// ═══════════════════════════════════════════════════════════════
+
+// — Root fade (overlay entry / exit) —
+.s-offcanvas-fade-enter-active,
+.s-offcanvas-fade-leave-active {
+  transition: opacity 0.15s linear;
+}
+
+.s-offcanvas-fade-enter-from,
+.s-offcanvas-fade-leave-to {
+  opacity: 0;
+}
+
+// — Slide mode —
+.s-offcanvas-slide-enter-active,
+.s-offcanvas-slide-leave-active {
+  transition: transform var(--s-offcanvas-duration) var(--s-offcanvas-ease);
+}
+
+// Raw offcanvas: slide in from right, slide out to right
+.s-offcanvas-slide-enter-from,
+.s-offcanvas-slide-leave-to {
+  transform: translateX(100%);
+}
+
+.s-offcanvas-slide-enter-to,
+.s-offcanvas-slide-leave-from {
+  transform: translateX(0);
+}
+
+// — Push mode (panel reveals under content as content shifts left) —
+.s-offcanvas--push {
+  z-index: 0;
+  pointer-events: none; // content handles interaction until overlay appears
+}
+
+..s-offcanvas--push .s-offcanvas__panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: var(--s-offcanvas-width);
+  z-index: 1001;
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.4);
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-enter-active,
+.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-leave-active {
+  transition: transform var(--s-offcanvas-duration) var(--s-offcanvas-ease),
+    opacity var(--s-offcanvas-duration) var(--s-offcanvas-ease);
+}
+
+.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-enter-from,
+.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-leave-to {
+  transform: translateX(100%);
+  opacity: 0;
+}
+
+.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-enter-to,
+.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-leave-from {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+
+.s-offcanvas--push .s-offcanvas__overlay {
+  z-index: 1002;
+}
+
+.s-offcanvas--push .s-offcanvas__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  opacity: 0;
+  transition: opacity var(--s-offcanvas-duration) var(--s-offcanvas-ease);
+}
+
+.s-offcanvas--push .s-offcanvas__overlay-enter-active,
+.s-offcanvas--push .s-offcanvas__overlay-leave-active {
+  transition: opacity var(--s-offcanvas-duration) var(--s-offcanvas-ease);
+}
+
+.s-offcanvas--push .s-offcanvas__overlay-enter-from,
+.s-offcanvas--push .s-offcanvas__overlay-leave-to {
+  opacity: 0;
+}
+
+.s-offcanvas--push .s-offcanvas__overlay-enter-to,
+.s-offcanvas--push .s-offcanvas__overlay-leave-from {
+  opacity: 1;
+}
+
+// Flipped: slide in from left (reverse behavior)
+.s-offcanvas--flip {
+  .s-offcanvas-slide-enter-from,
+  .s-offcanvas-slide-leave-to {
+    transform: translateX(-100%);
+  }
+
+  .s-offcanvas-slide-enter-to,
+  .s-offcanvas-slide-leave-from {
+    transform: translateX(0);
+  }
+}
+
+// — Reveal mode (clip-width animation) —
+.s-offcanvas-reveal-enter-active,
+.s-offcanvas-reveal-leave-active {
+  transition: clip-path var(--s-offcanvas-duration) var(--s-offcanvas-ease);
+}
+
+// Default: reveal from left edge
+.s-offcanvas-reveal-enter-from,
+.s-offcanvas-reveal-leave-to {
+  clip-path: inset(0 100% 0 0);
+}
+
+.s-offcanvas-reveal-enter-to,
+.s-offcanvas-reveal-leave-from {
+  clip-path: inset(0 0 0 0);
+}
+
+// Flipped: reveal from right edge
+.s-offcanvas--flip {
+  .s-offcanvas-reveal-enter-from,
+  .s-offcanvas-reveal-leave-to {
+    clip-path: inset(0 0 0 100%);
+  }
+
+  .s-offcanvas-reveal-enter-to,
+  .s-offcanvas-reveal-leave-from {
+    clip-path: inset(0 0 0 0);
+  }
+}
