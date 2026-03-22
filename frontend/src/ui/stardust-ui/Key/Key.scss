@@ -1,0 +1,179 @@
+.st-keyb-key {
+    --keycolor-text: var(--mid-dark) ;
+    --keycolor-face: var(--lightest) ;
+    --keycolor-light: var(--light);
+    --keycolor-shadow: var(--mid-light);
+    --keycolor-bevel: var(--lighter);
+    --keycolor-outer: var(--light);
+
+    &--styled {
+        --keycolor-text: color-mix(in srgb, var(--on-main), #FFF25);
+        --keycolor-face: var(--bg-surface);
+        --keycolor-light: color-mix(in srgb, var(--bg-main), #fffdee59 60%);
+        --keycolor-shadow: var(--bg-deep);
+        --keycolor-bevel: color-mix(in srgb, var(--bg-surface), #fffdee33 60%);
+        --keycolor-outer: var(--bg-deep);
+    }
+
+    
+    min-width: 1.8rem;
+    min-height: 1.8rem;
+    margin: 0 .75rem;
+    text-align: center;
+    filter:contrast(1.15) brightness(1.05);
+    font-size: 1rem;
+    line-height: inherit;
+    display: inline-flex;
+    padding: 0.1rem 0.6rem;
+    box-shadow: 0 0 var(--keycolor-shadow),
+    0 0px var(--keycolor-shadow),
+    0 1px var(--keycolor-shadow),
+    0 2px var(--keycolor-shadow),
+    0 3px var(--keycolor-shadow),
+    0 4px var(--keycolor-shadow),
+    0 5px var(--keycolor-shadow),
+    2px 2.5px 4px var(--keycolor-light),
+    0 -1px 2.5px var(--keycolor-light);
+    background-color: var(--keycolor-face);
+    border-color: var(--keycolor-bevel);
+    color: var(--keycolor-text);
+    border: 1px solid var(--keycolor-bevel);
+    border-radius: 0.24rem;
+    font-family: Panton;
+    transform: translate3d(0, -3px, 15px);
+    transform-style: preserve-3d;
+    transition: all 0.25s cubic-bezier(0.2, 1, 0.2, 1);
+
+    & .st-keyb-special {
+        transform: scale(1.5) translateY(-1.5px);
+        width: 26px;
+        text-align: center;
+    }
+
+    & i:not(:last-child) {
+        margin-right: 0.25rem;
+    }
+
+    &--spacebar {
+        width: 7.25rem;
+        text-align: center;
+    }
+
+    &--tab {
+        width: 3.55rem;
+        text-align: center;
+
+        & i {
+            margin-right: 0.25rem !important;
+        }
+    }
+    &--md {
+        & .st-keyb-special {
+            width: auto;
+            text-align: center;
+            margin:auto;
+        }
+        & .fa-windows {
+            width: auto;
+        }
+    }
+    &--xs,
+    &--sm {
+        min-width: 1.5rem;
+        min-height: 1.5rem;
+        font-size: 0.75rem;
+        padding: 0.08rem 0.4rem 0.1rem;
+        & .st-keyb-special {
+            width: 12px;
+        }
+    }
+    &--xs {
+        margin: .1rem;
+        font-weight: 600;
+        transform: scale(.8);
+        font-size: 0.95rem;
+
+    }
+    &--lg {
+        font-weight: 500;
+        min-width: 2.5rem;
+        min-height: 2.5rem;
+        font-size: 1.45rem;
+    
+
+    }
+
+    &::after {
+        border-style: solid;
+        box-sizing: content-box;
+        content: '';
+        display: block;
+        position: absolute;
+        transform-style: preserve-3d;
+        transition: all 0.25s cubic-bezier(0.2, 1, 0.2, 1);
+        border-color: var(--keycolor-outer);
+        border-radius: 0.5rem;
+        border-width: 0.125rem;
+        bottom: -9px;
+        left: -0.3125rem;
+        right: -0.3125rem;
+        top: -3px;
+        transform: translate3d(0, 0, -3px);
+    }
+
+    & + .st-keyb-key--plus,
+    & + .st-keyb-key--plus + & {
+        margin-left: -1.8rem;
+        margin-right: 0.8rem;
+    }
+
+    &[round="true"] {
+        border-radius: 100% !important;
+        width: 2rem;
+        height: 1.85rem;
+        font-weight: 600;
+        &::after {
+            border-radius: 100% !important;
+        }
+    }
+    &[color]:not(:empty) {
+    --key-color-foreground:  #88C;
+    --key-color-background:  #DDF;
+
+    --keycolor-text: var(--key-color-foreground);
+    --keycolor-face: var(--key-color-background);
+    --keycolor-light: color-mix(in srgb, var(--key-color-background), #fffdee59 60%);
+    --keycolor-shadow: color-mix(in srgb, var(--key-color-background), #00000059 60%);
+    --keycolor-bevel: color-mix(in srgb, var(--key-color-background), #fffdee33 80%);
+    --keycolor-outer: color-mix(in srgb, var(--key-color-background), #00000059 60%);
+    }
+    &[color="primary"] {
+    --key-color-foreground: var(--on-primary) !important;
+    --key-color-background: var(--color-primary) !important;
+    }
+    &[color="secondary"] {
+    --key-color-foreground: var(--on-secondary) !important;
+    --key-color-background: var(--color-secondary) !important;
+    }
+    &[color="tertiary"] {
+    --key-color-foreground: var(--on-secondary) !important;
+    --key-color-background: var(--color-tertiary) !important;
+    }
+    &[color="danger"] {
+    --key-color-foreground: var(--on-danger) !important;
+    --key-color-background: var(--color-danger) !important;
+    }
+    &[color="success"] {
+    --key-color-foreground: var(--on-success) !important;
+    --key-color-background: var(--color-success) !important;
+    }
+    &[color="warn"] {
+    --key-color-foreground: var(--on-warn) !important;
+    --key-color-background: var(--color-warn) !important;
+    }
+    &[color="info"] {
+    --key-color-foreground: var(--on-info) !important;
+    --key-color-background: var(--color-info) !important;
+    }
+
+}
