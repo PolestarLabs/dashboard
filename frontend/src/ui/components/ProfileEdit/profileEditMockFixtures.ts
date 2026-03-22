@@ -1,5 +1,5 @@
 import type { BackgroundOption } from './BackgroundPicker/BackgroundPicker.vue';
-import type { MedalItem } from './MedalPicker/MedalPicker.vue';
+import type { MedalItem } from './MedalPicker/MedalPickerNext.vue';
 import type { PackOption, StickerOption } from './StickerSelect/StickerSelect.vue'; export const sampleUserProfile = {
   id: '88120564400553984',
   profile: {
