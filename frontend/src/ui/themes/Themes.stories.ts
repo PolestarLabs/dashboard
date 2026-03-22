@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import ThemeShowcase from './ThemeShowcase.vue';
+import Typography from '../components/Typography/Typography.vue';
 import TagPill from '../stardust-ui/TagPill/TagPill.vue';
 import Badge from '../stardust-ui/Badge/Badge.vue';
 import ArtistTag from '../components/ArtistTag/ArtistTag.vue';
@@ -8,7 +9,7 @@ import '../stardust-ui/Badge/Badge.scss';
 import '../components/ArtistTag/ArtistTag.scss';
 
 const meta: Meta<typeof ThemeShowcase> = {
-  title: 'Themes/Color Schemes',
+  title: 'Themes',
   component: ThemeShowcase,
   tags: ['autodocs'],
   parameters: {
@@ -55,6 +56,24 @@ export const ComponentPreview: Story = {
           <h3 style="margin: 0 0 0.5rem; color: var(--on-main); font-size: 0.9rem;">Artist tag</h3>
           <ArtistTag>Artist Name</ArtistTag>
         </div>
+      </div>
+    `,
+  }),
+};
+
+export const TypographyPreview: Story = {
+  render: () => ({
+    components: { Typography },
+    template: `
+      <div style="padding: 2rem; display: grid; gap: 0.75rem; max-width: 840px;">
+        <Typography variant="h1">H1 Typography style sample</Typography>
+        <Typography variant="h2">H2 Typography style sample</Typography>
+        <Typography variant="h3">H3 Typography style sample</Typography>
+        <Typography variant="h4">H4 Typography style sample</Typography>
+        <Typography variant="subtitle">Subtitle sample</Typography>
+        <Typography variant="body">Body sample text. Lorem ipsum dolor sit amet.</Typography>
+        <Typography variant="small">Small sample text.</Typography>
+        <Typography variant="caption">Caption style sample text.</Typography>
       </div>
     `,
   }),

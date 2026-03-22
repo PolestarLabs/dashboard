@@ -1,7 +1,8 @@
 <template lang="pug">
 .st-dropdown-select(
   ref="rootRef"
-  :class="rootClasses"
+  :class="[rootClasses, attrs.class]"
+  v-bind="attrs"
 )
   label.st-dropdown-select__label(v-if="label" :for="triggerId") {{ label }}
   button.st-dropdown-select__trigger(
@@ -55,10 +56,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, nextTick, onMounted, onUnmounted, useAttrs } from 'vue';
 import './DropdownSelect.scss';
 
 defineOptions({ inheritAttrs: false });
+const attrs = useAttrs();
 
 export interface DropdownSelectOption {
   value: string | number;

@@ -1,8 +1,9 @@
 <template lang="pug">
 .st-searchable-select(
   ref="rootRef"
-  :class="rootClasses"
+  :class="[rootClasses, attrs.class]"
   :style="rootStyle"
+  v-bind="attrs"
 )
   label.st-searchable-select__label(v-if="label" :for="triggerId") {{ label }}
   .st-searchable-select__trigger-wrap(
@@ -61,11 +62,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, nextTick, onMounted, onUnmounted, useAttrs } from 'vue';
 import type { SelectOption } from './Select.vue';
 import './SearchableSelect.scss';
 
 defineOptions({ inheritAttrs: false });
+const attrs = useAttrs();
 
 const props = withDefaults(
   defineProps<{

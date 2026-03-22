@@ -55,7 +55,7 @@ html.theme-lunanuli {
   
   --plx-green: #395;
   --plx-cyan: #358;
-    
+    --on-main: rgb(192, 206, 212) !important;
   --plx-yellow: #975 !important;
    
   

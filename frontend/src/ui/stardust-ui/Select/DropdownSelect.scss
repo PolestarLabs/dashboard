@@ -1,9 +1,9 @@
-@import 'select-tokens';
+@import './select-tokens';
 
 .st-dropdown-select {
   @include sel-root;
-  min-width: 280px;
-  max-width: 320px;
+  width: 100%;
+  max-width: 100%;
 
   // ── Variants ──
   &--ghost {
@@ -45,6 +45,19 @@
     object-fit: cover;
     border-radius: 2px;
     margin-right: 0.4rem;
+
+
+    .st-dropdown-select--sm & {
+      margin: 0 2px 0 0;
+    }
+    .st-dropdown-select--sm .st-dropdown-select__trigger & {
+      z-index: 1020;
+      transform: translate(-24px, -8px);
+      margin-right: -24px;
+      width: auto;
+      height: 32px;
+      
+    }
   }
 
   // ── Text column ──
@@ -56,6 +69,20 @@
     flex: 1 1 auto;
     min-width: 0;
     gap: 0.15em;
+
+    .st-dropdown-select--sm & {
+      flex-direction: row;
+      flex-wrap: nowrap;
+      text-overflow: ellipsis;
+      > span {
+        flex: 1 0 auto;
+        margin-right: 0.25em;
+      }
+      > small {
+        flex: 0 1 auto;
+        text-overflow: ellipsis;
+      }
+    }
   }
 
   &__name {
@@ -161,8 +188,9 @@
 
   // ── Large size ──
   &--lg {
-    min-width: 300px;
-    max-width: 400px;
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
 
     .st-dropdown-select__label {
       font-size: 1rem;

@@ -4,6 +4,8 @@ import GlueContainer from './GlueContainer.vue';
 import Input from '../Form Elements/Input/Input.vue';
 import Button from '../Button/Button.vue';
 import Badge from '../Badge/Badge.vue';
+import Select from '../Select/Select.vue';
+import DropdownSelect from '../Select/DropdownSelect.vue';
 
 const meta: Meta<typeof GlueContainer> = {
   title: 'Stardust UI/GlueContainer',
@@ -152,6 +154,27 @@ export const SegmentWithIcons: Story = {
         <Button icon="fab fa-apple" label="Two" variant="fancy" theme="secondary" />
         <Button icon="fab fa-windows" label="Three" variant="fancy" theme="danger" />
       </GlueContainer>
+    `,
+  }),
+  args: {},
+};
+
+export const SelectsInGroup: Story = {
+  render: (args) => ({
+    setup() {
+      const value1 = ref('en');
+      const value2 = ref('fr');
+      return { args, value1, value2 };
+    },
+    components: { GlueContainer, Select, DropdownSelect },
+    template: `
+      <GlueContainer class="s-glue-container--inline" style="width: 400px;" v-bind="args" >
+        <Select v-model="value1" :options="[{ value: 'en', label: 'English' }, { value: 'de', label: 'Deutsch' }, { value: 'fr', label: 'Français' }]" />
+        <DropdownSelect v-model="value2" :options="[{ value: 'us', label: 'USA' }, { value: 'fr', label: 'France' }, { value: 'de', label: 'Germany' }]" />
+      </GlueContainer>
+      <div style="margin-top: 1rem; font-size: 0.85rem; color: #666;">
+        Selected: {{ value1 }} / {{ value2 }}
+      </div>
     `,
   }),
   args: {},

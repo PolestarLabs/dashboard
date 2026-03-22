@@ -1,15 +1,20 @@
 <template lang="pug">
 div.s-glue-container-wrapper
-  div.s-glue-container(:class="containerClasses")
+  div.s-glue-container(:class="containerClasses" :style="containerStyle")
     SlotRenderer(:nodes="slotContent")
   div.s-glue-container__label(v-if="$slots.label")
     slot(name="label")
 </template>
 
 <script setup lang="ts">
-import { computed, defineComponent, h, Fragment, useSlots } from 'vue';
+import { computed, defineComponent, h, Fragment, useAttrs, useSlots } from 'vue';
 import Badge from '../Badge/Badge.vue';
 import './GlueContainer.scss';
+
+defineOptions({ inheritAttrs: false });
+
+const attrs = useAttrs();
+const containerStyle = computed(() => attrs.style);
 
 const slots = useSlots();
 

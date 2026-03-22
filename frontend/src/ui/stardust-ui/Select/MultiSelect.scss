@@ -1,4 +1,4 @@
-@import 'select-tokens';
+@import './select-tokens';
 
 .st-multiselect {
   @include sel-root;
@@ -106,13 +106,19 @@
     @include sel-chevron-open;
   }
 
-  // ── Search box below trigger ──
+  // ── Search box below trigger (overlay, no layout shift) ──
   &__search-wrap {
+    position: absolute;
+    top: calc(100% - 1px);
+    left: 0;
+    right: 0;
+    z-index: 1001;
     border: var(--_bw) solid var(--_bc);
     border-top: none;
     border-bottom: 1px solid rgba(0, 0, 0, 0.06);
     background: var(--bg-main, #fff);
     padding: 0.35rem 0.75rem;
+    box-sizing: border-box;
   }
 
   &__search {
@@ -124,6 +130,8 @@
   // ── Dropdown list ──
   &__list {
     @include sel-list;
+    top: calc(100% + var(--st-multiselect-search-height, 44px) - 1px);
+    z-index: 1000;
   }
 
   &__list-header {

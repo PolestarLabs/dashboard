@@ -55,6 +55,20 @@
     </section>
 
     <section class="theme-showcase__section">
+      <h2 class="theme-showcase__heading">Typography scale</h2>
+      <div class="theme-showcase__typography">
+        <Typography variant="h1">H1 2.4rem / var(--type-scale-h1)</Typography>
+        <Typography variant="h2">H2 1.8rem / var(--type-scale-h2)</Typography>
+        <Typography variant="h3">H3 1.4rem / var(--type-scale-h3)</Typography>
+        <Typography variant="h4">H4 1.15rem / var(--type-scale-h4)</Typography>
+        <Typography variant="subtitle">Subtitle 1rem / var(--type-scale-subtitle)</Typography>
+        <Typography variant="body">Body 0.95rem / var(--type-scale-body)</Typography>
+        <Typography variant="small">Small 0.82rem / var(--type-scale-caption)</Typography>
+        <Typography variant="caption">Caption 0.82rem / var(--type-scale-caption)</Typography>
+      </div>
+    </section>
+
+    <section class="theme-showcase__section">
       <h2 class="theme-showcase__heading">Semantic (plx)</h2>
       <div class="theme-showcase__grid">
         <Swatch var-name="--plx-green" />
@@ -69,6 +83,7 @@
 
 <script setup lang="ts">
 import Swatch from './ThemeSwatch.vue';
+import Typography from '../components/Typography/Typography.vue';
 </script>
 
 <style scoped>
@@ -126,6 +141,17 @@ import Swatch from './ThemeSwatch.vue';
   color: var(--on-main, #ccc);
   font-size: 1.125rem;
   line-height: 1.5;
+}
+
+.theme-showcase__typography {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+}
+
+.theme-showcase__typography Typography {
+  margin: 0;
 }
 
 .theme-showcase__typeface--panton {

@@ -20,8 +20,9 @@ $_sel-chevron-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
 // ═════════════════════════════════════════════════════════════════════
 @mixin sel-root {
   position: relative;
-  display: inline-block;
-  min-width: 200px;
+  display: block;
+  width: 100%;
+  min-width: 230px;
   max-width: 100%;
 
   // Solid defaults
@@ -43,8 +44,19 @@ $_sel-chevron-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
 
 @mixin sel-size-sm {
   --_radius: #{$_sel-radius-sm};
-  --_min-h: 34px;
+  --_min-h: 32px;
   --_font: 0.875rem;
+}
+
+// Force max height for SM style buttons/inputs/selects to 32px.
+.st-select--sm .st-select__trigger,
+.st-dropdown-select--sm .st-dropdown-select__trigger,
+.st-searchable-select--sm .st-searchable-select__trigger,
+.st-multiselect--sm .st-multiselect__trigger,
+.st-searchable-select--sm .st-searchable-select__search-input,
+.st-multiselect--sm .st-multiselect__search {
+  min-height: 32px !important;
+  max-height: 32px !important;
 }
 
 @mixin sel-error-root {
@@ -158,6 +170,8 @@ $_sel-chevron-svg: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/
   top: calc(100% - var(--_bw));
   left: 0;
   right: 0;
+  width: 100%;
+  min-width: 100%;
   margin: 0;
   padding: 0;
   list-style: none;

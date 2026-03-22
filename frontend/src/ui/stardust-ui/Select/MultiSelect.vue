@@ -1,8 +1,9 @@
 <template lang="pug">
 .st-multiselect(
   ref="rootRef"
-  :class="rootClasses"
+  :class="[rootClasses, attrs.class]"
   :style="rootStyle"
+  v-bind="attrs"
 )
   label.st-multiselect__label(v-if="label" :for="triggerId") {{ label }}
   .st-multiselect__trigger-wrap(
@@ -76,11 +77,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, nextTick, onMounted, onUnmounted, useAttrs } from 'vue';
 import type { SelectOption } from './Select.vue';
 import './MultiSelect.scss';
 
 defineOptions({ inheritAttrs: false });
+const attrs = useAttrs();
 
 export type MultiSelectOption = SelectOption;
 

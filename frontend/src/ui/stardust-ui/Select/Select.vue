@@ -1,7 +1,8 @@
 <template lang="pug">
 .st-select(
   ref="rootRef"
-  :class="rootClasses"
+  :class="[rootClasses, attrs.class]"
+  v-bind="attrs"
 )
   label.st-select__label(v-if="label" :for="triggerId") {{ label }}
   button.st-select__trigger(
@@ -45,10 +46,11 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, watch, nextTick, onMounted, onUnmounted } from 'vue';
+import { ref, computed, watch, nextTick, onMounted, onUnmounted, useAttrs } from 'vue';
 import './Select.scss';
 
 defineOptions({ inheritAttrs: false });
+const attrs = useAttrs();
 
 export interface SelectOption {
   value: string | number;
