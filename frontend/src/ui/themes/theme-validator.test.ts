@@ -243,4 +243,10 @@ describe('theme CSS validation', () => {
       expect(text).toContain('--');
     });
   });
+
+  it('preserves default --on-main fallback in __default.css instead of circular alias', () => {
+    const text = fs.readFileSync(defaultThemeFile, 'utf-8');
+    expect(text).toContain('--on-main:            var(--on-main, var(--lighter));');
+    expect(text).not.toContain('--on-main:              var(--on-main, var(--on-main));');
+  });
 });
