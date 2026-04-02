@@ -26,9 +26,26 @@ router.get('/:endpoint', async (req, res)=> {
  
     const userDiscord = (await userCache.get( userprofile.id )) || (await PLX.getRESTUser( userprofile.id ));
 
+    // Use itemsData virtual so inventory screen has item details without manual lookups.
+    const userInventory = await DB.userInventory.findOne({ id: userprofile.id })
+        .populate({ path: "itemsData", select: "id name rarity type icon code" })
+        .lean();
+    userprofile.inventory = {
+        items:            userInventory?.inventory         ?? [],
+        itemsData:        userInventory?.itemsData        ?? [],
+        bgInventory:      userInventory?.bgInventory       ?? [],
+        medalInventory:   userInventory?.medalInventory    ?? [],
+        stickerInventory: userInventory?.stickerInventory  ?? [],
+        skinInventory:    userInventory?.skinInventory     ?? [],
+        flairInventory:   userInventory?.flairInventory    ?? [],
+        stickerShowcase:  userInventory?.stickerShowcase   ?? [],
+        achievements:     userInventory?.achievements      ?? [],
+        fishes:           userInventory?.fishes            ?? [],
+    };
+
     let donoranks;
-    if(userprofile.donator){
-        let donators = await DB.users.find( {'switches.donateStreak.total' :{$gte: 1}},{modules:0,personal:0,eventData:0} ).lean().exec();
+    if(userprofile.prime?.tier){
+        let donators = await DB.users.find( {'switches.donateStreak.total' :{$gte: 1}},{profile:0,personal:0,eventData:0} ).lean();
         function donatorScore(dono){
             let tally =0;
             tally+= 2 * dono.switches?.donateStreak.plastic      || 0
@@ -58,15 +75,15 @@ router.get('/:endpoint', async (req, res)=> {
         image: `${HOST}/generators/pfpv.png?u=${userprofile.id}`,
         large: true,
         title: `${userDiscord.username}`,
-        color: userprofile.modules?.favcolor,
-        description: `${userprofile.modules?.persotext}`,
+        color: userprofile.profile?.color,
+        description: `${userprofile.profile?.about}`,
       }
     const oembedObj = {
         version: "1.0"
         ,type: "rich"
         //,provider_name: `📬 ${entry.userdata?.meta?.tag}`
         //,provider_url: HOST + "/shop/marketplace"
-        ,author_name: userprofile.modules?.tagline
+        ,author_name: userprofile.profile?.tagline
        //,author_url: `${HOST}/p/${userDiscord.id}`
         ,thumbnail_url: `${HOST}/p/${userDiscord.id}`
         ,url: `${HOST}/p/${userDiscord.id}`

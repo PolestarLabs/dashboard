@@ -18,7 +18,7 @@ const FANA = new Vue({
             }
 
             
-            fetch("/api/user/fanart-hearts/"+(action)+"/"+item, {
+            fetch("/api/v1/user/fanart-hearts/"+(action)+"/"+item, {
                 method: "POST",
                 headers: { "Content-Type": "application/json; charset=utf-8" }
             }).then(async res => {

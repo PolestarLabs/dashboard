@@ -3,15 +3,15 @@
 .wealth
   .rubines
     span.plx-rubine.icon32.curr_icon_3        
-    span= miliarize(userprofile.modules.RBN) || 0
+    span= miliarize(userprofile.currency.RBN) || 0
     span &#x2001;
   .jades
     span.plx-jade.icon32.curr_icon_3        
-    span= miliarize(userprofile.modules.JDE) || 0
+    span= miliarize(userprofile.currency.JDE) || 0
     span &#x2001;
   .sapphires
     span.plx-sapphire.icon32.curr_icon_3        
-    span= miliarize(userprofile.modules.SPH) || 0
+    span= miliarize(userprofile.currency.SPH) || 0
     span &#x2001;
            
 .completionist-container      
@@ -29,10 +29,10 @@
       | %
 
 .bg(plx-toggle=' target:.toggle-lateral; cls: expanded; delay: 500; mode: hover')
-  img(src="/backdrops/#{userprofile.modules.bgID}.png")    
+  img(src="/backdrops/#{userprofile.profile.background}.png")    
   .bginfo.toggle-lateral 
     span(v-if='bgData.loading')
-      span {{bgInfo(userprofile.modules.bgID)}}
+      span {{bgInfo(userprofile.profile.background)}}
       i.fas.fa-cog.fa-spin      
     span(v-else)
       .plx-rarity-icon(:class='bgData.rarity') 
@@ -46,6 +46,6 @@
           | No marketplace entries.
 
 .medals.toggle-lateral
-  each MDL in userprofile.modules.medals
+  each MDL in userprofile.profile.medals
     .medal 
       img(src="/medals/"+MDL+".png")

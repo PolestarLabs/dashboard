@@ -21,8 +21,8 @@ router.get('/', async (req,res)=>{
     //114 108
     const ctx = canvas.getContext('2d')
 
-    let color = userData.modules.favcolor;
-    let background =  await Picto.getCanvas( `${HOST}/backdrops/${userData.modules.bgID}.png` );
+    let color = userData.profile.favcolor;
+    let background =  await Picto.getCanvas( `${HOST}/backdrops/${userData.profile.bgID}.png` );
  
 
     let waves = await Picto.getCanvas(HOST + "/build/opengraph/waves.png");

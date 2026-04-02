@@ -22,7 +22,7 @@
         .plx-width-1(class="plx-width-1-3@m" style="z-index:2" ).plx-flex.plx-flex-column.plx-padding-small
             h4 Equipped Medals
             .profile-box.plx-flex.plx-flex-center.plx-flex-wrap.medals
-                each medal,i in userprofile.modules.medals || [0,0,0,0,0,0,0,0,0]
+                each medal,i in userprofile.profile.medals || [0,0,0,0,0,0,0,0,0]
                     .medal
                         if medal
                             img(src=`/medals/${medal}.png` width='33%')
@@ -43,7 +43,7 @@
         .plx-width-1(class="plx-width-1-3@m").plx-flex.plx-flex-column.plx-padding-small
             h4  Equipped Sticker
             .profile-box.sticker
-                img(src=`/stickers/${userprofile.modules.sticker||'undefined'}.png` width=200)
+                img(src=`/stickers/${userprofile.profile.sticker||'undefined'}.png` width=200)
  
                 div(v-if='sticker' :class="'plx-icon plx-icon-32 plx-rarity '+sticker.rarity")
                 span.itm-name(v-if='sticker') {{sticker.name}}

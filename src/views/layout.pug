@@ -75,13 +75,6 @@ html(class="no-js" lang=locale||"en")
         script(src="/js/login.js" async) 
         
         script var ENV = "#{ENV}"
-        script.
-            console.group('%c[PLX ENV DEBUG]', 'color:#f48;font-weight:bold;font-size:13px');
-            console.log('ENV (NODE_ENV):', "#{ENV}");
-            console.log('STAGING flag:', !{STAGING});
-            console.log('banner should show?', !{STAGING} || "#{ENV}" !== 'production');
-            console.log('ACTIVE_CLIENT:', !{JSON.stringify(ACTIVE_CLIENT || null)});
-            console.groupEnd();
         // ribbon style for staging/dev environments
         style
             | #staging-banner { position:fixed; bottom:0; left:0; right:0; background:#d9263f; color:#fff; text-align:center; padding:8px 0; font-size:14px; z-index:9999; }
@@ -124,14 +117,14 @@ html(class="no-js" lang=locale||"en")
                     button#staging-switch-btn(type="button" onclick="_stagingSwitchClient()") switch client
                 script.
                     function _stagingSwitchClient(){
-                        fetch('/api/dev/clients').then(function(r){return r.json();}).then(function(data){
+                        fetch('/api/v1/dev/clients').then(function(r){return r.json();}).then(function(data){
                             var lines = data.clients.map(function(c,i){
                                 return (i+1)+'. '+c.fname+' ['+c.name+']'+(c.id===data.activeId?' ✓':'');
                             });
                             var choice = prompt('Select active bot client:\n'+lines.join('\n'));
                             var n = parseInt(choice,10)-1;
                             if(isNaN(n)||!data.clients[n]) return;
-                            fetch('/api/dev/set-client',{
+                            fetch('/api/v1/dev/set-client',{
                                 method:'POST',
                                 headers:{'Content-Type':'application/json'},
                                 body:JSON.stringify({clientId:data.clients[n].id})

@@ -45,7 +45,7 @@ exports.run = async function (req, res, next, options={}) {
             queryString  = {type:"medal"}
             break;
         case "userstickers":
-            endpointBase = "userDB"
+            endpointBase = "users"
             queryString  = {id:userID||req.query.user}
             break;
         //case "marketplace":
@@ -53,8 +53,8 @@ exports.run = async function (req, res, next, options={}) {
         //    queryString  = {lock:{$exists:false}}
         //    break;
         case "usersrank":
-            endpointBase = "userDB"
-            queryString  = {"modules.level":{$gte:5}}
+            endpointBase = "users"
+            queryString  = {"progression.level":{$gte:5}}
             break;
         case "collection":
             _endpoint = options.collection || []
@@ -120,7 +120,7 @@ exports.run = async function (req, res, next, options={}) {
             
                     // Stage 2
                     {
-                        $lookup: {from:"userdb",localField:"author",foreignField:"id",as:"userdata"}
+                        $lookup: {from:"users",localField:"author",foreignField:"id",as:"userdata"}
                     },
             
                     // Stage 3

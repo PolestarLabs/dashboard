@@ -86,15 +86,15 @@ block content
 
                     ul.plx-flex.plx-flex-around.plx-flex-wrap.achievements
                         - var achUserData = targdata || userdata
-                        - function hasAchiev(achiev,who=achUserData){return who && who.modules.achievements && who.modules.achievements.map(x=>x.id).includes(achiev.id)}
+                        - function hasAchiev(achiev,who=achUserData){return who && who.inventory && who.inventory.achievements && who.inventory.achievements.map(x=>x.id).includes(achiev.id)}
                         each achiev in ACHDB
                             - let chk = (checks.find(chk=>chk.achievement == achiev.id)||{}).progress || {current:0, goal:1, percent:0}
                             - let current = typeof chk.current != 'number' ? !!chk.current?1:0 : chk.current
                             - let percent = current == chk.goal ? 1 : chk.percent >= 1 ? 1 : chk.percent || 0;
 
-                            .achievement.plx-width-1-1(class="plx-width-1-2@m" data-exp=achiev.tier data-progress=percent class=(hasAchiev(achiev,userdata)?"unlocked":"locked")+(achiev.reveal_level > 0 && (!userdata || userdata.modules.level < achiev.reveal_level)?" unrevealed":"" ) )
+                            .achievement.plx-width-1-1(class="plx-width-1-2@m" data-exp=achiev.tier data-progress=percent class=(hasAchiev(achiev,userdata)?"unlocked":"locked")+(achiev.reveal_level > 0 && (!userdata || userdata.progression.level < achiev.reveal_level)?" unrevealed":"" ) )
                                 .tier= achiev.tier*100 +" EXP"
-                                if  achiev.reveal_level > 0 && (!userdata || userdata.modules.level < achiev.reveal_level)
+                                if  achiev.reveal_level > 0 && (!userdata || userdata.progression.level < achiev.reveal_level)
                                     if hasAchiev(achiev,userdata)
                                         .a-icon: img(src="/build/achievements/"+(achiev.icon||"noicon")+".png")
                                         .a-title= achiev.name
@@ -117,7 +117,7 @@ block content
 
                                 if hasAchiev(achiev,achUserData)
                                     small: .a-subtitle.yep Unlocked  
-                                        span.date(data-ts= achUserData.modules.achievements.find(x=>x.id==achiev.id).unlocked)
+                                        span.date(data-ts= achUserData.inventory.achievements.find(x=>x.id==achiev.id).unlocked)
                                 else
                                     small: .a-subtitle.nope Locked
                                     

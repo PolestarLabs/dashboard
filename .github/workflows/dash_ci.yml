@@ -1,7 +1,15 @@
 name: Dashboard CI
+
 on:
   push:
-    branches: [dev, master]
+    branches: [dev, master, elysia]
+    paths:
+      - 'api/**'
+      - '!api/**'   # always run gate regardless of path
+  pull_request:
+    branches: [dev, master, elysia]
+    paths:
+      - 'api/**'
   workflow_dispatch:
     inputs:
       environment:
@@ -15,114 +23,343 @@ concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
-# ── Staging pipeline (dev branch) ──────────────────────────────────────────
-
 jobs:
-  pull-staging:
-    name: 🔁 Sync Staging
-    if: >
-      github.ref == 'refs/heads/dev' ||
-      (github.event_name == 'workflow_dispatch' && inputs.environment == 'staging')
+  gate-root:
+    name: ⛔ Root gate (dashboard deps)
+    runs-on: ubuntu-latest
     env:
-      DIR: ${{ secrets.DASH_DIR_DEV }}
-    runs-on: self-hosted
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      non_api_changed: ${{ steps.diff.outputs.non_api }}
     steps:
-      - name: Sync with repository
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compute changed paths
+        id: diff
         run: |
-          cd "$DIR"
           git fetch origin
-          git reset --hard origin/dev
+          base=$([[ "${{ github.event_name }}" == "push" ]] && echo "${{ github.event.before }}" || echo "origin/${{ github.event.pull_request.base.ref }}")
+          # verify base exists, fallback to before SHA if not
+          if ! git rev-parse --verify "$base" >/dev/null 2>&1; then
+            echo "warning: base ref '$base' not found, using event.before" >&2
+            base="${{ github.event.before }}"
+          fi
+          git diff --name-only $base ${{ github.sha }} > changed.txt
+          if grep -qv '^api/' changed.txt; then
+            echo "non_api=true" >> $GITHUB_OUTPUT
+          else
+            echo "non_api=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          registry-url: 'https://npm.pkg.github.com'
+          scope: '@polestarlabs'
+      - name: Cache root node_modules
+        id: cache
+        uses: actions/cache@v3
+        with:
+          path: |
+            **/node_modules
+            ~/.npm
+          key: ${{ runner.os }}-root-deps-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-root-deps-
+      - name: Install root deps
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-  deps-staging:
-    name: 📦 Dependencies (Staging)
-    needs: pull-staging
+
+  gate-bun:
+    name: 🧄 Bun gate (API deps)
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    outputs:
+      api_changed: ${{ steps.diff.outputs.api }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Compute changed paths
+        id: diff
+        run: |
+          git fetch origin
+          base=$([[ "${{ github.event_name }}" == "push" ]] && echo "${{ github.event.before }}" || echo "origin/${{ github.event.pull_request.base.ref }}")
+          if ! git rev-parse --verify "$base" >/dev/null 2>&1; then
+            echo "warning: base ref '$base' not found, using event.before" >&2
+            base="${{ github.event.before }}"
+          fi
+          git diff --name-only $base ${{ github.sha }} > changed.txt
+          if grep -q '^api/' changed.txt; then
+            echo "api=true" >> $GITHUB_OUTPUT
+          else
+            echo "api=false" >> $GITHUB_OUTPUT
+          fi
+      - name: Install Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install bun runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: 🐇 Install API deps (bun)
+        run: |
+          cd api
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          bun install
+
+
+  gate:
+    name: ✅ Combined gate
+    needs: [gate-root, gate-bun]
+    runs-on: ubuntu-latest
+    outputs:
+      non_api_changed: ${{ needs.gate-root.outputs.non_api_changed }}
+      api_changed: ${{ needs.gate-bun.outputs.api_changed }}
+    steps:
+      - name: final gate check
+        run: echo "Gate jobs completed successfully"
+
+  typecheck:
+    name: 🧠 Run TypeScript typecheck
+    needs: [build-dist, elysia-check]
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install API deps
+        run: |
+          cd api
+          # authenticate npm registry for private @polestarlabs packages
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}" > ~/.npmrc
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          bun install
+      - name: Type-check API
+        run: |
+          cd api
+          bun run typecheck
+      # this job is informational only; other jobs do not depend on it
+
+  build-dist:
+    name: 📦 Build Elysia API bundle
+    needs: gate-bun
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install API deps
+        run: |
+          cd api
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          bun install
+      - name: Build bundle
+        run: |
+          cd api
+          bun build src/index.ts --bundle --target=bun --format=cjs --outdir=dist
+      - name: Upload bundle artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: elysia-bundle
+          path: api/dist
+
+  sanity-tests:
+    name: 🔬 API sanity tests
+    needs: [build-dist, elysia-check]
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install API deps
+        run: |
+          cd api
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          bun install
+      - name: Run sanity suite
+        run: |
+          cd api
+          bun run test:sanity
+      - name: Upload fixtures artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: sanity-fixtures
+          path: api/src/__tests__/img/fixtures
+
+  full-tests:
+    name: ✅ API full tests
+    needs: sanity-tests
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Install Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Download fixtures
+        uses: actions/download-artifact@v4
+        with:
+          name: sanity-fixtures
+          path: api/src/__tests__/img/fixtures
+      - name: Install API deps
+        run: |
+          cd api
+          # configure git for private git deps
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          bun install
+      - name: Run full API tests
+        run: |
+          cd api
+          bun test
+
+
+  fastlane:
+    name: 🚄 Fastlane label control
+    runs-on: ubuntu-latest
+    # only run this job when the PR has the fastlane label
+    if: >-
+      github.event_name == 'pull_request' &&
+      contains(github.event.pull_request.labels.*.name, 'fastlane')
+    steps:
+      - name: label present
+        run: echo "fastlane label present; job executed"
+
+  staging:
+    needs: gate-root
+    uses: ./.github/workflows/staging.yml
+    secrets: inherit
+    if: > 
+      contains(github.event.pull_request.labels.*.name, 'fastlane')
+
+  production:
+    needs: gate
+    uses: ./.github/workflows/production.yml
+    secrets: inherit
+    if: >
+      needs.gate.outputs.non_api_changed == 'true' && github.event_name == 'push' && github.ref == 'refs/heads/master'
+  
+  elysia-check:
+    needs: gate-bun
+    name: ✨ Elysia deps & postinstall
+    runs-on: ubuntu-latest
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Install bun runtime
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - name: Install API deps (bun)
+        run: |
+          cd api
+          # configure git for private git deps
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          bun install
+      - name: Run postinstall
+        run: |
+          cd api
+          bun ./scripts/postinstall.js
+
+
+
+  elysia-deploy:
+    name: 🎈 Elysia deploy → staging
+    needs: [elysia-check,build-dist]
     runs-on: self-hosted
+    environment:
+      name: staging
+      url: https://api-staging.pollux.gg/docs
     env:
       DIR: ${{ secrets.DASH_DIR_DEV }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - name: Backup current state
         run: |
           cd "$DIR"
-          echo "saving current commit hash"
           git rev-parse HEAD > /tmp/oldrev
-          echo "archiving node_modules"
           tar -czf /tmp/node_modules.tar.gz node_modules || true
-
-      - name: Install dev dependencies
+      - name: Sync api folder
         run: |
           set -e
-          cd "$DIR"
-          npm install --include=dev
-
-      - name: Install all dependencies
-        run: |
-          set -e
-          cd "$DIR"
-          npm install
-
-      - name: Rollback on failure
-        if: failure()
-        run: |
-          cd "$DIR"
-          echo "deployment failed, restoring previous node_modules and tag"
-          tar -xzf /tmp/node_modules.tar.gz
-          git checkout $(cat /tmp/oldrev)
-          exit 1
-
-  deploy-staging:
-    name: 🧪 Deploy → Staging
-    needs: deps-staging
-    runs-on: self-hosted
-    environment:
-      name: "staging"
-      url: https://staging.pollux.gg
-    steps:
-      - name: Reload PM2 staging processes
-        run: |
-          if /home/pollux/polaris/scripts/server-deploy.sh dashboard staging; then
-            echo "deploy succeeded"
-          else
-            echo "deploy failed, rolling back code and deps"
-            cd "${{ secrets.DASH_DIR_DEV }}"
-            tar -xzf /tmp/node_modules.tar.gz
-            git checkout $(cat /tmp/oldrev)
-            exit 1
-          fi
-
-  # ── Production pipeline (master branch) ──────────────────────────────────
-
-  pull-production:
-    name: 🔁 Sync Production
-    if: >
-      github.ref == 'refs/heads/master' ||
-      (github.event_name == 'workflow_dispatch' && inputs.environment == 'production')
-    env:
-      DIR: ${{ secrets.DASH_DIR_PROD }}
-    runs-on: self-hosted
-    steps:
-      - name: Sync with repository
-        run: |
           cd "$DIR"
           git fetch origin
-          git reset --hard origin/master
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # pull the PR head directly
+            prref=${{ github.event.pull_request.head.ref }}
+            git fetch origin "$prref":"pr-head"
+            git reset --hard pr-head
+          else
+            git reset --hard origin/dev
+          fi
+      - name: Install API deps
+        run: |
+          cd "$DIR"/api
+          # ensure git can fetch private repos
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global url."https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/".insteadOf "git@github.com:"
+          bun install
 
-  deps-production:
-    name: 📦 Dependencies (Production)
-    needs: pull-production
-    runs-on: self-hosted
-    env:
-      DIR: ${{ secrets.DASH_DIR_PROD }}
-    steps:
-      - name: Backup current state
+      - name: Build
         run: |
-          cd "$DIR"
-          git rev-parse HEAD > /tmp/oldrev
-          tar -czf /tmp/node_modules.tar.gz node_modules || true
-      - name: Install all dependencies
+          cd "$DIR"/api
+          bun build src/index.ts --bundle --target=bun --format=cjs --outdir=dist
+      #- name: Restart api-dev
+        #run: pm2 restart api-dev
+      - name: Run deploy script
         run: |
-          set -e
-          cd "$DIR"
-          npm install
+          current=$(git -C "${{ secrets.DASH_DIR_DEV }}" rev-parse HEAD)
+          /home/pollux/polaris/scripts/server-deploy.sh dashboard staging "$current"
+          
       - name: Rollback on failure
         if: failure()
         run: |
@@ -130,23 +367,3 @@ jobs:
           tar -xzf /tmp/node_modules.tar.gz
           git checkout $(cat /tmp/oldrev)
           exit 1
-
-  deploy-production:
-    name: 🚀 Deploy → Production
-    needs: deps-production
-    runs-on: self-hosted
-    environment:
-      name: "live"
-      url: https://pollux.gg
-    steps:
-      - name: Reload PM2 production processes
-        run: |
-          if /home/pollux/polaris/scripts/server-deploy.sh dashboard production; then
-            echo "deploy succeeded"
-          else
-            echo "deploy failed, rolling back code and deps"
-            cd "${{ secrets.DASH_DIR_PROD }}"
-            tar -xzf /tmp/node_modules.tar.gz
-            git checkout $(cat /tmp/oldrev)
-            exit 1
-          fi

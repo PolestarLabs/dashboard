@@ -95,11 +95,10 @@ if (!userDiscordData) return res.status(500).json("NO DISCORD USER DATA");
       ITEM
     );
     if (result.res === true) {
-      const finder = (DATA.itemStatus || {}).prequery || result.prequery || { id: PAYLOAD.author };
+      const finder = (DATA.itemStatus || {}).prequery || result.prequery || { userId: PAYLOAD.author };
       const action = (DATA.itemStatus || {}).query || result.query;
-
       if (finder === {}) return res.status(400).json("Dangerous Query Result");
-      await DB.users.updateOne(finder,action);
+      await DB.userInventory.updateOne(finder, action);
       await ECO.pay(PAYLOAD.author, PAYLOAD.currency == 'RBN' ? (PAYLOAD.price*.15) : 2 ,"Marketplace Listing Fee", PAYLOAD.currency);
 
     } else {
@@ -263,7 +262,7 @@ router.post("/buy/:entry_id", async (req,res)=>{
   if(sale) {
     ECO.transfer(CURRENT_USER.id,entry.author,entry.price,'MARKETPLACE [PURCHASE]',entry.currency)
     .then(async receipt=>{
-      DB.users.set({id: CURRENT_USER.id},{$inc: {  "modules.exp": ~~(entry.price/12) } });
+      DB.users.set({id: CURRENT_USER.id},{$inc: {  "progression.exp": ~~(entry.price/12) } });
       await ECO.pay(entry.author, Math.ceil(entry.price * 0.02) ,"Marketplace Trade Cut", entry.currency);
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       if(entry.feedMessage){
@@ -327,7 +326,7 @@ router.post("/sell/:entry_id", async (req,res)=>{
     ECO.arbitraryAudit(entry.author, CURRENT_USER.id, entry.price, 'MARKETPLACE [SALE]', entry.currency)
     .then(async receipt=>{
       await ECO.pay(CURRENT_USER.id, Math.ceil(entry.price * 0.05) ,"Marketplace Trade Cut", entry.currency);
-      await DB.users.set(CURRENT_USER.id, {$inc: { "modules.exp": ~~(entry.price/100) , ["modules." + entry.currency]:entry.price} });
+      await DB.users.set(CURRENT_USER.id, {$inc: { "progression.exp": ~~(entry.price/100) , ["currency." + entry.currency]:entry.price} });
       await DB.marketplace.updateOne({ id: entry_id },{$set: {completed: true}});
       
       //TODO[epic=anyone] Emit notification to the seller;
@@ -423,34 +422,45 @@ router.get(["/","/:entry"],  async (req, res) => {
     .sort({ timestamp: sort })
     .limit(lim)
     .skip(skip)
+    .noCache()
     .then(async (result) => {
-      console.log({result})
-      let [marketeers, cosmetics, goods] = await Promise.all([
+      const allData = await Promise.all([
        
         Promise.all(result.map(async (i) => await userCache.get(i.author).timeout(300).catch(async e=>{
-          const user = await DB.users.get(i.author);
-          return user.connections?.discord || user.discordData || { }
+          const userOAuthData = await DB.userOAuth.get(i.author).catch(() => null);
+          const userDiscordData = userOAuthData?.discordIdentityCache || {};
+
+          return userDiscordData.id ? userDiscordData : { id: i.author, username: "Unknown", avatar: "", meta: {} }
         })  ) ),
         DB.cosmetics
           .find({ _id: { $in: result.map((i) => i.item_id).filter(x=> parseInt(x) && x.length == 24) } }).lean()
           .catch((e) => []),
         DB.items
           .find({ _id: { $in: result.map((i) => i.item_id).filter(x=> parseInt(x) && x.length == 24) } }).lean()
-          .catch((e) =>  console.error(e) ),
+          .catch((e) => { console.error(e); return []; }),
       ]).catch((err) => {
         console.error(result.map((i) => i.item_id));
+        console.error({err});
         res.status(500).send("ERROR");
+        return null;
       });
 
+      if (!allData) return;
+      let [marketeers, cosmetics, goods] = allData;
+
       let newThing = result.map((entry) => {
+        // try to resolve user data, fall back to minimal stub if missing
+        const found = marketeers.find((u) => u?.id === entry.author);
+        const userdata =
+          found || { id: entry.author, username: "Unknown", avatar: "", meta: {} };
         return Object.assign(
           {
             itemdata: cosmetics
               .concat(goods)
               .find((i) => i._id == entry.item_id),
           },
-          { userdata: marketeers.find((u) => u.id === entry.author) },
-          entry._doc
+          { userdata },
+          entry
         );
       });
 
@@ -465,41 +475,29 @@ router.get(["/","/:entry"],  async (req, res) => {
 
 //SECTION FUNCTIONS
 
-async function awardMarketplaceItem(item,userID,remove){
-  let query = {};
-  let errorQuery = {};
-  let finder = {id: userID}
-  let operation = remove ? "$pull" : "$addToSet";
-
-  switch(item.type){
+async function awardMarketplaceItem(item, userID, remove) {
+  const operation = remove ? "$pull" : "$addToSet";
+  switch (item.type) {
     case "background":
-      query[operation]= {'modules.bgInventory': item.code};
-      break;
+      return DB.userInventory.set(userID, { [operation]: { bgInventory: item.code } }).then(() => true).catch(() => false);
     case "medal":
-      query[operation]= {'modules.medalInventory': item.icon};
-      break;
+      return DB.userInventory.set(userID, { [operation]: { medalInventory: item.icon } }).then(() => true).catch(() => false);
     case "sticker":
-      query[operation]= {'modules.stickerInventory': item.id};
-      break;
     case "flair":
-      query[operation]= {'modules.stickerInventory': item.id};
-      break;
-    default:       
-      finder['modules.inventory.id'] = item.id;
-      query = {$inc: {'modules.inventory.$.count': (remove ? -1 : 1) } };
-      errorQuery = {$push: {'modules.inventory': {id: item.id, count: 1} } };
+      return DB.userInventory.set(userID, { [operation]: { stickerInventory: item.id } }).then(() => true).catch(() => false);
+    default: {
+      const delta = remove ? -1 : 1;
+      const r = await DB.userInventory.set(
+        userID,
+        { $inc: { "inventory.$[item].count": delta } },
+        { arrayFilters: [{ "item.id": item.id }] }
+      ).catch(() => null);
+      if (r?.modifiedCount > 0) return true;
+      return DB.userInventory.set(userID, { $push: { inventory: { id: item.id, count: 1 } } })
+        .then(() => true)
+        .catch(err => { console.error(err, "Market error".bgRed); return false; });
+    }
   }
-  
-  let res = await DB.users.set( finder, query ).catch(err=> {
-      if (errorQuery) {
-        delete finder['modules.inventory.id'];
-        return DB.users.set( finder, errorQuery ).catch(err2=>console.error(err2,"Market error".bgRed) && null);
-      }
-      console.error(err) && null;
-  });
-  
-  if (res) return true;
-  else return false;
 }
 
 async function processFeedMessage(entry, item, CURRENT_USER) {
@@ -597,20 +595,18 @@ function getItemMarketDetails(item) {
 }
 
 // might need refactor
-function itemInInventory(item, userData) {
+function itemInInventory(item, cosmeticsData) {
   let res = false;
   let reason = "UNKNOWN";
   let status = 400;
   let query = {};
   let prequery;
 
-
   if (["junk", "boosterpack", "key", "material", "consumable"].includes(item.type)){
-    
-    if ( userData.modules.inventory.find(it=>it.id === item.id)?.count > 0 ) {
+    if ( cosmeticsData?.inventory?.find(it=>it.id === item.id)?.count > 0 ) {
       res = true;
-      prequery = { id: userData.id, "modules.inventory.id": item.id };
-      query = { $inc: { "modules.inventory.$.count": -1 } };
+      prequery = { userId: cosmeticsData.userId, "inventory.id": item.id };
+      query = { $inc: { "inventory.$.count": -1 } };
     }else{
       res = false;
       reason = "ITEM NOT IN INVENTORY";
@@ -618,46 +614,46 @@ function itemInInventory(item, userData) {
     }
   }
   if (item.type === "background") {
-    if (!userData.modules.bgInventory.includes(item.code)) {
+    if (!cosmeticsData?.bgInventory?.includes(item.code)) {
       res = false;
       reason = "BACKGROUND NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "modules.bgInventory": item.code } };
+      query = { $pull: { bgInventory: item.code } };
       res = true;
     }
   }
   if (item.type === "medal") {
-    if (!userData.modules.medalInventory.includes(item.icon)) {
+    if (!cosmeticsData?.medalInventory?.includes(item.icon)) {
       res = false;
       reason = "MEDAL NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "modules.medalInventory": item.icon } };
+      query = { $pull: { medalInventory: item.icon } };
       res = true;
     }
   }
   if (item.type === "skin") {
-    if (!userData.modules.skinInventory.includes(item.id)) {
+    if (!cosmeticsData?.skinInventory?.includes(item.id)) {
       res = false;
       reason = "SKIN NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "modules.skinInventory": item.id } };
+      query = { $pull: { skinInventory: item.id } };
       res = true;
     }
   }
   if (item.type === "sticker") {
-    if (!userData.modules.stickerInventory.includes(item.id)) {
+    if (!cosmeticsData?.stickerInventory?.includes(item.id)) {
       res = false;
       reason = "STICKER NOT IN INVENTORY";
       status = 404;
     }
     else {
-      query = { $pull: { "modules.stickerInventory": item.id } };
+      query = { $pull: { stickerInventory: item.id } };
       res = true;
     }
   }
@@ -665,26 +661,25 @@ function itemInInventory(item, userData) {
 }
 // might need refactor
 async function userCanSell(id, PAYLOAD, item, softCheck=false) {
-
-  const userData = await DB.users.findOne({id}).noCache();
-  
+  const [userData, cosmeticsData] = await Promise.all([
+    DB.users.findOne({id}).noCache(),
+    DB.userInventory.get(id),
+  ]);
 
   if (!softCheck){
-    if (!(await DB.users.get(id)))
+    if (!userData)
       return { res: false, reason: "USER NOT FOUND", status: 401 };
 
     if (!(await ECO.checkFunds(id, PAYLOAD.currency === "SPH" ? (2 + ~~(PAYLOAD.price*0.05)) : (PAYLOAD.price*.15) , PAYLOAD.currency)))
       return { res: false, reason: "NO INITIAL FUNDS", status: 422 };
-    if (userData.amtItem("sph-license") < 1 && PAYLOAD.currency === "SPH") {
+    if ((cosmeticsData?.inventory?.find(it=>it.id==="sph-license")?.count || 0) < 1 && PAYLOAD.currency === "SPH") {
       res = false;
       reason = "NO SAPPHIRE LICENSE";
       status = 401;
     }
   }
 
- 
-
-  let { res, reason, status, prequery, query } = await itemInInventory(item, userData);
+  let { res, reason, status, prequery, query } = itemInInventory(item, cosmeticsData);
 
   if( !isTradeable(item) ){
     res = false;
@@ -700,8 +695,8 @@ async function userCanBuy(userId, currency, price, item) {
     reason = "UNKNOWN",
     status = 200;
 
-  const userData = await DB.users.findOne({id:userId}).noCache();
-  let itemInInv = itemInInventory(item, userData);
+  const cosmeticsData = await DB.userInventory.get(userId);
+  let itemInInv = itemInInventory(item, cosmeticsData);
 
   if( itemInInv.res ){
     if(['background','medal','sticker','flair','skin'].includes(item.type)){     

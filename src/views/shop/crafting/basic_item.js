@@ -20,7 +20,7 @@ var items = [
         this.tooltip = {loading:true};
         let konoitem = this.items.find(x=> x.id == item.id);
         console.log({konoitem,item,inv:this.items})
-        fetch("/api/items/"+item.id).then((r) => r.json().then((res) => (this.tooltip = res)));
+        fetch("/api/v1/v1/items/"+item.id).then((r) => r.json().then((res) => (this.tooltip = res)));
         
       },
 
@@ -77,4 +77,4 @@ var items = [
     }
   })
 
-  fetch("/api/items/search?craftables=1&type=material").then((r) => r.json().then((res) => (BASIC_MATS.items = res)));
+  fetch("/api/v1/items/search?craftables=1&type=material").then((r) => r.json().then((res) => (BASIC_MATS.items = res)));

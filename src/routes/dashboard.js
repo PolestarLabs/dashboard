@@ -59,7 +59,7 @@ router.post('/imgbookmarks/expand', async (req,res)=>{
     try{
         if(!req.user) return res.sendStatus(401);
         let userdata = await DB.users.get(req.user.id);
-        if(userdata.modules.SPH < 3) return res.status(403).send('Insufficient Funds');
+        if(userdata.currency.SPH < 3) return res.status(403).send('Insufficient Funds');
         if(!userdata.switches || userdata.switches.booruSlots === undefined ){
             await DB.users.set(req.user.id,{$set: {"switches.booruSlots":25} });
         }        
@@ -77,10 +77,10 @@ router.post('/imgbookmarks/shrink', async (req,res)=>{
         if(!req.user) return res.sendStatus(401);
         let userdata = await DB.users.get(req.user.id);        
         if(!userdata.switches || userdata.switches.booruSlots === undefined ){
-             userdata = await DB.users.findOneAndUpdate({id:req.user.id},{$set: {"switches.booruSlots":25} }).lean().exec();
+             userdata = await DB.users.findOneAndUpdate({id:req.user.id},{$set: {"switches.booruSlots":25} }).lean();
         }        
-        if (userdata.switches.booruSlots+userdata.modules.level <= 3) return res.status(403).send("No more slots!");
-        let reduce = (userdata.switches.booruSlots+userdata.modules.level) < 10 ? (userdata.switches.booruSlots+userdata.modules.level) : 10; 
+        if (userdata.switches.booruSlots+userdata.progression.level <= 3) return res.status(403).send("No more slots!");
+        let reduce = (userdata.switches.booruSlots+userdata.progression.level) < 10 ? (userdata.switches.booruSlots+userdata.progression.level) : 10; 
 
         await ECO.receive(req.user.id,2,'sell_gallery_slots','SPH');
         return DB.users.set(req.user.id,{$inc: {"switches.booruSlots":-reduce} })
@@ -191,13 +191,16 @@ router.patch("/misc/:endpoint", async (req,res)=>{
     const UID = req.user.id;
     const _endpt = req.params.endpoint;
     const payload = req.body
-    const USERDATA = await DB.users.get(UID);
+    const [USERDATA, cosmeticsData] = await Promise.all([
+        DB.users.get(UID),
+        DB.userInventory.get(UID),
+    ]);
 
 
-    
+
     if (_endpt == "skin"){
-        if (payload.skinId!='default' && !USERDATA.modules.skinInventory.includes(payload.skinFor+"_"+payload.skinId)) return res.status(403).json("INVALID SKIN");
-        return DB.users.set(UID, {$set: {["modules.skins."+payload.skinFor] : payload.skinId } } ).then(()=> res.sendStatus(200) ).catch(e=> res.status(500).send(e) );
+        if (payload.skinId!='default' && !cosmeticsData?.skinInventory?.includes(payload.skinFor+"_"+payload.skinId)) return res.status(403).json("INVALID SKIN");
+        return DB.users.set(UID, {$set: {["profile.skins."+payload.skinFor] : payload.skinId } } ).then(()=> res.sendStatus(200) ).catch(e=> res.status(500).send(e) );
     }
     
     if (_endpt == "attr"){
@@ -219,15 +222,18 @@ router.patch("/profile/:endpoint", async (req,res)=>{
     const _endpt = req.params.endpoint;
     const payload = req.body.data
 
-    if (_endpt == "tagline")     return DB.users.set(UID, {$set: {"modules.tagline" : payload} } ).then(()=> res.sendStatus(200) );
-    if (_endpt == "personaltxt") return DB.users.set(UID, {$set: {"modules.persotext" : payload} } ).then(()=> res.sendStatus(200) );
+    if (_endpt == "tagline")     return DB.users.set(UID, {$set: {"profile.tagline" : payload} } ).then(()=> res.sendStatus(200) );
+    if (_endpt == "personaltxt") return DB.users.set(UID, {$set: {"profile.persotext" : payload} } ).then(()=> res.sendStatus(200) );
     if (_endpt == "frame")       return DB.users.set(UID, {$set: {"switches.profileFrame" : payload} } ).then(()=> res.sendStatus(200) );
 
 
 
     console.log(UID)
-    const USERDATA = await DB.users.get(UID);
-    if(!USERDATA.modules) return res.status(400).send("Incomplete UserData");
+    const [USERDATA, cosmeticsData] = await Promise.all([
+        DB.users.get(UID),
+        DB.userInventory.get(UID),
+    ]);
+    if(!USERDATA.profile) return res.status(400).send("Incomplete UserData");
 
 
     const invalidPayload = (pld) => res.status(403).send("INVALID PAYLOAD: "+payload)
@@ -238,42 +244,41 @@ router.patch("/profile/:endpoint", async (req,res)=>{
         console.log("Global Progression Emit: Edit Profile")
     }
     
-    //traditional
     if (_endpt == "background-legacy"){
-        if (!USERDATA.modules.bgInventory.includes(payload)) return invalidPayload(payload);
-        return DB.users.set(UID, {$set: {"modules.bgID" : payload} } ).then(()=> res.sendStatus(200) );
+        if (!cosmeticsData?.bgInventory?.includes(payload)) return invalidPayload(payload);
+        return DB.users.set(UID, {$set: {"profile.bgID" : payload} } ).then(()=> res.sendStatus(200) );
     }
     //positional
     if (_endpt == "background"){
-        if (payload === -2 && USERDATA.donator){
-            return DB.users.set(UID, {$set: {"modules.bgID" : UID} } ).then(()=> res.status(200).send("Saved! "+payload) );    
+        if (payload === -2 && USERDATA.prime?.tier){
+            return DB.users.set(UID, {$set: {"profile.bgID" : UID} } ).then(()=> res.status(200).send("Saved! "+payload) );
         }
-        if (!Number(payload+1) || USERDATA.modules.bgInventory.length <= Number(payload) ) return invalidPayload("Index out of Range");
-        return DB.users.set(UID, {$set: {"modules.bgID" : USERDATA.modules.bgInventory[payload]} } ).then(()=> res.status(200).send("Saved! "+payload) );
+        if (!Number(payload+1) || (cosmeticsData?.bgInventory?.length || 0) <= Number(payload) ) return invalidPayload("Index out of Range");
+        return DB.users.set(UID, {$set: {"profile.bgID" : cosmeticsData?.bgInventory?.[payload]} } ).then(()=> res.status(200).send("Saved! "+payload) );
     }
 
     if (_endpt == "flair"){
-        if (payload!="default" && !USERDATA.modules.flairsInventory.includes(payload)) return invalidPayload(payload);
-        return DB.users.set(UID, {$set: {"modules.flairTop" : payload} } ).then(()=> res.sendStatus(200) );
+        if (payload!="default" && !cosmeticsData?.flairInventory?.includes(payload)) return invalidPayload(payload);
+        return DB.users.set(UID, {$set: {"profile.flairTop" : payload} } ).then(()=> res.sendStatus(200) );
     }
 
     if (_endpt == "medal"){
         let [medal,index] = payload.split(',');
-        if (medal!="0" && !USERDATA.modules.medalInventory.includes(medal)) return invalidPayload(payload);
-        return DB.users.set(UID, {$set: {[`modules.medal.${index}`] : medal} } ).then(()=> res.sendStatus(200) );
+        if (medal!="0" && !cosmeticsData?.medalInventory?.includes(medal)) return invalidPayload(payload);
+        return DB.users.set(UID, {$set: {[`profile.medals.${index}`] : medal} } ).then(()=> res.sendStatus(200) );
     }
 
     if (_endpt == "sticker"){
-        if (payload && !USERDATA.modules.stickerInventory.includes(payload)) return invalidPayload(payload);
-        return DB.users.set(UID, {$set: {"modules.sticker" : payload} } ).then(()=> res.sendStatus(200) );
+        if (payload && !cosmeticsData?.stickerInventory?.includes(payload)) return invalidPayload(payload);
+        return DB.users.set(UID, {$set: {"profile.sticker" : payload} } ).then(()=> res.sendStatus(200) );
     }
 
     if (_endpt == "color"){
-        return DB.users.set(UID, {$set: {"modules.favcolor" : payload} } ).then(()=> res.sendStatus(200) );
+        return DB.users.set(UID, {$set: {"profile.favcolor" : payload} } ).then(()=> res.sendStatus(200) );
     }
 
     if (_endpt == "wife"){
-        return DB.users.set(UID, {$set: {"featuredMarriage" : payload} } ).then(()=> res.sendStatus(200) );
+        return DB.users.set(UID, {$set: {"profile.featuredMarriage" : payload} } ).then(()=> res.sendStatus(200) );
     }
 
 
@@ -287,16 +292,19 @@ router.put('/profile/medals', async (req,res)=>{
         
 
         const UID = req.user.id;
-        const USERDATA = await DB.users.get(UID);
-        
+        const [USERDATA, cosmeticsData] = await Promise.all([
+            DB.users.get(UID),
+            DB.userInventory.get(UID),
+        ]);
+
         let payload = req.body.map((v,i,a) => a.indexOf(v) == i ?v:v=="0"?0:0);
         payload = payload.map((medal,i,pld) => (
-            USERDATA.modules.medalInventory.includes(medal)||
-            USERDATA.modules.achievements.includes(medal)) ||
-            pld.indexOf(medal) === i 
+            cosmeticsData?.medalInventory?.includes(medal)||
+            cosmeticsData?.achievements?.includes(medal)) ||
+            pld.indexOf(medal) === i
             ? medal : 0 );
             console.log(payload)
-            return DB.users.set(UID, {$set: {"modules.medals" : payload} } ).then(()=> res.sendStatus(200) );
+            return DB.users.set(UID, {$set: {"profile.medals" : payload} } ).then(()=> res.sendStatus(200) );
     }catch(e){
         console.error(e)
         res.status(500).json(e.message)

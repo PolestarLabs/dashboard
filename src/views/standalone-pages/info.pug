@@ -578,12 +578,12 @@ block scripts
          
             }
         })
-        fetch("/api/user/search?donator=exists").then((r) =>
+        fetch("/api/v1/user/search?donator=exists").then((r) =>
             r.json().then(async (res) => (STAFF.donos= shuffle(res) ))
         );
         STAFF.staffMembers.forEach(async (user)=>{
             
-            fetch("/api/user/"+user.id).then((r) =>
+            fetch("/api/v1/user/"+user.id).then((r) =>
                 r.json().then(async (res) => (STAFF.updateStaff(user.id,res) ))
             );
         })

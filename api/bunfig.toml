@@ -1,0 +1,16 @@
+# Bun configuration for pollux-core-api
+[run]
+# Allow top-level await (default in Bun — explicit for clarity)
+bun = true
+
+[install]
+# Respect the lockfile on CI
+frozenLockfile = false
+
+[alias]
+"@plugins/*" = "src/plugins/*"
+"@routes/*" = "src/routes/*"
+"@helpers/*" = "src/helpers/*"
+"@definitions/*" = "src/definitions/*"
+"@services/*" = "src/services/*"
+"@schemas/*" = "src/schemas/*"

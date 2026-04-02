@@ -19,7 +19,7 @@ style
             | If you don't feel like using this feature, you can sell your slots and <b>receive 2 Sapphires</b> for every 10 of them!
 
         .plx-flex.plx-flex-center.plx-flex-wrap(style="align-items:center")
-            -let BSLOTS = -1 + userdata.modules.level + ((userdata.switches||{booruSlots:25}).booruSlots + 1 || 26 )
+            -let BSLOTS = -1 + userdata.progression.level + ((userdata.switches||{booruSlots:25}).booruSlots + 1 || 26 )
             span.plx-margin-bottom Your Collection: (#{boorucollection.length}/<span id='booruslots'>#{ BSLOTS }</span>)
             span &#x2003
             span.plx-text-center

@@ -1,0 +1,65 @@
+name: Deploy Production
+
+on:
+  workflow_call:
+
+jobs:
+  pull-production:
+    name: 🔄️ Sync Production
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_PROD }}
+    steps:
+      - name: Backup current state
+        run: |
+          cd "$DIR"
+          git rev-parse HEAD > /tmp/oldrev
+          tar -czf /tmp/node_modules.tar.gz node_modules || true
+      - name: Sync repo
+        run: |
+          cd "$DIR"
+          git fetch origin
+          git reset --hard origin/master
+
+  deps-production:
+    name: 📦 Dependencies (Production)
+    runs-on: self-hosted
+    needs: pull-production
+    env:
+      DIR: ${{ secrets.DASH_DIR_PROD }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Install dependencies
+        run: |
+          set -e
+          cd "$DIR"
+          npm install
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          cd "$DIR"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1
+
+  deploy-production:
+    name: 🚀 Deploy → Production
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    environment:
+      name: "live"
+      url: https://pollux.gg
+    runs-on: self-hosted
+    needs: deps-production
+    steps:
+      - name: Run deploy script
+        run: |
+          /home/pollux/polaris/scripts/server-deploy.sh dashboard production
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "rolling back code and dependencies"
+          cd "$DIR"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1

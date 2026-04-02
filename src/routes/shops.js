@@ -73,7 +73,6 @@ router.get(["/backgrounds","/bgs","bgshop"], async function (req, res) {
   delete require.cache[require.resolve('./paginate')];
   
   const bgBase =  await DB.cosmetics.find({type:"background",public:true,exclusive:{$exists:false}}).limit(50);
-  console.log(bgBase.length)
   
   res.render('shop/bgshop/bgshop',{
     bgBase,
@@ -88,7 +87,7 @@ router.get(["/backgrounds","/bgs","bgshop"], async function (req, res) {
 router.get(["/premium","/cash","prime"], async function (req, res) {
   delete require.cache[require.resolve('./paginate')];
   
-  const base =  await DB.buyables.find({available:true}).limit(50).lean().exec();
+  const base =  await DB.buyables.find({available:true}).limit(50).lean();
  
   res.render('shop/premium/main',{
     base,
@@ -104,29 +103,27 @@ router.get("/marketplace", async function (req, res) {
     delete require.cache[require.resolve('./paginate')];      
     await refreshBases();
     req.app.locals.fullbase = fullbase
-    let marketplace = await DB.marketplace.find({}).lean().exec();
-    let marketeers = await DB.users.find({id:{$in:marketplace.map(i=>i.author)}},{meta:1,id:1}).lean().exec()
+    // Use authorData virtual instead of separate users query + in-memory join.
+    let marketplace = await DB.marketplace.find({}).populate({ path: "authorData", select: "id meta" }).lean();
     let item, opengraph={};    
 
     // THIS PIECE IS PROBS DEPRECATED
     if(req.query.ff){
-      let ff = req.query.ff
-        entry = marketplace.find(x=>x.id==ff)
-        let authordata
-        if(entry){
-          let authordata = marketeers.find(x=>x.id==entry.author);
-          let item = fullbase.find(x=> x.id == entry.item_id && x.type == entry.item_type );
-          if (item){
-            console.log(item)
-            opengraph.title = `[${item.rarity}] ${item.name} (${item.type}) `
-            opengraph.sitename = ((authordata||{}).meta||{}).tag||"-no author-"
-            opengraph.description = `Posted by ${authordata.meta.tag} | <b>Price: ${entry.price} ${entry.currency}</b>`
-            opengraph.image = ROOT+item.img
-            opengraph.type = "arcticle"
-            opengraph.ts = new Date(entry.timestamp).toISOString()
-          }
+      const ff = req.query.ff;
+      const entry = marketplace.find(x=>x.id==ff);
+      if(entry){
+        const authordata = entry.authorData;
+        const itemFromBase = fullbase.find(x=> x.id == entry.item_id && x.type == entry.item_type );
+        if (itemFromBase){
+          opengraph.title = `[${itemFromBase.rarity}] ${itemFromBase.name} (${itemFromBase.type}) `
+          opengraph.sitename = ((authordata||{}).meta||{}).tag||"-no author-"
+          opengraph.description = `Posted by ${(authordata&&authordata.meta&&authordata.meta.tag)||"?"} | <b>Price: ${entry.price} ${entry.currency}</b>`
+          opengraph.image = ROOT+itemFromBase.img
+          opengraph.type = "arcticle"
+          opengraph.ts = new Date(entry.timestamp).toISOString()
         }
       }
+    }
     opengraph.image =    `${HOST}/build/opengraph/marketplace.png`
     opengraph.title =    "Player Marketplace"
     opengraph.description =    `🛍️ Buy and sell items from/to other players! 🛒 Over ${marketplace.length} items are been traded here. 🏪`,
@@ -145,12 +142,12 @@ router.get("/marketplace", async function (req, res) {
 })
 
 router.get("/marketplace/entry/:id", async function (req, res, _404) {
-  let ff = req.params.id  
-  let entry = await DB.marketplace.findOne({id:ff});
-  
-  if(!entry) return _404();
+  const ff = req.params.id;
+  let entry = await DB.marketplace.findOne({ id: ff }).populate({ path: "authorData", select: "id meta" });
+  if (!entry) return _404();
   if (entry.lock || entry.completed) {
-    let marketplace = await DB.marketplace.find({}).lean().exec();
+    if (entry.authorData) entry.userdata = entry.authorData;
+    let marketplace = await DB.marketplace.find({}).lean();
     const opengraph = {}
     opengraph.title = `🔴 This entry is gone! 🔴`
     opengraph.description = `Don't worry! You can still browse more items in the marketplace`
@@ -188,7 +185,7 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
     
         // Stage 3
         {
-          $lookup: {from:"userdb",localField:"author",foreignField:"id",as:"userdata"}
+          $lookup: {from:"users",localField:"author",foreignField:"id",as:"userdata"}
         },
     
         // Stage 4
@@ -276,11 +273,6 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
 
   let listings = marketplace.filter(it=>it.item_id.toString() == entry.item_id && !it.lock);
   let morefrom = marketplace.filter(it=>it.author == entry.author && !it.lock);
-  console.log({marketplace})
-  console.log({listings})
-  console.log({entry},'from payload')
-  entry = listings.find(x=>x.id==entry.id)
-  console.log({entry},'from db')
   
   if (entry) {
     let item = entry.itemdata // fullbase.find(it=> it.id == entry.item_id && it.type == entry.item_type);
@@ -327,12 +319,10 @@ router.get("/marketplace/entry/:id", async function (req, res, _404) {
 
     }else{
 
-      console.log('noitemu');
       return _404();
     }
   }else{
     
-    console.log('noentry');
     return _404();
   }
 })

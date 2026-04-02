@@ -1,0 +1,76 @@
+name: Deploy Staging
+
+on:
+  workflow_call:
+
+jobs:
+  pull-staging:
+    name: 🔄️ Sync Staging
+    runs-on: self-hosted
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+    steps:
+      - name: Backup current state
+        run: |
+          cd "$DIR"
+          git rev-parse HEAD > /tmp/oldrev
+          tar -czf /tmp/node_modules.tar.gz node_modules || true
+      - name: Sync repo
+        run: |
+          cd "$DIR"
+          git fetch origin
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            # pull the PR head directly
+            prref=${{ github.event.pull_request.head.ref }}
+            git fetch origin "$prref":"pr-head"
+            git reset --hard pr-head
+          else
+            git reset --hard origin/dev
+          fi
+
+  deps-staging:
+    name: 📦 Dependencies (Staging)
+    runs-on: self-hosted
+    needs: pull-staging
+    env:
+      DIR: ${{ secrets.DASH_DIR_DEV }}
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: Install dependencies
+        run: |
+          set -e
+          cd "$DIR"
+          npm install
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          cd "$DIR"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1
+
+  deploy-staging:
+    name: 🚀 Deploy → Staging
+    runs-on: self-hosted
+    needs: deps-staging
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    environment:
+      name: "staging"
+      url: https://staging.pollux.gg
+    steps:
+      - name: Run deploy script
+        run: |
+          # the sync step above may leave us on a detached PR head; pass the
+          # checked‑out SHA so the deploy helper doesn’t later reset us to a
+          # random fallback branch
+          current=$(git -C "${{ secrets.DASH_DIR_DEV }}" rev-parse HEAD)
+          /home/pollux/polaris/scripts/server-deploy.sh dashboard staging "$current"
+      - name: Rollback on failure
+        if: failure()
+        run: |
+          echo "rolling back code and dependencies"
+          cd "$DIR"
+          tar -xzf /tmp/node_modules.tar.gz
+          git checkout $(cat /tmp/oldrev)
+          exit 1

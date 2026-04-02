@@ -28,9 +28,9 @@ function since(x){
         background: {loading:true},
         medals: [null,null,null,null,null,null,null,null,null],
         completionist:[
-         {label: 'Stickers', val: userprofile.modules.stickerInventory.length ||0 , max: this.stickersSize},
-         {label: 'Backgrounds', val: userprofile.modules.bgInventory.length ||0 , max: this.backgroundsSize},
-         {label: 'Medals', val: userprofile.modules.medalInventory.length ||0 , max: this.medalsSize}
+         {label: 'Stickers', val: userprofile.profile.stickerInventory.length ||0 , max: this.stickersSize},
+         {label: 'Backgrounds', val: userprofile.profile.bgInventory.length ||0 , max: this.backgroundsSize},
+         {label: 'Medals', val: userprofile.profile.medalInventory.length ||0 , max: this.medalsSize}
         ],
 
         // COLLECTIONS TAB
@@ -44,12 +44,12 @@ function since(x){
       },
     methods:{
        bgInfo(bgID){
-          fetch("/api/cosmetics/backgrounds/"+bgID).then(r =>
+          fetch("/api/v1/cosmetics/backgrounds/"+bgID).then(r =>
             r.json().then(res_1 => {
                 console.log(res_1)
                 this.bgData = res_1 || {name: "UNKNOWN", rarity: "C" };
                 if(!res_1) return;
-                fetch("/api/marketplace?item_id="+this.bgData._id).then(r =>
+                fetch("/api/v1/marketplace?item_id="+this.bgData._id).then(r =>
                     r.json().then(res_2 => {
                       const payload = {}
                       payload.entries = res_2.length
@@ -129,7 +129,7 @@ function since(x){
     computed:{
       wifeData(){
           if(!this.relationships.loading){
-              const featRel = this.relationships.find(rel=> rel.id == userprofile.featuredMarriage )
+              const featRel = this.relationships.find(rel=> rel.id == userprofile.profile.featuredMarriage )
               if(!featRel) return {id:false};
               let _wifeData = featRel.usersData.find(u=> u.id != userprofile.id)
               _wifeData.ring = featRel.ring;
@@ -149,49 +149,49 @@ function since(x){
   })
 
 
-fetch("/api/cosmetics/count/background").then(r =>
+fetch("/api/v1/cosmetics/count/background").then(r =>
   r.json().then(res => (PROFILE.backgroundsSize = res) )
 );
-fetch("/api/cosmetics/count/sticker").then(r =>
+fetch("/api/v1/cosmetics/count/sticker").then(r =>
   r.json().then(res => (PROFILE.stickersSize = res) )
 );
-fetch("/api/cosmetics/count/medal").then(r =>
+fetch("/api/v1/cosmetics/count/medal").then(r =>
   r.json().then(res => (PROFILE.medalsSize = res) )
 );
 
 
-fetch("/api/relationships?uid="+userprofile.id+"&plxdata=1").then(r =>
+fetch("/api/v1/relationships?uid="+userprofile.id+"&plxdata=1").then(r =>
     r.json().then(res =>  PROFILE.relationships = res  )
 );
 
-fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
+fetch("/api/v1/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );
-fetch("/api/user/"+userprofile.id+"/commends/in?full=1").then(r =>
+fetch("/api/v1/user/"+userprofile.id+"/commends/in?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendRank.in = res  )
 );
   
-fetch("/api/user/"+userprofile.id+"/commends?full=1").then(r =>
+fetch("/api/v1/user/"+userprofile.id+"/commends?full=1").then(r =>
     r.json().then(res =>  PROFILE.commendInfo = res  )
 );  
 
-fetch("/api/cosmetics/stickers/"+userprofile.modules.sticker).then(r =>
+fetch("/api/v1/cosmetics/stickers/"+userprofile.profile.sticker).then(r =>
     r.json().then(res =>  PROFILE.sticker = res  )
 );
 
-fetch("/api/cosmetics/backgrounds/"+userprofile.modules.bgID).then(r =>
+fetch("/api/v1/cosmetics/backgrounds/"+userprofile.profile.bgID).then(r =>
     r.json().then(res =>  PROFILE.background = res  )
 );
 
 
-userprofile.modules.medals.forEach(async (medal,i)=>{
-  
-  fetch("/api/cosmetics/search?type=medal&icon="+userprofile.modules.medals[i]).then(r =>{
-  
+userprofile.profile.medals.forEach(async (medal,i)=>{
+
+  fetch("/api/v1/cosmetics/search?type=medal&icon="+userprofile.profile.medals[i]).then(r =>{
+
     r.json().then(res => {
       PROFILE.medals[i] = res[0]
       if(!res[0]){
-        fetch("/api/achievements/"+userprofile.modules.medals[i]).then(rr =>
+        fetch("/api/v1/achievements/"+userprofile.profile.medals[i]).then(rr =>
           rr.json().then(res2 =>  {
             if(!res2) return PROFILE.medals[i] = {name:"Unknown ",type:'achievement'};
             PROFILE.medals[i] = res2[0];

@@ -163,13 +163,13 @@ const STORE = new Vue({
     hasItem(i) {
       if (!this.userdata) return false;
       if (i.type == "background")
-        return (this.userdata.modules.bgInventory||[]).includes(i.code);
+        return (this.userdata.inventory?.bgInventory||[]).includes(i.code);
       if (i.type == "medal")
-        return (this.userdata.modules.medalInventory||[]).includes(i.icon);
+        return (this.userdata.inventory?.medalInventory||[]).includes(i.icon);
       if (i.type == "sticker")
-        return (this.userdata.modules.stickerInventory||[]).includes(i.id);
+        return (this.userdata.inventory?.stickerInventory||[]).includes(i.id);
       if (i.type == "skin")
-        return (this.userdata.modules.skinInventory||[]).includes(i.id);
+        return (this.userdata.inventory?.skinInventory||[]).includes(i.id);
       return false;
     },
     timeFun(i) {
@@ -188,7 +188,7 @@ const STORE = new Vue({
         this.timer2 = null;
       }
       this.timer2 = setTimeout(() => {
-        fetch("/api/cosmetics/search?type=medal&lim=20&searchq="+q+(q.length<3?"&event=null":"")).then((r) =>
+        fetch("/api/v1/v1/cosmetics/search?type=medal&lim=20&searchq="+q+(q.length<3?"&event=null":"")).then((r) =>
           r.json().then( (res) => {STORE.medals = res; this.timer2 = null} )
         );
       }, 800);
@@ -213,7 +213,7 @@ const STORE = new Vue({
     },
     storepage(type,store,max,jump){
       this[store] = [];
-      fetch(`/api/cosmetics/search?type=${type}&lim=${max||20}&skip=${jump*(max||20)}&event=null`).then((r) =>
+      fetch(`/api/v1/cosmetics/search?type=${type}&lim=${max||20}&skip=${jump*(max||20)}&event=null`).then((r) =>
         r.json().then(async (res) => this[store] = res )
       )
     }
@@ -255,12 +255,12 @@ function FurrBall2000(destination,filters){
   }
 
   const stringsPool = [];
-  if ( PARAMS.BG_LIMIT > 0 ) stringsPool.push( {uri: `/api/cosmetics/search?type=background`, key: "BG" } );
-  if ( PARAMS.MD_LIMIT > 0 ) stringsPool.push( {uri: `/api/cosmetics/search?type=medal`,      key: "MD" } );
-  if ( PARAMS.ST_LIMIT > 0 ) stringsPool.push( {uri: `/api/cosmetics/search?type=sticker`,    key: "ST" } );
-  if ( PARAMS.SK_LIMIT > 0 ) stringsPool.push( {uri: `/api/cosmetics/search?type=skin`,       key: "SK" } );
-  if ( PARAMS.FL_LIMIT > 0 ) stringsPool.push( {uri: `/api/cosmetics/search?type=flair`,      key: "FL" } );
-  if ( PARAMS.IT_LIMIT > 0 ) stringsPool.push( {uri: `/api/items/search?open=true`,           key: "IT" } );
+  if ( PARAMS.BG_LIMIT > 0 ) stringsPool.push( {uri: `/api/v1/cosmetics/search?type=background`, key: "BG" } );
+  if ( PARAMS.MD_LIMIT > 0 ) stringsPool.push( {uri: `/api/v1/cosmetics/search?type=medal`,      key: "MD" } );
+  if ( PARAMS.ST_LIMIT > 0 ) stringsPool.push( {uri: `/api/v1/cosmetics/search?type=sticker`,    key: "ST" } );
+  if ( PARAMS.SK_LIMIT > 0 ) stringsPool.push( {uri: `/api/v1/cosmetics/search?type=skin`,       key: "SK" } );
+  if ( PARAMS.FL_LIMIT > 0 ) stringsPool.push( {uri: `/api/v1/cosmetics/search?type=flair`,      key: "FL" } );
+  if ( PARAMS.IT_LIMIT > 0 ) stringsPool.push( {uri: `/api/v1/items/search?open=true`,           key: "IT" } );
 
   return Promise.all(
     stringsPool.map(({uri,key})=>{
@@ -290,29 +290,29 @@ FurrBall2000("seasonal",{
   STORE.seasonal= shuffle(STORE.seasonal)
 });
 
-fetch("/api/cosmetics/search?type=background&event=null").then((r) =>
+fetch("/api/v1/cosmetics/search?type=background&event=null").then((r) =>
   r.json().then(async (res) => (STORE.backgrounds = res.slice(0, 24)))
 ),
-fetch("/api/shop/bgrotation").then((r) =>
+fetch("/api/v1/shop/bgrotation").then((r) =>
   r.json().then(async (res) => (STORE.rotation = res ))
 ),
-fetch("/api/shop/userrotation").then((r) =>
+fetch("/api/v1/shop/userrotation").then((r) =>
   r.json().then(async (res) => (STORE.custom_rotation = res ))
 ),
 
-fetch("/api/cosmetics/search?type=medal&event=null").then((r) =>
+fetch("/api/v1/cosmetics/search?type=medal&event=null").then((r) =>
   r.json().then(async (res) => (STORE.medals = res.slice(0, 24)))
 ),
 
-fetch("/api/items/search?type=boosterpack").then((r) =>
+fetch("/api/v1/items/search?type=boosterpack").then((r) =>
   r.json().then(async (res) => (STORE.boosters = res.slice(0, 24)))
 );
 
-fetch("/api/marketplace?limit=100").then((r) =>
+fetch("/api/v1/marketplace?limit=100").then((r) =>
   r.json().then(async (res) => (STORE.market = res))
 );
 
-fetch("/api/marketplace/rates").then((r) =>
+fetch("/api/v1/marketplace/rates").then((r) =>
   r
     .json()
     .then(
@@ -357,7 +357,7 @@ function shuffle(array) {
       onOpen: Swal.clickConfirm,    
       preConfirm: () =>
         fetch(
-          `/api/shop/${type}/${(marketOps.type=='buy'?'sell':'buy') || 'buy'}/${item}`,
+          `/api/v1/shop/${type}/${(marketOps.type=='buy'?'sell':'buy') || 'buy'}/${item}`,
           {
             method:"POST",
             headers: {'Content-Type': 'application/json'},
@@ -394,12 +394,11 @@ function shuffle(array) {
               return Swal.showValidationMessage(val.reason || val.status);
             }else{
               if(STORE && type!="marketplace"){
-                STORE.userdata.modules[
-                  (type=="background"?"bg"
-                  :type=="flair"?"flairs"
+                const invKey = (type=="background"?"bg"
+                  :type=="flair"?"flair"
                   :type)
-                  + "Inventory"
-                ].push(item)
+                  + "Inventory";
+                if(STORE.userdata.inventory?.[invKey]) STORE.userdata.inventory[invKey].push(item)
               }else if(STORE && type === 'marketplace'){
                 let itemToChange = STORE.market.find(e=>e.id == marketOps.id);
                 if (itemToChange){

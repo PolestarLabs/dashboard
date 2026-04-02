@@ -125,14 +125,15 @@ router.post('/mix', async (req,res) => {
     const rars = ["C","U","R","SR","UR","XR"];
     const potTypeMap = pot.map(i=>i.type);
     
-    let inventory,craftingHistory;
+    let inventory, craftingHistory, itemsData;
     if(req.user?.id){
-        let [userData] = await Promise.all([
-            DB.users.get( req.user.id, {'modules.inventory':1}),          
-        ]);
-    let   inventory = (userData?.modules?.inventory || []).filter(x=>x.count > 0);
-    craftingHistory = (userData?.modules?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
-       
+        // Use itemsData virtual instead of separate item lookups for inventory screen.
+        const cosmeticsData = await DB.userInventory.findOne({ id: req.user.id }, { inventory: 1 })
+            .populate({ path: "itemsData", select: "id name rarity type icon code" })
+            .lean();
+        inventory = (cosmeticsData?.inventory || []).filter(x=>x.count > 0);
+        craftingHistory = (cosmeticsData?.inventory || []).filter(x=>x.crafted > 0).map(i=>i.id);
+        itemsData = cosmeticsData?.itemsData || [];
     } 
 
     if (!pot) return res.status(400).json({error: "No Pot"});
@@ -162,10 +163,10 @@ router.post('/mix', async (req,res) => {
 
 
     
-    let possible =  await DB.items.find(queryExact).lean().exec();
+    let possible =  await DB.items.find(queryExact).lean();
     console.log("\n--------------------------Check 1",pItemcol(possible) )
 
-    if (!possible.length) possible = await DB.items.find(query).lean().exec();
+    if (!possible.length) possible = await DB.items.find(query).lean();
     else possible.exact = true;
 
     let insufficient = possible.filter(item=>{
@@ -198,7 +199,7 @@ router.post('/mix', async (req,res) => {
             crafted: !0, //open: !0
         };
         console.log({refinedPot})
-        possible = await DB.items.find(querySameType).lean().exec();
+        possible = await DB.items.find(querySameType).lean();
         const potSorted = pot.sort((a,b) => rars.indexOf(b.rarity) - rars.indexOf(a.rarity) );
         const highestRar = potSorted[0].rarity;
         const lowestRar = potSorted[pot.length -1].rarity;
@@ -226,7 +227,7 @@ router.post('/mix', async (req,res) => {
             querySameType = {'typeCraft.type' : {$all: potTypeMap } }
             if (pot.length === 3) querySameType.rarity = {$in: pot.map(i=>i.rarity)};
             console.log(querySameType)        
-            possible = await DB.items.find(querySameType).lean().exec();
+            possible = await DB.items.find(querySameType).lean();
             possible.typeCraft = true
             possible.notQuite = true
         }
@@ -297,32 +298,13 @@ router.post('/mix', async (req,res) => {
         
     }else{
         return res.json({
-            possible: possible.length ||0, 
+            possible: possible.length ||0,
             inventory,
+            itemsData: itemsData || [],
             noMoreTable: possible.noMoreTable
-            
-        })
-    };
-
-
-
-
-
-   
-
-
-    
-    
-    DB.items.find({$or: [{materials: {$all:items}}, {'materials.id': {$all:items}}], crafted: !0, display: !0},
-        {name:1, rarity:1, event:1, icon:1, id:1, type:1, gemcraft: 1, materials: 1, code: 1}).then(result=>{
-        
-            result.map(itm=> {
-                itm.materials.every(t=>items.includes(t))
-            })
-        res.json(result)
-    })
-     
-})
+        });
+    }
+});
 
 
 router.post(['/create','/craft'], checkAuth, async (req,res)=> {
@@ -334,23 +316,24 @@ router.post(['/create','/craft'], checkAuth, async (req,res)=> {
     }
     try{
 
-        const userData = await DB.users.getFull(req.user.id);
+        const [userData, cosmeticsDoc] = await Promise.all([
+            DB.users.getFull(req.user.id),
+            DB.userInventory.getFull(req.user.id),
+        ]);
         if (!userData) return res.status(401).json({status:"ERROR",message:"Not Logged in"});
 
         const pay = (pot||itemToCraft.materials).map(itm=>{
-            let itemToCheck = userData.modules.inventory.find(i=>i.id === itm.id);
+            let itemToCheck = cosmeticsDoc.inventory.find(i=>i.id === itm.id);
             if (itemToCheck.count < itm.count) {
                 return res.status(403).json({status:"ERROR",message:"You dont have enough of ["+itm.id+"]"});
-                //throw new Error("Invalid Inventory");
             };
         return [itm.id,itm.count];
     });
     const payGem = Object.keys(itemToCraft.gemcraft)?.map(it=>{
-        let userBal = userData.modules[it];
+        let userBal = userData.currency[it];
         let itm = itemToCraft.gemcraft[it];
         console.log({it,itm,userBal})
         if (userBal < itm) {
-            //res.status(403).json({status:"ERROR",message:"You dont have enough "+itm+"."});
             throw new Error("Invalid Balance");
         };
         return [userData.id,itm, "crafting_discovery", it ,{details:{item_id:itemToCraft.id}}];
@@ -359,7 +342,7 @@ router.post(['/create','/craft'], checkAuth, async (req,res)=> {
     //console.log(pay,payGem)
     //console.log(PLX)
     let errors = 0;
-    await Promise.all( pay.map(material=> userData.removeItem(...material)) ).catch(err=> {
+    await Promise.all( pay.map(material=> cosmeticsDoc.removeItem(...material)) ).catch(err=> {
             console.error(err);
             res.status(500).json("Error processing materials");
             errors+=1;
@@ -372,13 +355,13 @@ router.post(['/create','/craft'], checkAuth, async (req,res)=> {
         }); 
     if (errors) return;        
     await Promise.all([
-        userData.addItem(item, 1,true),
+        cosmeticsDoc.addItem(item, 1,true),
         DB.users.set(req.user.id, {
             $inc: { "progression.craftingExp": baselineBonus[itemToCraft.rarity] * 1 },
         })
     ]);
-    if (errors) return;   
-    return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: userData.modules.inventory});
+    if (errors) return;
+    return res.status(200).json({status:"OK",message:"Item has been crafted",inventory: cosmeticsDoc.inventory});
 
 }catch(err){
     console.error(err)

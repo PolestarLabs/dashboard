@@ -4,6 +4,8 @@ Promise.config({
 	longStackTraces: true
 })
 
+const BOT_PATH = process.env.BOT_PATH || "../../bot";	
+
 const memCache = require('memory-cache');
 global.cacheFunction = (duration) => {
 	return (req, res, next) => {
@@ -12,7 +14,15 @@ global.cacheFunction = (duration) => {
 		let key = '__express__' + (req.originalUrl || req.url);
 		let cachedBody = memCache.get(key);
 		if (cachedBody) {
-			res.json(typeof cachedBody == 'string' ? JSON.parse(cachedBody) : cachedBody);
+			if (typeof cachedBody === 'string') {
+				try {
+					res.json(JSON.parse(cachedBody));
+				} catch (_) {
+					res.send(cachedBody);
+				}
+			} else {
+				res.json(cachedBody);
+			}
 			return;
 		} else {
 			// avoid wrapping send repeatedly on the same response object
@@ -32,8 +42,8 @@ global.cacheFunction = (duration) => {
 const config = require('../config.js');
 global.Sentry = require("@sentry/node");
 Sentry.init({ dsn: config.sentry });
-
-global.HOST = config.host //"https://beta.pollux.gg" 
+console.log(process.env)
+global.HOST = process.env.HOST || `http://localhost:${process.env.DASHPORT || 4728}`;
 
 global.hasPolluxRole = function hasPolluxRole(req,roleID){
 	return new Promise(async resolve=>{     
@@ -148,21 +158,35 @@ app.post('/webhook/bsian-stripe', async (req, res) => {
 */
 // =======================================================================================
 
-const dbURL = config.mongodb;
+const dbURL = process.env.DB_INFO || config.mongodb;
 const dbOptions = { 
 	useNewUrlParser: true,
-	keepAlive: 1,
+	keepAlive: true,
 	connectTimeoutMS: 30000,
 	useUnifiedTopology: true
 }
 
+// central_pollux is the client used by most of the app (bot REST, etc.)
+// historically on production this was the "main" client, but auth is
+// performed using the alpha/polaris application (ID 354285599588483082).
+// the following logic picks the appropriate client for runtime use and
+// ensures we can override the OAuth client if needed.
 const central_pollux = config.clients.find(c=>{
-	if(process.env.NODE_ENV === "production"){
-		return c.name==='main';
-	}else{
-		return c.name==='polaris';
-	}
+    if(process.env.NODE_ENV === "production"){
+        return c.name==='main';
+    }else{
+        return c.name==='polaris';
+    }
 });
+
+// explicitly choose the auth application. this will usually be the polaris
+// client (alpha) regardless of NODE_ENV. allow an override via an environment
+// variable if we ever need to switch.
+const authClient = process.env.FORCE_ALPHA_AUTH === '1'
+    ? config.clients.find(c=>c.id === '354285599588483082')
+    : config.clients.find(c=>c.id === '354285599588483082') || central_pollux;
+console.log("[auth] using OAuth client", authClient.id, authClient.name || authClient.fname);
+
 
 global.PLX = new Eris.Client(central_pollux.token,{restMode:true});
 
@@ -173,7 +197,7 @@ PLX.user = central_pollux;
 
 global.polluxClients = new Map();
 
-const GearboxClient = require(process.env.BOT_PATH + '/core/utilities/Gearbox').Client;
+const GearboxClient = require(BOT_PATH + '/core/utilities/Gearbox').Client;
 
 config.clients.forEach(async cli=>{
 	try {
@@ -201,7 +225,7 @@ setTimeout(()=>{
 
 Object.assign(PLX, GearboxClient);
 
-(require('@polestar/database_schema'))({
+(require('@polestarlabs/database_schema'))({
 	url: dbURL,
 	options: dbOptions,
 },{
@@ -280,11 +304,10 @@ const MongoStore = require('connect-mongo')(exSession);
 mongoose.connect( dbURL, dbOptions);
 
 
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
+mongoose.set('strictQuery', true);
 mongoose.Promise = require('bluebird');
 Promise.promisifyAll(require("mongoose"));
-Object.assign(global,require( process.env.BOT_PATH + '/core/utilities/Gearbox' ).Global)
+Object.assign(global,require( BOT_PATH + '/core/utilities/Gearbox' ).Global)
 
 //-- PASSPORT  
 const scopes = ['identify','email', 'guilds','connections'];
@@ -303,9 +326,12 @@ Passport.use(new CookieStrategy(
 	}
 ));
 
+// authentication strategy uses the dedicated authClient (polaris by
+// default). this allows the dashboard to redirect to the application that
+// actually has the appropriate OAuth settings configured.
 const discordStrategy = new Strategy({
-	clientID: central_pollux.id,
-	clientSecret: central_pollux.secret,
+	clientID: authClient.id,
+	clientSecret: authClient.secret,
 	authorizationURL: 'https://discordapp.com/api/oauth2/authorize?prompt=none',
 	callbackURL:   HOST + "/callback",
 	scope: scopes,
@@ -313,7 +339,31 @@ const discordStrategy = new Strategy({
 }, function (req, accessToken, refreshToken, profile, done) {
 		profile.refreshToken = refreshToken;
 		process.nextTick(function () {
-			DB.users.updateOne({id: profile.id},{discordData: profile}).then(x=>x);
+			// Update OAuth data in the new split collection
+			DB.userOAuth.set(profile.id, { $set: {
+				discordIdentityCache: {
+					id: profile.id,
+					username: profile.username,
+					avatar: profile.avatar,
+					discriminator: profile.discriminator,
+					global_name: profile.global_name,
+					banner: profile.banner,
+					flags: profile.flags,
+					premium_type: profile.premium_type,
+				},
+				discord: {
+					accessToken: accessToken,
+					refreshToken: refreshToken,
+					scope: profile.scope,
+					email: profile.email,
+					locale: profile.locale,
+					verified: profile.verified,
+					mfa_enabled: profile.mfa_enabled,
+				},
+				fetchedAt: new Date(),
+			}}).catch(e => console.error("userOAuth update failed", e));
+			// Also update core user meta for backwards-compat
+			DB.users.updateOne({id: profile.id},{ $set: { "meta.lastLogin": new Date(), "meta.lastUpdated": new Date() } }).then(x=>x);
 		return done(null, profile);
 	});
 });
@@ -504,9 +554,6 @@ app.use(function(req,res,next){
 	res.locals.HOST = HOST;
 	res.locals.ENV = process.env.NODE_ENV;
 	res.locals.STAGING = !!process.env.STAGING;
-	if (req.method === 'GET' && !req.path.startsWith('/api')) {
-		console.log('[ENV DEBUG]', { url: req.path, NODE_ENV: process.env.NODE_ENV, STAGING: process.env.STAGING, ACTIVE_CLIENT: res.locals.ACTIVE_CLIENT || null });
-	}
 	res.locals.INSTANCE_VUE_PATH = process.env.NODE_ENV === "production" 
 		? "https://cdn.jsdelivr.net/npm/vue@2.6.14"
 		//? "https://cdnjs.cloudflare.com/ajax/libs/vue/2.6.14/vue.js"
@@ -517,6 +564,7 @@ app.use(function(req,res,next){
 })
 
 app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
+	res.setHeader('X-API-Version', "Pollux Dash v1.0");
 	if (process.env.NODE_ENV!=="production") res.startTime('preudata', 'Pre userdata fetching');
 	let preDataProcess = result=>{
 		let USR = req.user;
@@ -539,8 +587,20 @@ app.use([/\/((?!generators).)*/,/\/((?!api).)*/],async function(req,res,next){
 
 			if(!data) {
 				let dscUser = (await userCache.get(req.user.id)) || await PLX.getRESTUser(req.user.id).then(u=> userCache.set(u.id,u) && u );
-				data = await DB.users.new(dscUser); 
+				data = await DB.users.new(dscUser);
 			}
+			const cosmetics = await DB.userInventory.get(data.id);
+			data.inventory = {
+				items:            cosmetics?.inventory         ?? [],
+				bgInventory:      cosmetics?.bgInventory       ?? [],
+				medalInventory:   cosmetics?.medalInventory    ?? [],
+				stickerInventory: cosmetics?.stickerInventory  ?? [],
+				skinInventory:    cosmetics?.skinInventory     ?? [],
+				flairInventory:   cosmetics?.flairInventory    ?? [],
+				stickerShowcase:  cosmetics?.stickerShowcase   ?? [],
+				achievements:     cosmetics?.achievements      ?? [],
+				fishes:           cosmetics?.fishes            ?? [],
+			};
 			authCacheExpiration.set(req.user.id,{data,exp: Date.now() + 10e3  })
 			preDataProcess(data)
 		});

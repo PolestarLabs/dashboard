@@ -150,12 +150,13 @@ section.plx-container#settings-options
     br
 
 -const ATTR = (userdata.switches||{}).variables || []        
--const SKINS = (userdata.modules.skins || {})
+-const SKINS = (userdata.profile && userdata.profile.skins) || {}
 
 -const myDeckCasino = SKINS.blackjack || "default"
 -const myDeckTarot  = SKINS.tarot || "default"
 
--const myDecks  = DCKINFO.filter(t=>userdata.modules.skinInventory.includes(t.id))
+-const skinInv = (typeof cosmeticsData !== 'undefined' && cosmeticsData && cosmeticsData.skinInventory) || []
+-const myDecks  = DCKINFO.filter(t=>skinInv.includes(t.id))
 
 -const DEFAULT_DECK_C = {for:'casino', id:'casino_default',name: 'Standard Casino Deck', rarity: 'C', localizer:'default'}
 -const DEFAULT_DECK_T = {for:'tarot', id:'tarot_persona3',name: 'Persona 3', rarity: 'C', localizer:'persona3'}

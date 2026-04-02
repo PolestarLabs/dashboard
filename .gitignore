@@ -24,3 +24,6 @@ config.js.bak
 api/src/tmp/*
 api/tmp/*
 !api/src/__tests__/img/fixtures/**
+.github/copilot
+api/scripts/routes.md
+api/src/routes/from_bot_draft.ts

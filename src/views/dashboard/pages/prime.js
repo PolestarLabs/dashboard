@@ -106,7 +106,7 @@ const PRIME = new Vue({
                 icon: "",
                 permissions: 0,
             };
-            fetch("/api/server/"+svid).then(res=>{
+            fetch("/api/v1/server/"+svid).then(res=>{
                 if (res.status !== 200) return;
                 res.json().then(res=>{
                     aServer.dbData = res;
@@ -127,7 +127,7 @@ const PRIME = new Vue({
                 showLoaderOnConfirm: true,
                 preConfirm: () => {
                     return new Promise((resolve,reject) => {
-                        fetch("/api/prime/"+svid,{method: "DELETE"})
+                        fetch("/api/v1/prime/"+svid,{method: "DELETE"})
                         .then(res=>{
                             if (res.status === 200){
                                 this.currentPrimeServers = this.currentPrimeServers.filter(s=>s.id !== svid);
