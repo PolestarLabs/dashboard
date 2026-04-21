@@ -215,6 +215,61 @@ jobs:
           git add package.json tsconfig.json vite.config.ts postcss.config.cjs tailwind.config.cjs .gitignore src/env.d.ts src/shims-vue.d.ts .storybook/main.ts
           GIT_AUTHOR_DATE="$author_date" GIT_COMMITTER_DATE="$author_date" git commit -m "materialize standalone project shell"
 
+      - name: Generate sync report
+        run: |
+          TOKEN='${{ secrets.STARDUST_UI_PUSH_TOKEN }}'
+          {
+            echo "## Dashboard \u2192 Stardust UI Sync"
+            echo ""
+            echo "**Source:** [\`${{ github.repository }}@$(git rev-parse --short HEAD)\`](${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }})"
+            echo "**Target:** \`${TARGET_REPO}@${TARGET_BRANCH}\`"
+            echo ""
+          } >> "$GITHUB_STEP_SUMMARY"
+          REMOTE_SHA=$(curl -sf \
+            -H "Authorization: token ${TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${TARGET_REPO}/git/ref/heads/${TARGET_BRANCH}" \
+            | python3 -c "import sys,json; d=json.load(sys.stdin); print(d['object']['sha'])" 2>/dev/null || echo "")
+          LOCAL_SHA=$(git rev-parse HEAD)
+          if [[ -z "$REMOTE_SHA" ]]; then
+            {
+              echo "### 🆕 New branch — initial push"
+              echo ""
+              echo '```'
+              git ls-files | head -60
+              echo '```'
+            } >> "$GITHUB_STEP_SUMMARY"
+          elif [[ "$REMOTE_SHA" == "$LOCAL_SHA" ]]; then
+            echo "### ✅ Nothing changed — target is already up to date" >> "$GITHUB_STEP_SUMMARY"
+          else
+            git fetch "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git" "${TARGET_BRANCH}:refs/remotes/target/${TARGET_BRANCH}" 2>/dev/null || true
+            if git rev-parse "refs/remotes/target/${TARGET_BRANCH}" &>/dev/null; then
+              {
+                echo "### 📝 Changes"
+                echo ""
+                echo '```'
+                git diff --stat "refs/remotes/target/${TARGET_BRANCH}" HEAD
+                echo '```'
+                echo ""
+                echo "<details><summary>File status</summary>"
+                echo ""
+                echo '```'
+                git diff --name-status "refs/remotes/target/${TARGET_BRANCH}" HEAD
+                echo '```'
+                echo ""
+                echo "</details>"
+              } >> "$GITHUB_STEP_SUMMARY"
+            else
+              {
+                echo "### 📝 Changes pushed (diff unavailable — histories diverged after rewrite)"
+                echo ""
+                echo '```'
+                git log --oneline -10
+                echo '```'
+              } >> "$GITHUB_STEP_SUMMARY"
+            fi
+          fi
+
       - name: Push mirror to target repository via API
         run: |
           TOKEN='${{ secrets.STARDUST_UI_PUSH_TOKEN }}'
