@@ -215,12 +215,30 @@ jobs:
           git add package.json tsconfig.json vite.config.ts postcss.config.cjs tailwind.config.cjs .gitignore src/env.d.ts src/shims-vue.d.ts .storybook/main.ts
           GIT_AUTHOR_DATE="$author_date" GIT_COMMITTER_DATE="$author_date" git commit -m "materialize standalone project shell"
 
+      - name: Verify token has access
+        env:
+          TOKEN: ${{ secrets.STARDUST_UI_PUSH_TOKEN }}
+        run: |
+          echo "Testing token access to ${TARGET_REPO}..."
+          curl -s -I -H "Authorization: token ${TOKEN}" \
+            https://api.github.com/repos/${TARGET_REPO} | head -1
+          
+          curl -s -H "Authorization: token ${TOKEN}" \
+            https://api.github.com/repos/${TARGET_REPO} | grep -E "\"permissions\"|\"message\""
+
+      - name: Authenticate with GitHub CLI
+        env:
+          GH_TOKEN: ${{ secrets.STARDUST_UI_PUSH_TOKEN }}
+        run: |
+          gh auth login --with-token <<< "$GH_TOKEN"
+          gh auth status
+
       - name: Push mirror to target repository
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          # Embed token directly in the remote URL
-          REMOTE_URL="https://x-access-token:${{ secrets.STARDUST_UI_PUSH_TOKEN }}@github.com/${TARGET_REPO}.git"
-          git remote add target "$REMOTE_URL"
-          git push --force target HEAD:refs/heads/${TARGET_BRANCH}
+          # Use gh to push
+          gh repo clone ${TARGET_REPO} _target --bare
+          cd _target
+          git push --force . HEAD:refs/heads/${TARGET_BRANCH}
