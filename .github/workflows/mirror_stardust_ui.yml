@@ -216,15 +216,9 @@ jobs:
           GIT_AUTHOR_DATE="$author_date" GIT_COMMITTER_DATE="$author_date" git commit -m "materialize standalone project shell"
 
       - name: Push mirror to target repository
-        env:
-          TARGET_TOKEN: ${{ secrets.STARDUST_UI_PUSH_TOKEN }}
         run: |
-          if [[ -z "$TARGET_TOKEN" ]]; then
-            echo "Missing required secret: STARDUST_UI_PUSH_TOKEN" >&2
-            exit 1
-          fi
-
-          git config --global credential.helper store
-          echo "https://x-access-token:${TARGET_TOKEN}@github.com" > ~/.git-credentials
-          git remote add target "https://github.com/${TARGET_REPO}.git"
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          
+          git remote add target "https://x-access-token:${{ secrets.STARDUST_UI_PUSH_TOKEN }}@github.com/${TARGET_REPO}.git"
           git push --force target HEAD:refs/heads/${TARGET_BRANCH}
