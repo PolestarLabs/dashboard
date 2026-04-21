@@ -270,31 +270,11 @@ jobs:
             fi
           fi
 
-      - name: Push mirror to target repository via API
+      - name: Push mirror to target repository
         run: |
           TOKEN='${{ secrets.STARDUST_UI_PUSH_TOKEN }}'
-          
-          # Get the current commit SHA
           COMMIT_SHA=$(git rev-parse HEAD)
           echo "Pushing commit ${COMMIT_SHA} to ${TARGET_REPO}/${TARGET_BRANCH}"
-
-          # Try to update existing ref; if branch doesn't exist yet (422), create it
-          HTTP_STATUS=$(curl -s -o /tmp/gh_push_response.json -w "%{http_code}" \
-            -X PATCH \
-            -H "Authorization: token ${TOKEN}" \
-            -H "Accept: application/vnd.github+json" \
-            "https://api.github.com/repos/${TARGET_REPO}/git/refs/heads/${TARGET_BRANCH}" \
-            -d "{\"sha\": \"${COMMIT_SHA}\", \"force\": true}")
-
-          if [[ "$HTTP_STATUS" == "422" ]]; then
-            echo "Branch does not exist yet, creating ref..."
-            curl -s -o /tmp/gh_push_response.json -w "%{http_code}" \
-              -X POST \
-              -H "Authorization: token ${TOKEN}" \
-              -H "Accept: application/vnd.github+json" \
-              "https://api.github.com/repos/${TARGET_REPO}/git/refs" \
-              -d "{\"ref\": \"refs/heads/${TARGET_BRANCH}\", \"sha\": \"${COMMIT_SHA}\"}"
-            echo ""
-          fi
-
-          cat /tmp/gh_push_response.json
+          git push --force \
+            "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git" \
+            "HEAD:refs/heads/${TARGET_BRANCH}"
