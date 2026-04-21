@@ -215,10 +215,26 @@ jobs:
           git add package.json tsconfig.json vite.config.ts postcss.config.cjs tailwind.config.cjs .gitignore src/env.d.ts src/shims-vue.d.ts .storybook/main.ts
           GIT_AUTHOR_DATE="$author_date" GIT_COMMITTER_DATE="$author_date" git commit -m "materialize standalone project shell"
 
+      - name: Debug secrets
+        run: |
+          echo "Secret length: ${#STARDUST_UI_PUSH_TOKEN}"
+          if [[ -z "$STARDUST_UI_PUSH_TOKEN" ]]; then
+            echo "ERROR: STARDUST_UI_PUSH_TOKEN is empty!"
+          else
+            echo "Token is present (first 10 chars): ${STARDUST_UI_PUSH_TOKEN:0:10}"
+          fi
+        env:
+          STARDUST_UI_PUSH_TOKEN: ${{ secrets.STARDUST_UI_PUSH_TOKEN }}
+
       - name: Push mirror to target repository
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
-          git remote add target "https://x-access-token:${{ secrets.STARDUST_UI_PUSH_TOKEN }}@github.com/${TARGET_REPO}.git"
+          # Use credential helper approach
+          git config --global credential.helper store
+          echo "https://x-access-token:${{ secrets.STARDUST_UI_PUSH_TOKEN }}@github.com" > ~/.git-credentials
+          chmod 600 ~/.git-credentials
+          
+          git remote add target "https://github.com/${TARGET_REPO}.git"
           git push --force target HEAD:refs/heads/${TARGET_BRANCH}
