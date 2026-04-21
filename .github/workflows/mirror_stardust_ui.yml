@@ -1,0 +1,61 @@
+name: Mirror Stardust UI
+
+on:
+  push:
+    branches: [dash-v3]
+    paths:
+      - 'frontend/src/ui/**'
+      - 'frontend/src/stories/**'
+      - 'frontend/.storybook/**'
+      - '.github/workflows/mirror_stardust_ui.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: stardust-ui-mirror-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  mirror:
+    name: Mirror filtered UI history
+    runs-on: ubuntu-latest
+    env:
+      TARGET_REPO: andromika/Stardust-UI
+      TARGET_BRANCH: main
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install git-filter-repo
+        run: python -m pip install git-filter-repo
+
+      - name: Rewrite repository to Stardust UI projection
+        run: |
+          python -m git_filter_repo --force \
+            --path frontend/src/ui/ \
+            --path frontend/src/stories/ \
+            --path frontend/.storybook/ \
+            --path-rename frontend/src/ui/:src/ui/ \
+            --path-rename frontend/src/stories/:src/stories/ \
+            --path-rename frontend/.storybook/:.storybook/
+
+      - name: Push mirror to target repository
+        env:
+          TARGET_TOKEN: ${{ secrets.STARDUST_UI_PUSH_TOKEN }}
+        run: |
+          if [[ -z "$TARGET_TOKEN" ]]; then
+            echo "Missing required secret: STARDUST_UI_PUSH_TOKEN" >&2
+            exit 1
+          fi
+
+          git remote add target "https://x-access-token:${TARGET_TOKEN}@github.com/${TARGET_REPO}.git"
+          git push --force target HEAD:refs/heads/${TARGET_BRANCH}
