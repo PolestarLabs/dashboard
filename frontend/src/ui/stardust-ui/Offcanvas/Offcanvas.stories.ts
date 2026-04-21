@@ -18,7 +18,9 @@ const meta: Meta<typeof Offcanvas> = {
     closeOnOverlay: { control: 'boolean' },
   },
   parameters: {
+    layout: 'fullscreen',
     docs: {
+      story: { inline: false, iframeHeight: 420 },
       description: {
         component:
           'Slide-over / off-canvas panel. Ported from the legacy `plx-offcanvas` / `plx-offcanvas-reveal` / `plx-offcanvas-overlay` system. Supports **slide** and **reveal** modes, optional overlay, and left / right (flip) positioning.',

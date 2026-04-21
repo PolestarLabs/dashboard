@@ -1,5 +1,5 @@
 <template>
-  <Teleport to="body">
+  <Teleport to="body" :disabled="mode === 'push'">
     <div class="s-offcanvas" :class="[rootClasses, { 's-offcanvas--visible': isOpen }]" @keydown.esc="onEsc">
       <Transition name="s-offcanvas-fade">
         <div
@@ -10,7 +10,8 @@
         />
       </Transition>
 
-      <Transition :name="panelTransitionName" @after-leave="onPanelAfterLeave">
+      <!-- slide / reveal: Vue Transition drives enter/leave -->
+      <Transition v-if="mode !== 'push'" :name="panelTransitionName" @after-leave="onPanelAfterLeave">
         <div
           v-if="modelValue"
           class="s-offcanvas__panel"
@@ -33,6 +34,31 @@
           </div>
         </div>
       </Transition>
+
+      <!-- push: always in DOM, parked offscreen at translateX(100%).
+           #app transform carries it into view — no panel animation. -->
+      <div
+        v-else
+        class="s-offcanvas__panel"
+        ref="panelEl"
+        role="dialog"
+        aria-modal="true"
+        tabindex="-1"
+        :inert="!modelValue || undefined"
+      >
+        <button
+          v-if="showClose"
+          class="s-offcanvas__close"
+          type="button"
+          aria-label="Close"
+          @click="close"
+        >
+          <i class="fas fa-times" />
+        </button>
+        <div class="s-offcanvas__body">
+          <slot />
+        </div>
+      </div>
     </div>
   </Teleport>
 </template>
@@ -83,21 +109,12 @@ const rootClasses = computed(() => [
 ]);
 
 const panelTransitionName = computed(() =>
-  props.mode === 'reveal'
-    ? 's-offcanvas-reveal'
-    : props.mode === 'push'
-    ? 's-offcanvas-push'
-    : 's-offcanvas-slide',
+  props.mode === 'reveal' ? 's-offcanvas-reveal' : 's-offcanvas-slide',
 );
 
 function onPanelAfterLeave() {
   if (!props.modelValue) {
     isOpen.value = false;
-
-    if (props.mode === 'push' && pushContentEl.value) {
-      pushContentEl.value.style.transition = '';
-      pushContentEl.value.style.transform = '';
-    }
   }
 }
 
@@ -126,13 +143,17 @@ watch(
       isOpen.value = true;
       previouslyFocused = document.activeElement as HTMLElement | null;
       document.body.style.overflow = 'hidden';
-      await nextTick();
 
       if (props.mode === 'push' && pushContentEl.value) {
-        pushContentEl.value.style.transition = `transform var(--s-offcanvas-duration) var(--s-offcanvas-ease)`;
-        pushContentEl.value.style.transform = `translateX(calc(-1 * var(--s-offcanvas-width)))`;
+        const el = pushContentEl.value;
+        el.style.transition = `transform var(--s-offcanvas-duration) var(--s-offcanvas-ease)`;
+        void el.offsetHeight;
+        el.style.transform = props.flip
+          ? `translateX(var(--s-offcanvas-width))`
+          : `translateX(calc(-1 * var(--s-offcanvas-width)))`;
       }
 
+      await nextTick();
       panelEl.value?.focus();
     } else {
       document.body.style.overflow = '';
@@ -140,8 +161,15 @@ watch(
       previouslyFocused = null;
 
       if (props.mode === 'push' && pushContentEl.value) {
-        pushContentEl.value.style.transition = `transform var(--s-offcanvas-duration) var(--s-offcanvas-ease)`;
-        pushContentEl.value.style.transform = '';
+        const el = pushContentEl.value;
+        el.style.transform = '';
+        const onEnd = (e: TransitionEvent) => {
+          if (e.propertyName !== 'transform') return;
+          el.removeEventListener('transitionend', onEnd);
+          el.style.transition = '';
+          isOpen.value = false;
+        };
+        el.addEventListener('transitionend', onEnd);
       }
 
       await nextTick();
@@ -151,5 +179,9 @@ watch(
 
 onBeforeUnmount(() => {
   document.body.style.overflow = '';
+  if (pushContentEl.value) {
+    pushContentEl.value.style.transition = '';
+    pushContentEl.value.style.transform = '';
+  }
 });
 </script>

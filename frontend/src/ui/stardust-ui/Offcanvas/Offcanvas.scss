@@ -134,71 +134,23 @@
   transform: translateX(0);
 }
 
-// — Push mode (panel reveals under content as content shifts left) —
+// — Push mode: panel always in DOM, parked offscreen via translateX.
+// No Vue <Transition>. Opening shifts #app; the panel rides along
+// because transform on #app makes its fixed children relative to it.
 .s-offcanvas--push {
-  z-index: 0;
-  pointer-events: none; // content handles interaction until overlay appears
+  visibility: visible;
 }
 
-..s-offcanvas--push .s-offcanvas__panel {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  width: var(--s-offcanvas-width);
-  z-index: 1001;
-  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.4);
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-enter-active,
-.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-leave-active {
-  transition: transform var(--s-offcanvas-duration) var(--s-offcanvas-ease),
-    opacity var(--s-offcanvas-duration) var(--s-offcanvas-ease);
-}
-
-.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-enter-from,
-.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-leave-to {
+.s-offcanvas--push .s-offcanvas__panel {
   transform: translateX(100%);
-  opacity: 0;
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.4);
 }
 
-.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-enter-to,
-.s-offcanvas--push .s-offcanvas__panel.s-offcanvas-push-leave-from {
-  transform: translateX(0);
-  opacity: 1;
+.s-offcanvas--push.s-offcanvas--flip .s-offcanvas__panel {
+  transform: translateX(-100%);
 }
 
-
-.s-offcanvas--push .s-offcanvas__overlay {
-  z-index: 1002;
-}
-
-.s-offcanvas--push .s-offcanvas__overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  opacity: 0;
-  transition: opacity var(--s-offcanvas-duration) var(--s-offcanvas-ease);
-}
-
-.s-offcanvas--push .s-offcanvas__overlay-enter-active,
-.s-offcanvas--push .s-offcanvas__overlay-leave-active {
-  transition: opacity var(--s-offcanvas-duration) var(--s-offcanvas-ease);
-}
-
-.s-offcanvas--push .s-offcanvas__overlay-enter-from,
-.s-offcanvas--push .s-offcanvas__overlay-leave-to {
-  opacity: 0;
-}
-
-.s-offcanvas--push .s-offcanvas__overlay-enter-to,
-.s-offcanvas--push .s-offcanvas__overlay-leave-from {
-  opacity: 1;
-}
-
-// Flipped: slide in from left (reverse behavior)
+// Flipped: slide from left (reverse direction)
 .s-offcanvas--flip {
   .s-offcanvas-slide-enter-from,
   .s-offcanvas-slide-leave-to {
