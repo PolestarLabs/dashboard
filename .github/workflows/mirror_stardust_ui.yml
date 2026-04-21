@@ -215,19 +215,17 @@ jobs:
           git add package.json tsconfig.json vite.config.ts postcss.config.cjs tailwind.config.cjs .gitignore src/env.d.ts src/shims-vue.d.ts .storybook/main.ts
           GIT_AUTHOR_DATE="$author_date" GIT_COMMITTER_DATE="$author_date" git commit -m "materialize standalone project shell"
 
-      - name: Push mirror to target repository
+      - name: Push mirror to target repository via API
         run: |
-          git config --global user.name "github-actions[bot]"
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          
-          # Disable all credential helpers to prevent GitHub Actions override
-          git config --global --unset-all credential.helper || true
-          git config --system --unset-all credential.helper || true
-          
           TOKEN='${{ secrets.STARDUST_UI_PUSH_TOKEN }}'
           
-          # Use basic auth with PAT
-          git remote add target "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git"
+          # Get the current commit SHA
+          COMMIT_SHA=$(git rev-parse HEAD)
+          echo "Pushing commit ${COMMIT_SHA} to ${TARGET_REPO}/${TARGET_BRANCH}"
           
-          # Force git to not use any credential helpers
-          GIT_TRACE=1 git -c credential.helper="" -c "http.version=HTTP/1.1" push --force target HEAD:refs/heads/${TARGET_BRANCH}
+          # Use GitHub API to push the ref directly
+          curl -X PATCH \
+            -H "Authorization: token ${TOKEN}" \
+            -H "Accept: application/vnd.github+json" \
+            "https://api.github.com/repos/${TARGET_REPO}/git/refs/heads/${TARGET_BRANCH}" \
+            -d "{\"sha\": \"${COMMIT_SHA}\", \"force\": true}"
