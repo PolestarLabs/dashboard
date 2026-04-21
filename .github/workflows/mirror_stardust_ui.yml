@@ -224,5 +224,7 @@ jobs:
             exit 1
           fi
 
-          git remote add target "https://x-access-token:${TARGET_TOKEN}@github.com/${TARGET_REPO}.git"
+          git config --global credential.helper store
+          echo "https://x-access-token:${TARGET_TOKEN}@github.com" > ~/.git-credentials
+          git remote add target "https://github.com/${TARGET_REPO}.git"
           git push --force target HEAD:refs/heads/${TARGET_BRANCH}
