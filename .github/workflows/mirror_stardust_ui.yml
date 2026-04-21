@@ -6,12 +6,14 @@ on:
     paths:
       - 'frontend/src/ui/**'
       - 'frontend/src/stories/**'
+      - 'frontend/src/assets/fonts.css'
+      - 'frontend/src/assets/tailwind.css'
       - 'frontend/.storybook/**'
       - '.github/workflows/mirror_stardust_ui.yml'
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: stardust-ui-mirror-${{ github.ref }}
@@ -43,10 +45,175 @@ jobs:
           python -m git_filter_repo --force \
             --path frontend/src/ui/ \
             --path frontend/src/stories/ \
+            --path frontend/src/assets/fonts.css \
+            --path frontend/src/assets/tailwind.css \
             --path frontend/.storybook/ \
             --path-rename frontend/src/ui/:src/ui/ \
             --path-rename frontend/src/stories/:src/stories/ \
+            --path-rename frontend/src/assets/fonts.css:src/assets/fonts.css \
+            --path-rename frontend/src/assets/tailwind.css:src/assets/tailwind.css \
             --path-rename frontend/.storybook/:.storybook/
+
+      - name: Materialize standalone project shell
+        run: |
+          mkdir -p src
+
+          cat > package.json <<'EOF'
+          {
+            "name": "stardust-ui",
+            "version": "0.1.0",
+            "private": true,
+            "scripts": {
+              "storybook": "storybook dev -p 6006 --host 0.0.0.0",
+              "build-storybook": "storybook build --output-dir storybook-static",
+              "dedupe:themes": "node src/ui/themes/dedupe-theme-vars.js"
+            },
+            "dependencies": {
+              "@fortawesome/fontawesome-free": "^7.2.0",
+              "gravity-dnd": "^1.1.6",
+              "sweetalert2": "^11.26.22",
+              "vue": "^3.4.0",
+              "vue-draggable-next": "^2.2.1",
+              "vue-router": "^4.3.0"
+            },
+            "devDependencies": {
+              "@storybook/addon-a11y": "^10.2.19",
+              "@storybook/addon-docs": "^10.2.19",
+              "@storybook/addon-themes": "^10.2.19",
+              "@storybook/vue3": "^10.2.19",
+              "@storybook/vue3-vite": "^10.2.19",
+              "@types/node": "^24.0.0",
+              "@vitejs/plugin-vue": "^6.0.0",
+              "autoprefixer": "^10.4.0",
+              "postcss": "^8.4.0",
+              "sass": "^1.77.0",
+              "storybook": "^10.2.19",
+              "tailwindcss": "^3.4.0",
+              "typescript": "^5.4.0",
+              "vite": "^8.0.0",
+              "vitest": "^4.1.0",
+              "vue-tsc": "^2.0.0"
+            }
+          }
+          EOF
+
+          cat > tsconfig.json <<'EOF'
+          {
+            "compilerOptions": {
+              "target": "ESNext",
+              "useDefineForClassFields": true,
+              "module": "ESNext",
+              "moduleResolution": "bundler",
+              "strict": true,
+              "skipLibCheck": true,
+              "jsx": "preserve",
+              "resolveJsonModule": true,
+              "isolatedModules": true,
+              "esModuleInterop": true,
+              "lib": ["ESNext", "DOM"],
+              "types": ["vite/client", "node"],
+              "baseUrl": ".",
+              "paths": {
+                "@/*": ["src/*"]
+              }
+            },
+            "include": [
+              "src/**/*.ts",
+              "src/**/*.d.ts",
+              "src/**/*.tsx",
+              "src/**/*.vue",
+              ".storybook/**/*.ts",
+              "vite.config.ts"
+            ]
+          }
+          EOF
+
+          cat > vite.config.ts <<'EOF'
+          import { defineConfig } from 'vite';
+          import vue from '@vitejs/plugin-vue';
+          import path from 'node:path';
+
+          export default defineConfig({
+            plugins: [vue()],
+            resolve: {
+              alias: {
+                '@': path.resolve(__dirname, 'src'),
+              },
+            },
+          });
+          EOF
+
+          cat > postcss.config.cjs <<'EOF'
+          module.exports = {
+            plugins: {
+              tailwindcss: {},
+              autoprefixer: {},
+            },
+          };
+          EOF
+
+          cat > tailwind.config.cjs <<'EOF'
+          module.exports = {
+            content: ['./src/**/*.{vue,ts,tsx}', './.storybook/**/*.{ts,tsx}'],
+            theme: {
+              extend: {},
+            },
+          };
+          EOF
+
+          cat > .gitignore <<'EOF'
+          node_modules/
+          storybook-static/
+          dist/
+          EOF
+
+          cat > src/env.d.ts <<'EOF'
+          /// <reference types="vite/client" />
+          EOF
+
+          cat > src/shims-vue.d.ts <<'EOF'
+          declare module '*.vue' {
+            import type { DefineComponent } from 'vue';
+            const component: DefineComponent<{}, {}, any>;
+            export default component;
+          }
+          EOF
+
+          cat > .storybook/main.ts <<'EOF'
+          import type { StorybookConfig } from '@storybook/vue3-vite';
+
+          const config: StorybookConfig = {
+            stories: [
+              '../src/stories/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+              '../src/ui/themes/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+              '../src/ui/stardust-ui/**/*.stories.@(js|jsx|mjs|ts|tsx)',
+              '../src/ui/components/**/*.stories.@(js|jsx|mjs|ts|tsx)'
+            ],
+            addons: [
+              '@storybook/addon-a11y',
+              '@storybook/addon-docs',
+              '@storybook/addon-themes'
+            ],
+            framework: '@storybook/vue3-vite'
+          };
+
+          export default config;
+          EOF
+
+      - name: Commit standalone project shell
+        run: |
+          if [[ -z "$(git status --porcelain -- package.json tsconfig.json vite.config.ts postcss.config.cjs tailwind.config.cjs .gitignore src/env.d.ts src/shims-vue.d.ts .storybook/main.ts)" ]]; then
+            exit 0
+          fi
+
+          author_name=$(git log -1 --format='%an')
+          author_email=$(git log -1 --format='%ae')
+          author_date=$(git log -1 --format='%aI')
+
+          git config user.name "$author_name"
+          git config user.email "$author_email"
+          git add package.json tsconfig.json vite.config.ts postcss.config.cjs tailwind.config.cjs .gitignore src/env.d.ts src/shims-vue.d.ts .storybook/main.ts
+          GIT_AUTHOR_DATE="$author_date" GIT_COMMITTER_DATE="$author_date" git commit -m "materialize standalone project shell"
 
       - name: Push mirror to target repository
         env:
