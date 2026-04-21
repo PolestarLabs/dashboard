@@ -33,27 +33,29 @@ jobs:
           fetch-depth: 0
           persist-credentials: false
 
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: '3.12'
-
-      - name: Install git-filter-repo
-        run: python -m pip install git-filter-repo
-
-      - name: Rewrite repository to Stardust UI projection
+      - name: Clone Stardust UI target
         run: |
-          python -m git_filter_repo --force \
-            --path frontend/src/ui/ \
-            --path frontend/src/stories/ \
-            --path frontend/src/assets/fonts.css \
-            --path frontend/src/assets/tailwind.css \
-            --path frontend/.storybook/ \
-            --path-rename frontend/src/ui/:src/ui/ \
-            --path-rename frontend/src/stories/:src/stories/ \
-            --path-rename frontend/src/assets/fonts.css:src/assets/fonts.css \
-            --path-rename frontend/src/assets/tailwind.css:src/assets/tailwind.css \
-            --path-rename frontend/.storybook/:.storybook/
+          TOKEN='${{ secrets.STARDUST_UI_PUSH_TOKEN }}'
+          git clone --depth=1 --branch "${TARGET_BRANCH}" \
+            "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git" \
+            /tmp/stardust-target \
+            || git clone --depth=1 \
+              "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git" \
+              /tmp/stardust-target
+          cd /tmp/stardust-target
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git checkout "${TARGET_BRANCH}" 2>/dev/null || git checkout -b "${TARGET_BRANCH}"
+
+      - name: Create backup branch on Stardust UI
+        run: |
+          TOKEN='${{ secrets.STARDUST_UI_PUSH_TOKEN }}'
+          BACKUP_BRANCH="backup/sync-$(date -u +%Y%m%d-%H%M%S)"
+          cd /tmp/stardust-target
+          git push "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git" \
+            "HEAD:refs/heads/${BACKUP_BRANCH}"
+          echo "BACKUP_BRANCH=${BACKUP_BRANCH}" >> "$GITHUB_ENV"
+          echo "Created backup branch: ${BACKUP_BRANCH}" >> "$GITHUB_STEP_SUMMARY"
 
       - name: Materialize standalone project shell
         run: |
