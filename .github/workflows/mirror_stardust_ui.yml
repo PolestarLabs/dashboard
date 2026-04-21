@@ -220,6 +220,14 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
           
+          # Disable all credential helpers to prevent GitHub Actions override
+          git config --global --unset-all credential.helper || true
+          git config --system --unset-all credential.helper || true
+          
           TOKEN='${{ secrets.STARDUST_UI_PUSH_TOKEN }}'
+          
+          # Use basic auth with PAT
           git remote add target "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git"
-          git -c "http.extraheader=Authorization: token ${TOKEN}" push --force target HEAD:refs/heads/${TARGET_BRANCH}
+          
+          # Force git to not use any credential helpers
+          GIT_TRACE=1 git -c credential.helper="" -c "http.version=HTTP/1.1" push --force target HEAD:refs/heads/${TARGET_BRANCH}
