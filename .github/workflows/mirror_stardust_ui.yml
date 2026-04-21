@@ -129,10 +129,8 @@ jobs:
             echo "Nothing to commit, skipping push."
             exit 0
           fi
-          git commit -m "chore: sync UI source files from ${{ github.repository }}
-
-Synced from: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}
-Workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          COMMIT_MSG="chore: sync UI source files from ${{ github.repository }}"$'\n\n'"Synced from: ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}"$'\n'"Workflow: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          git commit -m "$COMMIT_MSG"
           git push \
             "https://x-access-token:${TOKEN}@github.com/${TARGET_REPO}.git" \
             "HEAD:refs/heads/${TARGET_BRANCH}"
