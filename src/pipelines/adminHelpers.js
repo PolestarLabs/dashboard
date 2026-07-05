@@ -25,22 +25,35 @@ function makeUserClient(token, userId){
     return {
         id: `user:${userId}`,
         async getRESTGuild(gid){
-            const r = await fetch(`https://discord.com/api/v9/guilds/${gid}`, { headers: { Authorization: `Bearer ${token}` } });
+            // Try as OAuth Bearer first, then as Bot token if unauthorized
+            let r = await fetch(`https://discord.com/api/v9/guilds/${gid}`, { headers: { Authorization: `Bearer ${token}` } });
+            if (r.status === 401) {
+                r = await fetch(`https://discord.com/api/v9/guilds/${gid}`, { headers: { Authorization: `Bot ${token}` } });
+            }
             if(!r.ok) throw new Error(`${r.status} ${r.statusText} on GET /guilds/${gid}`);
             return r.json();
         },
         async getRESTGuildRoles(gid){
-            const r = await fetch(`https://discord.com/api/v9/guilds/${gid}/roles`, { headers: { Authorization: `Bearer ${token}` } });
+            let r = await fetch(`https://discord.com/api/v9/guilds/${gid}/roles`, { headers: { Authorization: `Bearer ${token}` } });
+            if (r.status === 401) {
+                r = await fetch(`https://discord.com/api/v9/guilds/${gid}/roles`, { headers: { Authorization: `Bot ${token}` } });
+            }
             if(!r.ok) throw new Error(`${r.status} ${r.statusText} on GET /guilds/${gid}/roles`);
             return r.json();
         },
         async getRESTGuildChannels(gid){
-            const r = await fetch(`https://discord.com/api/v9/guilds/${gid}/channels`, { headers: { Authorization: `Bearer ${token}` } });
+            let r = await fetch(`https://discord.com/api/v9/guilds/${gid}/channels`, { headers: { Authorization: `Bearer ${token}` } });
+            if (r.status === 401) {
+                r = await fetch(`https://discord.com/api/v9/guilds/${gid}/channels`, { headers: { Authorization: `Bot ${token}` } });
+            }
             if(!r.ok) throw new Error(`${r.status} ${r.statusText} on GET /guilds/${gid}/channels`);
             return r.json();
         },
         async getRESTGuildMember(gid, uid){
-            const r = await fetch(`https://discord.com/api/v9/guilds/${gid}/members/${uid}`, { headers: { Authorization: `Bearer ${token}` } });
+            let r = await fetch(`https://discord.com/api/v9/guilds/${gid}/members/${uid}`, { headers: { Authorization: `Bearer ${token}` } });
+            if (r.status === 401) {
+                r = await fetch(`https://discord.com/api/v9/guilds/${gid}/members/${uid}`, { headers: { Authorization: `Bot ${token}` } });
+            }
             if(!r.ok) throw new Error(`${r.status} ${r.statusText} on GET /guilds/${gid}/members/${uid}`);
             return r.json();
         }

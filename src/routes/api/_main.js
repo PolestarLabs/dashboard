@@ -301,5 +301,31 @@ router.get('/pid', (req, res) => {
 })
 
 
+// Debug endpoint: probe a client token and guild access. Restricted to MASTER.
+router.get('/debug/client/:clientId/guild/:guildId', AUTHED, MASTER, async (req, res) => {
+    const { clientId, guildId } = req.params;
+    const { computeBotPermissions } = require('../../pipelines/adminHelpers');
+    try {
+        let entry;
+        if (clientId === 'plx' || clientId === PLX.id) entry = { client: PLX, meta: PLX.user };
+        else entry = polluxClients.get(clientId);
+
+        if (!entry) return res.status(404).json({ error: 'client-not-found' });
+        const client = entry.client;
+
+        const userMe = await client.getRESTUser('@me').catch(e=>({error: e.message||String(e), name: e.constructor?.name}));
+        const guild = await client.getRESTGuild(guildId).catch(e=>({error: e.message||String(e), name: e.constructor?.name}));
+        const roles = await client.getRESTGuildRoles(guildId).catch(e=>({error: e.message||String(e), name: e.constructor?.name}));
+        const member = await client.getRESTGuildMember(guildId, client.user?.id || client.id).catch(e=>({error: e.message||String(e), name: e.constructor?.name}));
+
+        const perms = await computeBotPermissions(client, guildId).catch(()=>null);
+
+        res.json({ clientId, userMe, guild, roles, member, perms });
+    } catch (err) {
+        res.status(500).json({ error: err.message || String(err) });
+    }
+});
+
+
 
 module.exports = router  
