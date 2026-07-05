@@ -5,17 +5,7 @@ const router = express.Router();
 const fx = require('../../pipelines/globalFunctions.js');
 const operations = require('../../pipelines/operations.js');
 
-const getActiveClient = (gData, req) => {
-    // On staging, always use the session-selected client — DB activeClients don't apply
-    if (process.env.STAGING || process.env.NODE_ENV !== 'production') return req?.PLX ?? PLX;
-    const activeIds = Array.isArray(gData?.activeClients) ? gData.activeClients : [];
-    const entry = activeIds.map(id => polluxClients.get(id)).find(Boolean);
-    if (entry) return entry.client;
-    if (activeIds.length) {
-        console.warn('[getActiveClient] missing loaded client for activeClients', { activeClients: activeIds, loadedClientIds: Array.from(polluxClients.keys()) });
-    }
-    return PLX;
-};
+const { getActiveClient, isPolluxAdmin } = require('../../pipelines/adminHelpers.js');
 
 router.use("/:serverID", ADMCHECKS);
 
@@ -53,7 +43,7 @@ router.get('/:serverID', async function (req,res) {
     await wait(1.2);
 
     const guildData = req.user.guilds?.find(g=>g.id === SVID);
-    if (!guildData && req.user.id !== '88120564400553984') {
+    if (!guildData && !isPolluxAdmin(req)) {
         return res.status(403).render('error', {
             message: "You are not a member of this server or guild information is unavailable.",
             error: {
@@ -81,7 +71,11 @@ router.get('/:serverID', async function (req,res) {
             DB.paidroles.find({server:SVID}).lean().exec(),
         ]);
     } catch(e) {
-        console.error(`[admin/${SVID}] Discord API error:`, e.message || e);
+        console.error(`[admin/${SVID}] Discord API error with client ${authPLX?.id}:`, {
+            activeClients: serverData?.activeClients,
+            selectedClientId: authPLX?.id,
+            error: e.message || e,
+        });
         const isDiscordError = e?.constructor?.name === 'DiscordHTTPError';
         const httpStatus = isDiscordError ? (e.code || (e.message?.match(/^(\d+)/)?.[1] | 0)) : 0;
         const status = (httpStatus === 401 || httpStatus === 403) ? 403 : isDiscordError ? 502 : 500;
