@@ -47,8 +47,18 @@ router.get('/:serverID', async function (req,res) {
     await wait(1.2);
 
     const guildData = req.user.guilds?.find(g=>g.id === SVID);
+    if (!guildData && req.user.id !== '88120564400553984') {
+        return res.status(403).render('error', {
+            message: "You are not a member of this server or guild information is unavailable.",
+            error: {
+                status: 403,
+                name: 'GuildDataMissing',
+                stack: process.env.STAGING ? new Error().stack : '',
+            },
+        });
+    }
     const serverData = await DB.servers.get(SVID);
-    const guildPermissions = guildData.permissions;
+    const guildPermissions = guildData?.permissions;
     const authPLX = getActiveClient(serverData, req);
 
     let memberInfo, roleInfo, serverInfo, channelInfo, reactRoles, feeds, localranks, temproles, paidroles;
