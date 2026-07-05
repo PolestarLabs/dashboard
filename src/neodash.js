@@ -402,6 +402,10 @@ app.use(function(req, res, next) {
 	const activeId = req.session?.activeClientId || PLX.id;
 	const entry = polluxClients.get(activeId);
 	res.locals.ACTIVE_CLIENT = entry?.meta || {name: central_pollux.name, fname: central_pollux.fname, id: central_pollux.id, category: central_pollux.category};
+	// ensure non-null for later middleware
+	if (!res.locals.ACTIVE_CLIENT) {
+		res.locals.ACTIVE_CLIENT = {name: central_pollux.name, fname: central_pollux.fname, id: central_pollux.id, category: central_pollux.category};
+	}
 	next();
 });
 
@@ -410,6 +414,23 @@ if (IS_STAGING) {
 	app.get('/api/dev/clients', (req, res) => {
 		const safe = Array.from(polluxClients.values()).map(({meta}) => meta).filter(Boolean);
 		res.json({clients: safe, activeId: req.session?.activeClientId || PLX.id});
+	});
+	app.get('/api/dev/check-client/:id', async (req, res) => {
+		const id = req.params.id;
+		const guild = req.query.guild;
+		let entry = polluxClients.get(id);
+		let client = entry?.client || (id === PLX.id ? PLX : null);
+		if (!client) return res.status(404).json({ error: 'unknown_client', id });
+		const result = { id, meta: entry?.meta || {id: PLX.id, name: PLX.user?.name || null}, checks: {} };
+		try {
+			result.checks.user = await client.getRESTUser(id).then(u=>({ok:true,user:u})).catch(e=>({ok:false,error: e.message||String(e), name: e.constructor?.name, stack: process.env.STAGING ? (e.stack||null) : undefined}));
+			if (guild) {
+				result.checks.guildRoles = await client.getRESTGuildRoles(guild).then(r=>({ok:true,count:r.length})).catch(e=>({ok:false,error: e.message||String(e), name: e.constructor?.name, stack: process.env.STAGING ? (e.stack||null) : undefined}));
+			}
+			return res.json(result);
+		} catch (e) {
+			return res.status(500).json({ error: 'internal', message: e.message, stack: process.env.STAGING ? e.stack : undefined });
+		}
 	});
 	app.post('/api/dev/set-client', (req, res) => {
 		const {clientId} = req.body;

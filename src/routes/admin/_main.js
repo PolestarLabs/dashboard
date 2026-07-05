@@ -5,7 +5,7 @@ const router = express.Router();
 const fx = require('../../pipelines/globalFunctions.js');
 const operations = require('../../pipelines/operations.js');
 
-const { getActiveClient, isPolluxAdmin } = require('../../pipelines/adminHelpers.js');
+const { getActiveClient, isPolluxAdmin, findWorkingClient } = require('../../pipelines/adminHelpers.js');
 
 router.use("/:serverID", ADMCHECKS);
 
@@ -78,6 +78,33 @@ router.get('/:serverID', async function (req,res) {
         });
         const isDiscordError = e?.constructor?.name === 'DiscordHTTPError';
         const httpStatus = isDiscordError ? (e.code || (e.message?.match(/^(\d+)/)?.[1] | 0)) : 0;
+        // On 401/403, attempt to find another client that can access the guild and retry once
+        if (httpStatus === 401 || httpStatus === 403) {
+            try {
+                const altClient = await findWorkingClient(serverData, SVID, req, 8);
+                if (altClient && altClient.id !== authPLX?.id) {
+                    console.warn(`[admin/${SVID}] failing client ${authPLX?.id} - retrying with ${altClient.id}`);
+                    try {
+                        [memberInfo,roleInfo,serverInfo,channelInfo,reactRoles,feeds,localranks,temproles,paidroles] = await Promise.all([
+                            altClient.getRESTGuildMember(SVID, req.user.id).catch(e=> null),
+                            altClient.getRESTGuildRoles(SVID),
+                            altClient.getRESTGuild(SVID),
+                            altClient.getRESTGuildChannels(SVID),
+                            DB.reactRoles.find({server:SVID}).lean().exec(),
+                            DB.feed.find({server:SVID}).lean().exec(),
+                            DB.localranks.find({server:SVID}).lean().exec(),
+                            DB.temproles.find({server:SVID}).lean().exec(),
+                            DB.paidroles.find({server:SVID}).lean().exec(),
+                        ]);
+                    } catch (err2) {
+                        console.error(`[admin/${SVID}] retry failed with ${altClient.id}:`, { error: err2.message || err2 });
+                    }
+                }
+            } catch (probeErr) {
+                console.warn(`[admin/${SVID}] client probe failed:`, probeErr.message || probeErr);
+            }
+        }
+
         const status = (httpStatus === 401 || httpStatus === 403) ? 403 : isDiscordError ? 502 : 500;
         const messages = {
             403: "The bot doesn't have access to this server, or lacks permissions to fetch its data.",
@@ -244,41 +271,43 @@ router.delete("/:serverID/reactionrole", async (req,res) =>{
 
 //SECTION PUT
 
-router.put("/:serverID/language",async (req,res)=>{
-    let payload = req.body;
+router.put("/:serverID/language", async (req,res)=>{
+    const payload = req.body;
     const SVID = req.params.serverID;
-    DB.servers.findOneAndUpdate({id:SVID},{
-        $set: {'modules.LANGUAGE': payload.data}         
-    }).then(async doc=>{
-        updateGlobalInstances({id:SVID})
-        .then(async response=>{
 
-            const svData= await  DB.servers.get(SVID);
-            const authPLX = getActiveClient(svData, req);
+    try {
+        await DB.servers.findOneAndUpdate({id:SVID}, {
+            $set: {'modules.LANGUAGE': payload.data}
+        });
 
-            let serverInfo= (await authPLX.getRESTGuild(SVID));
-            let userData = (await DB.users.get(serverInfo.ownerID));
+        const response = await updateGlobalInstances({id:SVID});
+        const svData = await DB.servers.get(SVID);
+        const authPLX = getActiveClient(svData, req);
 
-            if(!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false){
+        const serverInfo = await authPLX.getRESTGuild(SVID);
+        const userData = await DB.users.get(serverInfo.ownerID);
 
-            authPLX.getDMChannel(serverInfo.ownerID).then(chn=> chn.createMessage({
-                embed: {color:0xff6699,description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
-        
-                **Changed Global Language to __${payload.data}__**
-        
-                Opt-out from DM notifications [HERE](${HOST+"/dashboard/dashboard#notifications"})
-                `}
-            }).catch(e=>null) )}
+        if (!req.body.noDM && userData?.switches?.notifications?.ownerNotif !== false) {
+            authPLX.getDMChannel(serverInfo.ownerID).then((chn) => chn.createMessage({
+                embed: {
+                    color: 0xff6699,
+                    description: `<@${req.user.id}> changed settings for **${serverInfo.name}**'s
 
-            if(response && response.ok) return res.status(200).json("Language OK");
-            else if (response) return  res.status(response.status).json(response.message);
-            else  res.status(510).json("Unknown Error");
+                    **Changed Global Language to __${payload.data}__**
 
-        }).catch(console.error  );
-    }).catch(err=>{
-        console.error(err)
+                    Opt-out from DM notifications [HERE](${HOST + "/dashboard/dashboard#notifications"})
+                    `
+                }
+            }).catch(() => null));
+        }
+
+        if (response && response.ok) return res.status(200).json("Language OK");
+        if (response) return res.status(response.status).json(response.message);
+        return res.status(510).json("Unknown Error");
+    } catch (err) {
+        console.error(err);
         return res.status(510).json(err);
-    })
+    }
 })
 
 router.put("/:serverID/commandswitch",async (req,res)=>{
