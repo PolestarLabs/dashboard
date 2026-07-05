@@ -5,7 +5,7 @@ const router = express.Router();
 const fx = require('../../pipelines/globalFunctions.js');
 const operations = require('../../pipelines/operations.js');
 
-const { getActiveClient, isPolluxAdmin, findWorkingClient } = require('../../pipelines/adminHelpers.js');
+const { getActiveClient, isPolluxAdmin, findWorkingClient, computeBotPermissions } = require('../../pipelines/adminHelpers.js');
 
 router.use("/:serverID", ADMCHECKS);
 
@@ -71,10 +71,12 @@ router.get('/:serverID', async function (req,res) {
             DB.paidroles.find({server:SVID}).lean().exec(),
         ]);
     } catch(e) {
+        const permInfo = await computeBotPermissions(authPLX, SVID).catch(()=>null);
         console.error(`[admin/${SVID}] Discord API error with client ${authPLX?.id}:`, {
             activeClients: serverData?.activeClients,
             selectedClientId: authPLX?.id,
             error: e.message || e,
+            botPermissions: permInfo,
         });
         const isDiscordError = e?.constructor?.name === 'DiscordHTTPError';
         const httpStatus = isDiscordError ? (e.code || (e.message?.match(/^(\d+)/)?.[1] | 0)) : 0;

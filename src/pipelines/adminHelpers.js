@@ -110,3 +110,35 @@ async function findWorkingClient(gData, guildId, req = {}, maxAttempts = 12){
 }
 
 module.exports = { isPolluxAdmin, getActiveClient, findWorkingClient, ADMIN_ID };
+
+// Attempt to compute the bot client's permissions in a guild for richer logging.
+async function computeBotPermissions(client, guildId){
+    if(!client) return { available: false, reason: 'no-client' };
+    // user-made clients (user:<id>) won't have a bot user
+    const botId = client.user?.id;
+    if(!botId) return { available: false, reason: 'no-bot-user' };
+    try {
+        const [member, roles] = await Promise.all([
+            client.getRESTGuildMember(guildId, botId).catch(e=>({error: e.message || String(e), name: e.constructor?.name})),
+            client.getRESTGuildRoles(guildId).catch(e=>({error: e.message || String(e), name: e.constructor?.name})),
+        ]);
+        if (member?.error || roles?.error) {
+            return { available: false, reason: 'fetch-failed', memberError: member?.error || null, rolesError: roles?.error || null };
+        }
+        // compute permission bitfield from member roles and role definitions
+        let perm = 0n;
+        const roleMap = new Map((roles || []).map(r=>[r.id, r]));
+        for(const rid of (member.roles || [])){
+            const r = roleMap.get(rid);
+            if(!r) continue;
+            const p = BigInt(r.permissions || r.permissionsRaw || 0);
+            perm = perm | p;
+        }
+        return { available: true, botId, permissions: perm.toString(), roleCount: (member.roles||[]).length, roles: (member.roles||[]).slice(0,10) };
+    } catch(err){
+        return { available: false, reason: 'exception', error: err.message || String(err), name: err.constructor?.name };
+    }
+}
+
+// re-export with new helper
+module.exports.computeBotPermissions = computeBotPermissions;
