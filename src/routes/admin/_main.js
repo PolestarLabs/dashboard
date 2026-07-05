@@ -8,7 +8,13 @@ const operations = require('../../pipelines/operations.js');
 const getActiveClient = (gData, req) => {
     // On staging, always use the session-selected client — DB activeClients don't apply
     if (process.env.STAGING || process.env.NODE_ENV !== 'production') return req?.PLX ?? PLX;
-    return polluxClients.get(gData?.activeClients?.[0])?.client || PLX;
+    const activeIds = Array.isArray(gData?.activeClients) ? gData.activeClients : [];
+    const entry = activeIds.map(id => polluxClients.get(id)).find(Boolean);
+    if (entry) return entry.client;
+    if (activeIds.length) {
+        console.warn('[getActiveClient] missing loaded client for activeClients', { activeClients: activeIds, loadedClientIds: Array.from(polluxClients.keys()) });
+    }
+    return PLX;
 };
 
 router.use("/:serverID", ADMCHECKS);
