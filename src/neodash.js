@@ -398,12 +398,10 @@ const IS_STAGING = process.env.STAGING || process.env.NODE_ENV !== 'production';
 
 app.use(function(req, res, next) {
 	req.PLX = getActivePLX(req);
-	// Expose safe client meta to views on staging
-	if (IS_STAGING) {
-		const activeId = req.session?.activeClientId || PLX.id;
-		const entry = polluxClients.get(activeId);
-		res.locals.ACTIVE_CLIENT = entry?.meta || {name: central_pollux.name, fname: central_pollux.fname, id: central_pollux.id, category: central_pollux.category};
-	}
+	// Expose safe client meta to views (fallback to central main client)
+	const activeId = req.session?.activeClientId || PLX.id;
+	const entry = polluxClients.get(activeId);
+	res.locals.ACTIVE_CLIENT = entry?.meta || {name: central_pollux.name, fname: central_pollux.fname, id: central_pollux.id, category: central_pollux.category};
 	next();
 });
 
